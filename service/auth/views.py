@@ -1,8 +1,8 @@
 from .responses import UserResponse, TokenResponse
 from ..models import User, AuthToken, EmailMessage
 from datetime import datetime, timedelta
+from .args import SignupArgs, LoginArgs
 from ..utils import hashpwd, checkpwd
-from .args import JoinArgs, LoginArgs
 from fastapi import APIRouter, Body
 from pydantic import EmailStr
 from ..errors import Abort
@@ -12,15 +12,15 @@ import secrets
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-@router.post("/join")
-async def join(
-    args: JoinArgs
+@router.post("/signup", response_model=UserResponse)
+async def signup(
+    args: SignupArgs
 ):
     # Check if username is availaible
     if await User.filter(username=args.username).first():
         raise Abort("auth", "username-taken")
 
-    # Check if email is availaible
+    # Check if email has been used
     if await User.filter(email=args.email).first():
         raise Abort("auth", "email-exists")
 
@@ -81,9 +81,9 @@ async def login(
     # Return auth token
     return display.token(token)
 
-@router.post("/activate", response_model=UserResponse)
+@router.post("/activation", response_model=UserResponse)
 async def activate(
-    token: str = Body(embed=True),
+    token: str = Body(embed=True)
 ):
     # Find user by activation token
     if not (user := await User.filter(activation_token=token).first()):
@@ -101,7 +101,7 @@ async def activate(
     # Return user info
     return display.user(user)
 
-@router.post("/resend/activation", response_model=UserResponse)
+@router.post("/activation/resend", response_model=UserResponse)
 async def resend_activation(
     email: EmailStr = Body(embed=True)
 ):
