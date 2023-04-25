@@ -1,3 +1,4 @@
+from .aggregator.characters import aggregator_characters
 from .aggregator.companies import aggregator_companies
 from .aggregator.genres import aggregator_anime_genres
 

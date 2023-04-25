@@ -24,7 +24,7 @@ TRANSLATIONS = {
     "iyashikei": "Іяшикай", "love-polygon": "Любовний багатокутник",
     "magical-sex-shift": "Зміна статі", "mahou-shoujo": "Дівчина-чарівниця",
     "martial-arts": "Бойові мистецтва", "mecha": "Мехи",
-    "medical": "Медицина", "military": "Військові", "music": "Музика",
+    "medical": "Медицина", "military": "Війна", "music": "Музика",
     "mythology": "Міфологія", "organized-crime": "Організована злочинність",
     "otaku-culture": "Культура отаку", "parody": "Пародія",
     "performing-arts": "Виконавче мистецтво", "pets": "Тварини",
