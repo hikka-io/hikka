@@ -7,7 +7,7 @@ import config
 
 async def make_request(semaphore, page):
     async with semaphore:
-        data = await requests.get_characters(page, 10000)
+        data = await requests.get_characters(page)
         return data["list"]
 
 async def save_characters(data):
@@ -69,7 +69,7 @@ async def aggregator_characters():
     await Tortoise.init(config=config.tortoise)
     await Tortoise.generate_schemas()
 
-    data = await requests.get_characters(1, 1)
+    data = await requests.get_characters(1)
     pages = data["pagination"]["pages"]
 
     semaphore = asyncio.Semaphore(20)
