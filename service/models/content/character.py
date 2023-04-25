@@ -16,4 +16,4 @@ class Character(Base):
     # ToDo: image
 
     class Meta:
-        table = "service_characters"
+        table = "service_content_characters"

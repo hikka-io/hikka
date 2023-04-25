@@ -40,7 +40,7 @@ async def aggregator_companies():
 
             else:
                 company = Company(**{
-                    "conetent_id": company_data["reference"],
+                    "content_id": company_data["reference"],
                     "favorites": company_data["favorites"],
                     "name": company_data["name"],
                     "updated": updated,

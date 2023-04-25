@@ -16,4 +16,4 @@ class Person(Base):
     # ToDo: image
 
     class Meta:
-        table = "service_people"
+        table = "service_content_people"
