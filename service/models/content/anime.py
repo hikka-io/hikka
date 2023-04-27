@@ -53,21 +53,20 @@ class Anime(Base):
         null=True, on_delete=fields.SET_NULL
     )
 
+    related_anime_to_anime: fields.ReverseRelation["AnimeToAnimeRelation"]
+
+    recommendations: fields.ReverseRelation["AnimeRecommendation"]
+    recommended_to: fields.ReverseRelation["AnimeRecommendation"]
+
+    characters: fields.ReverseRelation["AnimeCharacter"]
+    voices: fields.ReverseRelation["AnimeVoice"]
+    staff: fields.ReverseRelation["AnimeStaff"]
+
     genres: fields.ManyToManyRelation["AnimeGenre"]
 
-    # related_anime_to_anime: fields.ReverseRelation["MALAnimeToAnimeRelation"]
-    # related_manga_to_anime: fields.ReverseRelation["MALMangaToAnimeRelation"]
-
     # relations_anime_to_manga: fields.ReverseRelation["MALAnimeToMangaRelation"]
-    # recommended_to: fields.ReverseRelation["MALAnimeToAnimeRelation"]
-
-    # recommendations: fields.ReverseRelation["MALAnimeRecommendation"]
-    # recommended_to: fields.ReverseRelation["MALAnimeToAnimeRelation"]
-
-    # characters: fields.ReverseRelation["MALAnimeCharacter"]
+    # related_manga_to_anime: fields.ReverseRelation["MALMangaToAnimeRelation"]
     # images: fields.ReverseRelation["MALAnimeImage"]
-    # voices: fields.ReverseRelation["MALAnimeVoice"]
-    # staff: fields.ReverseRelation["MALAnimeStaff"]
 
     class Meta:
         table = "service_content_anime"

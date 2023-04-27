@@ -17,3 +17,19 @@ class Character(Base):
 
     class Meta:
         table = "service_content_characters"
+
+class AnimeCharacter(Base):
+    main = fields.BooleanField()
+
+    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
+        "models.Anime", related_name="characters"
+    )
+
+    character: fields.ForeignKeyRelation["Character"] = fields.ForeignKeyField(
+        "models.Character", related_name="anime_roles"
+    )
+
+    class Meta:
+        table = "service_content_anime_characters"
+
+        unique_together = ("anime", "character")
