@@ -28,19 +28,15 @@ class Anime(Base):
     episodes = fields.IntField(null=True)
     nsfw = fields.BooleanField(null=True)
 
+    episodes_list = fields.JSONField(default=[])
+    translations = fields.JSONField(default=[])
+    synonyms = fields.JSONField(default=[])
+    external = fields.JSONField(default=[])
+    videos = fields.JSONField(default=[])
+    stats = fields.JSONField(default={})
+    ost = fields.JSONField(default=[])
+
     # ToDo: images
-
-    # # Content relations
-    # anitube: fields.ManyToManyRelation["AnitubeAnime"] = fields.ManyToManyField(
-    #     "models.AnitubeAnime", related_name="mal",
-    #     through="service_relation_mal_anitube"
-    # )
-
-    # toloka: fields.ManyToManyRelation["TolokaAnime"] = fields.ManyToManyField(
-    #     "models.TolokaAnime", related_name="mal",
-    #     through="service_relation_mal_toloka"
-    # )
-
 
     studios: fields.ManyToManyRelation["MALCompany"] = fields.ManyToManyField(
         "models.Company", related_name="studio_anime",
@@ -52,10 +48,12 @@ class Anime(Base):
         through="service_relation_anime_producers"
     )
 
-    # franchise: fields.ForeignKeyRelation["MALAnimeFranchise"] = fields.ForeignKeyField(
-    #     "models.MALAnimeFranchise", related_name="anime",
-    #     null=True, on_delete=fields.SET_NULL
-    # )
+    franchise: fields.ForeignKeyRelation["AnimeFranchise"] = fields.ForeignKeyField(
+        "models.AnimeFranchise", related_name="anime",
+        null=True, on_delete=fields.SET_NULL
+    )
+
+    genres: fields.ManyToManyRelation["AnimeGenre"]
 
     # related_anime_to_anime: fields.ReverseRelation["MALAnimeToAnimeRelation"]
     # related_manga_to_anime: fields.ReverseRelation["MALMangaToAnimeRelation"]
@@ -66,18 +64,10 @@ class Anime(Base):
     # recommendations: fields.ReverseRelation["MALAnimeRecommendation"]
     # recommended_to: fields.ReverseRelation["MALAnimeToAnimeRelation"]
 
-    # synonyms: fields.ManyToManyRelation["MALAnimeSynonym"]
-    genres: fields.ManyToManyRelation["AnimeGenre"]
-
-    # episodes_list: fields.ReverseRelation["MALAnimeEpisodes"]
     # characters: fields.ReverseRelation["MALAnimeCharacter"]
-    # external: fields.ReverseRelation["MALAnimeExternal"]
     # images: fields.ReverseRelation["MALAnimeImage"]
-    # videos: fields.ReverseRelation["MALAnimeImage"]
     # voices: fields.ReverseRelation["MALAnimeVoice"]
-    # stats: fields.ReverseRelation["MALAnimeStats"]
     # staff: fields.ReverseRelation["MALAnimeStaff"]
-    # ost: fields.ReverseRelation["MALAnimeOST"]
 
     class Meta:
         table = "service_content_anime"

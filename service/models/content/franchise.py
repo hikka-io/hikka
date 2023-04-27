@@ -6,8 +6,8 @@ class AnimeFranchise(Base):
     name_en = fields.CharField(null=True, max_length=255)
     name_ua = fields.CharField(null=True, max_length=255)
 
-    scored_by = fields.IntField(null=True, default=0)
     updated = NativeDatetimeField(null=True)
+    scored_by = fields.IntField(default=0)
     score = fields.FloatField(default=0)
 
     anime: fields.ReverseRelation["Anime"]

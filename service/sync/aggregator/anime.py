@@ -1,4 +1,5 @@
 from service.models import AnimeGenre
+from service.models import AnimeOST
 from service.models import Company
 from service.models import Anime
 from tortoise import Tortoise
@@ -72,7 +73,6 @@ async def save_anime_list(data):
 
 async def update_anime_info(semaphore, anime):
     async with semaphore:
-
         await anime.fetch_related("genres", "studios", "producers")
 
         data = await requests.get_anime_info(anime.content_id)
@@ -91,6 +91,7 @@ async def update_anime_info(semaphore, anime):
         producers_add = []
         studios_add = []
         genres_add = []
+        ost_create = []
 
         for genre_content_id in data["genres"]:
             if not (genre := await AnimeGenre.filter(
@@ -125,6 +126,23 @@ async def update_anime_info(semaphore, anime):
 
             producers_add.append(company)
 
+        for song in data["ost"]:
+            if await AnimeOST.filter(
+                index=song["index"], anime=anime, ost_type=song["ost_type"]
+            ).first():
+                continue
+
+            ost = AnimeOST(**{
+                "ost_type": song["ost_type"],
+                "spotify": song["spotify"],
+                "author": song["author"],
+                "title": song["title"],
+                "index": song["index"],
+                "anime": anime
+            })
+
+            ost_create.append(ost)
+
         if len(genres_add) > 0:
             await anime.genres.add(*genres_add)
 
@@ -133,6 +151,9 @@ async def update_anime_info(semaphore, anime):
 
         if len(producers_add) > 0:
             await anime.producers.add(*producers_add)
+
+        if len(ost_create) > 0:
+            await AnimeOST.bulk_create(ost_create)
 
         await anime.save()
 
