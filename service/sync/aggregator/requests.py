@@ -32,3 +32,19 @@ async def get_people(page):
         async with session.get(endpoint) as r:
             data = await r.json()
             return data
+
+async def get_anime(page):
+    endpoint = f"{constants.AGGREGATOR}/anime?page={page}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+async def get_anime_info(content_id):
+    endpoint = f"{constants.AGGREGATOR}/anime/{content_id}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data

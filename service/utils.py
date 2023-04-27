@@ -40,4 +40,7 @@ def slugify(text, content_id=None):
     return text
 
 def from_timestamp(timestamp):
-    return datetime.utcfromtimestamp(timestamp)
+    if timestamp:
+        return datetime.utcfromtimestamp(timestamp)
+    
+    return None
