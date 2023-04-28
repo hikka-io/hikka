@@ -28,7 +28,6 @@ class Anime(Base):
     episodes = fields.IntField(null=True)
     nsfw = fields.BooleanField(null=True)
 
-    episodes_list = fields.JSONField(default=[])
     translations = fields.JSONField(default=[])
     synonyms = fields.JSONField(default=[])
     external = fields.JSONField(default=[])
@@ -53,19 +52,16 @@ class Anime(Base):
         null=True, on_delete=fields.SET_NULL
     )
 
-    related_anime_to_anime: fields.ReverseRelation["AnimeToAnimeRelation"]
-
     recommendations: fields.ReverseRelation["AnimeRecommendation"]
     recommended_to: fields.ReverseRelation["AnimeRecommendation"]
 
+    episodes_list: fields.ReverseRelation["AnimeEpisodes"]
     characters: fields.ReverseRelation["AnimeCharacter"]
     voices: fields.ReverseRelation["AnimeVoice"]
     staff: fields.ReverseRelation["AnimeStaff"]
 
     genres: fields.ManyToManyRelation["AnimeGenre"]
 
-    # relations_anime_to_manga: fields.ReverseRelation["MALAnimeToMangaRelation"]
-    # related_manga_to_anime: fields.ReverseRelation["MALMangaToAnimeRelation"]
     # images: fields.ReverseRelation["MALAnimeImage"]
 
     class Meta:

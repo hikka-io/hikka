@@ -13,7 +13,7 @@ class AnimeStaff(Base):
     )
 
     class Meta:
-        table = "service_mal_anime_staff"
+        table = "service_content_anime_staff"
 
         unique_together = ("anime", "person")
 
@@ -33,6 +33,6 @@ class AnimeVoice(Base):
     )
 
     class Meta:
-        table = "service_mal_anime_voices"
+        table = "service_content_anime_voices"
 
         unique_together = ("anime", "character", "person")

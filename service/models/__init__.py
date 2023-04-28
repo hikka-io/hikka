@@ -2,8 +2,8 @@ from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
 
 from .content.recommendation import AnimeRecommendation
-from .content.relation import AnimeToAnimeRelation
 from .content.franchise import AnimeFranchise
+from .content.episode import AnimeEpisode
 from .content.genre import AnimeGenre
 from .content.company import Company
 from .content.person import Person
