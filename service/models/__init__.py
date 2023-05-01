@@ -17,4 +17,5 @@ from .content.roles import AnimeVoice
 
 from .user.user import User
 
+from .list.favourite import AnimeFavourite
 from .list.watch import AnimeWatch

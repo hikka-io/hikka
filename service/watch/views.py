@@ -5,9 +5,8 @@ from ..decorators import auth_required
 from ..watch.args import WatchArgs
 from datetime import datetime
 from ..errors import Abort
-from .. import display
 
-router = APIRouter(prefix="/watch", tags=["Watch"])
+router = APIRouter(prefix="/watch")
 
 @router.get("/{slug}", response_model=WatchResponse)
 async def get_watch(
