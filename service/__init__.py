@@ -9,7 +9,7 @@ import config
 def create_app() -> FastAPI:
     fu.validation_error_response_definition = errors.ErrorResponse.schema()
 
-    app = FastAPI()
+    app = FastAPI(docs_url=None, redoc_url=None)
 
     app.add_middleware(
         CORSMiddleware,
@@ -27,9 +27,11 @@ def create_app() -> FastAPI:
         errors.Abort, errors.abort_handler
     )
 
+    from .watch import watch
     from .anime import anime
     from .auth import auth
 
+    app.include_router(watch)
     app.include_router(anime)
     app.include_router(auth)
 

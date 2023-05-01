@@ -16,3 +16,5 @@ from .content.roles import AnimeStaff
 from .content.roles import AnimeVoice
 
 from .user.user import User
+
+from .list.watch import AnimeWatch
