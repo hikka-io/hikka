@@ -27,8 +27,10 @@ def create_app() -> FastAPI:
         errors.Abort, errors.abort_handler
     )
 
+    from .anime import anime
     from .auth import auth
 
+    app.include_router(anime)
     app.include_router(auth)
 
     register_tortoise(

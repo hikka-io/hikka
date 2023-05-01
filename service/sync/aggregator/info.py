@@ -236,6 +236,7 @@ async def update_anime_info(semaphore, anime):
         anime.duration = data["duration"]
         anime.source = data["source"]
         anime.rating = data["rating"]
+        anime.status = data["status"]
         anime.score = data["score"]
         anime.nsfw = data["nsfw"]
 
