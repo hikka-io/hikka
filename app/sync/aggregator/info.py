@@ -1,39 +1,45 @@
-from service.models import AnimeRecommendation
-from service.models import AnimeCharacter
-from service.models import AnimeEpisode
-from service.models import AnimeGenre
-from service.models import AnimeStaff
-from service.models import AnimeVoice
-from service.models import Character
-from service.models import Company
-from service.models import Person
-from service.models import Anime
+from app.models import AnimeRecommendation
+from app.models import AnimeCharacter
+from app.models import AnimeEpisode
+from app.models import AnimeGenre
+from app.models import AnimeStaff
+from app.models import AnimeVoice
+from app.models import Character
+from app.models import Company
+from app.models import Person
+from app.models import Anime
 from tortoise import Tortoise
-from service import utils
+from app import utils
 from . import requests
 import asyncio
 import config
 
 from pprint import pprint
 
+
 def process_translations(data):
     translations = []
 
     for entry in data["services"]["anitube"]:
-        translations.append({
-            "synopsis": entry["description"],
-            "title": entry["title"],
-            "source": entry["url"]
-        })
+        translations.append(
+            {
+                "synopsis": entry["description"],
+                "title": entry["title"],
+                "source": entry["url"],
+            }
+        )
 
     for entry in data["services"]["toloka"]:
-        translations.append({
-            "synopsis": entry["description"],
-            "title": entry["title"],
-            "source": entry["url"]
-        })
+        translations.append(
+            {
+                "synopsis": entry["description"],
+                "title": entry["title"],
+                "source": entry["url"],
+            }
+        )
 
     return translations
+
 
 async def process_genres(anime, data):
     genres = await AnimeGenre.filter(content_id__in=data["genres"])
@@ -47,6 +53,7 @@ async def process_genres(anime, data):
 
     return genres_add
 
+
 async def process_studios(anime, data):
     companies = await Company.filter(content_id__in=data["studios"])
     studios_add = []
@@ -58,6 +65,7 @@ async def process_studios(anime, data):
         studios_add.append(company)
 
     return studios_add
+
 
 async def process_producers(anime, data):
     companies = await Company.filter(content_id__in=data["producers"])
@@ -71,13 +79,14 @@ async def process_producers(anime, data):
 
     return producers_add
 
+
 async def process_characters(anime, data):
     create_character_roles = []
     create_voices = []
 
-    cache = await Character.filter(content_id__in=[
-        entry["reference"] for entry in data["characters"]
-    ])
+    cache = await Character.filter(
+        content_id__in=[entry["reference"] for entry in data["characters"]]
+    )
 
     characters_cache = {entry.content_id: entry for entry in cache}
 
@@ -88,17 +97,21 @@ async def process_characters(anime, data):
         if not await AnimeCharacter.filter(
             anime=anime, character=character
         ).first():
-            character_role = AnimeCharacter(**{
-                "main": character_data["main"],
-                "character": character,
-                "anime": anime
-            })
+            character_role = AnimeCharacter(
+                **{
+                    "main": character_data["main"],
+                    "character": character,
+                    "anime": anime,
+                }
+            )
 
             create_character_roles.append(character_role)
 
-        cache = await Person.filter(content_id__in=[
-            entry["reference"] for entry in character_data["voice_actors"]
-        ])
+        cache = await Person.filter(
+            content_id__in=[
+                entry["reference"] for entry in character_data["voice_actors"]
+            ]
+        )
 
         voices_cache = {entry.content_id: entry for entry in cache}
 
@@ -111,42 +124,48 @@ async def process_characters(anime, data):
             ).first():
                 continue
 
-            voice = AnimeVoice(**{
-                "language": voice_data["language"],
-                "character": character,
-                "person": person,
-                "anime": anime
-            })
+            voice = AnimeVoice(
+                **{
+                    "language": voice_data["language"],
+                    "character": character,
+                    "person": person,
+                    "anime": anime,
+                }
+            )
 
             create_voices.append(voice)
 
     return create_character_roles, create_voices
 
+
 async def process_recommendations(anime, data):
     create_recommendations = []
     update_recommendations = []
 
-    cache = await Anime.filter(content_id__in=[
-        entry["reference"] for entry in data["recommendations"]
-    ])
+    cache = await Anime.filter(
+        content_id__in=[entry["reference"] for entry in data["recommendations"]]
+    )
 
     recommendations_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["recommendations"]:
-        if not (recommended_anime := recommendations_cache.get(
-            entry["reference"]
-        )):
+        if not (
+            recommended_anime := recommendations_cache.get(entry["reference"])
+        ):
             continue
 
-        if not (recommendation := await AnimeRecommendation.filter(
-            recommendation=recommended_anime,
-            anime=anime
-        ).first()):
-            recommendation = AnimeRecommendation(**{
-                "recommendation": recommended_anime,
-                "weight": entry["weight"],
-                "anime": anime
-            })
+        if not (
+            recommendation := await AnimeRecommendation.filter(
+                recommendation=recommended_anime, anime=anime
+            ).first()
+        ):
+            recommendation = AnimeRecommendation(
+                **{
+                    "recommendation": recommended_anime,
+                    "weight": entry["weight"],
+                    "anime": anime,
+                }
+            )
 
             create_recommendations.append(recommendation)
 
@@ -159,25 +178,29 @@ async def process_recommendations(anime, data):
 
     return create_recommendations, update_recommendations
 
+
 async def process_episodes(anime, data):
     create_episodes = []
     update_episodes = []
 
-    cache = await AnimeEpisode.filter(anime=anime, index__in=[
-        entry["index"] for entry in data["episodes_list"]
-    ])
+    cache = await AnimeEpisode.filter(
+        anime=anime,
+        index__in=[entry["index"] for entry in data["episodes_list"]],
+    )
 
     episodes_cache = {entry.index: entry for entry in cache}
 
     for episode_data in data["episodes_list"]:
         if not (episode := episodes_cache.get(episode_data["index"])):
-            episode = AnimeEpisode(**{
-                "aired": utils.from_timestamp(episode_data["aired"]),
-                "title_ja": episode_data["title_ja"],
-                "title_en": episode_data["title_en"],
-                "index": episode_data["index"],
-                "anime": anime
-            })
+            episode = AnimeEpisode(
+                **{
+                    "aired": utils.from_timestamp(episode_data["aired"]),
+                    "title_ja": episode_data["title_ja"],
+                    "title_en": episode_data["title_en"],
+                    "index": episode_data["index"],
+                    "anime": anime,
+                }
+            )
 
             create_episodes.append(episode)
 
@@ -193,33 +216,31 @@ async def process_episodes(anime, data):
 
     return create_episodes, update_episodes
 
+
 async def process_staff(anime, data):
     create_staff = []
 
-    cache = await Person.filter(content_id__in=[
-        entry["person_reference"] for entry in data["staff"]
-    ])
+    cache = await Person.filter(
+        content_id__in=[entry["person_reference"] for entry in data["staff"]]
+    )
 
     people_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["staff"]:
-        if not (person := people_cache.get(
-            entry["person_reference"]
-        )):
+        if not (person := people_cache.get(entry["person_reference"])):
             continue
 
         if await AnimeStaff.filter(anime=anime, person=person).first():
             continue
 
-        staff = AnimeStaff(**{
-            "role": entry["role"],
-            "person": person,
-            "anime": anime
-        })
+        staff = AnimeStaff(
+            **{"role": entry["role"], "person": person, "anime": anime}
+        )
 
         create_staff.append(staff)
 
     return create_staff
+
 
 async def update_anime_info(semaphore, anime):
     async with semaphore:
@@ -262,9 +283,10 @@ async def update_anime_info(semaphore, anime):
             anime, data
         )
 
-        create_recommendations, update_recommendations = await process_recommendations(
-            anime, data
-        )
+        (
+            create_recommendations,
+            update_recommendations,
+        ) = await process_recommendations(anime, data)
 
         create_episodes, update_episodes = await process_episodes(anime, data)
 
@@ -300,9 +322,9 @@ async def update_anime_info(semaphore, anime):
             )
 
         if len(update_episodes) > 0:
-            await AnimeEpisode.bulk_update(update_episodes, fields=[
-                "title_ja", "title_en", "aired"
-            ])
+            await AnimeEpisode.bulk_update(
+                update_episodes, fields=["title_ja", "title_en", "aired"]
+            )
 
         # print(f"create_character_roles: {len(create_character_roles)}")
         # print(f"create_voices: {len(create_voices)}")
@@ -319,19 +341,20 @@ async def update_anime_info(semaphore, anime):
 
         print(f"Synced anime {anime.title_en}")
 
+
 async def aggregator_anime_info():
     await Tortoise.init(config=config.tortoise)
     await Tortoise.generate_schemas()
-    
+
     # anime = await Anime.filter(content_id="354966ae-28ee-496f-8a55-f088f65396b4").first()
     # semaphore = asyncio.Semaphore(20)
     # await update_anime_info(semaphore, anime)
 
     semaphore = asyncio.Semaphore(20)
 
-    anime_list = await Anime.filter(
-        needs_update=True
-    ).order_by("-score", "scored_by")
+    anime_list = await Anime.filter(needs_update=True).order_by(
+        "-score", "scored_by"
+    )
 
     tasks = [update_anime_info(semaphore, anime) for anime in anime_list]
 

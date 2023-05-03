@@ -1,8 +1,8 @@
 from .utils import checkpwd, hashpwd, new_token
 from datetime import datetime, timedelta
 from fastapi import Body, Depends
-from service.errors import Abort
-from service.models import User
+from app.errors import Abort
+from app.models import User
 from pydantic import EmailStr
 from . import service
 

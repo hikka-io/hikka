@@ -1,15 +1,17 @@
-from service.models import Company
+from app.models import Company
 from tortoise import Tortoise
-from service import utils
+from app import utils
 from . import requests
 import asyncio
 import config
+
 
 async def make_request(semaphore, page):
     async with semaphore:
         data = await requests.get_companies(page)
         return data["list"]
-    
+
+
 async def save_companies(data):
     references = [entry["reference"] for entry in data]
 
@@ -22,9 +24,7 @@ async def save_companies(data):
 
     for company_data in data:
         updated = utils.from_timestamp(company_data["updated"])
-        slug = utils.slugify(
-            company_data["name"], company_data["reference"]
-        )
+        slug = utils.slugify(company_data["name"], company_data["reference"])
 
         if company_data["reference"] in companies_cache:
             company = companies_cache[company_data["reference"]]
@@ -43,13 +43,15 @@ async def save_companies(data):
             print(f"Updated company: {company.name} ({company.favorites})")
 
         else:
-            company = Company(**{
-                "content_id": company_data["reference"],
-                "favorites": company_data["favorites"],
-                "name": company_data["name"],
-                "updated": updated,
-                "slug": slug
-            })
+            company = Company(
+                **{
+                    "content_id": company_data["reference"],
+                    "favorites": company_data["favorites"],
+                    "name": company_data["name"],
+                    "updated": updated,
+                    "slug": slug,
+                }
+            )
 
             create_companies.append(company)
 
@@ -58,9 +60,10 @@ async def save_companies(data):
     await Company.bulk_create(create_companies)
 
     if len(update_companies) > 0:
-        await Company.bulk_update(update_companies, fields=[
-            "updated", "favorites"
-        ])
+        await Company.bulk_update(
+            update_companies, fields=["updated", "favorites"]
+        )
+
 
 async def aggregator_companies():
     await Tortoise.init(config=config.tortoise)

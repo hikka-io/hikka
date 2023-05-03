@@ -8,9 +8,11 @@ from .. import display
 
 router = APIRouter(prefix="/user")
 
+
 @router.get("/me", response_model=UserResponse)
 async def profile(user: User = Depends(auth_required())):
     return display.user(user)
+
 
 # ToDo: move to user settings
 @router.post("/description", response_model=UserResponse)
@@ -21,6 +23,7 @@ async def change_description(
     await user.save()
 
     return display.user(user)
+
 
 @router.get("/{username}", response_model=UserResponse)
 async def user_profile(username: str):

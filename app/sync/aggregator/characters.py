@@ -1,14 +1,16 @@
-from service.models import Character
+from app.models import Character
 from tortoise import Tortoise
-from service import utils
+from app import utils
 from . import requests
 import asyncio
 import config
+
 
 async def make_request(semaphore, page):
     async with semaphore:
         data = await requests.get_characters(page)
         return data["list"]
+
 
 async def save_characters(data):
     references = [entry["reference"] for entry in data]
@@ -42,28 +44,35 @@ async def save_characters(data):
 
             update_characters.append(character)
 
-            print(f"Updated character: {character.name_en} ({character.favorites})")
+            print(
+                f"Updated character: {character.name_en} ({character.favorites})"
+            )
 
         else:
-            character = Character(**{
-                "content_id": character_data["reference"],
-                "favorites": character_data["favorites"],
-                "name_ja": character_data["name_ja"],
-                "name_en": character_data["name"],
-                "updated": updated,
-                "slug": slug
-            })
+            character = Character(
+                **{
+                    "content_id": character_data["reference"],
+                    "favorites": character_data["favorites"],
+                    "name_ja": character_data["name_ja"],
+                    "name_en": character_data["name"],
+                    "updated": updated,
+                    "slug": slug,
+                }
+            )
 
             create_characters.append(character)
 
-            print(f"Added character: {character.name_en} ({character.favorites})")
+            print(
+                f"Added character: {character.name_en} ({character.favorites})"
+            )
 
     await Character.bulk_create(create_characters)
 
     if len(update_characters) > 0:
-        await Character.bulk_update(update_characters, fields=[
-            "updated", "favorites"
-        ])
+        await Character.bulk_update(
+            update_characters, fields=["updated", "favorites"]
+        )
+
 
 async def aggregator_characters():
     await Tortoise.init(config=config.tortoise)

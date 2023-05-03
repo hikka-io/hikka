@@ -1,4 +1,4 @@
-from service.models import User, EmailMessage, AuthToken
+from app.models import User, EmailMessage, AuthToken
 from datetime import datetime, timedelta
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from service.models import User
-from service import constants
-from service import display
+from app.models import User
+from app import constants
+from app import display
 from . import service
 
 from .dependencies import (
