@@ -1,25 +1,26 @@
 from .responses import WatchResponse, WatchDeleteResponse
 from ..models import User, Anime, AnimeWatch
 from fastapi import APIRouter, Depends
-from ..decorators import auth_required
+from ..dependencies import auth_required
 from ..watch.args import WatchArgs
 from datetime import datetime
 from ..errors import Abort
 
 router = APIRouter(prefix="/watch")
 
+
 @router.get("/{slug}", response_model=WatchResponse)
-async def get_watch(
-    slug: str, user: User = Depends(auth_required())
-):
+async def get_watch(slug: str, user: User = Depends(auth_required)):
     # Find anime by slug
     if not (anime := await Anime.filter(slug=slug).first()):
         raise Abort("anime", "not-found")
 
-    # Find user watch record for anime 
-    if not (watch := await AnimeWatch.filter(**{
-        "anime": anime, "user": user
-    }).first()):
+    # Find user watch record for anime
+    if not (
+        watch := await AnimeWatch.filter(
+            **{"anime": anime, "user": user}
+        ).first()
+    ):
         raise Abort("watch", "not-found")
 
     # Return watch record
@@ -33,9 +34,10 @@ async def get_watch(
         "status": watch.status,
     }
 
+
 @router.put("/{slug}", response_model=WatchResponse)
 async def add_watch(
-    slug: str, args: WatchArgs, user: User = Depends(auth_required())
+    slug: str, args: WatchArgs, user: User = Depends(auth_required)
 ):
     # Find anime by slug
     if not (anime := await Anime.filter(slug=slug).first()):
@@ -50,9 +52,11 @@ async def add_watch(
         raise Abort("watch", "bad-episodes")
 
     # Create watch record if missing
-    if not (watch := await AnimeWatch.filter(**{
-        "anime": anime, "user": user
-    }).first()):
+    if not (
+        watch := await AnimeWatch.filter(
+            **{"anime": anime, "user": user}
+        ).first()
+    ):
         watch = AnimeWatch()
         watch.created = datetime.utcnow()
         watch.anime = anime
@@ -77,18 +81,19 @@ async def add_watch(
         "status": watch.status,
     }
 
+
 @router.delete("/{slug}", response_model=WatchDeleteResponse)
-async def delete_watch(
-    slug: str, user: User = Depends(auth_required())
-):
+async def delete_watch(slug: str, user: User = Depends(auth_required)):
     # Find anime by slug
     if not (anime := await Anime.filter(slug=slug).first()):
         raise Abort("anime", "not-found")
 
     # Find anime watch record
-    if not (watch := await AnimeWatch.filter(**{
-        "anime": anime, "user": user
-    }).first()):
+    if not (
+        watch := await AnimeWatch.filter(
+            **{"anime": anime, "user": user}
+        ).first()
+    ):
         raise Abort("watch", "not-found")
 
     # And delete it

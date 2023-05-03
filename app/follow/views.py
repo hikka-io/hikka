@@ -4,9 +4,9 @@
 # from .responses import FollowStatsResponse
 # from .responses import WatchStatsResponse
 from fastapi import APIRouter, Depends
-from ..decorators import auth_required
+from ..dependencies import auth_required
+from app.schemas import PaginationArgs
 from ..models import User, AnimeGenre
-from ..args import PaginationArgs
 from ..errors import Abort
 from .. import constants
 from .. import display
@@ -14,12 +14,9 @@ from .. import utils
 
 router = APIRouter(prefix="/follow")
 
-@router.put("/{username}", summary="Follow user",
-    response_model=UserResponse
-)
-async def follow_user(
-    username: str, user: User = Depends(auth_required())
-):
+
+@router.put("/{username}", summary="Follow user", response_model=UserResponse)
+async def follow_user(username: str, user: User = Depends(auth_required)):
     if not (follow_user := await User.filter(username=username).first()):
         raise Abort("user", "not-found")
 
@@ -27,13 +24,11 @@ async def follow_user(
 
     return display.user(follow_user)
 
-@router.delete("/{username}", summary="Unfollow user",
-    response_model=UserResponse
+
+@router.delete(
+    "/{username}", summary="Unfollow user", response_model=UserResponse
 )
-async def follow_user(
-    username: str,
-    user: User = Depends(auth_required())
-):
+async def follow_user(username: str, user: User = Depends(auth_required)):
     if not (follow_user := await User.filter(username=username).first()):
         raise Abort("user", "not-found")
 
@@ -41,13 +36,13 @@ async def follow_user(
 
     return display.user(follow_user)
 
-@router.get("/{username}/following", summary="Get user following list",
-    response_model=UserPaginationResponse
+
+@router.get(
+    "/{username}/following",
+    summary="Get user following list",
+    response_model=UserPaginationResponse,
 )
-async def user_following(
-    username: str,
-    args: PaginationArgs = Depends()
-):
+async def user_following(username: str, args: PaginationArgs = Depends()):
     if not (user := await User.filter(username=username).first()):
         raise Abort("user", "not-found")
 
@@ -63,18 +58,15 @@ async def user_following(
     for follow_user in following:
         result.append(display.user(follow_user))
 
-    return {
-        "pagination": pagination,
-        "list": result
-    }
+    return {"pagination": pagination, "list": result}
 
-@router.get("/{username}/followers", summary="Get user followers",
-    response_model=UserPaginationResponse
+
+@router.get(
+    "/{username}/followers",
+    summary="Get user followers",
+    response_model=UserPaginationResponse,
 )
-async def user_following(
-    username: str,
-    args: PaginationArgs = Depends()
-):
+async def user_following(username: str, args: PaginationArgs = Depends()):
     if not (user := await User.filter(username=username).first()):
         raise Abort("user", "not-found")
 
@@ -90,24 +82,19 @@ async def user_following(
     for follow_user in followers:
         result.append(display.user(follow_user))
 
-    return {
-        "pagination": pagination,
-        "list": result
-    }
+    return {"pagination": pagination, "list": result}
 
-@router.get("/{username}/stats", summary="Get user follow stats",
-    response_model=FollowStatsResponse
+
+@router.get(
+    "/{username}/stats",
+    summary="Get user follow stats",
+    response_model=FollowStatsResponse,
 )
-async def user_follow_stats(
-    username: str
-):
+async def user_follow_stats(username: str):
     if not (user := await User.filter(username=username).first()):
         raise Abort("user", "not-found")
 
     followers = await user.followers.filter().count()
     following = await user.following.filter().count()
 
-    return {
-        "followers": followers,
-        "following": following
-    }
+    return {"followers": followers, "following": following}

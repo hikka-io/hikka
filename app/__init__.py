@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from . import errors
 import config
 
+
 def create_app() -> FastAPI:
     fu.validation_error_response_definition = errors.ErrorResponse.schema()
 
@@ -19,19 +20,15 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.add_exception_handler(
-        RequestValidationError, errors.validation_handler
-    )
+    app.add_exception_handler(RequestValidationError, errors.validation_handler)
 
-    app.add_exception_handler(
-        errors.Abort, errors.abort_handler
-    )
+    app.add_exception_handler(errors.Abort, errors.abort_handler)
 
     from .auth import router as auth
+    from .user import router as user
     from .favourite import favourite
     from .watch import watch
     from .anime import anime
-    from .user import user
 
     app.include_router(favourite)
     app.include_router(watch)
@@ -40,7 +37,8 @@ def create_app() -> FastAPI:
     app.include_router(auth)
 
     register_tortoise(
-        app, config=config.tortoise,
+        app,
+        config=config.tortoise,
         add_exception_handlers=True,
         generate_schemas=True,
     )

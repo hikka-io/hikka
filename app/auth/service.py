@@ -4,10 +4,6 @@ from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 
 
-async def get_user_by_username(username: str):
-    return await User.filter(username=username).first()
-
-
 async def get_user_by_activation(token: str):
     return await User.filter(activation_token=token).first()
 

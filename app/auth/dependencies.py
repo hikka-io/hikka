@@ -1,10 +1,16 @@
 from .utils import checkpwd, hashpwd, new_token
+from app.service import get_user_by_username
 from datetime import datetime, timedelta
 from fastapi import Body, Depends
+from pydantic import EmailStr
 from app.errors import Abort
 from app.models import User
-from pydantic import EmailStr
-from . import service
+
+from .service import (
+    get_user_by_activation,
+    get_user_by_email,
+    get_user_by_reset,
+)
 
 from .schemas import (
     ComfirmResetArgs,
@@ -15,7 +21,7 @@ from .schemas import (
 
 async def body_email_user(email: EmailStr = Body(embed=True)) -> User:
     # Get user by email
-    if not (user := await service.get_user_by_email(email)):
+    if not (user := await get_user_by_email(email)):
         raise Abort("auth", "user-not-found")
 
     return user
@@ -23,11 +29,11 @@ async def body_email_user(email: EmailStr = Body(embed=True)) -> User:
 
 async def validate_signup(signup: SignupArgs) -> SignupArgs:
     # Check if username is availaible
-    if await service.get_user_by_username(signup.username):
+    if await get_user_by_username(signup.username):
         raise Abort("auth", "username-taken")
 
     # Check if email has been used
-    if await service.get_user_by_email(signup.username):
+    if await get_user_by_email(signup.username):
         raise Abort("auth", "email-exists")
 
     return signup
@@ -35,7 +41,7 @@ async def validate_signup(signup: SignupArgs) -> SignupArgs:
 
 async def validate_login(login: LoginArgs) -> User:
     # Find user by email
-    if not (user := await service.get_user_by_email(login.email)):
+    if not (user := await get_user_by_email(login.email)):
         raise Abort("auth", "user-not-found")
 
     # Check password hash
@@ -55,7 +61,7 @@ async def validate_login(login: LoginArgs) -> User:
 
 async def validate_activation(token: str = Body(embed=True)) -> User:
     # Find user by activation token
-    if not (user := await service.get_user_by_activation(token)):
+    if not (user := await get_user_by_activation(token)):
         raise Abort("auth", "activation-invalid")
 
     # Check if activation token still valid
@@ -113,7 +119,7 @@ async def validate_password_reset(
 
 async def validate_password_confirm(confirm: ComfirmResetArgs):
     # Get user by reset token
-    if not (user := await service.get_user_by_reset(confirm.token)):
+    if not (user := await get_user_by_reset(confirm.token)):
         raise Abort("auth", "reset-invalid")
 
     # Make sure reset token is valid

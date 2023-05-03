@@ -3,5 +3,5 @@
 Run Hikka:
 
 ```
-uvicorn app:app --reload --port=8888
+uvicorn run:app --reload --port=8888
 ```
