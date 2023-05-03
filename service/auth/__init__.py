@@ -1,1 +1,1 @@
-from .views import router as auth
+from .router import router

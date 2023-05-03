@@ -27,11 +27,11 @@ def create_app() -> FastAPI:
         errors.Abort, errors.abort_handler
     )
 
+    from .auth import router as auth
     from .favourite import favourite
     from .watch import watch
     from .anime import anime
     from .user import user
-    from .auth import auth
 
     app.include_router(favourite)
     app.include_router(watch)
