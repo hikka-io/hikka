@@ -22,7 +22,6 @@ class ComfirmResetArgs(BaseModel):
 # Responses
 class UserResponse(BaseModel):
     created: Datetime
-    activated: bool
     username: str
 
 

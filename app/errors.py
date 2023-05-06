@@ -3,9 +3,11 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from fastapi import Request
 
+
 class ErrorResponse(BaseModel):
     message: str = Field(example="Example error message")
     code: str = Field(example="example_error")
+
 
 errors = {
     "auth": {
@@ -28,9 +30,7 @@ errors = {
     "permission": {
         "missing": ["You don't have permission for this action", 401],
     },
-    "anime": {
-        "not-found": ["Anime not found", 404]
-    },
+    "anime": {"not-found": ["Anime not found", 404]},
     "studio": {
         "not-found": ["Studio not found", 404],
     },
@@ -50,16 +50,26 @@ errors = {
     },
     "user": {
         "not-found": ["User not found", 404],
-    }
+    },
+    "follow": {
+        "already-following": ["This user is already followed", 400],
+        "not-following": ["This user is not followed", 400],
+        "invalid-action": ["Invalid action", 401],
+        "self": ["Can't follow self", 400],
+    },
 }
+
 
 class Abort(Exception):
     def __init__(self, scope: str, message: str):
         self.scope = scope
         self.message = message
 
+
 async def abort_handler(request: Request, exc: Abort):
-    error_code = exc.scope.replace("-", "_") + "_" + exc.message.replace("-", "_")
+    error_code = (
+        exc.scope.replace("-", "_") + "_" + exc.message.replace("-", "_")
+    )
 
     try:
         error_message = errors[exc.scope][exc.message][0]
@@ -69,17 +79,14 @@ async def abort_handler(request: Request, exc: Abort):
         status_code = 400
 
     return JSONResponse(
-        content={
-            "message": error_message, "code": error_code
-        },
-        status_code=status_code
+        content={"message": error_message, "code": error_code},
+        status_code=status_code,
     )
+
 
 async def validation_handler(request: Request, exc: RequestValidationError):
     exc_str = str(exc).replace("\n", " ").replace("   ", " ")
     return JSONResponse(
-        content={
-            "message": exc_str, "code": "validation_error"
-        },
-        status_code=422
+        content={"message": exc_str, "code": "validation_error"},
+        status_code=422,
     )

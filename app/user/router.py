@@ -1,13 +1,10 @@
+from .schemas import UserResponse, DescriptionArgs
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
-from .schemas import UserResponse
+from .dependencies import get_profile
 from app.models import User
 from app import display
 
-from .dependencies import (
-    update_description,
-    get_profile,
-)
 
 router = APIRouter(prefix="/user")
 
@@ -24,5 +21,10 @@ async def user_profile(user: User = Depends(get_profile)):
 
 # ToDo: move to user settings
 @router.post("/description", response_model=UserResponse)
-async def change_description(user: User = Depends(update_description)):
+async def change_description(
+    args: DescriptionArgs, user: User = Depends(auth_required)
+):
+    user.description = args.description
+    await user.save()
+
     return display.user(user)

@@ -24,6 +24,7 @@ def create_app() -> FastAPI:
 
     app.add_exception_handler(errors.Abort, errors.abort_handler)
 
+    from .follow import router as follow
     from .auth import router as auth
     from .user import router as user
     from .favourite import favourite
@@ -31,6 +32,7 @@ def create_app() -> FastAPI:
     from .anime import anime
 
     app.include_router(favourite)
+    app.include_router(follow)
     app.include_router(watch)
     app.include_router(anime)
     app.include_router(user)

@@ -1,8 +1,13 @@
 from datetime import datetime, timedelta
 from .service import get_user_by_auth
-from fastapi import Header
+from fastapi import Header, Query
 from .errors import Abort
 from .models import User
+
+
+# Get current pagination page
+async def get_page(page: int = Query(gt=0, default=1)):
+    return page
 
 
 # Check user auth token
