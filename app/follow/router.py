@@ -22,6 +22,7 @@ from .schemas import (
 )
 
 
+# ToDo: Better responses
 router = APIRouter(prefix="/follow")
 
 

@@ -1,6 +1,7 @@
+from .service import get_auth_token, get_anime_by_slug
 from datetime import datetime, timedelta
-from .service import get_auth_token
 from fastapi import Header, Query
+from .models import Anime
 from .errors import Abort
 from .models import User
 
@@ -8,6 +9,14 @@ from .models import User
 # Get current pagination page
 async def get_page(page: int = Query(gt=0, default=1)):
     return page
+
+
+# Get anime by slug
+async def get_anime(slug: str) -> Anime:
+    if not (anime := await get_anime_by_slug(slug)):
+        raise Abort("anime", "not-found")
+
+    return anime
 
 
 # Check user auth token

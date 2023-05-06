@@ -1,1 +1,1 @@
-from .views import router as favourite
+from .router import router

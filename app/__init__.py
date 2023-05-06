@@ -20,23 +20,28 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.add_exception_handler(RequestValidationError, errors.validation_handler)
+    app.add_exception_handler(
+        RequestValidationError,
+        errors.validation_handler,
+    )
 
     app.add_exception_handler(errors.Abort, errors.abort_handler)
 
+    from .favourite import router as favourite
     from .follow import router as follow
     from .auth import router as auth
     from .user import router as user
-    from .favourite import favourite
-    from .watch import watch
-    from .anime import anime
 
     app.include_router(favourite)
     app.include_router(follow)
-    app.include_router(watch)
-    app.include_router(anime)
     app.include_router(user)
     app.include_router(auth)
+
+    from .watch import watch
+    from .anime import anime
+
+    app.include_router(watch)
+    app.include_router(anime)
 
     register_tortoise(
         app,
