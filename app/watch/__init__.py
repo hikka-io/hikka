@@ -1,1 +1,1 @@
-from .views import router as watch
+from .router import router
