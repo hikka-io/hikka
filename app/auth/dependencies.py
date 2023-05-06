@@ -1,10 +1,10 @@
-from .utils import checkpwd, hashpwd, new_token
 from app.service import get_user_by_username
-from datetime import datetime, timedelta
 from fastapi import Body, Depends
+from datetime import datetime
 from pydantic import EmailStr
 from app.errors import Abort
 from app.models import User
+from .utils import checkpwd
 
 from .service import (
     get_user_by_activation,
@@ -52,10 +52,6 @@ async def validate_login(login: LoginArgs) -> User:
     if not user.activated:
         raise Abort("auth", "not-activated")
 
-    # Update user login time
-    user.login = datetime.utcnow()
-    await user.save()
-
     return user
 
 
@@ -68,11 +64,6 @@ async def validate_activation(token: str = Body(embed=True)) -> User:
     if user.activation_expire < datetime.utcnow():
         raise Abort("auth", "activation-expired")
 
-    # Activate user and delete token
-    user.activation_token = None
-    user.activated = True
-    await user.save()
-
     return user
 
 
@@ -83,17 +74,9 @@ async def validate_activation_resend(
     if user.activated:
         raise Abort("auth", "already-activated")
 
-    # Get current UTC datetime
-    now = datetime.utcnow()
-
     # Prevent sending new activation email if previous token still valid
     if datetime.utcnow() > user.activation_expire:
         raise Abort("auth", "activation-valid")
-
-    # Generate new token
-    user.activation_expire = now + timedelta(hours=3)
-    user.activation_token = new_token()
-    await user.save()
 
     return user
 
@@ -106,13 +89,8 @@ async def validate_password_reset(
         raise Abort("auth", "not-activated")
 
     # Prevent sending new password reset email if previous token still valid
-    if datetime.utcnow() > user.activation_expire:
+    if datetime.utcnow() > user.password_reset_expire:
         raise Abort("auth", "reset-valid")
-
-    # Generate new password reset token
-    user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
-    user.password_reset_token = new_token()
-    await user.save()
 
     return user
 
@@ -126,10 +104,4 @@ async def validate_password_confirm(confirm: ComfirmResetArgs):
     if datetime.utcnow() > user.password_reset_expire:
         raise Abort("auth", "reset-expired")
 
-    # Set new password and delete reset token
-    user.password_hash = hashpwd(confirm.password)
-    user.password_reset_expire = None
-    user.password_reset_token = None
-    await user.save()
-
-    return user
+    return user, confirm.password

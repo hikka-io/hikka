@@ -48,8 +48,13 @@ async def create_email(
     )
 
 
-async def create_token(user: User) -> AuthToken:
+async def create_auth_token(user: User) -> AuthToken:
     now = datetime.utcnow()
+
+    # Update user login time
+    user.login = now
+
+    await user.save()
 
     return await AuthToken.create(
         **{
@@ -59,3 +64,44 @@ async def create_token(user: User) -> AuthToken:
             "user": user,
         }
     )
+
+
+async def create_activation_token(user: User) -> User:
+    # Generate new token
+    user.activation_expire = datetime.utcnow() + timedelta(hours=3)
+    user.activation_token = new_token()
+
+    await user.save()
+
+    return user
+
+
+async def create_password_token(user: User) -> User:
+    # Generate new password reset token
+    user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
+    user.password_reset_token = new_token()
+
+    await user.save()
+
+    return user
+
+
+async def activate_user(user: User) -> User:
+    # Activate user and delete token
+    user.activation_token = None
+    user.activated = True
+
+    await user.save()
+
+    return user
+
+
+async def change_password(user: User, new_password: str):
+    # Set new password and delete reset token
+    user.password_hash = hashpwd(new_password)
+    user.password_reset_expire = None
+    user.password_reset_token = None
+
+    await user.save()
+
+    return user

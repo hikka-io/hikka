@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from .service import get_user_by_auth
+from .service import get_auth_token
 from fastapi import Header, Query
 from .errors import Abort
 from .models import User
@@ -12,7 +12,7 @@ async def get_page(page: int = Query(gt=0, default=1)):
 
 # Check user auth token
 async def auth_required(auth: str = Header()) -> User:
-    if not (token := await get_user_by_auth(auth)):
+    if not (token := await get_auth_token(auth)):
         raise Abort("auth", "invalid-token")
 
     if not token.user:
@@ -28,5 +28,8 @@ async def auth_required(auth: str = Header()) -> User:
 
     token.expiration = now + timedelta(days=3)
     await token.save()
+
+    token.user.last_active = now
+    await token.user.save()
 
     return token.user
