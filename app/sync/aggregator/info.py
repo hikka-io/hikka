@@ -7,14 +7,12 @@ from app.models import AnimeVoice
 from app.models import Character
 from app.models import Company
 from app.models import Person
-from app.models import Anime
 from tortoise import Tortoise
-from app import utils
+from app.models import Anime
 from . import requests
+from app import utils
 import asyncio
 import config
-
-from pprint import pprint
 
 
 def process_translations(data):
@@ -248,6 +246,8 @@ async def update_anime_info(semaphore, anime):
 
         data = await requests.get_anime_info(anime.content_id)
 
+        total_episodes = len(data["episodes_list"])
+
         anime.start_date = utils.from_timestamp(data["start_date"])
         anime.end_date = utils.from_timestamp(data["end_date"])
         anime.updated = utils.from_timestamp(data["updated"])
@@ -260,6 +260,8 @@ async def update_anime_info(semaphore, anime):
         anime.status = data["status"]
         anime.score = data["score"]
         anime.nsfw = data["nsfw"]
+
+        anime.total_episodes = total_episodes if total_episodes > 0 else None
 
         anime.synopsis_en = data["synopsis"]
         anime.title_en = data["title_en"]

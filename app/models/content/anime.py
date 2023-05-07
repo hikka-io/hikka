@@ -1,6 +1,7 @@
 from ..base import Base, NativeDatetimeField
 from tortoise import fields
 
+
 class Anime(Base):
     # Multilang fields
     title_ja = fields.CharField(null=True, max_length=255)
@@ -22,6 +23,7 @@ class Anime(Base):
     status = fields.CharField(null=True, max_length=16, index=True)
     scored_by = fields.IntField(null=True, default=0)
     score = fields.FloatField(null=True, default=0)
+    total_episodes = fields.IntField(null=True)
     start_date = NativeDatetimeField(null=True)
     end_date = NativeDatetimeField(null=True)
     duration = fields.IntField(null=True)
@@ -38,18 +40,24 @@ class Anime(Base):
     # ToDo: images
 
     studios: fields.ManyToManyRelation["MALCompany"] = fields.ManyToManyField(
-        "models.Company", related_name="studio_anime",
-        through="service_relation_anime_studios"
+        "models.Company",
+        related_name="studio_anime",
+        through="service_relation_anime_studios",
     )
 
     producers: fields.ManyToManyRelation["MALCompany"] = fields.ManyToManyField(
-        "models.Company", related_name="producer_anime",
-        through="service_relation_anime_producers"
+        "models.Company",
+        related_name="producer_anime",
+        through="service_relation_anime_producers",
     )
 
-    franchise: fields.ForeignKeyRelation["AnimeFranchise"] = fields.ForeignKeyField(
-        "models.AnimeFranchise", related_name="anime",
-        null=True, on_delete=fields.SET_NULL
+    franchise: fields.ForeignKeyRelation[
+        "AnimeFranchise"
+    ] = fields.ForeignKeyField(
+        "models.AnimeFranchise",
+        related_name="anime",
+        on_delete=fields.SET_NULL,
+        null=True,
     )
 
     recommendations: fields.ReverseRelation["AnimeRecommendation"]

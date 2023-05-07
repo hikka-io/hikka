@@ -1,9 +1,9 @@
-from service.sync import aggregator_anime_genres
-from service.sync import aggregator_anime_info
-from service.sync import aggregator_characters
-from service.sync import aggregator_companies
-from service.sync import aggregator_people
-from service.sync import aggregator_anime
+from app.sync import aggregator_anime_genres
+from app.sync import aggregator_anime_info
+from app.sync import aggregator_characters
+from app.sync import aggregator_companies
+from app.sync import aggregator_people
+from app.sync import aggregator_anime
 import asyncio
 
 if __name__ == "__main__":

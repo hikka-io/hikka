@@ -27,14 +27,11 @@ async def anime_slug(anime: Anime = Depends(get_anime)):
         for company in anime.producers
     ]
 
-    # ToDo: move to database field
-    total_episodes = await anime.episodes_list.filter().count()
-
     # Return full anime info
     return {
         "start_date": utils.to_timestamp(anime.start_date),
         "end_date": utils.to_timestamp(anime.end_date),
-        "total_episodes": total_episodes,
+        "total_episodes": anime.total_episodes,
         "synopsis_en": anime.synopsis_en,
         "synopsis_ua": anime.synopsis_ua,
         "media_type": anime.media_type,
