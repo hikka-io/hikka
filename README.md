@@ -23,3 +23,9 @@ SELECT count(*) FROM service_content_anime WHERE needs_update = true;
 
 UPDATE service_content_anime SET needs_update = true;
 ```
+
+## Meilisearch
+
+```bash
+./meilisearch --http-addr 127.0.0.1:8800 --env development --master-key xyz
+```

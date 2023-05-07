@@ -39,13 +39,13 @@ class Anime(Base):
 
     # ToDo: images
 
-    studios: fields.ManyToManyRelation["MALCompany"] = fields.ManyToManyField(
+    studios: fields.ManyToManyRelation["Company"] = fields.ManyToManyField(
         "models.Company",
         related_name="studio_anime",
         through="service_relation_anime_studios",
     )
 
-    producers: fields.ManyToManyRelation["MALCompany"] = fields.ManyToManyField(
+    producers: fields.ManyToManyRelation["Company"] = fields.ManyToManyField(
         "models.Company",
         related_name="producer_anime",
         through="service_relation_anime_producers",

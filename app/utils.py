@@ -55,3 +55,23 @@ def pagination_dict(total, page, size):
         "total": total,
         "page": page,
     }
+
+
+# Convert month to season str
+def get_season(date):
+    season_map = {
+        12: "winter",
+        1: "winter",
+        2: "winter",
+        3: "spring",
+        4: "spring",
+        5: "spring",
+        6: "summer",
+        7: "summer",
+        8: "summer",
+        9: "fall",
+        10: "fall",
+        11: "fall",
+    }
+
+    return season_map.get(date.month) if date else None
