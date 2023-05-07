@@ -80,9 +80,7 @@ async def meilisearch_populate():
 
     documents = await anime_documents()
 
-    async with Client(
-        config.meilisearch["endpoint"], config.meilisearch["token"]
-    ) as client:
+    async with Client(**config.meilisearch) as client:
         index = client.index("content_anime")
 
         await update_anime_settings(index)
