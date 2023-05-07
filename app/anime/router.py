@@ -1,31 +1,31 @@
-from fastapi import APIRouter
-from ..models import Anime
-from ..errors import Abort
-from .. import utils
+from app.dependencies import get_anime
+from fastapi import APIRouter, Depends
+from app.models import Anime
+from app import utils
+from . import service
+
 
 router = APIRouter(prefix="/anime")
 
+
 @router.get("/{slug}")
-async def anime_slug(slug: str):
-    # Get anime by slug
-    if not (anime := await Anime.filter(slug=slug).first()):
-        raise Abort("anime", "not-found")
-    
-    await anime.fetch_related("studios", "producers", "genres")
+async def anime_slug(anime: Anime = Depends(get_anime)):
+    anime = await service.anime_fetch_related(anime)
 
-    genres = [{
-        "name_en": genre.name_en,
-        "name_ua": genre.name_ua,
-        "slug": genre.slug
-    } for genre in anime.genres]
+    genres = [
+        {"name_en": genre.name_en, "name_ua": genre.name_ua, "slug": genre.slug}
+        for genre in anime.genres
+    ]
 
-    studios = [{
-        "name": company.name, "slug": company.slug,
-    } for company in anime.studios]
+    studios = [
+        {"name": company.name, "slug": company.slug}
+        for company in anime.studios
+    ]
 
-    producers = [{
-        "name": company.name, "slug": company.slug,
-    } for company in anime.producers]
+    producers = [
+        {"name": company.name, "slug": company.slug}
+        for company in anime.producers
+    ]
 
     # ToDo: move to database field
     total_episodes = await anime.episodes_list.filter().count()
@@ -57,5 +57,5 @@ async def anime_slug(slug: str):
         "nsfw": anime.nsfw,
         "slug": anime.slug,
         "genres": genres,
-        "ost": anime.ost
+        "ost": anime.ost,
     }

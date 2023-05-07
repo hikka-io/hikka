@@ -1,1 +1,1 @@
-from .views import router as anime
+from .router import router
