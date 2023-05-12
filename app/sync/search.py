@@ -31,6 +31,7 @@ async def update_anime_settings(index):
             ],
             displayed_attributes=[
                 "media_type",
+                "scored_by",
                 "title_ua",
                 "title_en",
                 "title_ja",

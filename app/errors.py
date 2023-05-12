@@ -57,6 +57,12 @@ errors = {
         "invalid-action": ["Invalid action", 401],
         "self": ["Can't follow self", 400],
     },
+    "search": {
+        "bad-year": ["Invalid years passed", 400],
+        "unknown-producer": ["Unknown producer", 400],
+        "unknown-studio": ["Unknown studio", 400],
+        "unknown-genre": ["Unknown genre", 400],
+    },
 }
 
 
