@@ -14,6 +14,15 @@ async def anime_genre_count(slugs):
 async def anime_search_query(search: AnimeSearchArgs):
     query = Anime.filter()
 
+    if search.years[0]:
+        query = query.filter(year__gte=search.years[0])
+
+    if search.years[1]:
+        query = query.filter(year__lte=search.years[1])
+
+    if len(search.season) > 0:
+        query = query.filter(season__in=utils.enum_list_values(search.season))
+
     if len(search.rating) > 0:
         query = query.filter(rating__in=utils.enum_list_values(search.rating))
 
@@ -40,9 +49,7 @@ async def anime_search_query(search: AnimeSearchArgs):
         genres = await AnimeGenre.filter(slug__in=search.genres)
         query = query.filter(genres__in=genres)
 
-    # years
-    # season
-
-    query = query.order_by(*utils.build_order_by(search.sort))
+    if len(search.sort) > 0:
+        query = query.order_by(*utils.build_order_by(search.sort))
 
     return query

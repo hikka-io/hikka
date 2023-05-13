@@ -12,12 +12,12 @@ router = APIRouter(prefix="/search")
 async def search_anime(
     search: AnimeSearchArgs = Depends(validate_search_anime),
 ):
-    query = await service.anime_search_query(search)
+    search_query = await service.anime_search_query(search)
 
-    total = await query.count()
+    total = await search_query.count()
     limit, offset, size = pagination(search.page)
 
-    anime_list = await query.limit(limit).offset(offset)
+    anime_list = await search_query.limit(limit).offset(offset)
 
     result = [
         {

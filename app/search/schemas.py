@@ -58,8 +58,8 @@ class SourceEnum(str, Enum):
 # Args
 class AnimeSearchArgs(BaseModel):
     query: Union[constr(min_length=3, max_length=255), None] = None
+    sort: list[str] = ["score:desc", "scored_by:desc"]
     page: int = Field(default=1, gt=0)
-    sort: list[str]
 
     years: list[Union[PositiveInt, None]] = Field(
         default=[None, None], min_items=2, max_items=2
@@ -88,6 +88,9 @@ class AnimeSearchArgs(BaseModel):
     def validate_sort(cls, sort_list):
         valid_fields = ["score", "scored_by"]
         valid_orders = ["asc", "desc"]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError(f"Invalid sort: duplicates")
 
         for sort_item in sort_list:
             parts = sort_item.split(":")
