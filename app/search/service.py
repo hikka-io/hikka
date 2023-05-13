@@ -3,6 +3,14 @@ from .schemas import AnimeSearchArgs
 from . import utils
 
 
+async def company_count(slugs):
+    return await Company.filter(slug__in=slugs).count()
+
+
+async def anime_genre_count(slugs):
+    return await AnimeGenre.filter(slug__in=slugs).count()
+
+
 async def anime_search_query(search: AnimeSearchArgs):
     query = Anime.filter()
 
