@@ -58,14 +58,15 @@ class SourceEnum(str, Enum):
 # Args
 class AnimeSearchArgs(BaseModel):
     query: Union[constr(min_length=3, max_length=255), None] = None
-    sort: list[str] = ["score:desc", "scored_by:desc"]
     page: int = Field(default=1, gt=0)
+    sort: list[str]
+
     years: list[Union[PositiveInt, None]] = Field(
         default=[None, None], min_items=2, max_items=2
     )
 
+    media_type: list[AnimeMediaEnum] = []
     rating: list[AnimeAgeRatingEnum] = []
-    release: list[AnimeMediaEnum] = []
     status: list[AnimeStatusEnum] = []
     source: list[SourceEnum] = []
     season: list[SeasonEnum] = []
@@ -74,7 +75,7 @@ class AnimeSearchArgs(BaseModel):
     studios: list[str] = []
     genres: list[str] = []
 
-    @staticmethod
+    @validator("years")
     def validate_years(cls, years):
         if all(year is not None for year in years) and years[0] > years[1]:
             raise ValueError(
@@ -83,6 +84,20 @@ class AnimeSearchArgs(BaseModel):
 
         return years
 
-    _validate_years = validator("years", allow_reuse=True, pre=True)(
-        validate_years
-    )
+    @validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_fields = ["score", "scored_by"]
+        valid_orders = ["asc", "desc"]
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list

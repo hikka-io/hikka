@@ -2,7 +2,7 @@ from app.utils import pagination_dict, pagination
 from .dependencies import validate_search_anime
 from fastapi import APIRouter, Depends
 from .schemas import AnimeSearchArgs
-from app.models import Anime
+from . import service
 
 
 router = APIRouter(prefix="/search")
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/search")
 async def search_anime(
     search: AnimeSearchArgs = Depends(validate_search_anime),
 ):
-    query = Anime.filter().order_by("-score", "-scored_by")
+    query = await service.anime_search_query(search)
 
     total = await query.count()
     limit, offset, size = pagination(search.page)
