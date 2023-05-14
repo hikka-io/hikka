@@ -248,6 +248,9 @@ async def update_anime_info(semaphore, anime):
 
         total_episodes = len(data["episodes_list"])
 
+        anime.year = anime.start_date.year if anime.start_date else None
+        anime.season = utils.get_season(anime.start_date)
+
         anime.start_date = utils.from_timestamp(data["start_date"])
         anime.end_date = utils.from_timestamp(data["end_date"])
         anime.updated = utils.from_timestamp(data["updated"])

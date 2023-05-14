@@ -1,7 +1,7 @@
 from app.models import Anime
 from tortoise import Tortoise
-from app import utils
 from . import requests
+from app import utils
 import asyncio
 import config
 
@@ -41,12 +41,13 @@ async def save_anime_list(data):
             print(f"Anime needs update: {anime.title_en}")
 
         else:
+            start_date = utils.from_timestamp(anime_data["start_date"])
+
             anime = Anime(
                 **{
-                    "start_date": utils.from_timestamp(
-                        anime_data["start_date"]
-                    ),
                     "end_date": utils.from_timestamp(anime_data["end_date"]),
+                    "year": start_date.year if start_date else None,
+                    "season": utils.get_season(anime.start_date),
                     "media_type": anime_data["media_type"],
                     "content_id": anime_data["reference"],
                     "scored_by": anime_data["scored_by"],
@@ -54,6 +55,7 @@ async def save_anime_list(data):
                     "title_en": anime_data["title_en"],
                     "title_ja": anime_data["title"],
                     "score": anime_data["score"],
+                    "start_date": start_date,
                     "needs_update": True,
                     "updated": updated,
                     "slug": slug,
