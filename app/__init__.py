@@ -32,8 +32,8 @@ def create_app() -> FastAPI:
     # from .follow import router as follow
     # from .anime import router as anime
     # from .watch import router as watch
-    # from .auth import router as auth
     # from .user import router as user
+    from .auth import router as auth
 
     # app.include_router(favourite)
     # app.include_router(search)
@@ -41,7 +41,7 @@ def create_app() -> FastAPI:
     # app.include_router(anime)
     # app.include_router(watch)
     # app.include_router(user)
-    # app.include_router(auth)
+    app.include_router(auth)
 
     register_tortoise(
         app,
