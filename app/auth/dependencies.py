@@ -1,4 +1,6 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
+from app.database import get_session
 from fastapi import Body, Depends
 from datetime import datetime
 from pydantic import EmailStr
@@ -27,13 +29,15 @@ async def body_email_user(email: EmailStr = Body(embed=True)) -> User:
     return user
 
 
-async def validate_signup(signup: SignupArgs) -> SignupArgs:
+async def validate_signup(
+    signup: SignupArgs, session: AsyncSession = Depends(get_session)
+) -> SignupArgs:
     # Check if username is availaible
-    if await get_user_by_username(signup.username):
+    if await get_user_by_username(signup.username, session):
         raise Abort("auth", "username-taken")
 
     # Check if email has been used
-    if await get_user_by_email(signup.username):
+    if await get_user_by_email(signup.username, session):
         raise Abort("auth", "email-exists")
 
     return signup

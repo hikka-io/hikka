@@ -1,9 +1,11 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
+from app.database import get_session
 from app.models import User
 from app import constants
 from typing import Tuple
-from app import display
 from . import service
+
 
 from .dependencies import (
     validate_activation_resend,
@@ -25,16 +27,32 @@ router = APIRouter(prefix="/auth")
 
 
 @router.post("/signup", response_model=UserResponse)
-async def signup(signup: SignupArgs = Depends(validate_signup)):
+async def signup(
+    signup: SignupArgs = Depends(validate_signup),
+    session: AsyncSession = Depends(get_session),
+):
     # Create new user
-    user = await service.create_user(signup)
+    user = await service.create_user(signup, session)
 
     # Add activation email to database
     await service.create_email(
-        constants.EMAIL_ACTIVATION, user.activation_token, user
+        constants.EMAIL_ACTIVATION, user.activation_token, user, session
     )
 
-    return display.user(user)
+    return user
+
+
+# @router.post("/signup", response_model=UserResponse)
+# async def signup(signup: SignupArgs = Depends(validate_signup)):
+#     # Create new user
+#     user = await service.create_user(signup)
+
+#     # Add activation email to database
+#     await service.create_email(
+#         constants.EMAIL_ACTIVATION, user.activation_token, user
+#     )
+
+#     return display.user(user)
 
 
 # @router.post("/login", response_model=TokenResponse)

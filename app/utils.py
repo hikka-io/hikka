@@ -1,8 +1,14 @@
 from pydantic.datetime_parse import parse_datetime
 from unicodedata import normalize
 from datetime import datetime
+import orjson
 import math
 import re
+
+
+# Dump dict using orjson
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
 
 
 # Quick hack to make FastAPI display datetime as timestamp

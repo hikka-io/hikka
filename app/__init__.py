@@ -1,16 +1,30 @@
 from tortoise.contrib.fastapi import register_tortoise
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+from .database import sessionmanager
 import fastapi.openapi.utils as fu
 from fastapi import FastAPI
 from . import errors
 import config
 
 
-def create_app() -> FastAPI:
+def create_app(init_db: bool = True) -> FastAPI:
+    lifespan = None
+
+    # SQLAlchemy initialization process
+    if init_db:
+        sessionmanager.init(config.database)
+
+        @asynccontextmanager
+        async def lifespan(app: FastAPI):
+            yield
+            if sessionmanager._engine is not None:
+                await sessionmanager.close()
+
     fu.validation_error_response_definition = errors.ErrorResponse.schema()
 
-    app = FastAPI(docs_url=None, redoc_url=None)
+    app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
 
     app.add_middleware(
         CORSMiddleware,
@@ -20,10 +34,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.add_exception_handler(
-        RequestValidationError,
-        errors.validation_handler,
-    )
+    app.add_exception_handler(RequestValidationError, errors.validation_handler)
 
     app.add_exception_handler(errors.Abort, errors.abort_handler)
 
