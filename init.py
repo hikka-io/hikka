@@ -1,6 +1,5 @@
 from app.database import engine, AsyncSessionFactory
 from app.models import Base, User
-from app.database import get_db
 import asyncio
 
 
@@ -15,5 +14,5 @@ async def create_db_and_tables():
         await conn.run_sync(Base.metadata.create_all)
 
 
-# asyncio.run(create_db_and_tables())
-asyncio.run(test())
+asyncio.run(create_db_and_tables())
+# asyncio.run(test())

@@ -1,0 +1,16 @@
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy import String
+from datetime import datetime
+from ..base import Base
+
+
+class AuthToken(Base):
+    __tablename__ = "service_auth_tokens"
+
+    secret: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    expiration: Mapped[datetime]
+    created: Mapped[datetime]
+
+    user: Mapped["User"] = relationship(back_populates="auth_tokens")
