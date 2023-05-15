@@ -6,7 +6,7 @@ from typing import Union
 
 
 async def get_user_by_username(
-    username: str, session: AsyncSession
+    session: AsyncSession, username: str
 ) -> Union[User, None]:
     return await session.scalar(select(User).filter_by(username=username))
 
