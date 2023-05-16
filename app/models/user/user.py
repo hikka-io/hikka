@@ -1,4 +1,3 @@
-from sqlalchemy import Table, Column, ForeignKey, UUID
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -35,9 +34,13 @@ class User(Base):
         back_populates="user",
     )
 
-    # ToDo: make separate table for followers
-    # following: Mapped[list["User"]] = relationship(back_populates="followers")
-    # followers: Mapped[list["User"]] = relationship(back_populates="following")
+    followers: Mapped[list["Follow"]] = relationship(
+        back_populates="followed_user",
+    )
+
+    following: Mapped[list["Follow"]] = relationship(
+        back_populates="user",
+    )
 
     # favourite: fields.ReverseRelation["AnimeFavourite"]
     # watch: fields.ReverseRelation["AnimeWatch"]
