@@ -1,7 +1,8 @@
+from app.database import sessionmanager
 from app.models import Person
-from tortoise import Tortoise
-from app import utils
+from sqlalchemy import select
 from . import requests
+from app import utils
 import asyncio
 import config
 
@@ -13,63 +14,62 @@ async def make_request(semaphore, page):
 
 
 async def save_people(data):
-    references = [entry["reference"] for entry in data]
+    sessionmanager.init(config.database)
 
-    cache = await Person.filter(content_id__in=references)
+    async with sessionmanager.session() as session:
+        references = [entry["reference"] for entry in data]
 
-    people_cache = {entry.content_id: entry for entry in cache}
+        cache = await session.scalars(
+            select(Person).where(Person.content_id.in_(references))
+        )
 
-    create_people = []
-    update_people = []
+        people_cache = {entry.content_id: entry for entry in cache}
 
-    for person_data in data:
-        updated = utils.from_timestamp(person_data["updated"])
-        slug = utils.slugify(person_data["name"], person_data["reference"])
+        add_people = []
 
-        if person_data["reference"] in people_cache:
-            person = people_cache[person_data["reference"]]
+        for person_data in data:
+            updated = utils.from_timestamp(person_data["updated"])
+            slug = utils.slugify(person_data["name"], person_data["reference"])
 
-            if person.updated == updated:
-                continue
+            if person_data["reference"] in people_cache:
+                person = people_cache[person_data["reference"]]
 
-            if person.favorites == person_data["favorites"]:
-                continue
+                if person.updated == updated:
+                    continue
 
-            person.favorites = person_data["favorites"]
-            person.updated = updated
+                if person.favorites == person_data["favorites"]:
+                    continue
 
-            await person.save()
+                person.favorites = person_data["favorites"]
+                person.updated = updated
 
-            update_people.append(person)
+                await person.save()
 
-            print(f"Updated person: {person.name_en} ({person.favorites})")
+                add_people.append(person)
 
-        else:
-            person = Person(
-                **{
-                    "content_id": person_data["reference"],
-                    "name_native": person_data["name_ja"],
-                    "favorites": person_data["favorites"],
-                    "name_en": person_data["name"],
-                    "updated": updated,
-                    "slug": slug,
-                }
-            )
+                print(f"Updated person: {person.name_en} ({person.favorites})")
 
-            create_people.append(person)
+            else:
+                person = Person(
+                    **{
+                        "content_id": person_data["reference"],
+                        "name_native": person_data["name_ja"],
+                        "favorites": person_data["favorites"],
+                        "name_en": person_data["name"],
+                        "updated": updated,
+                        "slug": slug,
+                    }
+                )
 
-            print(f"Added person: {person.name_en} ({person.favorites})")
+                add_people.append(person)
 
-    await Person.bulk_create(create_people)
+                print(f"Added person: {person.name_en} ({person.favorites})")
 
-    if len(update_people) > 0:
-        await Person.bulk_update(update_people, fields=["updated", "favorites"])
+        session.add_all(add_people)
+        await session.commit()
 
 
 async def aggregator_people():
-    await Tortoise.init(config=config.tortoise)
-    await Tortoise.generate_schemas()
-
     data = await requests.get_people(1)
     pages = data["pagination"]["pages"]
 
@@ -80,4 +80,5 @@ async def aggregator_people():
 
     data = [item for sublist in result for item in sublist]
 
-    await save_people(data)
+    for data_chunk in utils.chunkify(data, 20000):
+        await save_people(data_chunk)
