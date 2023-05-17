@@ -8,5 +8,6 @@ from .content.character import Character
 from .content.genre import AnimeGenre
 from .content.company import Company
 from .content.person import Person
+from .content.anime import Anime
 
 from .base import Base

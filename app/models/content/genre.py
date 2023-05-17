@@ -1,3 +1,4 @@
+from ..association import anime_genres_association_table
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -17,8 +18,6 @@ class GenreMixin:
 class AnimeGenre(Base, GenreMixin, ContentMixin):
     __tablename__ = "service_content_anime_genres"
 
-    # anime: fields.ManyToManyRelation["Anime"] = fields.ManyToManyField(
-    #     "models.Anime",
-    #     related_name="genres",
-    #     through="service_relation_anime_genres",
-    # )
+    anime: Mapped["Anime"] = relationship(
+        secondary=anime_genres_association_table, back_populates="genres"
+    )
