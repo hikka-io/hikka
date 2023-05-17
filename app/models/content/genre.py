@@ -18,6 +18,6 @@ class GenreMixin:
 class AnimeGenre(Base, GenreMixin, ContentMixin):
     __tablename__ = "service_content_anime_genres"
 
-    anime: Mapped["Anime"] = relationship(
+    anime: Mapped[list["Anime"]] = relationship(
         secondary=anime_genres_association_table, back_populates="genres"
     )

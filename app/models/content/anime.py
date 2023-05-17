@@ -1,3 +1,5 @@
+from ..association import anime_producers_association_table
+from ..association import anime_studios_association_table
 from ..association import anime_genres_association_table
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import ContentMixin, SlugMixin
@@ -55,10 +57,6 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="anime", foreign_keys=[franchise_id]
     )
 
-    genres: Mapped["AnimeGenre"] = relationship(
-        secondary=anime_genres_association_table, back_populates="anime"
-    )
-
     voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
     staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
 
@@ -78,18 +76,18 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="recommendation"
     )
 
+    genres: Mapped[list["AnimeGenre"]] = relationship(
+        secondary=anime_genres_association_table, back_populates="anime"
+    )
+
+    producers: Mapped[list["Company"]] = relationship(
+        secondary=anime_producers_association_table,
+        back_populates="producer_anime",
+    )
+
+    studios: Mapped[list["Company"]] = relationship(
+        secondary=anime_studios_association_table,
+        back_populates="studio_anime",
+    )
+
     # ToDo: images
-
-
-# class Anime(Base):
-#     studios: fields.ManyToManyRelation["Company"] = fields.ManyToManyField(
-#         "models.Company",
-#         related_name="studio_anime",
-#         through="service_relation_anime_studios",
-#     )
-
-#     producers: fields.ManyToManyRelation["Company"] = fields.ManyToManyField(
-#         "models.Company",
-#         related_name="producer_anime",
-#         through="service_relation_anime_producers",
-#     )

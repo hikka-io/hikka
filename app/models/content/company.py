@@ -1,4 +1,5 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
+from ..association import anime_producers_association_table
+from ..association import anime_studios_association_table
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -17,7 +18,12 @@ class Company(Base, ContentMixin):
     favorites: Mapped[int] = mapped_column(default=0, nullable=True)
     updated: Mapped[datetime]
 
-    # producer_anime: fields.ManyToManyRelation["Anime"]
-    # studio_anime: fields.ManyToManyRelation["Anime"]
+    producer_anime: Mapped[list["Anime"]] = relationship(
+        secondary=anime_producers_association_table, back_populates="producers"
+    )
+
+    studio_anime: Mapped[list["Anime"]] = relationship(
+        secondary=anime_studios_association_table, back_populates="studios"
+    )
 
     # ToDo: image

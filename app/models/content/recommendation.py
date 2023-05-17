@@ -1,5 +1,5 @@
+from sqlalchemy.orm import relationship, mapped_column
 from sqlalchemy import ForeignKey, UniqueConstraint
-from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from ..base import Base
 
@@ -9,13 +9,9 @@ class AnimeRecommendation(Base):
 
     weight: Mapped[int]
 
-    recommendation_id: Mapped[int] = relationship(
-        ForeignKey("service_content_anime.id"),
-    )
+    recommendation_id = mapped_column(ForeignKey("service_content_anime.id"))
 
-    anime_id: Mapped[int] = relationship(
-        ForeignKey("service_content_anime.id"),
-    )
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
 
     recommendation: Mapped["Anime"] = relationship(
         back_populates="recommended_to", foreign_keys=[recommendation_id]
