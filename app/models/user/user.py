@@ -35,10 +35,12 @@ class User(Base):
     )
 
     followers: Mapped[list["Follow"]] = relationship(
+        foreign_keys="[Follow.followed_user_id]",
         back_populates="followed_user",
     )
 
     following: Mapped[list["Follow"]] = relationship(
+        foreign_keys="[Follow.user_id]",
         back_populates="user",
     )
 

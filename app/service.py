@@ -1,5 +1,6 @@
 # from .models import User, AuthToken, Anime
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from .models import User, AuthToken
 from sqlalchemy import select
 from typing import Union
@@ -15,12 +16,11 @@ async def get_user_by_username(
 #     return await Anime.filter(slug=slug).first()
 
 
-async def get_auth_token(secret: str) -> Union[AuthToken, None]:
-    # return (
-    #     await AuthToken.filter(
-    #         secret=secret,
-    #     )
-    #     .prefetch_related("user")
-    #     .first()
-    # )
-    pass
+async def get_auth_token(
+    session: AsyncSession, secret: str
+) -> Union[AuthToken, None]:
+    return await session.scalar(
+        select(AuthToken)
+        .filter_by(secret=secret)
+        .options(selectinload(AuthToken.user))
+    )

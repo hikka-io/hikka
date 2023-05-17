@@ -1,26 +1,22 @@
 from app.schemas import PaginationResponse
-from pydantic import BaseModel
-from ..utils import Datetime
-from typing import Union
+from app.schemas import ORJSONModel
 
 
 # Responses
-class UserResponse(BaseModel):
-    description: Union[str, None]
-    created: Datetime
+class UserResponse(ORJSONModel):
     reference: str
     username: str
 
 
-class UserPaginationResponse(BaseModel):
+class UserPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[UserResponse]
 
 
-class FollowStatsResponse(BaseModel):
+class FollowStatsResponse(ORJSONModel):
     followers: int
     following: int
 
 
-class FollowResponse(BaseModel):
+class FollowResponse(ORJSONModel):
     follow: bool

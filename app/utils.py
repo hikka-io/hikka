@@ -47,17 +47,16 @@ def to_timestamp(date):
 
 
 # Helper function for toroise pagination
-def pagination(page, size=20):
-    limit = size
+def pagination(page, limit=20):
     offset = (limit * (page)) - limit
 
-    return limit, offset, size
+    return limit, offset
 
 
 # Helper function to make pagication dict for api
-def pagination_dict(total, page, size):
+def pagination_dict(total, page, limit):
     return {
-        "pages": math.ceil(total / size),
+        "pages": math.ceil(total / limit),
         "total": total,
         "page": page,
     }
