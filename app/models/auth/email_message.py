@@ -9,7 +9,7 @@ from ..base import Base
 class EmailMessage(Base):
     __tablename__ = "service_email_messages"
 
-    sent_time: Mapped[str] = mapped_column(default=None, nullable=True)
+    sent_time: Mapped[datetime] = mapped_column(default=None, nullable=True)
     sent: Mapped[bool] = mapped_column(default=False)
     type: Mapped[str] = mapped_column(String(32))
     created: Mapped[datetime]

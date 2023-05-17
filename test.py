@@ -11,58 +11,28 @@
 # from pprint import pprint
 
 from app.service import get_user_by_username
-from app.models import Base, User, Follow
+from app.models import EmailMessage
 from app.database import sessionmanager
 from sqlalchemy import select, desc
 from datetime import datetime
 import asyncio
 import config
 
+from sqlalchemy.orm import selectinload
+
 
 async def test():
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
-        user = await session.scalar(select(User).filter_by(username="volbil"))
-
-        statement = (
-            select(User)
-            .select_from(Follow)
-            .filter(Follow.user_id == user.id)
-            .join(User, Follow.followed_user_id == User.id)
-            .order_by(desc(Follow.created))
-            .limit(10)
-            .offset(0)
+        emails = await session.scalars(
+            select(EmailMessage)
+            .filter_by(sent=False)
+            .options(selectinload(EmailMessage.user))
         )
 
-        # user = await session.scalar(select(User).filter_by(username="test"))
-
-        # statement = (
-        #     select(User.username)
-        #     .select_from(Follow)
-        #     .filter(Follow.followed_user_id == user.id)
-        #     .join(User, Follow.user_id == User.id)
-        #     .order_by(desc(Follow.created))
-        # )
-
-        # print(statement)
-
-        result = await session.execute(statement)
-
-        for entry in result:
-            print(entry)
-
-        # print(len(user.following))
-
-        # async for test in user.following:
-        #     print(test.username)
-        # user = await create_user(session)
-        # print(user.username)
-        # session.add(create_user())
-        # await session.commit()
-
-        # if user := await get_user_by_username("volbil", session):
-        #     print(user.username)
+        for email in emails:
+            print(email.user.username)
 
 
 # async def search_anime():

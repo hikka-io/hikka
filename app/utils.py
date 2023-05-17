@@ -1,4 +1,3 @@
-from pydantic.datetime_parse import parse_datetime
 from unicodedata import normalize
 from datetime import datetime
 import orjson
@@ -9,18 +8,6 @@ import re
 # Dump dict using orjson
 def orjson_dumps(v, *, default):
     return orjson.dumps(v, default=default).decode()
-
-
-# Quick hack to make FastAPI display datetime as timestamp
-class Datetime(int):
-    @classmethod
-    def __get_validators__(cls):
-        yield parse_datetime
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, value) -> int:
-        return int(value.timestamp())
 
 
 # Generate URL safe slug
