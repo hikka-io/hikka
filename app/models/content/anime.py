@@ -1,11 +1,10 @@
 from ..association import anime_genres_association_table
-from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import ContentMixin, SlugMixin
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from sqlalchemy import String
 from datetime import datetime
 from ..base import Base
 
@@ -35,7 +34,6 @@ class Anime(Base, ContentMixin, SlugMixin):
     end_date: Mapped[datetime] = mapped_column(nullable=True)
     duration: Mapped[int] = mapped_column(nullable=True)
     episodes: Mapped[int] = mapped_column(nullable=True)
-    score: Mapped[bool] = mapped_column(nullable=True)
     scored_by: Mapped[int] = mapped_column(default=0)
     score: Mapped[float] = mapped_column(default=0)
     media_type: Mapped[str] = mapped_column(
@@ -49,11 +47,38 @@ class Anime(Base, ContentMixin, SlugMixin):
     stats: Mapped[dict] = mapped_column(JSONB, default=[])
     ost: Mapped[dict] = mapped_column(JSONB, default=[])
 
-    # ToDo: images
+    franchise_id = mapped_column(
+        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL")
+    )
+
+    franchise: Mapped["AnimeFranchise"] = relationship(
+        back_populates="anime", foreign_keys=[franchise_id]
+    )
 
     genres: Mapped["AnimeGenre"] = relationship(
         secondary=anime_genres_association_table, back_populates="anime"
     )
+
+    voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
+    staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
+
+    episodes_list: Mapped[list["AnimeEpisode"]] = relationship(
+        back_populates="anime"
+    )
+
+    characters: Mapped[list["AnimeCharacter"]] = relationship(
+        back_populates="anime"
+    )
+
+    recommendations: Mapped[list["AnimeCharacter"]] = relationship(
+        back_populates="anime"
+    )
+
+    recommended_to: Mapped[list["AnimeCharacter"]] = relationship(
+        back_populates="recommendation"
+    )
+
+    # ToDo: images
 
 
 # class Anime(Base):
@@ -68,24 +93,3 @@ class Anime(Base, ContentMixin, SlugMixin):
 #         related_name="producer_anime",
 #         through="service_relation_anime_producers",
 #     )
-
-#     franchise: fields.ForeignKeyRelation[
-#         "AnimeFranchise"
-#     ] = fields.ForeignKeyField(
-#         "models.AnimeFranchise",
-#         related_name="anime",
-#         on_delete=fields.SET_NULL,
-#         null=True,
-#     )
-
-#     recommendations: fields.ReverseRelation["AnimeRecommendation"]
-#     recommended_to: fields.ReverseRelation["AnimeRecommendation"]
-
-#     episodes_list: fields.ReverseRelation["AnimeEpisodes"]
-#     characters: fields.ReverseRelation["AnimeCharacter"]
-#     voices: fields.ReverseRelation["AnimeVoice"]
-#     staff: fields.ReverseRelation["AnimeStaff"]
-
-#     genres: fields.ManyToManyRelation["AnimeGenre"]
-
-#     # images: fields.ReverseRelation["MALAnimeImage"]

@@ -18,19 +18,29 @@ class Character(Base, ContentMixin, SlugMixin):
     favorites: Mapped[int] = mapped_column(default=0, nullable=True)
     updated: Mapped[datetime]
 
+    anime_roles: Mapped[list["AnimeCharacter"]] = relationship(
+        back_populates="character"
+    )
 
-# class AnimeCharacter(Base, SlugMixin):
-#     __tablename__ = "service_content_anime_characters"
+    voices: Mapped[list["AnimeVoices"]] = relationship(
+        back_populates="character"
+    )
 
-#     main: Mapped[bool]
 
-#     unique_constraint = UniqueConstraint(followed_user_id, user_id)
+class AnimeCharacter(Base, SlugMixin):
+    __tablename__ = "service_content_anime_characters"
 
-# anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-#     "models.Anime", related_name="characters"
-# )
+    main: Mapped[bool]
 
-# class Meta:
-#     table = "service_content_anime_characters"
+    character_id = mapped_column(ForeignKey("service_content_characters.id"))
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
 
-#     unique_together = ("anime", "character")
+    character: Mapped["Character"] = relationship(
+        back_populates="anime_roles", foreign_keys=[character_id]
+    )
+
+    anime: Mapped["Anime"] = relationship(
+        back_populates="characters", foreign_keys=[anime_id]
+    )
+
+    unique_constraint = UniqueConstraint(character_id, anime_id)

@@ -17,6 +17,14 @@ class Person(Base, ContentMixin, SlugMixin):
     favorites: Mapped[int] = mapped_column(default=0, nullable=True)
     updated: Mapped[datetime]
 
+    staff_roles: Mapped[list["AnimeStaff"]] = relationship(
+        back_populates="person"
+    )
+
+    voice_roles: Mapped[list["AnimeVoices"]] = relationship(
+        back_populates="person"
+    )
+
     # ToDo: initialized
 
     # ToDo: image

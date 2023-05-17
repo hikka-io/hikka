@@ -1,6 +1,7 @@
 from ..base import Base, NativeDatetimeField
 from tortoise import fields
 
+
 class AnimeFranchise(Base):
     # Multilang fields
     name_en = fields.CharField(null=True, max_length=255)
