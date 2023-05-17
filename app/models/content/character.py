@@ -22,7 +22,7 @@ class Character(Base, ContentMixin, SlugMixin):
         back_populates="character"
     )
 
-    voices: Mapped[list["AnimeVoices"]] = relationship(
+    voices: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="character"
     )
 

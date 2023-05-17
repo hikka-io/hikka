@@ -21,7 +21,7 @@ class Person(Base, ContentMixin, SlugMixin):
         back_populates="person"
     )
 
-    voice_roles: Mapped[list["AnimeVoices"]] = relationship(
+    voice_roles: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="person"
     )
 

@@ -68,12 +68,14 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="anime"
     )
 
-    recommendations: Mapped[list["AnimeCharacter"]] = relationship(
-        back_populates="anime"
+    recommendations: Mapped[list["AnimeRecommendation"]] = relationship(
+        foreign_keys="[AnimeRecommendation.anime_id]",
+        back_populates="anime",
     )
 
-    recommended_to: Mapped[list["AnimeCharacter"]] = relationship(
-        back_populates="recommendation"
+    recommended_to: Mapped[list["AnimeRecommendation"]] = relationship(
+        foreign_keys="[AnimeRecommendation.recommendation_id]",
+        back_populates="recommendation",
     )
 
     genres: Mapped[list["AnimeGenre"]] = relationship(

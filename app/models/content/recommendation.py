@@ -10,15 +10,14 @@ class AnimeRecommendation(Base):
     weight: Mapped[int]
 
     recommendation_id = mapped_column(ForeignKey("service_content_anime.id"))
-
     anime_id = mapped_column(ForeignKey("service_content_anime.id"))
 
     recommendation: Mapped["Anime"] = relationship(
         back_populates="recommended_to", foreign_keys=[recommendation_id]
     )
 
-    anime: Mapped["User"] = relationship(
-        back_populates="recommendation", foreign_keys=[anime_id]
+    anime: Mapped["Anime"] = relationship(
+        back_populates="recommendations", foreign_keys=[anime_id]
     )
 
     unique_constraint = UniqueConstraint(recommendation_id, anime_id)
