@@ -1,22 +1,20 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from ..mixins import ContentMixin
 from sqlalchemy import String
-from datetime import datetime
 from ..base import Base
 
 
-class GenreMixing:
+class GenreMixin:
     name_en: Mapped[str] = mapped_column(String(64), nullable=True)
     name_ua: Mapped[str] = mapped_column(String(64), nullable=True)
 
-    content_id: Mapped[str] = mapped_column(String(36), unique=True, index=True)
     slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     type: Mapped[str] = mapped_column(String(32))
 
 
-class AnimeGenre(Base, GenreMixing):
+class AnimeGenre(Base, GenreMixin, ContentMixin):
     __tablename__ = "service_content_anime_genres"
 
     # anime: fields.ManyToManyRelation["Anime"] = fields.ManyToManyField(

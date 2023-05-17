@@ -5,5 +5,6 @@ from .user.follow import Follow
 from .user.user import User
 
 from .content.genre import AnimeGenre
+from .content.company import Company
 
 from .base import Base

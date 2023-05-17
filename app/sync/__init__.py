@@ -1,5 +1,5 @@
 # from .aggregator.characters import aggregator_characters
-# from .aggregator.companies import aggregator_companies
+from .aggregator.companies import aggregator_companies
 from .aggregator.genres import aggregator_anime_genres
 
 # from .aggregator.info import aggregator_anime_info
