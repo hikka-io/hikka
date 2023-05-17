@@ -1,6 +1,7 @@
 from ..base import Base, NativeDatetimeField
 from tortoise import fields
 
+
 class Character(Base):
     name_ja = fields.CharField(null=True, max_length=255)
     name_en = fields.CharField(null=True, max_length=255)
@@ -17,6 +18,7 @@ class Character(Base):
 
     class Meta:
         table = "service_content_characters"
+
 
 class AnimeCharacter(Base):
     main = fields.BooleanField()

@@ -79,4 +79,5 @@ async def aggregator_companies():
 
     data = [item for sublist in result for item in sublist]
 
-    await save_companies(data)
+    for data_chunk in utils.chunkify(data, 20000):
+        await save_companies(data_chunk)

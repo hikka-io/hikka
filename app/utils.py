@@ -5,6 +5,11 @@ import math
 import re
 
 
+# Split list into chunks
+def chunkify(lst, size):
+    return [lst[i : i + size] for i in range(0, len(lst), size)]
+
+
 # Dump dict using orjson
 def orjson_dumps(v, *, default):
     return orjson.dumps(v, default=default).decode()

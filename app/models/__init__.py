@@ -4,6 +4,7 @@ from .auth.auth_token import AuthToken
 from .user.follow import Follow
 from .user.user import User
 
+from .content.character import Character
 from .content.genre import AnimeGenre
 from .content.company import Company
 

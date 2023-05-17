@@ -5,3 +5,7 @@ from sqlalchemy import String
 
 class ContentMixin:
     content_id: Mapped[str] = mapped_column(String(36), unique=True, index=True)
+
+
+class SlugMixin:
+    slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
