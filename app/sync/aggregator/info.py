@@ -1,6 +1,8 @@
 from app.models import AnimeRecommendation
+from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from app.models import AnimeCharacter
+from sqlalchemy import select, desc
 from app.models import AnimeEpisode
 from app.models import AnimeGenre
 from app.models import AnimeStaff
@@ -13,9 +15,6 @@ from . import requests
 from app import utils
 import asyncio
 import config
-
-from sqlalchemy.orm import selectinload
-from sqlalchemy import select, desc
 
 
 def process_translations(data):
@@ -394,17 +393,12 @@ async def update_anime_info(semaphore, content_id):
             # print(f"update_recommendations: {len(update_recommendations)}")
             # print(f"update_episodes: {len(update_episodes)}")
 
-            # await anime.save()
             await session.commit()
 
             print(f"Synced anime {anime.title_ja}")
 
 
 async def aggregator_anime_info():
-    # anime = await Anime.filter(content_id="354966ae-28ee-496f-8a55-f088f65396b4").first()
-    # semaphore = asyncio.Semaphore(20)
-    # await update_anime_info(semaphore, anime)
-
     sessionmanager.init(config.database)
     anime_list = []
 
