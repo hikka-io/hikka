@@ -27,7 +27,7 @@ class Character(Base, ContentMixin, SlugMixin):
     )
 
 
-class AnimeCharacter(Base, SlugMixin):
+class AnimeCharacter(Base):
     __tablename__ = "service_content_anime_characters"
 
     main: Mapped[bool]

@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy import ForeignKey, UniqueConstraint, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -27,7 +27,7 @@ class AnimeStaff(Base):
 class AnimeVoice(Base):
     __tablename__ = "service_content_anime_voices"
 
-    role: Mapped[str]
+    language: Mapped[str] = mapped_column(String(32), index=True)
 
     character_id = mapped_column(ForeignKey("service_content_characters.id"))
     person_id = mapped_column(ForeignKey("service_content_people.id"))

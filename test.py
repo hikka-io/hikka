@@ -11,7 +11,7 @@
 # from pprint import pprint
 
 from app.service import get_user_by_username
-from app.models import EmailMessage
+from app.models import Anime
 from app.database import sessionmanager
 from sqlalchemy import select, desc
 from datetime import datetime
@@ -25,14 +25,19 @@ async def test():
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
-        emails = await session.scalars(
-            select(EmailMessage)
-            .filter_by(sent=False)
-            .options(selectinload(EmailMessage.user))
+        anime = await session.scalar(
+            select(Anime.content_id)
+            .filter_by(needs_update=True)
+            .order_by(desc("score"), desc("scored_by"))
+            # .options(
+            #     selectinload(Anime.studios),
+            #     selectinload(Anime.producers),
+            #     selectinload(Anime.genres),
+            # )
+            .limit(1)
         )
 
-        for email in emails:
-            print(email.user.username)
+        print(anime)
 
 
 # async def search_anime():
