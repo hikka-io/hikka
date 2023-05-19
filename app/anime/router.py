@@ -1,4 +1,4 @@
-from app.dependencies import get_anime
+from .dependencies import get_anime_info
 from fastapi import APIRouter, Depends
 from app.models import Anime
 from app import utils
@@ -9,9 +9,7 @@ router = APIRouter(prefix="/anime")
 
 
 @router.get("/{slug}")
-async def anime_slug(anime: Anime = Depends(get_anime)):
-    anime = await service.anime_fetch_related(anime)
-
+async def anime_slug(anime: Anime = Depends(get_anime_info)):
     genres = [
         {"name_en": genre.name_en, "name_ua": genre.name_ua, "slug": genre.slug}
         for genre in anime.genres

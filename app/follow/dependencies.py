@@ -1,4 +1,3 @@
-from tortoise.fields.relational import ManyToManyRelation
 from app.service import get_user_by_username
 from app.dependencies import auth_required
 from app.errors import Abort

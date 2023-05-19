@@ -36,8 +36,10 @@ class Anime(Base, ContentMixin, SlugMixin):
     end_date: Mapped[datetime] = mapped_column(nullable=True)
     duration: Mapped[int] = mapped_column(nullable=True)
     episodes: Mapped[int] = mapped_column(nullable=True)
+    nsfw: Mapped[bool] = mapped_column(nullable=True)
     scored_by: Mapped[int] = mapped_column(default=0)
     score: Mapped[float] = mapped_column(default=0)
+
     media_type: Mapped[str] = mapped_column(
         String(16), index=True, nullable=True
     )

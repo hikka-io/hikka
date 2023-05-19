@@ -2,6 +2,7 @@
 __pycache__/
 venv/*
 config.py
+alembic.ini
 
 # misc
 .DS_STORE

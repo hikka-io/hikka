@@ -1,4 +1,3 @@
-from tortoise.fields.relational import ManyToManyRelation
 from app.utils import pagination_dict, pagination
 from fastapi import APIRouter, Depends
 from app.dependencies import get_page
