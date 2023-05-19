@@ -1,10 +1,11 @@
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from .schemas import ORJSONModel
 from fastapi import Request
+from pydantic import Field
 
 
-class ErrorResponse(BaseModel):
+class ErrorResponse(ORJSONModel):
     message: str = Field(example="Example error message")
     code: str = Field(example="example_error")
 

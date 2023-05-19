@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
 from app.schemas import ORJSONModel
 from datetime import datetime
 

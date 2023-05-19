@@ -1,13 +1,22 @@
 from app.models import AnimeFavourite, Anime, User
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from datetime import datetime
+from typing import Union
 
 
-async def get_anime_favourite(anime: AnimeFavourite, user: User):
-    return await AnimeFavourite.filter(anime=anime, user=user).first()
+async def get_anime_favourite(
+    session: AsyncSession, anime: AnimeFavourite, user: User
+) -> Union[AnimeFavourite, None]:
+    return await session.scalar(
+        select(AnimeFavourite).filter_by(anime=anime, user=user)
+    )
 
 
-async def create_anime_favourite(anime: Anime, user: User) -> AnimeFavourite:
-    return await AnimeFavourite.create(
+async def create_anime_favourite(
+    session: AsyncSession, anime: Anime, user: User
+) -> AnimeFavourite:
+    favourite = AnimeFavourite(
         **{
             "created": datetime.utcnow(),
             "anime": anime,
@@ -15,6 +24,14 @@ async def create_anime_favourite(anime: Anime, user: User) -> AnimeFavourite:
         }
     )
 
+    session.add(favourite)
+    await session.commit()
 
-async def delete_anime_favourite(favourite: AnimeFavourite):
-    await favourite.delete()
+    return favourite
+
+
+async def delete_anime_favourite(
+    session: AsyncSession, favourite: AnimeFavourite
+):
+    await session.delete(favourite)
+    await session.commit()
