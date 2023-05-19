@@ -1,16 +1,22 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
 from .schemas import WatchArgs
+from sqlalchemy import select
 from datetime import datetime
 
 
-async def get_anime_watch(anime: Anime, user: User):
-    return await AnimeWatch.filter(anime=anime, user=user).first()
+async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
+    return await session.scalar(
+        select(AnimeWatch).filter_by(anime=anime, user=user)
+    )
 
 
 # ToDo: rewrite this function?
-async def save_watch(anime: Anime, user: User, args: WatchArgs):
+async def save_watch(
+    session: AsyncSession, anime: Anime, user: User, args: WatchArgs
+):
     # Create watch record if missing
-    if not (watch := await AnimeWatch.filter(anime=anime, user=user).first()):
+    if not (watch := await get_anime_watch(session, anime, user)):
         watch = AnimeWatch()
         watch.created = datetime.utcnow()
         watch.anime = anime
@@ -22,10 +28,13 @@ async def save_watch(anime: Anime, user: User, args: WatchArgs):
 
     # Save watch record
     watch.updated = datetime.utcnow()
-    await watch.save()
+
+    session.add(watch)
+    await session.commit()
 
     return watch
 
 
-async def delete_watch(watch: AnimeWatch):
-    await watch.delete()
+async def delete_watch(session: AsyncSession, watch: AnimeWatch):
+    await session.delete(watch)
+    await session.commit()

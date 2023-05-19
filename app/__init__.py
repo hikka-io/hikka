@@ -40,10 +40,9 @@ def create_app(init_db: bool = True) -> FastAPI:
     # from .favourite import router as favourite
     # from .search import router as search
     from .follow import router as follow
-
     from .anime import router as anime
 
-    # from .watch import router as watch
+    from .watch import router as watch
     from .user import router as user
     from .auth import router as auth
 
@@ -51,7 +50,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     # app.include_router(search)
     app.include_router(follow)
     app.include_router(anime)
-    # app.include_router(watch)
+    app.include_router(watch)
     app.include_router(user)
     app.include_router(auth)
 
