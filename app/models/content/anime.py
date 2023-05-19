@@ -94,4 +94,14 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="studio_anime",
     )
 
+    favourite: Mapped[list["AnimeFavourite"]] = relationship(
+        foreign_keys="[AnimeFavourite.anime_id]",
+        back_populates="anime",
+    )
+
+    watch: Mapped[list["AnimeWatch"]] = relationship(
+        foreign_keys="[AnimeWatch.anime_id]",
+        back_populates="anime",
+    )
+
     # ToDo: images

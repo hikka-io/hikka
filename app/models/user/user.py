@@ -44,5 +44,12 @@ class User(Base):
         back_populates="user",
     )
 
-    # favourite: fields.ReverseRelation["AnimeFavourite"]
-    # watch: fields.ReverseRelation["AnimeWatch"]
+    favourite: Mapped[list["AnimeFavourite"]] = relationship(
+        foreign_keys="[AnimeFavourite.user_id]",
+        back_populates="user",
+    )
+
+    watch: Mapped[list["AnimeWatch"]] = relationship(
+        foreign_keys="[AnimeWatch.user_id]",
+        back_populates="user",
+    )

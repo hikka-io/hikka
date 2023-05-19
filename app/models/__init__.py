@@ -4,6 +4,9 @@ from .auth.auth_token import AuthToken
 from .user.follow import Follow
 from .user.user import User
 
+from .list.favourite import AnimeFavourite
+from .list.watch import AnimeWatch
+
 from .content.recommendation import AnimeRecommendation
 from .content.franchise import AnimeFranchise
 from .content.episode import AnimeEpisode
