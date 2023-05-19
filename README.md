@@ -29,3 +29,8 @@ UPDATE service_content_anime SET needs_update = true;
 ```bash
 ./meilisearch --http-addr 127.0.0.1:8800 --env development --master-key xyz
 ```
+
+
+```json
+{"genres": ["supernatural", "drama"], "years": [1999, 2023], "season": ["summer"], "rating": ["r_plus"]}
+```
