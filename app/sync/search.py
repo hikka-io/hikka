@@ -51,8 +51,8 @@ async def anime_documents(session: AsyncSession):
         select(Anime)
         .where(Anime.media_type != None)
         .options(
-            selectinload(Anime.studios),
             selectinload(Anime.producers),
+            selectinload(Anime.studios),
             selectinload(Anime.genres),
         )
     )

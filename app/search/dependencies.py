@@ -10,11 +10,7 @@ from . import service
 async def validate_search_anime(
     search: AnimeSearchArgs,
     session: AsyncSession = Depends(get_session),
-) -> Tuple[AnimeSearchArgs, list, list, list]:
-    producers = []
-    studios = []
-    genres = []
-
+) -> AnimeSearchArgs:
     # Check if provided producers exist
     if len(search.producers) > 0:
         producers = await service.company_count(session, search.producers)
@@ -33,4 +29,4 @@ async def validate_search_anime(
         if genres != len(search.genres):
             raise Abort("search", "unknown-genre")
 
-    return search, producers, studios, genres
+    return search

@@ -1,5 +1,6 @@
 from app.models import Anime, AnimeGenre, Company
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, func, and_
 from .schemas import AnimeSearchArgs
 from . import utils
@@ -17,9 +18,7 @@ async def anime_genre_count(session: AsyncSession, slugs: list[str]):
     )
 
 
-def anime_search_where(
-    search: AnimeSearchArgs, query, producers: list, studios: list, genres: list
-):
+def anime_search_where(search: AnimeSearchArgs, query: Select):
     if search.years[0]:
         query = query.where(Anime.year >= search.years[0])
 
@@ -76,16 +75,10 @@ def anime_search_where(
 
 
 async def anime_search(
-    session: AsyncSession,
-    limit: int,
-    offset: int,
-    search: AnimeSearchArgs,
-    producers: list,
-    studios: list,
-    genres: list,
+    session: AsyncSession, search: AnimeSearchArgs, limit: int, offset: int
 ):
     query = select(Anime)
-    query = anime_search_where(search, query, producers, studios, genres)
+    query = anime_search_where(search, query)
 
     if len(search.sort) > 0:
         query = query.order_by(*utils.build_order_by(search.sort))
@@ -95,14 +88,8 @@ async def anime_search(
     return await session.scalars(query)
 
 
-async def anime_search_total(
-    session: AsyncSession,
-    search: AnimeSearchArgs,
-    producers: list,
-    studios: list,
-    genres: list,
-):
+async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = select(func.count(Anime.id))
-    query = anime_search_where(search, query, producers, studios, genres)
+    query = anime_search_where(search, query)
 
     return await session.scalar(query)
