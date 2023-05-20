@@ -1,24 +1,20 @@
 from app.models import Anime, AnimeGenre, Company
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func, and_
 from .schemas import AnimeSearchArgs
-from sqlalchemy import select, func
 from . import utils
 
 
 async def company_count(session: AsyncSession, slugs: list[str]):
-    companies = await session.scalars(
-        select(Company.id).where(Company.slug.in_(slugs))
+    return await session.scalar(
+        select(func.count(Company.id)).where(Company.slug.in_(slugs))
     )
-
-    return companies.all()
 
 
 async def anime_genre_count(session: AsyncSession, slugs: list[str]):
-    genres = await session.scalars(
-        select(AnimeGenre.id).where(AnimeGenre.slug.in_(slugs))
+    return await session.scalar(
+        select(func.count(AnimeGenre.id)).where(AnimeGenre.slug.in_(slugs))
     )
-
-    return genres.all()
 
 
 def anime_search_where(
@@ -65,9 +61,15 @@ def anime_search_where(
             Company.slug.in_(search.studios)
         )
 
+    # All genres must be present in query result
     if len(search.genres) > 0:
-        query = query.join(Anime.genres).filter(
-            AnimeGenre.slug.in_(search.genres)
+        query = query.filter(
+            and_(
+                *[
+                    Anime.genres.any(AnimeGenre.slug == slug)
+                    for slug in search.genres
+                ]
+            )
         )
 
     return query
