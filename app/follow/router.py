@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 from app.dependencies import get_page
 from app.models import User
 from typing import Tuple
-from app import display
 from . import service
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +24,7 @@ from .schemas import (
 
 
 # ToDo: Better responses
-router = APIRouter(prefix="/follow")
+router = APIRouter(prefix="/follow", tags=["Follow"])
 
 
 @router.get("/{username}", response_model=FollowResponse)

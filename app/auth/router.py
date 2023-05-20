@@ -22,7 +22,7 @@ from .schemas import (
 )
 
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/signup", response_model=UserResponse)

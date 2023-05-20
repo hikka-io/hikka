@@ -23,7 +23,11 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     fu.validation_error_response_definition = errors.ErrorResponse.schema()
 
-    app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
+    app = FastAPI(
+        # docs_url=None,
+        # redoc_url=None,
+        lifespan=lifespan,
+    )
 
     app.add_middleware(
         CORSMiddleware,

@@ -5,7 +5,7 @@ from app import utils
 from . import service
 
 
-router = APIRouter(prefix="/anime")
+router = APIRouter(prefix="/anime", tags=["Anime"])
 
 
 @router.get("/{slug}")

@@ -17,7 +17,7 @@ from .schemas import (
 )
 
 
-router = APIRouter(prefix="/search")
+router = APIRouter(prefix="/search", tags=["Search"])
 
 
 @router.post("/anime", response_model=AnimeSearchPaginationResponse)

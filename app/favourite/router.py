@@ -13,7 +13,7 @@ from .dependencies import (
 
 
 # ToDo: Better responses
-router = APIRouter(prefix="/favourite")
+router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 
 @router.get("/anime/{slug}", response_model=FavouriteResponse)

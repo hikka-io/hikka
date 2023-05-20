@@ -3,7 +3,6 @@ from app.models import User, Anime, AnimeWatch
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from typing import Tuple
-from app import display
 from . import service
 
 from .dependencies import (
@@ -18,7 +17,7 @@ from .schemas import (
 )
 
 
-router = APIRouter(prefix="/watch")
+router = APIRouter(prefix="/watch", tags=["Watch"])
 
 
 @router.get("/{slug}", response_model=WatchResponse)
