@@ -39,6 +39,11 @@ async def update_anime_settings(index):
                 "title_ja",
                 "score",
                 "slug",
+                # ToDo: remove those
+                "genres",
+                "studios",
+                "producers",
+                "year",
             ],
             sortable_attributes=["scored_by", "score", "year"],
             distinct_attribute="slug",
@@ -87,14 +92,14 @@ async def anime_documents(session: AsyncSession):
 async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating database")
 
-    documents = await anime_documents(session)
+    # documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
         index = client.index("content_anime")
 
         await update_anime_settings(index)
 
-        await index.add_documents(documents)
+        # await index.add_documents(documents)
 
 
 async def update_search():

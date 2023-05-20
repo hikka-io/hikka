@@ -17,14 +17,14 @@ async def search_anime(
     session: AsyncSession = Depends(get_session),
     search: AnimeSearchArgs = Depends(validate_search_anime),
 ):
-    if not search.query:
-        total = await service.anime_search_total(session, search)
-        limit, offset = pagination(search.page)
-        result = await service.anime_search(session, search, limit, offset)
+    # if not search.query:
+    #     total = await service.anime_search_total(session, search)
+    #     limit, offset = pagination(search.page, limit=12)
+    #     result = await service.anime_search(session, search, limit, offset)
 
-        return {
-            "pagination": pagination_dict(total, search.page, limit),
-            "list": [anime for anime in result],
-        }
+    #     return {
+    #         "pagination": pagination_dict(total, search.page, limit),
+    #         "list": [anime for anime in result],
+    #     }
 
     return await meilisearch.anime_search(search)
