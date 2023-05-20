@@ -1,5 +1,7 @@
 from app.dependencies import get_anime, auth_required
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
+from app.database import get_session
 from .schemas import WatchArgs
 from app.errors import Abort
 from fastapi import Depends
@@ -10,8 +12,9 @@ from . import service
 async def verify_watch(
     anime: Anime = Depends(get_anime),
     user: User = Depends(auth_required),
+    session: AsyncSession = Depends(get_session),
 ) -> AnimeWatch:
-    if not (watch := await service.get_anime_watch(anime, user)):
+    if not (watch := await service.get_anime_watch(session, anime, user)):
         raise Abort("watch", "not-found")
 
     return watch

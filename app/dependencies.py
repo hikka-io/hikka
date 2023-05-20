@@ -1,9 +1,11 @@
 from .service import get_auth_token, get_anime_by_slug
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from .database import get_session
 from fastapi import Header, Query
-from .models import Anime
+from .models import User, Anime
+from fastapi import Depends
 from .errors import Abort
-from .models import User
 
 
 # Get current pagination page
@@ -12,16 +14,20 @@ async def get_page(page: int = Query(gt=0, default=1)):
 
 
 # Get anime by slug
-async def get_anime(slug: str) -> Anime:
-    if not (anime := await get_anime_by_slug(slug)):
+async def get_anime(
+    slug: str, session: AsyncSession = Depends(get_session)
+) -> Anime:
+    if not (anime := await get_anime_by_slug(session, slug)):
         raise Abort("anime", "not-found")
 
     return anime
 
 
 # Check user auth token
-async def auth_required(auth: str = Header()) -> User:
-    if not (token := await get_auth_token(auth)):
+async def auth_required(
+    auth: str = Header(), session: AsyncSession = Depends(get_session)
+) -> User:
+    if not (token := await get_auth_token(session, auth)):
         raise Abort("auth", "invalid-token")
 
     if not token.user:
@@ -36,9 +42,9 @@ async def auth_required(auth: str = Header()) -> User:
         raise Abort("auth", "token-expired")
 
     token.expiration = now + timedelta(days=3)
-    await token.save()
-
     token.user.last_active = now
-    await token.user.save()
+
+    session.add(token)
+    await session.commit()
 
     return token.user

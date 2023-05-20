@@ -1,46 +1,43 @@
-from app.utils import pagination_dict, pagination
+from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import validate_search_anime
 from fastapi import APIRouter, Depends
-from .schemas import AnimeSearchArgs
+from app.database import get_session
+from app import constants
+from . import meilisearch
 from . import service
+
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
+
+from .schemas import (
+    AnimeSearchPaginationResponse,
+    AnimeSearchArgs,
+)
 
 
 router = APIRouter(prefix="/search")
 
 
-@router.post("/anime")
+@router.post("/anime", response_model=AnimeSearchPaginationResponse)
 async def search_anime(
+    session: AsyncSession = Depends(get_session),
     search: AnimeSearchArgs = Depends(validate_search_anime),
 ):
     if not search.query:
-        search_query = await service.anime_search_query(search)
+        total = await service.anime_search_total(session, search)
 
-        total = await search_query.count()
-        limit, offset, size = pagination(search.page, size=12)
-
-        anime_list = (
-            await search_query.prefetch_related("genres")
-            .limit(limit)
-            .offset(offset)
+        limit, offset = pagination(
+            search.page,
+            limit=constants.SEARCH_RESULT_LIMIT,
         )
 
-        result = [
-            {
-                "media_type": anime.media_type,
-                "scored_by": anime.scored_by,
-                "title_ua": anime.title_ua,
-                "title_en": anime.title_en,
-                "title_ja": anime.title_ja,
-                "score": anime.score,
-                "slug": anime.slug,
-                "genres": [genre.slug for genre in anime.genres],
-            }
-            for anime in anime_list
-        ]
+        result = await service.anime_search(session, search, limit, offset)
 
         return {
-            "pagination": pagination_dict(total, search.page, size),
-            "list": result,
+            "pagination": pagination_dict(total, search.page, limit),
+            "list": [anime for anime in result],
         }
 
-    return {"query": search.query}
+    return await meilisearch.anime_search(search)

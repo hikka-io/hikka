@@ -1,4 +1,3 @@
-from tortoise.fields.relational import ManyToManyRelation
 from app.utils import pagination_dict, pagination
 from fastapi import APIRouter, Depends
 from app.dependencies import get_page
@@ -6,6 +5,9 @@ from app.models import User
 from typing import Tuple
 from app import display
 from . import service
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import get_session
 
 from .dependencies import (
     validate_username,
@@ -27,37 +29,64 @@ router = APIRouter(prefix="/follow")
 
 
 @router.get("/{username}", response_model=FollowResponse)
-async def check(users: Tuple[User, User] = Depends(validate_self)):
-    return {"follow": await service.is_following(*users)}
+async def check(
+    users: Tuple[User, User] = Depends(validate_self),
+    session: AsyncSession = Depends(get_session),
+):
+    return {"follow": await service.is_following(session, *users)}
 
 
 @router.put("/{username}", response_model=FollowResponse)
-async def follow(users: Tuple[User, User] = Depends(validate_follow)):
-    return {"follow": await service.follow(*users)}
+async def follow(
+    users: Tuple[User, User] = Depends(validate_follow),
+    session: AsyncSession = Depends(get_session),
+):
+    return {"follow": await service.follow(session, *users)}
 
 
 @router.delete("/{username}", response_model=FollowResponse)
-async def unfollow(users: Tuple[User, User] = Depends(validate_unfollow)):
-    return {"follow": await service.unfollow(*users)}
+async def unfollow(
+    users: Tuple[User, User] = Depends(validate_unfollow),
+    session: AsyncSession = Depends(get_session),
+):
+    return {"follow": await service.unfollow(session, *users)}
 
 
 @router.get("/{username}/stats", response_model=FollowStatsResponse)
-async def follow_stats(user: User = Depends(validate_username)):
-    return await service.get_follow_stats(user)
+async def follow_stats(
+    user: User = Depends(validate_username),
+    session: AsyncSession = Depends(get_session),
+):
+    return {
+        "followers": await service.count_followers(session, user),
+        "following": await service.count_following(session, user),
+    }
 
 
 @router.get("/{username}/{action}", response_model=UserPaginationResponse)
 async def follow_list(
-    relation: ManyToManyRelation = Depends(validate_action),
+    session: AsyncSession = Depends(get_session),
+    action: str = Depends(validate_action),
+    user: User = Depends(validate_username),
     page: int = Depends(get_page),
 ):
-    # Pagination
-    total = await relation.filter().count()
-    limit, offset, size = pagination(page)
+    if action == "following":
+        count_function, list_function = (
+            service.count_following,
+            service.list_following,
+        )
 
-    result = await relation.filter().limit(limit).offset(offset)
+    if action == "followers":
+        count_function, list_function = (
+            service.count_followers,
+            service.list_followers,
+        )
+
+    total = await count_function(session, user)
+    limit, offset = pagination(page)
+    result = await list_function(session, user, limit, offset)
 
     return {
-        "list": [display.user(follow_user) for follow_user in result],
-        "pagination": pagination_dict(total, page, size),
+        "pagination": pagination_dict(total, page, limit),
+        "list": [follow_user for follow_user in result],
     }

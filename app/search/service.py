@@ -1,55 +1,96 @@
 from app.models import Anime, AnimeGenre, Company
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.selectable import Select
 from .schemas import AnimeSearchArgs
+from sqlalchemy import select, and_
+from sqlalchemy import func
 from . import utils
 
 
-async def company_count(slugs):
-    return await Company.filter(slug__in=slugs).count()
+async def company_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(Company.id)).where(Company.slug.in_(slugs))
+    )
 
 
-async def anime_genre_count(slugs):
-    return await AnimeGenre.filter(slug__in=slugs).count()
+async def anime_genre_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(AnimeGenre.id)).where(AnimeGenre.slug.in_(slugs))
+    )
 
 
-async def anime_search_query(search: AnimeSearchArgs):
-    query = Anime.filter()
-
+def anime_search_where(search: AnimeSearchArgs, query: Select):
     if search.years[0]:
-        query = query.filter(year__gte=search.years[0])
+        query = query.where(Anime.year >= search.years[0])
 
     if search.years[1]:
-        query = query.filter(year__lte=search.years[1])
+        query = query.where(Anime.year <= search.years[1])
 
     if len(search.season) > 0:
-        query = query.filter(season__in=utils.enum_list_values(search.season))
+        query = query.where(
+            Anime.season.in_(utils.enum_list_values(search.season))
+        )
 
     if len(search.rating) > 0:
-        query = query.filter(rating__in=utils.enum_list_values(search.rating))
+        query = query.where(
+            Anime.rating.in_(utils.enum_list_values(search.rating))
+        )
 
     if len(search.status) > 0:
-        query = query.filter(status__in=utils.enum_list_values(search.status))
+        query = query.where(
+            Anime.status.in_(utils.enum_list_values(search.status))
+        )
 
     if len(search.source) > 0:
-        query = query.filter(source__in=utils.enum_list_values(search.source))
+        query = query.where(
+            Anime.source.in_(utils.enum_list_values(search.source))
+        )
 
     if len(search.media_type) > 0:
-        query = query.filter(
-            media_type__in=utils.enum_list_values(search.media_type)
+        query = query.where(
+            Anime.media_type.in_(utils.enum_list_values(search.media_type))
         )
 
     if len(search.producers) > 0:
-        producers = await Company.filter(slug__in=search.producers)
-        query = query.filter(producers__in=producers)
+        query = query.join(Anime.producers).filter(
+            Company.slug.in_(search.producers)
+        )
 
     if len(search.studios) > 0:
-        studios = await Company.filter(slug__in=search.studios)
-        query = query.filter(studios__in=studios)
+        query = query.join(Anime.studios).filter(
+            Company.slug.in_(search.studios)
+        )
 
+    # All genres must be present in query result
     if len(search.genres) > 0:
-        genres = await AnimeGenre.filter(slug__in=search.genres)
-        query = query.filter(genres__in=genres)
+        query = query.filter(
+            and_(
+                *[
+                    Anime.genres.any(AnimeGenre.slug == slug)
+                    for slug in search.genres
+                ]
+            )
+        )
+
+    return query
+
+
+async def anime_search(
+    session: AsyncSession, search: AnimeSearchArgs, limit: int, offset: int
+):
+    query = select(Anime)
+    query = anime_search_where(search, query)
 
     if len(search.sort) > 0:
         query = query.order_by(*utils.build_order_by(search.sort))
 
-    return query
+    query = query.limit(limit).offset(offset)
+
+    return await session.scalars(query)
+
+
+async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
+    query = select(func.count(Anime.id))
+    query = anime_search_where(search, query)
+
+    return await session.scalar(query)

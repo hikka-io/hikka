@@ -1,19 +1,23 @@
-from tortoise import fields
+from ..association import anime_genres_association_table
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from ..mixins import ContentMixin
+from sqlalchemy import String
 from ..base import Base
 
-class GenreBase(Base):
-    name_en = fields.CharField(null=True, max_length=64)
-    name_ua = fields.CharField(null=True, max_length=64)
 
-    content_id = fields.CharField(max_length=36, unique=True, index=True)
-    slug = fields.CharField(unique=True, index=True, max_length=255)
-    type = fields.CharField(max_length=32)
+class GenreMixin:
+    name_en: Mapped[str] = mapped_column(String(64), nullable=True)
+    name_ua: Mapped[str] = mapped_column(String(64), nullable=True)
 
-class AnimeGenre(GenreBase):
-    anime: fields.ManyToManyRelation["Anime"] = fields.ManyToManyField(
-        "models.Anime", related_name="genres",
-        through="service_relation_anime_genres"
+    slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    type: Mapped[str] = mapped_column(String(32))
+
+
+class AnimeGenre(Base, GenreMixin, ContentMixin):
+    __tablename__ = "service_content_anime_genres"
+
+    anime: Mapped[list["Anime"]] = relationship(
+        secondary=anime_genres_association_table, back_populates="genres"
     )
-
-    class Meta:
-        table = "service_content_anime_genres"

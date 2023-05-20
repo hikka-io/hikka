@@ -1,19 +1,30 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from ..mixins import ContentMixin, SlugMixin
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy import String
+from datetime import datetime
+from ..base import Base
 
-class Person(Base):
-    name_native = fields.CharField(null=True, max_length=255)
-    name_en = fields.CharField(null=True, max_length=255)
-    name_ua = fields.CharField(null=True, max_length=255)
 
-    content_id = fields.CharField(max_length=36, unique=True, index=True)
-    favorites = fields.IntField(null=True, default=0)
-    slug = fields.CharField(max_length=255)
-    updated = NativeDatetimeField()
+class Person(Base, ContentMixin, SlugMixin):
+    __tablename__ = "service_content_people"
+
+    name_native: Mapped[str] = mapped_column(String(255), nullable=True)
+    name_en: Mapped[str] = mapped_column(String(255), nullable=True)
+    name_ua: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    favorites: Mapped[int] = mapped_column(default=0, nullable=True)
+    updated: Mapped[datetime]
+
+    staff_roles: Mapped[list["AnimeStaff"]] = relationship(
+        back_populates="person"
+    )
+
+    voice_roles: Mapped[list["AnimeVoice"]] = relationship(
+        back_populates="person"
+    )
 
     # ToDo: initialized
 
     # ToDo: image
-
-    class Meta:
-        table = "service_content_people"

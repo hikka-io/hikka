@@ -1,14 +1,18 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from datetime import datetime
+from ..base import Base
+
 
 class AuthToken(Base):
-    secret = fields.CharField(index=True, unique=True, max_length=64)
-    expiration = NativeDatetimeField()
-    created = NativeDatetimeField()
+    __tablename__ = "service_auth_tokens"
 
-    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
-        "models.User", related_name="auth_tokens"
-    )
+    secret: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    expiration: Mapped[datetime]
+    created: Mapped[datetime]
 
-    class Meta:
-        table = "service_auth_tokens"
+    user_id = mapped_column(ForeignKey("service_users.id"))
+
+    user: Mapped["User"] = relationship(back_populates="auth_tokens")

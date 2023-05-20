@@ -1,17 +1,23 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy import ForeignKey
+from datetime import datetime
+from ..base import Base
+
 
 class AnimeEpisode(Base):
-    title_ja = fields.TextField(null=True)
-    title_en = fields.TextField(null=True)
-    title_ua = fields.TextField(null=True)
+    __tablename__ = "service_content_anime_episodes"
 
-    aired = NativeDatetimeField(null=True)
-    index = fields.IntField()
+    title_ja: Mapped[str] = mapped_column(nullable=True)
+    title_en: Mapped[str] = mapped_column(nullable=True)
+    title_ua: Mapped[str] = mapped_column(nullable=True)
 
-    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="episodes_list"
+    aired: Mapped[datetime] = mapped_column(nullable=True)
+    index: Mapped[int]
+
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+
+    anime: Mapped["Anime"] = relationship(
+        back_populates="episodes_list", foreign_keys=[anime_id]
     )
-
-    class Meta:
-        table = "service_content_anime_episodes"

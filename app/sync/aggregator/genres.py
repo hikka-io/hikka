@@ -1,7 +1,8 @@
+from app.database import sessionmanager
 from app.models import AnimeGenre
-from tortoise import Tortoise
-from app import utils
+from sqlalchemy import select
 from . import requests
+from app import utils
 import config
 
 TRANSLATIONS = {
@@ -85,31 +86,32 @@ TRANSLATIONS = {
 
 
 async def aggregator_anime_genres():
-    await Tortoise.init(config=config.tortoise)
-    await Tortoise.generate_schemas()
+    sessionmanager.init(config.database)
 
-    data = await requests.get_anime_genres()
-    create_genres = []
+    async with sessionmanager.session() as session:
+        data = await requests.get_anime_genres()
+        create_genres = []
 
-    for genre_data in data:
-        slug = utils.slugify(genre_data["name"])
-        name_ua = TRANSLATIONS.get(slug)
+        for genre_data in data:
+            slug = utils.slugify(genre_data["name"])
+            name_ua = TRANSLATIONS.get(slug)
 
-        if await AnimeGenre.filter(slug=slug).first():
-            continue
+            if await session.scalar(select(AnimeGenre).filter_by(slug=slug)):
+                continue
 
-        genre = AnimeGenre(
-            **{
-                "content_id": genre_data["reference"],
-                "name_en": genre_data["name"],
-                "type": genre_data["type"],
-                "name_ua": name_ua,
-                "slug": slug,
-            }
-        )
+            genre = AnimeGenre(
+                **{
+                    "content_id": genre_data["reference"],
+                    "name_en": genre_data["name"],
+                    "type": genre_data["type"],
+                    "name_ua": name_ua,
+                    "slug": slug,
+                }
+            )
 
-        create_genres.append(genre)
+            create_genres.append(genre)
 
-        print(f"Added genre: {genre.name_en}")
+            print(f"Added genre: {genre.name_en}")
 
-    await AnimeGenre.bulk_create(create_genres)
+        session.add_all(create_genres)
+        await session.commit()

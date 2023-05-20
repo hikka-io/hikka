@@ -1,20 +1,18 @@
-from pydantic.datetime_parse import parse_datetime
 from unicodedata import normalize
 from datetime import datetime
+import orjson
 import math
 import re
 
 
-# Quick hack to make FastAPI display datetime as timestamp
-class Datetime(int):
-    @classmethod
-    def __get_validators__(cls):
-        yield parse_datetime
-        yield cls.validate
+# Split list into chunks
+def chunkify(lst, size):
+    return [lst[i : i + size] for i in range(0, len(lst), size)]
 
-    @classmethod
-    def validate(cls, value) -> int:
-        return int(value.timestamp())
+
+# Dump dict using orjson
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
 
 
 # Generate URL safe slug
@@ -41,17 +39,16 @@ def to_timestamp(date):
 
 
 # Helper function for toroise pagination
-def pagination(page, size=20):
-    limit = size
+def pagination(page, limit=20):
     offset = (limit * (page)) - limit
 
-    return limit, offset, size
+    return limit, offset
 
 
 # Helper function to make pagication dict for api
-def pagination_dict(total, page, size):
+def pagination_dict(total, page, limit):
     return {
-        "pages": math.ceil(total / size),
+        "pages": math.ceil(total / limit),
         "total": total,
         "page": page,
     }

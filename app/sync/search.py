@@ -1,9 +1,12 @@
 from meilisearch_python_async.models.settings import MeilisearchSettings
+from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_async import Client
+from sqlalchemy.orm import selectinload
+from app.database import sessionmanager
 from app.utils import get_season
-from tortoise.queryset import Q
-from tortoise import Tortoise
+from sqlalchemy import select
 from app.models import Anime
+from app import constants
 import config
 
 
@@ -37,6 +40,11 @@ async def update_anime_settings(index):
                 "title_ja",
                 "score",
                 "slug",
+                # ToDo: remove those
+                # "genres",
+                # "studios",
+                # "producers",
+                # "year",
             ],
             sortable_attributes=["scored_by", "score", "year"],
             distinct_attribute="slug",
@@ -44,9 +52,15 @@ async def update_anime_settings(index):
     )
 
 
-async def anime_documents():
-    anime_list = await Anime.filter(~Q(media_type=None)).prefetch_related(
-        "genres", "studios", "producers"
+async def anime_documents(session: AsyncSession):
+    anime_list = await session.scalars(
+        select(Anime)
+        .where(Anime.media_type != None)
+        .options(
+            selectinload(Anime.producers),
+            selectinload(Anime.studios),
+            selectinload(Anime.genres),
+        )
     )
 
     documents = [
@@ -76,21 +90,21 @@ async def anime_documents():
     return documents
 
 
-async def meilisearch_populate():
+async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating database")
 
-    documents = await anime_documents()
+    # documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
-        index = client.index("content_anime")
+        index = client.index(constants.ANIME_SEARCH_INDEX)
 
         await update_anime_settings(index)
 
-        await index.add_documents(documents)
+        # await index.add_documents(documents)
 
 
 async def update_search():
-    await Tortoise.init(config=config.tortoise)
-    await Tortoise.generate_schemas()
+    sessionmanager.init(config.database)
 
-    await meilisearch_populate()
+    async with sessionmanager.session() as session:
+        await meilisearch_populate(session)

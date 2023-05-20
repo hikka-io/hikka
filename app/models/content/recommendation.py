@@ -1,19 +1,23 @@
-from tortoise import fields
+from sqlalchemy.orm import relationship, mapped_column
+from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy.orm import Mapped
 from ..base import Base
 
-class RecommendationBase(Base):
-    weight = fields.IntField()
 
-class AnimeRecommendation(RecommendationBase):
-    recommendation: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="recommended_to"
+class AnimeRecommendation(Base):
+    __tablename__ = "service_content_anime_recommendations"
+
+    weight: Mapped[int]
+
+    recommendation_id = mapped_column(ForeignKey("service_content_anime.id"))
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+
+    recommendation: Mapped["Anime"] = relationship(
+        back_populates="recommended_to", foreign_keys=[recommendation_id]
     )
 
-    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="recommendations"
+    anime: Mapped["Anime"] = relationship(
+        back_populates="recommendations", foreign_keys=[anime_id]
     )
 
-    class Meta:
-        table = "service_content_anime_recommendations"
-
-        unique_together = ("anime", "recommendation")
+    unique_constraint = UniqueConstraint(recommendation_id, anime_id)

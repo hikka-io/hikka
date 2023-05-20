@@ -1,23 +1,28 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String, ForeignKey, UniqueConstraint
+from datetime import datetime
+from ..base import Base
+
 
 class AnimeWatch(Base):
-    status = fields.CharField(max_length=16)
-    user_score = fields.IntField(default=0)
-    episodes = fields.IntField(default=0)
-    note = fields.TextField(null=True)
-    created = NativeDatetimeField()
-    updated = NativeDatetimeField()
+    __tablename__ = "service_watch"
 
-    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
-        "models.User", related_name="watch"
+    note: Mapped[str] = mapped_column(nullable=True)
+    episodes: Mapped[int] = mapped_column(default=0)
+    status: Mapped[str] = mapped_column(String(16))
+    score: Mapped[int] = mapped_column(default=0)
+    created: Mapped[datetime]
+    updated: Mapped[datetime]
+
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"))
+
+    anime: Mapped["Anime"] = relationship(
+        back_populates="watch", foreign_keys=[anime_id]
     )
 
-    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="watch"
+    user: Mapped["User"] = relationship(
+        back_populates="watch", foreign_keys=[user_id]
     )
 
-    class Meta:
-        table = "service_watch"
-
-        unique_together = ("user", "anime")
+    unique_constraint = UniqueConstraint(anime_id, user_id)

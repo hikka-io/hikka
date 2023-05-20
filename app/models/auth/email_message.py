@@ -1,16 +1,20 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from datetime import datetime
+from ..base import Base
+
 
 class EmailMessage(Base):
-    sent_time = NativeDatetimeField(default=None, null=True)
-    sent = fields.BooleanField(default=False)
-    type = fields.CharField(max_length=32)
-    created = NativeDatetimeField()
-    content = fields.TextField()
+    __tablename__ = "service_email_messages"
 
-    receiver: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
-        "models.User", related_name="email_messages"
-    )
+    sent_time: Mapped[datetime] = mapped_column(default=None, nullable=True)
+    sent: Mapped[bool] = mapped_column(default=False)
+    type: Mapped[str] = mapped_column(String(32))
+    created: Mapped[datetime]
+    content: Mapped[str]
 
-    class Meta:
-        table = "service_email_messages"
+    user_id = mapped_column(ForeignKey("service_users.id"))
+
+    user: Mapped["User"] = relationship(back_populates="email_messages")

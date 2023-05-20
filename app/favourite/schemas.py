@@ -1,11 +1,11 @@
-from pydantic import BaseModel
-from ..utils import Datetime
+from app.schemas import ORJSONModel
+from datetime import datetime
 
 
 # Responses
-class FavouriteResponse(BaseModel):
-    created: Datetime
+class FavouriteResponse(ORJSONModel):
+    created: datetime
 
 
-class DeleteResponse(BaseModel):
+class DeleteResponse(ORJSONModel):
     success: bool

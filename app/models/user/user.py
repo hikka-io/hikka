@@ -1,35 +1,55 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy import String
+from datetime import datetime
+from ..base import Base
+
 
 class User(Base):
-    username = fields.CharField(index=True, unique=True, max_length=16)
-    email = fields.CharField(index=True, unique=True, max_length=255)
-    description = fields.CharField(max_length=140, null=True)
-    password_hash = fields.CharField(max_length=60)
-    activated = fields.BooleanField(default=False)
-    banned = fields.BooleanField(default=False)
+    __tablename__ = "service_users"
 
-    last_active = NativeDatetimeField()
-    created = NativeDatetimeField()
-    login = NativeDatetimeField()
+    username: Mapped[str] = mapped_column(String(16), unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    description: Mapped[str] = mapped_column(String(140), nullable=True)
+    password_hash: Mapped[str] = mapped_column(String(60))
+    activated: Mapped[bool] = mapped_column(default=False)
+    banned: Mapped[bool] = mapped_column(default=False)
 
-    activation_token = fields.CharField(null=True, max_length=64)
-    activation_expire = NativeDatetimeField(null=True)
+    activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
+    activation_expire: Mapped[datetime] = mapped_column(nullable=True)
 
-    password_reset_token = fields.CharField(null=True, max_length=64)
-    password_reset_expire = NativeDatetimeField(null=True)
+    password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True)
+    password_reset_expire: Mapped[datetime] = mapped_column(nullable=True)
 
-    email_messages: fields.ReverseRelation["EmailMessage"]
-    auth_tokens: fields.ReverseRelation["AuthToken"]
+    last_active: Mapped[datetime]
+    created: Mapped[datetime]
+    login: Mapped[datetime]
 
-    # favourite: fields.ReverseRelation["AnimeFavourite"]
-    # watch: fields.ReverseRelation["AnimeWatch"]
-
-    following: fields.ManyToManyRelation["User"] = fields.ManyToManyField(
-        "models.User", related_name="followers", through="service_user_followers"
+    email_messages: Mapped[list["EmailMessage"]] = relationship(
+        back_populates="user",
     )
 
-    followers: fields.ManyToManyRelation["User"]
+    auth_tokens: Mapped[list["AuthToken"]] = relationship(
+        back_populates="user",
+    )
 
-    class Meta:
-        table = "service_users"
+    followers: Mapped[list["Follow"]] = relationship(
+        foreign_keys="[Follow.followed_user_id]",
+        back_populates="followed_user",
+    )
+
+    following: Mapped[list["Follow"]] = relationship(
+        foreign_keys="[Follow.user_id]",
+        back_populates="user",
+    )
+
+    favourite: Mapped[list["AnimeFavourite"]] = relationship(
+        foreign_keys="[AnimeFavourite.user_id]",
+        back_populates="user",
+    )
+
+    watch: Mapped[list["AnimeWatch"]] = relationship(
+        foreign_keys="[AnimeWatch.user_id]",
+        back_populates="user",
+    )

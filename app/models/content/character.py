@@ -1,35 +1,46 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy import ForeignKey, UniqueConstraint
+from ..mixins import ContentMixin, SlugMixin
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy import String
+from datetime import datetime
+from ..base import Base
 
-class Character(Base):
-    name_ja = fields.CharField(null=True, max_length=255)
-    name_en = fields.CharField(null=True, max_length=255)
-    name_ua = fields.CharField(null=True, max_length=255)
 
-    content_id = fields.CharField(max_length=36, unique=True, index=True)
-    favorites = fields.IntField(null=True, default=0)
-    slug = fields.CharField(max_length=255)
-    updated = NativeDatetimeField()
+class Character(Base, ContentMixin, SlugMixin):
+    __tablename__ = "service_content_characters"
 
-    # ToDo: initialized
+    name_ja: Mapped[str] = mapped_column(String(255), nullable=True)
+    name_en: Mapped[str] = mapped_column(String(255), nullable=True)
+    name_ua: Mapped[str] = mapped_column(String(255), nullable=True)
 
-    # ToDo: image
+    favorites: Mapped[int] = mapped_column(default=0, nullable=True)
+    updated: Mapped[datetime]
 
-    class Meta:
-        table = "service_content_characters"
+    anime_roles: Mapped[list["AnimeCharacter"]] = relationship(
+        back_populates="character"
+    )
+
+    voices: Mapped[list["AnimeVoice"]] = relationship(
+        back_populates="character"
+    )
+
 
 class AnimeCharacter(Base):
-    main = fields.BooleanField()
+    __tablename__ = "service_content_anime_characters"
 
-    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="characters"
+    main: Mapped[bool]
+
+    character_id = mapped_column(ForeignKey("service_content_characters.id"))
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+
+    character: Mapped["Character"] = relationship(
+        back_populates="anime_roles", foreign_keys=[character_id]
     )
 
-    character: fields.ForeignKeyRelation["Character"] = fields.ForeignKeyField(
-        "models.Character", related_name="anime_roles"
+    anime: Mapped["Anime"] = relationship(
+        back_populates="characters", foreign_keys=[anime_id]
     )
 
-    class Meta:
-        table = "service_content_anime_characters"
-
-        unique_together = ("anime", "character")
+    unique_constraint = UniqueConstraint(character_id, anime_id)

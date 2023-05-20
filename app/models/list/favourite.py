@@ -1,18 +1,23 @@
-from ..base import Base, NativeDatetimeField
-from tortoise import fields
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, UniqueConstraint
+from datetime import datetime
+from ..base import Base
+
 
 class AnimeFavourite(Base):
-    created = NativeDatetimeField()
+    __tablename__ = "service_favourite_anime"
 
-    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
-        "models.User", related_name="favourite"
+    created: Mapped[datetime]
+
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"))
+
+    anime: Mapped["Anime"] = relationship(
+        back_populates="favourite", foreign_keys=[anime_id]
     )
 
-    anime: fields.ForeignKeyRelation["Anime"] = fields.ForeignKeyField(
-        "models.Anime", related_name="favourite"
+    user: Mapped["User"] = relationship(
+        back_populates="favourite", foreign_keys=[user_id]
     )
 
-    class Meta:
-        table = "service_favourite_anime"
-
-        unique_together = ("user", "anime")
+    unique_constraint = UniqueConstraint(anime_id, user_id)

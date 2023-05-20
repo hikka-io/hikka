@@ -1,5 +1,6 @@
+from app.database import sessionmanager
+from sqlalchemy import select
 from app.models import Anime
-from tortoise import Tortoise
 from . import requests
 from app import utils
 import asyncio
@@ -13,69 +14,70 @@ async def make_request(semaphore, page):
 
 
 async def save_anime_list(data):
-    references = [entry["reference"] for entry in data]
+    sessionmanager.init(config.database)
 
-    cache = await Anime.filter(content_id__in=references)
+    async with sessionmanager.session() as session:
+        references = [entry["reference"] for entry in data]
 
-    anime_cache = {entry.content_id: entry for entry in cache}
+        cache = await session.scalars(
+            select(Anime).where(Anime.content_id.in_(references))
+        )
 
-    create_anime = []
-    update_anime = []
+        anime_cache = {entry.content_id: entry for entry in cache}
 
-    for anime_data in data:
-        updated = utils.from_timestamp(anime_data["updated"])
-        slug = utils.slugify(anime_data["title"], anime_data["reference"])
+        add_anime = []
 
-        if anime_data["reference"] in anime_cache:
-            anime = anime_cache[anime_data["reference"]]
+        for anime_data in data:
+            updated = utils.from_timestamp(anime_data["updated"])
+            slug = utils.slugify(anime_data["title"], anime_data["reference"])
 
-            if updated == anime.updated:
-                continue
+            if anime_data["reference"] in anime_cache:
+                anime = anime_cache[anime_data["reference"]]
 
-            if anime.needs_update:
-                continue
+                if updated == anime.updated:
+                    continue
 
-            anime.needs_update = True
-            update_anime.append(anime)
+                if anime.needs_update:
+                    continue
 
-            print(f"Anime needs update: {anime.title_en}")
+                anime.needs_update = True
+                add_anime.append(anime)
 
-        else:
-            start_date = utils.from_timestamp(anime_data["start_date"])
+                print(f"Anime needs update: {anime.title_en}")
 
-            anime = Anime(
-                **{
-                    "end_date": utils.from_timestamp(anime_data["end_date"]),
-                    "year": start_date.year if start_date else None,
-                    "season": utils.get_season(anime.start_date),
-                    "media_type": anime_data["media_type"],
-                    "content_id": anime_data["reference"],
-                    "scored_by": anime_data["scored_by"],
-                    "episodes": anime_data["episodes"],
-                    "title_en": anime_data["title_en"],
-                    "title_ja": anime_data["title"],
-                    "score": anime_data["score"],
-                    "start_date": start_date,
-                    "needs_update": True,
-                    "updated": updated,
-                    "slug": slug,
-                }
-            )
+            else:
+                start_date = utils.from_timestamp(anime_data["start_date"])
 
-            create_anime.append(anime)
+                anime = Anime(
+                    **{
+                        "end_date": utils.from_timestamp(
+                            anime_data["end_date"]
+                        ),
+                        "year": start_date.year if start_date else None,
+                        "season": utils.get_season(start_date),
+                        "media_type": anime_data["media_type"],
+                        "content_id": anime_data["reference"],
+                        "scored_by": anime_data["scored_by"],
+                        "episodes": anime_data["episodes"],
+                        "title_en": anime_data["title_en"],
+                        "title_ja": anime_data["title"],
+                        "score": anime_data["score"],
+                        "start_date": start_date,
+                        "needs_update": True,
+                        "updated": updated,
+                        "slug": slug,
+                    }
+                )
 
-            print(f"Added anime: {anime.title_en}")
+                add_anime.append(anime)
 
-    await Anime.bulk_create(create_anime)
+                print(f"Added anime: {anime.title_ja}")
 
-    if len(update_anime) > 0:
-        await Anime.bulk_update(update_anime, fields=["needs_update"])
+        session.add_all(add_anime)
+        await session.commit()
 
 
 async def aggregator_anime():
-    await Tortoise.init(config=config.tortoise)
-    await Tortoise.generate_schemas()
-
     data = await requests.get_anime(1)
     pages = data["pagination"]["pages"]
 
@@ -86,4 +88,5 @@ async def aggregator_anime():
 
     data = [item for sublist in result for item in sublist]
 
-    await save_anime_list(data)
+    for data_chunk in utils.chunkify(data, 20000):
+        await save_anime_list(data_chunk)

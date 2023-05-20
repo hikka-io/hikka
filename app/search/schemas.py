@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, validator
+from app.schemas import ORJSONModel, PaginationResponse
 from pydantic import constr, PositiveInt
+from pydantic import Field, validator
 from app import constants
 from typing import Union
 from enum import Enum
@@ -56,7 +57,7 @@ class SourceEnum(str, Enum):
 
 
 # Args
-class AnimeSearchArgs(BaseModel):
+class AnimeSearchArgs(ORJSONModel):
     query: Union[constr(min_length=3, max_length=255), None] = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
     page: int = Field(default=1, gt=0)
@@ -104,3 +105,19 @@ class AnimeSearchArgs(BaseModel):
                 raise ValueError(f"Invalid sort value: {sort_item}")
 
         return sort_list
+
+
+# Responses
+class AnimeSearchResponse(ORJSONModel):
+    media_type: Union[str, None]
+    scored_by: Union[int, None]
+    title_ua: Union[str, None]
+    title_en: Union[str, None]
+    title_ja: Union[str, None]
+    score: Union[float, None]
+    slug: Union[str, None]
+
+
+class AnimeSearchPaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[AnimeSearchResponse]

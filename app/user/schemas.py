@@ -1,23 +1,24 @@
 from app.schemas import PaginationResponse
-from pydantic import BaseModel, Field
-from ..utils import Datetime
+from app.schemas import ORJSONModel
+from datetime import datetime
+from pydantic import Field
 from typing import Union
 
 
 # Args
-class DescriptionArgs(BaseModel):
+class DescriptionArgs(ORJSONModel):
     description: Union[str, None] = Field(default=None, max_length=140)
 
 
 # Responses
-class UserResponse(BaseModel):
+class UserResponse(ORJSONModel):
     description: Union[str, None]
-    created: Datetime
+    created: datetime
     reference: str
     username: str
 
 
-class WatchStatsResponse(BaseModel):
+class WatchStatsResponse(ORJSONModel):
     completed: int
     watching: int
     planned: int
@@ -25,6 +26,6 @@ class WatchStatsResponse(BaseModel):
     on_hold: int
 
 
-class UserPaginationResponse(BaseModel):
+class UserPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[UserResponse]
