@@ -59,8 +59,9 @@ errors = {
         "self": ["Can't follow self", 400],
     },
     "search": {
-        "bad-year": ["Invalid years passed", 400],
+        "query-down": ["Search by query unavailable at the moment", 400],
         "unknown-producer": ["Unknown producer", 400],
+        "bad-year": ["Invalid years passed", 400],
         "unknown-studio": ["Unknown studio", 400],
         "unknown-genre": ["Unknown genre", 400],
     },

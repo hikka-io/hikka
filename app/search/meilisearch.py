@@ -1,9 +1,10 @@
-# from meilisearch_python_async.errors import MeiliSearchCommunicationError
-# from meilisearch_python_async.errors import MeiliSearchApiError
+from meilisearch_python_async.errors import MeilisearchError
 from meilisearch_python_async import Client
 from app.utils import pagination_dict
 from .schemas import AnimeSearchArgs
 from .utils import enum_list_values
+from app.errors import Abort
+from app import constants
 import config
 
 
@@ -49,20 +50,24 @@ def build_anime_filters(search: AnimeSearchArgs):
 
 
 async def anime_search(search: AnimeSearchArgs):
-    async with Client(**config.meilisearch) as client:
-        index = client.index("content_anime")
+    try:
+        async with Client(**config.meilisearch) as client:
+            index = client.index(constants.ANIME_SEARCH_INDEX)
 
-        result = await index.search(
-            filter=build_anime_filters(search),
-            query=search.query,
-            page=search.page,
-            sort=search.sort,
-            hits_per_page=12,
-        )
+            result = await index.search(
+                hits_per_page=constants.SEARCH_RESULT_LIMIT,
+                filter=build_anime_filters(search),
+                query=search.query,
+                page=search.page,
+                sort=search.sort,
+            )
 
-        return {
-            "pagination": pagination_dict(
-                result.total_hits, result.page, result.hits_per_page
-            ),
-            "list": result.hits,
-        }
+            return {
+                "pagination": pagination_dict(
+                    result.total_hits, result.page, result.hits_per_page
+                ),
+                "list": result.hits,
+            }
+
+    except MeilisearchError:
+        raise Abort("search", "query-down")

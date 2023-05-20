@@ -3,7 +3,6 @@ from app.database import get_session
 from .schemas import AnimeSearchArgs
 from app.errors import Abort
 from fastapi import Depends
-from typing import Tuple
 from . import service
 
 

@@ -6,6 +6,7 @@ from app.database import sessionmanager
 from app.utils import get_season
 from sqlalchemy import select
 from app.models import Anime
+from app import constants
 import config
 
 
@@ -40,10 +41,10 @@ async def update_anime_settings(index):
                 "score",
                 "slug",
                 # ToDo: remove those
-                "genres",
-                "studios",
-                "producers",
-                "year",
+                # "genres",
+                # "studios",
+                # "producers",
+                # "year",
             ],
             sortable_attributes=["scored_by", "score", "year"],
             distinct_attribute="slug",
@@ -95,7 +96,7 @@ async def meilisearch_populate(session: AsyncSession):
     # documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
-        index = client.index("content_anime")
+        index = client.index(constants.ANIME_SEARCH_INDEX)
 
         await update_anime_settings(index)
 

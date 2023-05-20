@@ -1,5 +1,3 @@
-from enum import Enum
-
 # Email types
 EMAIL_ACTIVATION = "activation"
 EMAIL_PASSWORD_RESET = "password_reset"
@@ -63,3 +61,8 @@ SOURCE_OTHER = "other"
 SOURCE_RADIO = "radio"
 SOURCE_GAME = "game"
 SOURCE_BOOK = "book"
+
+SEARCH_RESULT_LIMIT = 12
+
+# Meilisearch index names
+ANIME_SEARCH_INDEX = "content_anime"

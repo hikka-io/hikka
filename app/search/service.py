@@ -1,8 +1,9 @@
 from app.models import Anime, AnimeGenre, Company
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy import select, func, and_
 from .schemas import AnimeSearchArgs
+from sqlalchemy import select, and_
+from sqlalchemy import func
 from . import utils
 
 
