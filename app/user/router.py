@@ -1,8 +1,7 @@
+from app.dependencies import auth_required, get_user
 from .schemas import UserResponse, DescriptionArgs
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
-from .dependencies import get_profile
 from app.database import get_session
 from app.models import User
 from . import service
@@ -17,7 +16,7 @@ async def profile(user: User = Depends(auth_required)):
 
 
 @router.get("/{username}", response_model=UserResponse)
-async def user_profile(user: User = Depends(get_profile)):
+async def user_profile(user: User = Depends(get_user)):
     return user
 
 

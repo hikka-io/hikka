@@ -1,4 +1,3 @@
-from .service import get_auth_token, get_anime_by_slug
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from .database import get_session
@@ -6,6 +5,22 @@ from fastapi import Header, Query
 from .models import User, Anime
 from fastapi import Depends
 from .errors import Abort
+
+from .service import (
+    get_user_by_username,
+    get_anime_by_slug,
+    get_auth_token,
+)
+
+
+# Get user by username
+async def get_user(
+    username: str, session: AsyncSession = Depends(get_session)
+) -> User:
+    if not (user := await get_user_by_username(session, username)):
+        raise Abort("user", "not-found")
+
+    return user
 
 
 # Get current pagination page
