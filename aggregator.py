@@ -4,8 +4,7 @@ from app.sync import aggregator_characters
 from app.sync import aggregator_companies
 from app.sync import aggregator_people
 from app.sync import aggregator_anime
-
-# from app.sync import update_search
+from app.sync import update_search
 import asyncio
 
 if __name__ == "__main__":
@@ -14,5 +13,5 @@ if __name__ == "__main__":
     # asyncio.run(aggregator_companies())
     # asyncio.run(aggregator_people())
     # asyncio.run(aggregator_anime())
-    asyncio.run(aggregator_anime_info())
-    # asyncio.run(update_search())
+    # asyncio.run(aggregator_anime_info())
+    asyncio.run(update_search())

@@ -7,4 +7,4 @@ from .aggregator.anime import aggregator_anime
 
 from .email import send_emails
 
-# from .search import update_search
+from .search import update_search
