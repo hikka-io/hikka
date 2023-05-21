@@ -61,5 +61,16 @@ class AnimeFavouriteResponse(ORJSONModel):
     reference: str
 
 
+class WatchResponse(ORJSONModel):
+    note: Union[str, None]
+    anime: AnimeResponse
+    updated: datetime
+    created: datetime
+    reference: str
+    episodes: int
+    status: str
+    score: int
+
+
 class SuccessResponse(ORJSONModel):
     success: bool

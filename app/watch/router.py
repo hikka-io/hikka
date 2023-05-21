@@ -1,19 +1,15 @@
+from app.schemas import WatchResponse, SuccessResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from .schemas import WatchArgs
 from typing import Tuple
 from . import service
 
 from .dependencies import (
     verify_add_watch,
     verify_watch,
-)
-
-from .schemas import (
-    WatchDeleteResponse,
-    WatchResponse,
-    WatchArgs,
 )
 
 
@@ -30,11 +26,10 @@ async def watch_add(
     data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
     session: AsyncSession = Depends(get_session),
 ):
-    watch = await service.save_watch(session, *data)
-    return watch
+    return await service.save_watch(session, *data)
 
 
-@router.delete("/{slug}", response_model=WatchDeleteResponse)
+@router.delete("/{slug}", response_model=SuccessResponse)
 async def delete_watch(
     watch: AnimeWatch = Depends(verify_watch),
     session: AsyncSession = Depends(get_session),

@@ -1,11 +1,10 @@
-from datetime import datetime
 from typing import Union
 
 from app.schemas import (
     AnimeFavouriteResponse,
     PaginationResponse,
     WatchStatusEnum,
-    AnimeResponse,
+    WatchResponse,
     ORJSONModel,
 )
 
@@ -16,17 +15,6 @@ class WatchFilterArgs(ORJSONModel):
 
 
 # Responses
-class WatchResponse(ORJSONModel):
-    note: Union[str, None]
-    anime: AnimeResponse
-    updated: datetime
-    created: datetime
-    reference: str
-    episodes: int
-    status: str
-    score: int
-
-
 class WatchPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[WatchResponse]
