@@ -27,29 +27,19 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
         query = query.where(Anime.year <= search.years[1])
 
     if len(search.season) > 0:
-        query = query.where(
-            Anime.season.in_(utils.enum_list_values(search.season))
-        )
+        query = query.where(Anime.season.in_(search.season))
 
     if len(search.rating) > 0:
-        query = query.where(
-            Anime.rating.in_(utils.enum_list_values(search.rating))
-        )
+        query = query.where(Anime.rating.in_(search.rating))
 
     if len(search.status) > 0:
-        query = query.where(
-            Anime.status.in_(utils.enum_list_values(search.status))
-        )
+        query = query.where(Anime.status.in_(search.status))
 
     if len(search.source) > 0:
-        query = query.where(
-            Anime.source.in_(utils.enum_list_values(search.source))
-        )
+        query = query.where(Anime.source.in_(search.source))
 
     if len(search.media_type) > 0:
-        query = query.where(
-            Anime.media_type.in_(utils.enum_list_values(search.media_type))
-        )
+        query = query.where(Anime.media_type.in_(search.media_type))
 
     if len(search.producers) > 0:
         query = query.join(Anime.producers).filter(

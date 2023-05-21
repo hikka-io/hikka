@@ -2,28 +2,19 @@ from meilisearch_python_async.errors import MeilisearchError
 from meilisearch_python_async import Client
 from app.utils import pagination_dict
 from .schemas import AnimeSearchArgs
-from .utils import enum_list_values
 from app.errors import Abort
 from app import constants
 import config
 
 
 def build_anime_filters(search: AnimeSearchArgs):
-    rating = [
-        f"rating = {rating}" for rating in enum_list_values(search.rating)
-    ]
+    rating = [f"rating = {rating}" for rating in search.rating]
 
-    status = [
-        f"status = {status}" for status in enum_list_values(search.status)
-    ]
+    status = [f"status = {status}" for status in search.status]
 
-    source = [
-        f"source = {source}" for source in enum_list_values(search.source)
-    ]
+    source = [f"source = {source}" for source in search.source]
 
-    season = [
-        f"season = {season}" for season in enum_list_values(search.season)
-    ]
+    season = [f"season = {season}" for season in search.season]
 
     producers = [f"producers = {producer}" for producer in search.producers]
     studios = [f"studios = {studio}" for studio in search.studios]

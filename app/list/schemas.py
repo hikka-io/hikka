@@ -1,7 +1,12 @@
+from app.schemas import ORJSONModel, WatchStatusEnum
 from app.schemas import PaginationResponse
-from app.schemas import ORJSONModel
 from datetime import datetime
 from typing import Union
+
+
+# Args
+class WatchFilterArgs(ORJSONModel):
+    status: Union[WatchStatusEnum, None] = None
 
 
 # Responses

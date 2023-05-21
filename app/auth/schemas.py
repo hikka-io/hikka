@@ -2,8 +2,6 @@ from pydantic import EmailStr, Field
 from app.schemas import ORJSONModel
 from datetime import datetime
 
-# from ..utils import Datetime
-
 
 # Args
 class SignupArgs(ORJSONModel):
