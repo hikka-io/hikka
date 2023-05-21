@@ -1,6 +1,7 @@
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import Union
 from . import constants
 from enum import Enum
 from . import utils
@@ -40,3 +41,15 @@ class PaginationResponse(ORJSONModel):
     total: int
     pages: int
     page: int
+
+
+class AnimeResponse(ORJSONModel):
+    media_type: Union[str, None]
+    title_ua: Union[str, None]
+    title_en: Union[str, None]
+    title_ja: Union[str, None]
+    episodes: Union[int, None]
+    status: Union[str, None]
+    scored_by: int
+    score: float
+    slug: str

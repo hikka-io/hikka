@@ -6,6 +6,20 @@ from sqlalchemy import func
 from typing import Union
 
 
+def anime_selectinload():
+    return selectinload(AnimeWatch.anime).load_only(
+        Anime.media_type,
+        Anime.scored_by,
+        Anime.title_ja,
+        Anime.title_en,
+        Anime.title_ua,
+        Anime.episodes,
+        Anime.status,
+        Anime.score,
+        Anime.slug,
+    )
+
+
 async def get_user_watch(
     session: AsyncSession,
     user: User,
@@ -18,17 +32,7 @@ async def get_user_watch(
 
     return await session.scalars(
         query.order_by(desc(AnimeWatch.updated))
-        .options(
-            selectinload(AnimeWatch.anime).load_only(
-                Anime.scored_by,
-                Anime.title_ja,
-                Anime.title_en,
-                Anime.title_ua,
-                Anime.episodes,
-                Anime.status,
-                Anime.score,
-            )
-        )
+        .options(anime_selectinload())
         .limit(limit)
         .offset(offset)
     )
@@ -54,17 +58,7 @@ async def get_user_anime_favourite(
         select(AnimeFavourite)
         .filter_by(user=user)
         .order_by(desc(AnimeFavourite.created))
-        .options(
-            selectinload(AnimeFavourite.anime).load_only(
-                Anime.scored_by,
-                Anime.title_ja,
-                Anime.title_en,
-                Anime.title_ua,
-                Anime.episodes,
-                Anime.status,
-                Anime.score,
-            )
-        )
+        .options(anime_selectinload())
         .limit(limit)
         .offset(offset)
     )

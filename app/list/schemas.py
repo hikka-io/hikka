@@ -1,7 +1,12 @@
-from app.schemas import ORJSONModel, WatchStatusEnum
-from app.schemas import PaginationResponse
 from datetime import datetime
 from typing import Union
+
+from app.schemas import (
+    PaginationResponse,
+    WatchStatusEnum,
+    AnimeResponse,
+    ORJSONModel,
+)
 
 
 # Args
@@ -10,16 +15,6 @@ class WatchFilterArgs(ORJSONModel):
 
 
 # Responses
-class AnimeResponse(ORJSONModel):
-    title_ua: Union[str, None]
-    title_en: Union[str, None]
-    title_ja: Union[str, None]
-    episodes: Union[int, None]
-    status: Union[str, None]
-    scored_by: int
-    score: float
-
-
 class WatchResponse(ORJSONModel):
     note: Union[str, None]
     anime: AnimeResponse

@@ -1,9 +1,14 @@
-from app.schemas import ORJSONModel, PaginationResponse
 from pydantic import constr, PositiveInt
 from pydantic import Field, validator
 from app import constants
 from typing import Union
 from enum import Enum
+
+from app.schemas import (
+    PaginationResponse,
+    AnimeResponse,
+    ORJSONModel,
+)
 
 
 # Enums
@@ -108,16 +113,6 @@ class AnimeSearchArgs(ORJSONModel):
 
 
 # Responses
-class AnimeSearchResponse(ORJSONModel):
-    media_type: Union[str, None]
-    scored_by: Union[int, None]
-    title_ua: Union[str, None]
-    title_en: Union[str, None]
-    title_ja: Union[str, None]
-    score: Union[float, None]
-    slug: Union[str, None]
-
-
 class AnimeSearchPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
-    list: list[AnimeSearchResponse]
+    list: list[AnimeResponse]
