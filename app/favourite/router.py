@@ -1,4 +1,4 @@
-from .schemas import FavouriteResponse, DeleteResponse
+from app.schemas import AnimeFavouriteResponse, SuccessResponse
 from app.models import User, Anime, AnimeFavourite
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
@@ -16,23 +16,22 @@ from .dependencies import (
 router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 
-@router.get("/anime/{slug}", response_model=FavouriteResponse)
+@router.get("/anime/{slug}", response_model=AnimeFavouriteResponse)
 async def anime_favourite(
     favourite: AnimeFavourite = Depends(get_anime_favourite),
 ):
-    return {"created": favourite.created}
+    return favourite
 
 
-@router.put("/anime/{slug}", response_model=FavouriteResponse)
+@router.put("/anime/{slug}", response_model=AnimeFavouriteResponse)
 async def anime_favourite_add(
     data: Tuple[Anime, User] = Depends(add_anime_favourite),
     session: AsyncSession = Depends(get_session),
 ):
-    favourite = await service.create_anime_favourite(session, *data)
-    return {"created": favourite.created}
+    return await service.create_anime_favourite(session, *data)
 
 
-@router.delete("/anime/{slug}", response_model=DeleteResponse)
+@router.delete("/anime/{slug}", response_model=SuccessResponse)
 async def anime_favourite_delete(
     favourite: AnimeFavourite = Depends(get_anime_favourite),
     session: AsyncSession = Depends(get_session),

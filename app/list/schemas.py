@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Union
 
 from app.schemas import (
+    AnimeFavouriteResponse,
     PaginationResponse,
     WatchStatusEnum,
     AnimeResponse,
@@ -24,12 +25,6 @@ class WatchResponse(ORJSONModel):
     episodes: int
     status: str
     score: int
-
-
-class AnimeFavouriteResponse(ORJSONModel):
-    anime: AnimeResponse
-    created: datetime
-    reference: str
 
 
 class WatchPaginationResponse(ORJSONModel):

@@ -53,3 +53,13 @@ class AnimeResponse(ORJSONModel):
     scored_by: int
     score: float
     slug: str
+
+
+class AnimeFavouriteResponse(ORJSONModel):
+    anime: AnimeResponse
+    created: datetime
+    reference: str
+
+
+class SuccessResponse(ORJSONModel):
+    success: bool
