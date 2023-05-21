@@ -31,6 +31,17 @@ class WatchResponse(ORJSONModel):
     score: int
 
 
+class AnimeFavouriteResponse(ORJSONModel):
+    anime: AnimeResponse
+    created: datetime
+    reference: str
+
+
 class WatchPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[WatchResponse]
+
+
+class AnimeFavouritePaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[AnimeFavouriteResponse]
