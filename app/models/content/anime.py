@@ -118,6 +118,6 @@ class Anime(Base, ContentMixin, SlugMixin):
 
     @hybrid_property
     def franchise(self):
-        return self.franchise_id
+        return str(self.franchise_id)
 
     # ToDo: images

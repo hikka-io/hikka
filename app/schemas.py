@@ -37,10 +37,6 @@ class PaginationArgs(ORJSONModel):
 
 
 # Responses
-class ImageResponse(ORJSONModel):
-    url: str
-
-
 class PaginationResponse(ORJSONModel):
     total: int
     pages: int
@@ -48,12 +44,12 @@ class PaginationResponse(ORJSONModel):
 
 
 class AnimeResponse(ORJSONModel):
-    poster: Union[str, None]
     media_type: Union[str, None]
     title_ua: Union[str, None]
     title_en: Union[str, None]
     title_ja: Union[str, None]
     episodes: Union[int, None]
+    poster: Union[str, None]
     status: Union[str, None]
     scored_by: int
     score: float
