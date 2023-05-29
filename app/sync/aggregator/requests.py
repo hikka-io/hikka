@@ -47,6 +47,15 @@ async def get_anime(page):
             return data
 
 
+async def get_anime_franchises(page):
+    endpoint = f"{constants.AGGREGATOR}/franchises/anime?page={page}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
 async def get_anime_info(content_id):
     endpoint = f"{constants.AGGREGATOR}/anime/{content_id}"
 
