@@ -61,13 +61,11 @@ async def anime_documents(session: AsyncSession):
             selectinload(Anime.producers),
             selectinload(Anime.studios),
             selectinload(Anime.genres),
-            selectinload(Anime.poster),
         )
     )
 
     documents = [
         {
-            "poster": {"url": anime.poster.url} if anime.poster else None,
             "year": anime.start_date.year if anime.start_date else None,
             "producers": [company.slug for company in anime.producers],
             "studios": [company.slug for company in anime.studios],
@@ -80,6 +78,7 @@ async def anime_documents(session: AsyncSession):
             "title_ua": anime.title_ua,
             "title_en": anime.title_en,
             "title_ja": anime.title_ja,
+            "poster": anime.poster,
             "status": anime.status,
             "source": anime.source,
             "rating": anime.rating,

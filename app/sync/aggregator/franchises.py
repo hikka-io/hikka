@@ -13,6 +13,7 @@ async def make_request(semaphore, page):
         return data["list"]
 
 
+# ToDo: optimize it
 async def save_anime_franchises_list(data):
     sessionmanager.init(config.database)
 

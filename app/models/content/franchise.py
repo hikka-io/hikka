@@ -13,4 +13,6 @@ class AnimeFranchise(Base, ContentMixin):
     scored_by: Mapped[int] = mapped_column(default=0)
     score: Mapped[float] = mapped_column(default=0)
 
-    anime: Mapped[list["Anime"]] = relationship(back_populates="franchise")
+    anime: Mapped[list["Anime"]] = relationship(
+        back_populates="franchise_relation"
+    )

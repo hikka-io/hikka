@@ -27,7 +27,6 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
 
     # Return full anime info
     return {
-        "poster": anime.poster.url if anime.poster else None,
         "start_date": utils.to_timestamp(anime.start_date),
         "end_date": utils.to_timestamp(anime.end_date),
         "total_episodes": anime.total_episodes,
@@ -35,6 +34,7 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
         "synopsis_ua": anime.synopsis_ua,
         "media_type": anime.media_type,
         "scored_by": anime.scored_by,
+        "franchise": anime.franchise,
         "title_ja": anime.title_ja,
         "title_en": anime.title_en,
         "title_ua": anime.title_ua,
@@ -43,6 +43,7 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
         "synonyms": anime.synonyms,
         "external": anime.external,
         "producers": producers,
+        "poster": anime.poster,
         "rating": anime.rating,
         "source": anime.source,
         "status": anime.status,

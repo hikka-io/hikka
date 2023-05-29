@@ -48,7 +48,7 @@ class PaginationResponse(ORJSONModel):
 
 
 class AnimeResponse(ORJSONModel):
-    poster: Union[ImageResponse, None]
+    poster: Union[str, None]
     media_type: Union[str, None]
     title_ua: Union[str, None]
     title_en: Union[str, None]

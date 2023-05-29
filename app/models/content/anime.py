@@ -1,6 +1,7 @@
 from ..association import anime_producers_association_table
 from ..association import anime_studios_association_table
 from ..association import anime_genres_association_table
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import ContentMixin, SlugMixin
 from sqlalchemy import ForeignKey, String
@@ -51,14 +52,6 @@ class Anime(Base, ContentMixin, SlugMixin):
     stats: Mapped[dict] = mapped_column(JSONB, default=[])
     ost: Mapped[dict] = mapped_column(JSONB, default=[])
 
-    franchise_id = mapped_column(
-        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL")
-    )
-
-    franchise: Mapped["AnimeFranchise"] = relationship(
-        back_populates="anime", foreign_keys=[franchise_id]
-    )
-
     voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
     staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
 
@@ -108,6 +101,23 @@ class Anime(Base, ContentMixin, SlugMixin):
         ForeignKey("service_images.id", ondelete="SET NULL")
     )
 
-    poster: Mapped["Image"] = relationship(lazy="selectin")
+    poster_relation: Mapped["Image"] = relationship(lazy="selectin")
+
+    franchise_id = mapped_column(
+        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL")
+    )
+
+    franchise_relation: Mapped["AnimeFranchise"] = relationship(
+        back_populates="anime", foreign_keys=[franchise_id]
+    )
+
+    # Very dirty hacks, but they do the trick
+    @hybrid_property
+    def poster(self):
+        return self.poster_relation.url if self.poster_relation else None
+
+    @hybrid_property
+    def franchise(self):
+        return self.franchise_id
 
     # ToDo: images
