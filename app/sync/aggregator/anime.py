@@ -1,6 +1,7 @@
 from app.database import sessionmanager
+from app.models import Anime, Image
 from sqlalchemy import select
-from app.models import Anime
+from datetime import datetime
 from . import requests
 from app import utils
 import asyncio
@@ -18,12 +19,19 @@ async def save_anime_list(data):
 
     async with sessionmanager.session() as session:
         references = [entry["reference"] for entry in data]
+        posters = [entry["poster"] for entry in data]
 
         cache = await session.scalars(
             select(Anime).where(Anime.content_id.in_(references))
         )
 
         anime_cache = {entry.content_id: entry for entry in cache}
+
+        cache = await session.scalars(
+            select(Image).where(Image.path.in_(posters))
+        )
+
+        poster_cache = {entry.path: entry for entry in cache}
 
         add_anime = []
 
@@ -41,11 +49,21 @@ async def save_anime_list(data):
                     continue
 
                 anime.needs_update = True
+
                 add_anime.append(anime)
 
                 print(f"Anime needs update: {anime.title_en}")
 
             else:
+                if not (image := poster_cache.get(anime_data["poster"])):
+                    if anime_data["poster"]:
+                        image = Image(
+                            **{
+                                "path": anime_data["poster"],
+                                "created": datetime.utcnow(),
+                            }
+                        )
+
                 start_date = utils.from_timestamp(anime_data["start_date"])
 
                 anime = Anime(
@@ -65,6 +83,7 @@ async def save_anime_list(data):
                         "start_date": start_date,
                         "needs_update": True,
                         "updated": updated,
+                        "poster": image,
                         "slug": slug,
                     }
                 )

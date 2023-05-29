@@ -38,6 +38,7 @@ async def update_anime_settings(index):
                 "title_ua",
                 "title_en",
                 "title_ja",
+                "poster",
                 "score",
                 "slug",
                 # ToDo: remove those
@@ -60,6 +61,7 @@ async def anime_documents(session: AsyncSession):
             selectinload(Anime.producers),
             selectinload(Anime.studios),
             selectinload(Anime.genres),
+            selectinload(Anime.poster),
         )
     )
 
@@ -68,6 +70,7 @@ async def anime_documents(session: AsyncSession):
             "year": anime.start_date.year if anime.start_date else None,
             "producers": [company.slug for company in anime.producers],
             "studios": [company.slug for company in anime.studios],
+            "poster": anime.poster.url if anime.poster else None,
             "genres": [genre.slug for genre in anime.genres],
             "season": get_season(anime.start_date),
             "media_type": anime.media_type,
@@ -93,14 +96,14 @@ async def anime_documents(session: AsyncSession):
 async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating database")
 
-    # documents = await anime_documents(session)
+    documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
         index = client.index(constants.ANIME_SEARCH_INDEX)
 
         await update_anime_settings(index)
 
-        # await index.add_documents(documents)
+        await index.add_documents(documents)
 
 
 async def update_search():

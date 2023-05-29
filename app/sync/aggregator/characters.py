@@ -47,8 +47,6 @@ async def save_characters(data):
                 character.favorites = character_data["favorites"]
                 character.updated = updated
 
-                await character.save()
-
                 add_characters.append(character)
 
                 print(

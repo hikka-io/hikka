@@ -9,8 +9,10 @@ from app.models import AnimeStaff
 from app.models import AnimeVoice
 from app.models import Character
 from app.models import Company
+from datetime import datetime
 from app.models import Person
 from app.models import Anime
+from app.models import Image
 from . import requests
 from app import utils
 import asyncio
@@ -328,6 +330,21 @@ async def update_anime_info(semaphore, content_id):
             anime.videos = data["videos"]
             anime.stats = data["stats"]
             anime.ost = data["ost"]
+
+            if data["poster"]:
+                if not (
+                    image := await session.scalar(
+                        select(Image).filter_by(path=data["poster"])
+                    )
+                ):
+                    image = Image(
+                        **{
+                            "created": datetime.utcnow(),
+                            "path": data["poster"],
+                        }
+                    )
+
+                anime.poster = image
 
             anime.needs_update = False
 

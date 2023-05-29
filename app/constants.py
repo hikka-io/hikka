@@ -5,6 +5,9 @@ EMAIL_PASSWORD_RESET = "password_reset"
 # Aggregator endpoint
 AGGREGATOR = "http://localhost:7777/database"
 
+# CDN endpoing
+CDN_ENDPOINT = "https://cdn.hikka.io"
+
 # Watch list statuses
 WATCH_PLANNED = "planned"
 WATCH_WATCHING = "watching"

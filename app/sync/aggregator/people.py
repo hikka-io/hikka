@@ -43,8 +43,6 @@ async def save_people(data):
                 person.favorites = person_data["favorites"]
                 person.updated = updated
 
-                await person.save()
-
                 add_people.append(person)
 
                 print(f"Updated person: {person.name_en} ({person.favorites})")
