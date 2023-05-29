@@ -9,11 +9,9 @@ uvicorn run:app --reload --port=8888
 ## Migrations
 
 ```bash
-aerich init -t config.tortoise
-aerich init-db
-aerich migrate --name migration_name
-aerich upgrade
-aerich downgrade
+alembic init -t async alembic
+alembic revision --autogenerate -m "Migration name"
+alembic upgrade head
 ```
 
 ## Aggregator SQL

@@ -104,4 +104,10 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="anime",
     )
 
+    image_id = mapped_column(
+        ForeignKey("service_images.id", ondelete="SET NULL")
+    )
+
+    image: Mapped["Image"] = relationship()
+
     # ToDo: images

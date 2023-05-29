@@ -21,4 +21,6 @@ from .content.character import Character
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
+from .image import Image
+
 from .base import Base
