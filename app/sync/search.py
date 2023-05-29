@@ -67,10 +67,10 @@ async def anime_documents(session: AsyncSession):
 
     documents = [
         {
+            "poster": {"url": anime.poster.url} if anime.poster else None,
             "year": anime.start_date.year if anime.start_date else None,
             "producers": [company.slug for company in anime.producers],
             "studios": [company.slug for company in anime.studios],
-            "poster": anime.poster.url if anime.poster else None,
             "genres": [genre.slug for genre in anime.genres],
             "season": get_season(anime.start_date),
             "media_type": anime.media_type,

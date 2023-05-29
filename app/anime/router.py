@@ -27,6 +27,7 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
 
     # Return full anime info
     return {
+        "poster": anime.poster.url if anime.poster else None,
         "start_date": utils.to_timestamp(anime.start_date),
         "end_date": utils.to_timestamp(anime.end_date),
         "total_episodes": anime.total_episodes,

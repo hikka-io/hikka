@@ -108,6 +108,6 @@ class Anime(Base, ContentMixin, SlugMixin):
         ForeignKey("service_images.id", ondelete="SET NULL")
     )
 
-    poster: Mapped["Image"] = relationship()
+    poster: Mapped["Image"] = relationship(lazy="selectin")
 
     # ToDo: images
