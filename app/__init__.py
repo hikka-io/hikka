@@ -42,7 +42,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.add_exception_handler(errors.Abort, errors.abort_handler)
 
     from .favourite import router as favourite_router
-    from .search import router as search_router
+    from .content import router as content_router
     from .follow import router as follow_router
     from .anime import router as anime_router
     from .watch import router as watch_router
@@ -51,7 +51,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .list import router as list_router
 
     app.include_router(favourite_router)
-    app.include_router(search_router)
+    app.include_router(content_router)
     app.include_router(follow_router)
     app.include_router(anime_router)
     app.include_router(watch_router)
