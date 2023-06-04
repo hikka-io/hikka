@@ -1,9 +1,10 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy.ext.hybrid import hybrid_property
 from ..mixins import ContentMixin, SlugMixin
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from sqlalchemy import String
 from datetime import datetime
 from ..base import Base
 
@@ -25,6 +26,16 @@ class Character(Base, ContentMixin, SlugMixin):
     voices: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="character"
     )
+
+    image_id = mapped_column(
+        ForeignKey("service_images.id", ondelete="SET NULL")
+    )
+
+    image_relation: Mapped["Image"] = relationship(lazy="selectin")
+
+    @hybrid_property
+    def image(self):
+        return self.image_relation.url if self.image_relation else None
 
 
 class AnimeCharacter(Base):

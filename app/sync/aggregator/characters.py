@@ -1,6 +1,7 @@
 from app.database import sessionmanager
-from app.models import Character
+from app.models import Character, Image
 from sqlalchemy import select
+from datetime import datetime
 from . import requests
 from app import utils
 import asyncio
@@ -20,12 +21,19 @@ async def save_characters(data):
 
     async with sessionmanager.session() as session:
         content_ids = [entry["content_id"] for entry in data]
+        images = [entry["image"] for entry in data]
 
         cache = await session.scalars(
             select(Character).where(Character.content_id.in_(content_ids))
         )
 
         characters_cache = {entry.content_id: entry for entry in cache}
+
+        cache = await session.scalars(
+            select(Image).where(Image.path.in_(images))
+        )
+
+        image_cache = {entry.path: entry for entry in cache}
 
         add_characters = []
 
@@ -54,12 +62,24 @@ async def save_characters(data):
                 )
 
             else:
+                if not (image := image_cache.get(character_data["image"])):
+                    if character_data["image"]:
+                        image = Image(
+                            **{
+                                "path": character_data["image"],
+                                "created": datetime.utcnow(),
+                            }
+                        )
+
+                        image_cache[character_data["image"]] = image
+
                 character = Character(
                     **{
                         "content_id": character_data["content_id"],
                         "favorites": character_data["favorites"],
                         "name_ja": character_data["name_ja"],
                         "name_en": character_data["name"],
+                        "image_relation": image,
                         "updated": updated,
                         "slug": slug,
                     }

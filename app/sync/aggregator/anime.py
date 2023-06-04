@@ -64,6 +64,8 @@ async def save_anime_list(data):
                             }
                         )
 
+                        poster_cache[anime_data["poster"]] = image
+
                 start_date = utils.from_timestamp(anime_data["start_date"])
 
                 anime = Anime(
@@ -80,10 +82,10 @@ async def save_anime_list(data):
                         "title_en": anime_data["title_en"],
                         "title_ja": anime_data["title"],
                         "score": anime_data["score"],
+                        "poster_relation": image,
                         "start_date": start_date,
                         "needs_update": True,
                         "updated": updated,
-                        "poster": image,
                         "slug": slug,
                     }
                 )

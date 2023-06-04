@@ -1,6 +1,7 @@
 from app.database import sessionmanager
-from app.models import Person
+from app.models import Person, Image
 from sqlalchemy import select
+from datetime import datetime
 from . import requests
 from app import utils
 import asyncio
@@ -18,12 +19,19 @@ async def save_people(data):
 
     async with sessionmanager.session() as session:
         content_ids = [entry["content_id"] for entry in data]
+        images = [entry["image"] for entry in data]
 
         cache = await session.scalars(
             select(Person).where(Person.content_id.in_(content_ids))
         )
 
         people_cache = {entry.content_id: entry for entry in cache}
+
+        cache = await session.scalars(
+            select(Image).where(Image.path.in_(images))
+        )
+
+        image_cache = {entry.path: entry for entry in cache}
 
         add_people = []
 
@@ -48,12 +56,24 @@ async def save_people(data):
                 print(f"Updated person: {person.name_en} ({person.favorites})")
 
             else:
+                if not (image := image_cache.get(person_data["image"])):
+                    if person_data["image"]:
+                        image = Image(
+                            **{
+                                "path": person_data["image"],
+                                "created": datetime.utcnow(),
+                            }
+                        )
+
+                        image_cache[person_data["image"]] = image
+
                 person = Person(
                     **{
                         "content_id": person_data["content_id"],
                         "name_native": person_data["name_ja"],
                         "favorites": person_data["favorites"],
                         "name_en": person_data["name"],
+                        "image_relation": image,
                         "updated": updated,
                         "slug": slug,
                     }

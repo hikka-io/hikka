@@ -333,20 +333,21 @@ async def update_anime_info(semaphore, content_id):
             anime.stats = data["stats"]
             anime.ost = data["ost"]
 
-            if data["poster"]:
-                if not (
-                    image := await session.scalar(
-                        select(Image).filter_by(path=data["poster"])
-                    )
-                ):
-                    image = Image(
-                        **{
-                            "created": datetime.utcnow(),
-                            "path": data["poster"],
-                        }
-                    )
+            # ToDo: do we need it here?
+            # if data["poster"]:
+            #     if not (
+            #         image := await session.scalar(
+            #             select(Image).filter_by(path=data["poster"])
+            #         )
+            #     ):
+            #         image = Image(
+            #             **{
+            #                 "created": datetime.utcnow(),
+            #                 "path": data["poster"],
+            #             }
+            #         )
 
-                anime.poster = image
+            #     anime.poster = image
 
             anime.needs_update = False
 

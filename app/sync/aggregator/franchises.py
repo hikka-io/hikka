@@ -46,7 +46,7 @@ async def save_anime_franchises_list(data):
             update_anime = []
 
             for anime in cache:
-                anime.franchise = franchise
+                anime.franchise_relation = franchise
                 update_anime.append(anime)
 
             session.add_all(update_anime)
