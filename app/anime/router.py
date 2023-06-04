@@ -26,7 +26,7 @@ from app.utils import (
 router = APIRouter(prefix="/anime", tags=["Anime"])
 
 
-@router.post("/", response_model=AnimeSearchPaginationResponse)
+@router.post("", response_model=AnimeSearchPaginationResponse)
 async def search_anime(
     session: AsyncSession = Depends(get_session),
     search: AnimeSearchArgs = Depends(validate_search_anime),
