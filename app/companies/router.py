@@ -1,13 +1,38 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import constants
+from . import service
+
+from .schemas import (
+    CompaniesSearchPaginationResponse,
+    CompaniesSearchArgs,
+)
+
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
 
 
 router = APIRouter(prefix="/companies", tags=["Companies"])
 
 
-@router.post("")
+@router.post("", response_model=CompaniesSearchPaginationResponse)
 async def search_companies(
-    # session: AsyncSession = Depends(get_session),
-    # search: AnimeSearchArgs = Depends(validate_search_anime),
+    search: CompaniesSearchArgs,
+    session: AsyncSession = Depends(get_session),
 ):
-    return {}
+    total = await service.search_total(session)
+
+    limit, offset = pagination(
+        search.page,
+        limit=constants.SEARCH_RESULT_LIMIT,
+    )
+
+    result = await service.companies_search(session, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, search.page, limit),
+        "list": [company for company in result],
+    }

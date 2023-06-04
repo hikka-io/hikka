@@ -35,5 +35,3 @@ class Company(Base, ContentMixin, SlugMixin):
     @hybrid_property
     def image(self):
         return self.image_relation.url if self.image_relation else None
-
-    # ToDo: image
