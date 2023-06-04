@@ -18,11 +18,11 @@ async def save_anime_list(data):
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
-        references = [entry["reference"] for entry in data]
+        content_ids = [entry["content_id"] for entry in data]
         posters = [entry["poster"] for entry in data]
 
         cache = await session.scalars(
-            select(Anime).where(Anime.content_id.in_(references))
+            select(Anime).where(Anime.content_id.in_(content_ids))
         )
 
         anime_cache = {entry.content_id: entry for entry in cache}
@@ -37,10 +37,10 @@ async def save_anime_list(data):
 
         for anime_data in data:
             updated = utils.from_timestamp(anime_data["updated"])
-            slug = utils.slugify(anime_data["title"], anime_data["reference"])
+            slug = utils.slugify(anime_data["title"], anime_data["content_id"])
 
-            if anime_data["reference"] in anime_cache:
-                anime = anime_cache[anime_data["reference"]]
+            if anime_data["content_id"] in anime_cache:
+                anime = anime_cache[anime_data["content_id"]]
 
                 if updated == anime.updated:
                     continue
@@ -74,7 +74,7 @@ async def save_anime_list(data):
                         "year": start_date.year if start_date else None,
                         "season": utils.get_season(start_date),
                         "media_type": anime_data["media_type"],
-                        "content_id": anime_data["reference"],
+                        "content_id": anime_data["content_id"],
                         "scored_by": anime_data["scored_by"],
                         "episodes": anime_data["episodes"],
                         "title_en": anime_data["title_en"],

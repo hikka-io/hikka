@@ -22,12 +22,12 @@ async def save_anime_franchises_list(data):
             if not (
                 franchise := await session.scalar(
                     select(AnimeFranchise).filter_by(
-                        content_id=franchise_data["reference"]
+                        content_id=franchise_data["content_id"]
                     )
                 )
             ):
                 franchise = AnimeFranchise(
-                    content_id=franchise_data["reference"]
+                    content_id=franchise_data["content_id"]
                 )
 
             franchise.updated = utils.from_timestamp(franchise_data["updated"])

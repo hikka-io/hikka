@@ -101,7 +101,7 @@ async def aggregator_anime_genres():
 
             genre = AnimeGenre(
                 **{
-                    "content_id": genre_data["reference"],
+                    "content_id": genre_data["content_id"],
                     "name_en": genre_data["name"],
                     "type": genre_data["type"],
                     "name_ua": name_ua,

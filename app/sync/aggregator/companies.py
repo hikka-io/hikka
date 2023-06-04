@@ -17,10 +17,10 @@ async def save_companies(data):
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
-        references = [entry["reference"] for entry in data]
+        content_ids = [entry["content_id"] for entry in data]
 
         cache = await session.scalars(
-            select(Company).where(Company.content_id.in_(references))
+            select(Company).where(Company.content_id.in_(content_ids))
         )
 
         companies_cache = {entry.content_id: entry for entry in cache}
@@ -30,11 +30,11 @@ async def save_companies(data):
         for company_data in data:
             updated = utils.from_timestamp(company_data["updated"])
             slug = utils.slugify(
-                company_data["name"], company_data["reference"]
+                company_data["name"], company_data["content_id"]
             )
 
-            if company_data["reference"] in companies_cache:
-                company = companies_cache[company_data["reference"]]
+            if company_data["content_id"] in companies_cache:
+                company = companies_cache[company_data["content_id"]]
 
                 if company.updated == updated:
                     continue
@@ -52,7 +52,7 @@ async def save_companies(data):
             else:
                 company = Company(
                     **{
-                        "content_id": company_data["reference"],
+                        "content_id": company_data["content_id"],
                         "favorites": company_data["favorites"],
                         "name": company_data["name"],
                         "updated": updated,

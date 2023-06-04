@@ -98,7 +98,7 @@ async def process_characters(session, anime, data):
     cache = await session.scalars(
         select(Character).where(
             Character.content_id.in_(
-                [entry["reference"] for entry in data["characters"]]
+                [entry["content_id"] for entry in data["characters"]]
             )
         )
     )
@@ -106,7 +106,9 @@ async def process_characters(session, anime, data):
     characters_cache = {entry.content_id: entry for entry in cache}
 
     for character_data in data["characters"]:
-        if not (character := characters_cache.get(character_data["reference"])):
+        if not (
+            character := characters_cache.get(character_data["content_id"])
+        ):
             continue
 
         if not await session.scalar(
@@ -126,7 +128,7 @@ async def process_characters(session, anime, data):
             select(Person).where(
                 Person.content_id.in_(
                     [
-                        entry["reference"]
+                        entry["content_id"]
                         for entry in character_data["voice_actors"]
                     ]
                 )
@@ -136,7 +138,7 @@ async def process_characters(session, anime, data):
         voices_cache = {entry.content_id: entry for entry in cache}
 
         for voice_data in character_data["voice_actors"]:
-            if not (person := voices_cache.get(voice_data["reference"])):
+            if not (person := voices_cache.get(voice_data["content_id"])):
                 continue
 
             if await session.scalar(
@@ -167,7 +169,7 @@ async def process_recommendations(session, anime, data):
     cache = await session.scalars(
         select(Anime).where(
             Anime.content_id.in_(
-                [entry["reference"] for entry in data["recommendations"]]
+                [entry["content_id"] for entry in data["recommendations"]]
             )
         )
     )
@@ -176,7 +178,7 @@ async def process_recommendations(session, anime, data):
 
     for entry in data["recommendations"]:
         if not (
-            recommended_anime := recommendations_cache.get(entry["reference"])
+            recommended_anime := recommendations_cache.get(entry["content_id"])
         ):
             continue
 
@@ -255,7 +257,7 @@ async def process_staff(session, anime, data):
     cache = await session.scalars(
         select(Person).where(
             Person.content_id.in_(
-                [entry["person_reference"] for entry in data["staff"]]
+                [entry["person_content_id"] for entry in data["staff"]]
             )
         )
     )
@@ -263,7 +265,7 @@ async def process_staff(session, anime, data):
     people_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["staff"]:
-        if not (person := people_cache.get(entry["person_reference"])):
+        if not (person := people_cache.get(entry["person_content_id"])):
             continue
 
         if await session.scalar(

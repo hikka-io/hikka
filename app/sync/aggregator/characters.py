@@ -19,10 +19,10 @@ async def save_characters(data):
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
-        references = [entry["reference"] for entry in data]
+        content_ids = [entry["content_id"] for entry in data]
 
         cache = await session.scalars(
-            select(Character).where(Character.content_id.in_(references))
+            select(Character).where(Character.content_id.in_(content_ids))
         )
 
         characters_cache = {entry.content_id: entry for entry in cache}
@@ -32,11 +32,11 @@ async def save_characters(data):
         for character_data in data:
             updated = utils.from_timestamp(character_data["updated"])
             slug = utils.slugify(
-                character_data["name"], character_data["reference"]
+                character_data["name"], character_data["content_id"]
             )
 
-            if character_data["reference"] in characters_cache:
-                character = characters_cache[character_data["reference"]]
+            if character_data["content_id"] in characters_cache:
+                character = characters_cache[character_data["content_id"]]
 
                 if character.updated == updated:
                     continue
@@ -56,7 +56,7 @@ async def save_characters(data):
             else:
                 character = Character(
                     **{
-                        "content_id": character_data["reference"],
+                        "content_id": character_data["content_id"],
                         "favorites": character_data["favorites"],
                         "name_ja": character_data["name_ja"],
                         "name_en": character_data["name"],
