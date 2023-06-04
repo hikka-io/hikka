@@ -105,7 +105,7 @@ async def meilisearch_populate(session: AsyncSession):
         await index.add_documents(documents)
 
 
-async def update_search():
+async def update_search_anime():
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
