@@ -12,7 +12,6 @@ from .dependencies import (
 )
 
 
-# ToDo: Better responses
 router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 

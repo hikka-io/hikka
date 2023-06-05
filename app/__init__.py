@@ -41,6 +41,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app.add_exception_handler(errors.Abort, errors.abort_handler)
 
+    from .characters import router as characters_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
     from .follow import router as follow_router
@@ -50,6 +51,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .auth import router as auth_router
     from .list import router as list_router
 
+    app.include_router(characters_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
     app.include_router(follow_router)
