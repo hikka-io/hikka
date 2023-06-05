@@ -1,11 +1,11 @@
 from meilisearch_python_async.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_async import Client
+from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from app.utils import get_season
 from sqlalchemy import select
-from app.models import Anime
 from app import constants
 import config
 
@@ -58,36 +58,47 @@ async def anime_documents(session: AsyncSession):
         select(Anime)
         .where(Anime.media_type != None)
         .options(
-            selectinload(Anime.producers),
-            selectinload(Anime.studios),
+            selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
     )
 
-    documents = [
-        {
-            "year": anime.start_date.year if anime.start_date else None,
-            "producers": [company.slug for company in anime.producers],
-            "studios": [company.slug for company in anime.studios],
-            "genres": [genre.slug for genre in anime.genres],
-            "season": get_season(anime.start_date),
-            "media_type": anime.media_type,
-            "scored_by": anime.scored_by,
-            "synonyms": anime.synonyms,
-            "episodes": anime.episodes,
-            "title_ua": anime.title_ua,
-            "title_en": anime.title_en,
-            "title_ja": anime.title_ja,
-            "poster": anime.poster,
-            "status": anime.status,
-            "source": anime.source,
-            "rating": anime.rating,
-            "id": anime.content_id,
-            "score": anime.score,
-            "slug": anime.slug,
-        }
-        for anime in anime_list
-    ]
+    documents = []
+
+    for anime in anime_list:
+        producers = []
+        studios = []
+
+        for company_anime in anime.companies:
+            if company_anime.type == constants.COMPANY_ANIME_PRODUCER:
+                producers.append(company_anime.company.slug)
+
+            if company_anime.type == constants.COMPANY_ANIME_STUDIO:
+                studios.append(company_anime.company.slug)
+
+        documents.append(
+            {
+                "year": anime.start_date.year if anime.start_date else None,
+                "genres": [genre.slug for genre in anime.genres],
+                "season": get_season(anime.start_date),
+                "media_type": anime.media_type,
+                "scored_by": anime.scored_by,
+                "synonyms": anime.synonyms,
+                "episodes": anime.episodes,
+                "title_ua": anime.title_ua,
+                "title_en": anime.title_en,
+                "title_ja": anime.title_ja,
+                "poster": anime.poster,
+                "status": anime.status,
+                "source": anime.source,
+                "rating": anime.rating,
+                "id": anime.content_id,
+                "producers": producers,
+                "score": anime.score,
+                "studios": studios,
+                "slug": anime.slug,
+            }
+        )
 
     return documents
 

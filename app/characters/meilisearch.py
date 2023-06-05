@@ -1,16 +1,16 @@
 from meilisearch_python_async.errors import MeilisearchError
 from meilisearch_python_async import Client
-from .schemas import CompaniesSearchArgs
+from .schemas import CharactersSearchArgs
 from app.utils import pagination_dict
 from app.errors import Abort
 from app import constants
 import config
 
 
-async def companies_search(search: CompaniesSearchArgs):
+async def characters_search(search: CharactersSearchArgs):
     try:
         async with Client(**config.meilisearch) as client:
-            index = client.index(constants.COMPANIES_SEARCH_INDEX)
+            index = client.index(constants.CHARACTERS_SEARCH_INDEX)
 
             result = await index.search(
                 hits_per_page=constants.SEARCH_RESULT_LIMIT,

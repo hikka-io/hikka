@@ -2,8 +2,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import constants
-from typing import Tuple
+from . import meilisearch
 from . import service
+
+from .schemas import (
+    CharactersSearchPaginationResponse,
+    CharactersSearchArgs,
+)
 
 from app.utils import (
     pagination_dict,
@@ -14,25 +19,24 @@ from app.utils import (
 router = APIRouter(prefix="/characters", tags=["Characters"])
 
 
-@router.post("")
+@router.post("", response_model=CharactersSearchPaginationResponse)
 async def search_characters(
-    # search: CompaniesSearchArgs,
+    search: CharactersSearchArgs,
     session: AsyncSession = Depends(get_session),
 ):
-    page = 1
-    # if not search.query:
-    total = await service.search_total(session)
+    if not search.query:
+        total = await service.search_total(session)
 
-    limit, offset = pagination(
-        page,
-        limit=constants.SEARCH_RESULT_LIMIT,
-    )
+        limit, offset = pagination(
+            search.page,
+            limit=constants.SEARCH_RESULT_LIMIT,
+        )
 
-    result = await service.characters_search(session, limit, offset)
+        result = await service.characters_search(session, limit, offset)
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": [character for character in result],
-    }
+        return {
+            "pagination": pagination_dict(total, search.page, limit),
+            "list": [character for character in result],
+        }
 
-    # return await meilisearch.companies_search(search)
+    return await meilisearch.characters_search(search)
