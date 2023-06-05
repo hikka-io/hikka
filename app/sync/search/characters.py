@@ -22,6 +22,7 @@ async def update_characters_settings(index):
                 "name_en",
                 "name_ja",
                 "image",
+                "slug",
             ],
             sortable_attributes=["favorites"],
             distinct_attribute="slug",

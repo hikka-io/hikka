@@ -1,4 +1,4 @@
-from app.schemas import ORJSONModel, PaginationResponse
+from app.schemas import ORJSONModel, PaginationResponse, AnimeResponse
 from pydantic import constr
 from pydantic import Field
 from typing import Union
@@ -16,8 +16,19 @@ class CharacterResponse(ORJSONModel):
     name_en: Union[str, None]
     name_ja: Union[str, None]
     image: Union[str, None]
+    slug: str
+
+
+class CharacterAnimeResponse(ORJSONModel):
+    anime: AnimeResponse
+    main: bool
 
 
 class CharactersSearchPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[CharacterResponse]
+
+
+class CharacterAnimePaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[CharacterAnimeResponse]

@@ -70,6 +70,9 @@ errors = {
     "company": {
         "not-found": ["Company not found", 404],
     },
+    "character": {
+        "not-found": ["Character not found", 404],
+    },
 }
 
 

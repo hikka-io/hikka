@@ -11,7 +11,7 @@ from .schemas import (
     CompaniesSearchPaginationResponse,
     CompanyAnimePaginationResponse,
     CompaniesSearchArgs,
-    ComapnyAnimeArgs,
+    CompanyAnimeArgs,
 )
 
 from app.utils import (
@@ -48,7 +48,7 @@ async def search_companies(
 
 @router.get("/{slug}/anime", response_model=CompanyAnimePaginationResponse)
 async def company_anime(
-    args: ComapnyAnimeArgs = Depends(),
+    args: CompanyAnimeArgs = Depends(),
     company: Company = Depends(get_company),
     session: AsyncSession = Depends(get_session),
 ):

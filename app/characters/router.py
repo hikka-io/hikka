@@ -1,12 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from .dependencies import get_character
 from fastapi import APIRouter, Depends
+from app.dependencies import get_page
 from app.database import get_session
+from app.models import Character
 from app import constants
 from . import meilisearch
 from . import service
 
 from .schemas import (
     CharactersSearchPaginationResponse,
+    CharacterAnimePaginationResponse,
     CharactersSearchArgs,
 )
 
@@ -40,3 +44,21 @@ async def search_characters(
         }
 
     return await meilisearch.characters_search(search)
+
+
+@router.get("/{slug}/anime", response_model=CharacterAnimePaginationResponse)
+async def character_anime(
+    page: int = Depends(get_page),
+    character: Character = Depends(get_character),
+    session: AsyncSession = Depends(get_session),
+):
+    total = await service.character_anime_total(session, character)
+
+    limit, offset = pagination(page, limit=constants.SEARCH_RESULT_LIMIT)
+
+    result = await service.character_anime(session, character, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [entry for entry in result],
+    }

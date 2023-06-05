@@ -24,7 +24,7 @@ class CompaniesSearchArgs(ORJSONModel):
     page: int = Field(default=1, gt=0)
 
 
-class ComapnyAnimeArgs(ORJSONModel):
+class CompanyAnimeArgs(ORJSONModel):
     type: Union[CompanyAnimeTypeEnum, None] = None
     page: int = Field(default=1, gt=0)
 
