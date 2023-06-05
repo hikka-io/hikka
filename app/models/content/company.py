@@ -47,4 +47,4 @@ class CompanyAnime(Base):
         back_populates="companies", foreign_keys=[anime_id]
     )
 
-    unique_constraint = UniqueConstraint(company_id, anime_id)
+    unique_constraint = UniqueConstraint(company_id, anime_id, type)
