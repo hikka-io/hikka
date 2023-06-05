@@ -6,6 +6,7 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    CompanyResponse,
     AnimeResponse,
     ORJSONModel,
 )
@@ -29,12 +30,6 @@ class ComapnyAnimeArgs(ORJSONModel):
 
 
 # Responses
-class CompanyResponse(ORJSONModel):
-    image: Union[str, None]
-    name: str
-    slug: str
-
-
 class CompanyAnimeResponse(ORJSONModel):
     anime: AnimeResponse
     type: str

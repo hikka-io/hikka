@@ -1,4 +1,4 @@
-from app.models import Anime, AnimeGenre, Company
+from app.models import Anime, AnimeGenre, Company, CompanyAnime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import selectinload
@@ -16,8 +16,7 @@ async def get_anime_info_by_slug(
         select(Anime)
         .filter_by(slug=slug)
         .options(
-            selectinload(Anime.producers),
-            selectinload(Anime.studios),
+            selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
     )

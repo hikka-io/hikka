@@ -75,3 +75,9 @@ class WatchResponse(ORJSONModel):
 
 class SuccessResponse(ORJSONModel):
     success: bool
+
+
+class CompanyResponse(ORJSONModel):
+    image: Union[str, None]
+    name: str
+    slug: str
