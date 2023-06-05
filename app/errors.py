@@ -73,6 +73,9 @@ errors = {
     "character": {
         "not-found": ["Character not found", 404],
     },
+    "person": {
+        "not-found": ["Person not found", 404],
+    },
 }
 
 

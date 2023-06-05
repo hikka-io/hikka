@@ -31,24 +31,21 @@ async def characters_search(
 
 
 async def character_anime_total(session: AsyncSession, character: Character):
-    query = select(func.count(AnimeCharacter.id)).filter_by(character=character)
-    return await session.scalar(query)
+    return await session.scalar(
+        select(func.count(AnimeCharacter.id)).filter_by(character=character)
+    )
 
 
 async def character_anime(
     session: AsyncSession,
     character: Character,
-    # company_type: Union[str, None],
     limit: int,
     offset: int,
 ):
-    query = select(AnimeCharacter).filter_by(character=character)
-
-    # if company_type:
-    #     query = query.filter_by(type=company_type)
-
     return await session.scalars(
-        query.join(Anime)
+        select(AnimeCharacter)
+        .filter_by(character=character)
+        .join(Anime)
         .options(anime_loadonly(joinedload(AnimeCharacter.anime)))
         .order_by(
             desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)

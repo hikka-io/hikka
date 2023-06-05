@@ -16,6 +16,16 @@ class PersonResponse(ORJSONModel):
     slug: str
 
 
+class PersonAnimeResponse(ORJSONModel):
+    anime: AnimeResponse
+    role: str
+
+
 class PersonSearchPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[PersonResponse]
+
+
+class PersonAnimePaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[PersonAnimeResponse]
