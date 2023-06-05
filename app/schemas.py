@@ -1,5 +1,5 @@
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, constr
 from datetime import datetime
 from typing import Union
 from . import constants
@@ -41,6 +41,11 @@ class PaginationResponse(ORJSONModel):
     total: int
     pages: int
     page: int
+
+
+class QuerySearchArgs(ORJSONModel):
+    query: Union[constr(min_length=3, max_length=255), None] = None
+    page: int = Field(default=1, gt=0)
 
 
 class AnimeResponse(ORJSONModel):

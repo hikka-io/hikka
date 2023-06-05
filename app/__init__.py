@@ -44,6 +44,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .characters import router as characters_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
+    from .people import router as people_router
     from .follow import router as follow_router
     from .anime import router as anime_router
     from .watch import router as watch_router
@@ -54,6 +55,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(characters_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
+    app.include_router(people_router)
     app.include_router(follow_router)
     app.include_router(anime_router)
     app.include_router(watch_router)

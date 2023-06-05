@@ -1,13 +1,10 @@
-from app.schemas import ORJSONModel, PaginationResponse, AnimeResponse
-from pydantic import constr
-from pydantic import Field
 from typing import Union
 
-
-# Args
-class CharactersSearchArgs(ORJSONModel):
-    query: Union[constr(min_length=3, max_length=255), None] = None
-    page: int = Field(default=1, gt=0)
+from app.schemas import (
+    PaginationResponse,
+    AnimeResponse,
+    ORJSONModel,
+)
 
 
 # Responses

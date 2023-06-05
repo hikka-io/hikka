@@ -1,13 +1,13 @@
 from meilisearch_python_async.errors import MeilisearchError
 from meilisearch_python_async import Client
-from .schemas import CharactersSearchArgs
+from app.schemas import QuerySearchArgs
 from app.utils import pagination_dict
 from app.errors import Abort
 from app import constants
 import config
 
 
-async def characters_search(search: CharactersSearchArgs):
+async def characters_search(search: QuerySearchArgs):
     try:
         async with Client(**config.meilisearch) as client:
             index = client.index(constants.CHARACTERS_SEARCH_INDEX)
