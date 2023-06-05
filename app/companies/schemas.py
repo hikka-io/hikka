@@ -19,11 +19,6 @@ class CompanyAnimeTypeEnum(str, Enum):
 
 
 # Args
-class CompaniesSearchArgs(ORJSONModel):
-    query: Union[constr(min_length=3, max_length=255), None] = None
-    page: int = Field(default=1, gt=0)
-
-
 class CompanyAnimeArgs(ORJSONModel):
     type: Union[CompanyAnimeTypeEnum, None] = None
     page: int = Field(default=1, gt=0)

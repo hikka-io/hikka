@@ -10,7 +10,7 @@ import config
 async def characters_search(search: QuerySearchArgs):
     try:
         async with Client(**config.meilisearch) as client:
-            index = client.index(constants.CHARACTERS_SEARCH_INDEX)
+            index = client.index(constants.SEARCH_INDEX_CHARACTERS)
 
             result = await index.search(
                 hits_per_page=constants.SEARCH_RESULT_LIMIT,

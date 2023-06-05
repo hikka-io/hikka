@@ -47,7 +47,7 @@ async def meilisearch_populate(session: AsyncSession):
     documents = await companies_documents(session)
 
     async with Client(**config.meilisearch) as client:
-        index = client.index(constants.COMPANIES_SEARCH_INDEX)
+        index = client.index(constants.SEARCH_INDEX_COMPANIES)
 
         await update_companies_settings(index)
 

@@ -68,9 +68,10 @@ SOURCE_BOOK = "book"
 SEARCH_RESULT_LIMIT = 12
 
 # Meilisearch index names
-CHARACTERS_SEARCH_INDEX = "content_characters"
-COMPANIES_SEARCH_INDEX = "content_companies"
-ANIME_SEARCH_INDEX = "content_anime"
+SEARCH_INDEX_CHARACTERS = "content_characters"
+SEARCH_INDEX_COMPANIES = "content_companies"
+SEARCH_INDEX_PEOPLE = "content_people"
+SEARCH_INDEX_ANIME = "content_anime"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"

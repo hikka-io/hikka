@@ -104,12 +104,12 @@ async def anime_documents(session: AsyncSession):
 
 
 async def meilisearch_populate(session: AsyncSession):
-    print("Meilisearch: Populating database")
+    print("Meilisearch: Populating anime")
 
     documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
-        index = client.index(constants.ANIME_SEARCH_INDEX)
+        index = client.index(constants.SEARCH_INDEX_ANIME)
 
         await update_anime_settings(index)
 

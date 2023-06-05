@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import QuerySearchArgs
 from fastapi import APIRouter, Depends
 from .dependencies import get_company
 from app.database import get_session
@@ -10,7 +11,6 @@ from . import service
 from .schemas import (
     CompaniesSearchPaginationResponse,
     CompanyAnimePaginationResponse,
-    CompaniesSearchArgs,
     CompanyAnimeArgs,
 )
 
@@ -25,7 +25,7 @@ router = APIRouter(prefix="/companies", tags=["Companies"])
 
 @router.post("", response_model=CompaniesSearchPaginationResponse)
 async def search_companies(
-    search: CompaniesSearchArgs,
+    search: QuerySearchArgs,
     session: AsyncSession = Depends(get_session),
 ):
     if not search.query:

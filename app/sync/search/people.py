@@ -2,25 +2,25 @@ from meilisearch_python_async.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_async import Client
 from app.database import sessionmanager
-from app.models import Character
+from app.models import Person
 from sqlalchemy import select
 from app import constants
 import config
 
 
-async def update_characters_settings(index):
+async def update_people_settings(index):
     await index.update_settings(
         MeilisearchSettings(
             filterable_attributes=["favorites"],
             searchable_attributes=[
+                "name_native",
                 "name_ua",
                 "name_en",
-                "name_ja",
             ],
             displayed_attributes=[
+                "name_native",
                 "name_ua",
                 "name_en",
-                "name_ja",
                 "image",
                 "slug",
             ],
@@ -30,39 +30,39 @@ async def update_characters_settings(index):
     )
 
 
-async def characters_documents(session: AsyncSession):
-    characters_list = await session.scalars(select(Character))
+async def people_documents(session: AsyncSession):
+    people_list = await session.scalars(select(Person))
 
     documents = [
         {
-            "favorites": character.favorites,
-            "name_ua": character.name_ua,
-            "name_en": character.name_en,
-            "name_ja": character.name_ja,
-            "id": character.content_id,
-            "image": character.image,
-            "slug": character.slug,
+            "name_native": person.name_native,
+            "favorites": person.favorites,
+            "name_ua": person.name_ua,
+            "name_en": person.name_en,
+            "id": person.content_id,
+            "image": person.image,
+            "slug": person.slug,
         }
-        for character in characters_list
+        for person in people_list
     ]
 
     return documents
 
 
 async def meilisearch_populate(session: AsyncSession):
-    print("Meilisearch: Populating characters")
+    print("Meilisearch: Populating people")
 
-    documents = await characters_documents(session)
+    documents = await people_documents(session)
 
     async with Client(**config.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_CHARACTERS)
+        index = client.index(constants.SEARCH_INDEX_PEOPLE)
 
-        await update_characters_settings(index)
+        await update_people_settings(index)
 
         await index.add_documents(documents)
 
 
-async def update_search_characters():
+async def update_search_people():
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:

@@ -7,10 +7,10 @@ from app import constants
 import config
 
 
-async def companies_search(search: QuerySearchArgs):
+async def people_search(search: QuerySearchArgs):
     try:
         async with Client(**config.meilisearch) as client:
-            index = client.index(constants.SEARCH_INDEX_COMPANIES)
+            index = client.index(constants.SEARCH_INDEX_PEOPLE)
 
             result = await index.search(
                 hits_per_page=constants.SEARCH_RESULT_LIMIT,

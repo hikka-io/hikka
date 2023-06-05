@@ -43,7 +43,7 @@ def build_anime_filters(search: AnimeSearchArgs):
 async def anime_search(search: AnimeSearchArgs):
     try:
         async with Client(**config.meilisearch) as client:
-            index = client.index(constants.ANIME_SEARCH_INDEX)
+            index = client.index(constants.SEARCH_INDEX_ANIME)
 
             result = await index.search(
                 hits_per_page=constants.SEARCH_RESULT_LIMIT,
