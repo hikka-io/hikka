@@ -1,23 +1,10 @@
 from app.models import User, Anime, AnimeWatch, AnimeFavourite
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import anime_loadonly
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, desc
 from sqlalchemy import func
 from typing import Union
-
-
-def anime_selectinload(statement):
-    return statement.load_only(
-        Anime.media_type,
-        Anime.scored_by,
-        Anime.title_ja,
-        Anime.title_en,
-        Anime.title_ua,
-        Anime.episodes,
-        Anime.status,
-        Anime.score,
-        Anime.slug,
-    )
 
 
 async def get_user_watch(
@@ -32,7 +19,7 @@ async def get_user_watch(
 
     return await session.scalars(
         query.order_by(desc(AnimeWatch.updated))
-        .options(anime_selectinload(selectinload(AnimeWatch.anime)))
+        .options(anime_loadonly(selectinload(AnimeWatch.anime)))
         .limit(limit)
         .offset(offset)
     )
@@ -58,7 +45,7 @@ async def get_user_anime_favourite(
         select(AnimeFavourite)
         .filter_by(user=user)
         .order_by(desc(AnimeFavourite.created))
-        .options(anime_selectinload(selectinload(AnimeFavourite.anime)))
+        .options(anime_loadonly(selectinload(AnimeFavourite.anime)))
         .limit(limit)
         .offset(offset)
     )

@@ -31,7 +31,9 @@ errors = {
     "permission": {
         "missing": ["You don't have permission for this action", 401],
     },
-    "anime": {"not-found": ["Anime not found", 404]},
+    "anime": {
+        "not-found": ["Anime not found", 404],
+    },
     "studio": {
         "not-found": ["Studio not found", 404],
     },
@@ -64,6 +66,9 @@ errors = {
         "bad-year": ["Invalid years passed", 400],
         "unknown-studio": ["Unknown studio", 400],
         "unknown-genre": ["Unknown genre", 400],
+    },
+    "company": {
+        "not-found": ["Company not found", 404],
     },
 }
 

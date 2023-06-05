@@ -14,6 +14,7 @@ from datetime import datetime
 from app.models import Person
 from app.models import Anime
 from app.models import Image
+from app import constants
 from . import requests
 from app import utils
 import asyncio
@@ -78,15 +79,17 @@ async def process_companies_anime(session, anime, data):
 
         if await session.scalar(
             select(CompanyAnime).filter_by(
-                anime=anime, company=company, type="producer"
+                type=constants.COMPANY_ANIME_PRODUCER,
+                company=company,
+                anime=anime,
             )
         ):
             continue
 
         company_anime = CompanyAnime(
             **{
+                "type": constants.COMPANY_ANIME_PRODUCER,
                 "company": company,
-                "type": "producer",
                 "anime": anime,
             }
         )
@@ -99,15 +102,17 @@ async def process_companies_anime(session, anime, data):
 
         if await session.scalar(
             select(CompanyAnime).filter_by(
-                anime=anime, company=company, type="studio"
+                anime=anime,
+                company=company,
+                type=constants.COMPANY_ANIME_STUDIO,
             )
         ):
             continue
 
         company_anime = CompanyAnime(
             **{
+                "type": constants.COMPANY_ANIME_STUDIO,
                 "company": company,
-                "type": "studio",
                 "anime": anime,
             }
         )
