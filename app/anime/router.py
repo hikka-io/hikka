@@ -1,10 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import AnimeInfoResponse
+from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Anime
+from app import meilisearch
 from app import constants
-from . import meilisearch
 from . import service
 
 from .dependencies import (
@@ -33,20 +34,20 @@ async def search_anime(
 ):
     if not search.query:
         total = await service.anime_search_total(session, search)
-
-        limit, offset = pagination(
-            search.page,
-            limit=constants.SEARCH_RESULT_LIMIT,
-        )
-
+        limit, offset = pagination(search.page, constants.SEARCH_RESULT_LIMIT)
         result = await service.anime_search(session, search, limit, offset)
-
         return {
             "pagination": pagination_dict(total, search.page, limit),
             "list": [anime for anime in result],
         }
 
-    return await meilisearch.anime_search(search)
+    return await meilisearch.search(
+        constants.SEARCH_INDEX_ANIME,
+        filter=build_anime_filters(search),
+        query=search.query,
+        page=search.page,
+        sort=search.sort,
+    )
 
 
 @router.get("/{slug}", response_model=AnimeInfoResponse)

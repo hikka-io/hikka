@@ -25,18 +25,18 @@ async def validate_search_anime(
     if len(search.producers) > 0:
         producers = await service.company_count(session, search.producers)
         if producers != len(search.producers):
-            raise Abort("search", "unknown-producer")
+            raise Abort("anime", "unknown-producer")
 
     # Check if provided studios exist
     if len(search.studios) > 0:
         studios = await service.company_count(session, search.studios)
         if studios != len(search.studios):
-            raise Abort("search", "unknown-studio")
+            raise Abort("anime", "unknown-studio")
 
     # Check if provided genres exist
     if len(search.genres) > 0:
         genres = await service.anime_genre_count(session, search.genres)
         if genres != len(search.genres):
-            raise Abort("search", "unknown-genre")
+            raise Abort("anime", "unknown-genre")
 
     return search

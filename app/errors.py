@@ -32,6 +32,10 @@ errors = {
         "missing": ["You don't have permission for this action", 401],
     },
     "anime": {
+        "unknown-producer": ["Unknown producer", 400],
+        "unknown-studio": ["Unknown studio", 400],
+        "bad-year": ["Invalid years passed", 400],
+        "unknown-genre": ["Unknown genre", 400],
         "not-found": ["Anime not found", 404],
     },
     "studio": {
@@ -62,10 +66,6 @@ errors = {
     },
     "search": {
         "query-down": ["Search by query unavailable at the moment", 400],
-        "unknown-producer": ["Unknown producer", 400],
-        "bad-year": ["Invalid years passed", 400],
-        "unknown-studio": ["Unknown studio", 400],
-        "unknown-genre": ["Unknown genre", 400],
     },
     "company": {
         "not-found": ["Company not found", 404],

@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from .dependencies import get_company
 from app.database import get_session
 from app.models import Company
+from app import meilisearch
 from app import constants
-from . import meilisearch
 from . import service
 
 from .schemas import (
@@ -30,20 +30,19 @@ async def search_companies(
 ):
     if not search.query:
         total = await service.search_total(session)
-
-        limit, offset = pagination(
-            search.page,
-            limit=constants.SEARCH_RESULT_LIMIT,
-        )
-
+        limit, offset = pagination(search.page, constants.SEARCH_RESULT_LIMIT)
         result = await service.companies_search(session, limit, offset)
-
         return {
             "pagination": pagination_dict(total, search.page, limit),
             "list": [company for company in result],
         }
 
-    return await meilisearch.companies_search(search)
+    return await meilisearch.search(
+        constants.SEARCH_INDEX_COMPANIES,
+        sort=["favorites:desc"],
+        query=search.query,
+        page=search.page,
+    )
 
 
 @router.get("/{slug}/anime", response_model=CompanyAnimePaginationResponse)
@@ -53,9 +52,7 @@ async def company_anime(
     session: AsyncSession = Depends(get_session),
 ):
     total = await service.company_anime_total(session, company, args.type)
-
-    limit, offset = pagination(args.page, limit=constants.SEARCH_RESULT_LIMIT)
-
+    limit, offset = pagination(args.pageconstants.SEARCH_RESULT_LIMIT)
     result = await service.company_anime(
         session, company, args.type, limit, offset
     )
