@@ -1,8 +1,8 @@
-from ..association import anime_producers_association_table
-from ..association import anime_studios_association_table
+# from ..association import anime_producers_association_table
+# from ..association import anime_studios_association_table
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
 from ..mixins import ContentMixin, SlugMixin
-from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -18,13 +18,7 @@ class Company(Base, ContentMixin, SlugMixin):
     favorites: Mapped[int] = mapped_column(default=0, nullable=True)
     updated: Mapped[datetime]
 
-    producer_anime: Mapped[list["Anime"]] = relationship(
-        secondary=anime_producers_association_table, back_populates="producers"
-    )
-
-    studio_anime: Mapped[list["Anime"]] = relationship(
-        secondary=anime_studios_association_table, back_populates="studios"
-    )
+    anime: Mapped[list["CompanyAnime"]] = relationship(back_populates="company")
 
     image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL")
@@ -35,3 +29,22 @@ class Company(Base, ContentMixin, SlugMixin):
     @hybrid_property
     def image(self):
         return self.image_relation.url if self.image_relation else None
+
+
+class CompanyAnime(Base):
+    __tablename__ = "service_content_companies_anime"
+
+    type: Mapped[str] = mapped_column(String(32))
+
+    company_id = mapped_column(ForeignKey("service_content_companies.id"))
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+
+    company: Mapped["Company"] = relationship(
+        back_populates="anime", foreign_keys=[company_id]
+    )
+
+    anime: Mapped["Anime"] = relationship(
+        back_populates="companies", foreign_keys=[anime_id]
+    )
+
+    unique_constraint = UniqueConstraint(company_id, anime_id)

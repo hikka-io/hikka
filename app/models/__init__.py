@@ -11,9 +11,11 @@ from .content.recommendation import AnimeRecommendation
 from .content.franchise import AnimeFranchise
 from .content.episode import AnimeEpisode
 from .content.genre import AnimeGenre
-from .content.company import Company
 from .content.person import Person
 from .content.anime import Anime
+
+from .content.company import CompanyAnime
+from .content.company import Company
 
 from .content.character import AnimeCharacter
 from .content.character import Character

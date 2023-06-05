@@ -4,6 +4,7 @@ from app.database import sessionmanager
 from app.models import AnimeCharacter
 from sqlalchemy import select, desc
 from app.models import AnimeEpisode
+from app.models import CompanyAnime
 from app.models import AnimeGenre
 from app.models import AnimeStaff
 from app.models import AnimeVoice
@@ -59,36 +60,61 @@ async def process_genres(session, anime, data):
     return genres_add
 
 
-async def process_studios(session, anime, data):
-    companies = await session.scalars(
-        select(Company).where(Company.content_id.in_(data["studios"]))
+async def process_companies_anime(session, anime, data):
+    content_ids = list(dict.fromkeys(data["producers"] + data["studios"]))
+
+    cache = await session.scalars(
+        select(Company).where(Company.content_id.in_(content_ids))
     )
 
-    studios_add = []
+    companies_cache = {entry.content_id: entry for entry in cache}
 
-    for company in companies:
-        if company in anime.studios:
+    create = []
+
+    # ToDo: conver into function and reuse code
+    for content_id in data["producers"]:
+        if not (company := companies_cache.get(content_id)):
             continue
 
-        studios_add.append(company)
-
-    return studios_add
-
-
-async def process_producers(session, anime, data):
-    companies = await session.scalars(
-        select(Company).where(Company.content_id.in_(data["producers"]))
-    )
-
-    producers_add = []
-
-    for company in companies:
-        if company in anime.producers:
+        if await session.scalar(
+            select(CompanyAnime).filter_by(
+                anime=anime, company=company, type="producer"
+            )
+        ):
             continue
 
-        producers_add.append(company)
+        company_anime = CompanyAnime(
+            **{
+                "company": company,
+                "type": "producer",
+                "anime": anime,
+            }
+        )
 
-    return producers_add
+        create.append(company_anime)
+
+    for content_id in data["studios"]:
+        if not (company := companies_cache.get(content_id)):
+            continue
+
+        if await session.scalar(
+            select(CompanyAnime).filter_by(
+                anime=anime, company=company, type="studio"
+            )
+        ):
+            continue
+
+        company_anime = CompanyAnime(
+            **{
+                "company": company,
+                "type": "studio",
+                "anime": anime,
+            }
+        )
+
+        create.append(company_anime)
+
+    return create
 
 
 async def process_characters(session, anime, data):
@@ -290,11 +316,7 @@ async def update_anime_info(semaphore, content_id):
             anime = await session.scalar(
                 select(Anime)
                 .filter_by(content_id=content_id)
-                .options(
-                    selectinload(Anime.studios),
-                    selectinload(Anime.producers),
-                    selectinload(Anime.genres),
-                )
+                .options(selectinload(Anime.genres))
             )
 
             data = await requests.get_anime_info(anime.content_id)
@@ -333,27 +355,15 @@ async def update_anime_info(semaphore, content_id):
             anime.stats = data["stats"]
             anime.ost = data["ost"]
 
-            # ToDo: do we need it here?
-            # if data["poster"]:
-            #     if not (
-            #         image := await session.scalar(
-            #             select(Image).filter_by(path=data["poster"])
-            #         )
-            #     ):
-            #         image = Image(
-            #             **{
-            #                 "created": datetime.utcnow(),
-            #                 "path": data["poster"],
-            #             }
-            #         )
-
-            #     anime.poster = image
+            # ToDo: update poster here?
 
             anime.needs_update = False
 
-            producers_add = await process_producers(session, anime, data)
-            studios_add = await process_studios(session, anime, data)
             genres_add = await process_genres(session, anime, data)
+
+            create_companies_anime = await process_companies_anime(
+                session, anime, data
+            )
 
             create_character_roles, create_voices = await process_characters(
                 session, anime, data
@@ -385,14 +395,11 @@ async def update_anime_info(semaphore, content_id):
             if len(create_recommendations) > 0:
                 session.add_all(create_recommendations)
 
+            if len(create_companies_anime) > 0:
+                session.add_all(create_companies_anime)
+
             for genre in genres_add:
                 anime.genres.append(genre)
-
-            for company in studios_add:
-                anime.studios.append(company)
-
-            for company in producers_add:
-                anime.producers.append(company)
 
             if len(update_recommendations) > 0:
                 session.add_all(update_recommendations)
@@ -407,9 +414,8 @@ async def update_anime_info(semaphore, content_id):
             # print(f"create_staff: {len(create_staff)}")
             # print(f"create_episodes: {len(create_episodes)}")
             # print(f"create_recommendations: {len(create_recommendations)}")
+            # print(f"create_companies_anime: {len(create_companies_anime)}")
             # print(f"genres_add: {len(genres_add)}")
-            # print(f"studios_add: {len(studios_add)}")
-            # print(f"producers_add: {len(producers_add)}")
             # print(f"update_recommendations: {len(update_recommendations)}")
             # print(f"update_episodes: {len(update_episodes)}")
 

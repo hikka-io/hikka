@@ -1,5 +1,5 @@
-from ..association import anime_producers_association_table
-from ..association import anime_studios_association_table
+# from ..association import anime_producers_association_table
+# from ..association import anime_studios_association_table
 from ..association import anime_genres_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
@@ -77,14 +77,8 @@ class Anime(Base, ContentMixin, SlugMixin):
         secondary=anime_genres_association_table, back_populates="anime"
     )
 
-    producers: Mapped[list["Company"]] = relationship(
-        secondary=anime_producers_association_table,
-        back_populates="producer_anime",
-    )
-
-    studios: Mapped[list["Company"]] = relationship(
-        secondary=anime_studios_association_table,
-        back_populates="studio_anime",
+    companies: Mapped[list["CompanyAnime"]] = relationship(
+        back_populates="anime"
     )
 
     favourite: Mapped[list["AnimeFavourite"]] = relationship(
