@@ -25,7 +25,11 @@ from .schemas import (
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/signup", response_model=UserResponse)
+@router.post(
+    "/signup",
+    response_model=UserResponse,
+    summary="User signup",
+)
 async def signup(
     signup: SignupArgs = Depends(validate_signup),
     session: AsyncSession = Depends(get_session),

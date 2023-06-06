@@ -24,9 +24,23 @@ def create_app(init_db: bool = True) -> FastAPI:
     fu.validation_error_response_definition = errors.ErrorResponse.schema()
 
     app = FastAPI(
-        # docs_url=None,
-        # redoc_url=None,
+        title="Hikka API",
+        version="0.1.1",
+        openapi_tags=[
+            {"name": "Auth"},
+            {"name": "User"},
+            {"name": "Follow"},
+            {"name": "Anime"},
+            {"name": "Characters"},
+            {"name": "Companies"},
+            {"name": "People"},
+            {"name": "Favourite"},
+            {"name": "Watch"},
+            {"name": "List"},
+        ],
         lifespan=lifespan,
+        # redoc_url=None,
+        # docs_url=None,
     )
 
     app.add_middleware(
@@ -37,9 +51,11 @@ def create_app(init_db: bool = True) -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.add_exception_handler(RequestValidationError, errors.validation_handler)
-
     app.add_exception_handler(errors.Abort, errors.abort_handler)
+    app.add_exception_handler(
+        RequestValidationError,
+        errors.validation_handler,
+    )
 
     from .characters import router as characters_router
     from .companies import router as companies_router
