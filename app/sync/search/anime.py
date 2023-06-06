@@ -1,13 +1,14 @@
 from meilisearch_python_async.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import get_season, pagination
 from meilisearch_python_async import Client
 from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from app.utils import get_season
-from sqlalchemy import select
+from sqlalchemy import select, func
 from app import constants
 import config
+import math
 
 
 async def update_anime_settings(index):
@@ -53,7 +54,7 @@ async def update_anime_settings(index):
     )
 
 
-async def anime_documents(session: AsyncSession):
+async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
         .where(Anime.media_type != None)
@@ -61,6 +62,9 @@ async def anime_documents(session: AsyncSession):
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
+        .order_by("content_id")
+        .limit(limit)
+        .offset(offset)
     )
 
     documents = []
@@ -103,17 +107,29 @@ async def anime_documents(session: AsyncSession):
     return documents
 
 
+async def anime_documents_total(session: AsyncSession):
+    return await session.scalar(select(func.count(Anime.id)))
+
+
 async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating anime")
-
-    documents = await anime_documents(session)
 
     async with Client(**config.meilisearch) as client:
         index = client.index(constants.SEARCH_INDEX_ANIME)
 
         await update_anime_settings(index)
 
-        await index.add_documents(documents)
+        size = 1000
+        total = await anime_documents_total(session)
+        pages = math.ceil(total / size)
+
+        for page in range(1, pages + 1):
+            print(f"Meilisearch: Processing anime page {page}")
+
+            limit, offset = pagination(page, size)
+            documents = await anime_documents(session, limit, offset)
+
+            await index.add_documents(documents)
 
 
 async def update_search_anime():

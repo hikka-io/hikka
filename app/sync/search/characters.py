@@ -2,10 +2,12 @@ from meilisearch_python_async.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_async import Client
 from app.database import sessionmanager
+from sqlalchemy import select, func
 from app.models import Character
-from sqlalchemy import select
+from app.utils import pagination
 from app import constants
 import config
+import math
 
 
 async def update_characters_settings(index):
@@ -30,8 +32,10 @@ async def update_characters_settings(index):
     )
 
 
-async def characters_documents(session: AsyncSession):
-    characters_list = await session.scalars(select(Character))
+async def characters_documents(session: AsyncSession, limit: int, offset: int):
+    characters_list = await session.scalars(
+        select(Character).order_by("content_id").limit(limit).offset(offset)
+    )
 
     documents = [
         {
@@ -49,17 +53,29 @@ async def characters_documents(session: AsyncSession):
     return documents
 
 
+async def characters_documents_total(session: AsyncSession):
+    return await session.scalar(select(func.count(Character.id)))
+
+
 async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating characters")
-
-    documents = await characters_documents(session)
 
     async with Client(**config.meilisearch) as client:
         index = client.index(constants.SEARCH_INDEX_CHARACTERS)
 
         await update_characters_settings(index)
 
-        await index.add_documents(documents)
+        size = 1000
+        total = await characters_documents_total(session)
+        pages = math.ceil(total / size)
+
+        for page in range(1, pages + 1):
+            print(f"Meilisearch: Processing characters page {page}")
+
+            limit, offset = pagination(page, size)
+            documents = await characters_documents(session, limit, offset)
+
+            await index.add_documents(documents)
 
 
 async def update_search_characters():
