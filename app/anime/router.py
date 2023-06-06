@@ -18,6 +18,7 @@ from .schemas import (
     AnimeCharacterPaginationResponse,
     AnimeSearchPaginationResponse,
     AnimeStaffPaginationResponse,
+    AnimeEpisodesListResponse,
     AnimeSearchArgs,
 )
 
@@ -88,3 +89,12 @@ async def anime_staff(
         "pagination": pagination_dict(total, page, limit),
         "list": [anime_character for anime_character in result],
     }
+
+
+@router.get("/{slug}/episodes", response_model=AnimeEpisodesListResponse)
+async def anime_episodes(
+    session: AsyncSession = Depends(get_session),
+    anime: Anime = Depends(get_anime_info),
+):
+    episodes = await service.anime_episodes(session, anime)
+    return {"list": [episode for episode in episodes]}

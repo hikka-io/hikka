@@ -118,6 +118,18 @@ class AnimeSearchArgs(ORJSONModel):
 
 
 # Responses
+class AnimeEpisodeResponse(ORJSONModel):
+    aired: Union[datetime, None]
+    title_ua: Union[str, None]
+    title_en: Union[str, None]
+    title_ja: Union[str, None]
+    index: int
+
+
+class AnimeEpisodesListResponse(ORJSONModel):
+    list: list[AnimeEpisodeResponse]
+
+
 class AnimeCharacterResponse(ORJSONModel):
     character: CharacterResponse
     main: bool

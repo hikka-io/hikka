@@ -12,6 +12,7 @@ from . import utils
 from app.models import (
     AnimeCharacter,
     CompanyAnime,
+    AnimeEpisode,
     AnimeGenre,
     AnimeStaff,
     Company,
@@ -53,6 +54,14 @@ async def anime_staff(
         .options(selectinload(AnimeStaff.person))
         .limit(limit)
         .offset(offset)
+    )
+
+
+async def anime_episodes(
+    session: AsyncSession, anime: Anime
+) -> list[AnimeStaff]:
+    return await session.scalars(
+        select(AnimeEpisode).filter_by(anime=anime).order_by(AnimeEpisode.index)
     )
 
 
