@@ -1,5 +1,68 @@
 # Hikka deploy guide
 
+Create Hikka systemd:
+```bash
+sudo nano /etc/systemd/system/hikka.service
+```
+
+```
+[Unit]
+Description=Uvicorn instance to serve Hikka
+After=network.target
+
+[Service]
+User=debian
+Group=www-data
+WorkingDirectory=/home/debian/hikka
+Environment="PATH=/home/debian/hikka/venv/bin"
+ExecStart=/home/debian/hikka/venv/bin/uvicorn run:app --port=8888
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Nginx:
+```bash
+sudo nano /etc/nginx/sites-available/api.hikka.io.conf
+```
+
+```
+server {
+    server_name api.hikka.io;
+    listen 80;
+
+    location / {
+        proxy_pass http://localhost:8888;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+```bash
+sudo ln -s /etc/nginx/sites-available/api.hikka.io.conf /etc/nginx/sites-enabled
+sudo systemctl restart nginx
+```
+
+Sync systemd:
+```
+[Unit]
+Description=Hikka sync service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/home/debian/hikka/venv/bin/python3 /home/debian/hikka/sync.py
+WorkingDirectory=/home/debian/hikka
+User=debian
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## Meilisearh
 
 1. Install Meilisearch
