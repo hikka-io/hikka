@@ -187,6 +187,7 @@ class AnimeInfoResponse(ORJSONModel):
     status: Union[str, None]
     source: Union[str, None]
     rating: Union[str, None]
+    has_franchise: bool
     scored_by: int
     score: float
     nsfw: bool

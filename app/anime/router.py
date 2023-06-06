@@ -11,6 +11,7 @@ from . import service
 
 from .dependencies import (
     validate_search_anime,
+    validate_franchise,
     get_anime_info,
 )
 
@@ -98,3 +99,35 @@ async def anime_episodes(
 ):
     episodes = await service.anime_episodes(session, anime)
     return {"list": [episode for episode in episodes]}
+
+
+@router.get(
+    "/{slug}/recommendations", response_model=AnimeSearchPaginationResponse
+)
+async def anime_recommendations(
+    page: int = Depends(get_page),
+    session: AsyncSession = Depends(get_session),
+    anime: Anime = Depends(get_anime_info),
+):
+    total = await service.anime_recommendations_count(session, anime)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.anime_recommendations(session, anime, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [anime.recommendation for anime in result],
+    }
+
+
+@router.get("/{slug}/franchise", response_model=AnimeSearchPaginationResponse)
+async def anime_franchise(
+    page: int = Depends(get_page),
+    session: AsyncSession = Depends(get_session),
+    anime: Anime = Depends(validate_franchise),
+):
+    total = await service.franchise_count(session, anime)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.franchise(session, anime, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [anime for anime in result],
+    }

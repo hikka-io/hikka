@@ -10,7 +10,9 @@ from typing import Union
 from . import utils
 
 from app.models import (
+    AnimeRecommendation,
     AnimeCharacter,
+    AnimeFranchise,
     CompanyAnime,
     AnimeEpisode,
     AnimeGenre,
@@ -65,9 +67,49 @@ async def anime_episodes(
     )
 
 
+async def anime_recommendations(
+    session: AsyncSession, anime: Anime, limit: int, offset: int
+) -> list[Anime]:
+    return await session.scalars(
+        select(AnimeRecommendation)
+        .filter_by(anime=anime)
+        .options(
+            anime_loadonly(selectinload(AnimeRecommendation.recommendation))
+        )
+        .order_by(desc(AnimeRecommendation.weight))
+        .limit(10)
+    )
+
+
 async def anime_staff_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
         select(func.count(AnimeStaff.id)).filter_by(anime=anime)
+    )
+
+
+async def franchise_count(session: AsyncSession, anime: Anime) -> int:
+    return await session.scalar(
+        select(func.count(Anime.id)).filter_by(franchise_id=anime.franchise_id)
+    )
+
+
+async def franchise(
+    session: AsyncSession, anime: Anime, limit: int, offset: int
+):
+    return await session.scalars(
+        select(Anime)
+        .filter_by(franchise_id=anime.franchise_id)
+        .order_by(desc(Anime.start_date))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def anime_recommendations_count(
+    session: AsyncSession, anime: Anime
+) -> int:
+    return await session.scalar(
+        select(func.count(AnimeRecommendation.id)).filter_by(anime=anime)
     )
 
 

@@ -32,6 +32,7 @@ errors = {
         "missing": ["You don't have permission for this action", 401],
     },
     "anime": {
+        "no-franchise": ["This anime doesn't have franchise", 400],
         "unknown-producer": ["Unknown producer", 400],
         "unknown-studio": ["Unknown studio", 400],
         "bad-year": ["Invalid years passed", 400],

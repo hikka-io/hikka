@@ -111,7 +111,7 @@ class Anime(Base, ContentMixin, SlugMixin):
         return self.poster_relation.url if self.poster_relation else None
 
     @hybrid_property
-    def franchise(self):
-        return str(self.franchise_id)
+    def has_franchise(self):
+        return self.franchise_id != None
 
     # ToDo: images

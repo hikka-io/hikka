@@ -40,3 +40,10 @@ async def validate_search_anime(
             raise Abort("anime", "unknown-genre")
 
     return search
+
+
+async def validate_franchise(anime: Anime = Depends(get_anime_info)):
+    if not anime.franchise_id:
+        raise Abort("anime", "no-franchise")
+
+    return anime
