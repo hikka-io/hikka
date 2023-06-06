@@ -5,28 +5,28 @@ from datetime import datetime
 
 # Args
 class SignupArgs(ORJSONModel):
-    username: str = Field(max_length=64, regex="[A-Za-z0-9]")
-    password: str = Field(min_length=8, max_length=64)
-    email: EmailStr
+    username: str = Field(max_length=16, regex="[A-Za-z0-9]", example="hikka")
+    password: str = Field(min_length=8, max_length=64, example="password")
+    email: EmailStr = Field(example="hikka@email.com")
 
 
 class LoginArgs(ORJSONModel):
-    password: str = Field(min_length=8, max_length=64)
-    email: EmailStr
+    password: str = Field(min_length=8, max_length=64, example="password")
+    email: EmailStr = Field(example="hikka@email.com")
 
 
 class ComfirmResetArgs(ORJSONModel):
-    password: str = Field(min_length=8, max_length=64)
-    token: str
+    password: str = Field(min_length=8, max_length=64, example="password")
+    token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
 
 
 # Responses
 class UserResponse(ORJSONModel):
-    created: datetime
-    username: str
+    created: datetime = Field(example=1686088809)
+    username: str = Field(example="hikka")
 
 
 class TokenResponse(ORJSONModel):
-    expiration: datetime
-    created: datetime
-    secret: str
+    token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
+    expiration: datetime = Field(example=1686088809)
+    created: datetime = Field(example=1686088809)

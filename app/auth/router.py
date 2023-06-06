@@ -28,7 +28,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 @router.post(
     "/signup",
     response_model=UserResponse,
-    summary="User signup",
+    summary="Signup",
 )
 async def signup(
     signup: SignupArgs = Depends(validate_signup),
@@ -48,7 +48,11 @@ async def signup(
     return user
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post(
+    "/login",
+    response_model=TokenResponse,
+    summary="Login",
+)
 async def login(
     user: User = Depends(validate_login),
     session: AsyncSession = Depends(get_session),
@@ -56,7 +60,11 @@ async def login(
     return await service.create_auth_token(session, user)
 
 
-@router.post("/activation", response_model=UserResponse)
+@router.post(
+    "/activation",
+    response_model=UserResponse,
+    summary="Activate account",
+)
 async def activation(
     user: User = Depends(validate_activation),
     session: AsyncSession = Depends(get_session),
@@ -64,7 +72,11 @@ async def activation(
     return await service.activate_user(session, user)
 
 
-@router.post("/activation/resend", response_model=UserResponse)
+@router.post(
+    "/activation/resend",
+    response_model=UserResponse,
+    summary="Resend activation link",
+)
 async def activation_resend(
     user: User = Depends(validate_activation_resend),
     session: AsyncSession = Depends(get_session),
@@ -82,7 +94,11 @@ async def activation_resend(
     return user
 
 
-@router.post("/password/reset", response_model=UserResponse)
+@router.post(
+    "/password/reset",
+    response_model=UserResponse,
+    summary="Password reset request",
+)
 async def reset_password(
     user: User = Depends(validate_password_reset),
     session: AsyncSession = Depends(get_session),
@@ -100,7 +116,11 @@ async def reset_password(
     return user
 
 
-@router.post("/password/confirm", response_model=UserResponse)
+@router.post(
+    "/password/confirm",
+    response_model=UserResponse,
+    summary="Confirm password reset",
+)
 async def password_reset(
     confirm: Tuple[User, str] = Depends(validate_password_confirm),
     session: AsyncSession = Depends(get_session),
