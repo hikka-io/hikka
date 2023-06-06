@@ -1,12 +1,22 @@
-from app.models import Anime, AnimeGenre, Company, CompanyAnime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
+from app.service import anime_loadonly
+from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
-from sqlalchemy import select, and_
 from sqlalchemy import func
 from typing import Union
 from . import utils
+
+from app.models import (
+    AnimeCharacter,
+    CompanyAnime,
+    AnimeGenre,
+    AnimeStaff,
+    Company,
+    Anime,
+)
 
 
 async def get_anime_info_by_slug(
@@ -19,6 +29,42 @@ async def get_anime_info_by_slug(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
+    )
+
+
+async def anime_characters(
+    session: AsyncSession, anime: Anime, limit: int, offset: int
+) -> list[AnimeCharacter]:
+    return await session.scalars(
+        select(AnimeCharacter)
+        .filter_by(anime=anime)
+        .options(selectinload(AnimeCharacter.character))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def anime_staff(
+    session: AsyncSession, anime: Anime, limit: int, offset: int
+) -> list[AnimeStaff]:
+    return await session.scalars(
+        select(AnimeStaff)
+        .filter_by(anime=anime)
+        .options(selectinload(AnimeStaff.person))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def anime_staff_count(session: AsyncSession, anime: Anime) -> int:
+    return await session.scalar(
+        select(func.count(AnimeStaff.id)).filter_by(anime=anime)
+    )
+
+
+async def anime_characters_count(session: AsyncSession, anime: Anime) -> int:
+    return await session.scalar(
+        select(func.count(AnimeCharacter.id)).filter_by(anime=anime)
     )
 
 

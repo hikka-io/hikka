@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import AnimeInfoResponse
 from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
+from app.dependencies import get_page
 from app.database import get_session
 from app.models import Anime
 from app import meilisearch
@@ -14,7 +15,9 @@ from .dependencies import (
 )
 
 from .schemas import (
+    AnimeCharacterPaginationResponse,
     AnimeSearchPaginationResponse,
+    AnimeStaffPaginationResponse,
     AnimeSearchArgs,
 )
 
@@ -53,3 +56,35 @@ async def search_anime(
 @router.get("/{slug}", response_model=AnimeInfoResponse)
 async def anime_slug(anime: Anime = Depends(get_anime_info)):
     return anime
+
+
+@router.get(
+    "/{slug}/characters", response_model=AnimeCharacterPaginationResponse
+)
+async def anime_characters(
+    page: int = Depends(get_page),
+    session: AsyncSession = Depends(get_session),
+    anime: Anime = Depends(get_anime_info),
+):
+    total = await service.anime_characters_count(session, anime)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.anime_characters(session, anime, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [anime_character for anime_character in result],
+    }
+
+
+@router.get("/{slug}/staff", response_model=AnimeStaffPaginationResponse)
+async def anime_staff(
+    page: int = Depends(get_page),
+    session: AsyncSession = Depends(get_session),
+    anime: Anime = Depends(get_anime_info),
+):
+    total = await service.anime_staff_count(session, anime)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.anime_staff(session, anime, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [anime_character for anime_character in result],
+    }

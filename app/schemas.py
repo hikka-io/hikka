@@ -61,6 +61,22 @@ class AnimeResponse(ORJSONModel):
     slug: str
 
 
+class CharacterResponse(ORJSONModel):
+    name_ua: Union[str, None]
+    name_en: Union[str, None]
+    name_ja: Union[str, None]
+    image: Union[str, None]
+    slug: str
+
+
+class PersonResponse(ORJSONModel):
+    name_native: Union[str, None]
+    name_ua: Union[str, None]
+    name_en: Union[str, None]
+    image: Union[str, None]
+    slug: str
+
+
 class AnimeFavouriteResponse(ORJSONModel):
     anime: AnimeResponse
     created: datetime

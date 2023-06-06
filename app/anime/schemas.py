@@ -8,7 +8,9 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    CharacterResponse,
     CompanyResponse,
+    PersonResponse,
     AnimeResponse,
     ORJSONModel,
 )
@@ -116,9 +118,14 @@ class AnimeSearchArgs(ORJSONModel):
 
 
 # Responses
-class AnimeSearchPaginationResponse(ORJSONModel):
-    pagination: PaginationResponse
-    list: list[AnimeResponse]
+class AnimeCharacterResponse(ORJSONModel):
+    character: CharacterResponse
+    main: bool
+
+
+class AnimeStaffResponse(ORJSONModel):
+    person: PersonResponse
+    role: str
 
 
 class GenreResponse(ORJSONModel):
@@ -130,6 +137,21 @@ class GenreResponse(ORJSONModel):
 class AnimeCompanyResponse(ORJSONModel):
     company: CompanyResponse
     type: str
+
+
+class AnimeCharacterPaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[AnimeCharacterResponse]
+
+
+class AnimeStaffPaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[AnimeStaffResponse]
+
+
+class AnimeSearchPaginationResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[AnimeResponse]
 
 
 class AnimeInfoResponse(ORJSONModel):
