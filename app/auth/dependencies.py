@@ -3,7 +3,6 @@ from app.service import get_user_by_username
 from app.database import get_session
 from fastapi import Body, Depends
 from datetime import datetime
-from pydantic import EmailStr
 from app.errors import Abort
 from app.models import User
 from .utils import checkpwd
@@ -19,15 +18,17 @@ from .schemas import (
     ComfirmResetArgs,
     SignupArgs,
     LoginArgs,
+    EmailArgs,
+    TokenArgs,
 )
 
 
 async def body_email_user(
-    email: EmailStr = Body(embed=True),
+    args: EmailArgs,
     session: AsyncSession = Depends(get_session),
 ) -> User:
     # Get user by email
-    if not (user := await get_user_by_email(session, email)):
+    if not (user := await get_user_by_email(session, args.email)):
         raise Abort("auth", "user-not-found")
 
     return user
@@ -69,10 +70,11 @@ async def validate_login(
 
 
 async def validate_activation(
-    token: str = Body(embed=True), session: AsyncSession = Depends(get_session)
+    args: TokenArgs,
+    session: AsyncSession = Depends(get_session),
 ) -> User:
     # Find user by activation token
-    if not (user := await get_user_by_activation(session, token)):
+    if not (user := await get_user_by_activation(session, args.token)):
         raise Abort("auth", "activation-invalid")
 
     # Check if activation token still valid

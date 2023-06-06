@@ -4,6 +4,14 @@ from datetime import datetime
 
 
 # Args
+class TokenArgs(ORJSONModel):
+    token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
+
+
+class EmailArgs(ORJSONModel):
+    email: EmailStr = Field(example="hikka@email.com")
+
+
 class SignupArgs(ORJSONModel):
     username: str = Field(max_length=16, regex="[A-Za-z0-9]", example="hikka")
     password: str = Field(min_length=8, max_length=64, example="password")
