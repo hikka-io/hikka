@@ -78,7 +78,7 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     token = AuthToken(
         **{
             "expiration": now + timedelta(minutes=30),
-            "token": new_token(),
+            "secret": new_token(),
             "created": now,
             "user": user,
         }

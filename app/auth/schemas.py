@@ -35,6 +35,6 @@ class UserResponse(ORJSONModel):
 
 
 class TokenResponse(ORJSONModel):
-    token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
+    secret: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
     expiration: datetime = Field(example=1686088809)
     created: datetime = Field(example=1686088809)
