@@ -32,7 +32,11 @@ from app.utils import (
 router = APIRouter(prefix="/anime", tags=["Anime"])
 
 
-@router.post("", response_model=AnimeSearchPaginationResponse)
+@router.post(
+    "",
+    response_model=AnimeSearchPaginationResponse,
+    summary="Anime catalog",
+)
 async def search_anime(
     session: AsyncSession = Depends(get_session),
     search: AnimeSearchArgs = Depends(validate_search_anime),
@@ -55,13 +59,19 @@ async def search_anime(
     )
 
 
-@router.get("/{slug}", response_model=AnimeInfoResponse)
+@router.get(
+    "/{slug}",
+    response_model=AnimeInfoResponse,
+    summary="Anime info",
+)
 async def anime_slug(anime: Anime = Depends(get_anime_info)):
     return anime
 
 
 @router.get(
-    "/{slug}/characters", response_model=AnimeCharacterPaginationResponse
+    "/{slug}/characters",
+    response_model=AnimeCharacterPaginationResponse,
+    summary="Anime characters",
 )
 async def anime_characters(
     page: int = Depends(get_page),
@@ -77,7 +87,11 @@ async def anime_characters(
     }
 
 
-@router.get("/{slug}/staff", response_model=AnimeStaffPaginationResponse)
+@router.get(
+    "/{slug}/staff",
+    response_model=AnimeStaffPaginationResponse,
+    summary="Anime staff",
+)
 async def anime_staff(
     page: int = Depends(get_page),
     session: AsyncSession = Depends(get_session),
@@ -92,7 +106,11 @@ async def anime_staff(
     }
 
 
-@router.get("/{slug}/episodes", response_model=AnimeEpisodesListResponse)
+@router.get(
+    "/{slug}/episodes",
+    response_model=AnimeEpisodesListResponse,
+    summary="Anime episodes",
+)
 async def anime_episodes(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
@@ -102,7 +120,9 @@ async def anime_episodes(
 
 
 @router.get(
-    "/{slug}/recommendations", response_model=AnimeSearchPaginationResponse
+    "/{slug}/recommendations",
+    response_model=AnimeSearchPaginationResponse,
+    summary="Anime recommendations",
 )
 async def anime_recommendations(
     page: int = Depends(get_page),
@@ -118,7 +138,11 @@ async def anime_recommendations(
     }
 
 
-@router.get("/{slug}/franchise", response_model=AnimeSearchPaginationResponse)
+@router.get(
+    "/{slug}/franchise",
+    response_model=AnimeSearchPaginationResponse,
+    summary="Franchise entries",
+)
 async def anime_franchise(
     page: int = Depends(get_page),
     session: AsyncSession = Depends(get_session),
