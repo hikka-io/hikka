@@ -47,10 +47,3 @@ async def validate_unfollow(
         raise Abort("follow", "not-following")
 
     return users
-
-
-async def validate_action(action: str) -> str:
-    if action not in ["following", "followers"]:
-        raise Abort("follow", "invalid-action")
-
-    return action

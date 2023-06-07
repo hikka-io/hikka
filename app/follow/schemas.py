@@ -1,11 +1,12 @@
 from app.schemas import PaginationResponse
 from app.schemas import ORJSONModel
+from pydantic import Field
 
 
 # Responses
 class UserResponse(ORJSONModel):
-    reference: str
-    username: str
+    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
+    username: str = Field(example="hikka")
 
 
 class UserPaginationResponse(ORJSONModel):
@@ -14,9 +15,9 @@ class UserPaginationResponse(ORJSONModel):
 
 
 class FollowStatsResponse(ORJSONModel):
-    followers: int
-    following: int
+    followers: int = Field(example=10)
+    following: int = Field(example=3)
 
 
 class FollowResponse(ORJSONModel):
-    follow: bool
+    follow: bool = Field(example=True)

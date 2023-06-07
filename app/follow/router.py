@@ -2,6 +2,7 @@ from app.utils import pagination_dict, pagination
 from fastapi import APIRouter, Depends
 from app.dependencies import get_page
 from app.models import User
+from app import constants
 from typing import Tuple
 from . import service
 
@@ -12,7 +13,6 @@ from .dependencies import (
     validate_username,
     validate_unfollow,
     validate_follow,
-    validate_action,
     validate_self,
 )
 
@@ -23,11 +23,14 @@ from .schemas import (
 )
 
 
-# ToDo: Better responses
 router = APIRouter(prefix="/follow", tags=["Follow"])
 
 
-@router.get("/{username}", response_model=FollowResponse)
+@router.get(
+    "/{username}",
+    response_model=FollowResponse,
+    summary="Check follow",
+)
 async def check(
     users: Tuple[User, User] = Depends(validate_self),
     session: AsyncSession = Depends(get_session),
@@ -35,7 +38,11 @@ async def check(
     return {"follow": await service.is_following(session, *users)}
 
 
-@router.put("/{username}", response_model=FollowResponse)
+@router.put(
+    "/{username}",
+    response_model=FollowResponse,
+    summary="Follow",
+)
 async def follow(
     users: Tuple[User, User] = Depends(validate_follow),
     session: AsyncSession = Depends(get_session),
@@ -43,7 +50,11 @@ async def follow(
     return {"follow": await service.follow(session, *users)}
 
 
-@router.delete("/{username}", response_model=FollowResponse)
+@router.delete(
+    "/{username}",
+    response_model=FollowResponse,
+    summary="Unfollow",
+)
 async def unfollow(
     users: Tuple[User, User] = Depends(validate_unfollow),
     session: AsyncSession = Depends(get_session),
@@ -51,7 +62,11 @@ async def unfollow(
     return {"follow": await service.unfollow(session, *users)}
 
 
-@router.get("/{username}/stats", response_model=FollowStatsResponse)
+@router.get(
+    "/{username}/stats",
+    response_model=FollowStatsResponse,
+    summary="Follow stats",
+)
 async def follow_stats(
     user: User = Depends(validate_username),
     session: AsyncSession = Depends(get_session),
@@ -62,29 +77,38 @@ async def follow_stats(
     }
 
 
-@router.get("/{username}/{action}", response_model=UserPaginationResponse)
-async def follow_list(
+@router.get(
+    "/{username}/following",
+    response_model=UserPaginationResponse,
+    summary="Followed users",
+)
+async def following_list(
     session: AsyncSession = Depends(get_session),
-    action: str = Depends(validate_action),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
 ):
-    if action == "following":
-        count_function, list_function = (
-            service.count_following,
-            service.list_following,
-        )
+    total = await service.count_following(session, user)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.list_following(session, user, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [follow_user for follow_user in result],
+    }
 
-    if action == "followers":
-        count_function, list_function = (
-            service.count_followers,
-            service.list_followers,
-        )
 
-    total = await count_function(session, user)
-    limit, offset = pagination(page)
-    result = await list_function(session, user, limit, offset)
-
+@router.get(
+    "/{username}/followers",
+    response_model=UserPaginationResponse,
+    summary="Followers",
+)
+async def followers_list(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_username),
+    page: int = Depends(get_page),
+):
+    total = await service.count_followers(session, user)
+    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
+    result = await service.list_followers(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": [follow_user for follow_user in result],
