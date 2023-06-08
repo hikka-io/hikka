@@ -1,5 +1,6 @@
 from unicodedata import normalize
 from datetime import datetime
+from app import constants
 import orjson
 import math
 import re
@@ -39,7 +40,7 @@ def to_timestamp(date):
 
 
 # Helper function for toroise pagination
-def pagination(page, limit=20):
+def pagination(page, limit=constants.SEARCH_RESULT_LIMIT):
     offset = (limit * (page)) - limit
 
     return limit, offset

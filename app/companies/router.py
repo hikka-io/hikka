@@ -29,8 +29,8 @@ async def search_companies(
     session: AsyncSession = Depends(get_session),
 ):
     if not search.query:
+        limit, offset = pagination(search.page)
         total = await service.search_total(session)
-        limit, offset = pagination(search.page, constants.SEARCH_RESULT_LIMIT)
         result = await service.companies_search(session, limit, offset)
         return {
             "pagination": pagination_dict(total, search.page, limit),
@@ -51,8 +51,8 @@ async def company_anime(
     company: Company = Depends(get_company),
     session: AsyncSession = Depends(get_session),
 ):
+    limit, offset = pagination(args.page)
     total = await service.company_anime_total(session, company, args.type)
-    limit, offset = pagination(args.pageconstants.SEARCH_RESULT_LIMIT)
     result = await service.company_anime(
         session, company, args.type, limit, offset
     )

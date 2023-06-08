@@ -42,8 +42,8 @@ async def search_anime(
     search: AnimeSearchArgs = Depends(validate_search_anime),
 ):
     if not search.query:
+        limit, offset = pagination(search.page)
         total = await service.anime_search_total(session, search)
-        limit, offset = pagination(search.page, constants.SEARCH_RESULT_LIMIT)
         result = await service.anime_search(session, search, limit, offset)
         return {
             "pagination": pagination_dict(total, search.page, limit),
@@ -78,8 +78,8 @@ async def anime_characters(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
+    limit, offset = pagination(page)
     total = await service.anime_characters_count(session, anime)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.anime_characters(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -97,8 +97,8 @@ async def anime_staff(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
+    limit, offset = pagination(page)
     total = await service.anime_staff_count(session, anime)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.anime_staff(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -129,8 +129,8 @@ async def anime_recommendations(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
+    limit, offset = pagination(page)
     total = await service.anime_recommendations_count(session, anime)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.anime_recommendations(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -148,8 +148,8 @@ async def anime_franchise(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(validate_franchise),
 ):
+    limit, offset = pagination(page)
     total = await service.franchise_count(session, anime)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.franchise(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),

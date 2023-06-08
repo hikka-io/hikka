@@ -28,8 +28,8 @@ async def search_people(
     session: AsyncSession = Depends(get_session),
 ):
     if not search.query:
+        limit, offset = pagination(search.page)
         total = await service.search_total(session)
-        limit, offset = pagination(search.page, constants.SEARCH_RESULT_LIMIT)
         result = await service.people_search(session, limit, offset)
         return {
             "pagination": pagination_dict(total, search.page, limit),
@@ -50,8 +50,8 @@ async def character_anime(
     person: Person = Depends(get_person),
     session: AsyncSession = Depends(get_session),
 ):
+    limit, offset = pagination(page)
     total = await service.person_anime_total(session, person)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.person_anime(session, person, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),

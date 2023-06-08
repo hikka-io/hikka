@@ -87,8 +87,8 @@ async def following_list(
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
 ):
+    limit, offset = pagination(page)
     total = await service.count_following(session, user)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.list_following(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -106,8 +106,8 @@ async def followers_list(
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
 ):
+    limit, offset = pagination(page)
     total = await service.count_followers(session, user)
-    limit, offset = pagination(page, constants.SEARCH_RESULT_LIMIT)
     result = await service.list_followers(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
