@@ -7,6 +7,7 @@ from enum import Enum
 from app.schemas import (
     PaginationResponse,
     CompanyResponse,
+    CompanyTypeEnum,
     AnimeResponse,
     ORJSONModel,
 )
@@ -21,13 +22,13 @@ class CompanyAnimeTypeEnum(str, Enum):
 # Args
 class CompanyAnimeArgs(ORJSONModel):
     type: Union[CompanyAnimeTypeEnum, None] = None
-    page: int = Field(default=1, gt=0)
+    page: int = Field(default=1, gt=0, example=1)
 
 
 # Responses
 class CompanyAnimeResponse(ORJSONModel):
     anime: AnimeResponse
-    type: str
+    type: CompanyTypeEnum
 
 
 class CompaniesSearchPaginationResponse(ORJSONModel):

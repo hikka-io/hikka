@@ -1,4 +1,4 @@
-from typing import Union
+from pydantic import Field
 
 from app.schemas import (
     PaginationResponse,
@@ -10,8 +10,8 @@ from app.schemas import (
 
 # Responses
 class CharacterAnimeResponse(ORJSONModel):
+    main: bool = Field(example=True)
     anime: AnimeResponse
-    main: bool
 
 
 class CharactersSearchPaginationResponse(ORJSONModel):

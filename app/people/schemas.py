@@ -1,4 +1,4 @@
-from typing import Union
+from pydantic import Field
 
 from app.schemas import (
     PaginationResponse,
@@ -10,8 +10,8 @@ from app.schemas import (
 
 # Responses
 class PersonAnimeResponse(ORJSONModel):
+    role: str = Field(example="Producer")
     anime: AnimeResponse
-    role: str
 
 
 class PersonSearchPaginationResponse(ORJSONModel):

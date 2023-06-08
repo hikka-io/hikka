@@ -9,6 +9,7 @@ from enum import Enum
 from app.schemas import (
     PaginationResponse,
     CharacterResponse,
+    CompanyTypeEnum,
     CompanyResponse,
     PersonResponse,
     AnimeResponse,
@@ -17,11 +18,6 @@ from app.schemas import (
 
 
 # Enums
-class CompanyTypeEnum(str, Enum):
-    producer = constants.COMPANY_ANIME_PRODUCER
-    studio = constants.COMPANY_ANIME_STUDIO
-
-
 class AnimeStatusEnum(str, Enum):
     announced = constants.RELEASE_STATUS_ANNOUNCED
     finished = constants.RELEASE_STATUS_FINISHED

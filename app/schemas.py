@@ -23,6 +23,11 @@ class ORJSONModel(BaseModel):
 
 
 # Enums
+class CompanyTypeEnum(str, Enum):
+    producer = constants.COMPANY_ANIME_PRODUCER
+    studio = constants.COMPANY_ANIME_STUDIO
+
+
 class WatchStatusEnum(str, Enum):
     completed = constants.WATCH_COMPLETED
     watching = constants.WATCH_WATCHING
