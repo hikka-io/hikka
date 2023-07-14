@@ -1,5 +1,6 @@
+from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from app.database import get_session
 from app.models import User
 from app import constants
@@ -8,7 +9,9 @@ from . import service
 
 from .dependencies import (
     validate_activation_resend,
+    validate_google_oauth_code,
     validate_password_confirm,
+    check_google_oauth_error,
     validate_password_reset,
     validate_activation,
     validate_signup,
@@ -46,6 +49,21 @@ async def signup(
     )
 
     return user
+
+
+@router.get("/google/oauth")
+async def oauth_google(request: Request):
+    return RedirectResponse(await service.get_google_oauth_url(request))
+
+
+@router.get("/google/callback")
+async def callback_google(
+    request: Request,
+    error: None = Depends(check_google_oauth_error),
+    code: str = Depends(validate_google_oauth_code),
+):
+    info = await service.get_google_oauth_info(request, code)
+    print(info)
 
 
 @router.post(

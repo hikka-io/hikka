@@ -1,10 +1,14 @@
 from app.models import User, EmailMessage, AuthToken
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from .oauth_client import GoogleClient
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
+from app.errors import Abort
+from fastapi import Request
 from typing import Union
+import config
 
 
 async def get_user_by_activation(
@@ -25,6 +29,44 @@ async def get_user_by_reset(
     return await session.scalar(
         select(User).filter_by(password_reset_token=token)
     )
+
+
+async def get_google_oauth_url(request: Request) -> str:
+    client = GoogleClient(
+        client_id=config.oauth["google"]["client_id"],
+        client_secret=config.oauth["google"]["client_secret"],
+    )
+
+    redirect_uri = request.url_for("callback_google")
+
+    return client.get_authorize_url(
+        scope="openid email profile",
+        redirect_uri=redirect_uri,
+    )
+
+
+async def get_google_oauth_info(request: Request, code: str) -> dict:
+    try:
+        client = GoogleClient(
+            client_id=config.oauth["google"]["client_id"],
+            client_secret=config.oauth["google"]["client_secret"],
+        )
+
+        token, _ = await client.get_access_token(
+            code, redirect_uri=request.url_for("callback_google")
+        )
+
+        client = GoogleClient(
+            client_id=config.oauth["google"]["client_id"],
+            client_secret=config.oauth["google"]["client_secret"],
+            access_token=token,
+        )
+
+        _, info = await client.user_info()
+    except Exception:
+        raise Abort("auth", "oauth-invalid-code")
+
+    return info
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
