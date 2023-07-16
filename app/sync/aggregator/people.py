@@ -64,6 +64,8 @@ async def save_people(data):
                             **{
                                 "path": person_data["image"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 

@@ -64,6 +64,8 @@ async def save_companies(data):
                             **{
                                 "path": company_data["image"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 
