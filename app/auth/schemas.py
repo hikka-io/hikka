@@ -28,6 +28,10 @@ class ComfirmResetArgs(ORJSONModel):
     token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
 
 
+class CodeArgs(ORJSONModel):
+    code: str
+
+
 # Responses
 class UserResponse(ORJSONModel):
     created: datetime = Field(example=1686088809)

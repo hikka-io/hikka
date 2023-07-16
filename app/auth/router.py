@@ -1,3 +1,4 @@
+from .oauth_client import GoogleClient, OAuthError
 from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, Request
@@ -6,6 +7,9 @@ from app.models import User
 from app import constants
 from typing import Tuple
 from . import service
+import config
+
+from app.errors import Abort
 
 from .dependencies import (
     validate_activation_resend,
@@ -22,6 +26,7 @@ from .schemas import (
     TokenResponse,
     UserResponse,
     SignupArgs,
+    CodeArgs,
 )
 
 
@@ -144,3 +149,45 @@ async def password_reset(
     session: AsyncSession = Depends(get_session),
 ):
     return await service.change_password(session, *confirm)
+
+
+@router.get("/test/url")
+async def test_url():
+    google = GoogleClient(
+        client_secret=config.google_client_secret,
+        client_id=config.google_client_id,
+    )
+
+    return {
+        "url": google.get_authorize_url(
+            scope="https://www.googleapis.com/auth/userinfo.email",
+            redirect_uri="http://localhost:5173",
+            include_granted_scopes="true",
+            access_type="offline",
+            state="hikka",
+        )
+    }
+
+
+@router.post("/test")
+async def test(args: CodeArgs):
+    google = GoogleClient(
+        client_secret=config.google_client_secret,
+        client_id=config.google_client_id,
+    )
+
+    data = None
+
+    try:
+        otoken, _ = await google.get_access_token(
+            args.code,
+            redirect_uri="http://localhost:5173",
+        )
+        google.access_token = otoken
+        _, data = await google.user_info()
+    except OAuthError:
+        raise Abort("auth", "invalid-token")
+
+    return {
+        "data": data,
+    }
