@@ -7,8 +7,6 @@ from app import utils
 import asyncio
 import config
 
-from sqlalchemy.exc import InterfaceError
-
 
 async def make_request(semaphore, page):
     async with semaphore:
@@ -40,7 +38,7 @@ async def save_characters(data):
         for character_data in data:
             updated = utils.from_timestamp(character_data["updated"])
             slug = utils.slugify(
-                character_data["name"], character_data["content_id"]
+                character_data["name_en"], character_data["content_id"]
             )
 
             if character_data["content_id"] in characters_cache:
@@ -68,6 +66,8 @@ async def save_characters(data):
                             **{
                                 "path": character_data["image"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 
@@ -78,7 +78,7 @@ async def save_characters(data):
                         "content_id": character_data["content_id"],
                         "favorites": character_data["favorites"],
                         "name_ja": character_data["name_ja"],
-                        "name_en": character_data["name"],
+                        "name_en": character_data["name_en"],
                         "image_relation": image,
                         "updated": updated,
                         "slug": slug,

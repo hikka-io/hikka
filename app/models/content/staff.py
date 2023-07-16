@@ -11,7 +11,7 @@ from ..mixins import (
 )
 
 
-class AnimeStaffRole(Base, ContentMixin, SlugMixin):
+class AnimeStaffRole(Base, SlugMixin):
     __tablename__ = "service_content_anime_staff_roles"
 
     name_en: Mapped[str] = mapped_column(nullable=True)
@@ -25,7 +25,7 @@ class AnimeStaffRole(Base, ContentMixin, SlugMixin):
 class AnimeStaff(Base):
     __tablename__ = "service_content_anime_staff"
 
-    genres: Mapped[list["AnimeStaffRole"]] = relationship(
+    roles: Mapped[list["AnimeStaffRole"]] = relationship(
         secondary=anime_staff_roles_association_table, back_populates="staff"
     )
 
