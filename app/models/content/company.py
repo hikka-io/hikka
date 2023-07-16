@@ -1,41 +1,54 @@
-# from ..association import anime_producers_association_table
-# from ..association import anime_studios_association_table
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
-from ..mixins import ContentMixin, SlugMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from datetime import datetime
 from ..base import Base
 
+from ..mixins import (
+    FavoritesMixin,
+    ContentMixin,
+    UpdatedMixin,
+    SlugMixin,
+)
 
-class Company(Base, ContentMixin, SlugMixin):
+
+class Company(
+    Base,
+    FavoritesMixin,
+    ContentMixin,
+    UpdatedMixin,
+    SlugMixin,
+):
     __tablename__ = "service_content_companies"
 
-    name: Mapped[str] = mapped_column(String(255), nullable=True)
+    name: Mapped[str] = mapped_column(nullable=True)
 
-    favorites: Mapped[int] = mapped_column(default=0, nullable=True)
-    updated: Mapped[datetime]
-
-    anime: Mapped[list["CompanyAnime"]] = relationship(back_populates="company")
+    anime: Mapped[list["CompanyAnime"]] = relationship(
+        back_populates="company",
+    )
 
     image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL")
+        ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
     image_relation: Mapped["Image"] = relationship(lazy="selectin")
 
     @hybrid_property
     def image(self):
-        return self.image_relation.url if self.image_relation else None
+        if not self.image_relation:
+            return None
+
+        if self.image_relation.ignore or not self.image_relation.uploaded:
+            return None
+
+        return self.image_relation.path
 
 
 class CompanyAnime(Base):
     __tablename__ = "service_content_companies_anime"
 
-    type: Mapped[str] = mapped_column(String(32))
-
+    type: Mapped[str] = mapped_column(String(32), index=True)
     company_id = mapped_column(ForeignKey("service_content_companies.id"))
     anime_id = mapped_column(ForeignKey("service_content_anime.id"))
 

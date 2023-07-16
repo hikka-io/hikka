@@ -9,8 +9,15 @@ class AnimeRecommendation(Base):
 
     weight: Mapped[int]
 
-    recommendation_id = mapped_column(ForeignKey("service_content_anime.id"))
-    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+    recommendation_id = mapped_column(
+        ForeignKey("service_content_anime.id"),
+        index=True,
+    )
+
+    anime_id = mapped_column(
+        ForeignKey("service_content_anime.id"),
+        index=True,
+    )
 
     recommendation: Mapped["Anime"] = relationship(
         back_populates="recommended_to", foreign_keys=[recommendation_id]

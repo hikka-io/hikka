@@ -1,5 +1,3 @@
-# from ..association import anime_producers_association_table
-# from ..association import anime_studios_association_table
 from ..association import anime_genres_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
