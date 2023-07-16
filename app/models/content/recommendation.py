@@ -20,7 +20,7 @@ class AnimeRecommendation(Base):
     )
 
     recommendation: Mapped["Anime"] = relationship(
-        back_populates="recommended_to", foreign_keys=[recommendation_id]
+        foreign_keys=[recommendation_id]
     )
 
     anime: Mapped["Anime"] = relationship(
