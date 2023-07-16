@@ -11,7 +11,6 @@ import time
 from hashlib import sha1
 from random import SystemRandom
 from typing import (
-    TYPE_CHECKING,
     Any,
     Awaitable,
     Dict,
@@ -25,8 +24,11 @@ from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit
 
 import httpx
 
-if TYPE_CHECKING:
-    from aioauth_client.types import THeaders, TParams, TRes
+from typing import Dict, List, Union
+
+TRes = Union[Dict[str, "TRes"], List["TRes"], str, int, float, bool, None]
+THeaders = Dict[str, str]
+TParams = Dict[str, str]
 
 RANDOM = SystemRandom().random
 
