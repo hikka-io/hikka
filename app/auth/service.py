@@ -1,12 +1,12 @@
 from app.models import User, EmailMessage, AuthToken
+from .oauth_client import GoogleClient, OAuthError
 from sqlalchemy.ext.asyncio import AsyncSession
+from .schemas import SignupArgs, UsernameArgs
 from datetime import datetime, timedelta
-from .oauth_client import GoogleClient
+from .constants import oauth_url_args
 from .utils import hashpwd, new_token
-from .schemas import SignupArgs
 from sqlalchemy import select
 from app.errors import Abort
-from fastapi import Request
 from typing import Union
 import config
 
@@ -23,6 +23,12 @@ async def get_user_by_email(
     return await session.scalar(select(User).filter_by(email=email))
 
 
+async def get_user_by_username(
+    session: AsyncSession, username: str
+) -> Union[User, None]:
+    return await session.scalar(select(User).filter_by(username=username))
+
+
 async def get_user_by_reset(
     session: AsyncSession, token: str
 ) -> Union[User, None]:
@@ -31,42 +37,59 @@ async def get_user_by_reset(
     )
 
 
-async def get_google_oauth_url(request: Request) -> str:
-    client = GoogleClient(
-        client_id=config.oauth["google"]["client_id"],
-        client_secret=config.oauth["google"]["client_secret"],
-    )
+async def get_user_by_oauth(
+    session: AsyncSession, user_data: dict[str, str]
+) -> User:
+    if not (user := await get_user_by_email(session, user_data["email"])):
+        now = datetime.utcnow()
+        user = User(
+            **{
+                "password_hash": None,
+                "username": None,
+                "email": user_data["email"],
+                "last_active": now,
+                "created": now,
+                "login": now,
+            }
+        )
 
-    redirect_uri = request.url_for("callback_google")
+        session.add(user)
+        await session.commit()
 
-    return client.get_authorize_url(
-        scope="openid email profile",
-        redirect_uri=redirect_uri,
-    )
+    return user
 
 
-async def get_google_oauth_info(request: Request, code: str) -> dict:
+async def get_provider_url(provider: str) -> dict[str, str]:
+    client = None
+
+    if provider == "google":
+        client = GoogleClient(**config.oauth[provider])
+    else:
+        raise Abort("auth", "invalid-provider")
+
+    return {"url": client.get_authorize_url(**oauth_url_args[provider])}
+
+
+async def get_oauth_info(provider: str, code: str):
+    client = None
+
+    if provider == "google":
+        client = GoogleClient(**config.oauth[provider])
+    else:
+        raise Abort("auth", "invalid-provider")
+
+    data = None
+
     try:
-        client = GoogleClient(
-            client_id=config.oauth["google"]["client_id"],
-            client_secret=config.oauth["google"]["client_secret"],
+        otoken, _ = await client.get_access_token(
+            code, oauth_url_args[provider]["redirect_uri"]
         )
+        client.access_token = otoken
+        _, data = await client.user_info()
+    except OAuthError:
+        raise Abort("auth", "invalid-token")
 
-        token, _ = await client.get_access_token(
-            code, redirect_uri=request.url_for("callback_google")
-        )
-
-        client = GoogleClient(
-            client_id=config.oauth["google"]["client_id"],
-            client_secret=config.oauth["google"]["client_secret"],
-            access_token=token,
-        )
-
-        _, info = await client.user_info()
-    except Exception:
-        raise Abort("auth", "oauth-invalid-code")
-
-    return info
+    return data
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
@@ -152,6 +175,20 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
     await session.commit()
 
     return user
+
+
+async def set_username(session: AsyncSession, user: User, args: UsernameArgs):
+    if user.username:
+        raise Abort("auth", "username-set")
+
+    if await get_user_by_username(session, args.username):
+        raise Abort("auth", "username-taken")
+
+    user.username = args.username
+    session.add(user)
+    await session.commit()
+
+    return {"username": user.username}
 
 
 async def activate_user(session: AsyncSession, user: User) -> User:

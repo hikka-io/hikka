@@ -1,30 +1,29 @@
-from .oauth_client import GoogleClient, OAuthError
-from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, Request
+from app.dependencies import auth_required
+from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
 from app import constants
 from typing import Tuple
 from . import service
-import config
 
-from app.errors import Abort
 
 from .dependencies import (
     validate_activation_resend,
-    validate_google_oauth_code,
     validate_password_confirm,
-    check_google_oauth_error,
     validate_password_reset,
     validate_activation,
+    validate_provider,
     validate_signup,
     validate_login,
 )
 
 from .schemas import (
+    ProviderUrlResponse,
+    UsernameResponse,
     TokenResponse,
     UserResponse,
+    UsernameArgs,
     SignupArgs,
     CodeArgs,
 )
@@ -54,21 +53,6 @@ async def signup(
     )
 
     return user
-
-
-@router.get("/google/oauth")
-async def oauth_google(request: Request):
-    return RedirectResponse(await service.get_google_oauth_url(request))
-
-
-@router.get("/google/callback")
-async def callback_google(
-    request: Request,
-    error: None = Depends(check_google_oauth_error),
-    code: str = Depends(validate_google_oauth_code),
-):
-    info = await service.get_google_oauth_info(request, code)
-    print(info)
 
 
 @router.post(
@@ -151,43 +135,39 @@ async def password_reset(
     return await service.change_password(session, *confirm)
 
 
-@router.get("/test/url")
-async def test_url():
-    google = GoogleClient(
-        client_secret=config.google_client_secret,
-        client_id=config.google_client_id,
-    )
-
-    return {
-        "url": google.get_authorize_url(
-            scope="https://www.googleapis.com/auth/userinfo.email",
-            redirect_uri="http://localhost:5173",
-            include_granted_scopes="true",
-            access_type="offline",
-            state="hikka",
-        )
-    }
+@router.put(
+    "/username",
+    response_model=UsernameResponse,
+    summary="Set a username",
+)
+async def username(
+    args: UsernameArgs,
+    user: User = Depends(auth_required(username_required=False)),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.set_username(session, user, args)
 
 
-@router.post("/test")
-async def test(args: CodeArgs):
-    google = GoogleClient(
-        client_secret=config.google_client_secret,
-        client_id=config.google_client_id,
-    )
+@router.get(
+    "/{provider}/url",
+    response_model=ProviderUrlResponse,
+    summary="Get a provider OAuth url",
+)
+async def provider_url(provider: str = Depends(validate_provider)):
+    return await service.get_provider_url(provider)
 
-    data = None
 
-    try:
-        otoken, _ = await google.get_access_token(
-            args.code,
-            redirect_uri="http://localhost:5173",
-        )
-        google.access_token = otoken
-        _, data = await google.user_info()
-    except OAuthError:
-        raise Abort("auth", "invalid-token")
+@router.post(
+    "/{provider}/oauth",
+    response_model=TokenResponse,
+    summary="OAuth",
+)
+async def oauth(
+    args: CodeArgs,
+    provider: str = Depends(validate_provider),
+    session: AsyncSession = Depends(get_session),
+):
+    data = await service.get_oauth_info(provider, args.code)
+    user = await service.get_user_by_oauth(session, data)
 
-    return {
-        "data": data,
-    }
+    return await service.create_auth_token(session, user)

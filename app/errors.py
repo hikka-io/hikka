@@ -12,12 +12,14 @@ class ErrorResponse(ORJSONModel):
 
 errors = {
     "auth": {
+        "username-required": ["Username is required to do that action", 400],
         "activation-valid": ["Previous activation token still valid", 400],
         "reset-valid": ["Previous password reset token still valid", 400],
         "email-exists": ["User with that email already exists", 400],
         "activation-expired": ["Activation token has expired", 400],
         "activation-invalid": ["Activation token is invalid", 400],
         "oauth-code-required": ["OAuth code required", 400],
+        "invalid-provider": ["Invalid OAuth provider", 400],
         "oauth-invalid-code": ["Invalid OAuth code", 400],
         "username-taken": ["Username already taken", 400],
         "reset-expired": ["Reset token has expired", 400],
@@ -25,6 +27,7 @@ errors = {
         "already-activated": ["Already activated", 400],
         "invalid-token": ["Auth token is invalid", 400],
         "invalid-password": ["Invalid password", 400],
+        "username-set": ["Username already set", 400],
         "not-activated": ["User not activated", 400],
         "token-expired": ["Token has expired", 400],
         "oauth-error": ["Error during OAuth", 400],

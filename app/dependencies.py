@@ -39,27 +39,36 @@ async def get_anime(
 
 
 # Check user auth token
-async def auth_required(
-    auth: str = Header(), session: AsyncSession = Depends(get_session)
-) -> User:
-    if not (token := await get_auth_token(session, auth)):
-        raise Abort("auth", "invalid-token")
+def auth_required(
+    username_required: bool = True,
+):
+    async def auth(
+        auth: str = Header(),
+        session: AsyncSession = Depends(get_session),
+    ) -> User:
+        if not (token := await get_auth_token(session, auth)):
+            raise Abort("auth", "invalid-token")
 
-    if not token.user:
-        raise Abort("auth", "user-not-found")
+        if not token.user:
+            raise Abort("auth", "user-not-found")
 
-    if token.user.banned:
-        raise Abort("auth", "banned")
+        if token.user.banned:
+            raise Abort("auth", "banned")
 
-    now = datetime.utcnow()
+        if not token.user.username and username_required:
+            raise Abort("auth", "username-required")
 
-    if now > token.expiration:
-        raise Abort("auth", "token-expired")
+        now = datetime.utcnow()
 
-    token.expiration = now + timedelta(days=3)
-    token.user.last_active = now
+        if now > token.expiration:
+            raise Abort("auth", "token-expired")
 
-    session.add(token)
-    await session.commit()
+        token.expiration = now + timedelta(days=3)
+        token.user.last_active = now
 
-    return token.user
+        session.add(token)
+        await session.commit()
+
+        return token.user
+
+    return auth

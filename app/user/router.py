@@ -15,7 +15,7 @@ router = APIRouter(prefix="/user", tags=["User"])
     response_model=UserResponse,
     summary="Logged user profile",
 )
-async def profile(user: User = Depends(auth_required)):
+async def profile(user: User = Depends(auth_required())):
     return user
 
 
@@ -36,7 +36,7 @@ async def user_profile(user: User = Depends(get_user)):
 )
 async def change_description(
     args: DescriptionArgs,
-    user: User = Depends(auth_required),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.change_description(session, user, args.description)
