@@ -42,10 +42,6 @@ class UserResponse(ORJSONModel):
     username: str = Field(example="hikka")
 
 
-class UsernameResponse(ORJSONModel):
-    username: str = Field(example="hikka")
-
-
 class ProviderUrlResponse(ORJSONModel):
     url: str = Field(example="https://accounts.google.com/o/oauth2/v2/auth")
 

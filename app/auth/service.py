@@ -1,10 +1,10 @@
 from app.models import User, EmailMessage, AuthToken
 from .oauth_client import GoogleClient, OAuthError
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import SignupArgs, UsernameArgs
 from datetime import datetime, timedelta
 from .constants import oauth_url_args
 from .utils import hashpwd, new_token
+from .schemas import SignupArgs
 from sqlalchemy import select
 from app.errors import Abort
 from typing import Union
@@ -177,18 +177,18 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
     return user
 
 
-async def set_username(session: AsyncSession, user: User, args: UsernameArgs):
+async def set_username(session: AsyncSession, user: User, username: str):
     if user.username:
         raise Abort("auth", "username-set")
 
-    if await get_user_by_username(session, args.username):
+    if await get_user_by_username(session, username):
         raise Abort("auth", "username-taken")
 
-    user.username = args.username
+    user.username = username
     session.add(user)
     await session.commit()
 
-    return {"username": user.username}
+    return user
 
 
 async def activate_user(session: AsyncSession, user: User) -> User:

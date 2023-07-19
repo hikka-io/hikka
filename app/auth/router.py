@@ -20,7 +20,6 @@ from .dependencies import (
 
 from .schemas import (
     ProviderUrlResponse,
-    UsernameResponse,
     TokenResponse,
     UserResponse,
     UsernameArgs,
@@ -137,7 +136,7 @@ async def password_reset(
 
 @router.put(
     "/username",
-    response_model=UsernameResponse,
+    response_model=UserResponse,
     summary="Set a username",
 )
 async def username(
@@ -145,11 +144,11 @@ async def username(
     user: User = Depends(auth_required(username_required=False)),
     session: AsyncSession = Depends(get_session),
 ):
-    return await service.set_username(session, user, args)
+    return await service.set_username(session, user, args.username)
 
 
 @router.get(
-    "/{provider}/url",
+    "/oauth/{provider}",
     response_model=ProviderUrlResponse,
     summary="Get a provider OAuth url",
 )
@@ -158,9 +157,9 @@ async def provider_url(provider: str = Depends(validate_provider)):
 
 
 @router.post(
-    "/{provider}/oauth",
+    "/oauth/{provider}",
     response_model=TokenResponse,
-    summary="OAuth",
+    summary="Get auth token using OAuth",
 )
 async def oauth(
     args: CodeArgs,
