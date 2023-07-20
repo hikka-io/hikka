@@ -11,6 +11,15 @@ async def get_anime_genres():
             return data
 
 
+async def get_anime_roles():
+    endpoint = f"{constants.AGGREGATOR}/roles/anime"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
 async def get_companies(page):
     endpoint = f"{constants.AGGREGATOR}/companies?page={page}"
 

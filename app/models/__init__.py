@@ -20,6 +20,7 @@ from .content.company import Company
 from .content.character import AnimeCharacter
 from .content.character import Character
 
+from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 

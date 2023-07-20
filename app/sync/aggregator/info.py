@@ -1,24 +1,28 @@
-from app.models import AnimeRecommendation
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from app.models import AnimeCharacter
 from sqlalchemy import select, desc
-from app.models import AnimeEpisode
-from app.models import CompanyAnime
-from app.models import AnimeGenre
-from app.models import AnimeStaff
-from app.models import AnimeVoice
-from app.models import Character
-from app.models import Company
 from datetime import datetime
-from app.models import Person
-from app.models import Anime
-from app.models import Image
 from app import constants
 from . import requests
 from app import utils
 import asyncio
 import config
+
+from app.models import (
+    AnimeRecommendation,
+    AnimeStaffRole,
+    AnimeCharacter,
+    AnimeEpisode,
+    CompanyAnime,
+    AnimeGenre,
+    AnimeStaff,
+    AnimeVoice,
+    Character,
+    Company,
+    Person,
+    Anime,
+    Image,
+)
 
 
 def process_translations(data):
@@ -47,7 +51,7 @@ def process_translations(data):
 
 async def process_genres(session, anime, data):
     genres = await session.scalars(
-        select(AnimeGenre).where(AnimeGenre.content_id.in_(data["genres"]))
+        select(AnimeGenre).where(AnimeGenre.content_id.in_(data["genre_ids"]))
     )
 
     genres_add = []
@@ -62,7 +66,9 @@ async def process_genres(session, anime, data):
 
 
 async def process_companies_anime(session, anime, data):
-    content_ids = list(dict.fromkeys(data["producers"] + data["studios"]))
+    content_ids = [
+        company["company"]["content_id"] for company in data["companies"]
+    ]
 
     cache = await session.scalars(
         select(Company).where(Company.content_id.in_(content_ids))
@@ -70,16 +76,16 @@ async def process_companies_anime(session, anime, data):
 
     companies_cache = {entry.content_id: entry for entry in cache}
 
-    create = []
+    companies_anime = []
 
-    # ToDo: conver into function and reuse code
-    for content_id in data["producers"]:
-        if not (company := companies_cache.get(content_id)):
+    for entry in data["companies"]:
+        if not (company := companies_cache.get(entry["company"]["content_id"])):
             continue
 
+        # ToDo: cache here
         if await session.scalar(
             select(CompanyAnime).filter_by(
-                type=constants.COMPANY_ANIME_PRODUCER,
+                type=entry["type"],
                 company=company,
                 anime=anime,
             )
@@ -88,57 +94,70 @@ async def process_companies_anime(session, anime, data):
 
         company_anime = CompanyAnime(
             **{
-                "type": constants.COMPANY_ANIME_PRODUCER,
+                "type": entry["type"],
                 "company": company,
                 "anime": anime,
             }
         )
 
-        create.append(company_anime)
+        companies_anime.append(company_anime)
 
-    for content_id in data["studios"]:
-        if not (company := companies_cache.get(content_id)):
-            continue
-
-        if await session.scalar(
-            select(CompanyAnime).filter_by(
-                anime=anime,
-                company=company,
-                type=constants.COMPANY_ANIME_STUDIO,
-            )
-        ):
-            continue
-
-        company_anime = CompanyAnime(
-            **{
-                "type": constants.COMPANY_ANIME_STUDIO,
-                "company": company,
-                "anime": anime,
-            }
-        )
-
-        create.append(company_anime)
-
-    return create
+    return companies_anime
 
 
-async def process_characters(session, anime, data):
-    create_character_roles = []
-    create_voices = []
+async def process_characters_and_voices(session, anime, data):
+    characters_and_voices = []
+
+    character_content_ids = list(
+        set([entry["character"]["content_id"] for entry in data["characters"]])
+    )
+
+    people_content_ids = list(
+        set([entry["person"]["content_id"] for entry in data["voices"]])
+    )
 
     cache = await session.scalars(
-        select(Character).where(
-            Character.content_id.in_(
-                [entry["content_id"] for entry in data["characters"]]
-            )
-        )
+        select(Character).where(Character.content_id.in_(character_content_ids))
     )
 
     characters_cache = {entry.content_id: entry for entry in cache}
 
-    for character_data in data["characters"]:
+    cache = await session.scalars(
+        select(Person).where(Person.content_id.in_(people_content_ids))
+    )
+
+    people_cache = {entry.content_id: entry for entry in cache}
+
+    cache = await session.scalars(
+        select(AnimeVoice).where(AnimeVoice.anime == anime)
+    )
+
+    anime_voice_cache = {
+        f"{entry.character_id}-{entry.person_id}-{entry.language}": entry
+        for entry in cache
+    }
+
+    # Assign people to characters to make import logic easier
+    voices = {}
+
+    for entry in data["voices"]:
+        character_content_id = entry["character"]["content_id"]
+        person_content_id = entry["person"]["content_id"]
+
+        if character_content_id not in voices:
+            voices[character_content_id] = []
+
+        if person_content_id not in voices[character_content_id]:
+            voices[character_content_id].append(
+                {
+                    "person_content_id": person_content_id,
+                    "language": entry["language"],
+                }
+            )
+
+    for entry in data["characters"]:
         if not (
-            character := characters_cache.get(character_data["content_id"])
+            character := characters_cache.get(entry["character"]["content_id"])
         ):
             continue
 
@@ -147,102 +166,95 @@ async def process_characters(session, anime, data):
         ):
             character_role = AnimeCharacter(
                 **{
-                    "main": character_data["main"],
                     "character": character,
+                    "main": entry["main"],
                     "anime": anime,
                 }
             )
 
-            create_character_roles.append(character_role)
+            characters_and_voices.append(character_role)
 
-        cache = await session.scalars(
-            select(Person).where(
-                Person.content_id.in_(
-                    [
-                        entry["content_id"]
-                        for entry in character_data["voice_actors"]
-                    ]
-                )
-            )
-        )
+        if character.content_id not in voices:
+            continue
 
-        voices_cache = {entry.content_id: entry for entry in cache}
+        for entry in voices[character.content_id]:
+            person_content_id = entry["person_content_id"]
+            language = entry["language"]
 
-        for voice_data in character_data["voice_actors"]:
-            if not (person := voices_cache.get(voice_data["content_id"])):
+            if not (person := people_cache.get(person_content_id)):
                 continue
 
-            if await session.scalar(
-                select(AnimeVoice).filter_by(
-                    anime=anime, character=character, person=person
-                )
-            ):
+            if anime_voice_cache.get(f"{character.id}-{person.id}-{language}"):
                 continue
 
             voice = AnimeVoice(
                 **{
-                    "language": voice_data["language"],
                     "character": character,
+                    "language": language,
                     "person": person,
                     "anime": anime,
                 }
             )
 
-            create_voices.append(voice)
+            characters_and_voices.append(voice)
 
-    return create_character_roles, create_voices
+    return characters_and_voices
 
 
 async def process_recommendations(session, anime, data):
-    create_recommendations = []
-    update_recommendations = []
+    recommendations = []
+
+    content_ids = [
+        entry["recommended"]["content_id"] for entry in data["recommendations"]
+    ]
 
     cache = await session.scalars(
-        select(Anime).where(
-            Anime.content_id.in_(
-                [entry["content_id"] for entry in data["recommendations"]]
-            )
-        )
+        select(Anime).where(Anime.content_id.in_(content_ids))
     )
 
-    recommendations_cache = {entry.content_id: entry for entry in cache}
+    recommended_cache = {entry.content_id: entry for entry in cache}
+
+    cache = await session.scalars(
+        select(AnimeRecommendation).where(AnimeRecommendation.anime == anime)
+    )
+
+    recommendations_cache = {
+        f"{entry.recommendation_id}-{entry.anime_id}": entry for entry in cache
+    }
 
     for entry in data["recommendations"]:
         if not (
-            recommended_anime := recommendations_cache.get(entry["content_id"])
+            recommended := recommended_cache.get(
+                entry["recommended"]["content_id"]
+            )
         ):
             continue
 
-        if not (
-            recommendation := await session.scalar(
-                select(AnimeRecommendation).filter_by(
-                    recommendation=recommended_anime, anime=anime
-                )
-            )
+        if recommendation := recommendations_cache.get(
+            f"{recommended.id}-{anime.id}"
         ):
-            recommendation = AnimeRecommendation(
-                **{
-                    "recommendation": recommended_anime,
-                    "weight": entry["weight"],
-                    "anime": anime,
-                }
-            )
-
-            create_recommendations.append(recommendation)
-
-        else:
             if recommendation.weight == entry["weight"]:
                 continue
 
             recommendation.weight = entry["weight"]
-            update_recommendations.append(recommendation)
+            recommendations.append(recommendation)
 
-    return create_recommendations, update_recommendations
+        else:
+            recommendations.append(
+                AnimeRecommendation(
+                    **{
+                        "recommendation": recommended,
+                        "weight": entry["weight"],
+                        "anime": anime,
+                    }
+                )
+            )
+
+    return recommendations
 
 
 async def process_episodes(session, anime, data):
-    create_episodes = []
-    update_episodes = []
+    episodes = []
 
     cache = await session.scalars(
         select(AnimeEpisode).where(
@@ -260,57 +272,96 @@ async def process_episodes(session, anime, data):
             episode = AnimeEpisode(
                 **{
                     "aired": utils.from_timestamp(episode_data["aired"]),
+                    "title_native": episode_data["title_native"],
                     "title_ja": episode_data["title_ja"],
                     "title_en": episode_data["title_en"],
+                    "title_ua": episode_data["title_ua"],
                     "index": episode_data["index"],
                     "anime": anime,
                 }
             )
 
-            create_episodes.append(episode)
+            episodes.append(episode)
 
         else:
-            original_state = episode.__dict__.copy()
-
             episode.aired = utils.from_timestamp(episode_data["aired"])
+            episode.title_native = episode_data["title_native"]
             episode.title_ja = episode_data["title_ja"]
             episode.title_en = episode_data["title_en"]
+            episode.title_ua = episode_data["title_ua"]
 
-            if episode.__dict__ != original_state:
-                update_episodes.append(episode)
+            if session.is_modified(episode):
+                episodes.append(episode)
 
-    return create_episodes, update_episodes
+    return episodes
 
 
 async def process_staff(session, anime, data):
-    create_staff = []
+    update_staff = []
+
+    people_content_ids = [
+        entry["person"]["content_id"] for entry in data["staff"]
+    ]
+
+    role_slugs = list(
+        set(
+            [
+                utils.slugify(role)
+                for tmp_roles in [entry["roles"] for entry in data["staff"]]
+                for role in tmp_roles
+            ]
+        )
+    )
 
     cache = await session.scalars(
-        select(Person).where(
-            Person.content_id.in_(
-                [entry["person_content_id"] for entry in data["staff"]]
-            )
-        )
+        select(Person).where(Person.content_id.in_(people_content_ids))
     )
 
     people_cache = {entry.content_id: entry for entry in cache}
 
+    cache = await session.scalars(
+        select(AnimeStaffRole).where(AnimeStaffRole.slug.in_(role_slugs))
+    )
+
+    role_cache = {entry.slug: entry for entry in cache}
+
+    cache = await session.scalars(
+        select(AnimeStaff)
+        .filter_by(anime=anime)
+        .options(selectinload(AnimeStaff.roles))
+    )
+
+    staff_cache = {
+        f"{entry.person_id}-{entry.anime_id}": entry for entry in cache
+    }
+
     for entry in data["staff"]:
-        if not (person := people_cache.get(entry["person_content_id"])):
+        person_content_id = entry["person"]["content_id"]
+
+        if not (person := people_cache.get(person_content_id)):
             continue
 
-        if await session.scalar(
-            select(AnimeStaff).filter_by(anime=anime, person=person)
-        ):
-            continue
+        if not (staff := staff_cache.get(f"{person.id}-{anime.id}")):
+            staff = AnimeStaff(
+                **{
+                    "person": person,
+                    "anime": anime,
+                }
+            )
 
-        staff = AnimeStaff(
-            **{"role": entry["role"], "person": person, "anime": anime}
-        )
+        for role_name in entry["roles"]:
+            role_slug = utils.slugify(role_name)
 
-        create_staff.append(staff)
+            if not (role := role_cache.get(role_slug)):
+                continue
 
-    return create_staff
+            if role not in staff.roles:
+                staff.roles.append(role)
+
+        if session.is_modified(staff):
+            update_staff.append(staff)
+
+    return update_staff
 
 
 async def update_anime_info(semaphore, content_id):
@@ -334,9 +385,10 @@ async def update_anime_info(semaphore, content_id):
             anime.start_date = utils.from_timestamp(data["start_date"])
             anime.end_date = utils.from_timestamp(data["end_date"])
             anime.updated = utils.from_timestamp(data["updated"])
+            anime.episodes = data["episodes_released"]
+            anime.episodes = data["episodes_total"]
             anime.media_type = data["media_type"]
             anime.scored_by = data["scored_by"]
-            anime.episodes = data["episodes"]
             anime.duration = data["duration"]
             anime.source = data["source"]
             anime.rating = data["rating"]
@@ -348,12 +400,14 @@ async def update_anime_info(semaphore, content_id):
                 total_episodes if total_episodes > 0 else None
             )
 
-            anime.synopsis_en = data["synopsis"]
+            anime.synopsis_en = data["synopsis_en"]
+            anime.synopsis_ua = data["synopsis_ua"]
             anime.title_en = data["title_en"]
-            anime.title_ja = data["title"]
+            anime.title_ja = data["title_ja"]
+            anime.title_ua = data["title_ua"]
 
             # ToDo: add extra checks here
-            anime.translations = process_translations(data)
+            # anime.translations = process_translations(data)
             anime.synonyms = data["synonyms"]
             anime.external = data["external"]
             anime.videos = data["videos"]
@@ -366,63 +420,39 @@ async def update_anime_info(semaphore, content_id):
 
             genres_add = await process_genres(session, anime, data)
 
-            create_companies_anime = await process_companies_anime(
+            companies_anime = await process_companies_anime(
                 session, anime, data
             )
 
-            create_character_roles, create_voices = await process_characters(
+            characters_and_voices = await process_characters_and_voices(
                 session, anime, data
             )
 
-            (
-                create_recommendations,
-                update_recommendations,
-            ) = await process_recommendations(session, anime, data)
-
-            create_episodes, update_episodes = await process_episodes(
+            recommendations = await process_recommendations(
                 session, anime, data
             )
 
-            create_staff = await process_staff(session, anime, data)
+            episodes = await process_episodes(session, anime, data)
 
-            if len(create_character_roles) > 0:
-                session.add_all(create_character_roles)
+            update_staff = await process_staff(session, anime, data)
 
-            if len(create_voices) > 0:
-                session.add_all(create_voices)
-
-            if len(create_staff) > 0:
-                session.add_all(create_staff)
-
-            if len(create_episodes) > 0:
-                session.add_all(create_episodes)
-
-            if len(create_recommendations) > 0:
-                session.add_all(create_recommendations)
-
-            if len(create_companies_anime) > 0:
-                session.add_all(create_companies_anime)
+            session.add_all(companies_anime)
+            session.add_all(characters_and_voices)
+            session.add_all(update_staff)
+            session.add_all(episodes)
+            session.add_all(recommendations)
 
             for genre in genres_add:
                 anime.genres.append(genre)
 
-            if len(update_recommendations) > 0:
-                session.add_all(update_recommendations)
-
-            if len(update_episodes) > 0:
-                session.add_all(update_episodes)
-
             session.add(anime)
 
-            # print(f"create_character_roles: {len(create_character_roles)}")
-            # print(f"create_voices: {len(create_voices)}")
-            # print(f"create_staff: {len(create_staff)}")
-            # print(f"create_episodes: {len(create_episodes)}")
-            # print(f"create_recommendations: {len(create_recommendations)}")
-            # print(f"create_companies_anime: {len(create_companies_anime)}")
+            # print(f"companies_anime: {len(companies_anime)}")
+            # print(f"characters_and_voices: {len(characters_and_voices)}")
+            # print(f"update_staff: {len(update_staff)}")
+            # print(f"episodes: {len(episodes)}")
+            # print(f"recommendations: {len(recommendations)}")
             # print(f"genres_add: {len(genres_add)}")
-            # print(f"update_recommendations: {len(update_recommendations)}")
-            # print(f"update_episodes: {len(update_episodes)}")
 
             await session.commit()
 
