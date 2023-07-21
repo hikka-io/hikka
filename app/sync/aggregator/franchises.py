@@ -18,28 +18,39 @@ async def save_anime_franchises_list(data):
     sessionmanager.init(config.database)
 
     async with sessionmanager.session() as session:
+        content_ids = [entry["content_id"] for entry in data]
+
+        cache = await session.scalars(
+            select(AnimeFranchise).where(
+                AnimeFranchise.content_id.in_(content_ids)
+            )
+        )
+
+        franchises_cache = {entry.content_id: entry for entry in cache}
+
         for franchise_data in data:
             if not (
-                franchise := await session.scalar(
-                    select(AnimeFranchise).filter_by(
-                        content_id=franchise_data["content_id"]
-                    )
-                )
+                franchise := franchises_cache.get(franchise_data["content_id"])
             ):
                 franchise = AnimeFranchise(
                     content_id=franchise_data["content_id"]
                 )
 
-            franchise.updated = utils.from_timestamp(franchise_data["updated"])
+            updated = utils.from_timestamp(franchise_data["updated"])
+
+            if updated == franchise.updated:
+                continue
+
             franchise.scored_by = franchise_data["scored_by"]
             franchise.score = franchise_data["score"]
+            franchise.updated = updated
 
             session.add(franchise)
             await session.commit()
 
             cache = await session.scalars(
                 select(Anime).where(
-                    Anime.content_id.in_(franchise_data["anime"])
+                    Anime.content_id.in_(franchise_data["franchise_entries"])
                 )
             )
 
@@ -50,9 +61,10 @@ async def save_anime_franchises_list(data):
                 update_anime.append(anime)
 
             session.add_all(update_anime)
-            await session.commit()
 
-            print("Processed franchise " + franchise_data["name"])
+            print("Processed franchise " + franchise_data["content_id"])
+
+        await session.commit()
 
 
 async def aggregator_anime_franchises():
