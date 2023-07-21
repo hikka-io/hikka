@@ -81,5 +81,3 @@ class AnimeVoice(Base):
     anime: Mapped["Anime"] = relationship(
         back_populates="voices", foreign_keys=[anime_id]
     )
-
-    unique_constraint = UniqueConstraint(character_id, person_id, anime_id)
