@@ -1,9 +1,6 @@
-# from ..association import anime_producers_association_table
-# from ..association import anime_studios_association_table
 from ..association import anime_genres_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from ..mixins import ContentMixin, SlugMixin
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -11,8 +8,19 @@ from sqlalchemy.orm import Mapped
 from datetime import datetime
 from ..base import Base
 
+from ..mixins import (
+    ContentMixin,
+    UpdatedMixin,
+    SlugMixin,
+)
 
-class Anime(Base, ContentMixin, SlugMixin):
+
+class Anime(
+    Base,
+    ContentMixin,
+    UpdatedMixin,
+    SlugMixin,
+):
     __tablename__ = "service_content_anime"
 
     # Multilang fields
@@ -31,21 +39,19 @@ class Anime(Base, ContentMixin, SlugMixin):
     source: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
     status: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
     season: Mapped[str] = mapped_column(String(6), index=True, nullable=True)
+    episodes_released: Mapped[int] = mapped_column(nullable=True)
     year: Mapped[int] = mapped_column(index=True, nullable=True)
     start_date: Mapped[datetime] = mapped_column(nullable=True)
-    total_episodes: Mapped[int] = mapped_column(nullable=True)
+    episodes_total: Mapped[int] = mapped_column(nullable=True)
     end_date: Mapped[datetime] = mapped_column(nullable=True)
     duration: Mapped[int] = mapped_column(nullable=True)
-    episodes: Mapped[int] = mapped_column(nullable=True)
     nsfw: Mapped[bool] = mapped_column(nullable=True)
     scored_by: Mapped[int] = mapped_column(default=0)
     score: Mapped[float] = mapped_column(default=0)
-
     media_type: Mapped[str] = mapped_column(
         String(16), index=True, nullable=True
     )
 
-    translations: Mapped[dict] = mapped_column(JSONB, default=[])
     synonyms: Mapped[dict] = mapped_column(JSONB, default=[])
     external: Mapped[dict] = mapped_column(JSONB, default=[])
     videos: Mapped[dict] = mapped_column(JSONB, default=[])
@@ -68,11 +74,6 @@ class Anime(Base, ContentMixin, SlugMixin):
         back_populates="anime",
     )
 
-    recommended_to: Mapped[list["AnimeRecommendation"]] = relationship(
-        foreign_keys="[AnimeRecommendation.recommendation_id]",
-        back_populates="recommendation",
-    )
-
     genres: Mapped[list["AnimeGenre"]] = relationship(
         secondary=anime_genres_association_table, back_populates="anime"
     )
@@ -92,13 +93,14 @@ class Anime(Base, ContentMixin, SlugMixin):
     )
 
     poster_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL")
+        ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
     poster_relation: Mapped["Image"] = relationship(lazy="selectin")
 
     franchise_id = mapped_column(
-        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL")
+        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL"),
+        index=True,
     )
 
     franchise_relation: Mapped["AnimeFranchise"] = relationship(
@@ -108,10 +110,14 @@ class Anime(Base, ContentMixin, SlugMixin):
     # Very dirty hacks, but they do the trick
     @hybrid_property
     def poster(self):
-        return self.poster_relation.url if self.poster_relation else None
+        if not self.poster_relation:
+            return None
+
+        if self.poster_relation.ignore or not self.poster_relation.uploaded:
+            return None
+
+        return self.poster_relation.url
 
     @hybrid_property
     def has_franchise(self):
         return self.franchise_id != None
-
-    # ToDo: images

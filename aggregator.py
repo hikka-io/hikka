@@ -1,5 +1,6 @@
 from app.sync import aggregator_anime_franchises
 from app.sync import aggregator_anime_genres
+from app.sync import aggregator_anime_roles
 from app.sync import aggregator_anime_info
 from app.sync import aggregator_characters
 from app.sync import aggregator_companies
@@ -10,6 +11,7 @@ import asyncio
 
 if __name__ == "__main__":
     # asyncio.run(aggregator_anime_genres())
+    # asyncio.run(aggregator_anime_roles())
     # asyncio.run(aggregator_characters())
     # asyncio.run(aggregator_companies())
     # asyncio.run(aggregator_people())

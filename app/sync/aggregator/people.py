@@ -37,7 +37,9 @@ async def save_people(data):
 
         for person_data in data:
             updated = utils.from_timestamp(person_data["updated"])
-            slug = utils.slugify(person_data["name"], person_data["content_id"])
+            slug = utils.slugify(
+                person_data["name_en"], person_data["content_id"]
+            )
 
             if person_data["content_id"] in people_cache:
                 person = people_cache[person_data["content_id"]]
@@ -62,6 +64,8 @@ async def save_people(data):
                             **{
                                 "path": person_data["image"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 
@@ -72,7 +76,7 @@ async def save_people(data):
                         "content_id": person_data["content_id"],
                         "name_native": person_data["name_ja"],
                         "favorites": person_data["favorites"],
-                        "name_en": person_data["name"],
+                        "name_en": person_data["name_en"],
                         "image_relation": image,
                         "updated": updated,
                         "slug": slug,

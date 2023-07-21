@@ -37,7 +37,9 @@ async def save_anime_list(data):
 
         for anime_data in data:
             updated = utils.from_timestamp(anime_data["updated"])
-            slug = utils.slugify(anime_data["title"], anime_data["content_id"])
+            slug = utils.slugify(
+                anime_data["title_ja"], anime_data["content_id"]
+            )
 
             if anime_data["content_id"] in anime_cache:
                 anime = anime_cache[anime_data["content_id"]]
@@ -61,30 +63,34 @@ async def save_anime_list(data):
                             **{
                                 "path": anime_data["poster"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 
                         poster_cache[anime_data["poster"]] = image
 
                 start_date = utils.from_timestamp(anime_data["start_date"])
+                end_date = utils.from_timestamp(anime_data["end_date"])
 
                 anime = Anime(
                     **{
-                        "end_date": utils.from_timestamp(
-                            anime_data["end_date"]
-                        ),
+                        "episodes_released": anime_data["episodes_released"],
                         "year": start_date.year if start_date else None,
-                        "season": utils.get_season(start_date),
+                        "episodes_total": anime_data["episodes_total"],
                         "media_type": anime_data["media_type"],
                         "content_id": anime_data["content_id"],
                         "scored_by": anime_data["scored_by"],
-                        "episodes": anime_data["episodes"],
                         "title_en": anime_data["title_en"],
-                        "title_ja": anime_data["title"],
+                        "title_ja": anime_data["title_ja"],
+                        "title_ua": anime_data["title_ua"],
+                        "status": anime_data["status"],
+                        "season": anime_data["season"],
                         "score": anime_data["score"],
                         "poster_relation": image,
                         "start_date": start_date,
                         "needs_update": True,
+                        "end_date": end_date,
                         "updated": updated,
                         "slug": slug,
                     }

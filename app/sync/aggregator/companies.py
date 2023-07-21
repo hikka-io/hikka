@@ -38,7 +38,7 @@ async def save_companies(data):
         for company_data in data:
             updated = utils.from_timestamp(company_data["updated"])
             slug = utils.slugify(
-                company_data["name"], company_data["content_id"]
+                company_data["name_en"], company_data["content_id"]
             )
 
             if company_data["content_id"] in companies_cache:
@@ -64,6 +64,8 @@ async def save_companies(data):
                             **{
                                 "path": company_data["image"],
                                 "created": datetime.utcnow(),
+                                "uploaded": True,
+                                "ignore": False,
                             }
                         )
 
@@ -73,7 +75,7 @@ async def save_companies(data):
                     **{
                         "content_id": company_data["content_id"],
                         "favorites": company_data["favorites"],
-                        "name": company_data["name"],
+                        "name": company_data["name_en"],
                         "image_relation": image,
                         "updated": updated,
                         "slug": slug,

@@ -15,9 +15,10 @@ async def update_anime_settings(index):
     await index.update_settings(
         MeilisearchSettings(
             filterable_attributes=[
+                "episodes_released",
+                "episodes_total",
                 "media_type",
                 "producers",
-                "episodes",
                 "studios",
                 "rating",
                 "season",
@@ -34,6 +35,8 @@ async def update_anime_settings(index):
                 "synonyms",
             ],
             displayed_attributes=[
+                "episodes_released",
+                "episodes_total",
                 "media_type",
                 "scored_by",
                 "title_ua",
@@ -84,11 +87,12 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
             {
                 "year": anime.start_date.year if anime.start_date else None,
                 "genres": [genre.slug for genre in anime.genres],
+                "episodes_released": anime.episodes_released,
+                "episodes_total": anime.episodes_total,
                 "season": get_season(anime.start_date),
                 "media_type": anime.media_type,
                 "scored_by": anime.scored_by,
                 "synonyms": anime.synonyms,
-                "episodes": anime.episodes,
                 "title_ua": anime.title_ua,
                 "title_en": anime.title_en,
                 "title_ja": anime.title_ja,

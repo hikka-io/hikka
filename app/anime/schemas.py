@@ -142,9 +142,15 @@ class AnimeCharacterResponse(ORJSONModel):
     character: CharacterResponse
 
 
+class RoleResponse(ORJSONModel):
+    name_ua: Union[str, None]
+    name_en: Union[str, None]
+    slug: str
+
+
 class AnimeStaffResponse(ORJSONModel):
-    role: str = Field(example="Producer")
-    person: PersonResponse
+    person: Union[PersonResponse, None]
+    roles: list[RoleResponse]
 
 
 class GenreResponse(ORJSONModel):
@@ -220,7 +226,8 @@ class AnimeInfoResponse(ORJSONModel):
     start_date: Union[datetime, None] = Field(example=1686088809)
     end_date: Union[datetime, None] = Field(example=1686088809)
 
-    total_episodes: Union[int, None] = Field(example=10)
+    episodes_released: Union[int, None] = Field(example=10)
+    episodes_total: Union[int, None] = Field(example=10)
     synopsis_en: Union[str, None] = Field(example="...")
     synopsis_ua: Union[str, None] = Field(example="...")
     media_type: Union[str, None] = Field(example="tv")
@@ -233,7 +240,6 @@ class AnimeInfoResponse(ORJSONModel):
     title_ja: Union[str, None] = Field(
         example="Kono Subarashii Sekai ni Shukufuku wo!"
     )
-    episodes: Union[int, None] = Field(example=10)
     duration: Union[int, None] = Field(example=23)
     poster: Union[str, None] = Field(example="https://cdn.hikka.io/hikka.jpg")
     status: Union[str, None] = Field(example="finished")

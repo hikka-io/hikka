@@ -1,25 +1,37 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
-from ..mixins import ContentMixin, SlugMixin
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from datetime import datetime
 from ..base import Base
 
+from ..mixins import (
+    FavoritesMixin,
+    ContentMixin,
+    UpdatedMixin,
+    NamesMixin,
+    SlugMixin,
+)
 
-class Character(Base, ContentMixin, SlugMixin):
+
+class Character(
+    Base,
+    FavoritesMixin,
+    ContentMixin,
+    UpdatedMixin,
+    NamesMixin,
+    SlugMixin,
+):
     __tablename__ = "service_content_characters"
 
-    name_ja: Mapped[str] = mapped_column(String(255), nullable=True)
-    name_en: Mapped[str] = mapped_column(String(255), nullable=True)
-    name_ua: Mapped[str] = mapped_column(String(255), nullable=True)
+    image_id = mapped_column(
+        ForeignKey("service_images.id", ondelete="SET NULL"), index=True
+    )
 
-    favorites: Mapped[int] = mapped_column(default=0, nullable=True)
-    updated: Mapped[datetime]
+    image_relation: Mapped["Image"] = relationship(lazy="selectin")
 
-    anime_roles: Mapped[list["AnimeCharacter"]] = relationship(
+    anime: Mapped[list["AnimeCharacter"]] = relationship(
         back_populates="character"
     )
 
@@ -27,15 +39,15 @@ class Character(Base, ContentMixin, SlugMixin):
         back_populates="character"
     )
 
-    image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL")
-    )
-
-    image_relation: Mapped["Image"] = relationship(lazy="selectin")
-
     @hybrid_property
     def image(self):
-        return self.image_relation.url if self.image_relation else None
+        if not self.image_relation:
+            return None
+
+        if self.image_relation.ignore or not self.image_relation.uploaded:
+            return None
+
+        return self.image_relation.url
 
 
 class AnimeCharacter(Base):
@@ -43,11 +55,18 @@ class AnimeCharacter(Base):
 
     main: Mapped[bool]
 
-    character_id = mapped_column(ForeignKey("service_content_characters.id"))
-    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+    character_id = mapped_column(
+        ForeignKey("service_content_characters.id"),
+        index=True,
+    )
+
+    anime_id = mapped_column(
+        ForeignKey("service_content_anime.id"),
+        index=True,
+    )
 
     character: Mapped["Character"] = relationship(
-        back_populates="anime_roles", foreign_keys=[character_id]
+        back_populates="anime", foreign_keys=[character_id]
     )
 
     anime: Mapped["Anime"] = relationship(
