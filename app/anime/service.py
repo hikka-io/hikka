@@ -3,7 +3,6 @@ from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
-from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from typing import Union
@@ -54,6 +53,7 @@ async def anime_staff(
         select(AnimeStaff)
         .filter_by(anime=anime)
         .options(selectinload(AnimeStaff.person))
+        .options(selectinload(AnimeStaff.roles))
         .limit(limit)
         .offset(offset)
     )

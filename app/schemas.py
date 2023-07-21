@@ -64,7 +64,8 @@ class AnimeResponse(ORJSONModel):
     title_ja: Union[str, None] = Field(
         example="Kono Subarashii Sekai ni Shukufuku wo!"
     )
-    episodes: Union[int, None] = Field(example="10")
+    episodes_released: Union[int, None] = Field(example="10")
+    episodes_total: Union[int, None] = Field(example="10")
     poster: Union[str, None] = Field(example="https://cdn.hikka.io/hikka.jpg")
     status: Union[str, None] = Field(example="finished")
     scored_by: int = Field(example=1210150)

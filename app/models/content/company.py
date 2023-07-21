@@ -42,7 +42,7 @@ class Company(
         if self.image_relation.ignore or not self.image_relation.uploaded:
             return None
 
-        return self.image_relation.path
+        return self.image_relation.url
 
 
 class CompanyAnime(Base):

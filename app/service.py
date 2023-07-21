@@ -29,13 +29,14 @@ async def get_auth_token(
 
 def anime_loadonly(statement):
     return statement.load_only(
+        Anime.episodes_released,
+        Anime.episodes_total,
         Anime.content_id,
         Anime.media_type,
         Anime.scored_by,
         Anime.title_ja,
         Anime.title_en,
         Anime.title_ua,
-        Anime.episodes,
         Anime.status,
         Anime.score,
         Anime.slug,

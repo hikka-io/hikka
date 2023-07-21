@@ -116,7 +116,7 @@ class Anime(
         if self.poster_relation.ignore or not self.poster_relation.uploaded:
             return None
 
-        return self.poster_relation.path
+        return self.poster_relation.url
 
     @hybrid_property
     def has_franchise(self):

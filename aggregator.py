@@ -17,5 +17,5 @@ if __name__ == "__main__":
     # asyncio.run(aggregator_people())
     # asyncio.run(aggregator_anime())
     # asyncio.run(aggregator_anime_info())
-    asyncio.run(aggregator_anime_franchises())
-    # asyncio.run(update_search())
+    # asyncio.run(aggregator_anime_franchises())
+    asyncio.run(update_search())
