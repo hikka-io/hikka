@@ -196,3 +196,7 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = anime_search_where(search, query)
 
     return await session.scalar(query)
+
+
+async def anime_genres(session: AsyncSession):
+    return await session.scalars(select(AnimeGenre).order_by(AnimeGenre.slug))

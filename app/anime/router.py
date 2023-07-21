@@ -21,6 +21,7 @@ from .schemas import (
     AnimeStaffPaginationResponse,
     AnimeEpisodesListResponse,
     AnimeSearchArgs,
+    GenreResponse,
 )
 
 from app.utils import (
@@ -57,6 +58,18 @@ async def search_anime(
         page=search.page,
         sort=search.sort,
     )
+
+
+@router.get(
+    "/genres",
+    response_model=list[GenreResponse],
+    summary="Genres list",
+)
+async def anime_genres(
+    session: AsyncSession = Depends(get_session),
+):
+    genres = await service.anime_genres(session)
+    return genres.all()
 
 
 @router.get(

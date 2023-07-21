@@ -157,6 +157,7 @@ class GenreResponse(ORJSONModel):
     name_en: Union[str, None] = Field(example="Comedy")
     name_ua: Union[str, None] = Field(example="Комедія")
     slug: str = Field(example="comedy")
+    type: str = Field(example="genre")
 
 
 class AnimeCompanyResponse(ORJSONModel):
