@@ -77,6 +77,10 @@ class AnimeSearchArgs(ORJSONModel):
         default=[None, None], min_items=2, max_items=2, example=[2000, 2020]
     )
 
+    score: list[Union[int, None]] = Field(
+        default=[None, None], min_items=2, max_items=2, example=[0, 10]
+    )
+
     media_type: list[AnimeMediaEnum] = []
     rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
@@ -95,6 +99,21 @@ class AnimeSearchArgs(ORJSONModel):
             )
 
         return years
+
+    @validator("score")
+    def validate_score(cls, scores):
+        if all(score is not None for score in scores) and scores[0] > scores[1]:
+            raise ValueError(
+                "The first score must be less than the second score."
+            )
+
+        if scores[0] and scores[0] < 0:
+            raise ValueError("Score can't be less than 0.")
+
+        if scores[1] and scores[1] > 10:
+            raise ValueError("Score can't be more than 1.")
+
+        return scores
 
     @validator("sort")
     def validate_sort(cls, sort_list):

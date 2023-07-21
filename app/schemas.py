@@ -4,23 +4,21 @@ from datetime import datetime
 from typing import Union
 from . import constants
 from enum import Enum
-
-# from . import utils
-# import orjson
+from . import utils
+import orjson
 
 
 # Custom Pydantic model
 class ORJSONModel(BaseModel):
     class Config:
-        # json_encoders = {datetime: utils.to_timestamp}
-        # json_dumps = utils.orjson_dumps
-        # json_loads = orjson.loads
+        json_encoders = {datetime: utils.to_timestamp}
+        json_dumps = utils.orjson_dumps
+        json_loads = orjson.loads
         use_enum_values = True
-        from_attributes = True
+        orm_mode = True
 
     def serializable_dict(self, **kwargs):
-        # default_dict = super().dict(**kwargs)
-        default_dict = super().model_dump(**kwargs)
+        default_dict = super().dict(**kwargs)
         return jsonable_encoder(default_dict)
 
 

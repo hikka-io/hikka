@@ -17,7 +17,7 @@ click==8.1.3
 dictdiffer==0.9.0
 dnspython==2.3.0
 email-validator==2.0.0.post2
-fastapi==0.100.0
+fastapi==0.95.1
 frozenlist==1.3.3
 greenlet==2.0.2
 h11==0.14.0
@@ -33,8 +33,7 @@ MarkupSafe==2.1.2
 meilisearch-python-async==1.2.0
 multidict==6.0.4
 orjson==3.8.10
-pydantic==2.0.3
-pydantic_core==2.3.0
+pydantic==1.10.7
 PyJWT==2.6.0
 pypika-tortoise==0.1.6
 python-dotenv==1.0.0
@@ -45,7 +44,7 @@ PyYAML==6.0
 six==1.16.0
 sniffio==1.3.0
 SQLAlchemy==2.0.13
-starlette==0.27.0
+starlette==0.26.1
 tomlkit==0.11.8
 typing_extensions==4.7.1
 tzdata==2023.3

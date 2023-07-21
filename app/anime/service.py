@@ -138,6 +138,12 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
     if search.years[1]:
         query = query.where(Anime.year <= search.years[1])
 
+    if search.score[0] and search.score[0] > 0:
+        query = query.where(Anime.score >= search.score[0])
+
+    if search.score[1]:
+        query = query.where(Anime.score <= search.score[1])
+
     if len(search.season) > 0:
         query = query.where(Anime.season.in_(search.season))
 

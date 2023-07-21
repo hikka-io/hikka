@@ -13,11 +13,11 @@ class EmailArgs(ORJSONModel):
 
 
 class UsernameArgs(ORJSONModel):
-    username: str = Field(max_length=16, pattern="[A-Za-z0-9]", example="hikka")
+    username: str = Field(max_length=16, regex="[A-Za-z0-9]", example="hikka")
 
 
 class SignupArgs(ORJSONModel):
-    username: str = Field(max_length=16, pattern="[A-Za-z0-9]", example="hikka")
+    username: str = Field(max_length=16, regex="[A-Za-z0-9]", example="hikka")
     password: str = Field(min_length=8, max_length=64, example="password")
     email: EmailStr = Field(example="hikka@email.com")
 

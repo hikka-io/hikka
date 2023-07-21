@@ -16,12 +16,19 @@ def build_anime_filters(search: AnimeSearchArgs):
     genres = [f"genres = {genre}" for genre in search.genres]
 
     year = []
+    score = []
 
     if search.years[0]:
         year.append([f"year>={search.years[0]}"])
 
     if search.years[1]:
         year.append([f"year<={search.years[1]}"])
+
+    if search.score[0] and search.score[0] > 0:
+        score.append([f"score>={search.score[0]}"])
+
+    if search.score[1]:
+        score.append([f"year<={search.score[1]}"])
 
     return [
         rating,
@@ -32,6 +39,7 @@ def build_anime_filters(search: AnimeSearchArgs):
         studios,
         *genres,
         *year,
+        # *score,
     ]
 
 
