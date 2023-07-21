@@ -11,7 +11,7 @@ from . import service
 
 async def verify_watch(
     anime: Anime = Depends(get_anime),
-    user: User = Depends(auth_required),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ) -> AnimeWatch:
     if not (watch := await service.get_anime_watch(session, anime, user)):
@@ -23,7 +23,7 @@ async def verify_watch(
 async def verify_add_watch(
     args: WatchArgs,
     anime: Anime = Depends(get_anime),
-    user: User = Depends(auth_required),
+    user: User = Depends(auth_required()),
 ) -> Tuple[Anime, User, WatchArgs]:
     # User can't set more than 0 episodes if anime not yet aired
     if not anime.episodes and args.episodes > 0:

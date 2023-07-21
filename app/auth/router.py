@@ -1,27 +1,30 @@
-from starlette.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, Request
+from app.dependencies import auth_required
+from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
 from app import constants
 from typing import Tuple
 from . import service
 
+
 from .dependencies import (
     validate_activation_resend,
-    validate_google_oauth_code,
     validate_password_confirm,
-    check_google_oauth_error,
     validate_password_reset,
     validate_activation,
+    validate_provider,
     validate_signup,
     validate_login,
 )
 
 from .schemas import (
+    ProviderUrlResponse,
     TokenResponse,
     UserResponse,
+    UsernameArgs,
     SignupArgs,
+    CodeArgs,
 )
 
 
@@ -49,21 +52,6 @@ async def signup(
     )
 
     return user
-
-
-@router.get("/google/oauth")
-async def oauth_google(request: Request):
-    return RedirectResponse(await service.get_google_oauth_url(request))
-
-
-@router.get("/google/callback")
-async def callback_google(
-    request: Request,
-    error: None = Depends(check_google_oauth_error),
-    code: str = Depends(validate_google_oauth_code),
-):
-    info = await service.get_google_oauth_info(request, code)
-    print(info)
 
 
 @router.post(
@@ -144,3 +132,41 @@ async def password_reset(
     session: AsyncSession = Depends(get_session),
 ):
     return await service.change_password(session, *confirm)
+
+
+@router.put(
+    "/username",
+    response_model=UserResponse,
+    summary="Set a username",
+)
+async def username(
+    args: UsernameArgs,
+    user: User = Depends(auth_required(username_required=False)),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.set_username(session, user, args.username)
+
+
+@router.get(
+    "/oauth/{provider}",
+    response_model=ProviderUrlResponse,
+    summary="Get a provider OAuth url",
+)
+async def provider_url(provider: str = Depends(validate_provider)):
+    return await service.get_provider_url(provider)
+
+
+@router.post(
+    "/oauth/{provider}",
+    response_model=TokenResponse,
+    summary="Get auth token using OAuth",
+)
+async def oauth(
+    args: CodeArgs,
+    provider: str = Depends(validate_provider),
+    session: AsyncSession = Depends(get_session),
+):
+    data = await service.get_oauth_info(provider, args.code)
+    user = await service.get_user_by_oauth(session, data)
+
+    return await service.create_auth_token(session, user)

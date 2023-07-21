@@ -1,12 +1,11 @@
-from fastapi import Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from app.database import get_session
 from datetime import datetime
 from app.errors import Abort
+from fastapi import Depends
 from app.models import User
 from .utils import checkpwd
-from typing import Union
 import config
 
 from .service import (
@@ -70,18 +69,11 @@ async def validate_login(
     return user
 
 
-async def validate_google_oauth_code(
-    request: Request, code: Union[str, None] = None
-) -> str:
-    if not code:
-        raise Abort("auth", "oauth-code-required")
+async def validate_provider(provider: str) -> str:
+    if provider not in ["google"]:
+        raise Abort("auth", "invalid-provider")
 
-    return code
-
-
-async def check_google_oauth_error(error: Union[str, None] = None) -> None:
-    if error:
-        raise Abort("auth", "oauth-error")
+    return provider
 
 
 async def validate_activation(

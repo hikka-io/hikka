@@ -21,7 +21,7 @@ async def validate_username(
 
 async def validate_self(
     follow_user: User = Depends(validate_username),
-    user: User = Depends(auth_required),
+    user: User = Depends(auth_required()),
 ) -> Tuple[User, User]:
     if follow_user == user:
         raise Abort("follow", "self")
