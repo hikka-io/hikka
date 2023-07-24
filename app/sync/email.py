@@ -7,10 +7,25 @@ from datetime import datetime
 import aiohttp
 import config
 
+# ToDo: move website endpoint to config/settings
+templates = {
+    "from": "Hikka <noreply@mail.hikka.io>",
+    "templates": {
+        "activation": {
+            "subject": "Активація акаунту",
+            "template": "https://hikka.io/activation/CONTENT",
+        },
+        "password_reset": {
+            "subject": "Скидання паролю",
+            "template": "https://hikka.io/reset/CONTENT",
+        },
+    },
+}
+
 
 async def send_email(session: AsyncSession, email: EmailMessage):
-    subject = config.email["templates"][email.type]["subject"]
-    template = config.email["templates"][email.type]["template"].replace(
+    subject = templates[email.type]["subject"]
+    template = templates[email.type]["template"].replace(
         "CONTENT", email.content
     )
 
