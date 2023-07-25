@@ -15,7 +15,7 @@ def get_client_class(provider: str):
 def get_client(provider: str):
     settings = get_settings()
 
-    if not (oauth_provider := settings.oauth[provider]):
+    if not (oauth_provider := settings.oauth.get(provider)):
         raise Abort("auth", "invalid-provider")
 
     client_class = get_client_class(provider)
