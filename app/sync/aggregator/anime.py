@@ -5,7 +5,6 @@ from datetime import datetime
 from . import requests
 from app import utils
 import asyncio
-import config
 
 
 async def make_request(semaphore, page):
@@ -15,8 +14,6 @@ async def make_request(semaphore, page):
 
 
 async def save_anime_list(data):
-    sessionmanager.init(config.database)
-
     async with sessionmanager.session() as session:
         content_ids = [entry["content_id"] for entry in data]
         posters = [entry["poster"] for entry in data]

@@ -6,7 +6,6 @@ from app.errors import Abort
 from fastapi import Depends
 from app.models import User
 from .utils import checkpwd
-import config
 
 from .service import (
     get_user_by_activation,
@@ -45,8 +44,8 @@ async def validate_signup(
     if await get_user_by_email(session, signup.username):
         raise Abort("auth", "email-exists")
 
-    if signup.email not in config.test_emails:
-        raise Abort("auth", "banned")
+    # if signup.email not in test_emails:
+    #     raise Abort("auth", "banned")
 
     return signup
 

@@ -1,14 +1,11 @@
 from app.models import User, EmailMessage, AuthToken
-from .oauth_client import GoogleClient, OAuthError
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
-from .constants import oauth_url_args
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
 from app.errors import Abort
 from typing import Union
-import config
 
 
 async def get_user_by_activation(
@@ -42,10 +39,11 @@ async def get_user_by_oauth(
 ) -> User:
     if not (user := await get_user_by_email(session, user_data["email"])):
         now = datetime.utcnow()
+
         user = User(
             **{
-                "password_hash": None,
                 "username": None,
+                "password_hash": None,
                 "email": user_data["email"],
                 "last_active": now,
                 "created": now,
@@ -57,39 +55,6 @@ async def get_user_by_oauth(
         await session.commit()
 
     return user
-
-
-async def get_provider_url(provider: str) -> dict[str, str]:
-    client = None
-
-    if provider == "google":
-        client = GoogleClient(**config.oauth[provider])
-    else:
-        raise Abort("auth", "invalid-provider")
-
-    return {"url": client.get_authorize_url(**oauth_url_args[provider])}
-
-
-async def get_oauth_info(provider: str, code: str):
-    client = None
-
-    if provider == "google":
-        client = GoogleClient(**config.oauth[provider])
-    else:
-        raise Abort("auth", "invalid-provider")
-
-    data = None
-
-    try:
-        otoken, _ = await client.get_access_token(
-            code, oauth_url_args[provider]["redirect_uri"]
-        )
-        client.access_token = otoken
-        _, data = await client.user_info()
-    except OAuthError:
-        raise Abort("auth", "invalid-token")
-
-    return data
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:

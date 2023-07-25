@@ -4,7 +4,6 @@ from sqlalchemy import select
 from . import requests
 from app import utils
 import asyncio
-import config
 
 
 async def make_request(semaphore, page):
@@ -15,8 +14,6 @@ async def make_request(semaphore, page):
 
 # ToDo: optimize it
 async def save_anime_franchises_list(data):
-    sessionmanager.init(config.database)
-
     async with sessionmanager.session() as session:
         content_ids = [entry["content_id"] for entry in data]
 

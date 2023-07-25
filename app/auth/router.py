@@ -6,6 +6,7 @@ from app.models import User
 from app import constants
 from typing import Tuple
 from . import service
+from . import oauth
 
 
 from .dependencies import (
@@ -153,7 +154,7 @@ async def username(
     summary="Get a provider OAuth url",
 )
 async def provider_url(provider: str = Depends(validate_provider)):
-    return await service.get_provider_url(provider)
+    return await oauth.get_url(provider)
 
 
 @router.post(
@@ -166,7 +167,7 @@ async def oauth(
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
 ):
-    data = await service.get_oauth_info(provider, args.code)
+    data = await oauth.get_info(provider, args.code)
     user = await service.get_user_by_oauth(session, data)
 
     return await service.create_auth_token(session, user)

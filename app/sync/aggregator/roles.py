@@ -3,12 +3,9 @@ from app.models import AnimeStaffRole
 from sqlalchemy import select
 from . import requests
 from app import utils
-import config
 
 
 async def aggregator_anime_roles():
-    sessionmanager.init(config.database)
-
     async with sessionmanager.session() as session:
         data = await requests.get_anime_roles()
         create_roles = []

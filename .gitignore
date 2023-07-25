@@ -3,6 +3,7 @@ __pycache__/
 venv/*
 config.py
 alembic.ini
+settings.toml
 
 # misc
 .DS_STORE

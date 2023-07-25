@@ -1,17 +1,18 @@
-from app.service import get_user_by_username
 from app.database import sessionmanager
-from app.models import Base, User
-from sqlalchemy import select
-from datetime import datetime
+from app.settings import get_settings
+from app.models import Base
 import asyncio
-import config
 
 
 async def create_db_and_tables():
-    sessionmanager.init(config.database)
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoin)
 
     async with sessionmanager.connect() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    await sessionmanager.close()
 
 
 asyncio.run(create_db_and_tables())

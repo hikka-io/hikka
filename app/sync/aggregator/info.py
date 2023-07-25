@@ -1,12 +1,9 @@
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import select, desc
-from datetime import datetime
-from app import constants
 from . import requests
 from app import utils
 import asyncio
-import config
 
 from app.models import (
     AnimeRecommendation,
@@ -21,7 +18,6 @@ from app.models import (
     Company,
     Person,
     Anime,
-    Image,
 )
 
 
@@ -366,8 +362,6 @@ async def process_staff(session, anime, data):
 
 async def update_anime_info(semaphore, content_id):
     async with semaphore:
-        sessionmanager.init(config.database)
-
         async with sessionmanager.session() as session:
             anime = await session.scalar(
                 select(Anime)
@@ -460,7 +454,6 @@ async def update_anime_info(semaphore, content_id):
 
 
 async def aggregator_anime_info():
-    sessionmanager.init(config.database)
     anime_list = []
 
     async with sessionmanager.session() as session:

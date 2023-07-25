@@ -1,4 +1,6 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.database import sessionmanager
+from app.settings import get_settings
 import asyncio
 
 

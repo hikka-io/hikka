@@ -3,17 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from .database import sessionmanager
 import fastapi.openapi.utils as fu
+from .settings import get_settings
 from fastapi import FastAPI
 from . import errors
-import config
 
 
 def create_app(init_db: bool = True) -> FastAPI:
+    settings = get_settings()
     lifespan = None
 
     # SQLAlchemy initialization process
     if init_db:
-        sessionmanager.init(config.database)
+        sessionmanager.init(settings.database.endpoint)
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
@@ -45,7 +46,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=config.origins,
+        allow_origins=settings.backend.origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

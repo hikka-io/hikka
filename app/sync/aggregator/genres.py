@@ -3,7 +3,6 @@ from app.models import AnimeGenre
 from sqlalchemy import select
 from . import requests
 from app import utils
-import config
 
 TRANSLATIONS = {
     "action": "Бойовик",
@@ -86,8 +85,6 @@ TRANSLATIONS = {
 
 
 async def aggregator_anime_genres():
-    sessionmanager.init(config.database)
-
     async with sessionmanager.session() as session:
         data = await requests.get_anime_genres()
         create_genres = []

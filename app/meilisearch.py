@@ -1,9 +1,9 @@
 from meilisearch_python_async.errors import MeilisearchError
 from meilisearch_python_async import Client
+from app.settings import get_settings
 from app.utils import pagination_dict
 from app.errors import Abort
 from app import constants
-import config
 
 
 async def search(
@@ -14,8 +14,10 @@ async def search(
     filter=None,
     hits_per_page=constants.SEARCH_RESULT_LIMIT,
 ):
+    settings = get_settings()
+
     try:
-        async with Client(**config.meilisearch) as client:
+        async with Client(**settings.meilisearch) as client:
             index = client.index(content_index)
 
             result = await index.search(

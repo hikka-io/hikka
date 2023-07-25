@@ -2,11 +2,11 @@ from meilisearch_python_async.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_async import Client
 from app.database import sessionmanager
+from app.settings import get_settings
 from sqlalchemy import select, func
 from app.utils import pagination
 from app.models import Person
 from app import constants
-import config
 import math
 
 
@@ -60,7 +60,9 @@ async def people_documents_total(session: AsyncSession):
 async def meilisearch_populate(session: AsyncSession):
     print("Meilisearch: Populating people")
 
-    async with Client(**config.meilisearch) as client:
+    settings = get_settings()
+
+    async with Client(**settings.meilisearch) as client:
         index = client.index(constants.SEARCH_INDEX_PEOPLE)
 
         await update_people_settings(index)
@@ -79,7 +81,5 @@ async def meilisearch_populate(session: AsyncSession):
 
 
 async def update_search_people():
-    sessionmanager.init(config.database)
-
     async with sessionmanager.session() as session:
         await meilisearch_populate(session)
