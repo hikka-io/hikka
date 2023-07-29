@@ -6,4 +6,6 @@ from dynaconf import Dynaconf
 def get_settings():
     return Dynaconf(
         settings_files=["settings.toml"],
+        default_env="default",
+        environments=True,
     )

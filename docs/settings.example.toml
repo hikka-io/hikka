@@ -1,22 +1,28 @@
-[oauth.google]
-client_id = "xxx.apps.googleusercontent.com"
-secret = "secret"
+[default]
+    [default.oauth.google]
+    client_id = "xxx.apps.googleusercontent.com"
+    secret = "secret"
 
-[database]
-endpoint = "postgresql+asyncpg://user:password@localhost:5432/database"
+    [default.database]
+    endpoint = "postgresql+asyncpg://user:password@localhost:5432/database"
 
-[mailgun]
-endpoint = "https://api.eu.mailgun.net/v3/mail.hikka.io/messages"
-token = "token"
+    [default.mailgun]
+    endpoint = "https://api.eu.mailgun.net/v3/mail.hikka.io/messages"
+    token = "token"
 
-[meilisearch]
-url = "http://127.0.0.1:8800"
-api_key = "xyz"
+    [default.meilisearch]
+    url = "http://127.0.0.1:8800"
+    api_key = "xyz"
 
-[backend]
-origins = [
-    "http://localhost:8000",
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "https://hikka.io",
-]
+    [default.backend]
+    origins = [
+        "http://localhost:8000",
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "https://hikka.io",
+    ]
+
+
+[testing]
+    [testing.database]
+    endpoint = "sqlite+aiosqlite://"

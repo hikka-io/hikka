@@ -8,6 +8,14 @@ from datetime import datetime
 from app.models import Anime
 import asyncio
 
+from app.settings import get_settings
+
+
+async def test_check():
+    settings = get_settings()
+    # settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
+    print(settings.database)
+
 
 async def test():
     settings = get_settings()
@@ -26,4 +34,5 @@ async def test():
 
 
 if __name__ == "__main__":
-    asyncio.run(test())
+    asyncio.run(test_check())
+    # asyncio.run(test())
