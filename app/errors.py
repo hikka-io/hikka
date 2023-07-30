@@ -92,10 +92,12 @@ class Abort(Exception):
         self.message = message
 
 
+def build_error_code(scope: str, message: str):
+    return scope.replace("-", "_") + "_" + message.replace("-", "_")
+
+
 async def abort_handler(request: Request, exc: Abort):
-    error_code = (
-        exc.scope.replace("-", "_") + "_" + exc.message.replace("-", "_")
-    )
+    error_code = build_error_code(exc.scope, exc.message.replace)
 
     try:
         error_message = errors[exc.scope][exc.message][0]

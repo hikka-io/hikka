@@ -1,3 +1,6 @@
+# Based on https://praciano.com.br/fastapi-and-async-sqlalchemy-20-with-pytest-done-right.html
+# https://github.com/gpkc/fastapi-sqlalchemy-pytest
+
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
 from async_asgi_testclient import TestClient
