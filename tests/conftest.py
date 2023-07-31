@@ -72,3 +72,9 @@ async def session_override(app, connection_test):
             yield session
 
     app.dependency_overrides[get_session] = get_session_override
+
+
+@pytest.fixture
+async def test_session():
+    async with sessionmanager.session() as session:
+        yield session

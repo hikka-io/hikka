@@ -97,7 +97,7 @@ def build_error_code(scope: str, message: str):
 
 
 async def abort_handler(request: Request, exc: Abort):
-    error_code = build_error_code(exc.scope, exc.message.replace)
+    error_code = build_error_code(exc.scope, exc.message)
 
     try:
         error_message = errors[exc.scope][exc.message][0]
