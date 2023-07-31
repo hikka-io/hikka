@@ -158,6 +158,7 @@ async def set_username(session: AsyncSession, user: User, username: str):
 
 async def activate_user(session: AsyncSession, user: User) -> User:
     # Activate user and delete token
+    user.activation_expire = None
     user.activation_token = None
     user.activated = True
 

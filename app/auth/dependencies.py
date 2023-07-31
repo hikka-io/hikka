@@ -83,6 +83,10 @@ async def validate_activation(
     if not (user := await get_user_by_activation(session, args.token)):
         raise Abort("auth", "activation-invalid")
 
+    # Let's have it here just in case
+    if not user.activation_expire:
+        raise Abort("auth", "activation-expired")
+
     # Check if activation token still valid
     if user.activation_expire < datetime.utcnow():
         raise Abort("auth", "activation-expired")
@@ -126,6 +130,10 @@ async def validate_password_confirm(
     # Get user by reset token
     if not (user := await get_user_by_reset(session, confirm.token)):
         raise Abort("auth", "reset-invalid")
+
+    # Just in case
+    if not user.password_reset_expire:
+        raise Abort("auth", "reset-expired")
 
     # Make sure reset token is valid
     if datetime.utcnow() > user.password_reset_expire:
