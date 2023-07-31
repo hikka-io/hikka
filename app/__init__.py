@@ -80,4 +80,8 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(list_router)
 
+    @app.get("/ping")
+    async def ping_pong():
+        return "pong"
+
     return app

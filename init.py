@@ -7,7 +7,7 @@ import asyncio
 async def create_db_and_tables():
     settings = get_settings()
 
-    sessionmanager.init(settings.database.endpoin)
+    sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.connect() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -15,4 +15,5 @@ async def create_db_and_tables():
     await sessionmanager.close()
 
 
-asyncio.run(create_db_and_tables())
+if __name__ == "__main__":
+    asyncio.run(create_db_and_tables())
