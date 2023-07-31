@@ -1,9 +1,10 @@
-from app.models import User, EmailMessage, AuthToken
+from app.models import User, EmailMessage, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
+from sqlalchemy import and_, select
 from .schemas import SignupArgs
-from sqlalchemy import select
 from app.errors import Abort
 from typing import Union
 
@@ -18,6 +19,21 @@ async def get_user_by_email(
     session: AsyncSession, email: str
 ) -> Union[User, None]:
     return await session.scalar(select(User).filter_by(email=email))
+
+
+async def get_user_by_oauth_id(
+    session: AsyncSession, oauth_id: str, provider: str
+) -> Union[User, None]:
+    return await session.scalar(
+        select(UserOAuth)
+        .filter_by(
+            **{
+                "provider": provider,
+                "oauth_id": oauth_id,
+            }
+        )
+        .options(selectinload(UserOAuth.user))
+    ).user
 
 
 async def get_user_by_username(
@@ -35,24 +51,59 @@ async def get_user_by_reset(
 
 
 async def get_user_by_oauth(
-    session: AsyncSession, user_data: dict[str, str]
+    session: AsyncSession, provider: str, user_data: dict[str, str]
 ) -> User:
-    if not (user := await get_user_by_email(session, user_data["email"])):
+    if not (
+        user := await get_user_by_oauth_id(session, provider, user_data["id"])
+    ):
+        # New account trying to use an already registered email
+        if user := await get_user_by_email(session, user_data["email"]):
+            raise Abort("auth", "email-exists")
+
         now = datetime.utcnow()
+        email = None if "email" not in user_data else user_data["email"]
 
         user = User(
             **{
                 "username": None,
                 "password_hash": None,
-                "email": user_data["email"],
+                "email": email,
                 "last_active": now,
                 "created": now,
                 "login": now,
             }
         )
 
+        oauth = UserOAuth(
+            **{
+                "user": user,
+                "provider": provider,
+                "oauth_id": user_data["id"],
+                "last_used": now,
+                "created": now,
+            }
+        )
+
         session.add(user)
+        session.add(oauth)
         await session.commit()
+
+        return user
+
+    oauth = await session.scalar(
+        select(UserOAuth).filter(
+            and_(
+                UserOAuth.oauth_id == user_data["id"],
+                UserOAuth.provider == provider,
+            )
+        )
+    )
+
+    now = datetime.utcnow()
+    oauth.last_used = now
+
+    session.add(oauth)
+    await session.commit()
 
     return user
 

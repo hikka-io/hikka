@@ -10,7 +10,7 @@ class User(Base):
     __tablename__ = "service_users"
 
     username: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
-    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), index=True, nullable=True)
     description: Mapped[str] = mapped_column(String(140), nullable=True)
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
     activated: Mapped[bool] = mapped_column(default=False)
@@ -51,5 +51,10 @@ class User(Base):
 
     watch: Mapped[list["AnimeWatch"]] = relationship(
         foreign_keys="[AnimeWatch.user_id]",
+        back_populates="user",
+    )
+
+    oauth_providers: Mapped[list["UserOauth"]] = relationship(
+        foreign_keys="[UserOauth.user_id]",
         back_populates="user",
     )

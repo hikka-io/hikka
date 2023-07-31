@@ -162,12 +162,12 @@ async def provider_url(provider: str = Depends(validate_provider)):
     response_model=TokenResponse,
     summary="Get auth token using OAuth",
 )
-async def oauth(
+async def oauth_token(
     args: CodeArgs,
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
 ):
     data = await oauth.get_info(provider, args.code)
-    user = await service.get_user_by_oauth(session, data)
+    user = await service.get_user_by_oauth(session, provider, data)
 
     return await service.create_auth_token(session, user)
