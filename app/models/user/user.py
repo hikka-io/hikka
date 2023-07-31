@@ -54,7 +54,7 @@ class User(Base):
         back_populates="user",
     )
 
-    oauth_providers: Mapped[list["UserOauth"]] = relationship(
-        foreign_keys="[UserOauth.user_id]",
+    oauth_providers: Mapped[list["UserOAuth"]] = relationship(
+        foreign_keys="[UserOAuth.user_id]",
         back_populates="user",
     )

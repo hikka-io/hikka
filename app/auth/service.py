@@ -21,7 +21,7 @@ async def get_user_by_email(
     return await session.scalar(select(User).filter_by(email=email))
 
 
-async def get_user_by_oauth_id(
+async def get_oauth_by_id(
     session: AsyncSession, oauth_id: str, provider: str
 ) -> Union[User, None]:
     return await session.scalar(
@@ -33,7 +33,7 @@ async def get_user_by_oauth_id(
             }
         )
         .options(selectinload(UserOAuth.user))
-    ).user
+    )
 
 
 async def get_user_by_username(
@@ -53,9 +53,7 @@ async def get_user_by_reset(
 async def get_user_by_oauth(
     session: AsyncSession, provider: str, user_data: dict[str, str]
 ) -> User:
-    if not (
-        user := await get_user_by_oauth_id(session, provider, user_data["id"])
-    ):
+    if not (oauth := await get_oauth_by_id(session, user_data["id"], provider)):
         # New account trying to use an already registered email
         if user := await get_user_by_email(session, user_data["email"]):
             raise Abort("auth", "email-exists")
@@ -90,22 +88,13 @@ async def get_user_by_oauth(
 
         return user
 
-    oauth = await session.scalar(
-        select(UserOAuth).filter(
-            and_(
-                UserOAuth.oauth_id == user_data["id"],
-                UserOAuth.provider == provider,
-            )
-        )
-    )
-
     now = datetime.utcnow()
     oauth.last_used = now
 
     session.add(oauth)
     await session.commit()
 
-    return user
+    return oauth.user
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
