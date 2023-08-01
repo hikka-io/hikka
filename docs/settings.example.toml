@@ -22,7 +22,6 @@
         "https://hikka.io",
     ]
 
-
 [testing]
     [testing.database]
-    endpoint = "sqlite+aiosqlite://"
+    endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
