@@ -41,6 +41,7 @@ async def get_anime(
 # Check user auth token
 def auth_required(
     username_required: bool = True,
+    email_required: bool = True,
 ):
     async def auth(
         auth: str = Header(),
@@ -57,6 +58,9 @@ def auth_required(
 
         if not token.user.username and username_required:
             raise Abort("auth", "username-required")
+
+        if not token.user.email and email_required:
+            raise Abort("auth", "email-required")
 
         now = datetime.utcnow()
 

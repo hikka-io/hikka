@@ -25,6 +25,7 @@ from .schemas import (
     UserResponse,
     UsernameArgs,
     SignupArgs,
+    EmailArgs,
     CodeArgs,
 )
 
@@ -142,10 +143,27 @@ async def password_reset(
 )
 async def username(
     args: UsernameArgs,
-    user: User = Depends(auth_required(username_required=False)),
+    user: User = Depends(
+        auth_required(username_required=False, email_required=False)
+    ),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.set_username(session, user, args.username)
+
+
+@router.put(
+    "/email",
+    response_model=UserResponse,
+    summary="Set a email",
+)
+async def email(
+    args: EmailArgs,
+    user: User = Depends(
+        auth_required(username_required=False, email_required=False)
+    ),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.set_email(session, user, args.email)
 
 
 @router.get(

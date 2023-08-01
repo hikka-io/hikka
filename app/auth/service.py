@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
-from sqlalchemy import and_, select
 from .schemas import SignupArgs
+from sqlalchemy import select
 from app.errors import Abort
 from typing import Union
 
@@ -23,7 +23,7 @@ async def get_user_by_email(
 
 async def get_oauth_by_id(
     session: AsyncSession, oauth_id: str, provider: str
-) -> Union[User, None]:
+) -> Union[UserOAuth, None]:
     return await session.scalar(
         select(UserOAuth)
         .filter_by(
@@ -54,12 +54,13 @@ async def get_user_by_oauth(
     session: AsyncSession, provider: str, user_data: dict[str, str]
 ) -> User:
     if not (oauth := await get_oauth_by_id(session, user_data["id"], provider)):
+        email = user_data.get("email")
+
         # New account trying to use an already registered email
-        if user := await get_user_by_email(session, user_data["email"]):
+        if email and (user := await get_user_by_email(session, email)):
             raise Abort("auth", "email-exists")
 
         now = datetime.utcnow()
-        email = None if "email" not in user_data else user_data["email"]
 
         user = User(
             **{
@@ -190,6 +191,21 @@ async def set_username(session: AsyncSession, user: User, username: str):
         raise Abort("auth", "username-taken")
 
     user.username = username
+    session.add(user)
+    await session.commit()
+
+    return user
+
+
+# WIP: Need to send an activation email
+async def set_email(session: AsyncSession, user: User, email: str):
+    if user.email:
+        raise Abort("auth", "email-set")
+
+    if await get_user_by_email(session, email):
+        raise Abort("auth", "email-exists")
+
+    user.email = email
     session.add(user)
     await session.commit()
 
