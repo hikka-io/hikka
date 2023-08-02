@@ -50,52 +50,47 @@ async def get_user_by_reset(
     )
 
 
-async def get_user_by_oauth(
+async def create_oauth_user(
     session: AsyncSession, provider: str, user_data: dict[str, str]
-) -> User:
-    if not (oauth := await get_oauth_by_id(session, user_data["id"], provider)):
-        email = user_data.get("email")
+) -> UserOAuth:
+    email = user_data.get("email")
+    now = datetime.utcnow()
 
-        # New account trying to use an already registered email
-        if email and (user := await get_user_by_email(session, email)):
-            raise Abort("auth", "email-exists")
+    user = User(
+        **{
+            "username": None,
+            "password_hash": None,
+            "email": email,
+            "last_active": now,
+            "created": now,
+            "login": now,
+            "activated": email is not None,
+        }
+    )
 
-        now = datetime.utcnow()
+    oauth = UserOAuth(
+        **{
+            "user": user,
+            "provider": provider,
+            "oauth_id": user_data["id"],
+            "last_used": now,
+            "created": now,
+        }
+    )
 
-        user = User(
-            **{
-                "username": None,
-                "password_hash": None,
-                "email": email,
-                "last_active": now,
-                "created": now,
-                "login": now,
-            }
-        )
+    session.add(user)
+    session.add(oauth)
+    await session.commit()
 
-        oauth = UserOAuth(
-            **{
-                "user": user,
-                "provider": provider,
-                "oauth_id": user_data["id"],
-                "last_used": now,
-                "created": now,
-            }
-        )
+    return oauth
 
-        session.add(user)
-        session.add(oauth)
-        await session.commit()
 
-        return user
-
+async def update_oauth_timestamp(session: AsyncSession, oauth: UserOAuth):
     now = datetime.utcnow()
     oauth.last_used = now
 
     session.add(oauth)
     await session.commit()
-
-    return oauth.user
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
@@ -184,12 +179,6 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
 
 
 async def set_username(session: AsyncSession, user: User, username: str):
-    if user.username:
-        raise Abort("auth", "username-set")
-
-    if await get_user_by_username(session, username):
-        raise Abort("auth", "username-taken")
-
     user.username = username
     session.add(user)
     await session.commit()
@@ -199,12 +188,6 @@ async def set_username(session: AsyncSession, user: User, username: str):
 
 # WIP: Need to send an activation email
 async def set_email(session: AsyncSession, user: User, email: str):
-    if user.email:
-        raise Abort("auth", "email-set")
-
-    if await get_user_by_email(session, email):
-        raise Abort("auth", "email-exists")
-
     user.email = email
     session.add(user)
     await session.commit()
