@@ -12,6 +12,7 @@ from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
 from app import create_app
+import test_helpers
 import asyncio
 import pytest
 
@@ -90,22 +91,12 @@ async def test_session():
 
 @pytest.fixture
 async def create_test_user(test_session):
-    now = datetime.utcnow()
+    await test_helpers.create_user(test_session)
 
-    user = User(
-        **{
-            "password_hash": hashpwd("password"),
-            "email": "user@mail.com",
-            "username": "username",
-            "last_active": now,
-            "activated": True,
-            "created": now,
-            "login": now,
-        }
-    )
 
-    test_session.add(user)
-    await test_session.commit()
+@pytest.fixture
+async def create_test_user_not_activated(test_session):
+    await test_helpers.create_user(test_session, False)
 
 
 @pytest.fixture
