@@ -10,6 +10,7 @@ from app.settings import get_settings
 from app.auth.utils import hashpwd
 from contextlib import ExitStack
 from sqlalchemy import make_url
+from sqlalchemy import select
 from app import create_app
 import asyncio
 import pytest
@@ -103,6 +104,18 @@ async def create_test_user(test_session):
         }
     )
 
+    test_session.add(user)
+    await test_session.commit()
+
+
+@pytest.fixture
+async def get_test_token(test_session):
+    now = datetime.utcnow()
+
+    user = await test_session.scalar(
+        select(User).filter(User.email == "user@mail.com")
+    )
+
     token = AuthToken(
         **{
             "expiration": now + timedelta(minutes=30),
@@ -112,7 +125,7 @@ async def create_test_user(test_session):
         }
     )
 
-    test_session.add_all([user, token])
+    test_session.add(token)
     await test_session.commit()
 
     return token.secret

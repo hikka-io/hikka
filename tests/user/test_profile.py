@@ -20,8 +20,8 @@ async def test_bad_profile(client):
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
-async def test_me(client, create_test_user):
+async def test_me(client, create_test_user, get_test_token):
     # Get own profile
-    response = await request_me(client, create_test_user)
+    response = await request_me(client, get_test_token)
     assert response.json()["username"] == "username"
     assert response.status_code == status.HTTP_200_OK
