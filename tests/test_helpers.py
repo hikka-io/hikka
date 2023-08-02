@@ -1,5 +1,5 @@
-from app.auth.utils import hashpwd
-from datetime import datetime
+from app.auth.utils import hashpwd, new_token
+from datetime import datetime, timedelta
 from app.models import User
 
 
@@ -8,9 +8,11 @@ async def create_user(test_session, activated=True):
 
     user = User(
         **{
-            "activated": activated,
+            "activation_expire": datetime.utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
+            "activation_token": new_token(),
             "email": "user@mail.com",
+            "activated": activated,
             "username": "username",
             "last_active": now,
             "created": now,
