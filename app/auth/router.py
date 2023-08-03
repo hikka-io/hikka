@@ -162,7 +162,18 @@ async def email(
     user: User = Depends(auth_required(oauth_skip=True)),
     session: AsyncSession = Depends(get_session),
 ):
-    return await service.set_email(session, user, args.email)
+    user = await service.set_email(session, user, args.email)
+    user = await service.create_activation_token(session, user)
+
+    # Add new activation email to database
+    await service.create_email(
+        session,
+        constants.EMAIL_ACTIVATION,
+        user.activation_token,
+        user,
+    )
+
+    return user
 
 
 @router.get(
