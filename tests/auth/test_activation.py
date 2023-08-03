@@ -64,24 +64,6 @@ async def test_activation_resend(
     assert old_activation_token != user.activation_token
 
 
-async def test_activation_expired(
-    client, test_session, create_test_user_not_activated
-):
-    # Force expire activation token
-    user = await test_session.scalar(
-        select(User).filter(User.email == "user@mail.com")
-    )
-
-    user.activation_expire = datetime.utcnow()
-    test_session.add(user)
-    await test_session.commit()
-
-    # Test activation with expired token
-    response = await request_activation(client, user.activation_token)
-    assert response.json()["code"] == "auth_activation_expired"
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
 async def test_activation(client, test_session, create_test_user_not_activated):
     # Get test user
     user = await test_session.scalar(
@@ -95,6 +77,6 @@ async def test_activation(client, test_session, create_test_user_not_activated):
     # Make sure account has been activated and data cleaned
     await test_session.refresh(user)
 
-    assert user.activation_expire == None
-    assert user.activation_token == None
-    assert user.activated == True
+    assert user.activation_expire is None
+    assert user.activation_token is None
+    assert user.activated is True

@@ -17,7 +17,7 @@ async def test_signup(client, test_session):
         select(User).filter(User.email == "user@mail.com")
     )
 
-    assert user != None
+    assert user is not None
 
 
 async def test_signup_duplicate_email(client, create_test_user):
