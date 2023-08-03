@@ -6,32 +6,39 @@ from fastapi import status
 from client_requests import (
     request_password_confirm,
     request_password_reset,
-    request_signup,
 )
 
 
-async def test_password_reset(client, test_session):
-    # Create new account
-    response = await request_signup(
-        client, "user@mail.com", "username", "password"
-    )
-
-    assert response.status_code == status.HTTP_200_OK
-
+async def test_password_reset_not_activated(
+    client, test_session, create_test_user_not_activated
+):
     # Request password reset for not activated account
     response = await request_password_reset(client, "user@mail.com")
     assert response.json()["code"] == "auth_not_activated"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    # Get account and activate it
+
+async def test_password_reset(client, test_session, create_test_user):
+    # Get user
     user = await test_session.scalar(
         select(User).filter(User.email == "user@mail.com")
     )
 
-    user.activated = True
-    test_session.add(user)
-    await test_session.commit()
+    assert user.password_reset_expire == None
+    assert user.password_reset_token == None
 
+    # Request password reset
+    response = await request_password_reset(client, "user@mail.com")
+    assert response.status_code == status.HTTP_200_OK
+
+    # Make sure reset token has been set
+    await test_session.refresh(user)
+    assert user.password_reset_token != None
+
+
+async def test_password_reset_rate_limit(
+    client, test_session, create_test_user
+):
     # Request password reset
     response = await request_password_reset(client, "user@mail.com")
     assert response.status_code == status.HTTP_200_OK
@@ -41,11 +48,16 @@ async def test_password_reset(client, test_session):
     assert response.json()["code"] == "auth_reset_valid"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    # Force expire password reset token
-    await test_session.refresh(user)
 
-    expired_password_reset_token = user.password_reset_token
-    assert expired_password_reset_token != None
+async def test_password_reset_expired(client, test_session, create_test_user):
+    # Request password reset
+    response = await request_password_reset(client, "user@mail.com")
+    assert response.status_code == status.HTTP_200_OK
+
+    # Get user
+    user = await test_session.scalar(
+        select(User).filter(User.email == "user@mail.com")
+    )
 
     user.password_reset_expire = datetime.utcnow()
     test_session.add(user)
@@ -53,24 +65,26 @@ async def test_password_reset(client, test_session):
 
     # Reset password with expired token
     response = await request_password_confirm(
-        client, expired_password_reset_token, "new_password"
+        client, user.password_reset_token, "new_password"
     )
 
     assert response.json()["code"] == "auth_reset_expired"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+
+async def test_password_reset(client, test_session, create_test_user):
     # Request password reset
     response = await request_password_reset(client, "user@mail.com")
     assert response.status_code == status.HTTP_200_OK
 
-    # Refresh db user to obtain reset token
-    await test_session.refresh(user)
-
-    new_password_reset_token = user.password_reset_token
+    # Get user
+    user = await test_session.scalar(
+        select(User).filter(User.email == "user@mail.com")
+    )
 
     # Reset password
     response = await request_password_confirm(
-        client, new_password_reset_token, "new_password"
+        client, user.password_reset_token, "new_password"
     )
 
     assert response.status_code == status.HTTP_200_OK

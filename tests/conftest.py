@@ -4,14 +4,23 @@
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
 from async_asgi_testclient import TestClient
+from datetime import datetime, timedelta
 from pytest_postgresql import factories
 from app.settings import get_settings
+from app.auth.utils import hashpwd
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from app.models import Base
+from sqlalchemy import select
 from app import create_app
+import test_helpers
 import asyncio
 import pytest
+
+from app.models import (
+    AuthToken,
+    User,
+    Base,
+)
 
 # This is needed to obtain PostgreSQL version
 test_db = factories.postgresql_proc()
@@ -78,3 +87,36 @@ async def session_override(app, connection_test):
 async def test_session():
     async with sessionmanager.session() as session:
         yield session
+
+
+@pytest.fixture
+async def create_test_user(test_session):
+    await test_helpers.create_user(test_session)
+
+
+@pytest.fixture
+async def create_test_user_not_activated(test_session):
+    await test_helpers.create_user(test_session, False)
+
+
+@pytest.fixture
+async def get_test_token(test_session):
+    now = datetime.utcnow()
+
+    user = await test_session.scalar(
+        select(User).filter(User.email == "user@mail.com")
+    )
+
+    token = AuthToken(
+        **{
+            "expiration": now + timedelta(minutes=30),
+            "secret": "SECRET_TOKEN",
+            "created": now,
+            "user": user,
+        }
+    )
+
+    test_session.add(token)
+    await test_session.commit()
+
+    return token.secret

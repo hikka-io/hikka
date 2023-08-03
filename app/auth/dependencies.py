@@ -75,7 +75,7 @@ async def validate_signup(
         raise Abort("auth", "username-taken")
 
     # Check if email has been used
-    if await get_user_by_email(session, signup.username):
+    if await get_user_by_email(session, signup.email):
         raise Abort("auth", "email-exists")
 
     # if signup.email not in test_emails:
