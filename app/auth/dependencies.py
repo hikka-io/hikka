@@ -121,9 +121,7 @@ async def get_user_oauth(
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
 ) -> Union[UserOAuth, None]:
-    oauth = await get_oauth_by_id(session, data["id"], provider)
-
-    if not oauth:
+    if not (oauth := await get_oauth_by_id(session, data["id"], provider)):
         email = data.get("email")
 
         if email and (await get_user_by_email(session, email)):
