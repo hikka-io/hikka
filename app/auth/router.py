@@ -1,10 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
+from app.models import User, UserOAuth
 from app.database import get_session
-from app.models import User
+from typing import Tuple, Union
 from app import constants
-from typing import Tuple
 from . import service
 from . import oauth
 
@@ -13,10 +13,14 @@ from .dependencies import (
     validate_activation_resend,
     validate_password_confirm,
     validate_password_reset,
+    validate_set_username,
     validate_activation,
+    validate_set_email,
     validate_provider,
     validate_signup,
+    get_user_oauth,
     validate_login,
+    get_oauth_info,
 )
 
 from .schemas import (
@@ -25,7 +29,7 @@ from .schemas import (
     UserResponse,
     UsernameArgs,
     SignupArgs,
-    CodeArgs,
+    EmailArgs,
 )
 
 
@@ -141,11 +145,35 @@ async def password_reset(
     summary="Set a username",
 )
 async def username(
-    args: UsernameArgs,
-    user: User = Depends(auth_required(username_required=False)),
+    args: UsernameArgs = Depends(validate_set_username),
+    user: User = Depends(auth_required(oauth_skip=True)),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.set_username(session, user, args.username)
+
+
+@router.put(
+    "/email",
+    response_model=UserResponse,
+    summary="Set a email",
+)
+async def email(
+    args: EmailArgs = Depends(validate_set_email),
+    user: User = Depends(auth_required(oauth_skip=True)),
+    session: AsyncSession = Depends(get_session),
+):
+    user = await service.set_email(session, user, args.email)
+    user = await service.create_activation_token(session, user)
+
+    # Add new activation email to database
+    await service.create_email(
+        session,
+        constants.EMAIL_ACTIVATION,
+        user.activation_token,
+        user,
+    )
+
+    return user
 
 
 @router.get(
@@ -162,12 +190,15 @@ async def provider_url(provider: str = Depends(validate_provider)):
     response_model=TokenResponse,
     summary="Get auth token using OAuth",
 )
-async def oauth(
-    args: CodeArgs,
-    provider: str = Depends(validate_provider),
+async def oauth_token(
+    oauth: Union[UserOAuth, None] = Depends(get_user_oauth),
+    data: dict[str, str] = Depends(get_oauth_info),
     session: AsyncSession = Depends(get_session),
+    provider: str = Depends(validate_provider),
 ):
-    data = await oauth.get_info(provider, args.code)
-    user = await service.get_user_by_oauth(session, data)
+    if not oauth:
+        oauth = await service.create_oauth_user(session, provider, data)
 
-    return await service.create_auth_token(session, user)
+    await service.update_oauth_timestamp(session, oauth)
+
+    return await service.create_auth_token(session, oauth.user)

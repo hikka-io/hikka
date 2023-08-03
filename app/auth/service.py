@@ -1,6 +1,7 @@
-from app.models import User, EmailMessage, AuthToken
+from app.models import User, EmailMessage, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
@@ -20,6 +21,21 @@ async def get_user_by_email(
     return await session.scalar(select(User).filter_by(email=email))
 
 
+async def get_oauth_by_id(
+    session: AsyncSession, oauth_id: str, provider: str
+) -> Union[UserOAuth, None]:
+    return await session.scalar(
+        select(UserOAuth)
+        .filter_by(
+            **{
+                "provider": provider,
+                "oauth_id": oauth_id,
+            }
+        )
+        .options(selectinload(UserOAuth.user))
+    )
+
+
 async def get_user_by_username(
     session: AsyncSession, username: str
 ) -> Union[User, None]:
@@ -34,27 +50,47 @@ async def get_user_by_reset(
     )
 
 
-async def get_user_by_oauth(
-    session: AsyncSession, user_data: dict[str, str]
-) -> User:
-    if not (user := await get_user_by_email(session, user_data["email"])):
-        now = datetime.utcnow()
+async def create_oauth_user(
+    session: AsyncSession, provider: str, user_data: dict[str, str]
+) -> UserOAuth:
+    email = user_data.get("email")
+    now = datetime.utcnow()
 
-        user = User(
-            **{
-                "username": None,
-                "password_hash": None,
-                "email": user_data["email"],
-                "last_active": now,
-                "created": now,
-                "login": now,
-            }
-        )
+    user = User(
+        **{
+            "username": None,
+            "password_hash": None,
+            "email": email,
+            "last_active": now,
+            "created": now,
+            "login": now,
+            "activated": email is not None,
+        }
+    )
 
-        session.add(user)
-        await session.commit()
+    oauth = UserOAuth(
+        **{
+            "user": user,
+            "provider": provider,
+            "oauth_id": user_data["id"],
+            "last_used": now,
+            "created": now,
+        }
+    )
 
-    return user
+    session.add(user)
+    session.add(oauth)
+    await session.commit()
+
+    return oauth
+
+
+async def update_oauth_timestamp(session: AsyncSession, oauth: UserOAuth):
+    now = datetime.utcnow()
+    oauth.last_used = now
+
+    session.add(oauth)
+    await session.commit()
 
 
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
@@ -143,13 +179,16 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
 
 
 async def set_username(session: AsyncSession, user: User, username: str):
-    if user.username:
-        raise Abort("auth", "username-set")
-
-    if await get_user_by_username(session, username):
-        raise Abort("auth", "username-taken")
-
     user.username = username
+    session.add(user)
+    await session.commit()
+
+    return user
+
+
+# WIP: Need to send an activation email
+async def set_email(session: AsyncSession, user: User, email: str):
+    user.email = email
     session.add(user)
     await session.commit()
 
