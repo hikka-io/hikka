@@ -121,19 +121,15 @@ async def get_user_oauth(
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
 ) -> Union[UserOAuth, None]:
-    return await get_oauth_by_id(session, data["id"], provider)
+    oauth = await get_oauth_by_id(session, data["id"], provider)
 
-
-async def check_oauth_unique_email(
-    oauth: Union[UserOAuth, None] = Depends(get_user_oauth),
-    data: dict[str, str] = Depends(get_oauth_info),
-    session: AsyncSession = Depends(get_session),
-):
     if not oauth:
         email = data.get("email")
 
         if email and (await get_user_by_email(session, email)):
             raise Abort("auth", "email-exists")
+
+    return oauth
 
 
 async def validate_activation(

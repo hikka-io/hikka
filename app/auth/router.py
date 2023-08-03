@@ -12,7 +12,6 @@ from . import oauth
 from .dependencies import (
     validate_activation_resend,
     validate_password_confirm,
-    check_oauth_unique_email,
     validate_password_reset,
     validate_set_username,
     validate_activation,
@@ -185,7 +184,6 @@ async def oauth_token(
     data: dict[str, str] = Depends(get_oauth_info),
     session: AsyncSession = Depends(get_session),
     provider: str = Depends(validate_provider),
-    _=Depends(check_oauth_unique_email),
 ):
     if not oauth:
         oauth = await service.create_oauth_user(session, provider, data)
