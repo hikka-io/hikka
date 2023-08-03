@@ -24,8 +24,8 @@ async def test_password_reset(client, test_session, create_test_user):
         select(User).filter(User.email == "user@mail.com")
     )
 
-    assert user.password_reset_expire == None
-    assert user.password_reset_token == None
+    assert user.password_reset_expire is None
+    assert user.password_reset_token is None
 
     # Request password reset
     response = await request_password_reset(client, "user@mail.com")
@@ -33,7 +33,7 @@ async def test_password_reset(client, test_session, create_test_user):
 
     # Make sure reset token has been set
     await test_session.refresh(user)
-    assert user.password_reset_token != None
+    assert user.password_reset_token is not None
 
 
 async def test_password_reset_rate_limit(
@@ -72,7 +72,7 @@ async def test_password_reset_expired(client, test_session, create_test_user):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-async def test_password_reset(client, test_session, create_test_user):
+async def test_password_reset_confirm(client, test_session, create_test_user):
     # Request password reset
     response = await request_password_reset(client, "user@mail.com")
     assert response.status_code == status.HTTP_200_OK
@@ -94,5 +94,5 @@ async def test_password_reset(client, test_session, create_test_user):
     await test_session.refresh(user)
 
     assert old_password_hash != user.password_hash
-    assert user.password_reset_expire == None
-    assert user.password_reset_token == None
+    assert user.password_reset_expire is None
+    assert user.password_reset_token is None
