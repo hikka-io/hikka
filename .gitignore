@@ -5,6 +5,10 @@ config.py
 alembic.ini
 settings.toml
 
+# Linters
+.pytest_cache
+.ruff_cache
+
 # misc
 .DS_STORE
 *.db
