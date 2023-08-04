@@ -3,14 +3,14 @@ from app.settings import get_settings
 import asyncio
 
 from app.sync import (
-    aggregator_anime_franchises,
-    aggregator_anime_genres,
-    aggregator_anime_roles,
-    aggregator_characters,
-    aggregator_anime_info,
-    aggregator_companies,
-    aggregator_people,
-    aggregator_anime,
+    # aggregator_anime_franchises,
+    # aggregator_anime_genres,
+    # aggregator_anime_roles,
+    # aggregator_characters,
+    # aggregator_anime_info,
+    # aggregator_companies,
+    # aggregator_people,
+    # aggregator_anime,
     update_search,
 )
 

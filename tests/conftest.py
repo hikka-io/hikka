@@ -7,7 +7,6 @@ from async_asgi_testclient import TestClient
 from datetime import datetime, timedelta
 from pytest_postgresql import factories
 from app.settings import get_settings
-from app.auth.utils import hashpwd
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
