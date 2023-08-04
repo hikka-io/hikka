@@ -1,7 +1,6 @@
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from datetime import datetime
 from ..base import Base
 
 from ..mixins import (

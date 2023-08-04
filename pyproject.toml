@@ -1,8 +1,13 @@
 [tool.pytest.ini_options]
-# python_files = "test_*.py"
-# python_functions = "test_*"
-# python_classes = "Test* *Tests"
-# addopts = "-vv -x"
+python_functions = "test_*"
+python_files = "test_*.py"
 asyncio_mode = "auto"
 testpaths = "tests"
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 80
+exclude = ["venv"]
+extend-ignore = [
+    "F821",  # Disable checks for annotated SQLAlchemy relations 
+]

@@ -60,7 +60,7 @@ async def update_anime_settings(index):
 async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
-        .where(Anime.media_type != None)
+        .where(Anime.media_type is not None)
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),

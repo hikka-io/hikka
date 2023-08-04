@@ -41,7 +41,7 @@ async def save_characters(session, data):
             add_characters.append(character)
 
             print(
-                f"Updated character: {character.name_en} ({character.favorites})"
+                f"Updated character: {character.name_en} ({character.favorites})"  # noqa: E501
             )
 
         else:

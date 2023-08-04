@@ -1,14 +1,10 @@
-from sqlalchemy import ForeignKey, UniqueConstraint, String
 from ..association import anime_staff_roles_association_table
+from sqlalchemy import ForeignKey, UniqueConstraint, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from ..mixins import SlugMixin
 from ..base import Base
-
-from ..mixins import (
-    ContentMixin,
-    SlugMixin,
-)
 
 
 class AnimeStaffRole(Base, SlugMixin):

@@ -1,6 +1,5 @@
 from pydantic import constr, PositiveInt
 from pydantic import Field, validator
-from app.schemas import ORJSONModel
 from datetime import datetime
 from app import constants
 from typing import Union
@@ -121,7 +120,7 @@ class AnimeSearchArgs(ORJSONModel):
         valid_orders = ["asc", "desc"]
 
         if len(sort_list) != len(set(sort_list)):
-            raise ValueError(f"Invalid sort: duplicates")
+            raise ValueError("Invalid sort: duplicates")
 
         for sort_item in sort_list:
             parts = sort_item.split(":")
@@ -144,7 +143,7 @@ class AnimeEpisodeResponse(ORJSONModel):
         example="Самопроголошена богиня і переродження в паралельному світі!"
     )
     title_en: Union[str, None] = Field(
-        example="This Self-Proclaimed Goddess and Reincarnation in Another World!"
+        example="This Self-Proclaimed Goddess and Reincarnation in Another World!"  # noqa: E501
     )
     title_ja: Union[str, None] = Field(
         example="Kono Jishou Megami to Isekai Tenshou wo!"

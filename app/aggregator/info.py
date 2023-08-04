@@ -1,5 +1,5 @@
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select, desc
+from sqlalchemy import select
 from app import utils
 
 

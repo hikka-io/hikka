@@ -11,7 +11,6 @@ from . import utils
 from app.models import (
     AnimeRecommendation,
     AnimeCharacter,
-    AnimeFranchise,
     CompanyAnime,
     AnimeEpisode,
     AnimeGenre,

@@ -26,7 +26,7 @@ async def get_follow(session: AsyncSession, followed_user: User, user: User):
 
 
 async def is_following(session: AsyncSession, followed_user: User, user: User):
-    return await get_follow(session, followed_user, user) != None
+    return await get_follow(session, followed_user, user) is not None
 
 
 async def follow(session: AsyncSession, followed_user: User, user: User):

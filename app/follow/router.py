@@ -1,13 +1,11 @@
 from app.utils import pagination_dict, pagination
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.dependencies import get_page
+from app.database import get_session
 from app.models import User
-from app import constants
 from typing import Tuple
 from . import service
-
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import get_session
 
 from .dependencies import (
     validate_username,

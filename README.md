@@ -32,3 +32,9 @@ UPDATE service_content_anime SET needs_update = true;
 ```json
 {"genres": ["supernatural", "drama"], "years": [1999, 2023], "season": ["summer"], "rating": ["r_plus"]}
 ```
+
+## Ruff check
+
+```bash
+ruff check app/
+```

@@ -1,6 +1,5 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped

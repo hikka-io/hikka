@@ -10,3 +10,16 @@ from .aggregator.anime import aggregator_anime
 from .email import send_emails
 
 from .search import update_search
+
+__all__ = [
+    "aggregator_anime_franchises",
+    "aggregator_characters",
+    "aggregator_companies",
+    "aggregator_anime_genres",
+    "aggregator_anime_roles",
+    "aggregator_anime_info",
+    "aggregator_people",
+    "aggregator_anime",
+    "send_emails",
+    "update_search",
+]

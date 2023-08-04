@@ -28,3 +28,28 @@ from .content.staff import AnimeVoice
 from .image import Image
 
 from .base import Base
+
+__all__ = [
+    "EmailMessage",
+    "AuthToken",
+    "UserOAuth",
+    "Follow",
+    "User",
+    "AnimeFavourite",
+    "AnimeWatch",
+    "AnimeRecommendation",
+    "AnimeFranchise",
+    "AnimeEpisode",
+    "AnimeGenre",
+    "Person",
+    "Anime",
+    "CompanyAnime",
+    "Company",
+    "AnimeCharacter",
+    "Character",
+    "AnimeStaffRole",
+    "AnimeStaff",
+    "AnimeVoice",
+    "Image",
+    "Base",
+]

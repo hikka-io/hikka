@@ -1,10 +1,15 @@
-from app.models import User, Anime, AnimeWatch, AnimeFavourite
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import anime_loadonly
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, desc
 from sqlalchemy import func
 from typing import Union
+
+from app.models import (
+    AnimeFavourite,
+    AnimeWatch,
+    User,
+)
 
 
 async def get_user_watch(

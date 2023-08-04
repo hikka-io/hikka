@@ -14,17 +14,18 @@ from typing import (
     Any,
     Awaitable,
     Dict,
+    Union,
     Generator,
     Optional,
     Tuple,
     Type,
+    List,
     cast,
 )
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit
 
 import httpx
 
-from typing import Dict, List, Union
 
 TRes = Union[Dict[str, "TRes"], List["TRes"], str, int, float, bool, None]
 THeaders = Dict[str, str]
@@ -297,9 +298,7 @@ class OAuth1Client(Client):
         """Make a request to provider."""
         oparams = {
             "oauth_consumer_key": self.consumer_key,
-            "oauth_nonce": sha1(
-                str(RANDOM()).encode("ascii")
-            ).hexdigest(),  # noqa: S324
+            "oauth_nonce": sha1(str(RANDOM()).encode("ascii")).hexdigest(),
             "oauth_signature_method": self.signature.name,
             "oauth_timestamp": str(int(time.time())),
             "oauth_version": self.version,
@@ -313,7 +312,7 @@ class OAuth1Client(Client):
 
         if urlsplit(url).query:
             raise ValueError(
-                'Request parameters should be in the "params" parameter, not inlined in the URL',
+                'Request parameters should be in the "params" parameter, not inlined in the URL',  # noqa: E501
             )
 
         oparams["oauth_signature"] = self.signature.sign(
@@ -364,7 +363,7 @@ class OAuth1Client(Client):
 
         if request_token and self.oauth_token != request_token:
             raise OAuthError(
-                "Failed to obtain OAuth 1.0 access token. Request token is invalid",
+                "Failed to obtain OAuth 1.0 access token. Request token is invalid",  # noqa: E501
             )
 
         data = await self.request(
@@ -380,7 +379,7 @@ class OAuth1Client(Client):
 
         if not isinstance(data, dict):
             raise OAuthError(
-                f"Failed to obtain OAuth 1.0 access token. Invalid data: {data}",
+                f"Failed to obtain OAuth 1.0 access token. Invalid data: {data}",  # noqa: E501
             )
 
         self.oauth_token = cast(str, data.get("oauth_token") or "")
@@ -499,7 +498,7 @@ class OAuth2Client(Client):
 
         else:
             self.logger.warning(
-                "Error when getting the access token.\nData returned by OAuth server: %r",
+                "Error when getting the access token.\nData returned by OAuth server: %r",  # noqa: E501
                 data,
             )
 

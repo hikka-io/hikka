@@ -5,7 +5,6 @@ from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
-from app.errors import Abort
 from typing import Union
 
 

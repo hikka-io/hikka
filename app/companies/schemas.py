@@ -1,4 +1,3 @@
-from pydantic import constr
 from pydantic import Field
 from app import constants
 from typing import Union
