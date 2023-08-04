@@ -1,30 +1,35 @@
 # Source: https://github.com/klen/aioauth-client
 """OAuth support for asyncio/trio libraries."""
 
-
 from __future__ import annotations
-
-import base64
-import hmac
-import logging
-import time
-from hashlib import sha1
 from random import SystemRandom
+from hashlib import sha1
+import logging
+import base64
+import httpx
+import time
+import hmac
+
+from urllib.parse import (
+    urlencode,
+    parse_qsl,
+    urlsplit,
+    urljoin,
+    quote,
+)
+
 from typing import (
-    Any,
     Awaitable,
-    Dict,
-    Union,
     Generator,
     Optional,
+    Union,
     Tuple,
     Type,
     List,
+    Dict,
     cast,
+    Any,
 )
-from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit
-
-import httpx
 
 
 TRes = Union[Dict[str, "TRes"], List["TRes"], str, int, float, bool, None]
