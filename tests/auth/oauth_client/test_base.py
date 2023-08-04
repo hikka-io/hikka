@@ -1,0 +1,56 @@
+from httpx import AsyncClient
+
+from app.auth.oauth_client import (
+    HmacSha1Signature,
+    GoogleClient,
+    GithubClient,
+    UserData,
+)
+
+
+def test_userinfo():
+    user = UserData(email="email")
+    assert user.email == "email"
+    assert user.id is None
+
+
+def test_signatures():
+    sig = HmacSha1Signature()
+    assert sig.name
+    assert sig.sign("secret", "GET", "/test", oauth_token_secret="secret")
+
+
+async def test_client(http):
+    google = GoogleClient(
+        client_id="123", client_secret="456", access_token="789"
+    )
+
+    data = await google.request("GET", "/")
+    assert data == {"response": "ok"}
+
+    http.assert_called_with(
+        "GET",
+        "https://www.googleapis.com/",
+        params=None,
+        headers={
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+            "Authorization": "Bearer 789",
+        },
+    )
+
+
+async def test_custom_client(http, response):
+    transport = AsyncClient()
+    github = GithubClient(
+        client_id="cid", client_secret="csecret", transport=transport
+    )
+
+    assert github.transport
+
+    http.return_value = response(json={"access_token": "TOKEN"})
+    token, meta = await github.get_access_token("000")
+
+    assert http.called
+    assert meta
+    assert token

@@ -10,7 +10,9 @@ from app.settings import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
+from httpx import Response
 from app import create_app
+from unittest import mock
 import test_helpers
 import asyncio
 import pytest
@@ -119,3 +121,19 @@ async def get_test_token(test_session):
     await test_session.commit()
 
     return token.secret
+
+
+# OAuth fixtures
+@pytest.fixture(autouse=True)
+def response():
+    def generate(status_code=200, **params):
+        return Response(status_code, **params)
+
+    return generate
+
+
+@pytest.fixture(autouse=True)
+def http(response):
+    with mock.patch("httpx.AsyncClient.request") as mocked:
+        mocked.return_value = response(text="response=ok")
+        yield mocked

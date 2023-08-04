@@ -43,7 +43,7 @@ class OAuthError(RuntimeError):
     """AIOAuth Exceptions Class."""
 
 
-class User:
+class UserData:
     """Store user's information."""
 
     __slots__ = (
@@ -211,7 +211,7 @@ class Client(object, metaclass=ClientRegistry):
         """Make a request to provider."""
         raise NotImplementedError("Shouldnt be called.")
 
-    async def user_info(self, **options) -> Tuple[User, TRes]:
+    async def user_info(self, **options) -> Tuple[UserData, TRes]:
         """Load user information from provider."""
         if not self.user_info_url:
             raise NotImplementedError(
@@ -224,7 +224,7 @@ class Client(object, metaclass=ClientRegistry):
             raise_for_status=True,
             **options,
         )
-        user = User(**dict(self.user_parse(data)))
+        user = UserData(**dict(self.user_parse(data)))
         return user, data
 
     @staticmethod
@@ -599,6 +599,39 @@ class GoogleClient(OAuth2Client):
         yield "locale", data.get("locale")
         yield "picture", data.get("picture")
         yield "gender", data.get("gender")
+
+
+class GithubClient(OAuth2Client):
+    """Support Github.
+
+    * Dashboard: https://github.com/settings/applications/
+    * Docs: http://developer.github.com/v3/#authentication
+    * API reference: http://developer.github.com/v3/
+    """
+
+    access_token_url = "https://github.com/login/oauth/access_token"
+    authorize_url = "https://github.com/login/oauth/authorize"
+    base_url = "https://api.github.com"
+    name = "github"
+    user_info_url = "https://api.github.com/user"
+
+    @staticmethod
+    def user_parse(data):
+        """Parse information from provider."""
+        yield "id", data.get("id")
+        yield "email", data.get("email")
+        first_name, _, last_name = (data.get("name") or "").partition(" ")
+        yield "first_name", first_name
+        yield "last_name", last_name
+        yield "username", data.get("login")
+        yield "picture", data.get("avatar_url")
+        yield "link", data.get("html_url")
+        location = data.get("location", "")
+        if location:
+            split_location = location.split(",")
+            yield "country", split_location[0].strip()
+            if len(split_location) > 1:
+                yield "city", split_location[1].strip()
 
 
 # ruff: noqa: S105
