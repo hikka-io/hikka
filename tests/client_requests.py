@@ -40,6 +40,10 @@ def request_password_confirm(client, token, new_password):
     )
 
 
+def request_oauth_url(client, provider):
+    return client.get(f"/auth/oauth/{provider}")
+
+
 def request_me(client, token):
     return client.get("/user/me", headers={"Auth": token})
 
