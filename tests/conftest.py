@@ -3,6 +3,7 @@
 
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
+from app.auth.dependencies import get_oauth_info
 from async_asgi_testclient import TestClient
 from datetime import datetime, timedelta
 from pytest_postgresql import factories
@@ -10,6 +11,7 @@ from app.settings import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
+from app.errors import Abort
 from httpx import Response
 from app import create_app
 from unittest import mock
@@ -82,6 +84,25 @@ async def session_override(app, connection_test):
             yield session
 
     app.dependency_overrides[get_session] = get_session_override
+
+
+@pytest.fixture(scope="function", autouse=True)
+async def oauth_info_override(app):
+    # ToDo: Figure out how to specify the source for the arguments so they're
+    # not all just query parameters. This is important to test the provider
+    # path variable which for now is hardcoded.
+    async def info_override(code):
+        if code == "validoauthcode":
+            return {
+                "id": "1234567890987654321",
+                "email": "user@mail.com",
+                "verified_email": True,
+                "picture": "https://example.com",
+            }
+
+        raise Abort("auth", "invalid-token")
+
+    app.dependency_overrides[get_oauth_info] = info_override
 
 
 @pytest.fixture
