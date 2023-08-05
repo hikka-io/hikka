@@ -86,25 +86,6 @@ async def session_override(app, connection_test):
     app.dependency_overrides[get_session] = get_session_override
 
 
-# @pytest.fixture(scope="function", autouse=True)
-# async def oauth_info_override(app):
-#     # ToDo: Figure out how to specify the source for the arguments so they're
-#     # not all just query parameters. This is important to test the provider
-#     # path variable which for now is hardcoded.
-#     async def info_override(code):
-#         if code == "validoauthcode":
-#             return {
-#                 "id": "1234567890987654321",
-#                 "email": "user@mail.com",
-#                 "verified_email": True,
-#                 "picture": "https://example.com",
-#             }
-
-#         raise Abort("auth", "invalid-token")
-
-#     app.dependency_overrides[get_oauth_info] = info_override
-
-
 @pytest.fixture
 async def test_session():
     async with sessionmanager.session() as session:
@@ -156,5 +137,12 @@ def oauth_response():
 @pytest.fixture(autouse=True)
 def oauth_http(oauth_response):
     with mock.patch("httpx.AsyncClient.request") as mocked:
-        mocked.return_value = oauth_response(text="response=ok")
+        mocked.return_value = oauth_response(
+            json={
+                "email": "user@mail.com",
+                "response": "ok",
+                "id": "test-id",
+            }
+        )
+
         yield mocked

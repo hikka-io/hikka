@@ -45,7 +45,10 @@ def request_oauth_url(client, provider):
 
 
 def oauth_post(client, provider, code):
-    return client.post(f"/auth/oauth/{provider}?code={code}")
+    return client.post(
+        f"/auth/oauth/{provider}",
+        json={"code": code},
+    )
 
 
 def request_me(client, token):

@@ -20,8 +20,8 @@ async def test_invalid_provider(client):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-async def test_valid_oauth_signup(client):
-    response = await oauth_post(client, "google", "validoauthcode")
+async def test_valid_oauth_signup(client, oauth_http):
+    response = await oauth_post(client, "google", "code")
 
     assert response.json().get("secret") is not None
     assert response.status_code == status.HTTP_200_OK
