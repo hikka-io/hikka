@@ -27,6 +27,6 @@
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
 
     [testing.oauth.google]
-    client_id = "cid"
+    client_id = "xxx.apps.googleusercontent.com"
     client_secret = "secret"
     redirect_uri = "http://example.com/oauth/google"
