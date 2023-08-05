@@ -125,7 +125,7 @@ async def get_test_token(test_session):
 
 # OAuth fixtures
 @pytest.fixture(autouse=True)
-def response():
+def oauth_response():
     def generate(status_code=200, **params):
         return Response(status_code, **params)
 
@@ -133,7 +133,7 @@ def response():
 
 
 @pytest.fixture(autouse=True)
-def http(response):
+def oauth_http(oauth_response):
     with mock.patch("httpx.AsyncClient.request") as mocked:
-        mocked.return_value = response(text="response=ok")
+        mocked.return_value = oauth_response(text="response=ok")
         yield mocked

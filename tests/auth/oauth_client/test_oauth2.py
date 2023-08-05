@@ -1,33 +1,42 @@
-from app.auth.oauth_client import GithubClient, ClientRegistry
+from app.auth.oauth_client import GoogleClient, ClientRegistry
 
 
-async def test_oauth2(http, response):
-    github = GithubClient(client_id="cid", client_secret="csecret")
-
-    assert github
-    assert "github" in ClientRegistry.clients
-
-    assert (
-        github.get_authorize_url()
-        == "https://github.com/login/oauth/authorize?client_id=cid&response_type=code"
+async def test_oauth2(oauth_http, oauth_response):
+    google = GoogleClient(
+        client_id="cid",
+        client_secret="secret",
+        access_token="token",
     )
 
-    http.return_value = response(json={"access_token": "TEST-TOKEN"})
-    token, meta = await github.get_access_token("000")
+    assert google
+    assert "google" in ClientRegistry.clients
+
+    assert (
+        google.get_authorize_url()
+        == "https://accounts.google.com/o/oauth2/v2/auth?client_id=cid&response_type=code"
+    )
+
+    oauth_http.return_value = oauth_response(
+        json={"access_token": "TEST-TOKEN"}
+    )
+
+    token, meta = await google.get_access_token("000")
 
     assert token == "TEST-TOKEN"
     assert meta
-    assert http.called
+    assert oauth_http.called
 
-    http.reset_mock()
-    http.return_value = response(json={"access_token": "TEST-TOKEN"})
+    oauth_http.reset_mock()
+    oauth_http.return_value = oauth_response(
+        json={"access_token": "TEST-TOKEN"}
+    )
 
-    res = await github.request("GET", "user", access_token="NEW-TEST-TOKEN")
+    res = await google.request("GET", "user", access_token="NEW-TEST-TOKEN")
     assert res
 
-    http.assert_called_with(
+    oauth_http.assert_called_with(
         "GET",
-        "https://api.github.com/user",
+        "https://www.googleapis.com/userinfo/v2/user",
         params=None,
         headers={
             "Accept": "application/json",
@@ -37,17 +46,17 @@ async def test_oauth2(http, response):
     )
 
 
-async def test_oauth2_request(http):
-    github = GithubClient(
+async def test_oauth2_request(oauth_http):
+    google = GoogleClient(
         client_id="cid", client_secret="csecret", access_token="token"
     )
 
-    res = await github.request("GET", "/user", params={"test": "ok"})
+    res = await google.request("GET", "/user", params={"test": "ok"})
     assert res
 
-    http.assert_called_with(
+    oauth_http.assert_called_with(
         "GET",
-        "https://api.github.com/user",
+        "https://www.googleapis.com/user",
         params={"test": "ok"},
         headers={
             "Accept": "application/json",
