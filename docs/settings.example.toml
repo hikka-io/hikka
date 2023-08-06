@@ -24,11 +24,6 @@
         "https://hikka.io",
     ]
 
-    [providers]
-    google = true
-    twitter = false
-    discord = false
-
 [testing]
     [testing.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
