@@ -1,5 +1,3 @@
-# ToDo: this file needs major cleanup
-
 from .oauth_client import GoogleClient, OAuthError
 from app.settings import get_settings
 from app.errors import Abort
@@ -13,6 +11,7 @@ oauth_client_args = {
 }
 
 
+# ToDo: make client list coherent with oauth_client_args and settings.toml
 def get_client_class(provider: str):
     provider_classes = {
         "google": GoogleClient,
@@ -21,18 +20,23 @@ def get_client_class(provider: str):
     return provider_classes.get(provider)
 
 
+# ToDo: merge with get_client_class (?)
 def get_client(provider: str):
     settings = get_settings()
 
-    # ToDo: remove this (?) since we already have validate_provider decorator
-    if not (oauth_provider := settings.oauth.get(provider)):
-        raise Abort("auth", "invalid-provider")
+    oauth_provider = settings.oauth.get(provider)
 
     client_class = get_client_class(provider)
 
-    return client_class(**oauth_provider)
+    return client_class(
+        **{
+            "client_secret": oauth_provider["client_secret"],
+            "client_id": oauth_provider["client_id"],
+        }
+    )
 
 
+# ToDo: cleanup
 async def get_url(provider: str) -> dict[str, str]:
     client = get_client(provider)
 
@@ -55,6 +59,7 @@ async def get_url(provider: str) -> dict[str, str]:
     }
 
 
+# ToDo: move this to dependencies
 async def get_info(provider: str, code: str):
     client = get_client(provider)
     data = None
