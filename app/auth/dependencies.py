@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
+from app.settings import get_settings
 from app.database import get_session
+from .oauth_client import OAuthError
 from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
@@ -103,7 +105,11 @@ async def validate_login(
 
 
 async def validate_provider(provider: str) -> str:
-    if provider not in ["google"]:
+    settings = get_settings()
+
+    enabled_providers = [p for p in settings.oauth if settings.oauth[p].enabled]
+
+    if provider not in enabled_providers:
         raise Abort("auth", "invalid-provider")
 
     return provider
@@ -113,7 +119,24 @@ async def get_oauth_info(
     args: CodeArgs,
     provider: str = Depends(validate_provider),
 ):
-    return await oauth.get_info(provider, args.code)
+    client = oauth.get_client(provider)
+    data = None
+
+    settings = get_settings()
+    oauth_provider = settings.oauth.get(provider)
+
+    try:
+        otoken, _ = await client.get_access_token(
+            args.code, oauth_provider["redirect_uri"]
+        )
+
+        client.access_token = otoken
+        _, data = await client.user_info()
+
+    except OAuthError:
+        raise Abort("auth", "invalid-token")
+
+    return data
 
 
 async def get_user_oauth(

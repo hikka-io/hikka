@@ -2,6 +2,8 @@
     [default.oauth.google]
     client_id = "xxx.apps.googleusercontent.com"
     client_secret = "secret"
+    redirect_uri = "http://localhost:5173"
+    enabled = true
 
     [default.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database"
@@ -22,6 +24,11 @@
         "https://hikka.io",
     ]
 
+    [providers]
+    google = true
+    twitter = false
+    discord = false
+
 [testing]
     [testing.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
@@ -30,3 +37,4 @@
     client_id = "xxx.apps.googleusercontent.com"
     client_secret = "secret"
     redirect_uri = "http://example.com/oauth/google"
+    enabled = true
