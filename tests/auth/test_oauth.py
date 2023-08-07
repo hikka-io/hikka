@@ -52,10 +52,9 @@ async def test_signup_absent_code(client, oauth_fail_http):
 
 
 async def test_valid_oauth_login(
-    client, create_test_user_different_email, oauth_http
+    client, create_test_user_with_oauth, oauth_http
 ):
     response = await oauth_post(client, "google", "code")
-    print(response.json())
 
     assert response.json().get("secret") is not None
     assert response.status_code == status.HTTP_200_OK

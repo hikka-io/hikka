@@ -102,8 +102,9 @@ async def create_test_user_not_activated(test_session):
 
 
 @pytest.fixture
-async def create_test_user_different_email(test_session):
-    await test_helpers.create_user(test_session, email="email@mail.com")
+async def create_test_user_with_oauth(test_session):
+    user = await test_helpers.create_user(test_session, activated=False)
+    await test_helpers.create_oauth(test_session, user.id)
 
 
 @pytest.fixture
