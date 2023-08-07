@@ -21,7 +21,7 @@ errors = {
         "activation-invalid": ["Activation token is invalid", 400],
         "oauth-code-required": ["OAuth code required", 400],
         "invalid-provider": ["Invalid OAuth provider", 400],
-        "oauth-invalid-code": ["Invalid OAuth code", 400],
+        "invalid-code": ["Invalid OAuth code", 400],
         "username-taken": ["Username already taken", 400],
         "reset-expired": ["Reset token has expired", 400],
         "reset-invalid": ["Reset token is invalid", 400],

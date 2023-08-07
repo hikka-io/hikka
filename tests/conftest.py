@@ -3,7 +3,7 @@
 
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
-from app.auth.dependencies import get_oauth_info
+from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
 from datetime import datetime, timedelta
 from pytest_postgresql import factories
@@ -11,7 +11,6 @@ from app.settings import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
-from app.errors import Abort
 from httpx import Response
 from app import create_app
 from unittest import mock
@@ -99,7 +98,12 @@ async def create_test_user(test_session):
 
 @pytest.fixture
 async def create_test_user_not_activated(test_session):
-    await test_helpers.create_user(test_session, False)
+    await test_helpers.create_user(test_session, activated=False)
+
+
+@pytest.fixture
+async def create_test_user_different_email(test_session):
+    await test_helpers.create_user(test_session, email="email@mail.com")
 
 
 @pytest.fixture
@@ -145,4 +149,12 @@ def oauth_http(oauth_response):
             }
         )
 
+        yield mocked
+
+
+@pytest.fixture(autouse=False)
+def oauth_fail_http(oauth_response):
+    with mock.patch(
+        "httpx.AsyncClient.request", side_effect=OAuthError
+    ) as mocked:
         yield mocked

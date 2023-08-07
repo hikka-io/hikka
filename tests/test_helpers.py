@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from app.models import User
 
 
-async def create_user(test_session, activated=True):
+async def create_user(test_session, activated=True, email="user@mail.com"):
     now = datetime.utcnow()
 
     user = User(
@@ -11,7 +11,7 @@ async def create_user(test_session, activated=True):
             "activation_expire": datetime.utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
             "activation_token": new_token(),
-            "email": "user@mail.com",
+            "email": email,
             "activated": activated,
             "username": "username",
             "last_active": now,

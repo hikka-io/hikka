@@ -134,7 +134,7 @@ async def get_oauth_info(
         _, data = await client.user_info()
 
     except OAuthError:
-        raise Abort("auth", "invalid-token")
+        raise Abort("auth", "invalid-code")
 
     return data
 

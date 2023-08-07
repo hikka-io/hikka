@@ -27,9 +27,44 @@ async def test_valid_oauth_signup(client, oauth_http):
     assert response.status_code == status.HTTP_200_OK
 
 
-# ToDo:
-# Test invalid provider
-# Test invalid code
-# Test absent code
-# Test both signup (no account exists) and login (account exists) (need a db lookup?)  # noqa: E501
-# Test a case where a user with an email already exists
+async def test_signup_invalid_provider(client, oauth_fail_http):
+    response = await oauth_post(client, "qwerty123", "code")
+
+    assert response.json().get("secret") is None
+    assert response.json()["code"] == "auth_invalid_provider"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_signup_invalid_code(client, oauth_fail_http):
+    response = await oauth_post(client, "google", "invalidcode")
+
+    assert response.json().get("secret") is None
+    assert response.json()["code"] == "auth_invalid_code"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_signup_absent_code(client, oauth_fail_http):
+    response = await oauth_post(client, "google")
+
+    assert response.json().get("secret") is None
+    assert response.json()["code"] == "validation_error"
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+async def test_valid_oauth_login(
+    client, create_test_user_different_email, oauth_http
+):
+    response = await oauth_post(client, "google", "code")
+    print(response.json())
+
+    assert response.json().get("secret") is not None
+    assert response.status_code == status.HTTP_200_OK
+
+
+async def test_oauth_login_email_exists(client, create_test_user, oauth_http):
+    response = await oauth_post(client, "google", "code")
+    print(response.json())
+
+    assert response.json().get("secret") is None
+    assert response.json()["code"] == "auth_email_exists"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
