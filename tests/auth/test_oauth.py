@@ -62,7 +62,6 @@ async def test_valid_oauth_login(
 
 async def test_oauth_login_email_exists(client, create_test_user, oauth_http):
     response = await oauth_post(client, "google", "code")
-    print(response.json())
 
     assert response.json().get("secret") is None
     assert response.json()["code"] == "auth_email_exists"

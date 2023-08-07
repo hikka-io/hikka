@@ -103,7 +103,7 @@ async def create_test_user_not_activated(test_session):
 
 @pytest.fixture
 async def create_test_user_with_oauth(test_session):
-    user = await test_helpers.create_user(test_session, activated=False)
+    user = await test_helpers.create_user(test_session)
     await test_helpers.create_oauth(test_session, user.id)
 
 
