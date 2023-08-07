@@ -1,30 +1,32 @@
 # Source: https://github.com/klen/aioauth-client
 """OAuth support for asyncio/trio libraries."""
 
-
 from __future__ import annotations
-
-import base64
-import hmac
-import logging
-import time
-from hashlib import sha1
 from random import SystemRandom
+from hashlib import sha1
+import logging
+import base64
+import httpx
+import hmac
+
+from urllib.parse import (
+    urlencode,
+    parse_qsl,
+    urljoin,
+    quote,
+)
+
 from typing import (
-    Any,
     Awaitable,
-    Dict,
-    Union,
     Generator,
     Optional,
+    Union,
     Tuple,
     Type,
     List,
-    cast,
+    Dict,
+    Any,
 )
-from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlsplit
-
-import httpx
 
 
 TRes = Union[Dict[str, "TRes"], List["TRes"], str, int, float, bool, None]
@@ -38,7 +40,7 @@ class OAuthError(RuntimeError):
     """AIOAuth Exceptions Class."""
 
 
-class User:
+class UserData:
     """Store user's information."""
 
     __slots__ = (
@@ -206,7 +208,7 @@ class Client(object, metaclass=ClientRegistry):
         """Make a request to provider."""
         raise NotImplementedError("Shouldnt be called.")
 
-    async def user_info(self, **options) -> Tuple[User, TRes]:
+    async def user_info(self, **options) -> Tuple[UserData, TRes]:
         """Load user information from provider."""
         if not self.user_info_url:
             raise NotImplementedError(
@@ -219,7 +221,7 @@ class Client(object, metaclass=ClientRegistry):
             raise_for_status=True,
             **options,
         )
-        user = User(**dict(self.user_parse(data)))
+        user = UserData(**dict(self.user_parse(data)))
         return user, data
 
     @staticmethod
@@ -234,158 +236,6 @@ class Client(object, metaclass=ClientRegistry):
     async def get_access_token(self, *args, **kwargs) -> Tuple[str, Any]:
         """Abstract base method."""
         raise NotImplementedError
-
-
-class OAuth1Client(Client):
-    """Implement OAuth1."""
-
-    name = "oauth1"
-    access_token_key = "oauth_token"
-    version = "1.0"
-    escape = False
-    request_token_url: str = ""
-
-    def __init__(  # noqa: PLR0913
-        self,
-        consumer_key: str,
-        consumer_secret: str,
-        base_url: Optional[str] = None,
-        authorize_url: Optional[str] = None,
-        oauth_token: Optional[str] = None,
-        oauth_token_secret: Optional[str] = None,
-        request_token_url: Optional[str] = None,
-        access_token_url: Optional[str] = None,
-        access_token_key: Optional[str] = None,
-        transport: Optional[httpx.AsyncClient] = None,
-        logger: Optional[logging.Logger] = None,
-        signature: Optional[Signature] = None,
-        **params,
-    ):
-        """Initialize the client."""
-        super().__init__(
-            base_url,
-            authorize_url,
-            access_token_key,
-            access_token_url,
-            transport,
-            logger,
-        )
-
-        self.oauth_token = oauth_token
-        self.oauth_token_secret = oauth_token_secret
-        self.consumer_key = consumer_key
-        self.consumer_secret = consumer_secret
-        self.request_token_url = request_token_url or self.request_token_url
-        self.params = params
-        self.signature = signature or HmacSha1Signature()
-
-    def get_authorize_url(
-        self, request_token: Optional[str] = None, **params
-    ) -> str:
-        """Return formatted authorization URL."""
-        params.update({"oauth_token": request_token or self.oauth_token})
-        params.update(self.params)
-        return self.authorize_url + "?" + urlencode(params)
-
-    def request(
-        self,
-        method: str,
-        url: str,
-        params: Optional[TParams] = None,
-        headers: Optional[THeaders] = None,
-        **options,
-    ) -> Awaitable[TRes]:
-        """Make a request to provider."""
-        oparams = {
-            "oauth_consumer_key": self.consumer_key,
-            "oauth_nonce": sha1(str(RANDOM()).encode("ascii")).hexdigest(),
-            "oauth_signature_method": self.signature.name,
-            "oauth_timestamp": str(int(time.time())),
-            "oauth_version": self.version,
-        }
-        oparams.update(params or {})
-
-        if self.oauth_token:
-            oparams["oauth_token"] = self.oauth_token
-
-        url = self._get_url(url)
-
-        if urlsplit(url).query:
-            raise ValueError(
-                'Request parameters should be in the "params" parameter, not inlined in the URL',  # noqa: E501
-            )
-
-        oparams["oauth_signature"] = self.signature.sign(
-            self.consumer_secret,
-            method,
-            url,
-            oauth_token_secret=self.oauth_token_secret,
-            escape=self.escape,
-            **oparams,
-        )
-        return self._request(
-            method, url, params=oparams, headers=headers, **options
-        )
-
-    async def get_request_token(self, **params) -> Tuple[str, Any]:
-        """Get a request_token and request_token_secret from OAuth1 provider."""
-        params = dict(self.params, **params)
-        data = await self.request(
-            "GET",
-            self.request_token_url,
-            raise_for_status=True,
-            params=params,
-        )
-        if not isinstance(data, dict):
-            return "", data
-
-        self.oauth_token = cast(str, data.get("oauth_token") or "")
-        self.oauth_token_secret = cast(str, data.get("oauth_token_secret"))
-        return self.oauth_token, data
-
-    async def get_access_token(
-        self,
-        oauth_verifier,
-        request_token=None,
-        headers=None,
-        **_,
-    ) -> Tuple[str, Dict]:
-        """Get access_token from OAuth1 provider.
-
-        :returns: (access_token, access_token_secret, provider_data)
-        """
-        # Possibility to provide REQUEST DATA to the method
-        if (
-            not isinstance(oauth_verifier, str)
-            and self.shared_key in oauth_verifier
-        ):
-            oauth_verifier = oauth_verifier[self.shared_key]
-
-        if request_token and self.oauth_token != request_token:
-            raise OAuthError(
-                "Failed to obtain OAuth 1.0 access token. Request token is invalid",  # noqa: E501
-            )
-
-        data = await self.request(
-            "POST",
-            self.access_token_url,
-            raise_for_status=True,
-            headers=headers,
-            params={
-                "oauth_verifier": oauth_verifier,
-                "oauth_token": request_token,
-            },
-        )
-
-        if not isinstance(data, dict):
-            raise OAuthError(
-                f"Failed to obtain OAuth 1.0 access token. Invalid data: {data}",  # noqa: E501
-            )
-
-        self.oauth_token = cast(str, data.get("oauth_token") or "")
-        self.oauth_token_secret = cast(str, data.get("oauth_token_secret"))
-
-        return self.oauth_token, data
 
 
 class OAuth2Client(Client):
@@ -532,42 +382,6 @@ class DiscordClient(OAuth2Client):
         )
 
 
-class TwitterClient(OAuth1Client):
-    """Support Twitter.
-
-    * Dashboard: https://dev.twitter.com/apps
-    * Docs: https://dev.twitter.com/docs
-    * API reference: https://dev.twitter.com/docs/api
-    """
-
-    access_token_url = "https://api.twitter.com/oauth/access_token"
-    authorize_url = "https://api.twitter.com/oauth/authorize"
-    base_url = "https://api.twitter.com/1.1/"
-    name = "twitter"
-    request_token_url = "https://api.twitter.com/oauth/request_token"
-    user_info_url = (
-        "https://api.twitter.com/1.1/account/verify_credentials.json"
-    )
-
-    @staticmethod
-    def user_parse(data):
-        """Parse information from the provider."""
-        yield "id", data.get("id") or data.get("user_id")
-        first_name, _, last_name = data["name"].partition(" ")
-        yield "first_name", first_name
-        yield "last_name", last_name
-        yield "email", data.get("email")
-        yield "picture", data.get("profile_image_url")
-        yield "locale", data.get("lang")
-        yield "link", data.get("url")
-        yield "username", data.get("screen_name")
-        city, _, country = (
-            s.strip() for s in data.get("location", "").partition(",")
-        )
-        yield "city", city
-        yield "country", country
-
-
 class GoogleClient(OAuth2Client):
     """Support Google.
 
@@ -594,6 +408,39 @@ class GoogleClient(OAuth2Client):
         yield "locale", data.get("locale")
         yield "picture", data.get("picture")
         yield "gender", data.get("gender")
+
+
+class GithubClient(OAuth2Client):
+    """Support Github.
+
+    * Dashboard: https://github.com/settings/applications/
+    * Docs: http://developer.github.com/v3/#authentication
+    * API reference: http://developer.github.com/v3/
+    """
+
+    access_token_url = "https://github.com/login/oauth/access_token"
+    authorize_url = "https://github.com/login/oauth/authorize"
+    base_url = "https://api.github.com"
+    name = "github"
+    user_info_url = "https://api.github.com/user"
+
+    @staticmethod
+    def user_parse(data):
+        """Parse information from provider."""
+        yield "id", data.get("id")
+        yield "email", data.get("email")
+        first_name, _, last_name = (data.get("name") or "").partition(" ")
+        yield "first_name", first_name
+        yield "last_name", last_name
+        yield "username", data.get("login")
+        yield "picture", data.get("avatar_url")
+        yield "link", data.get("html_url")
+        location = data.get("location", "")
+        if location:
+            split_location = location.split(",")
+            yield "country", split_location[0].strip()
+            if len(split_location) > 1:
+                yield "city", split_location[1].strip()
 
 
 # ruff: noqa: S105

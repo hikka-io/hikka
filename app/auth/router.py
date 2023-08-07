@@ -8,7 +8,6 @@ from app import constants
 from . import service
 from . import oauth
 
-
 from .dependencies import (
     validate_activation_resend,
     validate_password_confirm,
@@ -191,14 +190,14 @@ async def provider_url(provider: str = Depends(validate_provider)):
     summary="Get auth token using OAuth",
 )
 async def oauth_token(
-    oauth: Union[UserOAuth, None] = Depends(get_user_oauth),
+    oauth_user: Union[UserOAuth, None] = Depends(get_user_oauth),
     data: dict[str, str] = Depends(get_oauth_info),
     session: AsyncSession = Depends(get_session),
     provider: str = Depends(validate_provider),
 ):
-    if not oauth:
-        oauth = await service.create_oauth_user(session, provider, data)
+    if not oauth_user:
+        oauth_user = await service.create_oauth_user(session, provider, data)
 
-    await service.update_oauth_timestamp(session, oauth)
+    await service.update_oauth_timestamp(session, oauth_user)
 
-    return await service.create_auth_token(session, oauth.user)
+    return await service.create_auth_token(session, oauth_user.user)

@@ -1,7 +1,9 @@
 [default]
     [default.oauth.google]
     client_id = "xxx.apps.googleusercontent.com"
-    secret = "secret"
+    client_secret = "secret"
+    redirect_uri = "http://localhost:5173"
+    enabled = true
 
     [default.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database"
@@ -25,3 +27,9 @@
 [testing]
     [testing.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
+
+    [testing.oauth.google]
+    client_id = "xxx.apps.googleusercontent.com"
+    client_secret = "secret"
+    redirect_uri = "http://example.com/oauth/google"
+    enabled = true

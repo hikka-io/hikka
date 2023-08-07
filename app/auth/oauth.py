@@ -1,49 +1,46 @@
-from .oauth_client import GoogleClient, OAuthError
-from .constants import oauth_url_args
+from .oauth_client import GoogleClient, DiscordClient, GithubClient
 from app.settings import get_settings
-from app.errors import Abort
 
-
-def get_client_class(provider: str):
-    provider_classes = {
-        "google": GoogleClient,
-    }
-
-    return provider_classes.get(provider)
+oauth_client_args = {
+    "google": {
+        "args": {
+            "scope": "https://www.googleapis.com/auth/userinfo.email",
+            "include_granted_scopes": "true",
+            "access_type": "offline",
+        },
+        "client": GoogleClient,
+    },
+    "discord": {"client": DiscordClient},
+    "github": {"client": GithubClient},
+}
 
 
 def get_client(provider: str):
     settings = get_settings()
 
-    if not (oauth_provider := settings.oauth.get(provider)):
-        raise Abort("auth", "invalid-provider")
+    oauth_provider = settings.oauth.get(provider)
+    client_class = oauth_client_args[provider]["client"]  # type: ignore
 
-    client_class = get_client_class(provider)
-
-    return client_class(**oauth_provider)
+    return client_class(
+        **{
+            "client_secret": oauth_provider["client_secret"],
+            "client_id": oauth_provider["client_id"],
+        }
+    )
 
 
 async def get_url(provider: str) -> dict[str, str]:
     client = get_client(provider)
 
-    return {
-        "url": client.get_authorize_url(**oauth_url_args[provider]),
-    }
+    settings = get_settings()
+    oauth_provider = settings.oauth.get(provider)
 
+    url = client.get_authorize_url(
+        **{
+            "redirect_uri": oauth_provider["redirect_uri"],
+            **oauth_client_args[provider]["args"],  # type: ignore
+            # "state": "hikka",  # ToDo: generate state server side
+        }
+    )
 
-async def get_info(provider: str, code: str):
-    client = get_client(provider)
-    data = None
-
-    try:
-        otoken, _ = await client.get_access_token(
-            code, oauth_url_args[provider]["redirect_uri"]
-        )
-
-        client.access_token = otoken
-        _, data = await client.user_info()
-
-    except OAuthError:
-        raise Abort("auth", "invalid-token")
-
-    return data
+    return {"url": url}
