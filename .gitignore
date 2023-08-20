@@ -4,6 +4,7 @@ venv/*
 config.py
 alembic.ini
 settings.toml
+.venv
 
 # Linters
 .pytest_cache
