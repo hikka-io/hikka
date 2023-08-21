@@ -21,6 +21,7 @@ pytest-postgresql = "^5.0.0"
 async-asgi-testclient = "^1.4.11"
 pytest-asyncio = "^0.21.1"
 aiohttp = "^3.8.5"
+apscheduler = "^3.10.4"
 
 [build-system]
 requires = ["poetry-core"]
