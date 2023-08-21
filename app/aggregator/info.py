@@ -376,20 +376,19 @@ async def update_anime_info(session, anime, data):
     anime.score = data["score"]
     anime.nsfw = data["nsfw"]
 
-    # anime and data should be visible regardless but I think it's nice to
+    # anime and data should be visible regardless but I think it's nice to pass
     # them explicitly
     def update_if_not_ignored(anime, data, field):
         if not data[field]:
             return
 
-        if field in anime.ignored_fields["ignore"]:
+        if field in anime.ignored_fields:
             return
 
         # Basically anime.field = data[field] except the field is dynamic
         setattr(anime, field, data[field])
 
-        anime.ignored_fields["ignore"].append(field)
-        anime.ignored_fields.update()
+        anime.ignored_fields.append(field)
 
     for field in [
         "synopsis_ua",
@@ -399,12 +398,6 @@ async def update_anime_info(session, anime, data):
         "title_ua",
     ]:
         update_if_not_ignored(anime, data, field)
-
-    # anime.synopsis_en = data["synopsis_en"]
-    # anime.synopsis_ua = data["synopsis_ua"]
-    # anime.title_en = data["title_en"]
-    # anime.title_ja = data["title_ja"]
-    # anime.title_ua = data["title_ua"]
 
     # ToDo: add extra checks here
     # anime.translations = process_translations(data)
