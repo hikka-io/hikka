@@ -12,6 +12,7 @@ from ..mixins import (
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
+    IgnoredFieldsMixin,
 )
 
 
@@ -20,6 +21,7 @@ class Anime(
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
+    IgnoredFieldsMixin,
 ):
     __tablename__ = "service_content_anime"
 

@@ -1,3 +1,5 @@
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Mapped
 from sqlalchemy import String
@@ -34,3 +36,10 @@ class TitlesMixin:
     title_ja: Mapped[str] = mapped_column(nullable=True)
     title_en: Mapped[str] = mapped_column(nullable=True)
     title_ua: Mapped[str] = mapped_column(nullable=True)
+
+
+# https://amercader.net/blog/beware-of-json-fields-in-sqlalchemy/
+class IgnoredFieldsMixin:
+    ignored_fields: Mapped[MutableDict] = mapped_column(
+        MutableDict.as_mutable(JSONB), default={"ignore": []}
+    )
