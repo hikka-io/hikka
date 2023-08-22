@@ -12,6 +12,7 @@ from ..mixins import (
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
+    IgnoredFieldsMixin,
 )
 
 
@@ -20,6 +21,7 @@ class Anime(
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
+    IgnoredFieldsMixin,
 ):
     __tablename__ = "service_content_anime"
 
@@ -52,11 +54,11 @@ class Anime(
         String(16), index=True, nullable=True
     )
 
-    synonyms: Mapped[dict] = mapped_column(JSONB, default=[])
-    external: Mapped[dict] = mapped_column(JSONB, default=[])
-    videos: Mapped[dict] = mapped_column(JSONB, default=[])
-    stats: Mapped[dict] = mapped_column(JSONB, default=[])
-    ost: Mapped[dict] = mapped_column(JSONB, default=[])
+    synonyms: Mapped[list] = mapped_column(JSONB, default=[])
+    external: Mapped[list] = mapped_column(JSONB, default=[])
+    videos: Mapped[list] = mapped_column(JSONB, default=[])
+    stats: Mapped[list] = mapped_column(JSONB, default=[])
+    ost: Mapped[list] = mapped_column(JSONB, default=[])
 
     voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
     staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")

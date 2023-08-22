@@ -359,16 +359,14 @@ async def process_staff(session, anime, data):
 
 
 async def update_anime_info(session, anime, data):
-    total_episodes = len(data["episodes_list"])
-
     anime.year = anime.start_date.year if anime.start_date else None
     anime.season = utils.get_season(anime.start_date)
 
     anime.start_date = utils.from_timestamp(data["start_date"])
     anime.end_date = utils.from_timestamp(data["end_date"])
     anime.updated = utils.from_timestamp(data["updated"])
-    anime.episodes = data["episodes_released"]
-    anime.episodes = data["episodes_total"]
+    anime.episodes_released = data["episodes_released"]
+    anime.episodes_total = data["episodes_total"]
     anime.media_type = data["media_type"]
     anime.scored_by = data["scored_by"]
     anime.duration = data["duration"]
@@ -378,13 +376,28 @@ async def update_anime_info(session, anime, data):
     anime.score = data["score"]
     anime.nsfw = data["nsfw"]
 
-    anime.total_episodes = total_episodes if total_episodes > 0 else None
+    # anime and data should be visible regardless but I think it's nice to pass
+    # them explicitly
+    def update_if_not_ignored(anime, data, field):
+        if not data[field]:
+            return
 
-    anime.synopsis_en = data["synopsis_en"]
-    anime.synopsis_ua = data["synopsis_ua"]
-    anime.title_en = data["title_en"]
-    anime.title_ja = data["title_ja"]
-    anime.title_ua = data["title_ua"]
+        if field in anime.ignored_fields:
+            return
+
+        # Basically anime.field = data[field] except the field is dynamic
+        setattr(anime, field, data[field])
+
+        anime.ignored_fields.append(field)
+
+    for field in [
+        "synopsis_ua",
+        "synopsis_en",
+        "title_en",
+        "title_ja",
+        "title_ua",
+    ]:
+        update_if_not_ignored(anime, data, field)
 
     # ToDo: add extra checks here
     # anime.translations = process_translations(data)

@@ -3,15 +3,15 @@ from app.settings import get_settings
 import asyncio
 
 from app.sync import (
-    # aggregator_anime_franchises,
-    # aggregator_anime_genres,
-    # aggregator_anime_roles,
-    # aggregator_characters,
-    # aggregator_anime_info,
-    # aggregator_companies,
-    # aggregator_people,
-    # aggregator_anime,
-    update_search,
+    aggregator_anime_franchises,
+    aggregator_anime_genres,
+    aggregator_anime_roles,
+    aggregator_characters,
+    aggregator_anime_info,
+    aggregator_companies,
+    aggregator_people,
+    aggregator_anime,
+    # update_search,
 )
 
 
@@ -20,18 +20,18 @@ async def import_aggregator():
 
     sessionmanager.init(settings.database.endpoint)
 
-    # await aggregator_anime_franchises()
-    # await aggregator_anime_genres()
-    # await aggregator_anime_roles()
-    # await aggregator_characters()
-    # await aggregator_anime_info()
-    # await aggregator_companies()
-    # await aggregator_people()
-    # await aggregator_anime()
-    await update_search()
+    await aggregator_anime_franchises()
+    await aggregator_anime_genres()
+    await aggregator_anime_roles()
+    await aggregator_characters()
+    await aggregator_companies()
+    await aggregator_people()
+    await aggregator_anime()
+    await aggregator_anime_info()
+    # await update_search()
 
     await sessionmanager.close()
 
 
 if __name__ == "__main__":
-    asyncio.run(update_search())
+    asyncio.run(import_aggregator())
