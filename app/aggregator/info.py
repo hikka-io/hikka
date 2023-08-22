@@ -1,5 +1,6 @@
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
+from datetime import datetime
 from app import utils
 
 
@@ -16,7 +17,19 @@ from app.models import (
     Company,
     Person,
     Anime,
+    Image,
 )
+
+
+def update_if_not_ignored(model, data, field):
+    if not data[field]:
+        return
+
+    if field in model.ignored_fields:
+        return
+
+    # Basically model.field = data[field] except the field is dynamic
+    setattr(model, field, data[field])
 
 
 def process_translations(data):
@@ -358,6 +371,39 @@ async def process_staff(session, anime, data):
     return update_staff
 
 
+async def process_poster(session, anime, data):
+    if not (path := data.get("poster")):
+        return
+
+    if "poster" in anime.ignored_fields:
+        return
+
+    if not (poster_id := anime.poster_id):
+        return
+
+    if not (
+        image := await session.scalar(
+            select(Image).where(Image.id == poster_id)
+        )
+    ):
+        return
+
+    if image.path == path:
+        return
+
+    image = Image(
+        **{
+            "path": data["poster"],
+            "created": datetime.utcnow(),
+            "uploaded": True,
+            "ignore": False,
+        }
+    )
+
+    session.add(image)
+    anime.poster_relation = image
+
+
 async def update_anime_info(session, anime, data):
     anime.year = anime.start_date.year if anime.start_date else None
     anime.season = utils.get_season(anime.start_date)
@@ -376,38 +422,21 @@ async def update_anime_info(session, anime, data):
     anime.score = data["score"]
     anime.nsfw = data["nsfw"]
 
-    # anime and data should be visible regardless but I think it's nice to pass
-    # them explicitly
-    def update_if_not_ignored(anime, data, field):
-        if not data[field]:
-            return
-
-        if field in anime.ignored_fields:
-            return
-
-        # Basically anime.field = data[field] except the field is dynamic
-        setattr(anime, field, data[field])
-
-        anime.ignored_fields.append(field)
-
     for field in [
         "synopsis_ua",
         "synopsis_en",
         "title_en",
         "title_ja",
         "title_ua",
+        "synonyms",
+        "external",
+        "videos",
+        "stats",
+        "ost",
     ]:
         update_if_not_ignored(anime, data, field)
 
-    # ToDo: add extra checks here
-    # anime.translations = process_translations(data)
-    anime.synonyms = data["synonyms"]
-    anime.external = data["external"]
-    anime.videos = data["videos"]
-    anime.stats = data["stats"]
-    anime.ost = data["ost"]
-
-    # ToDo: update poster here?
+    await process_poster(session, anime, data)
 
     anime.needs_update = False
 

@@ -37,7 +37,7 @@ async def save_anime_list(session, data):
 
             add_anime.append(anime)
 
-            print(f"Anime needs update: {anime.title_en}")
+            print(f"Anime needs update: {anime.title_ja}")
 
         else:
             if not (image := poster_cache.get(anime_data["poster"])):
