@@ -20,7 +20,6 @@ async def import_aggregator():
 
     sessionmanager.init(settings.database.endpoint)
 
-    await aggregator_anime_franchises()
     await aggregator_anime_genres()
     await aggregator_anime_roles()
     await aggregator_characters()
@@ -28,6 +27,7 @@ async def import_aggregator():
     await aggregator_people()
     await aggregator_anime()
     await aggregator_anime_info()
+    await aggregator_anime_franchises()
     # await update_search()
 
     await sessionmanager.close()

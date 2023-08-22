@@ -13,10 +13,12 @@ from sqlalchemy import make_url
 from sqlalchemy import select
 from httpx import Response
 from app import create_app
+from app import aggregator
 from unittest import mock
 import test_helpers
 import asyncio
 import pytest
+
 
 from app.models import (
     AuthToken,
@@ -163,7 +165,18 @@ def oauth_fail_http(oauth_response):
 
 # Aggregator fixtures
 @pytest.fixture
-async def load_json_genres():
-    return await test_helpers.load_json(
+async def aggregator_anime_genres(test_session):
+    data = await test_helpers.load_json(
         "tests/aggregator/data/anime_genres.json"
     )
+
+    await aggregator.save_anime_genres(test_session, data)
+
+
+@pytest.fixture
+async def aggregator_anime_roles(test_session):
+    data = await test_helpers.load_json(
+        "tests/aggregator/data/anime_roles.json"
+    )
+
+    await aggregator.update_anime_roles(test_session, data)
