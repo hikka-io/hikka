@@ -1,0 +1,382 @@
+[
+    {
+        "content_id": "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "name": "Action",
+        "type": "genre"
+    },
+    {
+        "content_id": "ebaba115-e384-4707-94e1-944f6c22c7d2",
+        "name": "Adventure",
+        "type": "genre"
+    },
+    {
+        "content_id": "3bd4bfd2-5173-40e0-84d0-2a9c49fb9c5b",
+        "name": "Avant Garde",
+        "type": "genre"
+    },
+    {
+        "content_id": "545bb81f-8702-4358-8f8e-596910ac394c",
+        "name": "Award Winning",
+        "type": "genre"
+    },
+    {
+        "content_id": "367a3e7d-12bd-4393-bdf3-b11ffb4cb130",
+        "name": "Boys Love",
+        "type": "genre"
+    },
+    {
+        "content_id": "b377cf64-9a8b-455f-9634-d1183b5b88b8",
+        "name": "Comedy",
+        "type": "genre"
+    },
+    {
+        "content_id": "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "name": "Drama",
+        "type": "genre"
+    },
+    {
+        "content_id": "75673e0b-e199-49f9-8414-e69db616dcb4",
+        "name": "Fantasy",
+        "type": "genre"
+    },
+    {
+        "content_id": "afcd63d1-f932-420a-85ed-4eba15fc6962",
+        "name": "Girls Love",
+        "type": "genre"
+    },
+    {
+        "content_id": "05fcc0be-f995-4340-84fa-e57bf55624b9",
+        "name": "Gourmet",
+        "type": "genre"
+    },
+    {
+        "content_id": "e47f0d66-3ae8-4d28-84a5-e77169c74048",
+        "name": "Horror",
+        "type": "genre"
+    },
+    {
+        "content_id": "c4fae6d5-b5a0-444b-a4c4-e1e0236c36ca",
+        "name": "Mystery",
+        "type": "genre"
+    },
+    {
+        "content_id": "4a45ce42-05ab-4959-bee1-dda20b929075",
+        "name": "Romance",
+        "type": "genre"
+    },
+    {
+        "content_id": "0163d442-a3e2-4c67-a0df-7fbd11fa2035",
+        "name": "Sci-Fi",
+        "type": "genre"
+    },
+    {
+        "content_id": "96be4e39-ea85-41bb-bfa3-8dbb7da3677d",
+        "name": "Slice of Life",
+        "type": "genre"
+    },
+    {
+        "content_id": "2b5e6e45-7eed-4bae-ae3b-565acc464f4e",
+        "name": "Sports",
+        "type": "genre"
+    },
+    {
+        "content_id": "95ae63e0-a4d7-4f88-8596-92216073db24",
+        "name": "Supernatural",
+        "type": "genre"
+    },
+    {
+        "content_id": "46f23e25-2181-4081-9878-4a74247551ee",
+        "name": "Suspense",
+        "type": "genre"
+    },
+    {
+        "content_id": "c4d46d6f-645a-447c-8583-da489f1d4acc",
+        "name": "Ecchi",
+        "type": "explicit"
+    },
+    {
+        "content_id": "f55dfcf0-48ca-4690-b900-44e50dd7e8df",
+        "name": "Erotica",
+        "type": "explicit"
+    },
+    {
+        "content_id": "15749dc8-e0c3-4c7c-82e6-325e3a286ac2",
+        "name": "Hentai",
+        "type": "explicit"
+    },
+    {
+        "content_id": "cd74d840-8585-4cd1-a26c-ba57b3543d13",
+        "name": "Adult Cast",
+        "type": "theme"
+    },
+    {
+        "content_id": "3330ef40-9999-4c14-9984-dbcf1c7dad85",
+        "name": "Anthropomorphic",
+        "type": "theme"
+    },
+    {
+        "content_id": "ab3b2380-2c0c-45ac-924a-2cef72b59b69",
+        "name": "CGDCT",
+        "type": "theme"
+    },
+    {
+        "content_id": "d8843726-48e3-41bb-b8e1-7ef91e614895",
+        "name": "Childcare",
+        "type": "theme"
+    },
+    {
+        "content_id": "b0b265aa-deac-4a47-8104-ef76b7d538ab",
+        "name": "Combat Sports",
+        "type": "theme"
+    },
+    {
+        "content_id": "db660afc-7ba2-46d9-a9b1-98ece3b21c88",
+        "name": "Crossdressing",
+        "type": "theme"
+    },
+    {
+        "content_id": "b222c427-e3f6-466f-bb8a-4a4b1cd03c96",
+        "name": "Delinquents",
+        "type": "theme"
+    },
+    {
+        "content_id": "d79054aa-f4cd-44b4-9a2f-3dedbe7e60ea",
+        "name": "Detective",
+        "type": "theme"
+    },
+    {
+        "content_id": "c44805f4-aa96-453a-80df-cac99f23e3c6",
+        "name": "Educational",
+        "type": "theme"
+    },
+    {
+        "content_id": "18d32e27-bbcb-4f54-871e-bd940d7186aa",
+        "name": "Gag Humor",
+        "type": "theme"
+    },
+    {
+        "content_id": "c89748be-c9a0-4a13-8f0d-374593a23d7e",
+        "name": "Gore",
+        "type": "theme"
+    },
+    {
+        "content_id": "387f7e4d-8525-44f4-b462-3d63a297a482",
+        "name": "Harem",
+        "type": "theme"
+    },
+    {
+        "content_id": "985e1929-2d7d-4be4-a030-746c7f40ef58",
+        "name": "High Stakes Game",
+        "type": "theme"
+    },
+    {
+        "content_id": "a34f51ba-62a2-4ce4-8f2c-de6af8ba18f8",
+        "name": "Historical",
+        "type": "theme"
+    },
+    {
+        "content_id": "3c1c4427-da62-4fe9-8989-c94167ebfe0d",
+        "name": "Idols (Female)",
+        "type": "theme"
+    },
+    {
+        "content_id": "085647ec-c3b3-4d8e-8dc0-5bacaf56cd88",
+        "name": "Idols (Male)",
+        "type": "theme"
+    },
+    {
+        "content_id": "d5eb04ca-9125-4be5-9eae-8f9f2be6b8ac",
+        "name": "Isekai",
+        "type": "theme"
+    },
+    {
+        "content_id": "4f07a6ca-acf8-44d3-a6cc-2f2b0a8e4047",
+        "name": "Iyashikei",
+        "type": "theme"
+    },
+    {
+        "content_id": "282ff5aa-7700-4816-a1cb-d5dafa9c3c6c",
+        "name": "Love Polygon",
+        "type": "theme"
+    },
+    {
+        "content_id": "580c1c45-6b3b-49bf-8b71-a0ca6ad9a76e",
+        "name": "Magical Sex Shift",
+        "type": "theme"
+    },
+    {
+        "content_id": "0be2f050-4c31-4f06-8cfb-527b8890aefb",
+        "name": "Mahou Shoujo",
+        "type": "theme"
+    },
+    {
+        "content_id": "576b32cf-71f0-4e54-9639-cedbee93da15",
+        "name": "Martial Arts",
+        "type": "theme"
+    },
+    {
+        "content_id": "df7f5b50-950e-4f87-bbe1-e23bdfd203ae",
+        "name": "Mecha",
+        "type": "theme"
+    },
+    {
+        "content_id": "7ef7b720-5f3b-418b-9c7e-e99c5a96c906",
+        "name": "Medical",
+        "type": "theme"
+    },
+    {
+        "content_id": "45a3e2cf-0d37-4bad-bed0-9268f02f7d6b",
+        "name": "Military",
+        "type": "theme"
+    },
+    {
+        "content_id": "d84a3119-534c-4eb5-ba48-4b2ade683e38",
+        "name": "Music",
+        "type": "theme"
+    },
+    {
+        "content_id": "5277d2bf-715c-4576-83ab-981afabb4ca2",
+        "name": "Mythology",
+        "type": "theme"
+    },
+    {
+        "content_id": "5998a658-e9b0-4920-9909-ad68e627c822",
+        "name": "Organized Crime",
+        "type": "theme"
+    },
+    {
+        "content_id": "17f0bb4a-3993-4543-b7aa-3a37f9976c17",
+        "name": "Otaku Culture",
+        "type": "theme"
+    },
+    {
+        "content_id": "b8add093-93bd-4448-9712-36198eba7a56",
+        "name": "Parody",
+        "type": "theme"
+    },
+    {
+        "content_id": "4af488c3-c478-4afd-94cd-e6e780c311a8",
+        "name": "Performing Arts",
+        "type": "theme"
+    },
+    {
+        "content_id": "adae8066-94c1-4598-a2c3-3d3cc8fccad9",
+        "name": "Pets",
+        "type": "theme"
+    },
+    {
+        "content_id": "b3c7aa68-5cb4-40fb-b0e0-47099f10fc7b",
+        "name": "Psychological",
+        "type": "theme"
+    },
+    {
+        "content_id": "dd22db6d-b5e5-45af-aeee-8c9562e56054",
+        "name": "Racing",
+        "type": "theme"
+    },
+    {
+        "content_id": "f1ff289d-0571-4950-a7ff-122c331eafd8",
+        "name": "Reincarnation",
+        "type": "theme"
+    },
+    {
+        "content_id": "87b60444-72d7-45a5-ad4d-c3391789916a",
+        "name": "Reverse Harem",
+        "type": "theme"
+    },
+    {
+        "content_id": "1cd67fa4-f783-4191-aff9-51405e7e2111",
+        "name": "Romantic Subtext",
+        "type": "theme"
+    },
+    {
+        "content_id": "6ec68c79-7abd-4ffd-813e-dc86c30fdb30",
+        "name": "Samurai",
+        "type": "theme"
+    },
+    {
+        "content_id": "9cb8e61a-0d90-4e3e-84b6-31f4f9684834",
+        "name": "School",
+        "type": "theme"
+    },
+    {
+        "content_id": "95ef7498-ba41-40bc-a40b-34c8d0a36fe2",
+        "name": "Showbiz",
+        "type": "theme"
+    },
+    {
+        "content_id": "5d71c26c-945c-4f83-b0a8-ea3ebc02ff6a",
+        "name": "Space",
+        "type": "theme"
+    },
+    {
+        "content_id": "733c2d97-0259-491d-9a32-b9364991c718",
+        "name": "Strategy Game",
+        "type": "theme"
+    },
+    {
+        "content_id": "4f789b26-7861-47a4-b265-d34b98ce0db7",
+        "name": "Super Power",
+        "type": "theme"
+    },
+    {
+        "content_id": "20a4b551-7e47-4d44-85a3-2bdfb63cea62",
+        "name": "Survival",
+        "type": "theme"
+    },
+    {
+        "content_id": "c8c47f81-872f-4943-9af5-e466cb19fdc6",
+        "name": "Team Sports",
+        "type": "theme"
+    },
+    {
+        "content_id": "c9f61f03-16fb-4c71-a16e-ea2ead5a14d8",
+        "name": "Time Travel",
+        "type": "theme"
+    },
+    {
+        "content_id": "e9b467e7-39d7-43f5-b9d9-be460ccd21a2",
+        "name": "Vampire",
+        "type": "theme"
+    },
+    {
+        "content_id": "57d31910-2408-4160-9daf-7be0d1441e09",
+        "name": "Video Game",
+        "type": "theme"
+    },
+    {
+        "content_id": "0227a578-48e9-4e0f-8c70-c0ef47d69a2e",
+        "name": "Visual Arts",
+        "type": "theme"
+    },
+    {
+        "content_id": "775b74e6-2341-4948-bef6-b308217071ac",
+        "name": "Workplace",
+        "type": "theme"
+    },
+    {
+        "content_id": "7df6dd45-b339-4f04-b0c5-2018fdbdccff",
+        "name": "Josei",
+        "type": "demographic"
+    },
+    {
+        "content_id": "60ca4902-df67-46eb-8d9f-93d1f57205b5",
+        "name": "Kids",
+        "type": "demographic"
+    },
+    {
+        "content_id": "bd7b1695-9d1f-4363-be74-3934ed433206",
+        "name": "Seinen",
+        "type": "demographic"
+    },
+    {
+        "content_id": "ee7df871-87e5-41da-b715-27a0379902b9",
+        "name": "Shoujo",
+        "type": "demographic"
+    },
+    {
+        "content_id": "77572b04-8ab6-4f74-b65e-e1194da761fb",
+        "name": "Shounen",
+        "type": "demographic"
+    }
+]

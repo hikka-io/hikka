@@ -1,6 +1,14 @@
 from app.auth.utils import hashpwd, new_token
 from datetime import datetime, timedelta
 from app.models import User, UserOAuth
+import aiofiles
+import json
+
+
+async def load_json(path):
+    async with aiofiles.open(path, mode="r") as file:
+        contents = await file.read()
+        return json.loads(contents)
 
 
 async def create_user(test_session, activated=True, email="user@mail.com"):

@@ -159,3 +159,11 @@ def oauth_fail_http(oauth_response):
         "httpx.AsyncClient.request", side_effect=OAuthError
     ) as mocked:
         yield mocked
+
+
+# Aggregator fixtures
+@pytest.fixture
+async def load_json_genres():
+    return await test_helpers.load_json(
+        "tests/aggregator/data/anime_genres.json"
+    )
