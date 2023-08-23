@@ -75,3 +75,20 @@ SEARCH_INDEX_ANIME = "content_anime"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
+
+# Roles
+ROLES = {
+    "user": [
+        "content:create_edit",
+    ],
+    "moderator": [
+        "content:create_edit",
+        "content:accept_edit",
+        "content:reject_edit",
+    ],
+    "admin": [
+        "content:create_edit",
+        "content:confirm_edit",
+        "content:reject_edit",
+    ],
+}
