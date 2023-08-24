@@ -86,6 +86,7 @@ PERMISSION_CREATE_EDIT = "content:create_edit"
 PERMISSION_ACCEPT_EDIT = "content:accept_edit"
 PERMISSION_REJECT_EDIT = "content:reject_edit"
 PERMISSION_CONFIRM_EDIT = "content:confirm_edit"
+PERMISSION_TEST = "system:test"
 
 # Role permissions
 ROLES = {
@@ -101,5 +102,6 @@ ROLES = {
         PERMISSION_CREATE_EDIT,
         PERMISSION_CONFIRM_EDIT,
         PERMISSION_REJECT_EDIT,
+        PERMISSION_TEST,
     ],
 }

@@ -11,8 +11,9 @@ class User(Base):
 
     username: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
     email: Mapped[str] = mapped_column(String(255), index=True, nullable=True)
-    description: Mapped[str] = mapped_column(String(140), nullable=True)
+    role: Mapped[str] = mapped_column(String(64), index=True, nullable=True)
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
+    description: Mapped[str] = mapped_column(String(140), nullable=True)
     activated: Mapped[bool] = mapped_column(default=False)
     banned: Mapped[bool] = mapped_column(default=False)
 
