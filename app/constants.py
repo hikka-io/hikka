@@ -77,18 +77,29 @@ COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
 
 # Roles
+ROLE_USER = "user"
+ROLE_MODERATOR = "moderator"
+ROLE_ADMIN = "admin"
+
+# Permissions
+PERMISSION_CREATE_EDIT = "content:create_edit"
+PERMISSION_ACCEPT_EDIT = "content:accept_edit"
+PERMISSION_REJECT_EDIT = "content:reject_edit"
+PERMISSION_CONFIRM_EDIT = "content:confirm_edit"
+
+# Role permissions
 ROLES = {
-    "user": [
-        "content:create_edit",
+    ROLE_USER: [
+        PERMISSION_CREATE_EDIT,
     ],
-    "moderator": [
-        "content:create_edit",
-        "content:accept_edit",
-        "content:reject_edit",
+    ROLE_MODERATOR: [
+        PERMISSION_CREATE_EDIT,
+        PERMISSION_ACCEPT_EDIT,
+        PERMISSION_REJECT_EDIT,
     ],
-    "admin": [
-        "content:create_edit",
-        "content:confirm_edit",
-        "content:reject_edit",
+    ROLE_ADMIN: [
+        PERMISSION_CREATE_EDIT,
+        PERMISSION_CONFIRM_EDIT,
+        PERMISSION_REJECT_EDIT,
     ],
 }

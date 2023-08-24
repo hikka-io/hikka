@@ -37,7 +37,7 @@ errors = {
         "banned": ["Banned", 403],
     },
     "permission": {
-        "missing": ["You don't have permission for this action", 401],
+        "denied": ["You don't have permission for this action", 403],
     },
     "anime": {
         "no-franchise": ["This anime doesn't have franchise", 400],

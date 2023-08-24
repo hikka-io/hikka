@@ -41,6 +41,7 @@ async def get_anime(
 # Check user auth token
 def auth_required(
     oauth_skip: bool = False,
+    permissions: list = [],
 ):
     async def auth(
         auth: str = Header(),
@@ -65,6 +66,9 @@ def auth_required(
 
         if now > token.expiration:
             raise Abort("auth", "token-expired")
+
+        if len(permissions) > 0:
+            raise Abort("permission", "denied")
 
         token.expiration = now + timedelta(days=3)
         token.user.last_active = now
