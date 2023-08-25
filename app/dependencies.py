@@ -5,6 +5,7 @@ from fastapi import Header, Query
 from .models import User, Anime
 from fastapi import Depends
 from .errors import Abort
+from app import constants
 
 from .service import (
     get_user_by_username,
@@ -41,6 +42,7 @@ async def get_anime(
 # Check user auth token
 def auth_required(
     oauth_skip: bool = False,
+    permissions: list = [],
 ):
     async def auth(
         auth: str = Header(),
@@ -65,6 +67,17 @@ def auth_required(
 
         if now > token.expiration:
             raise Abort("auth", "token-expired")
+
+        # Simple check for permissions
+        if len(permissions) > 0:
+            role_permissions = constants.ROLES.get(token.user.role, [])
+
+            has_permission = all(
+                permission in role_permissions for permission in permissions
+            )
+
+            if not has_permission:
+                raise Abort("permission", "denied")
 
         token.expiration = now + timedelta(days=3)
         token.user.last_active = now

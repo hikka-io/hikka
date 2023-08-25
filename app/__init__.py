@@ -38,6 +38,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Favourite"},
             {"name": "Watch"},
             {"name": "List"},
+            {"name": "Edit"},
         ],
         lifespan=lifespan,
         # redoc_url=None,
@@ -68,6 +69,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .user import router as user_router
     from .auth import router as auth_router
     from .list import router as list_router
+    from .edit import router as edit_router
 
     app.include_router(characters_router)
     app.include_router(companies_router)
@@ -79,6 +81,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(user_router)
     app.include_router(auth_router)
     app.include_router(list_router)
+    app.include_router(edit_router)
 
     @app.get("/ping")
     async def ping_pong():

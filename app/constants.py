@@ -75,3 +75,33 @@ SEARCH_INDEX_ANIME = "content_anime"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
+
+# Roles
+ROLE_USER = "user"
+ROLE_MODERATOR = "moderator"
+ROLE_ADMIN = "admin"
+
+# Permissions
+PERMISSION_CREATE_EDIT = "content:create_edit"
+PERMISSION_ACCEPT_EDIT = "content:accept_edit"
+PERMISSION_REJECT_EDIT = "content:reject_edit"
+PERMISSION_CONFIRM_EDIT = "content:confirm_edit"
+PERMISSION_TEST = "system:test"
+
+# Role permissions
+ROLES = {
+    ROLE_USER: [
+        PERMISSION_CREATE_EDIT,
+    ],
+    ROLE_MODERATOR: [
+        PERMISSION_CREATE_EDIT,
+        PERMISSION_ACCEPT_EDIT,
+        PERMISSION_REJECT_EDIT,
+    ],
+    ROLE_ADMIN: [
+        PERMISSION_CREATE_EDIT,
+        PERMISSION_CONFIRM_EDIT,
+        PERMISSION_REJECT_EDIT,
+        PERMISSION_TEST,
+    ],
+}
