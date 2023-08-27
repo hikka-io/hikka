@@ -15,7 +15,7 @@ from httpx import Response
 from app import create_app
 from app import aggregator
 from unittest import mock
-import test_helpers
+import helpers
 import asyncio
 import pytest
 
@@ -95,18 +95,18 @@ async def test_session():
 
 @pytest.fixture
 async def create_test_user(test_session):
-    await test_helpers.create_user(test_session)
+    await helpers.create_user(test_session)
 
 
 @pytest.fixture
 async def create_test_user_not_activated(test_session):
-    await test_helpers.create_user(test_session, activated=False)
+    await helpers.create_user(test_session, activated=False)
 
 
 @pytest.fixture
 async def create_test_user_with_oauth(test_session):
-    user = await test_helpers.create_user(test_session)
-    await test_helpers.create_oauth(test_session, user.id)
+    user = await helpers.create_user(test_session)
+    await helpers.create_oauth(test_session, user.id)
 
 
 @pytest.fixture
@@ -166,17 +166,13 @@ def oauth_fail_http(oauth_response):
 # Aggregator fixtures
 @pytest.fixture
 async def aggregator_anime_genres(test_session):
-    data = await test_helpers.load_json(
-        "tests/aggregator/data/anime_genres.json"
-    )
+    data = await helpers.load_json("tests/aggregator/data/anime_genres.json")
 
     await aggregator.save_anime_genres(test_session, data)
 
 
 @pytest.fixture
 async def aggregator_anime_roles(test_session):
-    data = await test_helpers.load_json(
-        "tests/aggregator/data/anime_roles.json"
-    )
+    data = await helpers.load_json("tests/aggregator/data/anime_roles.json")
 
     await aggregator.update_anime_roles(test_session, data)

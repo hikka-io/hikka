@@ -8,11 +8,16 @@ from . import utils
 import orjson
 
 
+# Dump dict using orjson
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
+
+
 # Custom Pydantic model
 class ORJSONModel(BaseModel):
     class Config:
         json_encoders = {datetime: utils.to_timestamp}
-        json_dumps = utils.orjson_dumps
+        json_dumps = orjson_dumps
         json_loads = orjson.loads
         use_enum_values = True
         orm_mode = True
