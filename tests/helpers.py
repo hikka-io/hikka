@@ -11,7 +11,9 @@ async def load_json(path):
         return json.loads(contents)
 
 
-async def create_user(test_session, activated=True, email="user@mail.com"):
+async def create_user(
+    test_session, activated=True, username="username", email="user@mail.com"
+):
     now = datetime.utcnow()
 
     user = User(
@@ -19,11 +21,11 @@ async def create_user(test_session, activated=True, email="user@mail.com"):
             "activation_expire": datetime.utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
             "activation_token": new_token(),
-            "email": email,
             "activated": activated,
-            "username": "username",
+            "username": username,
             "last_active": now,
             "created": now,
+            "email": email,
             "login": now,
         }
     )

@@ -1,3 +1,7 @@
+# ToDo: Split into multiple files
+
+
+# Auth
 def request_signup(client, email, username, password):
     return client.post(
         "/auth/signup",
@@ -40,6 +44,7 @@ def request_password_confirm(client, token, new_password):
     )
 
 
+# Oauth
 def request_oauth_url(client, provider):
     return client.get(f"/auth/oauth/{provider}")
 
@@ -53,9 +58,47 @@ def oauth_post(client, provider, code=None):
     )
 
 
+# User
 def request_me(client, token):
-    return client.get("/user/me", headers={"Auth": token})
+    return client.get(
+        "/user/me",
+        headers={"Auth": token},
+    )
 
 
 def request_profile(client, username):
     return client.get(f"/user/{username}")
+
+
+# Follow
+def request_follow_check(client, token, username):
+    return client.get(
+        f"/follow/{username}",
+        headers={"Auth": token},
+    )
+
+
+def request_follow(client, token, username):
+    return client.put(
+        f"/follow/{username}",
+        headers={"Auth": token},
+    )
+
+
+def request_unfollow(client, token, username):
+    return client.delete(
+        f"/follow/{username}",
+        headers={"Auth": token},
+    )
+
+
+def request_follow_stats(client, username):
+    return client.get(f"/follow/{username}/stats")
+
+
+def request_following(client, username):
+    return client.get(f"/follow/{username}/following")
+
+
+def request_followers(client, username):
+    return client.get(f"/follow/{username}/followers")

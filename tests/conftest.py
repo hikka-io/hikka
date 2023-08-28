@@ -99,6 +99,13 @@ async def create_test_user(test_session):
 
 
 @pytest.fixture
+async def create_dummy_user(test_session):
+    await helpers.create_user(
+        test_session, username="dummy", email="dummy@mail.com"
+    )
+
+
+@pytest.fixture
 async def create_test_user_not_activated(test_session):
     await helpers.create_user(test_session, activated=False)
 
