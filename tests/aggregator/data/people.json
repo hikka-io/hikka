@@ -1,0 +1,17 @@
+{
+    "pagination": {
+        "total": 22178,
+        "pages": 3,
+        "page": 1
+    },
+    "list": [
+        {
+            "name_en": "Hiroshi Kamiya",
+            "name_ja": "神谷 浩史",
+            "image": "/content/people/hiroshi-kamiya-124b1f/5e3laQ148hcDLi2wsq5b0Q.jpg",
+            "updated": 1689370659,
+            "content_id": "124b1f8e-572b-44ef-b2b0-1068ce4dad4c",
+            "favorites": 106056
+        }
+    ]
+}

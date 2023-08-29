@@ -190,3 +190,10 @@ async def aggregator_characters(test_session):
     data = await helpers.load_json("tests/aggregator/data/characters.json")
 
     await aggregator.save_characters(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_people(test_session):
+    data = await helpers.load_json("tests/aggregator/data/people.json")
+
+    await aggregator.save_people(test_session, data["list"])

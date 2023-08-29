@@ -4,8 +4,10 @@ from sqlalchemy import func
 
 
 async def test_import_characters(test_session, aggregator_characters):
-    genres_count = await test_session.scalar(select(func.count(Character.id)))
-    assert genres_count == 10
+    characters_count = await test_session.scalar(
+        select(func.count(Character.id))
+    )
+    assert characters_count == 10
 
     # Check individual character
     character = await test_session.scalar(
