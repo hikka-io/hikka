@@ -1,0 +1,89 @@
+{
+    "pagination": {
+        "total": 10,
+        "pages": 1,
+        "page": 1
+    },
+    "list": [
+        {
+            "name_en": "Lelouch Lamperouge",
+            "name_ja": "ルルーシュ・ランペルージ",
+            "image": "/content/characters/lelouch-lamperouge-b1efd4/Q3G2k0jPcK3Yx46wQ7Cu3Q.jpg",
+            "updated": 1689370344,
+            "content_id": "b1efd49f-952c-4888-a638-462fc70bc23f",
+            "favorites": 164657
+        },
+        {
+            "name_en": "Levi",
+            "name_ja": "リヴァイ",
+            "image": "/content/characters/levi-565409/uuEltburcIrRg-2sNcLsKQ.jpg",
+            "updated": 1689370344,
+            "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec",
+            "favorites": 137259
+        },
+        {
+            "name_en": "Luffy Monkey D.",
+            "name_ja": "モンキー・D・ルフィ",
+            "image": "/content/characters/luffy-monkey-d-b6c098/jxnLBB9hZhJDQvPOVup6_w.jpg",
+            "updated": 1689370344,
+            "content_id": "b6c098b5-99d9-4c3f-b6c8-03ddb2b8b172",
+            "favorites": 131200
+        },
+        {
+            "name_en": "L Lawliet",
+            "name_ja": "エル ローライト",
+            "image": "/content/characters/l-lawliet-393ffe/XUckEcuduIWSugqWM8mG7w.jpg",
+            "updated": 1689370344,
+            "content_id": "393ffee0-1cb5-4437-aa04-01fbc30fb5f9",
+            "favorites": 124283
+        },
+        {
+            "name_en": "Zoro Roronoa",
+            "name_ja": "ロロノア・ゾロ",
+            "image": "/content/characters/zoro-roronoa-c9f79d/By_w7ISRVkBnswt4hXlNhw.jpg",
+            "updated": 1689370344,
+            "content_id": "c9f79d36-f9bf-468e-bf70-7b4d4aa04013",
+            "favorites": 104601
+        },
+        {
+            "name_en": "Light Yagami",
+            "name_ja": "夜神 月",
+            "image": "/content/characters/light-yagami-0ceb01/CNNvbzkiF-DCOvi0HTYY9w.jpg",
+            "updated": 1689370344,
+            "content_id": "0ceb010c-4f7f-4556-a669-33db99f2c823",
+            "favorites": 94167
+        },
+        {
+            "name_en": "Killua Zoldyck",
+            "name_ja": "キルア=ゾルディック",
+            "image": "/content/characters/killua-zoldyck-7dcb03/eMC25f0fBLgWagPd-o4B-g.jpg",
+            "updated": 1689370344,
+            "content_id": "7dcb0393-9304-4af8-87c1-5d364bc946dd",
+            "favorites": 93572
+        },
+        {
+            "name_en": "Rintarou Okabe",
+            "name_ja": "岡部 倫太郎",
+            "image": "/content/characters/rintarou-okabe-765892/U4fQxyWSSlKuJyBVcISb4A.jpg",
+            "updated": 1689370344,
+            "content_id": "76589296-5e3f-4010-a13d-7321ac52939d",
+            "favorites": 92741
+        },
+        {
+            "name_en": "Edward Elric",
+            "name_ja": "エドワード・エルリック",
+            "image": "/content/characters/edward-elric-3a3963/oUNX9S8JWIbXgN-93yuNjQ.jpg",
+            "updated": 1689370344,
+            "content_id": "3a396391-dbc0-47b2-8ddf-8a1141748a3a",
+            "favorites": 85959
+        },
+        {
+            "name_en": "Naruto Uzumaki",
+            "name_ja": "うずまき ナルト",
+            "image": "/content/characters/naruto-uzumaki-4e1eca/XQDfNCeOO4paEMCXF6r4VA.jpg",
+            "updated": 1689370344,
+            "content_id": "4e1eca44-b04d-4f6b-8e0d-996d617ffde3",
+            "favorites": 82151
+        }
+    ]
+}

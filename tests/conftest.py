@@ -183,3 +183,10 @@ async def aggregator_anime_roles(test_session):
     data = await helpers.load_json("tests/aggregator/data/anime_roles.json")
 
     await aggregator.update_anime_roles(test_session, data)
+
+
+@pytest.fixture
+async def aggregator_characters(test_session):
+    data = await helpers.load_json("tests/aggregator/data/characters.json")
+
+    await aggregator.save_characters(test_session, data["list"])
