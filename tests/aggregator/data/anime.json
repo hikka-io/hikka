@@ -1,0 +1,27 @@
+{
+    "pagination": {
+        "total": 24801,
+        "pages": 249,
+        "page": 1
+    },
+    "list": [
+        {
+            "episodes_released": 64,
+            "start_date": 1238878800,
+            "episodes_total": 64,
+            "end_date": 1278190800,
+            "title_en": "Fullmetal Alchemist: Brotherhood",
+            "title_ja": "Fullmetal Alchemist: Brotherhood",
+            "title_ua": "Сталевий алхімік: Братерство",
+            "poster": "/content/anime/fullmetal-alchemist-brotherhood-fc524a/1dRVedKKpa2i_iiHmEcDhA.jpg",
+            "season": "spring",
+            "status": "finished",
+            "created": 1687273642,
+            "updated": 1689272170,
+            "content_id": "fc524a18-378f-4ccb-82a0-b4063206c600",
+            "media_type": "tv",
+            "scored_by": 2028821,
+            "score": 9.1
+        }
+    ]
+}

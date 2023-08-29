@@ -197,3 +197,10 @@ async def aggregator_people(test_session):
     data = await helpers.load_json("tests/aggregator/data/people.json")
 
     await aggregator.save_people(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_anime(test_session):
+    data = await helpers.load_json("tests/aggregator/data/anime.json")
+
+    await aggregator.save_anime_list(test_session, data["list"])
