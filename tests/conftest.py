@@ -22,6 +22,7 @@ import pytest
 
 from app.models import (
     AuthToken,
+    Anime,
     User,
     Base,
 )
@@ -204,3 +205,17 @@ async def aggregator_anime(test_session):
     data = await helpers.load_json("tests/aggregator/data/anime.json")
 
     await aggregator.save_anime_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_anime_info(test_session):
+    if anime := await test_session.scalar(
+        select(Anime).filter(
+            Anime.slug == "fullmetal-alchemist-brotherhood-fc524a"
+        )
+    ):
+        data = await helpers.load_json(
+            "tests/aggregator/data/anime_info_fma.json"
+        )
+
+        await aggregator.update_anime_info(test_session, anime, data)
