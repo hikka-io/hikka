@@ -31,7 +31,7 @@ class Person(
     )
 
     voice_roles: Mapped[list["AnimeVoice"]] = relationship(
-        back_populates="person"
+        back_populates="person", viewonly=True
     )
 
     image_id = mapped_column(

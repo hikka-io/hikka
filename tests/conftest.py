@@ -7,6 +7,7 @@ from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
 from datetime import datetime, timedelta
 from pytest_postgresql import factories
+from sqlalchemy.orm import selectinload
 from app.settings import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
@@ -219,7 +220,9 @@ async def aggregator_anime_info(test_session):
 
     for slug in anime_list:
         if anime := await test_session.scalar(
-            select(Anime).filter(Anime.content_id == slug)
+            select(Anime)
+            .filter(Anime.content_id == slug)
+            .options(selectinload(Anime.genres))
         ):
             data = await helpers.load_json(
                 f"tests/aggregator/data/anime_info/{anime_list[slug]}"

@@ -60,7 +60,9 @@ class Anime(
     stats: Mapped[list] = mapped_column(JSONB, default=[])
     ost: Mapped[list] = mapped_column(JSONB, default=[])
 
-    voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
+    voices: Mapped[list["AnimeVoice"]] = relationship(
+        back_populates="anime", viewonly=True
+    )
     staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
 
     episodes_list: Mapped[list["AnimeEpisode"]] = relationship(
@@ -68,7 +70,7 @@ class Anime(
     )
 
     characters: Mapped[list["AnimeCharacter"]] = relationship(
-        back_populates="anime"
+        back_populates="anime", viewonly=True
     )
 
     recommendations: Mapped[list["AnimeRecommendation"]] = relationship(
