@@ -1,0 +1,2084 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "06347beb-6914-46e0-811b-561d846d6b70"
+            },
+            "weight": 129
+        },
+        {
+            "recommended": {
+                "content_id": "d35fd64d-7e84-4e68-9791-cbcd798ef1cd"
+            },
+            "weight": 129
+        },
+        {
+            "recommended": {
+                "content_id": "83ac27c6-62e0-41a4-a311-058b84aafc6e"
+            },
+            "weight": 49
+        },
+        {
+            "recommended": {
+                "content_id": "f990037d-5e05-4021-a545-c1b7a17842d2"
+            },
+            "weight": 27
+        },
+        {
+            "recommended": {
+                "content_id": "26d9309c-6d15-41da-a27d-3ed7b0bfd321"
+            },
+            "weight": 25
+        },
+        {
+            "recommended": {
+                "content_id": "03c3c761-f22f-4d09-8132-4882d637ddad"
+            },
+            "weight": 18
+        },
+        {
+            "recommended": {
+                "content_id": "cd9ef25c-048e-4fe9-9f57-bdcac2c760a6"
+            },
+            "weight": 18
+        },
+        {
+            "recommended": {
+                "content_id": "d25732a1-332b-4e11-9170-4657673a8937"
+            },
+            "weight": 15
+        },
+        {
+            "recommended": {
+                "content_id": "e967c4b1-520a-4cff-a674-c57214ad99d6"
+            },
+            "weight": 15
+        },
+        {
+            "recommended": {
+                "content_id": "bc51e6a4-86c1-472a-a472-0039d900afa4"
+            },
+            "weight": 14
+        },
+        {
+            "recommended": {
+                "content_id": "068fbc97-fff5-4b6b-9c07-c6004f84e5b7"
+            },
+            "weight": 13
+        },
+        {
+            "recommended": {
+                "content_id": "d09492be-cb3e-475d-829d-a5d0675f2539"
+            },
+            "weight": 12
+        },
+        {
+            "recommended": {
+                "content_id": "b9ebd61b-d376-458a-bed5-9d3d0a01b53c"
+            },
+            "weight": 11
+        },
+        {
+            "recommended": {
+                "content_id": "56200882-ec97-4c66-b344-f9bb30edf7bf"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "428838d9-fc44-4898-a0a6-19c36d0a00b0"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "14bb67fb-97f2-45ad-b0bc-4d3c70240105"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "123dc2fb-e132-4da4-a320-f4af86de4836"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "eb725d32-11fe-4bac-8279-a59f29cf67f6"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "c39f5f99-7b7e-44df-b56b-d5471a6b7010"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "7e230025-397e-4a98-9ba4-9c1c798417b9"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "236fd275-6531-4b1c-8e3b-e2d6fafa3473"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "233d17ac-453a-4814-9f78-c1cb4227a7e8"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "db6511dc-53fc-4f64-9d22-f0de8bb9881b"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "c9702a0e-031f-4abd-8ef9-4da984782cac"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "1faa9b8e-10e1-4c11-b95f-15fcd54cc00c"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "24b65774-4f05-4d51-9c31-092ddb4473e1"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "99942e70-b061-419e-bc7c-7b4e26b968f5"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "1a3a5b04-463c-4062-b625-cdc4b6e946b4"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "d9d0c48a-e677-4019-9eab-81a976ed9378"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "45a95a9e-715f-4679-a42c-f0b2a39552cc"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "22671a62-0691-4c65-95e1-2a3bff23927b"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "94577949-789f-4c5c-bb56-a88b243254bb"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "392d0e1e-d075-4eda-b9b8-d67475c70aca"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "ead4f16d-2dbb-4cee-981d-9149fc2ff02a"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "bb1f1e37-5b55-47d5-b813-fb884e1e06d7"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "5e7d1104-12c4-42e7-b817-c49262725bd7"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "cb69190b-2894-441f-af2d-e1f9ed8769a0"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "9940e20a-d381-4d28-a935-089c5e02546b"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "ed6fbb41-b5f6-4bc9-83b1-161b3e4b1741"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "48eb1db9-3241-4e06-a620-13e6e01bb73d"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "13d06408-e451-4f17-8a50-f21653146b56"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "a5221a92-294e-43b5-8ab2-32e019d19b39"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "5e03a8f2-427c-4842-950f-5c4c01ef413e"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "94c3d13f-3838-4155-86fb-451efad2730e"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "57785cd0-ec76-4f02-9875-5aec96368124"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "5848f580-56c2-4452-ac50-4567a75635c4"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "1234273e-c832-4fcb-bf42-036878fac710"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "458d3067-f4e4-4290-ba27-be0092dba857"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "6b6fa116-86f9-434b-8441-5b422773dc94"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "34131578-8f73-42ee-bce7-0934439fa365"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "86ec190c-a1cc-4834-875c-480a4105d55d"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "114ac319-f27e-44a2-8890-429ec69f2166"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "491c0e29-fad2-4553-bc3e-c8e0e6f6605c"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "0bb8d411-50c3-4c23-8f45-64b447e8ce8a"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "d572ee61-10bd-42f2-8d1c-31a220ba1ae5"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "6dc72f9a-8f7a-437c-9c01-f798973e92a8"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "eed0c59e-3927-417e-8fb1-67d8beeb41e9"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "52721db6-d88f-443f-93be-c9e0a5f003c9"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "34da3b1f-adc2-4ab1-b841-71a1559aea56"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "851d1188-ee62-4cc7-9e3d-e7f586451036"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "06f751c0-1c8f-4a56-baf3-f825aca86bba"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "52f755bc-7d98-47c7-be7e-9525d017c1ff"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "4c3ed5d8-b2ae-492e-8306-f9c7e5a0bc7c"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "aa1e3b39-9e81-4e47-9339-9e195f420f2e"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "3324cfe8-aaa8-4555-8507-b3fcae5d2975"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "e5eeaa63-e218-42da-a0e7-b976211c77b5"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "5897bb9f-b4a9-4e07-844e-bd84e9b302ef"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "30bada41-ac43-4a75-96b9-c4c8155be3f2"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a75c369e-60bc-471b-903c-c8cd7fcfd4d9"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "e2bc40ab-d404-4032-a446-aca311e1fd34"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "b2a3c87d-17f4-4668-906f-0494ff1d0abb"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "87401459-1245-4b3c-8df7-c6f302f923f0"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a00da856-cc2b-4daa-b6fe-2b26474d073c"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "ca8d1491-320a-42e2-bfdb-168676081a77"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "f395fff4-32fe-4b11-a5d3-297991f788d2"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "88dfafad-60f9-41dc-9150-d71db23f357a"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9a92f79f-d9d3-4a38-9dac-4810850dc734"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "fc00eca5-c7bb-4442-9f3d-09d98661b036"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "eb1779cf-d451-4e84-ad89-c088118ecbdd"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "bad64b46-1ddc-49c9-bf02-1dd868f5a6df"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "f09891a9-d708-4f5a-bf6d-08ecaac1b9d0"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "0471f3f2-965f-45e3-a80f-2096e4a3b8b4"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "3f21fb57-c540-4218-b3b3-1a76dd3dc091"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "de053e39-6b2a-4073-8f60-422dd99c62ef"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e33fd5f6-e0cf-4b42-8b75-d75e006a465b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f06acc63-ab35-4f31-b5c1-ddb466f877fe"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "163612e2-5f0a-4d1a-a039-1f2bf750c167"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6abf59dd-7178-40ea-89da-031d52bac385"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2d850d7f-4cf2-49cb-9d17-582367cee10f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "efc038a5-ba04-476d-86ee-4a5ccb23aa95"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ad5d9734-77a7-411a-8020-33b2b3e4a34d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c888998b-3987-411e-b283-648303854403"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4f98144a-d058-4aca-ad81-eaada645f30d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3302addd-c952-4039-86d8-ee0003d5af43"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f531fd48-7dd2-47c9-8d89-810f63407a74"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e9dd08c4-2716-40f2-9a8f-2bce8d343935"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "01df4eb0-6730-45e8-8f71-5bf5ea1e96f4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ae6b9d7d-91db-4ea8-bf46-c2ded961cc9c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c10842a5-1f03-40e5-bf44-8034623caf2a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "59734ab9-50ff-4c6d-8885-7acd71b0b592"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "564fd0ac-bbdd-4645-8d48-19e3eafa9ccf"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5285406d-2aaa-4903-93e3-6ee55ef32efb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7884da8a-eca0-4858-8779-749533fb0a86"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f5461e21-611a-4756-87bc-02162468ea96"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2b00e50a-b4b3-4ccc-9851-a167f224dff0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4ca1a264-fd8c-4316-bd42-66157e820e7a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6433f422-e126-45a5-891f-7dafc8bb6172"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9d83b8b9-aa0d-4b02-b633-d4ae1f7c7187"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "caf83a75-ed4d-405e-a8c8-714de6f0f910"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "80616233-e188-49c2-9d9e-b51fc9811b78"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "94a969da-7e63-4aa8-9eb2-09e52739cadd"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2beb5dc9-658d-4f24-a898-4cb9e9d9f6fa"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ff18fd68-e369-4b66-817d-69f1091bdec4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bbcfd13b-7233-4fcd-8ca5-56e3d0f934eb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "21d71702-ef6e-4e7a-b444-eccfa390894e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "085587f5-25b7-4eb0-ba1c-5b1281cedef8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b52dd2fa-81c7-463f-bf3f-6f6fc66f3496"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5ca1c6c6-7641-493b-9301-08383475b4b8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6fa6472e-206a-470b-bbe2-b91b131fde31"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "28632596-b69f-470e-aed6-8230e038cd99"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5296bf40-430c-4cb9-b403-ed4f8be4dc51"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bab43a7c-22a8-4a6f-96b5-d24a0e8b98d2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4c2172a6-00aa-40fe-8bf1-8cf5ac9ec4b3"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "767f7cb1-4991-4ffe-b739-03c867060113"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e0c87a73-2f1a-4b76-bcbf-3547d7a3947e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "1ee2d101-786d-4d3e-a2b9-a76ffaa98875"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5c51fd40-80af-4bda-8618-8ec0c4ff978e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a216e97a-bc5c-4c0e-bcef-97e0f711ed1d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a73ecfa4-9a59-4ee7-ab17-48019d8835a7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "971fe227-0d0f-4220-ae0b-fe4defe3b8dc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "de913a21-ed18-4c83-b7bd-0fc3c714f4c0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a5f62dc8-3d90-48e5-980c-87790f1c9bf1"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "66169980-59a7-4887-9837-3a258a41345b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b218afbe-12df-485f-a4ea-f43eb2c44fb9"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ea233edb-7956-4284-a043-9c5c9688b5d8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "69e5c79f-85b1-44d4-a3e8-da3da66ae71d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "096caafc-6df5-4a15-95cc-5f54d6afe46f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "93f1120b-e7dd-4523-b66b-b3c6ec464462"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "70aaf89c-abd8-4722-bf94-226da24d9619"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d3a59220-dcae-4b25-9197-227f3e7707db"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f6faa342-3e7d-4846-a168-68a3eaa28e85"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8da4cc70-6ff4-4ad0-9edf-1482659c3219"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b6517aa4-42ee-413c-be8f-a89f1d218a9e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7735da11-a522-4a85-b28e-6e115d467e75"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c29a7211-d63b-4d4b-8fb1-42e2f5d10790"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0dc124ab-47ae-487b-8f23-3f0be1c8a7b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b36494bd-6752-4003-81e4-dfde739fb768"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7a8cd4ee-a042-49a5-b34e-8117e816f2fb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "388fba25-7d5b-4c70-9a47-eda6e36b28ee"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "55a246cd-767d-46ef-a2b4-2ff9bb084468"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bd5fc6c9-ba49-4084-8b50-0860749a0d03"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "475d6bb1-fe0f-4e81-8c00-59ce48d0a20e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e4dc918a-9fee-4957-a07c-0ece9533204c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "71400d05-22e1-422b-b32b-24d9ef7a6a1c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5bb07ed4-6c3c-4987-b638-051733e88f67"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bb06cf11-f367-4067-a756-7d6925bd10bb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a63a0488-869c-4ca7-9b05-bc00b02b7869"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a806add4-22e3-4795-91fa-4332bdeebb77"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "44330965-01fe-4bfc-899d-7107fe03acb5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "224c0b6e-a43e-40cc-8ae2-b1dbbed8f30b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e88fe265-f010-4350-8710-e9d23f2d80f1"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "fdab13c3-7c03-4f12-ab20-9e620d8c6ea0"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "70a4aef2-7223-4cba-9e7a-f7dedf639626"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "76589296-5e3f-4010-a13d-7321ac52939d"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "c865b927-da86-4037-82aa-0472532a9c2a"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "7917cb49-6d33-4f79-9816-ae5bb34dcb01"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "cc7891b4-f984-4fa1-a54a-59101e78ff50"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8527d3df-44e3-4be3-ade5-be7765481c6c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0ed2293c-bb50-4f23-be70-15ca6a49ec7d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1ec5179e-44b8-4e72-a003-8177ef64b408"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2042dbbf-ded1-4133-b0ac-fd13c83d63a5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5d2ffe8a-6dea-455c-b18f-573779c1a122"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a78433f8-4c3b-43cb-8704-39d2e95f8799"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "3961c896-61d9-4e6c-927a-fbc47f69b0e6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1de2b681-d55b-49db-b748-c3c01348e8f4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2dafe40a-e369-4a91-b544-09afbc9f9e3c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4e819c74-97e7-4da0-8064-af9d971d4909"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "417aedb5-e617-482d-a6f6-240e34a7f184"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "60bc40e3-0898-43a1-b74d-8f65ba3d0750"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5000b25e-a4af-4865-8add-48c32039ef70"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1b649eb0-f915-4f78-befb-13b6be73d10b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "033a1b2d-8a24-4b84-991f-2d008f14d433"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "435c6efe-2587-4a92-b1e0-c2a392c9db36"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e14eb513-022d-40a5-b4c3-6c213a22d916"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "3667726e-c0bb-468b-a692-7225af426bd6"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "deeb3e21-1f1c-4353-9a8e-f0a797e15f10"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "132e9aba-25ef-4c91-94bf-cdacba728c99"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "84c014c0-af1d-46e6-9a38-89958a73bb2c"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "b811e088-16e1-4e45-a7bf-b24a8dcf4b7b"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "9be93c18-38b6-4aad-8647-69762d3fe7d2"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "8595409b-d4ae-4fea-9abd-c2846ba08a65"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "f36038b3-7a07-431a-8d6e-08011488d90d"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [],
+    "episodes_released": 24,
+    "start_date": 1302037200,
+    "episodes_total": 24,
+    "voices": [
+        {
+            "character": {
+                "content_id": "fdab13c3-7c03-4f12-ab20-9e620d8c6ea0"
+            },
+            "person": {
+                "content_id": "ba422701-6ed2-4360-aa07-762ee23ac5b9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "435c6efe-2587-4a92-b1e0-c2a392c9db36"
+            },
+            "person": {
+                "content_id": "670a9302-4c5f-4392-aa08-ee1e07c22452"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1b649eb0-f915-4f78-befb-13b6be73d10b"
+            },
+            "person": {
+                "content_id": "e0805f5c-3307-48c6-a13e-e29ae42e4b1c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5000b25e-a4af-4865-8add-48c32039ef70"
+            },
+            "person": {
+                "content_id": "796c47f2-98f7-4014-8431-edba3ccf5e94"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "70a4aef2-7223-4cba-9e7a-f7dedf639626"
+            },
+            "person": {
+                "content_id": "7a5ad445-efc1-49b0-8f2b-6f93f49e7960"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c865b927-da86-4037-82aa-0472532a9c2a"
+            },
+            "person": {
+                "content_id": "73c1a886-988d-43c0-b206-6e81f3fd569b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4e819c74-97e7-4da0-8064-af9d971d4909"
+            },
+            "person": {
+                "content_id": "3c355922-e276-4b89-b45a-e7528fd2b626"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "cc7891b4-f984-4fa1-a54a-59101e78ff50"
+            },
+            "person": {
+                "content_id": "1bb4ba33-2850-4370-a6be-937cf93732f6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5d2ffe8a-6dea-455c-b18f-573779c1a122"
+            },
+            "person": {
+                "content_id": "2e8adc5a-d451-48ab-b208-f50cf4c0a1d9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "e14eb513-022d-40a5-b4c3-6c213a22d916"
+            },
+            "person": {
+                "content_id": "0ccd183d-b0dc-4f79-9a6d-ed3091586eba"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "76589296-5e3f-4010-a13d-7321ac52939d"
+            },
+            "person": {
+                "content_id": "3d95eb32-3b8b-4e73-a5c0-ab142a3c8a9d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2dafe40a-e369-4a91-b544-09afbc9f9e3c"
+            },
+            "person": {
+                "content_id": "259beefc-a13e-42e2-8588-b89f9962258c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "60bc40e3-0898-43a1-b74d-8f65ba3d0750"
+            },
+            "person": {
+                "content_id": "00d211d1-59cc-4749-87a4-baad2aa3d1ec"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "3961c896-61d9-4e6c-927a-fbc47f69b0e6"
+            },
+            "person": {
+                "content_id": "5a31ef14-4b79-46f9-bce8-af668587216e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c865b927-da86-4037-82aa-0472532a9c2a"
+            },
+            "person": {
+                "content_id": "d618d85c-393d-49b1-8b24-ce72f2d0d840"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "033a1b2d-8a24-4b84-991f-2d008f14d433"
+            },
+            "person": {
+                "content_id": "30206884-d429-4e56-919f-2c1ace39757c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1b649eb0-f915-4f78-befb-13b6be73d10b"
+            },
+            "person": {
+                "content_id": "1d373f57-0872-4714-a2f3-4967790cc139"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "60bc40e3-0898-43a1-b74d-8f65ba3d0750"
+            },
+            "person": {
+                "content_id": "dfa64cb0-617b-4b91-8265-28fd3ed931ad"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0ed2293c-bb50-4f23-be70-15ca6a49ec7d"
+            },
+            "person": {
+                "content_id": "b2717e80-7197-4512-8cc2-cf1ae6398392"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5d2ffe8a-6dea-455c-b18f-573779c1a122"
+            },
+            "person": {
+                "content_id": "26d54cec-0a27-417d-90fe-0b6c51bd6d55"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "76589296-5e3f-4010-a13d-7321ac52939d"
+            },
+            "person": {
+                "content_id": "57034898-f478-42b6-bf35-f324cd67ca53"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e14eb513-022d-40a5-b4c3-6c213a22d916"
+            },
+            "person": {
+                "content_id": "1fc7d36d-ceda-4494-9b51-c5c12ed1aef4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0ed2293c-bb50-4f23-be70-15ca6a49ec7d"
+            },
+            "person": {
+                "content_id": "bf3efd31-7e75-4581-bab5-1ffffae58dec"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8527d3df-44e3-4be3-ade5-be7765481c6c"
+            },
+            "person": {
+                "content_id": "4d338ac7-f721-41da-b0ed-748502ca2a8e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "70a4aef2-7223-4cba-9e7a-f7dedf639626"
+            },
+            "person": {
+                "content_id": "4167c9bb-6063-4131-b600-84505249ff02"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5000b25e-a4af-4865-8add-48c32039ef70"
+            },
+            "person": {
+                "content_id": "231b5bfa-76af-4010-bbd6-8bfd14d930a4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "cc7891b4-f984-4fa1-a54a-59101e78ff50"
+            },
+            "person": {
+                "content_id": "0335590d-4e54-467e-8037-cef899b103f3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8527d3df-44e3-4be3-ade5-be7765481c6c"
+            },
+            "person": {
+                "content_id": "9e83baf9-dc53-4c0d-8134-d516762539ac"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "fdab13c3-7c03-4f12-ab20-9e620d8c6ea0"
+            },
+            "person": {
+                "content_id": "fbad4231-6dd7-4476-89c9-e1b58f833c7f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "033a1b2d-8a24-4b84-991f-2d008f14d433"
+            },
+            "person": {
+                "content_id": "fa1649b6-1476-43d8-8010-a9f2c561a7d6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "435c6efe-2587-4a92-b1e0-c2a392c9db36"
+            },
+            "person": {
+                "content_id": "91bfc64a-cbde-4ca7-86aa-68d7c82cb034"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2dafe40a-e369-4a91-b544-09afbc9f9e3c"
+            },
+            "person": {
+                "content_id": "8189ec21-8907-4018-bd94-e2e7b2c19a0c"
+            },
+            "language": "en"
+        }
+    ],
+    "end_date": 1315947600,
+    "staff": [
+        {
+            "person": {
+                "content_id": "77f1b3b6-3531-477b-98ea-7a4b9792700c"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c0d48eb1-cf1d-4e0f-ad1e-91c53240018f"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dc31fb6c-8745-40c6-82c5-a8ba89f850b5"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "42f9a747-b9e7-443c-9dc7-ecfeb77242db"
+            },
+            "roles": [
+                "Producer",
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8a326f88-520f-49a3-b76f-867dea2bd339"
+            },
+            "roles": [
+                "Director",
+                "Episode Director",
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "21b3d75f-da70-4702-97e0-f1383b239481"
+            },
+            "roles": [
+                "Director",
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a6877411-e511-4e7f-aff9-ae487ed9f4d4"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3e86f358-bc01-4399-bc18-498d0ea19967"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "89ebdb1b-3f56-4ce3-9021-b32757072efe"
+            },
+            "roles": [
+                "Episode Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "2c92ec88-c466-4ca7-845b-e69d458019bc"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard",
+                "Key Animation",
+                "Assistant Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c211b403-f78a-4741-9881-b311eeb13d30"
+            },
+            "roles": [
+                "Script",
+                "Series Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "39fddb9a-01b3-4a25-bd58-0834f8691aef"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3d95eb32-3b8b-4e73-a5c0-ab142a3c8a9d"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f0640779-8e70-4dcc-9407-c09b9debdc14"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a408a8d8-3f07-4476-8c17-fd7a239c4e8f"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f14045b8-983f-451e-b797-bfff055615ae"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1b3530fe-ddd8-402b-8846-1ee0d7b37909"
+            },
+            "roles": [
+                "Theme Song Composition",
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8f7c09d4-1f9b-477a-a0af-163d85d080e2"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "607e663c-8c07-42e6-affb-03c5c69fead6"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "11cd64ef-116e-4209-9d3c-c382c7b654de"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cecba239-2480-4764-8781-e2985013ba86"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "db86c356-83a9-4a51-9542-eb9e5945a05b"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a7672b77-1714-4214-aa82-297756d995a5"
+            },
+            "roles": [
+                "Art Director",
+                "Background Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a8802736-e62a-47b1-86c2-605409c8de2e"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "053e4b6a-b69f-405e-b857-20025188974e"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "2a0efc26-a5c3-4f78-b89f-24d02aa6638a"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "989d2419-adb8-4891-852e-fe42b9dcdc6c"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3abc87f2-d2cf-4583-a03a-346ee409b3a5"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9cf128c1-eaf2-4a12-9eec-235694e2cfe8"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "96b94f59-c384-488e-b27b-cf2b547c2555"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "74703461-bada-4a1b-9205-b8160b834b35"
+            },
+            "roles": [
+                "Dialogue Editing"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "57632e24-a45d-4b0b-aaee-03d2d76ec359"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1d769b77-a050-452c-9fad-96129520eb9e"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f711a496-ae4f-4510-9b7e-d47164f5f7a3"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a420dd45-4d8a-446a-af7b-1b623e5bb2f6"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "66272e39-6ac8-451d-81a9-ef7df9361bf5"
+            },
+            "roles": [
+                "Animation Director",
+                "Character Design",
+                "Chief Animation Director",
+                "Assistant Animation Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "665cdd6c-3dca-42ec-9ebc-a7f8dab8f9a0"
+            },
+            "roles": [
+                "Original Character Design"
+            ]
+        }
+    ],
+    "created": 1687273642,
+    "updated": 1689286696,
+    "synopsis_en": "Eccentric scientist Rintarou Okabe has a never-ending thirst for scientific exploration. Together with his ditzy but well-meaning friend Mayuri Shiina and his roommate Itaru Hashida, Rintarou founds the Future Gadget Laboratory in the hopes of creating technological innovations that baffle the human psyche. Despite claims of grandeur, the only notable \"gadget\" the trio have created is a microwave that has the mystifying power to turn bananas into green goo.\n\nHowever, when Rintarou decides to attend neuroscientist Kurisu Makise's conference on time travel, he experiences a series of strange events that lead him to believe that there is more to the \"Phone Microwave\" gadget than meets the eye. Apparently able to send text messages into the past using the microwave, Rintarou dabbles further with the \"time machine,\" attracting the ire and attention of the mysterious organization SERN.\n\nDue to the novel discovery, Rintarou and his friends find themselves in an ever-present danger. As he works to mitigate the damage his invention has caused to the timeline, he is not only fighting a battle to save his loved ones, but also one against his degrading sanity.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Історія розпочинається в Акіхабарі, 28 липня 2010 року, коли Окабе Рінтаро відвідує міжнародну конференцію з питання подорожей в часі. У цей же день, після конференції, він знаходить тіло Кріс Макісе, однієї з учасниць конференції, усю в крові. В паніці він відправляє смс своєму другу, розповівши те, що побачив. Але через кілька годин після цього він бачить Кріс знову живою, ніби нічого й не траплялось. Через деякий час головні герої розуміють, що смс змінила минуле.\n\nДжерело: Toloka",
+    "franchise": "1218b1b1-e91c-4944-bc7c-baaee5dc700b",
+    "title_ja": "Steins;Gate",
+    "title_en": "Steins;Gate",
+    "title_ua": "Брама;Штейна",
+    "duration": 24,
+    "poster": "/content/anime/steinsgate-f29797/M-8Gxbqmsq0ScxFZWQAt-Q.jpg",
+    "rating": "pg_13",
+    "source": "visual_novel",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://www.steinsgate.tv/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/sg_anime",
+            "text": "@sg_anime"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=7729",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=11770",
+            "text": "ANN"
+        },
+        {
+            "url": "http://en.wikipedia.org/wiki/Steins;Gate",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/STEINS;GATE",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/2142",
+            "text": "Syoboi"
+        },
+        {
+            "url": "http://www.crunchyroll.com/series-229050",
+            "text": "Crunchyroll"
+        },
+        {
+            "url": "https://www.funimation.com/shows/steinsgate",
+            "text": "Funimation"
+        },
+        {
+            "url": "https://www.netflix.com/",
+            "text": "Netflix"
+        }
+    ],
+    "genre_ids": [
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "0163d442-a3e2-4c67-a0df-7fbd11fa2035",
+        "46f23e25-2181-4081-9878-4a74247551ee",
+        "b3c7aa68-5cb4-40fb-b0e0-47099f10fc7b",
+        "c9f61f03-16fb-4c71-a16e-ea2ead5a14d8"
+    ],
+    "synonyms": [],
+    "videos": [
+        {
+            "url": "https://youtu.be/QT3OHKPzQ1A",
+            "title": "OP 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Hacking to the Gate\" by Kanako Itou"
+        },
+        {
+            "url": "https://youtu.be/5ylI4hJCRMQ",
+            "title": "ED 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Toki Tsukasadoru Juuni no Meiyaku (刻司ル十二ノ盟約)\" by Yui Sakakibara"
+        },
+        {
+            "url": "https://youtu.be/_hW_t0875Gk",
+            "title": "ED 2 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Fake Verthandi\" by Takeshi Abo"
+        },
+        {
+            "url": "https://youtu.be/k2LDC0sTsEQ",
+            "title": "ED 3 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Sky Clad no Kansokusha (スカイクラッドの観測者)\" by Kanako Itou"
+        },
+        {
+            "url": "https://youtu.be/Pvt4zgNmz80",
+            "title": "ED 4 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Another Heaven\" by Kanako Itou"
+        },
+        {
+            "url": "https://youtu.be/27OZc-ku6is",
+            "title": "PV March 2011 version",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/gaOvEIkeyzU",
+            "title": "PV English dub version",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/3ngiZjmnPgc",
+            "title": "PV Comiket 79 version",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Hacking to the Gate",
+            "author": "Kanako",
+            "spotify": "https://open.spotify.com/track/78dl9lfz8vogpSxpdpWQdl",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Toki Tsukasadoru Juuni no Meiyaku (刻司ル十二ノ盟約)",
+            "author": "Yui",
+            "spotify": "https://open.spotify.com/track/0O4b9jI3vwcMnG43mpqkz8",
+            "ost_type": "ending"
+        },
+        {
+            "index": 2,
+            "title": "Fake Verthandi",
+            "author": "Takeshi",
+            "spotify": "https://open.spotify.com/track/2wHj9XulFpAwK8PG9KASCU",
+            "ost_type": "ending"
+        },
+        {
+            "index": 3,
+            "title": "Sky Clad no Kansokusha (スカイクラッドの観測者)",
+            "author": "Kanako",
+            "spotify": "https://open.spotify.com/track/3Y0W7Lxg1X4cbyvtmdCHzL",
+            "ost_type": "ending"
+        },
+        {
+            "index": 4,
+            "title": "Another Heaven",
+            "author": "Kanako",
+            "spotify": "https://open.spotify.com/track/1R1Kh3CwdPY7FrhkNvyEpS",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "f297970c-93e7-47f0-a01d-ee4cd1f067d9",
+    "scored_by": 1342602,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 24,
+            "dub": true,
+            "hidden": false,
+            "description": "Головний герой, навісний божевільний вчений, створює машину часу. Але не все так просто у нашому світі. СЕРН намагається перешкодити в оприлюдненні цієї інформації, оскільки володіє ексклюзивними правами на цей винахід. Починається полювання, і наш герой втрачає подругу. Аби повернути її, він мусить змінити плин часу і переписати історію.Увага! Додані серії ONA та OVA \"Відкриття загубленої ланки. Ділення на 0. β-лінія. Серія 23\"(Початок історії другого сезону - Steins;Gate0. Альтернативний епізод 23-ої серії першого сезону.)",
+            "sub": false,
+            "created": 1687706616,
+            "title_ja": "Steins Gate",
+            "episodes": 24,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2013-10/1382180434_1.jpg",
+                "https://anitube.in.ua/uploads/posts/2013-10/1382180455_2.jpg",
+                "https://anitube.in.ua/uploads/posts/2013-10/1382180413_3.jpg",
+                "https://anitube.in.ua/uploads/posts/2013-10/1382180450_4.jpg"
+            ],
+            "updated": 1689360529,
+            "title_ua": "Брама;Штейна / Штейнова Брама",
+            "length": 24,
+            "translators": [
+                "ihabi",
+                "Gedet"
+            ],
+            "slug": "1886-shteynova-brama-steinsgate-steins-gate",
+            "episodes_raw": "24 з 24 + 2 OVA, 4 ONA (24 хв.)",
+            "scored_by": 195,
+            "voices": [
+                "ihabi",
+                "Konstantinych",
+                "Kallaider",
+                "Korzhik",
+                "Cookies",
+                "Zebadiya",
+                "Lomaev",
+                "Laanajar",
+                "Gwostik",
+                "Sladkoeshka",
+                "Maslinka",
+                "Hennessi"
+            ],
+            "url": "https://anitube.in.ua/1886-shteynova-brama-steinsgate-steins-gate.html",
+            "director": "Сато Такуя",
+            "year": 2011,
+            "genres": [
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Триллер",
+                    "slug": "triller"
+                },
+                {
+                    "name": "Фантастика",
+                    "slug": "fantaskyka"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=27OZc-ku6is",
+            "score": 9.6,
+            "teams": [
+                "MelodicVoiceStudio",
+                "AniUa"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/d/8e2bcfb29ea39adbccc29d56b81f4b.jpg",
+            "nsfw": false,
+            "id": "4f3c49f1-1d76-4e43-9bed-4444d59dd17a"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Брама;Штейна / Steins;Gate (серії 01-24 з 24+OVA) (2011) BDRip 720p",
+            "year": 2011,
+            "title_ja": "Steins;Gate",
+            "leech": 0,
+            "title_ua": "Брама;Штейна",
+            "seed": 19,
+            "quality": "720p",
+            "size": 8560,
+            "slug": "65360",
+            "url": "http://toloka.to/t65360",
+            "image": "https://toloka.to/photos/150429214438355998_f0_0.jpg",
+            "id": "371828b2-2216-4875-a51a-c19146ba6f77",
+            "next_update_info": null,
+            "author": "ihabi",
+            "created": 1432587600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-01BDRip720pUKRFLAC.mkv_snapshot_05.33_2015.04.29_21.29.12.png",
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-01BDRip720pUKRFLAC.mkv_thumbs_2015.04.29_21.28.34.png",
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-01BDRip720pUKRFLAC.mkv_snapshot_16.14_2015.04.29_21.29.43.png",
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-02BDRip720pUKRFLAC.mkv_snapshot_17.20_2015.04.29_21.30.03.png",
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-02BDRip720pUKRFLAC.mkv_snapshot_02.56_2015.04.29_21.31.28.png",
+                "https://img.hurtom.com/i/2015/04/MelodicVoiceStudioSteinsGate-02BDRip720pUKRFLAC.mkv_snapshot_05.02_2015.04.29_21.30.59.png"
+            ],
+            "description": "Історія розпочинається в Акіхабарі, 28 липня 2010 року, коли Окабе Рінтаро відвідує міжнародну конференцію з питання подорожей в часі. У цей же день, після конференції, він знаходить тіло Кріс Макісе, однієї з учасниць конференції, усю в крові. В паніці він відправляє смс своєму другу, розповівши те, що побачив. Але через кілька годин після цього він бачить Кріс знову живою, ніби нічого й не траплялось. Через деякий час головні герої розуміють, що смс змінила минуле.",
+            "updated": 1689357007,
+            "hidden": false,
+            "episodes": 24
+        },
+        {
+            "title_raw": "Штейнова Брама / Steins;Gate / Steins Gate / シュタインズ・ゲート [2011] BDRip 720p Ukr/Jap | Ukr Sub",
+            "year": 2011,
+            "title_ja": "Steins;Gate",
+            "leech": 1,
+            "title_ua": "Штейнова Брама",
+            "seed": 8,
+            "quality": "720p",
+            "size": 19066,
+            "slug": "50794",
+            "url": "http://toloka.to/t50794",
+            "image": "https://img.hurtom.com/i/2013/10/SG05MUqHo.jpg",
+            "id": "6b6b7fd4-6c4f-4d7d-abdd-e45a97e25058",
+            "next_update_info": null,
+            "author": "Arch Enemy",
+            "created": 1405371600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot022720131014154716GqXD.th.png",
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot052120131014155006Zwu5.th.png",
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot080920131014154552loyFK.th.png",
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot122820131014155244vx3jF.th.png",
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot165220131014155651c3A1Q.th.png",
+                "https://img.hurtom.com/i/2013/10/Yousei-raws_SteinsGate_01_BDrip_1280x720_x264_Vorbismkvsnapshot200920131014160043qauYD.th.png"
+            ],
+            "description": null,
+            "updated": 1689357008,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 9.07,
+    "stats": {
+        "dropped": 52604,
+        "on_hold": 86213,
+        "planned": 615790,
+        "score_1": 9467,
+        "score_2": 2646,
+        "score_3": 3506,
+        "score_4": 7632,
+        "score_5": 15879,
+        "score_6": 30145,
+        "score_7": 81073,
+        "score_8": 195637,
+        "score_9": 374071,
+        "score_10": 622701,
+        "watching": 161027,
+        "completed": 1537299
+    }
+}

@@ -209,16 +209,27 @@ async def aggregator_anime(test_session):
 
 @pytest.fixture
 async def aggregator_anime_info(test_session):
-    if anime := await test_session.scalar(
-        select(Anime).filter(
-            Anime.slug == "fullmetal-alchemist-brotherhood-fc524a"
-        )
-    ):
-        data = await helpers.load_json(
-            "tests/aggregator/data/anime_info_fma.json"
-        )
+    anime_list = {
+        "fc524a18-378f-4ccb-82a0-b4063206c600": "fma.json",
+        "f297970c-93e7-47f0-a01d-ee4cd1f067d9": "steins_gate.json",
+        "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6": "kaguya_1.json",
+        "73a73ca9-fcea-4521-ad88-fa5206ad8e78": "kaguya_2.json",
+        "fcd76158-66b6-4c72-8c1c-5aa801a5efff": "kaguya_3.json",
+    }
 
-        await aggregator.update_anime_info(test_session, anime, data)
+    for slug in anime_list:
+        if anime := await test_session.scalar(
+            select(Anime).filter(Anime.content_id == slug)
+        ):
+            data = await helpers.load_json(
+                f"tests/aggregator/data/anime_info/{anime_list[slug]}"
+            )
+
+            await aggregator.update_anime_info(
+                test_session,
+                anime,
+                data,
+            )
 
 
 @pytest.fixture
