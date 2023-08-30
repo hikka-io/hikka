@@ -219,3 +219,12 @@ async def aggregator_anime_info(test_session):
         )
 
         await aggregator.update_anime_info(test_session, anime, data)
+
+
+@pytest.fixture
+async def aggregator_anime_franchises(test_session):
+    data = await helpers.load_json(
+        "tests/aggregator/data/anime_franchises.json"
+    )
+
+    await aggregator.save_anime_franchises_list(test_session, data["list"])
