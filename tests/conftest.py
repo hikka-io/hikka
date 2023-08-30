@@ -231,6 +231,8 @@ async def aggregator_anime_info(test_session):
                 data,
             )
 
+    print(people)
+
 
 @pytest.fixture
 async def aggregator_anime_franchises(test_session):
