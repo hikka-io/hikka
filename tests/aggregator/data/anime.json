@@ -1,7 +1,7 @@
 {
     "pagination": {
-        "total": 24801,
-        "pages": 249,
+        "total": 5,
+        "pages": 1,
         "page": 1
     },
     "list": [
@@ -22,6 +22,78 @@
             "media_type": "tv",
             "scored_by": 2028821,
             "score": 9.1
+        },
+        {
+            "episodes_released": 24,
+            "start_date": 1302037200,
+            "episodes_total": 24,
+            "end_date": 1315947600,
+            "title_en": "Steins;Gate",
+            "title_ja": "Steins;Gate",
+            "title_ua": "Брама;Штейна",
+            "poster": "/content/anime/steinsgate-f29797/M-8Gxbqmsq0ScxFZWQAt-Q.jpg",
+            "season": "spring",
+            "status": "finished",
+            "created": 1687273642,
+            "updated": 1689286696,
+            "content_id": "f297970c-93e7-47f0-a01d-ee4cd1f067d9",
+            "media_type": "tv",
+            "scored_by": 1342602,
+            "score": 9.07
+        },
+        {
+            "episodes_released": 13,
+            "start_date": 1649451600,
+            "episodes_total": 13,
+            "end_date": 1656104400,
+            "title_en": "Kaguya-sama: Love is War - Ultra Romantic",
+            "title_ja": "Kaguya-sama wa Kokurasetai: Ultra Romantic",
+            "title_ua": "Каґуя хоче, щоб їй зізналися: ~Ультра-романтика~",
+            "poster": "/content/anime/kaguya-sama-wa-kokurasetai-ultra-romantic-fcd761/ep9j_nzOz_UsB2lareqizw.jpg",
+            "season": "spring",
+            "status": "finished",
+            "created": 1687273642,
+            "updated": 1689287225,
+            "content_id": "fcd76158-66b6-4c72-8c1c-5aa801a5efff",
+            "media_type": "tv",
+            "scored_by": 459909,
+            "score": 9.05
+        },
+        {
+            "episodes_released": 12,
+            "start_date": 1586552400,
+            "episodes_total": 12,
+            "end_date": 1593205200,
+            "title_en": "Kaguya-sama: Love is War Season 2",
+            "title_ja": "Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen",
+            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (Сезон 2)",
+            "poster": "/content/anime/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-73a73c/8Tco9tymEr2LREqkwVm6IA.jpg",
+            "season": "spring",
+            "status": "finished",
+            "created": 1687453302,
+            "updated": 1689286401,
+            "content_id": "73a73ca9-fcea-4521-ad88-fa5206ad8e78",
+            "media_type": "tv",
+            "scored_by": 810975,
+            "score": 8.64
+        },
+        {
+            "episodes_released": 12,
+            "start_date": 1547244000,
+            "episodes_total": 12,
+            "end_date": 1553896800,
+            "title_en": "Kaguya-sama: Love is War",
+            "title_ja": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
+            "title_ua": "Каґуя хоче, щоб їй зізналися: ~Війна любові та розуму геніїв~",
+            "poster": "/content/anime/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-a3ac07/Ju06eCAihUeAZHJsdz6k0A.jpg",
+            "season": "winter",
+            "status": "finished",
+            "created": 1687453383,
+            "updated": 1689287525,
+            "content_id": "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6",
+            "media_type": "tv",
+            "scored_by": 1037865,
+            "score": 8.41
         }
     ]
 }
