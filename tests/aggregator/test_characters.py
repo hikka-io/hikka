@@ -7,13 +7,13 @@ async def test_import_characters(test_session, aggregator_characters):
     characters_count = await test_session.scalar(
         select(func.count(Character.id))
     )
-    assert characters_count == 10
+    assert characters_count == 171
 
     # Check individual character
     character = await test_session.scalar(
-        select(Character).filter(Character.slug == "lelouch-lamperouge-b1efd4")
+        select(Character).filter(Character.slug == "edward-elric-3a3963")
     )
 
     assert character is not None
-    assert character.name_en == "Lelouch Lamperouge"
-    assert character.favorites == 164657
+    assert character.name_en == "Edward Elric"
+    assert character.favorites == 85959
