@@ -37,6 +37,7 @@ __all__ = [
     "UserOAuth",
     "Follow",
     "User",
+    "ContentEdit",
     "AnimeFavourite",
     "AnimeWatch",
     "AnimeRecommendation",
