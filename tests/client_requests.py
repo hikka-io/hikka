@@ -102,3 +102,8 @@ def request_following(client, username):
 
 def request_followers(client, username):
     return client.get(f"/follow/{username}/followers")
+
+
+# Anime
+def request_anime_search(client):
+    return client.post("/anime", json={})
