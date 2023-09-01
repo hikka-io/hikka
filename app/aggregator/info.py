@@ -431,10 +431,11 @@ async def update_anime_info(session, anime, data):
         "synonyms",
         "external",
         "videos",
-        "stats",
         "ost",
     ]:
         update_if_not_ignored(anime, data, field)
+
+    anime.stats = data["stats"]
 
     await process_poster(session, anime, data)
 

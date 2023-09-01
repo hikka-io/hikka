@@ -47,6 +47,9 @@ errors = {
         "unknown-genre": ["Unknown genre", 400],
         "not-found": ["Anime not found", 404],
     },
+    "edit": {
+        "empty-edit": ["This edit is empty", 400],
+    },
     "studio": {
         "not-found": ["Studio not found", 404],
     },

@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from app import constants
 from ..base import Base
 from uuid import UUID
 
@@ -12,17 +13,22 @@ from ..mixins import (
 )
 
 
-# ToDo: move those to a separate location?
-statuses = ("PENDING", "APPROVED", "DENIED", "CLOSED")
+statuses = (
+    constants.EDIT_PENDING,
+    constants.EDIT_APPROVED,
+    constants.EDIT_DENIED,
+    constants.EDIT_CLOSED,
+)
+
 content_types = (
-    "anime",
-    "manga",
-    "character",
-    "company",
-    "episode",
-    "genre",
-    "person",
-    "staff",
+    constants.CONTENT_ANIME,
+    constants.CONTENT_MANGA,
+    constants.CONTENT_CHARACTER,
+    constants.CONTENT_COMPANY,
+    constants.CONTENT_EPISODE,
+    constants.CONTENT_GENRE,
+    constants.CONTENT_PERSON,
+    constants.CONTENT_STAFF,
 )
 
 
@@ -33,7 +39,9 @@ class ContentEdit(
 ):
     __tablename__ = "service_edits"
 
-    edit_id: Mapped[int] = mapped_column(Integer, unique=True, index=True)
+    edit_id: Mapped[int] = mapped_column(
+        Integer, unique=True, index=True, primary_key=True, autoincrement=True
+    )
     status: Mapped[str] = mapped_column(Enum(*statuses, name="status"))
     description: Mapped[str] = mapped_column(String(140), nullable=True)
     hidden: Mapped[bool] = mapped_column(Boolean, default=False)

@@ -49,6 +49,12 @@ AGE_RATING_RX = "rx"
 AGE_RATING_G = "g"
 AGE_RATING_R = "r"
 
+VIDEO_PROMO = "video_promo"
+VIDEO_MUSIC = "video_music"
+
+OST_OPENING = "opening"
+OST_ENDING = "ending"
+
 SOURCE_DIGITAL_MANGA = "digital_manga"
 SOURCE_PICTURE_BOOK = "picture_book"
 SOURCE_VISUAL_NOVEL = "visual_novel"
@@ -76,6 +82,20 @@ SEARCH_INDEX_ANIME = "content_anime"
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
 
+EDIT_PENDING = "PENDING"
+EDIT_APPROVED = "APPROVED"
+EDIT_DENIED = "DENIED"
+EDIT_CLOSED = "CLOSED"
+
+CONTENT_ANIME = "anime"
+CONTENT_MANGA = "manga"
+CONTENT_CHARACTER = "character"
+CONTENT_COMPANY = "company"
+CONTENT_EPISODE = "episode"
+CONTENT_GENRE = "genre"
+CONTENT_PERSON = "person"
+CONTENT_STAFF = "staff"
+
 # Roles
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
@@ -86,7 +106,6 @@ PERMISSION_CREATE_EDIT = "content:create_edit"
 PERMISSION_ACCEPT_EDIT = "content:accept_edit"
 PERMISSION_REJECT_EDIT = "content:reject_edit"
 PERMISSION_CONFIRM_EDIT = "content:confirm_edit"
-PERMISSION_TEST = "system:test"
 
 # Role permissions
 ROLES = {
@@ -102,6 +121,5 @@ ROLES = {
         PERMISSION_CREATE_EDIT,
         PERMISSION_CONFIRM_EDIT,
         PERMISSION_REJECT_EDIT,
-        PERMISSION_TEST,
     ],
 }
