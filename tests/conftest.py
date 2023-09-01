@@ -150,7 +150,7 @@ def oauth_response():
     return generate
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=False)
 def oauth_http(oauth_response):
     with mock.patch("httpx.AsyncClient.request") as mocked:
         mocked.return_value = oauth_response(
