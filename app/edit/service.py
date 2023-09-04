@@ -19,14 +19,12 @@ async def create_anime_edit_request(
     args = args.dict()
     description = args.pop("description")
 
-    previous = {}
     changes = {}
 
     for key, value in args.items():
         if not value:
             continue
 
-        previous[key] = getattr(anime, key)
         changes[key] = value
 
     now = datetime.utcnow()
@@ -36,7 +34,6 @@ async def create_anime_edit_request(
             "status": constants.EDIT_PENDING,
             "content_id": anime.id,
             "content_type": constants.CONTENT_ANIME,
-            "previous": previous,
             "changes": changes,
             "created": now,
             "updated": now,
