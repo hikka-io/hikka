@@ -21,15 +21,11 @@ async def test_anime_list(client, aggregator_anime):
     )
 
 
-async def test_anime_no_meilisearch(client, aggregator_anime):
+async def test_anime_no_meilisearch(client):
     response = await request_anime_search(client, {"query": "test"})
 
     assert response.json()["code"] == "search_query_down"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
-async def test_anime_filters(client, aggregator_anime):
-    pass
 
 
 async def test_anime_pagination(client, aggregator_anime):
