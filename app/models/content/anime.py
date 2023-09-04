@@ -76,6 +76,7 @@ class Anime(
     recommendations: Mapped[list["AnimeRecommendation"]] = relationship(
         foreign_keys="[AnimeRecommendation.anime_id]",
         back_populates="anime",
+        viewonly=True,
     )
 
     genres: Mapped[list["AnimeGenre"]] = relationship(

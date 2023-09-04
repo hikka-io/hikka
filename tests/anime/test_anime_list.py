@@ -6,7 +6,11 @@ async def test_anime_list(client, aggregator_anime):
     response = await request_anime_search(client)
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["pagination"]["total"] == 5
+    assert response.json()["pagination"]["total"] == 15
+
+    from pprint import pprint
+
+    pprint(response.json()["list"])
 
     # Check first anime slug
     assert (
@@ -16,8 +20,8 @@ async def test_anime_list(client, aggregator_anime):
 
     # Check last anime slug
     assert (
-        response.json()["list"][4]["slug"]
-        == "kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-a3ac07"
+        response.json()["list"][11]["slug"]
+        == "shingeki-no-kyojin-season-3-b22bb3"
     )
 
 

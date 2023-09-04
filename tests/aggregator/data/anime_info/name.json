@@ -1,0 +1,1587 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "4206fc3c-a1d7-4068-a317-96513b56d28b"
+            },
+            "weight": 66
+        },
+        {
+            "recommended": {
+                "content_id": "2667e9d4-afb8-4445-84a7-5032f20f9e45"
+            },
+            "weight": 50
+        },
+        {
+            "recommended": {
+                "content_id": "ead4f16d-2dbb-4cee-981d-9149fc2ff02a"
+            },
+            "weight": 29
+        },
+        {
+            "recommended": {
+                "content_id": "b7601f59-3e55-4b86-aad7-385d2111a2ae"
+            },
+            "weight": 20
+        },
+        {
+            "recommended": {
+                "content_id": "26d9309c-6d15-41da-a27d-3ed7b0bfd321"
+            },
+            "weight": 19
+        },
+        {
+            "recommended": {
+                "content_id": "5c735cde-ad6b-4f6a-b385-56c72e5db906"
+            },
+            "weight": 11
+        },
+        {
+            "recommended": {
+                "content_id": "14bb67fb-97f2-45ad-b0bc-4d3c70240105"
+            },
+            "weight": 11
+        },
+        {
+            "recommended": {
+                "content_id": "2d850d7f-4cf2-49cb-9d17-582367cee10f"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "4be3ca4a-c18a-4cde-9967-332e74e46660"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "88be4c8a-3f62-4c26-a762-e49b21e48e0f"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "4ca1a264-fd8c-4316-bd42-66157e820e7a"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "b8170169-3c1d-4f10-9630-83b3f868f565"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "7e230025-397e-4a98-9ba4-9c1c798417b9"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "b02ea125-02d9-4e1f-acf9-16045a99adb3"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "f297970c-93e7-47f0-a01d-ee4cd1f067d9"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "d35fd64d-7e84-4e68-9791-cbcd798ef1cd"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "b2a3c87d-17f4-4668-906f-0494ff1d0abb"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "eb1779cf-d451-4e84-ad89-c088118ecbdd"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "2f390b57-25a6-4487-9485-5d17f8c69bf3"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "56200882-ec97-4c66-b344-f9bb30edf7bf"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "5067ed3a-1f49-4272-b710-c55d7e3b4938"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "22b83227-cc10-4999-954f-988bd9c61ea1"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "c39f5f99-7b7e-44df-b56b-d5471a6b7010"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "9940e20a-d381-4d28-a935-089c5e02546b"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "68bbdb69-6691-40fd-b10c-fd3629fcbdcc"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "3ab97b2a-21d1-4ea6-9853-c36690ff472c"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "dce7bd2a-fefe-4647-8690-e100cb7ec741"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "ee7f1022-760d-4f2b-b399-4bd81e4a80ab"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "cd9ef25c-048e-4fe9-9f57-bdcac2c760a6"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "e96b9c03-4856-41e8-b949-4054006a525b"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "14c5415f-faf4-4d71-91a0-970b1da26f2d"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "9d83b8b9-aa0d-4b02-b633-d4ae1f7c7187"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "043f753b-b9c3-4c16-ba5c-99db0c190b6d"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "ad3f7a7e-7841-4463-a011-737cc6777aa7"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "bd5fc6c9-ba49-4084-8b50-0860749a0d03"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "22b7f774-f979-488b-81ee-cbf215835049"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "3417f198-1fb5-4d12-baf6-9b3d71eb1dc8"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a4b881ae-70b6-49ce-b57c-d509a53525d1"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "1a3a5b04-463c-4062-b625-cdc4b6e946b4"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a480bb43-bf2f-4376-8ffb-41df3b02e789"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "835e2408-59cb-4b8b-b3de-4b5620669c80"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "f514fc08-23b1-4f5c-b954-c6778710c32b"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "cdc0c1df-4572-4494-bc93-3dc0283f78c1"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "f395fff4-32fe-4b11-a5d3-297991f788d2"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a505c4ad-4205-48be-af3f-5285e4a95fac"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "96692ce7-5833-4fe5-b173-ce31df89c81a"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "675d6ba3-2fd6-4f37-b734-fd75069a8cc5"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "12390455-16a6-46c2-b8dc-7810a17e8a70"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "2e47ea59-c8de-4111-b0bb-aa9f3b5d0bda"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "bae65ab7-4e94-4e07-a88a-d3df40391cf2"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "bc51e6a4-86c1-472a-a472-0039d900afa4"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "ce0eb767-f6b8-4267-a85f-b77f55c41660"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "ed6fbb41-b5f6-4bc9-83b1-161b3e4b1741"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "4472a587-338c-4640-ab78-48488366f783"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9d39961a-84ce-430c-b7a9-b554a99fcd2d"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "c8e32939-bc4a-4faf-9742-d479661c3f81"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "19e60081-588e-4074-b51e-368fc5f12eac"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "99333d07-43c1-49cb-871a-fe335836a81a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "de875913-6a1e-4e9f-a9c1-1d840f6eb64a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2e9ffe4c-b027-4676-ad6f-404b519d46fe"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6c7c2287-545a-4dc3-b01e-28c33307a9e3"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7b38bbaf-03aa-4b2c-9469-fa20bc18477f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bfe360a4-4c86-4711-a24e-c4928f00f1e1"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "94332dc0-7f76-4b3d-b332-93a57eecfb38"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "85a093d5-6788-45ff-a554-fde5bd840cd2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4e9d888b-da8c-4144-8207-d5215214ebc7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "87f0c500-0d66-45b6-8c86-6d70b39aec91"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "428838d9-fc44-4898-a0a6-19c36d0a00b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "68377068-eba7-407d-b647-baf34460d10e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4dc884db-a123-4be0-a653-bdc4f74e2dc5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ddc4ce8f-7e15-4460-8d3d-d77cabb86b14"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6433f422-e126-45a5-891f-7dafc8bb6172"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8183088d-de81-4b91-88e3-074a7c19d10b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "64f35c19-7173-43fd-838d-8af5424d137c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e9dd08c4-2716-40f2-9a8f-2bce8d343935"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "40a55ef0-fe67-4a16-b0a9-90c63d20b7c3"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3b2212fc-dafd-42ff-9187-ba1fb68086e2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "12ed65f2-7da6-41ac-ba7d-ab06e9800dda"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "74635706-a06c-4928-aecf-68f634d37db7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6b6fa116-86f9-434b-8441-5b422773dc94"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f32cc897-fbf7-40e5-93b8-7a513f22c22c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "080eb7c1-ec22-4d99-a40e-2de07bee966e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d26a7c92-325a-4614-9b4a-60734a6c93ac"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "120552a5-2056-4f9f-a900-733d2b37d550"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4e354a42-9562-455a-8e73-65c70de8c76c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "89630ee6-e1cf-4951-ab22-ab5b00cb1b92"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "54f4e0b8-297c-4989-bdb4-60b641c2c03d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "06347beb-6914-46e0-811b-561d846d6b70"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f76fca06-902d-4ddc-80bd-774d29bab27b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "47260f82-9573-4eaa-8852-0ca950ff23bc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b9399886-f4f2-4549-bb46-10ed38ba3f4a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8b373c65-3a7c-4a21-9e28-24a4f8166afd"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8ebfb332-f610-4c60-aebf-86007d9fee8a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9a9d7a49-c95c-4767-ad28-0c6178dc42ab"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9136b6eb-436a-4326-9557-49e52d4ab37b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9273ce9e-794a-4f97-a8c6-cb73bc1d75b2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9a43c249-105f-4eff-89a7-9269e898a40e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4c279de6-9ba1-40cb-95b8-3ad73c45afce"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f09891a9-d708-4f5a-bf6d-08ecaac1b9d0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f649a27e-e203-47c8-8689-909636a8727f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a63a0488-869c-4ca7-9b05-bc00b02b7869"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "e73fefe2-b836-4703-b1d6-85c73daa6290"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "25bfefad-28a0-4217-949a-dc42744aea75"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "c424cb98-94bb-427f-97f4-f80318b60f54"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "24baf059-93c0-470e-8608-90a2ab645d3c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "08e069c1-b0b2-45ff-a70a-139cbfd96ee7"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "46887f3a-d1ef-43f2-b927-f51aca7f2f73"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f46546df-4a85-427d-a2b9-91c454722d1d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a5ec0b8b-c04b-4828-b591-cf64c16e5489"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f400cdec-ab5d-4ae6-b4db-fd78b87f7e44"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5b18b5fd-ce74-466a-b41b-5c1922268115"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f3b9df36-09d3-4c87-becb-d26407a2793f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "23cb4850-2b9b-4a5b-a1c2-41482d3bbea4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e889b88e-9a1f-4f23-ab34-81f750f44766"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d78c287c-6c3c-462f-b588-e451a8110cbb"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2637a5d8-ab79-4af2-8311-4cad3114de01"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "9e199d9e-ebf7-4d01-bbc7-d465ba057554"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "80ae5df0-852e-4f5b-b76d-fe40f158c5da"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "47025ff2-ba50-436e-b463-344c2bafa7e5"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "77baaef1-3c61-47e3-aadb-6fe47518e29c"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "30430c57-628d-4b0a-9dcc-3ee46654951e"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "78edb2a0-93c1-4b92-80a0-e7962714def3"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "06e20349-3e49-45f4-8996-02012404a907"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [],
+    "episodes_released": null,
+    "start_date": 1472158800,
+    "episodes_total": 1,
+    "voices": [
+        {
+            "character": {
+                "content_id": "2637a5d8-ab79-4af2-8311-4cad3114de01"
+            },
+            "person": {
+                "content_id": "73c1a886-988d-43c0-b206-6e81f3fd569b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f400cdec-ab5d-4ae6-b4db-fd78b87f7e44"
+            },
+            "person": {
+                "content_id": "d5ecd091-86dc-4a6c-b2d5-9b52922ccf7a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c424cb98-94bb-427f-97f4-f80318b60f54"
+            },
+            "person": {
+                "content_id": "1c6c781a-100d-40f7-99f3-dd15f6da1655"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "24baf059-93c0-470e-8608-90a2ab645d3c"
+            },
+            "person": {
+                "content_id": "796c47f2-98f7-4014-8431-edba3ccf5e94"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "25bfefad-28a0-4217-949a-dc42744aea75"
+            },
+            "person": {
+                "content_id": "63f2a467-483b-4b87-959d-553411da5a62"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f3b9df36-09d3-4c87-becb-d26407a2793f"
+            },
+            "person": {
+                "content_id": "6a40f10a-c334-45ee-b21a-7474dfbb9b06"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5b18b5fd-ce74-466a-b41b-5c1922268115"
+            },
+            "person": {
+                "content_id": "1e032956-e969-44d9-a506-38bd2cdb8302"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "08e069c1-b0b2-45ff-a70a-139cbfd96ee7"
+            },
+            "person": {
+                "content_id": "e1bc675b-3a88-465c-803a-c40cf5c2b15d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e73fefe2-b836-4703-b1d6-85c73daa6290"
+            },
+            "person": {
+                "content_id": "b457bd22-04d6-436c-9721-4af69d142a60"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "e889b88e-9a1f-4f23-ab34-81f750f44766"
+            },
+            "person": {
+                "content_id": "76caccae-b798-43e6-92ea-889f702d220a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c424cb98-94bb-427f-97f4-f80318b60f54"
+            },
+            "person": {
+                "content_id": "bcc5675e-f4cb-4d18-92d1-608ef4e515b6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a5ec0b8b-c04b-4828-b591-cf64c16e5489"
+            },
+            "person": {
+                "content_id": "95e49571-64f3-4c14-b53d-18944369510c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5b18b5fd-ce74-466a-b41b-5c1922268115"
+            },
+            "person": {
+                "content_id": "e59a9bf4-0c3d-4d82-b5bc-450cd1935746"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f46546df-4a85-427d-a2b9-91c454722d1d"
+            },
+            "person": {
+                "content_id": "104bfa05-771c-4bb2-a985-07d20921633e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d78c287c-6c3c-462f-b588-e451a8110cbb"
+            },
+            "person": {
+                "content_id": "1845779a-9558-4632-8008-cbad29563353"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f3b9df36-09d3-4c87-becb-d26407a2793f"
+            },
+            "person": {
+                "content_id": "496f16b9-5894-4aaf-8af5-4a1dea205ada"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "08e069c1-b0b2-45ff-a70a-139cbfd96ee7"
+            },
+            "person": {
+                "content_id": "464973bd-55cc-405a-b592-a38a837b8ac1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "46887f3a-d1ef-43f2-b927-f51aca7f2f73"
+            },
+            "person": {
+                "content_id": "1a7892d0-ef12-481b-98df-2d1319ccc967"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e73fefe2-b836-4703-b1d6-85c73daa6290"
+            },
+            "person": {
+                "content_id": "95ddae09-3625-461f-961c-b6bca8af2ab7"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "24baf059-93c0-470e-8608-90a2ab645d3c"
+            },
+            "person": {
+                "content_id": "d9fd2b2e-29a0-427c-b7fc-159b735e225a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "23cb4850-2b9b-4a5b-a1c2-41482d3bbea4"
+            },
+            "person": {
+                "content_id": "19606acc-c0e5-4eb2-aba9-ae67dd4e1a73"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f400cdec-ab5d-4ae6-b4db-fd78b87f7e44"
+            },
+            "person": {
+                "content_id": "71aeff69-fb82-47d2-83f6-276719af8d0e"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "23cb4850-2b9b-4a5b-a1c2-41482d3bbea4"
+            },
+            "person": {
+                "content_id": "b0beb3f6-2ba2-44ad-a61d-95ad52a7a31b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "46887f3a-d1ef-43f2-b927-f51aca7f2f73"
+            },
+            "person": {
+                "content_id": "b0beb3f6-2ba2-44ad-a61d-95ad52a7a31b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2637a5d8-ab79-4af2-8311-4cad3114de01"
+            },
+            "person": {
+                "content_id": "eda054b0-d097-4119-9f0b-b0cd05240457"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "a5ec0b8b-c04b-4828-b591-cf64c16e5489"
+            },
+            "person": {
+                "content_id": "a989998f-7a38-452d-afe8-d9b9dc7f0b82"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e889b88e-9a1f-4f23-ab34-81f750f44766"
+            },
+            "person": {
+                "content_id": "3306dba9-04bb-4846-ad8d-2e5555d8a0c5"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "25bfefad-28a0-4217-949a-dc42744aea75"
+            },
+            "person": {
+                "content_id": "ce49f5ed-ae7a-4985-b5ff-e705107ee5d5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d78c287c-6c3c-462f-b588-e451a8110cbb"
+            },
+            "person": {
+                "content_id": "3f7224a8-83c2-4227-b5fd-671ab1cc80e0"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1472158800,
+    "staff": [
+        {
+            "person": {
+                "content_id": "612c23de-918d-4ce5-ba28-9d2e364fd7bd"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7769269f-625f-4cd0-82b9-1dc2ac8bca49"
+            },
+            "roles": [
+                "Producer",
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b86e4ed0-95a9-4c01-9614-683cede88578"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "94361198-8273-4912-a320-56e98200792c"
+            },
+            "roles": [
+                "Director",
+                "Script",
+                "Storyboard",
+                "Editing",
+                "Color Design",
+                "Director of Photography",
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4c7cd8a1-2efb-4f0f-a6ce-9e37e03eecfa"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d86d968e-b6bb-4a82-8090-ed697241e7d8"
+            },
+            "roles": [
+                "Episode Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3fe3d622-0553-414c-ab53-8af15cb78f96"
+            },
+            "roles": [
+                "Theme Song Performance",
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1fa3b543-3740-4870-8eb8-bacad2f1e304"
+            },
+            "roles": [
+                "Character Design",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1fdd4904-b65f-42ef-b298-c842ce1e5c03"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fb5fead4-5ff8-45ff-89a1-740c8b75fd56"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "ae61a650-6b45-48af-b40c-42a62340bbda"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b5902914-3f22-4274-9f35-f12082ba0564"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b397ac1c-014f-4c7c-881d-583b967dfef1"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "55d40bb4-93bc-4ced-917c-96cc9bbf8424"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a03b71c7-e112-4273-8715-b8f1212d0be8"
+            },
+            "roles": [
+                "Production Assistant"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "60876cb8-9a30-4800-bbb2-98e7eacb4637"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f7118288-57f7-47ec-b815-f805fe537565"
+            },
+            "roles": [
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4051f81d-7936-4c97-a70e-f1c5ae96fd59"
+            },
+            "roles": [
+                "Background Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fb372f04-dc3e-40fa-9777-6fc9cc073402"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "492aee35-f9d2-4723-b437-3cd7b4c946a4"
+            },
+            "roles": [
+                "Sound Effects"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "26885017-6e3a-40bd-87fb-16bc32bd6384"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d192af9d-8100-4758-a3e4-cf6d5a2e8df2"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e534a349-c22a-40a3-bd08-912d380cd33d"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b457bd22-04d6-436c-9721-4af69d142a60"
+            },
+            "roles": [
+                "ADR Director",
+                "Casting Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "ce49f5ed-ae7a-4985-b5ff-e705107ee5d5"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "05be6484-2cf0-4f82-8dde-fdfeaf5dab18"
+            },
+            "roles": [
+                "Character Design",
+                "Key Animation",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "61ddd292-91c0-4e16-aa90-465c3337adc7"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a4f138c6-ac9f-4b79-8194-067f5aecd3eb"
+            },
+            "roles": [
+                "Art Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "6a20b8a0-51f3-4b12-820c-8e2ae3960bcb"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "348f560e-5435-44de-950d-bafe103cbc08"
+            },
+            "roles": [
+                "Background Art"
+            ]
+        }
+    ],
+    "created": 1687273642,
+    "updated": 1689287226,
+    "synopsis_en": "Mitsuha Miyamizu, a high school girl, yearns to live the life of a boy in the bustling city of Tokyo—a dream that stands in stark contrast to her present life in the countryside. Meanwhile in the city, Taki Tachibana lives a busy life as a high school student while juggling his part-time job and hopes for a future in architecture.\n\nOne day, Mitsuha awakens in a room that is not her own and suddenly finds herself living the dream life in Tokyo—but in Taki's body! Elsewhere, Taki finds himself living Mitsuha's life in the humble countryside. In pursuit of an answer to this strange phenomenon, they begin to search for one another.\n\nKimi no Na wa. revolves around Mitsuha and Taki's actions, which begin to have a dramatic impact on each other's lives, weaving them into a fabric held together by fate and circumstance.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Старшокласниця Міцуха навчається у звичайній провінційній школі у невеличкому містечку в центральній Японії та мріє про життя в Токіо. Одного дня відбувається щось по-справжньому дивне і Міцуха міняється тілом з токійським старшокласником Такі. Ці дивовижні трансформації стають регулярними та сході на сон. Коли ж Міцуха і Такі переконуються, що все відбувається насправді, то починають намагатись трошки підправити життя один одного. Міцуха організовує для Такі побачення з дівчиною, до якої він боявся навіть підступитись, а Такі робить Міцуху більш популярною серед однокласників. Але це тільки початок пригод...\n\nДжерело: Toloka",
+    "franchise": null,
+    "title_ja": "Kimi no Na wa.",
+    "title_en": "Your Name.",
+    "title_ua": "Твоє ім’я",
+    "duration": 106,
+    "poster": "/content/anime/kimi-no-na-wa-945779/F74__Da7B5le9RWGQg0YQg.jpg",
+    "rating": "pg_13",
+    "source": "original",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://www.kiminona.com/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/kiminona_movie",
+            "text": "@kiminona_movie"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=11829",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=18171",
+            "text": "ANN"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Your_Name",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E5%90%9B%E3%81%AE%E5%90%8D%E3%81%AF%E3%80%82",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/4276",
+            "text": "Syoboi"
+        },
+        {
+            "url": "https://www.netflix.com/",
+            "text": "Netflix"
+        }
+    ],
+    "genre_ids": [
+        "545bb81f-8702-4358-8f8e-596910ac394c",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "95ae63e0-a4d7-4f88-8596-92216073db24"
+    ],
+    "synonyms": [],
+    "videos": [
+        {
+            "url": "https://youtu.be/3KR8_igDs1Y",
+            "title": "Trailer 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/k4xGqY5IDBE",
+            "title": "Trailer 1",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/f3N0pzJ8w1c",
+            "title": "Announcement 3",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/4KCFlGAK5cY",
+            "title": "Announcement 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/RBBrZ3d2sJE",
+            "title": "Announcement 1",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Yume Tourou (夢灯籠)",
+            "author": "RADWIMPS",
+            "spotify": "https://open.spotify.com/track/7swTJOnvm3zEg7QdmJs52T",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Nandemonaiya (なんでもないや)",
+            "author": "RADWIMPS",
+            "spotify": "https://open.spotify.com/track/3SMpsXpVrFju2OUzFtJPws",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "movie",
+    "content_id": "94577949-789f-4c5c-bb56-a88b243254bb",
+    "scored_by": 1817186,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 1,
+            "dub": true,
+            "hidden": false,
+            "description": "Події відбуваються в Японії, коли вперше за тисячоліття близько біля Землі пролітає комета. Міцуха, учениця старшої школи, живе в селі і мріє жити в місті, бо втомилася від сільського життя. У той же час, є Такі, також учень старшої школи, який живе у Токіо з друзями і підробляє в італійському ресторані. До того ж, він захоплюється архітектурою та малюванням. Одного дня, Міцуха прокидається в тілі хлопця з Токіо, а Такі – в тілі дівчини з села. В чому ж секрет такого перевтілення?",
+            "sub": true,
+            "created": 1687706769,
+            "title_ja": "Kimi no Na wa",
+            "episodes": 1,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2016-09/1474654962_01.png",
+                "https://anitube.in.ua/uploads/posts/2016-09/1474654917_02.png",
+                "https://anitube.in.ua/uploads/posts/2016-09/1474654993_03.png",
+                "https://anitube.in.ua/uploads/posts/2016-09/1474654965_04.png"
+            ],
+            "updated": 1689360232,
+            "title_ua": "Твоє ім'я",
+            "length": 106,
+            "translators": [
+                "MadGuy",
+                "Gedet",
+                "Yeskind"
+            ],
+            "slug": "2591-tvoye-mya-kimi-no-na-wa",
+            "episodes_raw": "1 з 1 (1 год. 46 хв.)",
+            "scored_by": 387,
+            "voices": [
+                "Gwean",
+                "Maslinka",
+                "Ейдж",
+                "Милуся",
+                "Бостон",
+                "Владислава Чернова",
+                "Міла Сідляр",
+                "Yeskind",
+                "Balayansha"
+            ],
+            "url": "https://anitube.in.ua/2591-tvoye-mya-kimi-no-na-wa.html",
+            "director": "Макото Шінкай",
+            "year": 2016,
+            "genres": [
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Надприродне",
+                    "slug": "supernatural"
+                },
+                {
+                    "name": "Романтика",
+                    "slug": "romance"
+                },
+                {
+                    "name": "Школа",
+                    "slug": "school-life"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=xU47nhruN-Q",
+            "score": 9.6,
+            "teams": [
+                "GweanMaslinka",
+                "AniUa",
+                "Робота Голосом",
+                "Didko Studio"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/20438f53dd8412b68dc0a1ef795e52.jpg",
+            "nsfw": false,
+            "id": "dd5ebaf2-3554-47dc-9da3-b94f6587a471"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRip 1080p H.265 4xUkr/Jpn | Sub 2xUkr/Eng/Jpn",
+            "year": 2016,
+            "title_ja": "Kimi no Na wa",
+            "leech": 1,
+            "title_ua": "Твоє ім’я",
+            "seed": 16,
+            "quality": "1080p",
+            "size": 9472,
+            "slug": "110797",
+            "url": "http://toloka.to/t110797",
+            "image": "https://posters.hurtom.com/cache/anime/tvoye_im_ya-2_550.jpg",
+            "id": "11928e71-0541-4c1b-a5bb-0b7db31c0b67",
+            "next_update_info": null,
+            "author": "Anonymous",
+            "created": 1678658400,
+            "screenshots": [],
+            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Твоє ім'я / 君の名は。/ Your Name (2016) WEBDLRip Ukr",
+            "year": 2016,
+            "title_ja": "Your Name",
+            "leech": 0,
+            "title_ua": "Твоє ім'я",
+            "seed": 4,
+            "quality": null,
+            "size": 1771,
+            "slug": "665816",
+            "url": "http://toloka.to/t665816",
+            "image": "https://toloka.to/photos/2302270038381185537_f0_0.jpg",
+            "id": "1cecd8cb-9288-4404-aef7-65b013dbc39f",
+            "next_update_info": null,
+            "author": "Didko_Studio",
+            "created": 1677448800,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/02/1e605806dbe01df63.png",
+                "https://img.hurtom.com/i/2023/02/13d69b87246d30793.png",
+                "https://img.hurtom.com/i/2023/02/1ee1c6cde12ababac.png"
+            ],
+            "description": "Старшокласниця Міцуха навчається у звичайній провінційній школі у невеличкому містечку в центральній Японії та мріє про життя в Токіо. Одного дня відбувається щось по-справжньому дивне і Міцуха міняється тілом з токійським старшокласником Такі. Ці дивовижні трансформації стають регулярними та сході на сон. Коли ж Міцуха і Такі переконуються, що все відбувається насправді, то починають намагатись трошки підправити життя один одного. Міцуха організовує для Такі побачення з дівчиною, до якої він боявся навіть підступитись, а Такі робить Міцуху більш популярною серед однокласників. Але це тільки початок пригод...",
+            "updated": 1687705591,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRip 1080p 4xUkr/Jpn | Sub 2xUkr/Eng/Jpn",
+            "year": 2016,
+            "title_ja": "Kimi no Na wa",
+            "leech": 0,
+            "title_ua": "Твоє ім’я",
+            "seed": 1,
+            "quality": "1080p",
+            "size": 11796,
+            "slug": "664546",
+            "url": "http://toloka.to/t664546",
+            "image": "https://img.hurtom.com/i/2023/01/Covere5ed7639d84d5d06.md.jpg",
+            "id": "34517433-1456-4c17-8352-518341b689f0",
+            "next_update_info": null,
+            "author": "Anonymous",
+            "created": 1678658400,
+            "screenshots": [],
+            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Макото Шінкай. Колекція / Makoto Shinkai. Collection (1999-2019) BDRip 1080p H.265 Ukr/Jpn | Sub Ukr/Jpn",
+            "year": 1999,
+            "title_ja": "Makoto Shinkai. Collection",
+            "leech": 3,
+            "title_ua": "Макото Шінкай. Колекція",
+            "seed": 8,
+            "quality": "1080p",
+            "size": 26183,
+            "slug": "653811",
+            "url": "http://toloka.to/t653811",
+            "image": "https://img.hurtom.com/i/2022/02/Cover20f293c609f48964.md.jpg",
+            "id": "650c5494-0b6c-43a3-a201-8a12b9631254",
+            "next_update_info": null,
+            "author": "Anonymous",
+            "created": 1679176800,
+            "screenshots": [],
+            "description": "Альтернативна історія, після поразки у другій світовій війні Японію було поділено між союзниками: північний острів, Хоккайдо, відійшов Радянському Союзу, а Хоншю та іншими південними островами оволоділи американці. Влітку 1996 року на острові Хоккайдо почали будувати башту таких велетенських розмірів, що троє друзів-старшокласників з американського Хоншю, які гуляли разом під час літніх канікул, могли чітко бачити її контури. Друзі дали один одному обіцянку, що одного разу вони побудують літак і розкриють секрет гігантської башти…\n\nЦе аніме – про теперішнє і майбутнє, про вірність і обов’язок, про дружбу і невиконані обіцянки, а також про кохання та мрії.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRemux 4K 2160p H.265 HDR 2xUkr/Jap | Sub 2xUkr/Eng/Multilang",
+            "year": 2016,
+            "title_ja": "Kimi no Na wa",
+            "leech": 0,
+            "title_ua": "Твоє ім’я",
+            "seed": 1,
+            "quality": "4k",
+            "size": 58613,
+            "slug": "589771",
+            "url": "http://toloka.to/t589771",
+            "image": "https://toloka.to/photos/2304140308042760_f0_0.jpg",
+            "id": "81f430f3-1895-4435-af1c-d68d8db65ac4",
+            "next_update_info": null,
+            "author": "seasky",
+            "created": 1641765600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-1.md.png",
+                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-2.md.png",
+                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-3.md.png",
+                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-4.md.png",
+                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-5.md.png"
+            ],
+            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
+            "updated": 1689357008,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 8.85,
+    "stats": {
+        "dropped": 3676,
+        "on_hold": 6923,
+        "planned": 286087,
+        "score_1": 5288,
+        "score_2": 1970,
+        "score_3": 3713,
+        "score_4": 9016,
+        "score_5": 22241,
+        "score_6": 53754,
+        "score_7": 153022,
+        "score_8": 338770,
+        "score_9": 513359,
+        "score_10": 716102,
+        "watching": 59059,
+        "completed": 2256386
+    }
+}

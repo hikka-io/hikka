@@ -5,7 +5,7 @@ from sqlalchemy import func
 
 async def test_import_anime(test_session, aggregator_anime):
     anime_count = await test_session.scalar(select(func.count(Anime.id)))
-    assert anime_count == 5
+    assert anime_count == 15
 
     # Check individual anime
     anime = await test_session.scalar(

@@ -1,0 +1,4073 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "b953efd6-7616-484a-a75b-0bb25de7717f"
+            },
+            "weight": 110
+        },
+        {
+            "recommended": {
+                "content_id": "45195ef9-59fa-4153-85b2-1c1169da4fc7"
+            },
+            "weight": 51
+        },
+        {
+            "recommended": {
+                "content_id": "6d927971-0863-4dcf-b4a5-47db8af1858c"
+            },
+            "weight": 51
+        },
+        {
+            "recommended": {
+                "content_id": "e063256f-286f-4117-968e-4aa2a67d6817"
+            },
+            "weight": 46
+        },
+        {
+            "recommended": {
+                "content_id": "81ac6747-7df9-4216-bd66-cfdcdf580c1d"
+            },
+            "weight": 43
+        },
+        {
+            "recommended": {
+                "content_id": "fc524a18-378f-4ccb-82a0-b4063206c600"
+            },
+            "weight": 42
+        },
+        {
+            "recommended": {
+                "content_id": "7afc8302-8038-4336-9b27-5d58392e783c"
+            },
+            "weight": 37
+        },
+        {
+            "recommended": {
+                "content_id": "17dc41a5-673a-477d-bb42-3f39b9eae042"
+            },
+            "weight": 34
+        },
+        {
+            "recommended": {
+                "content_id": "b0db8067-bea7-4d9e-b820-8c642524de2b"
+            },
+            "weight": 32
+        },
+        {
+            "recommended": {
+                "content_id": "c29a7211-d63b-4d4b-8fb1-42e2f5d10790"
+            },
+            "weight": 32
+        },
+        {
+            "recommended": {
+                "content_id": "a5221a92-294e-43b5-8ab2-32e019d19b39"
+            },
+            "weight": 31
+        },
+        {
+            "recommended": {
+                "content_id": "c99ec9f7-feda-4cd3-8556-8c5dc6bc329e"
+            },
+            "weight": 30
+        },
+        {
+            "recommended": {
+                "content_id": "66c9a285-2e14-4bc2-9ebe-28292ba6f464"
+            },
+            "weight": 30
+        },
+        {
+            "recommended": {
+                "content_id": "6d4c9843-ca06-4e46-a0bb-39edf0697f2e"
+            },
+            "weight": 21
+        },
+        {
+            "recommended": {
+                "content_id": "d2b7f701-c590-4e59-9570-994872fc5be9"
+            },
+            "weight": 20
+        },
+        {
+            "recommended": {
+                "content_id": "ce11787b-b3b0-41f5-84e7-8712860e1d2c"
+            },
+            "weight": 16
+        },
+        {
+            "recommended": {
+                "content_id": "cefc6097-44db-406c-a78f-fe85229db381"
+            },
+            "weight": 13
+        },
+        {
+            "recommended": {
+                "content_id": "461edc50-44ae-4a7e-a902-7a8b70ad4edc"
+            },
+            "weight": 13
+        },
+        {
+            "recommended": {
+                "content_id": "be425fc3-cd78-4d38-b025-4b581989eca9"
+            },
+            "weight": 11
+        },
+        {
+            "recommended": {
+                "content_id": "f2b03a9a-0107-4a8a-b0f5-74cc8d5ab5c8"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "c56baad8-91ac-4616-97b8-a94647c98aea"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "cb69190b-2894-441f-af2d-e1f9ed8769a0"
+            },
+            "weight": 10
+        },
+        {
+            "recommended": {
+                "content_id": "3f21fb57-c540-4218-b3b3-1a76dd3dc091"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "6e584370-65a9-4eb4-918f-7fc95108f2fe"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "e967c4b1-520a-4cff-a674-c57214ad99d6"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "4614e40f-332b-4d76-ad18-556dcbfe37b5"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "f22039ff-8d05-46c7-aa6b-57631b2c3d5c"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "456975ce-0f32-4ba0-ae7e-e917c82231f4"
+            },
+            "weight": 8
+        },
+        {
+            "recommended": {
+                "content_id": "331c5f4d-592c-40c5-9c54-74973bf8dff3"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "c329691d-7853-4c0a-bdd5-adbec76c784d"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "a63e0c5b-24e0-4a2a-9835-cd434bd1f331"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "a67ac7e9-9c24-4dba-a04c-ebe68a93246d"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "f09891a9-d708-4f5a-bf6d-08ecaac1b9d0"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "7b75ac5e-c2da-4922-9b7b-7d7701255b8a"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "d469a383-711b-4b69-8da5-a119864d6247"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "23bd1150-530b-48be-8756-86e5b187ce9a"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "57136052-cae3-47a0-8016-125eeae8c627"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "88dfafad-60f9-41dc-9150-d71db23f357a"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "898db6be-6238-4283-96c2-03ee2cf660f5"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "6abf59dd-7178-40ea-89da-031d52bac385"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "c725ada0-4faa-4ced-abb1-c9b0fd6102a5"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "3302addd-c952-4039-86d8-ee0003d5af43"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "5454d8f7-0b9e-4676-9c46-799e35324b7f"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "006d9893-07e0-4d2b-a416-fdd662f64fb8"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "57945bca-fa24-4c12-b0d3-908ede8f270b"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "96629781-6abe-49b2-b8dd-d33d34608b35"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "94c3d13f-3838-4155-86fb-451efad2730e"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "04a90532-d8be-4e4b-ab54-09634f1fb894"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "a4b874fc-a29c-432b-8903-68889ca9bae2"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "eb6c8c8a-6338-4bfa-9aec-d61957cbfdbf"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "ddc4ce8f-7e15-4460-8d3d-d77cabb86b14"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "9a722bf2-e794-41bb-888c-cc6856381ec4"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "06347beb-6914-46e0-811b-561d846d6b70"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "c204f3c1-d08f-4add-a5fa-5a5773d1a1ae"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "e87d167c-9a90-4bbc-aed4-723f9655bb4b"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "86ec190c-a1cc-4834-875c-480a4105d55d"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "096caafc-6df5-4a15-95cc-5f54d6afe46f"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "5df79809-e98f-4296-8c76-88fcb3716771"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "ba77260a-a78f-4587-a950-382316be029a"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "d0faaffc-2167-48b1-97af-c74807c633f0"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "c401a48d-1e3c-4b0b-bde8-e6086fe3ae05"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "e0c87a73-2f1a-4b76-bcbf-3547d7a3947e"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "334061b3-ec38-4fcb-ae5e-0be9d98bcdc1"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "311f588e-b1c4-4835-84df-1b25ee5cf6de"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "90cd89e7-d972-4603-bab2-41793a384de0"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "d987d970-5c38-4178-b704-28d55ca70377"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "8a2f6f04-2ded-4288-ba08-0e730b3d1c9f"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "7613c60f-0a07-46e0-a9b4-afc68e5a50dd"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "50defdb1-7404-45fb-80a2-f25faf8aa2a8"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "8ebfb332-f610-4c60-aebf-86007d9fee8a"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "929f5d56-fa86-42db-92fe-27a00e14dc10"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "0ddf7b18-7e12-436c-bb1e-76819f6f2847"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "77b5a885-19bf-4ec8-880f-4dff6041e7b9"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "62e26e4d-1af2-4fec-9f1e-ac8fd63a51ed"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "d8ec419c-6c3f-4511-805c-e575be801da5"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "7a381b6c-2947-4516-993b-dc5bc65e605c"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "f4e4febc-b2dd-448b-a4e1-eedfecb7cda4"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "a55bba9b-949e-433c-a99c-744e3f310097"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "651d80aa-43fc-4c90-af57-906799581355"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "6cb3c135-26cd-47d0-b785-1dd0104a4c1c"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9d39961a-84ce-430c-b7a9-b554a99fcd2d"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "d6afbd8a-a90a-48cd-bdcb-74bfaac05938"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "beae5115-54a0-4670-8bb9-a7db109a934f"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "0af64efc-f5dd-42a3-b7bf-92461a1545e6"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "997f5377-154e-4c4e-a92f-7450a8bee7b7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "93d23010-2db0-48c2-ac8c-1fb4c51e9523"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d9dbbd13-60f2-4aec-970f-bc901a7e400f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7e6cb676-6c47-4b3b-a3b9-009377a91292"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "1601e4d1-bfd1-466e-bb48-5b8a500635de"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "460d7bd6-6edb-483d-ab74-042b68459943"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3e995c0a-536d-4686-b5e4-e513f6253658"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "aedbec66-b913-4b6f-b65c-2952c7a0d7f1"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ae6f0905-88e3-41a5-af46-2af3847a8eb4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "04d361a7-07f1-42f3-bee3-3810ea90a37d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "58f31c90-32a1-4e42-addd-5ebed8f280ee"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "944aeba2-d5f8-4c0d-a0c6-8eff5396175a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b4bc96ce-05eb-4bbf-81c0-339b40b49056"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "48efbcb3-d883-49a7-8c3a-3c844f727920"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f33419a8-a617-4be5-8e6e-20b71119e622"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0ca74559-bea1-411f-abdd-ce932ddbea2c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f95d1806-2930-4969-ae5f-ec912d1571ba"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f990037d-5e05-4021-a545-c1b7a17842d2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f06dec34-4e05-4c6e-9ff6-a6996ace0bbe"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "94292d72-a261-49bd-948d-12dfddd11987"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "311300f4-b63a-4add-84ec-484d0ffa8988"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "029db9f4-c952-4c70-96ca-f35345911d89"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a051ceed-86e4-459a-bd6d-8412a511f0a2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b42839ed-f3b5-4748-8b1c-d960ed809c09"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c5f524eb-b667-4f1e-bab6-a47307dd970e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d8b34ef4-b7b2-473f-bf1f-af2a1b0286ca"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2a33b735-5900-4ade-9b99-b8d890f5a877"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d09492be-cb3e-475d-829d-a5d0675f2539"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d89bf404-ad7a-4eb4-b913-035abf9f4e6d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "fed0756f-37c2-4b57-a532-51b55435cb52"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "83aa1f9b-6914-4c7e-86b1-73d9bed0ccc7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f297970c-93e7-47f0-a01d-ee4cd1f067d9"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5a365d96-2cbd-4532-92a1-90fc956d8275"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4794b116-f99d-4f74-b819-91e8f8cf25c4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3c90f86a-807c-4f0c-b76c-51383e05d783"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f4663719-4f89-46b9-b0f3-ac022e526f80"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "df9f1310-1a6f-4f38-ac66-af3146f840f6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a9d96e68-70ce-45ef-a2da-6a3c8901ac90"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "60d9631e-2c00-418d-9147-58a7704d489e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5be70bcf-63fc-480e-a16f-eade3788c271"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ca4f65dd-45b7-4b3b-804d-a9093cadd944"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "34ba3acf-5a3d-4df4-814d-d94dee33f7d9"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b51a5277-b49d-46f6-8419-a5a77eaf8a8c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f06acc63-ab35-4f31-b5c1-ddb466f877fe"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a0e6379f-56fb-44c5-a9ba-cdf8c74d8647"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b02ea125-02d9-4e1f-acf9-16045a99adb3"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "05f5b6f5-2fb1-403e-bd2d-87476bcf01df"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5e856757-e621-4e9d-8c4d-3b8537889a53"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0bca1087-b3f4-44f1-8916-212d56845637"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d66698dd-a69c-4d32-8ed4-9b4d2d1fa2e2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9c3047d2-7632-4feb-95da-4357e84474ed"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2e5b6781-2569-4d02-89d4-80545ae84c70"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "83ac27c6-62e0-41a4-a311-058b84aafc6e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "537e959c-9dc5-44b6-9060-612f06ba8b8d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "18589408-3da3-4abc-97be-261057cf2633"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9457a26e-b8c0-4f5d-b4e8-e2b0d6e44d50"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e3fcd293-7821-4055-8cf4-9e06eb25ae4d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8e242ddf-e76d-475d-b844-0dbbf7208449"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d48fa7f1-5ee2-4bec-a0ef-312869bf4106"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "24577963-0e89-44d8-a0ba-9c905051f320"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2830c19f-2c3b-416a-9b95-e51b7c4d5a37"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "37d1df6a-90dc-4862-856d-865cf46f0410"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f9c15cac-b800-49be-8647-6a02f6256e9a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "07ded792-b082-4834-8fe1-e1b3f8a907f7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c6eacad5-30d8-445e-b26f-f8b8b8e3b8c6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bb06cf11-f367-4067-a756-7d6925bd10bb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "371ffaae-9718-4d28-a425-d4942e6e0f4c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "725ce27a-727d-4052-a36d-772b656e9d40"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a4b40e84-973a-41c5-ac77-a511a9461778"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "1a3a5b04-463c-4062-b625-cdc4b6e946b4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "cccfb16c-4ec9-4f80-94e3-a89e26676e53"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4e905ca6-4669-47e8-a51b-f37f35660523"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7780a5e7-83cf-4903-9b11-5cbfbde5bed1"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b97d6c19-167e-4fbe-8c01-d2a8e085f652"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "61cfb401-9542-43f3-943f-80c90c9f5a90"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3d702192-73b7-49d0-bec5-1ad841512e07"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d9d6705c-0ffb-45dd-b6dd-fefe15cd75b2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "69a56214-177f-4bb1-96a1-238b7db627d8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "85a093d5-6788-45ff-a554-fde5bd840cd2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "96bf7b15-fbe0-4730-8222-bdc8ccdc1352"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4e89d921-c14b-4e3e-b559-db0c45bfc4bf"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c12109c9-d52a-4add-a669-8562861d287e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a488c38a-5b00-43fe-ac22-2d3f1101259e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "1ec834b0-ff97-483f-9014-41ff56c0efe0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "428838d9-fc44-4898-a0a6-19c36d0a00b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2f726a9f-a5d9-4073-b89f-380fbfce9530"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d572ee61-10bd-42f2-8d1c-31a220ba1ae5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "1f1abe90-da49-4273-8d86-8426225250e2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8f8ba047-0792-4d99-afef-a54f3bd14098"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4a3c991e-19e1-4c10-8368-03a7958a3d07"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a41c564a-99f4-4047-b683-455fcb7eb2cb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e8a4d95e-8d83-4f51-95e0-e84ed4b9ef5d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ae6b9d7d-91db-4ea8-bf46-c2ded961cc9c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "105864e8-1044-4526-805e-3bf496487e59"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "baf4c021-9516-4a9e-93ef-4f05bac4c8dc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c10bbba3-ff60-4896-a858-75733d78cf1f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f6a66368-35a1-4298-9ee4-ba0860888476"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c9209dcd-6726-46f8-a7a8-9a33089f09b7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bad64b46-1ddc-49c9-bf02-1dd868f5a6df"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "356cd4ce-999d-4e57-bd61-ddda740b40f8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "90530e90-8b1a-4d1d-b13a-93d5b216e0bc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c24fc89e-7e65-44bc-af74-661f14c38193"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "fa1280b4-2310-4226-aa9d-b35ad4fd6538"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bf7c4acc-8c06-4fd7-9155-4acb7ae6c074"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "aeee23a0-9e13-4dda-923c-91463add8fcc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4e19805b-89f7-4e92-baf8-edc7c3a8534a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "57db2999-e790-4018-9206-75da362da62f"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "03b639e6-6315-436e-b138-c784e9cb1612"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4be7f418-b57e-44e9-a9f0-5d23d1612344"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a9901868-0aad-47c1-96ce-c73f96028bcd"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2112ffbd-90ec-436d-b663-6eef8f940201"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "606e2164-61ef-4988-84ee-403d2347683f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "31d38136-fd86-485f-98dc-cb8948ab8921"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "418bbdb6-6a72-481d-86df-98047e7d7f1f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "71563810-0d48-47ed-bff6-bf81ebf57b52"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7ef0fdc9-affa-453a-96fe-e4fb757603da"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "64b87db5-99ba-4e24-bf5b-0e679076a701"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9cda5392-bf35-4dee-9bfc-96ad38f4eb6e"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9a68fa90-cebd-4e2b-9f17-d31df0f6e9cd"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a9ae4997-511a-4699-8a89-65f60f837250"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "431de5e7-ec2d-46c8-8f62-32ae16baa1ea"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e526d99-cd31-4bac-b17a-f644fd9e7c6b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "817fe83e-6060-4a46-9aff-43b491306ce5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "695f6246-0a53-4375-af88-0d91e9cd2a4f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "847208f6-0ce3-4c67-b8a7-7ec37ad9df95"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9b3e3fde-9a52-40fe-addf-fb085e42ee40"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6fedaec3-6a1d-4cfa-b650-04a9e09e5b3a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "90f57660-52da-433c-a7c8-18425a2c9395"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7482d5c8-ae0d-45c3-a3c3-56e664e04e62"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0fc4d7a0-6b36-4de0-92dd-34f20d6e5c51"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5e8a2f3d-9bb2-49b4-9480-4380fb8b8027"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "025dde7b-ca0b-4d04-9813-27c75ba3f968"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "57966cd0-8dfd-4fe9-b9e8-b225bba190c7"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f309b902-98ff-4d95-8e1a-5f3dd34e3fa4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e8c5d8c-18f4-4790-bab8-e6bdf9bc8619"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "95de24ac-d8a4-4aa0-8ada-2143a01ef101"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5f4dd356-98c0-4cd9-8bee-ad4132165f3b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e98f7801-6e4b-4edb-b253-f8df9cfc0063"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "937f9493-e17f-4a4c-b6d0-6a2cd81af635"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6185838d-37e8-42a7-8711-7cf57e2d0f83"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f63305b2-a367-49d0-ac9c-e9c259d76eed"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d2335da0-aa98-49ea-bee3-e06f82b9a8d2"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "bbcbf617-8ee1-4559-947b-fb05fef3c921"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4dfb0c40-da83-4245-bfe1-4326eb317339"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8096a974-f12c-4577-b345-2d77857bfb2a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b68f1c5e-019f-4dce-912f-981a982c1787"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1d10bb7e-db61-45fa-832e-dfdcc7c549d4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0830f6ad-5a99-4228-bd68-5d6ad80dbd3a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9798d029-4ecf-4a6a-82dd-824649e26770"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "fd1f92ea-cb32-4728-818d-87a083a647da"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8b1bb639-e673-469b-891c-6ceec4a913d6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4ff6f691-69d6-4642-a2f6-01da2558aafb"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "3c7feb3a-96e2-4150-afc5-3a766760b393"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "da13d40b-755d-4a87-b13b-2985fd450585"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5a5adc33-69e9-4824-a9d6-ec094a73cb35"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "cfce1009-bb37-48ec-98d1-5f0695108e05"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7e2caecd-9935-4267-8fba-9c197f06a99d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "42ad7632-e095-4d79-9c83-0a7237d95dc5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "d1799a78-fbdd-41a5-b19d-767f48267641"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3691b73c-3587-4d07-b406-ca26b91f3d5d"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "55c91c04-190a-43cd-9b06-2a086c508212"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "2249d8d5-2b9f-4eed-90fc-806f732e333a"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3b16a1c1-718f-4c74-ade7-abe98c4a9710"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "31f06722-a072-452d-839b-bd94783e3b87"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "e2514611-d478-417f-a063-0f3d28bb5f30"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "51604206-d426-47ce-8df8-712203c07199"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [
+        {
+            "title_native": "二千年後の君へ",
+            "aired": 1365282000,
+            "title_ja": "Ni Sen-Nen-Go no Kimi e",
+            "title_en": "To You Two Thousand Years Later",
+            "title_ua": null,
+            "type": null,
+            "index": 1
+        },
+        {
+            "title_native": "その日",
+            "aired": 1365886800,
+            "title_ja": "Sono Hi",
+            "title_en": "That Day",
+            "title_ua": null,
+            "type": null,
+            "index": 2
+        },
+        {
+            "title_native": "絶望の中で鈍く光る",
+            "aired": 1366491600,
+            "title_ja": "Zetsubou no Naka de Nibuku Hikaru",
+            "title_en": "Shining Dimly in the Midst of Despair",
+            "title_ua": null,
+            "type": null,
+            "index": 3
+        },
+        {
+            "title_native": "解散式の夜",
+            "aired": 1367096400,
+            "title_ja": "Kaisan Shiki no Yoru",
+            "title_en": "Night of the Disbanding",
+            "title_ua": null,
+            "type": null,
+            "index": 4
+        },
+        {
+            "title_native": "初陣",
+            "aired": 1367701200,
+            "title_ja": "Uijin",
+            "title_en": "First Battle",
+            "title_ua": null,
+            "type": null,
+            "index": 5
+        },
+        {
+            "title_native": "少女が見た世界",
+            "aired": 1368306000,
+            "title_ja": "Shoujo ga Mita Sekai",
+            "title_en": "The World She Saw",
+            "title_ua": null,
+            "type": null,
+            "index": 6
+        },
+        {
+            "title_native": "小さな刃",
+            "aired": 1368910800,
+            "title_ja": "Chiisana Yaiba",
+            "title_en": "The Small Blade",
+            "title_ua": null,
+            "type": null,
+            "index": 7
+        },
+        {
+            "title_native": "鼓動が聞こえる",
+            "aired": 1369515600,
+            "title_ja": "Kodou ga Kikoeru",
+            "title_en": "Hearing the Heartbeat",
+            "title_ua": null,
+            "type": null,
+            "index": 8
+        },
+        {
+            "title_native": "左腕の行方",
+            "aired": 1370120400,
+            "title_ja": "Hidariude no Yukue",
+            "title_en": "The Left Arm's Trace",
+            "title_ua": null,
+            "type": null,
+            "index": 9
+        },
+        {
+            "title_native": "応える",
+            "aired": 1370725200,
+            "title_ja": "Kotaeru",
+            "title_en": "Answer",
+            "title_ua": null,
+            "type": null,
+            "index": 10
+        },
+        {
+            "title_native": "偶像",
+            "aired": 1371330000,
+            "title_ja": "Guuzou",
+            "title_en": "Idol",
+            "title_ua": null,
+            "type": null,
+            "index": 11
+        },
+        {
+            "title_native": "傷",
+            "aired": 1371934800,
+            "title_ja": "Kizu",
+            "title_en": "Wound",
+            "title_ua": null,
+            "type": null,
+            "index": 12
+        },
+        {
+            "title_native": "原初的欲求",
+            "aired": 1372539600,
+            "title_ja": "Gensho-teki Yokkyuu",
+            "title_en": "Primordial Desire",
+            "title_ua": null,
+            "type": null,
+            "index": 13
+        },
+        {
+            "title_native": "まだ目を見れない",
+            "aired": 1373749200,
+            "title_ja": "Mada me wo Mirenai",
+            "title_en": "Can't Look Into His Eyes",
+            "title_ua": null,
+            "type": null,
+            "index": 14
+        },
+        {
+            "title_native": "特別作戦班",
+            "aired": 1374354000,
+            "title_ja": "Tokubetsu Sakusen-han",
+            "title_en": "Special Operations Squad",
+            "title_ua": null,
+            "type": null,
+            "index": 15
+        },
+        {
+            "title_native": "今、何をすべきか",
+            "aired": 1374958800,
+            "title_ja": "Ima, Nani wo Subeki ka",
+            "title_en": "What To Do Now",
+            "title_ua": null,
+            "type": null,
+            "index": 16
+        },
+        {
+            "title_native": "女型の巨人",
+            "aired": 1375563600,
+            "title_ja": "Megata no Kyojin",
+            "title_en": "The Female Titan",
+            "title_ua": null,
+            "type": null,
+            "index": 17
+        },
+        {
+            "title_native": "巨大樹の森",
+            "aired": 1376168400,
+            "title_ja": "Kyodai-ju no Mori",
+            "title_en": "The Forest of Giant Trees",
+            "title_ua": null,
+            "type": null,
+            "index": 18
+        },
+        {
+            "title_native": "嚙みつく",
+            "aired": 1376773200,
+            "title_ja": "Kamitsuku",
+            "title_en": "Bite",
+            "title_ua": null,
+            "type": null,
+            "index": 19
+        },
+        {
+            "title_native": "エルヴィン・スミス",
+            "aired": 1377378000,
+            "title_ja": "Erwin Smith",
+            "title_en": "Erwin Smith",
+            "title_ua": null,
+            "type": null,
+            "index": 20
+        },
+        {
+            "title_native": "鉄槌",
+            "aired": 1377982800,
+            "title_ja": "Tettsui",
+            "title_en": "Crushing Blow",
+            "title_ua": null,
+            "type": null,
+            "index": 21
+        },
+        {
+            "title_native": "敗者達",
+            "aired": 1378587600,
+            "title_ja": "Haisha-tachi",
+            "title_en": "The Defeated",
+            "title_ua": null,
+            "type": null,
+            "index": 22
+        },
+        {
+            "title_native": "微笑み",
+            "aired": 1379192400,
+            "title_ja": "Hohoemi",
+            "title_en": "Smile",
+            "title_ua": null,
+            "type": null,
+            "index": 23
+        },
+        {
+            "title_native": "慈悲",
+            "aired": 1379797200,
+            "title_ja": "Jihi",
+            "title_en": "Mercy",
+            "title_ua": null,
+            "type": null,
+            "index": 24
+        },
+        {
+            "title_native": "壁",
+            "aired": 1380402000,
+            "title_ja": "Kabe",
+            "title_en": "Wall",
+            "title_ua": null,
+            "type": null,
+            "index": 25
+        }
+    ],
+    "episodes_released": 25,
+    "start_date": 1365282000,
+    "episodes_total": 25,
+    "voices": [
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "person": {
+                "content_id": "cf200eac-24c3-4f93-a42a-e9a834a3ce3b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "person": {
+                "content_id": "b349a992-618c-442e-b132-64fd09115d3c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "42ad7632-e095-4d79-9c83-0a7237d95dc5"
+            },
+            "person": {
+                "content_id": "db2af5c9-a6a7-4b52-916c-a53d1ecaf5a6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1d10bb7e-db61-45fa-832e-dfdcc7c549d4"
+            },
+            "person": {
+                "content_id": "f058909a-b771-4852-bf54-320ec047260c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "da13d40b-755d-4a87-b13b-2985fd450585"
+            },
+            "person": {
+                "content_id": "daff3e15-9da0-4ef1-807d-6a7c4c836613"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "person": {
+                "content_id": "1fb2efef-e731-4dad-9380-5a29b5da4c8d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "person": {
+                "content_id": "37f89f27-a130-454d-a446-5fd385c668ae"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1d10bb7e-db61-45fa-832e-dfdcc7c549d4"
+            },
+            "person": {
+                "content_id": "b8471757-cb89-47bd-876c-59ce8bec8365"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "person": {
+                "content_id": "d618d85c-393d-49b1-8b24-ce72f2d0d840"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "person": {
+                "content_id": "2e8adc5a-d451-48ab-b208-f50cf4c0a1d9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "person": {
+                "content_id": "7fb6623f-be24-419f-b8f7-ca4e2ed5ac32"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9b3e3fde-9a52-40fe-addf-fb085e42ee40"
+            },
+            "person": {
+                "content_id": "2ce1b467-4acd-4372-83a7-4f275ca0c186"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4be7f418-b57e-44e9-a9f0-5d23d1612344"
+            },
+            "person": {
+                "content_id": "f461f8a6-9c1f-4680-ae50-ef0a8e3e48a2"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9cda5392-bf35-4dee-9bfc-96ad38f4eb6e"
+            },
+            "person": {
+                "content_id": "aac5abed-7f6c-45aa-9394-2be821e15ee8"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "person": {
+                "content_id": "4c173ffa-f234-44ad-8d95-a93314ea6c16"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "person": {
+                "content_id": "bfce6442-d2eb-4626-931e-85200aace2a6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "person": {
+                "content_id": "2da44d56-b9b8-4665-ad9b-9e99f21791d0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "person": {
+                "content_id": "79961a1f-f27d-4d97-9ba0-9ecfbabdf685"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "person": {
+                "content_id": "206c9bd4-2e8a-414c-b363-84f59bc5e8c1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5f4dd356-98c0-4cd9-8bee-ad4132165f3b"
+            },
+            "person": {
+                "content_id": "36fcd09b-d7d3-404f-a5eb-e16a687a0388"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "937f9493-e17f-4a4c-b6d0-6a2cd81af635"
+            },
+            "person": {
+                "content_id": "916edda4-cef6-464e-9018-7b2341a0fcbe"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4ff6f691-69d6-4642-a2f6-01da2558aafb"
+            },
+            "person": {
+                "content_id": "818f4e6b-836e-485c-aff9-91eca872369c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "90f57660-52da-433c-a7c8-18425a2c9395"
+            },
+            "person": {
+                "content_id": "ba422701-6ed2-4360-aa07-762ee23ac5b9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "90f57660-52da-433c-a7c8-18425a2c9395"
+            },
+            "person": {
+                "content_id": "5e8382df-b7a3-4d74-a429-e72345721263"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5a5adc33-69e9-4824-a9d6-ec094a73cb35"
+            },
+            "person": {
+                "content_id": "3ecae4e7-16ae-4e23-823e-ae35d008eaad"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "817fe83e-6060-4a46-9aff-43b491306ce5"
+            },
+            "person": {
+                "content_id": "7ca5d883-1eed-40fc-bd1c-298e92dc3f84"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a9901868-0aad-47c1-96ce-c73f96028bcd"
+            },
+            "person": {
+                "content_id": "1cfe982f-9784-4781-af5b-ea700b65de15"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "person": {
+                "content_id": "c7a68c17-7cbd-4584-bbc4-e3aaa71bffcb"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "64b87db5-99ba-4e24-bf5b-0e679076a701"
+            },
+            "person": {
+                "content_id": "71167b7f-287b-453f-b150-39222ca2f2ef"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7e2caecd-9935-4267-8fba-9c197f06a99d"
+            },
+            "person": {
+                "content_id": "638128a4-edaa-49e0-8a37-acc4b6db9cce"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "8b1bb639-e673-469b-891c-6ceec4a913d6"
+            },
+            "person": {
+                "content_id": "7e0dbb3f-aee7-40c5-8e36-09c18e21d0c4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "person": {
+                "content_id": "8189ec21-8907-4018-bd94-e2e7b2c19a0c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "person": {
+                "content_id": "7b681bf8-70ac-4782-b03d-a50f75408d92"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9798d029-4ecf-4a6a-82dd-824649e26770"
+            },
+            "person": {
+                "content_id": "aff496e2-4ea6-464f-8ec5-5e32fd2f2332"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f63305b2-a367-49d0-ac9c-e9c259d76eed"
+            },
+            "person": {
+                "content_id": "a1702e0a-4e35-4353-8d23-65eecf86b662"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "b68f1c5e-019f-4dce-912f-981a982c1787"
+            },
+            "person": {
+                "content_id": "7acd44b9-460c-4a8d-9c40-6e6842a8e887"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "person": {
+                "content_id": "26b047d8-e929-4779-a15b-daac8f07fb95"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "da13d40b-755d-4a87-b13b-2985fd450585"
+            },
+            "person": {
+                "content_id": "ecf4a1ad-40ac-4cee-9c17-ac4595daf78f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "95de24ac-d8a4-4aa0-8ada-2143a01ef101"
+            },
+            "person": {
+                "content_id": "d3e47f1f-674d-4adf-9adc-ee79def22d86"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "person": {
+                "content_id": "830ac486-a3e1-40a1-982a-6ce8e4902837"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9a68fa90-cebd-4e2b-9f17-d31df0f6e9cd"
+            },
+            "person": {
+                "content_id": "455a28d0-8ac9-46a4-ab70-10582a8ec075"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9798d029-4ecf-4a6a-82dd-824649e26770"
+            },
+            "person": {
+                "content_id": "1ec3ebb9-6f66-4a72-8966-d4e847b751b4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "6fedaec3-6a1d-4cfa-b650-04a9e09e5b3a"
+            },
+            "person": {
+                "content_id": "d116c250-fbf7-4ed4-b4ef-3847a6d860da"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "025dde7b-ca0b-4d04-9813-27c75ba3f968"
+            },
+            "person": {
+                "content_id": "71167b7f-287b-453f-b150-39222ca2f2ef"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7482d5c8-ae0d-45c3-a3c3-56e664e04e62"
+            },
+            "person": {
+                "content_id": "7e0bb203-441d-41bf-b295-5d00d44a7726"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "person": {
+                "content_id": "f1da1e24-f22f-4755-b577-6f72f81e43f4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "person": {
+                "content_id": "91bfc64a-cbde-4ca7-86aa-68d7c82cb034"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "person": {
+                "content_id": "124b1f8e-572b-44ef-b2b0-1068ce4dad4c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "person": {
+                "content_id": "3777e510-9d94-44d6-87ca-36a28ecf1057"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4dfb0c40-da83-4245-bfe1-4326eb317339"
+            },
+            "person": {
+                "content_id": "0acc8705-3a05-4c7c-b678-8a3031443f2f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fd1f92ea-cb32-4728-818d-87a083a647da"
+            },
+            "person": {
+                "content_id": "cd166618-6ea4-4701-8d38-2e79d2c999ee"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "6185838d-37e8-42a7-8711-7cf57e2d0f83"
+            },
+            "person": {
+                "content_id": "057517e1-f367-47cb-b94a-298f8aefb8b3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "person": {
+                "content_id": "f72bbe17-a319-4642-b12e-ae24af28ec5c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f63305b2-a367-49d0-ac9c-e9c259d76eed"
+            },
+            "person": {
+                "content_id": "fe4b9de3-9a84-432e-9c72-8c84b9e6f7c4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "person": {
+                "content_id": "30206884-d429-4e56-919f-2c1ace39757c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "95de24ac-d8a4-4aa0-8ada-2143a01ef101"
+            },
+            "person": {
+                "content_id": "118c7973-fbd6-4dd0-baf3-8f3e1d7f7200"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "person": {
+                "content_id": "bce93121-9246-4e59-8101-8e16eba5826e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "31d38136-fd86-485f-98dc-cb8948ab8921"
+            },
+            "person": {
+                "content_id": "0c7ff67e-5b2d-4af6-9b04-eae2494cc2ad"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5f4dd356-98c0-4cd9-8bee-ad4132165f3b"
+            },
+            "person": {
+                "content_id": "2e63ce4c-4303-4766-8aee-dab8ecd35054"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "3c7feb3a-96e2-4150-afc5-3a766760b393"
+            },
+            "person": {
+                "content_id": "f2c2ff09-b1bc-4eff-91f9-af4229dbcf22"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0fc4d7a0-6b36-4de0-92dd-34f20d6e5c51"
+            },
+            "person": {
+                "content_id": "1845779a-9558-4632-8008-cbad29563353"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "57966cd0-8dfd-4fe9-b9e8-b225bba190c7"
+            },
+            "person": {
+                "content_id": "3c5d323b-0dc5-449d-b0e5-15d1cd39512b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6185838d-37e8-42a7-8711-7cf57e2d0f83"
+            },
+            "person": {
+                "content_id": "a971add0-18b8-4d53-b363-85602938bed7"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0830f6ad-5a99-4228-bd68-5d6ad80dbd3a"
+            },
+            "person": {
+                "content_id": "a006372c-c200-4765-bcb9-761d310d4e77"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "person": {
+                "content_id": "bf208d4e-3bc6-4107-9c1e-5ee81cef5cbe"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "cfce1009-bb37-48ec-98d1-5f0695108e05"
+            },
+            "person": {
+                "content_id": "48f2ed72-df6a-4325-939f-dcb25e536a06"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "a9ae4997-511a-4699-8a89-65f60f837250"
+            },
+            "person": {
+                "content_id": "e784f3ce-e041-4bac-ac92-ee015d658199"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "person": {
+                "content_id": "6767d313-0297-4b07-9b77-a624e505ae9f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "person": {
+                "content_id": "3d95eb32-3b8b-4e73-a5c0-ab142a3c8a9d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "person": {
+                "content_id": "4fc7f060-1eb8-4012-8282-3185abde409a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "cfce1009-bb37-48ec-98d1-5f0695108e05"
+            },
+            "person": {
+                "content_id": "f2c2ff09-b1bc-4eff-91f9-af4229dbcf22"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "bbcbf617-8ee1-4559-947b-fb05fef3c921"
+            },
+            "person": {
+                "content_id": "2725a2f9-059c-454a-a4a6-3ad0638b3dfd"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "person": {
+                "content_id": "61f27529-a54c-437e-9143-7bc189b59a24"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "person": {
+                "content_id": "8d1ff8a3-fe87-4f13-b960-b7495c2a614a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "3c7feb3a-96e2-4150-afc5-3a766760b393"
+            },
+            "person": {
+                "content_id": "d2bd0f09-2b9f-4be6-acbc-62e967a18fd6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7e2caecd-9935-4267-8fba-9c197f06a99d"
+            },
+            "person": {
+                "content_id": "5d85f216-6979-4ace-bda7-49aa6d9e942d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a9901868-0aad-47c1-96ce-c73f96028bcd"
+            },
+            "person": {
+                "content_id": "11cd64ef-116e-4209-9d3c-c382c7b654de"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0fc4d7a0-6b36-4de0-92dd-34f20d6e5c51"
+            },
+            "person": {
+                "content_id": "18e64e09-a8ea-40e8-881c-d3134ec6fba3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4be7f418-b57e-44e9-a9f0-5d23d1612344"
+            },
+            "person": {
+                "content_id": "0acc8705-3a05-4c7c-b678-8a3031443f2f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "person": {
+                "content_id": "a487b818-a9f6-40dd-9246-30623221fd03"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7ef0fdc9-affa-453a-96fe-e4fb757603da"
+            },
+            "person": {
+                "content_id": "6a40b17b-8469-453f-8e10-be4d39fa4c7e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d2335da0-aa98-49ea-bee3-e06f82b9a8d2"
+            },
+            "person": {
+                "content_id": "c04386ef-3130-43d8-a6a2-b59d8b4282a5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4dfb0c40-da83-4245-bfe1-4326eb317339"
+            },
+            "person": {
+                "content_id": "1943bede-08ae-4ed2-8dc1-bf913b837888"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "817fe83e-6060-4a46-9aff-43b491306ce5"
+            },
+            "person": {
+                "content_id": "e2cf1f49-cbed-4866-9453-c7d469425f8a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "a9ae4997-511a-4699-8a89-65f60f837250"
+            },
+            "person": {
+                "content_id": "d75e01d7-c3ee-4a4c-9063-97c2fa66f1f1"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "71563810-0d48-47ed-bff6-bf81ebf57b52"
+            },
+            "person": {
+                "content_id": "3adfce9e-6c89-489f-9dd5-4be785901995"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "person": {
+                "content_id": "1fb2efef-e731-4dad-9380-5a29b5da4c8d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "person": {
+                "content_id": "0e5747c6-6af5-4ba0-88bc-f0b6f0a842a0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "03b639e6-6315-436e-b138-c784e9cb1612"
+            },
+            "person": {
+                "content_id": "80edb0e0-ff8c-4cc5-9320-d0f3ff41d7b2"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2112ffbd-90ec-436d-b663-6eef8f940201"
+            },
+            "person": {
+                "content_id": "a4ee937b-8041-4574-9623-1c3c1d9667f3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "64b87db5-99ba-4e24-bf5b-0e679076a701"
+            },
+            "person": {
+                "content_id": "5fc0f6fe-91ed-4e40-8200-aca2f726b3e6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7482d5c8-ae0d-45c3-a3c3-56e664e04e62"
+            },
+            "person": {
+                "content_id": "713d4918-c493-4e6b-9d6f-7fae17558a54"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2e526d99-cd31-4bac-b17a-f644fd9e7c6b"
+            },
+            "person": {
+                "content_id": "7e0bb203-441d-41bf-b295-5d00d44a7726"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "606e2164-61ef-4988-84ee-403d2347683f"
+            },
+            "person": {
+                "content_id": "d568d038-a68c-4e0c-977e-5bccf58a2b1d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "42ad7632-e095-4d79-9c83-0a7237d95dc5"
+            },
+            "person": {
+                "content_id": "3c5d323b-0dc5-449d-b0e5-15d1cd39512b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "695f6246-0a53-4375-af88-0d91e9cd2a4f"
+            },
+            "person": {
+                "content_id": "9b8b887a-f01c-40b4-8555-05ab874f3628"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "418bbdb6-6a72-481d-86df-98047e7d7f1f"
+            },
+            "person": {
+                "content_id": "ba829110-b00c-42d0-b800-37f3023b0656"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "person": {
+                "content_id": "34c95f89-8cfa-4fb5-aaf8-a5eac8dcb14b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "71563810-0d48-47ed-bff6-bf81ebf57b52"
+            },
+            "person": {
+                "content_id": "0dc9dc19-5466-4414-b323-10f217ca0804"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "person": {
+                "content_id": "a0ee5f61-ef47-4f78-a47c-a22254cbe06f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "person": {
+                "content_id": "1fc7d36d-ceda-4494-9b51-c5c12ed1aef4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5e8a2f3d-9bb2-49b4-9480-4380fb8b8027"
+            },
+            "person": {
+                "content_id": "4f9ae15c-c326-4d9a-9db8-b63ad24e5a0d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "937f9493-e17f-4a4c-b6d0-6a2cd81af635"
+            },
+            "person": {
+                "content_id": "efce4dce-d8ca-4871-b3a7-ed22c33ead9f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fd1f92ea-cb32-4728-818d-87a083a647da"
+            },
+            "person": {
+                "content_id": "89335a4b-f618-4dd8-8954-aee4688e158c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "57966cd0-8dfd-4fe9-b9e8-b225bba190c7"
+            },
+            "person": {
+                "content_id": "77f1b3b6-3531-477b-98ea-7a4b9792700c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "847208f6-0ce3-4c67-b8a7-7ec37ad9df95"
+            },
+            "person": {
+                "content_id": "3d23f5fa-4ed0-49f8-bc1b-0f49b7c81e11"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "31d38136-fd86-485f-98dc-cb8948ab8921"
+            },
+            "person": {
+                "content_id": "2401b2c7-80be-4b4c-8fe8-fa35b30d06b5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "person": {
+                "content_id": "0acc8705-3a05-4c7c-b678-8a3031443f2f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "person": {
+                "content_id": "46a7f485-3c71-452d-b148-30a842ba030d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "person": {
+                "content_id": "8a14f9c8-1380-4858-ad63-8d0ef4998a20"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "person": {
+                "content_id": "2de7ad9e-09d8-4c8c-bb05-abdf6b820581"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "431de5e7-ec2d-46c8-8f62-32ae16baa1ea"
+            },
+            "person": {
+                "content_id": "9503fdb2-f3f0-40e2-807d-3adb3b0f1480"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9a68fa90-cebd-4e2b-9f17-d31df0f6e9cd"
+            },
+            "person": {
+                "content_id": "89335a4b-f618-4dd8-8954-aee4688e158c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "431de5e7-ec2d-46c8-8f62-32ae16baa1ea"
+            },
+            "person": {
+                "content_id": "6e397972-6adf-4b0a-a50e-490b2fe36b32"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9cda5392-bf35-4dee-9bfc-96ad38f4eb6e"
+            },
+            "person": {
+                "content_id": "13233a4e-85cd-43ab-bf45-38534962f005"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "person": {
+                "content_id": "e4a0fc42-2f28-4462-896c-2ab0ccb33303"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "person": {
+                "content_id": "7a5ad445-efc1-49b0-8f2b-6f93f49e7960"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "8096a974-f12c-4577-b345-2d77857bfb2a"
+            },
+            "person": {
+                "content_id": "796c47f2-98f7-4014-8431-edba3ccf5e94"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "person": {
+                "content_id": "05261439-7c91-442a-8bbf-415ef106deef"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5e8a2f3d-9bb2-49b4-9480-4380fb8b8027"
+            },
+            "person": {
+                "content_id": "d1bf2c31-27bc-4d76-a1b1-a7b38a518d8c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "person": {
+                "content_id": "3390d8aa-8e14-4420-98e3-71757b9c1fc9"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "person": {
+                "content_id": "747c4722-f81d-4ca8-9455-bb671e6879cb"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "person": {
+                "content_id": "f8a6c01e-b8c7-40ff-8a90-35f38015da65"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "bbcbf617-8ee1-4559-947b-fb05fef3c921"
+            },
+            "person": {
+                "content_id": "1bbb152a-8c68-4979-a6ba-4ed83c0430f9"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "person": {
+                "content_id": "88fbabcc-3384-4905-b190-d3eb2f1efa59"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d2335da0-aa98-49ea-bee3-e06f82b9a8d2"
+            },
+            "person": {
+                "content_id": "19af229d-da99-44b0-aab3-485b3c5a9d59"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "847208f6-0ce3-4c67-b8a7-7ec37ad9df95"
+            },
+            "person": {
+                "content_id": "55918c0b-10b1-46a8-917d-ce760988d090"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2112ffbd-90ec-436d-b663-6eef8f940201"
+            },
+            "person": {
+                "content_id": "2725a2f9-059c-454a-a4a6-3ad0638b3dfd"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "606e2164-61ef-4988-84ee-403d2347683f"
+            },
+            "person": {
+                "content_id": "4cc85682-6177-4f7d-b959-fffacc4fb280"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e98f7801-6e4b-4edb-b253-f8df9cfc0063"
+            },
+            "person": {
+                "content_id": "08511ba0-cd44-4e38-abf1-c3e80e25703a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "8096a974-f12c-4577-b345-2d77857bfb2a"
+            },
+            "person": {
+                "content_id": "2f18a673-a571-4c93-954d-dee647779237"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "person": {
+                "content_id": "79961a1f-f27d-4d97-9ba0-9ecfbabdf685"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6fedaec3-6a1d-4cfa-b650-04a9e09e5b3a"
+            },
+            "person": {
+                "content_id": "94c6b667-f631-4340-a941-fe86015fcf87"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f309b902-98ff-4d95-8e1a-5f3dd34e3fa4"
+            },
+            "person": {
+                "content_id": "cc161d15-4679-4678-80b6-4373615db9d4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f309b902-98ff-4d95-8e1a-5f3dd34e3fa4"
+            },
+            "person": {
+                "content_id": "a334da2b-287b-468a-9cbc-54fc93a22a26"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5a5adc33-69e9-4824-a9d6-ec094a73cb35"
+            },
+            "person": {
+                "content_id": "231b5bfa-76af-4010-bbd6-8bfd14d930a4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "b68f1c5e-019f-4dce-912f-981a982c1787"
+            },
+            "person": {
+                "content_id": "ec834a4a-1444-409d-bca7-3bd7158f85e0"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2e8c5d8c-18f4-4790-bab8-e6bdf9bc8619"
+            },
+            "person": {
+                "content_id": "2da86c1e-0008-4a9f-8070-c2d5150e67de"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "person": {
+                "content_id": "fa1649b6-1476-43d8-8010-a9f2c561a7d6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "person": {
+                "content_id": "37a875c8-4a1c-4776-a19a-a0aeb86d0234"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8b1bb639-e673-469b-891c-6ceec4a913d6"
+            },
+            "person": {
+                "content_id": "9e83baf9-dc53-4c0d-8134-d516762539ac"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2e526d99-cd31-4bac-b17a-f644fd9e7c6b"
+            },
+            "person": {
+                "content_id": "5e7efae4-89a6-4cee-9ce4-90256c8bcb80"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "9b3e3fde-9a52-40fe-addf-fb085e42ee40"
+            },
+            "person": {
+                "content_id": "01fa68f9-a542-4ec0-be2d-565812e8ce0e"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1380402000,
+    "staff": [
+        {
+            "person": {
+                "content_id": "77f1b3b6-3531-477b-98ea-7a4b9792700c"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a181871e-1429-48e8-9eda-2b6e302cf6cc"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dd21a259-ba3f-4979-8ab0-d20f62646d19"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9ebea59b-7511-4dc5-9752-ee4520cf2cc9"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "78ebeaad-dd98-45e6-be3b-30950a523b3d"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "141d9354-7b3c-452d-87f1-f136c64ef2ab"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "05ef79cd-3240-40b8-b734-cb637b8f84e4"
+            },
+            "roles": [
+                "Director",
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7facf142-cdbe-47a5-9d4a-637c9d08dac7"
+            },
+            "roles": [
+                "Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b802cde5-c327-467b-abe9-79070df3b999"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "234b3581-0fa5-44cc-b2d9-1d269a7603d7"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "37df8407-56b7-4a2f-b272-d820c61ff27f"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "451d29c3-144b-4e40-9917-04da52bc0f7e"
+            },
+            "roles": [
+                "Episode Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e2b437db-745e-46d9-81ea-e1659f3aa54b"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard",
+                "Chief Animation Director",
+                "Character Design",
+                "Key Animation",
+                "Assistant Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "6d1ac21f-da53-4ac1-89a0-52bb519c3acf"
+            },
+            "roles": [
+                "Episode Director",
+                "Assistant Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "89ebdb1b-3f56-4ce3-9021-b32757072efe"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fc325188-9b3c-4bce-bf55-2aae06cc3548"
+            },
+            "roles": [
+                "Episode Director",
+                "Assistant Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "78b4881b-72ef-4ab4-a7ff-145ed98a9a26"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "004f0b61-2103-46e2-a8d5-79da159872a1"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9e35d933-cb1e-4879-becd-47260a02b795"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9503fdb2-f3f0-40e2-807d-3adb3b0f1480"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "18d33798-aac9-4bc7-8622-9e9dff712d6e"
+            },
+            "roles": [
+                "Script",
+                "Series Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cdde1f6b-e01f-4a5f-8294-153f0324b50d"
+            },
+            "roles": [
+                "Script",
+                "Dialogue Editing"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "ba422701-6ed2-4360-aa07-762ee23ac5b9"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "40984b67-5cc2-46eb-8d6f-fa9cad5d57f3"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f8d9dd17-3bf4-46da-9723-7e470c6705cf"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3d95eb32-3b8b-4e73-a5c0-ab142a3c8a9d"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "024dd7b5-7eb7-4f4b-94ee-078200545264"
+            },
+            "roles": [
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4443ba05-55d7-445b-a315-05deb625f9e5"
+            },
+            "roles": [
+                "Storyboard",
+                "Key Animation",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4741f11d-b7d2-4abe-82d2-40d2ed80f553"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e2f9a7ad-8e44-4798-ab19-4d0877b8f34c"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "75445ea7-f265-45d1-a750-6d5d13c5e6c2"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fdbf9912-ca3d-45cf-a809-9b99de335b16"
+            },
+            "roles": [
+                "Theme Song Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "75ddf69c-54c5-4089-8d2a-6e42800c87a9"
+            },
+            "roles": [
+                "Theme Song Arrangement"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4b58764a-709a-4e50-aa4c-ce46d21b6b5a"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "0c0027dc-d711-429c-8f30-7bff00b6eb75"
+            },
+            "roles": [
+                "Theme Song Composition",
+                "Theme Song Arrangement",
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "2c83fa0a-220b-43b2-8383-79fa43cc3f04"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7f8e548d-b7dd-43b4-b824-6219a5b38dd8"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "997f54c8-dd9d-4ba0-8807-3229b1aa9c9b"
+            },
+            "roles": [
+                "Key Animation",
+                "Animation Director",
+                "Character Design",
+                "Chief Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "43e7acb2-0f43-4c86-be31-b596ad1a39ac"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f3ecad1d-e7a0-40c3-a84a-f56fa3253226"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cecba239-2480-4764-8781-e2985013ba86"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f02f929d-8b66-4f01-9f89-c0b61441b0a6"
+            },
+            "roles": [
+                "2nd Key Animation",
+                "Assistant Animation Director",
+                "Animation Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a8802736-e62a-47b1-86c2-605409c8de2e"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "df198c80-2a6a-4afb-b8d6-d855ea0ccb82"
+            },
+            "roles": [
+                "Color Design"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "783f1118-15cb-4b85-bfe9-0f792e878973"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "989d2419-adb8-4891-852e-fe42b9dcdc6c"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d8469f2a-0a4f-4649-9778-45c84cb63cf8"
+            },
+            "roles": [
+                "Key Animation",
+                "In-Between Animation",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "55ac2cc1-5a55-42e3-b095-81e560846e20"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "045f95ce-8fa7-405f-ae53-a0beab625114"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c43d3687-ab66-4572-b6ce-10ba7c199183"
+            },
+            "roles": [
+                "Associate Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "15acee3f-e9cf-4b6c-b108-9f667feacf3a"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "67972e5b-2d4c-4f7e-828b-b851bfee341f"
+            },
+            "roles": [
+                "2nd Key Animation",
+                "Animation Director",
+                "Chief Animation Director",
+                "Assistant Animation Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b213404c-0f30-49ff-aa52-427d6c4093f3"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8a98d49d-9f9c-4087-b3bf-1e976ec1d282"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "59742ddb-0746-4ddd-92ea-563ba7f660ba"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a6139b3b-2c95-4848-8a21-f4d1f112a7e9"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c55e70d8-5790-44d8-8646-bc1832a2c6e4"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cfcadf69-acfd-4d7e-9b34-2719879bc472"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "45230432-8bc7-4a46-9492-9e916adb34a9"
+            },
+            "roles": [
+                "Planning Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "830ac486-a3e1-40a1-982a-6ce8e4902837"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "eb473ded-fcd4-4e25-ba16-d97cb18f63fd"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9bdf1bcd-0b72-4630-bab6-5b2b9d88980c"
+            },
+            "roles": [
+                "Planning Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d6f0e791-dd63-4d57-af5a-4c589b27e37a"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cea9dac4-b71c-4292-9281-f092bc650019"
+            },
+            "roles": [
+                "Principle Drawing"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "42b2ab81-e6c0-494f-92ae-dfcb386a5845"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5a46402f-9c72-4605-98cb-7aa2557a7d9a"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e73592b8-9b2b-4f3a-8c6f-fb9e72a9cb00"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "6a2eda71-1ba6-4100-99f7-57d3c87d8df9"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b2717442-4b0b-4d62-84a8-7f43c5cfa872"
+            },
+            "roles": [
+                "2nd Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "21f0c8b3-51e6-4603-915e-1e49bd80109a"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "81195c22-38d5-42bb-8490-e8629036c0de"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1790dccd-0f9d-4cea-8460-7f39baa055c3"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        }
+    ],
+    "created": 1687453284,
+    "updated": 1689286031,
+    "synopsis_en": "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans, forcing humans to hide in fear behind enormous concentric walls. What makes these giants truly terrifying is that their taste for human flesh is not born out of hunger but what appears to be out of pleasure. To ensure their survival, the remnants of humanity began living within defensive barriers, resulting in one hundred years without a single titan encounter. However, that fragile calm is soon shattered when a colossal Titan manages to breach the supposedly impregnable outer wall, reigniting the fight for survival against the man-eating abominations.\n\nAfter witnessing a horrific personal loss at the hands of the invading creatures, Eren Yeager dedicates his life to their eradication by enlisting into the Survey Corps, an elite military unit that combats the merciless humanoids outside the protection of the walls. Eren, his adopted sister Mikasa Ackerman, and his childhood friend Armin Arlert join the brutal war against the Titans and race to discover a way of defeating them before the last walls are breached.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.\n\nДжерело: Toloka",
+    "franchise": "e2283d58-ba06-420e-92de-8fe597d69a02",
+    "title_ja": "Shingeki no Kyojin",
+    "title_en": "Attack on Titan",
+    "title_ua": "Атака титанів",
+    "duration": 24,
+    "poster": "/content/anime/shingeki-no-kyojin-0cf69a/KSC1rO30SWHz9MeWhVL2lQ.jpg",
+    "rating": "r",
+    "source": "manga",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://shingeki.tv/season1/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/anime_shingeki",
+            "text": "@anime_shingeki"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=9541",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=14950",
+            "text": "ANN"
+        },
+        {
+            "url": "http://en.wikipedia.org/wiki/Attack_on_Titan",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E9%80%B2%E6%92%83%E3%81%AE%E5%B7%A8%E4%BA%BA",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/2935",
+            "text": "Syoboi"
+        },
+        {
+            "url": "http://www.crunchyroll.com/series-280312",
+            "text": "Crunchyroll"
+        },
+        {
+            "url": "https://www.funimation.com/shows/attack-on-titan",
+            "text": "Funimation"
+        },
+        {
+            "url": "https://www.netflix.com/title/70299043",
+            "text": "Netflix"
+        },
+        {
+            "url": "https://shahid.mbc.net/en/series/Attack-On-Titan/series-922170",
+            "text": "Shahid"
+        }
+    ],
+    "genre_ids": [
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "545bb81f-8702-4358-8f8e-596910ac394c",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "46f23e25-2181-4081-9878-4a74247551ee",
+        "c89748be-c9a0-4a13-8f0d-374593a23d7e",
+        "45a3e2cf-0d37-4bad-bed0-9268f02f7d6b",
+        "20a4b551-7e47-4d44-85a3-2bdfb63cea62",
+        "77572b04-8ab6-4f74-b65e-e1194da761fb"
+    ],
+    "synonyms": [
+        "AoT",
+        "SnK"
+    ],
+    "videos": [
+        {
+            "url": "https://youtu.be/kgZRAyVMcB8",
+            "title": "ED 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Utsukushiki Zankoku na Sekai (美しき残酷な世界)\" by Yoko Hikasa"
+        },
+        {
+            "url": "https://youtu.be/u2YSzzXb2I4",
+            "title": "ED 2 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"great escape\" by Cinema Staff"
+        },
+        {
+            "url": "https://youtu.be/1WgAGCfNTfc",
+            "title": "ED 2 (Artist ver.)",
+            "video_type": "video_music",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/LHtdKWJdif4",
+            "title": "PV 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/KKzmOh4SuBc",
+            "title": "PV 1",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Guren no Yumiya (紅蓮の弓矢)",
+            "author": "Linked",
+            "spotify": "https://open.spotify.com/track/7FzhSDmKqNyIOK3FcwiqHo",
+            "ost_type": "opening"
+        },
+        {
+            "index": 2,
+            "title": "Jiyuu no Tsubasa (自由の翼)",
+            "author": "Linked",
+            "spotify": "https://open.spotify.com/track/2VtK9Fj9OS11cYb0cCvLwK",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Utsukushiki Zankoku na Sekai (美しき残酷な世界)",
+            "author": "Yoko",
+            "spotify": "https://open.spotify.com/track/1LmIptfyl5QZANQYxuwvhK",
+            "ost_type": "ending"
+        },
+        {
+            "index": 2,
+            "title": "great escape",
+            "author": "Cinema",
+            "spotify": "https://open.spotify.com/track/0iXYLrcgvd9u6ATFMIHMpD",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11",
+    "scored_by": 2673779,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 25,
+            "dub": true,
+            "hidden": false,
+            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметровою стіною.Перенесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
+            "sub": false,
+            "created": 1687706395,
+            "title_ja": "Attack on Titan / Shingeki no Kyojin (TV-1)",
+            "episodes": 25,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2013-04/1366473368_1.png",
+                "https://anitube.in.ua/uploads/posts/2013-04/1366473441_2.png",
+                "https://anitube.in.ua/uploads/posts/2013-04/1366473404_4.png",
+                "https://anitube.in.ua/uploads/posts/2013-04/1366473369_5.png"
+            ],
+            "updated": 1689360337,
+            "title_ua": "Атака титанів (1 сезон)",
+            "length": 24,
+            "translators": [
+                "MetalFreak"
+            ],
+            "slug": "1759-na-by-proti-titanv",
+            "episodes_raw": "25 з 25 (24 хв.)",
+            "scored_by": 785,
+            "voices": [
+                "Surgeon",
+                "Helga Victim",
+                "Snovyda",
+                "Maslinka",
+                "Schmetterling",
+                "Crupt"
+            ],
+            "url": "https://anitube.in.ua/1759-na-by-proti-titanv.html",
+            "director": "Аракі Тецуро",
+            "year": 2013,
+            "genres": [
+                {
+                    "name": "Бойовик",
+                    "slug": "action"
+                },
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Пригоди",
+                    "slug": "prigodi"
+                },
+                {
+                    "name": "Шьонен",
+                    "slug": "shounen"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=LHtdKWJdif4",
+            "score": 9.4,
+            "teams": [
+                "FanVoxUA"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/e/3cfc43e6dc04dee0a04753ba20864e.jpg",
+            "nsfw": true,
+            "id": "1060267b-f921-45ea-b82f-308ca35c36ef"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Атака титанів (Сезон 1) / Shingeki no Kyojin (Season 1) (2013) HDTVRip 1080p Ukr/Jap | sub Ukr",
+            "year": 2013,
+            "title_ja": "Shingeki no Kyojin",
+            "leech": 8,
+            "title_ua": "Атака титанів",
+            "seed": 24,
+            "quality": "1080p",
+            "size": 15400,
+            "slug": "45934",
+            "url": "http://toloka.to/t45934",
+            "image": "https://thumb.hurtom.com/image/fanvoxua.org/images/upload/2015-10-18/small5001822062207.jpg",
+            "id": "6523a3c7-58ba-43fd-afff-0243a507e844",
+            "next_update_info": null,
+            "author": "FanVoxUA",
+            "created": 1380488400,
+            "screenshots": [
+                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/1.png",
+                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/2.png",
+                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/3.png",
+                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/4.png",
+                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/6.png"
+            ],
+            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Атака титанів (Attack on Titan) (Сезон 1) / Shingeki no Kyojin (Season 1) (2013) BDRip 720р",
+            "year": 2013,
+            "title_ja": "Shingeki no Kyojin",
+            "leech": 4,
+            "title_ua": "Атака титанів",
+            "seed": 27,
+            "quality": "720p",
+            "size": 22077,
+            "slug": "45740",
+            "url": "http://toloka.to/t45740",
+            "image": "https://posters.hurtom.com/cache/anime/na-b-i-z-titanami_1447010731_550.jpg",
+            "id": "c08d5aa2-1553-4001-9ca4-27f26b4e5d71",
+            "next_update_info": null,
+            "author": "FanVoxUA",
+            "created": 1640728800,
+            "screenshots": [
+                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_00.12_2019.07.11_12.57.10.md.png",
+                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_08.37_2019.07.11_12.57.20.md.png",
+                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_13.56_2019.07.11_12.57.31.md.png",
+                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_19.37_2019.07.11_12.57.42.md.png",
+                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_21.33_2019.07.11_12.57.47.md.png"
+            ],
+            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
+            "updated": 1689357008,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 8.54,
+    "stats": {
+        "dropped": 57896,
+        "on_hold": 49622,
+        "planned": 165401,
+        "score_1": 8622,
+        "score_2": 3647,
+        "score_3": 6143,
+        "score_4": 15258,
+        "score_5": 40114,
+        "score_6": 94874,
+        "score_7": 313723,
+        "score_8": 688298,
+        "score_9": 769133,
+        "score_10": 734105,
+        "watching": 194473,
+        "completed": 3295812
+    }
+}

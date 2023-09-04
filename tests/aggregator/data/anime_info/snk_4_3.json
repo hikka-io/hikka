@@ -1,0 +1,1001 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "4614e40f-332b-4d76-ad18-556dcbfe37b5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b51a5277-b49d-46f6-8419-a5a77eaf8a8c"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "791a3f02-92a8-4fba-b21f-f1d6b31be1b9"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "41f94a54-22ca-4a7c-90d3-546f3f6975b6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "bc040b5d-5a67-4be5-89dc-71e6d205d92d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "07fb72c8-2498-49c9-9490-38d63fd26f3f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "82c91069-4589-4893-bb82-ad52da27f6ca"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "cca1b9bb-8bf3-4b13-8bb9-c1f5643a70ca"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2095bc61-b7be-4aff-af6c-ef9e3b363fdd"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "aa47ed7a-bed6-45c9-b920-2f22a9fec0a0"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "feb6e4e0-c04d-452a-8261-646ebd81367a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a93b6fa3-ada5-45fd-8ef5-0e5b1769ad21"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b64003f2-bb8a-4982-acbe-06463577d1a6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "95de24ac-d8a4-4aa0-8ada-2143a01ef101"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5f4dd356-98c0-4cd9-8bee-ad4132165f3b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6b16f5bf-78bf-4f7e-b905-93fdc2dcff00"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "173939d9-b916-4a28-8268-05784763279f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "fa1da9fc-ea39-479c-a28b-7f1beb6eb0d9"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "92437b0e-ab57-4b2c-bec9-d28396245565"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "adedfcbf-61e3-491d-8277-94ba12782f7d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "d1799a78-fbdd-41a5-b19d-767f48267641"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3691b73c-3587-4d07-b406-ca26b91f3d5d"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "55c91c04-190a-43cd-9b06-2a086c508212"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "2249d8d5-2b9f-4eed-90fc-806f732e333a"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3b16a1c1-718f-4c74-ade7-abe98c4a9710"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "e2514611-d478-417f-a063-0f3d28bb5f30"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "36003364-f1fa-4fd7-8080-29eb3877a91c"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [
+        {
+            "title_native": "Zenpen) (完結編（前編）",
+            "aired": 1677880800,
+            "title_ja": "Kanketsu-hen",
+            "title_en": "The Final Chapters (Part One)",
+            "title_ua": null,
+            "type": null,
+            "index": 1
+        }
+    ],
+    "episodes_released": 1,
+    "start_date": 1677880800,
+    "episodes_total": 2,
+    "voices": [
+        {
+            "character": {
+                "content_id": "07fb72c8-2498-49c9-9490-38d63fd26f3f"
+            },
+            "person": {
+                "content_id": "246d5468-ee8a-43ae-a4f5-123dc91bae20"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "adedfcbf-61e3-491d-8277-94ba12782f7d"
+            },
+            "person": {
+                "content_id": "880ae9f1-59b0-4145-9647-e8f4ff3c7fc9"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "person": {
+                "content_id": "3777e510-9d94-44d6-87ca-36a28ecf1057"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b64003f2-bb8a-4982-acbe-06463577d1a6"
+            },
+            "person": {
+                "content_id": "cf527e8e-8625-4f3f-9934-3d01ebbc6cce"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "person": {
+                "content_id": "2da44d56-b9b8-4665-ad9b-9e99f21791d0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "person": {
+                "content_id": "79961a1f-f27d-4d97-9ba0-9ecfbabdf685"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "person": {
+                "content_id": "26b047d8-e929-4779-a15b-daac8f07fb95"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5f4dd356-98c0-4cd9-8bee-ad4132165f3b"
+            },
+            "person": {
+                "content_id": "29314edc-61fd-4b17-8d1c-45d1b61f7362"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "aa47ed7a-bed6-45c9-b920-2f22a9fec0a0"
+            },
+            "person": {
+                "content_id": "e780fc20-5247-4867-b983-7b007ec45c1d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "cca1b9bb-8bf3-4b13-8bb9-c1f5643a70ca"
+            },
+            "person": {
+                "content_id": "92cbd19e-bfb5-44ac-9dba-65b4fcfec472"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "bc040b5d-5a67-4be5-89dc-71e6d205d92d"
+            },
+            "person": {
+                "content_id": "467d7df6-a634-45f0-9f49-9b0a31c23ac9"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "82c91069-4589-4893-bb82-ad52da27f6ca"
+            },
+            "person": {
+                "content_id": "9ff5877f-b09c-4305-8dfb-b9cdd04d2612"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "feb6e4e0-c04d-452a-8261-646ebd81367a"
+            },
+            "person": {
+                "content_id": "ad6c8090-32b3-45b2-ad96-f25ed2ef01f8"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "person": {
+                "content_id": "61f27529-a54c-437e-9143-7bc189b59a24"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "41f94a54-22ca-4a7c-90d3-546f3f6975b6"
+            },
+            "person": {
+                "content_id": "23a677f3-bd86-4bf4-acaf-3aebe7e72b56"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "92437b0e-ab57-4b2c-bec9-d28396245565"
+            },
+            "person": {
+                "content_id": "2a01032b-0004-4562-83c3-94d3189bde21"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "person": {
+                "content_id": "6767d313-0297-4b07-9b77-a624e505ae9f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "person": {
+                "content_id": "bfce6442-d2eb-4626-931e-85200aace2a6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6b16f5bf-78bf-4f7e-b905-93fdc2dcff00"
+            },
+            "person": {
+                "content_id": "1c4765e9-b6c4-4077-a630-5ed6736fcf15"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "173939d9-b916-4a28-8268-05784763279f"
+            },
+            "person": {
+                "content_id": "2b84b77e-7e81-43ad-aa8f-b06ff133f32e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "person": {
+                "content_id": "124b1f8e-572b-44ef-b2b0-1068ce4dad4c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2095bc61-b7be-4aff-af6c-ef9e3b363fdd"
+            },
+            "person": {
+                "content_id": "7e0dbb3f-aee7-40c5-8e36-09c18e21d0c4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "person": {
+                "content_id": "8d1ff8a3-fe87-4f13-b960-b7495c2a614a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "95de24ac-d8a4-4aa0-8ada-2143a01ef101"
+            },
+            "person": {
+                "content_id": "d3e47f1f-674d-4adf-9adc-ee79def22d86"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a93b6fa3-ada5-45fd-8ef5-0e5b1769ad21"
+            },
+            "person": {
+                "content_id": "0b8b74d7-8b2f-403d-b862-839d6fdacd72"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "791a3f02-92a8-4fba-b21f-f1d6b31be1b9"
+            },
+            "person": {
+                "content_id": "4add17ff-b92c-49a4-9654-6a5958e7dc52"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fa1da9fc-ea39-479c-a28b-7f1beb6eb0d9"
+            },
+            "person": {
+                "content_id": "7ed627e1-e11c-45f4-a439-882c1af5d653"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": null,
+    "staff": [
+        {
+            "person": {
+                "content_id": "91b5b8e6-3cef-461b-acb0-a898fd451539"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "38239a0c-55a0-4189-9e8f-12cbad30146b"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a181871e-1429-48e8-9eda-2b6e302cf6cc"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dd21a259-ba3f-4979-8ab0-d20f62646d19"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cc89bf7b-76b4-4eb4-9329-da7d1446e37f"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "78ebeaad-dd98-45e6-be3b-30950a523b3d"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f3ad0df0-82c6-4f46-8afd-24bb6159e18e"
+            },
+            "roles": [
+                "Director",
+                "Episode Director",
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b802cde5-c327-467b-abe9-79070df3b999"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1cc14c99-52f6-44b3-95bf-45d693c7eb80"
+            },
+            "roles": [
+                "Episode Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b6c94567-9177-4d91-8815-0b846a631d3f"
+            },
+            "roles": [
+                "Episode Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "40984b67-5cc2-46eb-8d6f-fa9cad5d57f3"
+            },
+            "roles": [
+                "Script",
+                "Series Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5e029b84-e26a-4e91-a8a2-738a177dccb6"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "acd86710-c26f-429a-88ce-734abf0e1b60"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3627ccbc-6239-4904-aabf-7175d0974b02"
+            },
+            "roles": [
+                "Director of Photography"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "55ac2cc1-5a55-42e3-b095-81e560846e20"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "045f95ce-8fa7-405f-ae53-a0beab625114"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cd30693b-cec1-45f2-bbb4-cfb86f1a3cd8"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b124df92-1ce4-431d-bf47-4cc44b643964"
+            },
+            "roles": [
+                "Character Design",
+                "Chief Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "45230432-8bc7-4a46-9492-9e916adb34a9"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "25085ebe-7ff1-4238-8118-85c7e09c954e"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9e5528c2-bdee-4c44-9019-82c28cbda521"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d8a58926-6e52-43de-b175-2e9d44881d45"
+            },
+            "roles": [
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e73592b8-9b2b-4f3a-8c6f-fb9e72a9cb00"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "98ddc997-ea15-4491-acb5-303bf013d344"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "80711e14-8c3a-401e-95df-9d72435d9226"
+            },
+            "roles": [
+                "Producer"
+            ]
+        }
+    ],
+    "created": 1687273642,
+    "updated": 1689285488,
+    "synopsis_en": "In the wake of Eren Yeager's cataclysmic actions, his friends and former enemies form an alliance against his genocidal rampage. Though once bitter foes, Armin Arlert, Mikasa Ackerman, and the remaining members of the Scout Regiment join forces with Reiner Braun and the survivors of the Marleyan military. Their meager united front sets out on a mission to stop Eren's wrath and—if possible—save their old comrade in the process.\n\nAs Eren pushes forward at any cost, he battles his own internal turmoil. Although he feels immense remorse over his horrific invasion, Eren believes he harbors noble intentions: he believes the path ahead is the only way to save his friends and, to a greater extent, his people.\n\nThe opposing battalions spiral toward an inevitable final clash that may claim the lives of millions. Though they face an army of monsters beyond anything they could have previously imagined, Mikasa, Armin, and their allies stand brave in the face of certain doom.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Протистояння титанів та людей досягло апогею. Однак тепер людство змушене боротися не лише з величезними створіннями, а й один з одним. Спроба захопити першість у цій кривавій гонці спричиняє ланцюг подій, які здатні привести світ до загибелі. В одну мить ворог може стати союзником, а товариш зі зброї перетворитися на недруга, адже в цьому жорстокому світі сила і підступність вирішують все, а люди, щоб вижити та захистити те, що їм дорого, не гребують будь-якими методами.\n\nДжерело: Toloka",
+    "franchise": "e2283d58-ba06-420e-92de-8fe597d69a02",
+    "title_ja": "Shingeki no Kyojin: The Final Season - Kanketsu-hen",
+    "title_en": "Attack on Titan: The Final Season - Final Chapters",
+    "title_ua": "Атака титанів: Фінальний сезон",
+    "duration": 61,
+    "poster": "/content/anime/shingeki-no-kyojin-the-final-season-kanketsu-hen-833be1/u9bsJvepmMq3737kut3FAA.jpg",
+    "rating": "r",
+    "source": "manga",
+    "status": "ongoing",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "https://shingeki.tv/final/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/anime_shingeki",
+            "text": "@anime_shingeki"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=17303",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=25492",
+            "text": "ANN"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Attack_on_Titan_(season_4)",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E9%80%B2%E6%92%83%E3%81%AE%E5%B7%A8%E4%BA%BA_(%E3%82%A2%E3%83%8B%E3%83%A1)",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/6635",
+            "text": "Syoboi"
+        }
+    ],
+    "genre_ids": [
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "46f23e25-2181-4081-9878-4a74247551ee",
+        "c89748be-c9a0-4a13-8f0d-374593a23d7e",
+        "45a3e2cf-0d37-4bad-bed0-9268f02f7d6b",
+        "20a4b551-7e47-4d44-85a3-2bdfb63cea62",
+        "77572b04-8ab6-4f74-b65e-e1194da761fb"
+    ],
+    "synonyms": [
+        "Shingeki no Kyojin: The Final Season Part 3",
+        "Shingeki no Kyojin Season 4",
+        "Attack on Titan Season 4"
+    ],
+    "videos": [
+        {
+            "url": "https://youtu.be/4QesgADu8gM",
+            "title": "ED 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"UNDER THE TREE\" by SiM"
+        },
+        {
+            "url": "https://youtu.be/r7MosyoAUhQ",
+            "title": "PV 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/RCkS3ASeIRI",
+            "title": "PV 1",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/vzHt2lBG-zs",
+            "title": "Part 2 Teaser",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/q3Rk7lPxFU0",
+            "title": "Part 2 PV 1",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/KisIV47bL5g",
+            "title": "Announcement",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "UNDER THE TREE",
+            "author": "SiM",
+            "spotify": "https://open.spotify.com/track/0KmCtn8UBbqidcIRduzARB",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "special",
+    "content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0",
+    "scored_by": 164137,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 2,
+            "dub": true,
+            "hidden": false,
+            "description": "Ерен викликав Гуркіт і реалізовує свій план геноциду. Тим часом, його друзі намагаються зупинити знищення світу й врятувати Ерена.",
+            "sub": false,
+            "created": 1687706599,
+            "title_ja": "Shingeki no Kyojin: The Final Season - Kanketsu-hen",
+            "episodes": 1,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2023-03/1678005487_screenshot1.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-03/1678005478_screenshot2.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-03/1678005517_screenshot3.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-03/1678005522_screenshot4.jpg"
+            ],
+            "updated": 1689360497,
+            "title_ua": "Атака титанів: Фінальний сезон (сезон 4, частина 3)",
+            "length": 61,
+            "translators": [
+                "Avaken",
+                "Титанська кухня",
+                "Sherond"
+            ],
+            "slug": "4239-ataka-titanv-fnalniy-sezon-sezon-4-chastina-3",
+            "episodes_raw": "1 з 2 (1 год. 1 хв.)",
+            "scored_by": 308,
+            "voices": [
+                "Avaken",
+                "Копійка",
+                "Mentsynska",
+                "TruGreedyJew",
+                "Sora",
+                "Сашко",
+                "Sherond",
+                "DaGeR_HoT",
+                "fortheаrtss"
+            ],
+            "url": "https://anitube.in.ua/4239-ataka-titanv-fnalniy-sezon-sezon-4-chastina-3.html",
+            "director": "Аракі Тецуро",
+            "year": 2023,
+            "genres": [
+                {
+                    "name": "Бойовик",
+                    "slug": "action"
+                },
+                {
+                    "name": "Війна",
+                    "slug": "war"
+                },
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Шьонен",
+                    "slug": "shounen"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=rACpGb90aL0",
+            "score": 9.5,
+            "teams": [
+                "Bambooua",
+                "Kaizoku",
+                "Титанська кухня",
+                "Студія \"Качур\"",
+                "Lifecycle"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/9/49417985360ba6408788164a3521d7.jpg",
+            "nsfw": false,
+            "id": "72cca663-2e6f-4296-b29f-95ba03f1ffda"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Атака титанів: Фінальний сезон (Сезон 4, частина 3) / Attack on Titan: The Final Season (Season 4, part 3) (2022) WEBDL 1080р",
+            "year": 2022,
+            "title_ja": "Attack on Titan: The Final Season",
+            "leech": 0,
+            "title_ua": "Атака титанів: Фінальний сезон",
+            "seed": 6,
+            "quality": "1080p",
+            "size": 1648,
+            "slug": "666868",
+            "url": "http://toloka.to/t666868",
+            "image": "https://toloka.to/photos/2303240208051154511_f0_0.jpg",
+            "id": "10122cf2-1200-43a1-abac-2b5604f22740",
+            "next_update_info": null,
+            "author": "Lifecycle_team",
+            "created": 1679608800,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/03/33663debc1c18b97f.md.png",
+                "https://img.hurtom.com/i/2023/03/564c5fb81cb177672.md.png",
+                "https://img.hurtom.com/i/2023/03/46fda33ca0cf87220.md.png",
+                "https://img.hurtom.com/i/2023/03/29fd5c3410d11fbdd.md.png",
+                "https://img.hurtom.com/i/2023/03/1daa0e7ffe3a14829.md.png"
+            ],
+            "description": "Через чотири роки, після того, як безстрашні учасники розвідувального корпусу нарешті досягли берегів моря, людство дізналося, що протягом століть вело протистояння не лише з кровожерливими титанами, а й з людьми з протиборчої нації. Ця інформація зберігалася у записах Гриші Єгера — рідного батька Ерена та прийомного для його сестри Мікаси. У цей час за морем Марлія закінчила тривалу війну з багатотисячною армією Середньосхідного Альянсу. Нація, яка колись об'єднувала сили на полі бою з монстрами, почала поступово втрачати першість.\n\nЩоб зберегти лідерство, їх правитель задумав знайти могутність Титана-засновника, який був наймогутнішим, з дев'яти основоположників. Він контролював інших гігантів, але знайти його силу, було не простим завданням. Він перебував на острові Парадіз, в руках головного героя Ерена Єгера — колись забіячного хлопця, що перетворився на відважного юнака,який проте приносить чимало головного болю прийомній сестрі Мікасі. Незабаром йому разом з Райнером Брауном треба було повернутися в рідні краї після провальної операції із захоплення, і знову зіткнутися зі старими товаришами, а потім і з новими небезпеками.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Атака Титанів: Фінал - Заключний розділ/Attack on Titan: The Final Season - Kanketsu-hen (2023) WEBDLRip",
+            "year": 2023,
+            "title_ja": "Attack on Titan: The Final Season - Kanketsu-hen",
+            "leech": 0,
+            "title_ua": "Атака Титанів: Фінал - Заключний розділ",
+            "seed": 4,
+            "quality": null,
+            "size": 3317,
+            "slug": "666340",
+            "url": "http://toloka.to/t666340",
+            "image": "https://toloka.to/photos/2303110100191186599_f0_0.jpg",
+            "id": "a588bb37-c771-4ab9-bc3f-7958a1ec2a79",
+            "next_update_info": null,
+            "author": "Sherond",
+            "created": 1678485600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/03/Screenshot_578.png",
+                "https://img.hurtom.com/i/2023/03/Screenshot_572.png",
+                "https://img.hurtom.com/i/2023/03/Screenshot_577.png"
+            ],
+            "description": "Протистояння титанів та людей досягло апогею. Однак тепер людство змушене боротися не лише з величезними створіннями, а й один з одним. Спроба захопити першість у цій кривавій гонці спричиняє ланцюг подій, які здатні привести світ до загибелі. В одну мить ворог може стати союзником, а товариш зі зброї перетворитися на недруга, адже в цьому жорстокому світі сила і підступність вирішують все, а люди, щоб вижити та захистити те, що їм дорого, не гребують будь-якими методами.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Атака титанів: Фінальний сезон (Сезон 4, частина 3) / Shingeki no Kyojin: The Final Season (Season 4, part 3) (2023) WEB-DLRip 1080р",
+            "year": 2023,
+            "title_ja": "Shingeki no Kyojin: The Final Season",
+            "leech": 0,
+            "title_ua": "Атака титанів: Фінальний сезон",
+            "seed": 13,
+            "quality": "1080p",
+            "size": 1116,
+            "slug": "666091",
+            "url": "http://toloka.to/t666091",
+            "image": "https://toloka.to/photos/2304071424282760_f0_0.jpg",
+            "id": "cd7ca7b4-46fc-493d-8f71-43a830cb6617",
+            "next_update_info": null,
+            "author": "Bamboo Anime",
+            "created": 1677967200,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/03/13641cdbc70632328.png",
+                "https://img.hurtom.com/i/2023/03/2699cf199e3759aad.png",
+                "https://img.hurtom.com/i/2023/03/3838b7b18f41f4136.png"
+            ],
+            "description": "Ерен викликав Гуркіт і реалізовує свій план геноциду. Тим часом, його друзі намагаються зупинити знищення світу й врятувати Ерена.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Атака титанів: Фінальний сезон (Сезон 4, частина 3) / Shingeki no Kyojin: The Final Season (Season 4, part 3) (2022) WEBRip 1080р H.265 Ukr/Jpn",
+            "year": 2022,
+            "title_ja": "Shingeki no Kyojin: The Final Season",
+            "leech": 0,
+            "title_ua": "Атака титанів: Фінальний сезон",
+            "seed": 19,
+            "quality": "1080p",
+            "size": 1443,
+            "slug": "589769",
+            "url": "http://toloka.to/t589769",
+            "image": "https://thumb.hurtom.com/image/i.ibb.co/SyPsd2r/snk-fin-poster3.jpg",
+            "id": "d5d3d10c-06e3-4359-9880-f020bc199065",
+            "next_update_info": null,
+            "author": "FanVoxUA",
+            "created": 1679263200,
+            "screenshots": [
+                "https://thumb.hurtom.com/image/i.ibb.co/V3JjwGp/vlcsnap-2023-03-20-14h06m05s258.png",
+                "https://thumb.hurtom.com/image/i.ibb.co/KbsR2B4/vlcsnap-2023-03-20-14h06m14s274.png",
+                "https://thumb.hurtom.com/image/i.ibb.co/QFDLbP6/vlcsnap-2023-03-20-14h06m25s400.png",
+                "https://thumb.hurtom.com/image/i.ibb.co/nCJ7ZRm/vlcsnap-2023-03-20-14h06m36s380.png",
+                "https://thumb.hurtom.com/image/i.ibb.co/C1bMbJX/vlcsnap-2023-03-20-14h07m40s317.png"
+            ],
+            "description": "Фінальний сезон \"Атаки титанів\", який завершить франшизу, дасть відповіді на всі питання і розкриє всі таємниці сетингу.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 9.04,
+    "stats": {
+        "dropped": 1804,
+        "on_hold": 30133,
+        "planned": 172019,
+        "score_1": 4385,
+        "score_2": 392,
+        "score_3": 356,
+        "score_4": 567,
+        "score_5": 1100,
+        "score_6": 2112,
+        "score_7": 6280,
+        "score_8": 18880,
+        "score_9": 44017,
+        "score_10": 86028,
+        "watching": 245376,
+        "completed": 860
+    }
+}

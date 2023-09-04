@@ -12,7 +12,7 @@ async def test_import_anime_franchises(
     anime_franchises_count = await test_session.scalar(
         select(func.count(AnimeFranchise.id))
     )
-    assert anime_franchises_count == 1
+    assert anime_franchises_count == 2
 
     # Check franchise
     franchise = await test_session.scalar(

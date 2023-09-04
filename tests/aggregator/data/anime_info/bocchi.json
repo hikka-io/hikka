@@ -1,0 +1,1046 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "f5a4908f-3774-4127-9634-d2a131a1fd43"
+            },
+            "weight": 31
+        },
+        {
+            "recommended": {
+                "content_id": "ff3a3dc4-1314-417b-aab7-b21bd86a9db7"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "7851dc7a-7c06-4a2d-8bbe-4c70be663da9"
+            },
+            "weight": 9
+        },
+        {
+            "recommended": {
+                "content_id": "fad06c7d-368e-47ce-bb5e-ac3cf1b2e3a3"
+            },
+            "weight": 6
+        },
+        {
+            "recommended": {
+                "content_id": "34addc73-db1e-4e76-bf09-c8bbc8ea4ae7"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "90c446ed-1903-4b98-8dc0-05950c8f26f9"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "fec87d62-c4b3-422c-802a-d6a578f97984"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "113fb8f7-22d2-4223-9136-363cd9f9f403"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "672845b5-0918-473c-ac04-837b2da1e357"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9273ce9e-794a-4f97-a8c6-cb73bc1d75b2"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "74635706-a06c-4928-aecf-68f634d37db7"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "848e74c2-a520-40be-8c8f-fcf8e557063d"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "c47ea04b-2e76-4bf1-8090-6716b9a078ab"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "5f9888a4-db0b-4835-aac3-34ca905aa298"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9b3e2e9d-aa70-4952-93d8-8233727b6d7d"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "e6e2b185-da21-45a9-b7b3-de7ed0e65b50"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8d485266-6764-43ad-87f3-0408f3f5f14f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "22671a62-0691-4c65-95e1-2a3bff23927b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4210609f-9fcb-448b-b871-adbd06e1faf8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c805f210-9445-4604-8a17-aa4415eef5d5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "69b3ab92-c763-4e5b-97c9-a6f8174e1012"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "114ac319-f27e-44a2-8890-429ec69f2166"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3e8349c8-7bde-4c97-9ed4-5ee68d8c69f6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3b2212fc-dafd-42ff-9187-ba1fb68086e2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "63b58fbc-ec65-48c8-996d-631d75640d15"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0e30ee45-d16d-40b6-a8ec-a77936aad8c9"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "297b542c-d2c1-45d6-8e28-a0390e309cc4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "8985750c-f9b2-44cb-8baa-bbe53e7068cc"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2a34cce2-5616-4992-a5a8-8ea9e096b6cd"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "710af8c2-67de-4aad-8605-42bbb0f91911"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "64cf1b67-ad24-4152-997c-ffab494794c6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "03c3c761-f22f-4d09-8132-4882d637ddad"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b70b84ef-c426-4357-ba62-801c51b9587a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "48678e0d-0148-4a95-873a-4585b95ddcd8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a9ff5a4d-5a78-4ed4-b7c7-017ea066b246"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b0551edc-795c-4d96-ad4c-6c40dd681115"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3324cfe8-aaa8-4555-8507-b3fcae5d2975"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "75a7b7b1-2397-4921-b352-a16621c9d03a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5d6e6292-441a-4c09-9aac-33869f4f5a0a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "cea37039-2355-4d40-a0a8-d1dacbeb21bd"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5f51e48b-a350-40ea-9fb4-df61fc8862cb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "15c11f6f-ed14-4c4c-8c3e-86539379e500"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6365feaa-88f5-4b2c-bd50-243a0b0926e6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "fd50647f-8d3f-4e49-85f4-4f172677b8f0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9f789e9e-421e-4204-9a1a-3e3112d6b61f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "83ac27c6-62e0-41a4-a311-058b84aafc6e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ca3d24f6-da74-4d84-ab67-c466b913d6a5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9cb1b5e2-454b-493e-bb66-a68bde5ccee0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "443ec885-3e1c-4b55-8ed8-6999a7e006b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "064f5c3c-adfc-4c5b-9529-38beccfe31aa"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "fd29e3ec-59fa-4826-8db5-827d0fa8c2b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3f49b885-3bd1-433c-bd01-3b2f8b95887d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0a2f1420-59d3-4959-9aed-151df119a3f6"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "cadd709f-56bb-4b69-88d1-762091c12099"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "b310a522-c190-4831-b1ee-f623e4ca08d8"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "f0952f46-45f0-4b44-8adc-4275e2120acc"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "8a0aa0cf-6742-4694-a753-4a90b5f03f24"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "b05254f0-0eb8-4cdb-a6f5-baaa5bbb61f4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "805263d3-8d3c-405a-b5fb-da6e89c15835"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1b3a69d8-b76b-441a-b277-238813a32ae7"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a424ecda-d6d8-4420-b680-ae2ecf655f55"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "78a57ef2-c69f-429b-b551-af284cfd03ad"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f7c1c1b7-8c34-4fd9-82a5-5be49c25394f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f3ccc43f-7a90-4cac-8e81-eb8fcf2a890f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a22b1eaa-e53b-43cb-a516-0a7a95c52591"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4eb9b682-f55b-4b64-9ae5-29bcb0cced00"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0be3c1fc-b985-412d-b3bd-116bc5749be7"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6d08f92a-7170-4a9a-ad63-76dcf62a786b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9b6a1e12-706c-4a59-98ad-b6d698743387"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2f08d878-22c9-4722-9160-6c8affcfee60"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "332844b3-17f3-400f-8a90-426f8179b3cb"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "d2912523-55b9-4a5f-933f-dddc3316b7bf"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3c7a542a-415f-4f9f-bc41-10d06277beed"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [],
+    "episodes_released": 12,
+    "start_date": 1665262800,
+    "episodes_total": 12,
+    "voices": [
+        {
+            "character": {
+                "content_id": "a22b1eaa-e53b-43cb-a516-0a7a95c52591"
+            },
+            "person": {
+                "content_id": "de0392a8-bb16-4434-acee-0a60fcede8a6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "805263d3-8d3c-405a-b5fb-da6e89c15835"
+            },
+            "person": {
+                "content_id": "c72c529b-5db1-4fc3-8ab1-10c80aa50fa8"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b05254f0-0eb8-4cdb-a6f5-baaa5bbb61f4"
+            },
+            "person": {
+                "content_id": "0791b2dd-8716-4c0b-9c9f-86d010b467f0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2f08d878-22c9-4722-9160-6c8affcfee60"
+            },
+            "person": {
+                "content_id": "0fa30b22-3418-43af-b532-48b44c549596"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1b3a69d8-b76b-441a-b277-238813a32ae7"
+            },
+            "person": {
+                "content_id": "499559f1-c7c4-4335-8d29-a35c3fdf740d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f7c1c1b7-8c34-4fd9-82a5-5be49c25394f"
+            },
+            "person": {
+                "content_id": "12c1e8dd-87a0-40c1-871a-f52b202163ac"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "cadd709f-56bb-4b69-88d1-762091c12099"
+            },
+            "person": {
+                "content_id": "59be01cf-1533-403b-990d-defe9e55b92f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f0952f46-45f0-4b44-8adc-4275e2120acc"
+            },
+            "person": {
+                "content_id": "631fdb8c-5a96-4a39-80ba-328128654912"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9b6a1e12-706c-4a59-98ad-b6d698743387"
+            },
+            "person": {
+                "content_id": "5a30e9d1-e00d-42d5-823e-3d8b21e9552e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "78a57ef2-c69f-429b-b551-af284cfd03ad"
+            },
+            "person": {
+                "content_id": "1400cb41-bf09-45ff-abed-489f835601d7"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6d08f92a-7170-4a9a-ad63-76dcf62a786b"
+            },
+            "person": {
+                "content_id": "48ac0c3c-4ad7-4331-b4f7-827af19f78a8"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a424ecda-d6d8-4420-b680-ae2ecf655f55"
+            },
+            "person": {
+                "content_id": "990de8cb-ff80-4b87-8686-a3c223aef626"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f3ccc43f-7a90-4cac-8e81-eb8fcf2a890f"
+            },
+            "person": {
+                "content_id": "ffe22142-43ba-43aa-9e08-1f9765787eed"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8a0aa0cf-6742-4694-a753-4a90b5f03f24"
+            },
+            "person": {
+                "content_id": "da5c898c-0ad6-4cab-8b94-a4b752fe2fc4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4eb9b682-f55b-4b64-9ae5-29bcb0cced00"
+            },
+            "person": {
+                "content_id": "9a0a860c-13ad-4004-bd0c-8ca7f8fc5863"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0be3c1fc-b985-412d-b3bd-116bc5749be7"
+            },
+            "person": {
+                "content_id": "ff291c90-0211-43be-841a-58301eca6870"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b310a522-c190-4831-b1ee-f623e4ca08d8"
+            },
+            "person": {
+                "content_id": "279935a6-e69b-473b-ba05-374d92d1794a"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1671919200,
+    "staff": [
+        {
+            "person": {
+                "content_id": "fc94cf73-b66b-4932-a3b8-9fed2502a2c2"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c38cacab-011b-4958-b4c0-05241a728f24"
+            },
+            "roles": [
+                "Director",
+                "Episode Director",
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "451d29c3-144b-4e40-9917-04da52bc0f7e"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9259be45-ff01-4e73-ad50-9b4b0c28c6c8"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "59be01cf-1533-403b-990d-defe9e55b92f"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8535b6e8-0223-49bb-8572-8993950b20d2"
+            },
+            "roles": [
+                "Theme Song Lyrics",
+                "Theme Song Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "631fdb8c-5a96-4a39-80ba-328128654912"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e4e4679f-b1b9-4dfc-99a6-02c6fc24d9a6"
+            },
+            "roles": [
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5a7afd73-bb8f-4b4d-b0ed-1a159fc0f8c2"
+            },
+            "roles": [
+                "Theme Song Lyrics",
+                "Theme Song Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "da5c898c-0ad6-4cab-8b94-a4b752fe2fc4"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "46332aae-1e70-4bcb-a836-76b8c463a5c8"
+            },
+            "roles": [
+                "Theme Song Lyrics",
+                "Theme Song Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "279935a6-e69b-473b-ba05-374d92d1794a"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "3d9086b2-20a1-4352-9b05-493f7432bdf8"
+            },
+            "roles": [
+                "Theme Song Composition",
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dc0d688d-757a-4a4f-80ae-828c371563ee"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "038bdc6e-6109-4c9d-988e-2c760c12670d"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "07a91914-c14a-4777-8f48-34ca7499cfad"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e4348ec4-84c7-4e72-bad4-1c87b6c13de6"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5c6870cc-adf5-497d-a672-a66b08d3e245"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cee9d591-4b4d-40d5-ae2a-61d3f5280a6d"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        }
+    ],
+    "created": 1687273642,
+    "updated": 1689285503,
+    "synopsis_en": "Yearning to make friends and perform live with a band, lonely and socially anxious Hitori \"Bocchi\" Gotou devotes her time to playing the guitar. On a fateful day, Bocchi meets the outgoing drummer Nijika Ijichi, who invites her to join Kessoku Band when their guitarist, Ikuyo Kita, flees before their first show. Soon after, Bocchi meets her final bandmate—the cool bassist Ryou Yamada. \n\nAlthough their first performance together is subpar, the girls feel empowered by their shared love for music, and they are soon rejoined by Kita. Finding happiness in performing, Bocchi and her bandmates put their hearts into improving as musicians while making the most of their fleeting high school days.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Старшокласниця Ґото Хіторі почала вчитися гри на гітарі, щоб створити власний гурт, але вона настільки сором'язлива, що не має жодного друга. Проте все змінилося після зустрічі з барабанщицею Іджічі Ніджікою, яка якраз шукала гітариста.\n\nДжерело: Toloka",
+    "franchise": "aa399902-c9da-46ab-8d37-a894e94d6190",
+    "title_ja": "Bocchi the Rock!",
+    "title_en": "Bocchi the Rock!",
+    "title_ua": "Самітниця-рокер!",
+    "duration": 23,
+    "poster": "/content/anime/bocchi-the-rock-9e172d/1ggI22WwCAMyLdNtNrXEVQ.jpg",
+    "rating": "pg_13",
+    "source": "4_koma_manga",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "https://bocchi.rocks",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/BTR_anime",
+            "text": "@BTR_anime"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=16063",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=24062",
+            "text": "ANN"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Bocchi_The_Rock!",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E3%81%BC%E3%81%A3%E3%81%A1%E3%83%BB%E3%81%96%E3%83%BB%E3%82%8D%E3%81%A3%E3%81%8F%21",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/6474",
+            "text": "Syoboi"
+        },
+        {
+            "url": "http://www.crunchyroll.com/series-283152",
+            "text": "Crunchyroll"
+        },
+        {
+            "url": "https://www.aniplus-asia.com/",
+            "text": "Aniplus Asia"
+        },
+        {
+            "url": "https://ani.gamer.com.tw/",
+            "text": "Bahamut Anime Crazy"
+        },
+        {
+            "url": "https://www.bilibili.tv/en/index",
+            "text": "Bilibili Global"
+        }
+    ],
+    "genre_ids": [
+        "ab3b2380-2c0c-45ac-924a-2cef72b59b69",
+        "d84a3119-534c-4eb5-ba48-4b2ade683e38"
+    ],
+    "synonyms": [],
+    "videos": [
+        {
+            "url": "https://youtu.be/Yd8kUoB72xU",
+            "title": "OP 1 (Anime ver.)",
+            "video_type": "video_music",
+            "description": "\"青春コンプレックス\" by 結束バンド"
+        },
+        {
+            "url": "https://youtu.be/Xy6lZxoJ4ts",
+            "title": "ED 1 (Anime ver.)",
+            "video_type": "video_music",
+            "description": "\"Distortion!!\" by 結束バンド"
+        },
+        {
+            "url": "https://youtu.be/Fp7lnCp_LW0",
+            "title": "Teaser",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/1-o7fmQqSNg",
+            "title": "PV 3",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/kXNzx8qh2S8",
+            "title": "PV 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/nomJbjuQXAY",
+            "title": "PV 1",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/zT9O8cJ_hjY",
+            "title": "Character PV (Ryou Yamada ver.)",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/HtI2PPXdQaQ",
+            "title": "Character PV (Nijika Ijichi ver.)",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/ExKWf4h8X_A",
+            "title": "Character PV (Ikuyo Kita ver.)",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/zyuZFkbpVZg",
+            "title": "Character PV (Hitori Gotou ver.)",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "青春コンプレックス",
+            "author": "結束バンド",
+            "spotify": "https://open.spotify.com/track/60nwK1iMgnFCznF6FiNfts",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Distortion!!",
+            "author": "結束バンド",
+            "spotify": "https://open.spotify.com/track/5FwVziw6iZr778zD5e5HmK",
+            "ost_type": "ending"
+        },
+        {
+            "index": 2,
+            "title": "カラカラ",
+            "author": "結束バンド",
+            "spotify": "https://open.spotify.com/track/2ADOoCVouvRdKBzIVkYf3H",
+            "ost_type": "ending"
+        },
+        {
+            "index": 3,
+            "title": "なにが悪い",
+            "author": "結束バンド",
+            "spotify": "https://open.spotify.com/track/5r8hIaf0VCNptCt8SRtxD9",
+            "ost_type": "ending"
+        },
+        {
+            "index": 4,
+            "title": "転がる岩、君に朝が降る",
+            "author": "結束バンド",
+            "spotify": "https://open.spotify.com/track/2pK7RDBr3pc79fvFLCWpBW",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "9e172d54-b1a8-4aef-a396-67f6dddbfb07",
+    "scored_by": 258904,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 12,
+            "dub": true,
+            "hidden": false,
+            "description": "Старшокласниця Ґото Хіторі почала вчитися гри на гітарі, щоб створити власний гурт, але вона настільки сором'язлива, що не має жодного друга. Проте все змінилося після зустрічі з барабанщицею Іджічі Ніджікою, яка якраз шукала гітариста.",
+            "sub": true,
+            "created": 1687706600,
+            "title_ja": "Bocchi the Rock!",
+            "episodes": 12,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2022-10/1665670918_screenshot1.jpg",
+                "https://anitube.in.ua/uploads/posts/2022-10/1665670913_screenshot2.jpg",
+                "https://anitube.in.ua/uploads/posts/2022-10/1665670841_screenshot3.jpg",
+                "https://anitube.in.ua/uploads/posts/2022-10/1665670870_screenshot4.jpg"
+            ],
+            "updated": 1689360423,
+            "title_ua": "Самітниця-рокер!",
+            "length": 23,
+            "translators": [
+                "Aishin"
+            ],
+            "slug": "4112-bocchi-the-rock",
+            "episodes_raw": "12 з 12 (23 хв.)",
+            "scored_by": 449,
+            "voices": [
+                "Reniko",
+                "Lovka_Miko",
+                "RedMind",
+                "Eredelka"
+            ],
+            "url": "https://anitube.in.ua/4112-bocchi-the-rock.html",
+            "director": "Сайто Кейічіро",
+            "year": 2022,
+            "genres": [
+                {
+                    "name": "Буденність",
+                    "slug": "routine"
+                },
+                {
+                    "name": "Комедія",
+                    "slug": "comedy"
+                },
+                {
+                    "name": "Музичний",
+                    "slug": "music"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=XAPeKrKqNK0",
+            "score": 9.3,
+            "teams": [
+                "Kaizoku"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/2/16337666ae1c9d842347296c9ed42e.jpg",
+            "nsfw": false,
+            "id": "e28efc23-3286-4f1b-a350-8c08eb132b09"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Самітниця-рокер! (Сезон 1) / Bocchi the Rock! (Season 1) (2022) WEBDL 1080p H.265 Ukr/Jap | sub Ukr",
+            "year": 2022,
+            "title_ja": "Bocchi the Rock!",
+            "leech": 1,
+            "title_ua": "Самітниця-рокер!",
+            "seed": 25,
+            "quality": "1080p",
+            "size": 3430,
+            "slug": "662061",
+            "url": "http://toloka.to/t662061",
+            "image": "https://toloka.to/photos/2212271918412760_f0_0.jpg",
+            "id": "c3b52967-bbdd-4534-a75e-6c95636f3e51",
+            "next_update_info": null,
+            "author": "fanat22012",
+            "created": 1672092000,
+            "screenshots": [
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_21.46.972.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_00.39.873.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_04.42.908.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_20.45.786.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_16.06.716.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_02.49.461.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_08.14.806.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_18.35.614.th.png",
+                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_13.56.586.th.png"
+            ],
+            "description": "Старшокласниця Ґото Хіторі почала вчитися гри на гітарі, щоб створити власний гурт, але вона настільки сором'язлива, що не має жодного друга. Проте все змінилося після зустрічі з барабанщицею Іджічі Ніджікою, яка якраз шукала гітариста.",
+            "updated": 1689357007,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 8.84,
+    "stats": {
+        "dropped": 4858,
+        "on_hold": 6363,
+        "planned": 91586,
+        "score_1": 1422,
+        "score_2": 278,
+        "score_3": 295,
+        "score_4": 669,
+        "score_5": 1850,
+        "score_6": 5203,
+        "score_7": 20037,
+        "score_8": 57034,
+        "score_9": 84730,
+        "score_10": 87424,
+        "watching": 53358,
+        "completed": 284747
+    }
+}

@@ -216,6 +216,16 @@ async def aggregator_anime_info(test_session):
         "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6": "kaguya_1.json",
         "73a73ca9-fcea-4521-ad88-fa5206ad8e78": "kaguya_2.json",
         "fcd76158-66b6-4c72-8c1c-5aa801a5efff": "kaguya_3.json",
+        "0cf69ac6-9238-4e2f-9add-39294c1a0f11": "snk_1.json",
+        "b88bf4b4-564e-43d4-8f1a-01741d244366": "snk_2.json",
+        "b22bb359-4545-45ce-92d3-df8646554128": "snk_3_1.json",
+        "91a35018-3439-47b1-8eb8-ba2092fd0191": "snk_3_2.json",
+        "4877caaf-d76d-46f2-9a73-cbdb2fef202b": "snk_4_1.json",
+        "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e": "snk_4_2.json",
+        "833be1cc-b3ef-4ebc-8017-07f49203a8a0": "snk_4_3.json",
+        "94577949-789f-4c5c-bb56-a88b243254bb": "name.json",
+        "9e172d54-b1a8-4aef-a396-67f6dddbfb07": "bocchi.json",
+        "4210609f-9fcb-448b-b871-adbd06e1faf8": "oshi.json",
     }
 
     for slug in anime_list:
