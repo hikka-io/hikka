@@ -8,10 +8,6 @@ async def test_anime_list(client, aggregator_anime):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 15
 
-    from pprint import pprint
-
-    pprint(response.json()["list"])
-
     # Check first anime slug
     assert (
         response.json()["list"][0]["slug"]
@@ -33,4 +29,21 @@ async def test_anime_no_meilisearch(client):
 
 
 async def test_anime_pagination(client, aggregator_anime):
-    pass
+    response = await request_anime_search(client)
+
+    assert response.json()["pagination"]["total"] == 15
+    assert response.json()["pagination"]["pages"] == 2
+    assert response.json()["pagination"]["page"] == 1
+
+    assert (
+        response.json()["list"][0]["slug"]
+        == "fullmetal-alchemist-brotherhood-fc524a"
+    )
+
+    response = await request_anime_search(client, {"page": 2})
+
+    assert response.json()["pagination"]["total"] == 15
+    assert response.json()["pagination"]["pages"] == 2
+    assert response.json()["pagination"]["page"] == 2
+
+    assert response.json()["list"][0]["slug"] == "shingeki-no-kyojin-0cf69a"

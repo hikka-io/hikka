@@ -48,7 +48,7 @@ async def test_signup_absent_code(client, oauth_fail_http):
 
     assert response.json().get("secret") is None
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_valid_oauth_login(

@@ -118,5 +118,5 @@ async def validation_handler(request: Request, exc: RequestValidationError):
     exc_str = str(exc).replace("\n", " ").replace("   ", " ")
     return JSONResponse(
         content={"message": exc_str, "code": "validation_error"},
-        status_code=422,
+        status_code=400,
     )

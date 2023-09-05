@@ -11,7 +11,7 @@ async def test_short_username(client):
     response = await request_signup(client, "test@mail.com", "abc", "password")
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_long_username(client):
@@ -21,7 +21,7 @@ async def test_long_username(client):
     )
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_start_number_username(client):
@@ -31,7 +31,7 @@ async def test_start_number_username(client):
     )
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_short_password(client):
@@ -39,7 +39,7 @@ async def test_short_password(client):
     response = await request_signup(client, "test@mail.com", "username", "abc")
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_long_password(client):
@@ -52,7 +52,7 @@ async def test_long_password(client):
     )
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_bad_email(client):
@@ -61,7 +61,7 @@ async def test_bad_email(client):
     )
 
     assert response.json()["code"] == "validation_error"
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_login_not_fount(client):
