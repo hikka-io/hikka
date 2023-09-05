@@ -10,9 +10,6 @@ from fastapi import status
 # studios
 # genres
 
-# async def test_anime_filter_media_type():
-#     response = await request_anime_search(client, {})
-
 
 # async def test_anime_filter_rating():
 #     response = await request_anime_search(client, {})
