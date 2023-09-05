@@ -82,10 +82,10 @@ SEARCH_INDEX_ANIME = "content_anime"
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
 
-EDIT_PENDING = "PENDING"
-EDIT_APPROVED = "APPROVED"
-EDIT_DENIED = "DENIED"
-EDIT_CLOSED = "CLOSED"
+EDIT_PENDING = "pending"
+EDIT_APPROVED = "approved"
+EDIT_DENIED = "denied"
+EDIT_CLOSED = "closed"
 
 CONTENT_ANIME = "anime"
 CONTENT_MANGA = "manga"
@@ -105,7 +105,6 @@ ROLE_ADMIN = "admin"
 PERMISSION_CREATE_EDIT = "content:create_edit"
 PERMISSION_ACCEPT_EDIT = "content:accept_edit"
 PERMISSION_REJECT_EDIT = "content:reject_edit"
-PERMISSION_CONFIRM_EDIT = "content:confirm_edit"
 
 # Role permissions
 ROLES = {
@@ -119,7 +118,7 @@ ROLES = {
     ],
     ROLE_ADMIN: [
         PERMISSION_CREATE_EDIT,
-        PERMISSION_CONFIRM_EDIT,
+        PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
     ],
 }

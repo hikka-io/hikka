@@ -51,7 +51,8 @@ class ContentEdit(
         Enum(*content_types, name="content_type")
     )
 
-    changes: Mapped[dict] = mapped_column(JSONB)
+    before: Mapped[dict] = mapped_column(JSONB, nullable=True)
+    after: Mapped[dict] = mapped_column(JSONB)
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     moderator_id = mapped_column(ForeignKey("service_users.id"))

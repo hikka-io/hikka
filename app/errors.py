@@ -48,7 +48,11 @@ errors = {
         "not-found": ["Anime not found", 404],
     },
     "edit": {
+        "already-reviewed": ["Edit already reviewed", 400],
+        "invalid-content-id": ["Invalid content id", 400],
+        "wrong-content-type": ["Wrong content type", 400],
         "empty-edit": ["This edit is empty", 400],
+        "invalid-id": ["Invalid edit id", 400],
     },
     "studio": {
         "not-found": ["Studio not found", 404],

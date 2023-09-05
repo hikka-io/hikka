@@ -45,7 +45,7 @@ class AnimeOST(ORJSONModel):
     ost_type: AnimeOSTTypeEnum = Field(example="opening")
 
 
-class EditAnimeArgs(ORJSONModel):
+class AnimeEditArgs(ORJSONModel):
     title_ja: Union[str, None] = Field(
         example="Kimetsu no Yaiba: Mugen Ressha-hen", max_length=255
     )
@@ -69,6 +69,13 @@ class EditAnimeArgs(ORJSONModel):
     description: Union[str, None] = Field(example="...")
 
 
+class EditStatusEnum(str, Enum):
+    edit_pending = constants.EDIT_PENDING
+    edit_approved = constants.EDIT_APPROVED
+    edit_denied = constants.EDIT_DENIED
+    edit_closed = constants.EDIT_CLOSED
+
+
 class ContentTypeEnum(str, Enum):
     content_anime = constants.CONTENT_ANIME
     content_manga = constants.CONTENT_MANGA
@@ -81,11 +88,12 @@ class ContentTypeEnum(str, Enum):
 
 
 class UserResponse(ORJSONModel):
-    username: str = Field(example="2a407b0c-e28c-4bc4-80bb-d54f8e4c51a6")
+    username: str = Field(example="hikka")
 
 
-class EditAnimeResponse(ORJSONModel):
+class AnimeEditResponse(ORJSONModel):
     edit_id: int = Field(example=3)
+    status: EditStatusEnum = Field(example="pending")
     created: datetime = Field(example=1693850684)
     updated: datetime = Field(example=1693850684)
 
@@ -95,12 +103,20 @@ class EditAnimeResponse(ORJSONModel):
     content_id: UUID = Field(example="2a407b0c-e28c-4bc4-80bb-d54f8e4c51a6")
     content_type: ContentTypeEnum = Field(example="anime")
 
-    changes: dict = Field()
+    before: Union[dict, None] = Field()
+    after: dict = Field()
 
     # Note that this will generate a wrong return type in the docs
     # Should be fixed after migrating to Pydantic 2
     author: UserResponse = Field()
+    moderator: Union[UserResponse, None] = Field()
 
     @validator("author")
     def convert_author(cls, author: UserResponse) -> str:
         return author.username
+
+    @validator("moderator")
+    def convert_moderator(
+        cls, moderator: Union[UserResponse, None]
+    ) -> Union[str, None]:
+        return moderator.username if moderator else None
