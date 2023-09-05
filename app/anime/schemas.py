@@ -110,7 +110,7 @@ class AnimeSearchArgs(ORJSONModel):
             raise ValueError("Score can't be less than 0.")
 
         if scores[1] and scores[1] > 10:
-            raise ValueError("Score can't be more than 1.")
+            raise ValueError("Score can't be more than 10.")
 
         return scores
 
