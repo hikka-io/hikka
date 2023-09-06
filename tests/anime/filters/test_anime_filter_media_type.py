@@ -26,3 +26,5 @@ async def test_anime_filter_media_type(client, aggregator_anime):
     assert len(response.json()["list"]) == 2
     assert response.json()["list"][0]["media_type"] == "special"
     assert response.json()["list"][1]["media_type"] == "movie"
+
+    # ToDo: test for bad media type

@@ -1,18 +1,12 @@
 from client_requests import request_anime_search
 from fastapi import status
 
-# media_type
-# rating
 # status
 # source
 # season
 # producers
 # studios
 # genres
-
-
-# async def test_anime_filter_rating():
-#     response = await request_anime_search(client, {})
 
 
 # async def test_anime_filter_status():
