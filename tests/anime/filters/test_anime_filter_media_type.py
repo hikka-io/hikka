@@ -27,4 +27,8 @@ async def test_anime_filter_media_type(client, aggregator_anime):
     assert response.json()["list"][0]["media_type"] == "special"
     assert response.json()["list"][1]["media_type"] == "movie"
 
-    # ToDo: test for bad media type
+    # Check for bad media type
+    response = await request_anime_search(client, {"media_type": ["bad_type"]})
+
+    assert response.json()["code"] == "validation_error"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
