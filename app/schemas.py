@@ -76,6 +76,7 @@ class AnimeResponse(ORJSONModel):
     scored_by: int = Field(example=1210150)
     score: float = Field(example=8.11)
     slug: str = Field(example="kono-subarashii-sekai-ni-shukufuku-wo-123456")
+    source: Union[str, None]
     rating: Union[str, None]
     year: Union[int, None]
 
