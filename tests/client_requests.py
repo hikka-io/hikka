@@ -131,3 +131,7 @@ def request_anime_episodes(client, slug):
 
 def request_anime_recommendations(client, slug):
     return client.get(f"/anime/{slug}/recommendations")
+
+
+def request_anime_franchise(client, slug):
+    return client.get(f"/anime/{slug}/franchise")

@@ -19,3 +19,13 @@ async def test_anime_recommendations(
         == "fullmetal-alchemist-brotherhood-fc524a"
     )
     assert response.json()["list"][1]["slug"] == "steinsgate-f29797"
+
+
+async def test_anime_recommendations_bad(
+    client,
+    aggregator_anime,
+):
+    response = await request_anime_recommendations(client, "bad-slug")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["code"] == "anime_not_found"
