@@ -152,6 +152,7 @@ class AnimeEpisodeResponse(ORJSONModel):
 
 
 class AnimeEpisodesListResponse(ORJSONModel):
+    pagination: PaginationResponse
     list: list[AnimeEpisodeResponse]
 
 

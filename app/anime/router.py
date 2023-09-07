@@ -129,7 +129,6 @@ async def anime_episodes(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
-    # ToDo: pagination
     limit, offset = pagination(page)
     total = await service.anime_episodes_count(session, anime)
     episodes = await service.anime_episodes(session, anime, limit, offset)
