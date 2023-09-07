@@ -29,6 +29,7 @@ async def test_anime_filter_producers(
 
     assert len(response.json()["list"]) == 6
 
+    # Check for bad producer name
     response = await request_anime_search(
         client, {"producers": ["unknown-producer"]}
     )
