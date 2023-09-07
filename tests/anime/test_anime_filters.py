@@ -7,8 +7,17 @@ from fastapi import status
 # genres
 
 
-# async def test_anime_filter_producers():
-#     response = await request_anime_search(client, {})
+async def test_anime_filter_producers(
+    client,
+    aggregator_companies,
+    aggregator_anime,
+    aggregator_anime_info,
+):
+    response = await request_anime_search(
+        client, {"producers": ["aniplex-332844"]}
+    )
+
+    assert len(response.json()["list"]) == 5
 
 
 # async def test_anime_filter_studios():

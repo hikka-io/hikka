@@ -8,6 +8,8 @@ from sqlalchemy.orm import Mapped
 from datetime import datetime
 from ..base import Base
 
+from sqlalchemy import and_, text
+
 from ..mixins import (
     ContentMixin,
     UpdatedMixin,
@@ -84,7 +86,7 @@ class Anime(
     )
 
     companies: Mapped[list["CompanyAnime"]] = relationship(
-        back_populates="anime"
+        back_populates="anime", viewonly=True
     )
 
     favourite: Mapped[list["AnimeFavourite"]] = relationship(
@@ -110,6 +112,30 @@ class Anime(
 
     franchise_relation: Mapped["AnimeFranchise"] = relationship(
         back_populates="anime", foreign_keys=[franchise_id]
+    )
+
+    # ToDo: Check AssociationProxy
+    # https://docs.sqlalchemy.org/en/20/orm/extensions/associationproxy.html
+    producers: Mapped[list["Company"]] = relationship(
+        secondary="service_content_companies_anime",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'producer')"
+        ),
+        viewonly=True,
+    )
+
+    studios: Mapped[list["Company"]] = relationship(
+        secondary="service_content_companies_anime",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'studio')"
+        ),
+        viewonly=True,
     )
 
     # Very dirty hacks, but they do the trick

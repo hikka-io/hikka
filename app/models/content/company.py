@@ -25,7 +25,7 @@ class Company(
     name: Mapped[str] = mapped_column(nullable=True)
 
     anime: Mapped[list["CompanyAnime"]] = relationship(
-        back_populates="company",
+        back_populates="company", viewonly=True
     )
 
     image_id = mapped_column(
@@ -33,6 +33,12 @@ class Company(
     )
 
     image_relation: Mapped["Image"] = relationship(lazy="selectin")
+
+    produced_anime: Mapped[list["Anime"]] = relationship(
+        secondary="service_content_companies_anime",
+        back_populates="producers",
+        viewonly=True,
+    )
 
     @hybrid_property
     def image(self):
