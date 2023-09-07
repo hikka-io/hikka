@@ -21,7 +21,8 @@
             "content_id": "fc524a18-378f-4ccb-82a0-b4063206c600",
             "media_type": "tv",
             "scored_by": 2028821,
-            "score": 9.1
+            "score": 9.1,
+            "nsfw": false
         },
         {
             "episodes_released": 24,
@@ -39,7 +40,8 @@
             "content_id": "f297970c-93e7-47f0-a01d-ee4cd1f067d9",
             "media_type": "tv",
             "scored_by": 1342602,
-            "score": 9.07
+            "score": 9.07,
+            "nsfw": false
         },
         {
             "episodes_released": 13,
@@ -57,7 +59,8 @@
             "content_id": "fcd76158-66b6-4c72-8c1c-5aa801a5efff",
             "media_type": "tv",
             "scored_by": 459909,
-            "score": 9.05
+            "score": 9.05,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -75,7 +78,8 @@
             "content_id": "73a73ca9-fcea-4521-ad88-fa5206ad8e78",
             "media_type": "tv",
             "scored_by": 810975,
-            "score": 8.64
+            "score": 8.64,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -93,7 +97,8 @@
             "content_id": "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6",
             "media_type": "tv",
             "scored_by": 1037865,
-            "score": 8.41
+            "score": 8.41,
+            "nsfw": false
         },
         {
             "episodes_released": 25,
@@ -111,7 +116,8 @@
             "content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11",
             "media_type": "tv",
             "scored_by": 2673779,
-            "score": 8.54
+            "score": 8.54,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -129,7 +135,8 @@
             "content_id": "b88bf4b4-564e-43d4-8f1a-01741d244366",
             "media_type": "tv",
             "scored_by": 1771366,
-            "score": 8.51
+            "score": 8.51,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -147,7 +154,8 @@
             "content_id": "b22bb359-4545-45ce-92d3-df8646554128",
             "media_type": "tv",
             "scored_by": 1515984,
-            "score": 8.62
+            "score": 8.62,
+            "nsfw": false
         },
         {
             "episodes_released": 10,
@@ -165,7 +173,8 @@
             "content_id": "91a35018-3439-47b1-8eb8-ba2092fd0191",
             "media_type": "tv",
             "scored_by": 1482063,
-            "score": 9.05
+            "score": 9.05,
+            "nsfw": false
         },
         {
             "episodes_released": 16,
@@ -183,7 +192,8 @@
             "content_id": "4877caaf-d76d-46f2-9a73-cbdb2fef202b",
             "media_type": "tv",
             "scored_by": 1229333,
-            "score": 8.8
+            "score": 8.8,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -201,7 +211,8 @@
             "content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e",
             "media_type": "tv",
             "scored_by": 638807,
-            "score": 8.77
+            "score": 8.77,
+            "nsfw": false
         },
         {
             "episodes_released": 1,
@@ -219,7 +230,8 @@
             "content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0",
             "media_type": "special",
             "scored_by": 164137,
-            "score": 9.04
+            "score": 9.04,
+            "nsfw": false
         },
         {
             "episodes_released": null,
@@ -237,7 +249,8 @@
             "content_id": "94577949-789f-4c5c-bb56-a88b243254bb",
             "media_type": "movie",
             "scored_by": 1817186,
-            "score": 8.85
+            "score": 8.85,
+            "nsfw": false
         },
         {
             "episodes_released": 12,
@@ -255,7 +268,8 @@
             "content_id": "9e172d54-b1a8-4aef-a396-67f6dddbfb07",
             "media_type": "tv",
             "scored_by": 258904,
-            "score": 8.84
+            "score": 8.84,
+            "nsfw": false
         },
         {
             "episodes_released": 11,
@@ -273,7 +287,8 @@
             "content_id": "4210609f-9fcb-448b-b871-adbd06e1faf8",
             "media_type": "tv",
             "scored_by": 301198,
-            "score": 8.86
+            "score": 8.86,
+            "nsfw": false
         }
     ]
 }

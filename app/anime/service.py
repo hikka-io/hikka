@@ -25,7 +25,7 @@ async def get_anime_info_by_slug(
 ) -> Union[Anime, None]:
     return await session.scalar(
         select(Anime)
-        .filter_by(slug=slug)
+        .filter(Anime.slug == slug)
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),

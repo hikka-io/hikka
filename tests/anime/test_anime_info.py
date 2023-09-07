@@ -52,6 +52,7 @@ async def test_anime_info_bad(
     client,
     aggregator_anime,
 ):
-    response = await request_anime_info(client, "bocchi-the-rock-9e172d")
+    response = await request_anime_info(client, "bad-slug")
 
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["code"] == "anime_not_found"
