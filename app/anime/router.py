@@ -20,8 +20,8 @@ from .schemas import (
     AnimeSearchPaginationResponse,
     AnimeStaffPaginationResponse,
     AnimeEpisodesListResponse,
+    GenreListResposne,
     AnimeSearchArgs,
-    GenreResponse,
 )
 
 from app.utils import (
@@ -62,14 +62,14 @@ async def search_anime(
 
 @router.get(
     "/genres",
-    response_model=list[GenreResponse],
+    response_model=GenreListResposne,
     summary="Genres list",
 )
 async def anime_genres(
     session: AsyncSession = Depends(get_session),
 ):
     genres = await service.anime_genres(session)
-    return genres.all()
+    return {"list": genres.all()}
 
 
 @router.get(

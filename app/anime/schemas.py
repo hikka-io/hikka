@@ -178,6 +178,10 @@ class GenreResponse(ORJSONModel):
     type: str = Field(example="genre")
 
 
+class GenreListResposne(ORJSONModel):
+    list: list[GenreResponse]
+
+
 class AnimeCompanyResponse(ORJSONModel):
     company: CompanyResponse
     type: CompanyTypeEnum
