@@ -115,3 +115,7 @@ def request_anime_genres(client):
 
 def request_anime_info(client, slug):
     return client.get(f"/anime/{slug}")
+
+
+def request_anime_characters(client, slug):
+    return client.get(f"/anime/{slug}/characters")
