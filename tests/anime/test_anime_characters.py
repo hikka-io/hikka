@@ -26,3 +26,13 @@ async def test_anime_characters(
         response.json()["list"][11]["character"]["slug"]
         == "shima-iwashita-a22b1e"
     )
+
+
+async def test_anime_characters_bad(
+    client,
+    aggregator_anime,
+):
+    response = await request_anime_characters(client, "bad-slug")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["code"] == "anime_not_found"
