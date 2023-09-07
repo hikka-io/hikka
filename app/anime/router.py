@@ -93,10 +93,10 @@ async def anime_characters(
 ):
     limit, offset = pagination(page)
     total = await service.anime_characters_count(session, anime)
-    result = await service.anime_characters(session, anime, limit, offset)
+    characters = await service.anime_characters(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [anime_character for anime_character in result],
+        "list": characters.all(),
     }
 
 
@@ -112,10 +112,10 @@ async def anime_staff(
 ):
     limit, offset = pagination(page)
     total = await service.anime_staff_count(session, anime)
-    result = await service.anime_staff(session, anime, limit, offset)
+    staff = await service.anime_staff(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [anime_character for anime_character in result],
+        "list": staff.all(),
     }
 
 
@@ -129,7 +129,7 @@ async def anime_episodes(
     anime: Anime = Depends(get_anime_info),
 ):
     episodes = await service.anime_episodes(session, anime)
-    return {"list": [episode for episode in episodes]}
+    return {"list": episodes.all()}
 
 
 @router.get(
