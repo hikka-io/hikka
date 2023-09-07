@@ -125,11 +125,18 @@ async def anime_staff(
     summary="Anime episodes",
 )
 async def anime_episodes(
+    page: int = Depends(get_page),
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
-    episodes = await service.anime_episodes(session, anime)
-    return {"list": episodes.all()}
+    # ToDo: pagination
+    limit, offset = pagination(page)
+    total = await service.anime_episodes_count(session, anime)
+    episodes = await service.anime_episodes(session, anime, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": episodes.all(),
+    }
 
 
 @router.get(

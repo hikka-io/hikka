@@ -123,3 +123,7 @@ def request_anime_characters(client, slug):
 
 def request_anime_staff(client, slug):
     return client.get(f"/anime/{slug}/staff")
+
+
+def request_anime_episodes(client, slug):
+    return client.get(f"/anime/{slug}/episodes")
