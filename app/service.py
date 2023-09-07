@@ -37,7 +37,11 @@ def anime_loadonly(statement):
         Anime.title_ja,
         Anime.title_en,
         Anime.title_ua,
+        Anime.season,
+        Anime.source,
         Anime.status,
+        Anime.rating,
         Anime.score,
         Anime.slug,
+        Anime.year,
     )
