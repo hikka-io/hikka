@@ -1,0 +1,295 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "9d041657-8a85-4535-9e81-060afe72fa23"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6e8deff0-5f78-4d4c-bfb0-34fd93de9054"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4fb0ad98-f913-4dd2-839c-1fb23b3dfac5"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e14aa6de-a922-4b0f-b350-a0970df61bff"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "65bac2be-969d-4946-87ba-4fefe7f7f86a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "bc51e6a4-86c1-472a-a472-0039d900afa4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4cfb22d3-a095-4292-be80-053cd08c092b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b8571dcf-3169-4fcb-9f5d-46111bb7e0ba"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "2580d561-f554-4ca1-b5a6-03d6beb7669e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "62427d8c-ba56-4a42-afd1-eec9099c3dc6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "b43e3e71-8b26-4940-aa3f-9581c8fec14e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9138969a-d57d-43c9-a4b8-d5b95ee48d3c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "caa0dbf6-8d32-408f-a6ea-1ea079f101e4"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "aa50c9a7-a9bf-49e3-8734-3e17c4deffe6"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "d1a1a7bd-aa56-48be-a45d-a740bef3d2af"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "06d17b8f-8534-4da4-b2cb-a852c48a0955"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "74764c7b-b237-491c-9a88-dfae4970fc02"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "ef41f7e6-a38e-4d0e-b56a-9cf2eff6ae9a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "afc127ea-67c8-4b0f-8fac-23854082018a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7e93e76d-994f-4c76-964e-b3003565f1f6"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "67e786e2-045a-4f7f-b088-d2f164c91501"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [],
+    "episodes_released": 0,
+    "start_date": 1323554400,
+    "episodes_total": 6,
+    "voices": [
+        {
+            "character": {
+                "content_id": "74764c7b-b237-491c-9a88-dfae4970fc02"
+            },
+            "person": {
+                "content_id": "4d3c47a6-ac6d-4e18-b939-2f1ca7edb92a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d1a1a7bd-aa56-48be-a45d-a740bef3d2af"
+            },
+            "person": {
+                "content_id": "bfa78992-7ee7-4d8f-944e-75e83049ad62"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "afc127ea-67c8-4b0f-8fac-23854082018a"
+            },
+            "person": {
+                "content_id": "cc2533a5-325f-47e4-9da8-6f9ecb59ec1c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7e93e76d-994f-4c76-964e-b3003565f1f6"
+            },
+            "person": {
+                "content_id": "8223db52-2a20-4859-b367-4a75660ae3bc"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "aa50c9a7-a9bf-49e3-8734-3e17c4deffe6"
+            },
+            "person": {
+                "content_id": "5a999b97-af99-4aed-82d5-660916227816"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "06d17b8f-8534-4da4-b2cb-a852c48a0955"
+            },
+            "person": {
+                "content_id": "44dd1511-5510-432d-bfb1-032056730895"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "ef41f7e6-a38e-4d0e-b56a-9cf2eff6ae9a"
+            },
+            "person": {
+                "content_id": "158d3002-4ead-44a5-ae7f-56d5ff1284b8"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1456437600,
+    "staff": [
+        {
+            "person": {
+                "content_id": "44dd1511-5510-432d-bfb1-032056730895"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "189f53ee-2d06-4367-8de6-ed70006109a1"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e85072f1-fe13-45c4-aee1-3591bbd2fafa"
+            },
+            "roles": [
+                "Original Character Design"
+            ]
+        }
+    ],
+    "created": 1687453314,
+    "updated": 1689287787,
+    "synopsis_en": "Keisuke Takatou wakes up in a featureless white room, unaware of how and when he arrived. While exploring his whereabouts, he notices six familiar girls huddled around a large monitor—his childhood friend Kanae Hokari, the class president Miyakou Ando, his English teacher Natsuki Aoi, his junior Rika Makiba, and his classmates Rinne Byakuya and Nemu Manaka. \n\nAs they attempt to make sense of their current situation, a voice suddenly declares through the monitor, \"The game will now begin.\" The rules of the game are simple yet brutal; assigned as the \"unlocker,\" Keisuke must select one of the girls as his \"keyhole\" and violate her in a specific manner. Only after he does this for five rounds will the group be promised freedom to the outside world.\n\nRefusing to acknowledge the situation, Miyakou vehemently denies her participation. Suddenly, the entire room goes dark. When the lights come back on, Miyakou is strapped to an electric chair. \"Withdrawal from the game will result in death,\" announces the mysterious voice as the chair electrocutes her to death. \n\nLeft with no other option, the terrified captives concede, and thus begins the sadistic game that will awaken their carnal desires through pain—and pleasure.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": null,
+    "franchise": null,
+    "title_ja": "Euphoria",
+    "title_en": null,
+    "title_ua": null,
+    "duration": 29,
+    "poster": "/content/anime/euphoria-167704/uyQi_bfXPCfLwCHzg4E5Qg.jpg",
+    "rating": "rx",
+    "source": "visual_novel",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://entacom.org/clockup/product/dvd/euphoria.htm",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=8508",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=13245",
+            "text": "ANN"
+        }
+    ],
+    "genre_ids": [
+        "15749dc8-e0c3-4c7c-82e6-325e3a286ac2"
+    ],
+    "synonyms": [],
+    "videos": [],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Pandora no Rakuen (パンドラの楽園)",
+            "author": "Aoba",
+            "spotify": null,
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "ova",
+    "content_id": "167704d8-28fd-4f8a-aab2-1e9cabb30b20",
+    "scored_by": 43947,
+    "anitube": [],
+    "toloka": [],
+    "score": 5.85,
+    "stats": {
+        "dropped": 4751,
+        "on_hold": 2478,
+        "planned": 14225,
+        "score_1": 4469,
+        "score_2": 2948,
+        "score_3": 2559,
+        "score_4": 3495,
+        "score_5": 4755,
+        "score_6": 6424,
+        "score_7": 6428,
+        "score_8": 4496,
+        "score_9": 2546,
+        "score_10": 5830,
+        "watching": 7197,
+        "completed": 51581
+    }
+}

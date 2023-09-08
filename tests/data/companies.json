@@ -1,6 +1,6 @@
 {
     "pagination": {
-        "total": 36,
+        "total": 39,
         "pages": 1,
         "page": 1
     },
@@ -292,6 +292,30 @@
             "updated": 1689370629,
             "content_id": "5a9be504-abcf-4625-b19f-db3385b9ead5",
             "favorites": 2379
+        },
+        {
+            "name_en": "Geneon Universal Entertainment",
+            "name_ja": "NBCユニバーサルエンターテイメント",
+            "image": "/content/companies/geneon-universal-entertainment-b883cc/aOxWLq4SlDxU-EMeHBafcQ.png",
+            "updated": 1689370628,
+            "content_id": "b883ccc6-0e76-4220-ac7b-65e7a4426982",
+            "favorites": 9
+        },
+        {
+            "name_en": "I-move",
+            "name_ja": null,
+            "image": null,
+            "updated": 1689370628,
+            "content_id": "ff3a171e-05a6-4d8a-a5df-c09027bc29f3",
+            "favorites": 0
+        },
+        {
+            "name_en": "Majin",
+            "name_ja": "魔人",
+            "image": "/content/companies/majin-67e786/p59bdwihm64b42q4xBIEfA.png",
+            "updated": 1689370628,
+            "content_id": "67e786e2-045a-4f7f-b088-d2f164c91501",
+            "favorites": 163
         }
     ]
 }

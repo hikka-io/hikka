@@ -9,7 +9,7 @@ async def test_anime_list(client, aggregator_anime):
     assert response.status_code == status.HTTP_200_OK
 
     # Check pagination data
-    assert response.json()["pagination"]["total"] == 15
+    assert response.json()["pagination"]["total"] == 17
     assert response.json()["pagination"]["pages"] == 2
     assert response.json()["pagination"]["page"] == 1
 
@@ -40,7 +40,7 @@ async def test_anime_pagination(client, aggregator_anime):
 
     assert response.status_code == status.HTTP_200_OK
 
-    assert response.json()["pagination"]["total"] == 15
+    assert response.json()["pagination"]["total"] == 17
     assert response.json()["pagination"]["pages"] == 2
     assert response.json()["pagination"]["page"] == 2
 

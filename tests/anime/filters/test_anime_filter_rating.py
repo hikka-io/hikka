@@ -18,7 +18,7 @@ async def test_anime_filter_rating(
     response = await request_anime_search(client, {"rating": ["pg_13"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 7
+    assert len(response.json()["list"]) == 8
     assert response.json()["list"][0]["rating"] == "pg_13"
 
     # Get anime with both special and movie media types

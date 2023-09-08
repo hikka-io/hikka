@@ -289,6 +289,44 @@
             "scored_by": 301198,
             "score": 8.86,
             "nsfw": false
+        },
+        {
+            "episodes_released": null,
+            "start_date": 1034974800,
+            "episodes_total": 1,
+            "end_date": 1034974800,
+            "title_en": "Welcome to Pia Carrot! Sayaka's Love Story",
+            "title_ja": "Pia Carrot e Youkoso!!: Sayaka no Koi Monogatari",
+            "title_ua": null,
+            "poster": "/content/anime/pia-carrot-e-youkoso-sayaka-no-koi-monogatari-227414/rsu-i1iEUYXPOL5D_JY_Bw.jpg",
+            "season": "fall",
+            "status": "finished",
+            "created": 1687453353,
+            "updated": 1689286350,
+            "content_id": "227414cb-51df-43e8-b82e-49871b372054",
+            "media_type": "movie",
+            "scored_by": 1140,
+            "score": 5.8,
+            "nsfw": false
+        },
+        {
+            "episodes_released": 0,
+            "start_date": 1323554400,
+            "episodes_total": 6,
+            "end_date": 1456437600,
+            "title_en": null,
+            "title_ja": "Euphoria",
+            "title_ua": null,
+            "poster": "/content/anime/euphoria-167704/uyQi_bfXPCfLwCHzg4E5Qg.jpg",
+            "season": "winter",
+            "status": "finished",
+            "created": 1687453314,
+            "updated": 1689287787,
+            "content_id": "167704d8-28fd-4f8a-aab2-1e9cabb30b20",
+            "media_type": "ova",
+            "scored_by": 43947,
+            "score": 5.85,
+            "nsfw": true
         }
     ]
 }

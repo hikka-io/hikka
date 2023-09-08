@@ -5,7 +5,7 @@ from sqlalchemy import func
 
 async def test_import_companies(test_session, aggregator_companies):
     companies_count = await test_session.scalar(select(func.count(Company.id)))
-    assert companies_count == 36
+    assert companies_count == 39
 
     # Check individual company
     company = await test_session.scalar(

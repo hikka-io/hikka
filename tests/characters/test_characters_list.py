@@ -9,8 +9,8 @@ async def test_characters_list(client, aggregator_characters):
     assert response.status_code == status.HTTP_200_OK
 
     # Make sure pagination data is ok
-    assert response.json()["pagination"]["total"] == 407
-    assert response.json()["pagination"]["pages"] == 34
+    assert response.json()["pagination"]["total"] == 419
+    assert response.json()["pagination"]["pages"] == 35
     assert len(response.json()["list"]) == 12
 
     # Check first and last character slugs
@@ -25,8 +25,8 @@ async def test_characters_pagination(client, aggregator_characters):
     assert response.status_code == status.HTTP_200_OK
 
     # Make sure pagination data is ok
-    assert response.json()["pagination"]["total"] == 407
-    assert response.json()["pagination"]["pages"] == 34
+    assert response.json()["pagination"]["total"] == 419
+    assert response.json()["pagination"]["pages"] == 35
     assert response.json()["pagination"]["page"] == 2
     assert len(response.json()["list"]) == 12
 

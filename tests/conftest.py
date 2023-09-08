@@ -233,6 +233,8 @@ async def aggregator_anime_info(test_session):
         "94577949-789f-4c5c-bb56-a88b243254bb": "name.json",
         "9e172d54-b1a8-4aef-a396-67f6dddbfb07": "bocchi.json",
         "4210609f-9fcb-448b-b871-adbd06e1faf8": "oshi.json",
+        "227414cb-51df-43e8-b82e-49871b372054": "carrot.json",
+        "167704d8-28fd-4f8a-aab2-1e9cabb30b20": "euphoria.json",
     }
 
     for slug in anime_list:

@@ -18,7 +18,7 @@ async def test_anime_filter_genres(
     response = await request_anime_search(client, {"genres": ["comedy"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 1
+    assert len(response.json()["list"]) == 2
 
     # When we try to get anime with both adventure and comedy genres
     # It should return empty list because both genres must be present

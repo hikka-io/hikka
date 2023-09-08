@@ -7,7 +7,7 @@ async def test_import_characters(test_session, aggregator_characters):
     characters_count = await test_session.scalar(
         select(func.count(Character.id))
     )
-    assert characters_count == 407
+    assert characters_count == 419
 
     # Check individual character
     character = await test_session.scalar(

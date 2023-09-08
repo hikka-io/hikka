@@ -1,6 +1,6 @@
 {
     "pagination": {
-        "total": 407,
+        "total": 419,
         "pages": 1,
         "page": 1
     },
@@ -3260,6 +3260,102 @@
             "updated": 1689370071,
             "content_id": "d1f39226-ca05-46f7-bee7-3b32b474f542",
             "favorites": 1
+        },
+        {
+            "name_en": "Sayaka Takai",
+            "name_ja": "高井さやか",
+            "image": "/content/characters/sayaka-takai-bfeef6/rZbiosTBuFKvwplduKPa1g.jpg",
+            "updated": 1689370118,
+            "content_id": "bfeef6f3-39ac-410e-bf67-98bb89147623",
+            "favorites": 0
+        },
+        {
+            "name_en": "Tomomi Aizawa",
+            "name_ja": "愛沢ともみ",
+            "image": "/content/characters/tomomi-aizawa-fea587/iFdRHaY3de6VO5G_OqAxGQ.jpg",
+            "updated": 1689370209,
+            "content_id": "fea58756-964c-4326-b152-917ee4c7aad8",
+            "favorites": 0
+        },
+        {
+            "name_en": "Akemi Hasegawa",
+            "name_ja": null,
+            "image": "/content/characters/akemi-hasegawa-f547ae/PU89tdFNWM4r_i-8ORvTnA.jpg",
+            "updated": 1689370348,
+            "content_id": "f547aef4-0b8d-4b50-8c6e-a088314edb6c",
+            "favorites": 0
+        },
+        {
+            "name_en": "Azusa Hinomori",
+            "name_ja": "日野森あずさ",
+            "image": "/content/characters/azusa-hinomori-9143e9/DS-_Rvy5VLMTVscjELvDsw.jpg",
+            "updated": 1689370312,
+            "content_id": "9143e99a-ac74-4b43-8cf4-c2134fc99742",
+            "favorites": 5
+        },
+        {
+            "name_en": "Kouji Maeda",
+            "name_ja": "前田耕治",
+            "image": "/content/characters/kouji-maeda-d0af8a/7aagrOcgDJyHWuX-V6sryw.jpg",
+            "updated": 1689370552,
+            "content_id": "d0af8a80-3044-4961-ab2b-076fa5f8b874",
+            "favorites": 2
+        },
+        {
+            "name_en": "Rinne Byakuya",
+            "name_ja": "白夜 凛音",
+            "image": "/content/characters/rinne-byakuya-aa50c9/U7PjST2NakKryGOUOtvCYw.jpg",
+            "updated": 1689370152,
+            "content_id": "aa50c9a7-a9bf-49e3-8734-3e17c4deffe6",
+            "favorites": 129
+        },
+        {
+            "name_en": "Kanae Hokari",
+            "name_ja": "帆刈 叶 （ほかり かなえ）",
+            "image": "/content/characters/kanae-hokari-d1a1a7/47JAFGand4zFEmgwjecxow.jpg",
+            "updated": 1689370205,
+            "content_id": "d1a1a7bd-aa56-48be-a45d-a740bef3d2af",
+            "favorites": 39
+        },
+        {
+            "name_en": "Nemu Manaka",
+            "name_ja": "真中 合歓 （まなか ねむ）",
+            "image": "/content/characters/nemu-manaka-06d17b/cDM9r5RAIdGZtdqabPwhCQ.jpg",
+            "updated": 1689370325,
+            "content_id": "06d17b8f-8534-4da4-b2cb-a852c48a0955",
+            "favorites": 427
+        },
+        {
+            "name_en": "Keisuke Takatou",
+            "name_ja": "高遠 恵輔",
+            "image": "/content/characters/keisuke-takatou-74764c/cwAIrCgmKJFP6hMYYOtoSg.jpg",
+            "updated": 1689370085,
+            "content_id": "74764c7b-b237-491c-9a88-dfae4970fc02",
+            "favorites": 54
+        },
+        {
+            "name_en": "Miyako Andou",
+            "name_ja": "安藤 都子",
+            "image": "/content/characters/miyako-andou-ef41f7/GoOit__ZEhBgCdlW_dhvdw.jpg",
+            "updated": 1689370537,
+            "content_id": "ef41f7e6-a38e-4d0e-b56a-9cf2eff6ae9a",
+            "favorites": 1
+        },
+        {
+            "name_en": "Natsuki Aoi",
+            "name_ja": "葵 菜月",
+            "image": "/content/characters/natsuki-aoi-afc127/0pelFUYC1zzEGosHCXbXlw.jpg",
+            "updated": 1689370177,
+            "content_id": "afc127ea-67c8-4b0f-8fac-23854082018a",
+            "favorites": 16
+        },
+        {
+            "name_en": "Rika Makiba",
+            "name_ja": "蒔羽 梨香",
+            "image": "/content/characters/rika-makiba-7e93e7/q3vjJKdREpHuh_48XeTmJw.jpg",
+            "updated": 1689370214,
+            "content_id": "7e93e76d-994f-4c76-964e-b3003565f1f6",
+            "favorites": 9
         }
     ]
 }
