@@ -6,11 +6,11 @@ from fastapi import Depends
 from . import service
 
 
-# Get company by slug
+# Get character by slug
 async def get_character(
     slug: str, session: AsyncSession = Depends(get_session)
 ) -> Character:
-    if not (company := await service.get_character_by_slug(session, slug)):
+    if not (character := await service.get_character_by_slug(session, slug)):
         raise Abort("character", "not-found")
 
-    return company
+    return character
