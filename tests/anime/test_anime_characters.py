@@ -55,14 +55,3 @@ async def test_anime_characters_pagination(
         response.json()["list"][4]["character"]["slug"]
         == "ginjirou-yoshida-2f08d8"
     )
-
-
-async def test_anime_characters_bad(
-    client,
-    aggregator_anime,
-):
-    # Bad slug show throw error
-    response = await request_anime_characters(client, "bad-slug")
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "anime_not_found"

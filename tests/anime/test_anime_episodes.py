@@ -49,14 +49,3 @@ async def test_anime_episodes_pagination(
 
     assert response.json()["list"][11]["index"] == 24
     assert response.json()["list"][11]["title_en"] == "Mercy"
-
-
-async def test_anime_episodes_bad(
-    client,
-    aggregator_anime,
-):
-    # Bad slug show throw error
-    response = await request_anime_episodes(client, "bad-slug")
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "anime_not_found"

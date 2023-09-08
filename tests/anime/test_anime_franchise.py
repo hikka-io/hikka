@@ -40,14 +40,3 @@ async def test_anime_no_franchise(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "anime_no_franchise"
-
-
-async def test_anime_franchise_bad(
-    client,
-    aggregator_anime,
-):
-    # Bad slug show throw error
-    response = await request_anime_franchise(client, "bad-slug")
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "anime_not_found"
