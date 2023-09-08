@@ -42,10 +42,10 @@ async def search_characters(
     if not search.query:
         limit, offset = pagination(search.page)
         total = await service.search_total(session)
-        result = await service.characters_search(session, limit, offset)
+        characters = await service.characters_search(session, limit, offset)
         return {
             "pagination": pagination_dict(total, search.page, limit),
-            "list": [character for character in result],
+            "list": characters.all(),
         }
 
     return await meilisearch.search(
@@ -64,8 +64,8 @@ async def character_anime(
 ):
     limit, offset = pagination(page)
     total = await service.character_anime_total(session, character)
-    result = await service.character_anime(session, character, limit, offset)
+    anime = await service.character_anime(session, character, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [entry for entry in result],
+        "list": anime.all(),
     }
