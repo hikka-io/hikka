@@ -25,6 +25,8 @@ async def test_companies_pagination(client, aggregator_companies):
     assert response.status_code == status.HTTP_200_OK
 
     # Check data and length
+    assert response.json()["pagination"]["total"] == 36
+    assert response.json()["pagination"]["pages"] == 3
     assert response.json()["pagination"]["page"] == 2
     assert len(response.json()["list"]) == 12
 
