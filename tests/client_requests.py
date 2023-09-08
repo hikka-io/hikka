@@ -148,3 +148,8 @@ def request_characters_info(client, slug):
 
 def request_characters_anime(client, slug):
     return client.get(f"/characters/{slug}/anime")
+
+
+# Companies
+def request_companies_list(client, filters={}):
+    return client.post("/companies", json=filters)
