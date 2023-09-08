@@ -9,3 +9,11 @@ async def test_characters_info(client, aggregator_characters):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["name_en"] == "Levi"
     assert response.json()["slug"] == "levi-565409"
+
+
+async def test_characters_info_bad(client):
+    # Try fetching non existing character
+    response = await request_characters_info(client, "bad-character")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["code"] == "character_not_found"

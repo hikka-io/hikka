@@ -28,9 +28,7 @@ router = APIRouter(prefix="/characters", tags=["Characters"])
 
 
 @router.get("/{slug}", response_model=CharacterResponse)
-async def character_info(
-    character: Character = Depends(get_character),
-):
+async def character_info(character: Character = Depends(get_character)):
     return character
 
 

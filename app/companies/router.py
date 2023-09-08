@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import QuerySearchArgs
 from fastapi import APIRouter, Depends
 from .dependencies import get_company
 from app.database import get_session
@@ -7,6 +6,11 @@ from app.models import Company
 from app import meilisearch
 from app import constants
 from . import service
+
+from app.schemas import (
+    QuerySearchArgs,
+    CompanyResponse,
+)
 
 from .schemas import (
     CompaniesSearchPaginationResponse,
@@ -21,6 +25,11 @@ from app.utils import (
 
 
 router = APIRouter(prefix="/companies", tags=["Companies"])
+
+
+@router.get("/{slug}", response_model=CompanyResponse)
+async def company_info(company: Company = Depends(get_company)):
+    return company
 
 
 @router.post("", response_model=CompaniesSearchPaginationResponse)
