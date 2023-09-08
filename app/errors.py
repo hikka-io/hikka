@@ -51,6 +51,7 @@ errors = {
         "already-reviewed": ["Edit already reviewed", 400],
         "invalid-content-id": ["Invalid content id", 400],
         "wrong-content-type": ["Wrong content type", 400],
+        "content-not-found": ["Content not found", 404],
         "empty-edit": ["This edit is empty", 400],
         "invalid-id": ["Invalid edit id", 400],
     },

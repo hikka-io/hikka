@@ -1,12 +1,19 @@
 # Todo: replace validator with field_validator once we migrate to Pydantic 2
 from pydantic import Field, HttpUrl, validator
-from app.schemas import ORJSONModel
 from datetime import datetime
-from app.models import User
 from app import constants
 from typing import Union
 from enum import Enum
 from uuid import UUID
+
+from app.schemas import (
+    PaginationResponse,
+    ORJSONModel,
+)
+
+
+class EditArgs(ORJSONModel):
+    description: Union[str, None] = Field(example="...")
 
 
 class AnimeExternal(ORJSONModel):
@@ -45,7 +52,7 @@ class AnimeOST(ORJSONModel):
     ost_type: AnimeOSTTypeEnum = Field(example="opening")
 
 
-class AnimeEditArgs(ORJSONModel):
+class AnimeEditArgs(EditArgs):
     title_ja: Union[str, None] = Field(
         example="Kimetsu no Yaiba: Mugen Ressha-hen", max_length=255
     )
@@ -65,8 +72,6 @@ class AnimeEditArgs(ORJSONModel):
     # ost: Union[list[AnimeOST], None] = Field()
 
     # poster: Union[HttpUrl, None] = Field()
-
-    description: Union[str, None] = Field(example="...")
 
 
 class EditStatusEnum(str, Enum):
@@ -91,7 +96,7 @@ class UserResponse(ORJSONModel):
     username: str = Field(example="hikka")
 
 
-class AnimeEditResponse(ORJSONModel):
+class EditResponse(ORJSONModel):
     edit_id: int = Field(example=3)
     status: EditStatusEnum = Field(example="pending")
     created: datetime = Field(example=1693850684)
@@ -120,3 +125,8 @@ class AnimeEditResponse(ORJSONModel):
         cls, moderator: Union[UserResponse, None]
     ) -> Union[str, None]:
         return moderator.username if moderator else None
+
+
+class EditListResponse(ORJSONModel):
+    pagination: PaginationResponse
+    list: list[EditResponse]
