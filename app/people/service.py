@@ -2,6 +2,7 @@ from app.models import AnimeStaff, Anime, Person
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select, desc
 from sqlalchemy import func
 from typing import Union
@@ -50,6 +51,7 @@ async def person_anime(
         .filter_by(person=person)
         .join(Anime)
         .options(anime_loadonly(joinedload(AnimeStaff.anime)))
+        # .options(selectinload(AnimeStaff.roles))
         .order_by(
             desc(Anime.score),
             desc(Anime.scored_by),

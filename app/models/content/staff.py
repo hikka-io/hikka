@@ -22,7 +22,9 @@ class AnimeStaff(Base):
     __tablename__ = "service_content_anime_staff"
 
     roles: Mapped[list["AnimeStaffRole"]] = relationship(
-        secondary=anime_staff_roles_association_table, back_populates="staff"
+        secondary=anime_staff_roles_association_table,
+        back_populates="staff",
+        lazy="selectin",
     )
 
     person_id = mapped_column(
