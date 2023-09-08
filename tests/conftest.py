@@ -175,42 +175,42 @@ def oauth_fail_http(oauth_response):
 # Aggregator fixtures
 @pytest.fixture
 async def aggregator_anime_genres(test_session):
-    data = await helpers.load_json("tests/aggregator/data/anime_genres.json")
+    data = await helpers.load_json("tests/data/anime_genres.json")
 
     await aggregator.save_anime_genres(test_session, data)
 
 
 @pytest.fixture
 async def aggregator_anime_roles(test_session):
-    data = await helpers.load_json("tests/aggregator/data/anime_roles.json")
+    data = await helpers.load_json("tests/data/anime_roles.json")
 
     await aggregator.update_anime_roles(test_session, data)
 
 
 @pytest.fixture
 async def aggregator_characters(test_session):
-    data = await helpers.load_json("tests/aggregator/data/characters.json")
+    data = await helpers.load_json("tests/data/characters.json")
 
     await aggregator.save_characters(test_session, data["list"])
 
 
 @pytest.fixture
 async def aggregator_people(test_session):
-    data = await helpers.load_json("tests/aggregator/data/people.json")
+    data = await helpers.load_json("tests/data/people.json")
 
     await aggregator.save_people(test_session, data["list"])
 
 
 @pytest.fixture
 async def aggregator_companies(test_session):
-    data = await helpers.load_json("tests/aggregator/data/companies.json")
+    data = await helpers.load_json("tests/data/companies.json")
 
     await aggregator.save_companies(test_session, data["list"])
 
 
 @pytest.fixture
 async def aggregator_anime(test_session):
-    data = await helpers.load_json("tests/aggregator/data/anime.json")
+    data = await helpers.load_json("tests/data/anime.json")
 
     await aggregator.save_anime_list(test_session, data["list"])
 
@@ -242,7 +242,7 @@ async def aggregator_anime_info(test_session):
             .options(selectinload(Anime.genres))
         ):
             data = await helpers.load_json(
-                f"tests/aggregator/data/anime_info/{anime_list[slug]}"
+                f"tests/data/anime_info/{anime_list[slug]}"
             )
 
             await aggregator.update_anime_info(
@@ -254,8 +254,6 @@ async def aggregator_anime_info(test_session):
 
 @pytest.fixture
 async def aggregator_anime_franchises(test_session):
-    data = await helpers.load_json(
-        "tests/aggregator/data/anime_franchises.json"
-    )
+    data = await helpers.load_json("tests/data/anime_franchises.json")
 
     await aggregator.save_anime_franchises_list(test_session, data["list"])
