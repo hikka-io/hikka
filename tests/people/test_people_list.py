@@ -30,10 +30,6 @@ async def test_people_pagination(client, aggregator_people):
     assert response.json()["pagination"]["page"] == 2
     assert len(response.json()["list"]) == 12
 
-    from pprint import pprint
-
-    pprint(response.json())
-
     # Check first and last people slugs
     assert response.json()["list"][0]["slug"] == "yuuichi-nakamura-ed1264"
     assert response.json()["list"][11]["slug"] == "nana-mizuki-cceb6a"
