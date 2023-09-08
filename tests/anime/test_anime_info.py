@@ -9,10 +9,12 @@ async def test_anime_info(
     aggregator_anime,
     aggregator_anime_info,
 ):
+    # Test for anime info endpoint
     response = await request_anime_info(client, "bocchi-the-rock-9e172d")
 
     assert response.status_code == status.HTTP_200_OK
 
+    # Make sure data is more or less what we expect to see
     assert response.json()["title_en"] == "Bocchi the Rock!"
     assert response.json()["title_ua"] == "Самітниця-рокер!"
     assert response.json()["source"] == "4_koma_manga"
@@ -52,6 +54,7 @@ async def test_anime_info_bad(
     client,
     aggregator_anime,
 ):
+    # Bad slug show throw error
     response = await request_anime_info(client, "bad-slug")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

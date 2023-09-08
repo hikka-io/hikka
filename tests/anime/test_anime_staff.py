@@ -47,6 +47,7 @@ async def test_anime_staff_bad(
     client,
     aggregator_anime: None,
 ):
+    # Bad slug show throw error
     response = await request_anime_staff(client, "bad-slug")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

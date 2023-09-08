@@ -117,16 +117,16 @@ def request_anime_info(client, slug):
     return client.get(f"/anime/{slug}")
 
 
-def request_anime_characters(client, slug):
-    return client.get(f"/anime/{slug}/characters")
+def request_anime_characters(client, slug, page=1):
+    return client.get(f"/anime/{slug}/characters?page={page}")
 
 
 def request_anime_staff(client, slug):
     return client.get(f"/anime/{slug}/staff")
 
 
-def request_anime_episodes(client, slug):
-    return client.get(f"/anime/{slug}/episodes")
+def request_anime_episodes(client, slug, page=1):
+    return client.get(f"/anime/{slug}/episodes?page={page}")
 
 
 def request_anime_recommendations(client, slug):

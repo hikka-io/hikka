@@ -3,6 +3,7 @@ from fastapi import status
 
 
 async def test_anime_genres(client, aggregator_anime_genres):
+    # Test for list of anime genres
     response = await request_anime_genres(client)
 
     assert response.status_code == status.HTTP_200_OK

@@ -8,6 +8,7 @@ async def test_anime_characters(
     aggregator_anime,
     aggregator_anime_info,
 ):
+    # Get list of anime characters
     response = await request_anime_characters(client, "bocchi-the-rock-9e172d")
 
     assert response.status_code == status.HTTP_200_OK
@@ -28,10 +29,39 @@ async def test_anime_characters(
     )
 
 
+async def test_anime_characters_pagination(
+    client,
+    aggregator_characters,
+    aggregator_anime,
+    aggregator_anime_info,
+):
+    # Check second page of anime characters
+    response = await request_anime_characters(
+        client, "bocchi-the-rock-9e172d", 2
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    # Check first character on second page
+    assert response.json()["list"][0]["main"] is False
+    assert (
+        response.json()["list"][0]["character"]["slug"]
+        == "music-store-clerk-4eb9b6"
+    )
+
+    # Check last character on second page
+    assert response.json()["list"][4]["main"] is False
+    assert (
+        response.json()["list"][4]["character"]["slug"]
+        == "ginjirou-yoshida-2f08d8"
+    )
+
+
 async def test_anime_characters_bad(
     client,
     aggregator_anime,
 ):
+    # Bad slug show throw error
     response = await request_anime_characters(client, "bad-slug")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

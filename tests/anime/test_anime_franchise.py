@@ -7,14 +7,17 @@ async def test_anime_franchise(
     aggregator_anime,
     aggregator_anime_franchises,
 ):
+    # Check franchise entries for SNK
     response = await request_anime_franchise(
         client, "shingeki-no-kyojin-0cf69a"
     )
 
     assert response.status_code == status.HTTP_200_OK
 
+    # One day they will finish it
     assert len(response.json()["list"]) == 7
 
+    # Check slugs and relase dates
     assert (
         response.json()["list"][0]["slug"]
         == "shingeki-no-kyojin-the-final-season-kanketsu-hen-833be1"
@@ -22,13 +25,28 @@ async def test_anime_franchise(
     assert response.json()["list"][0]["year"] == 2023
 
     assert response.json()["list"][6]["slug"] == "shingeki-no-kyojin-0cf69a"
+
+    # 10 years... damn
     assert response.json()["list"][6]["year"] == 2013
 
 
-async def test_anime_recommendations_bad(
+async def test_anime_no_franchise(
+    client,
+    aggregator_anime,
+    aggregator_anime_franchises,
+):
+    # Check franchise entries for Bocchi
+    response = await request_anime_franchise(client, "bocchi-the-rock-9e172d")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "anime_no_franchise"
+
+
+async def test_anime_franchise_bad(
     client,
     aggregator_anime,
 ):
+    # Bad slug show throw error
     response = await request_anime_franchise(client, "bad-slug")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
