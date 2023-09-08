@@ -8,7 +8,7 @@ async def test_characters_anime(
     aggregator_anime,
     aggregator_anime_info,
 ):
-    # Get individual character info
+    # Get anime where character has starred
     response = await request_characters_anime(client, "levi-565409")
 
     assert response.status_code == status.HTTP_200_OK
