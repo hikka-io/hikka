@@ -166,3 +166,8 @@ def request_companies_anime(client, slug, company_type=None):
         endpoint += f"?type={company_type}"
 
     return client.get(endpoint)
+
+
+# People
+def request_people_search(client, filters={}):
+    return client.post("/people", json=filters)
