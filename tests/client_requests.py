@@ -151,7 +151,7 @@ def request_characters_anime(client, slug):
 
 
 # Companies
-def request_companies_list(client, filters={}):
+def request_companies_search(client, filters={}):
     return client.post("/companies", json=filters)
 
 
