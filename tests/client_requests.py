@@ -140,3 +140,7 @@ def request_anime_franchise(client, slug):
 # Characters
 def request_characters_search(client, filters={}):
     return client.post("/characters", json=filters)
+
+
+def request_characters_info(client, slug):
+    return client.get(f"/characters/{slug}")

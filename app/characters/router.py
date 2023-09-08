@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import get_character
-from app.schemas import QuerySearchArgs
 from fastapi import APIRouter, Depends
 from app.dependencies import get_page
 from app.database import get_session
@@ -8,6 +7,11 @@ from app.models import Character
 from app import meilisearch
 from app import constants
 from . import service
+
+from app.schemas import (
+    CharacterResponse,
+    QuerySearchArgs,
+)
 
 from .schemas import (
     CharactersSearchPaginationResponse,
@@ -21,6 +25,13 @@ from app.utils import (
 
 
 router = APIRouter(prefix="/characters", tags=["Characters"])
+
+
+@router.get("/{slug}", response_model=CharacterResponse)
+async def character_info(
+    character: Character = Depends(get_character),
+):
+    return character
 
 
 @router.post("", response_model=CharactersSearchPaginationResponse)
