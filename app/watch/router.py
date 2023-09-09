@@ -1,4 +1,3 @@
-from app.schemas import WatchResponse, SuccessResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
 from fastapi import APIRouter, Depends
@@ -6,6 +5,11 @@ from app.database import get_session
 from .schemas import WatchArgs
 from typing import Tuple
 from . import service
+
+from app.schemas import (
+    SuccessResponse,
+    WatchResponse,
+)
 
 from .dependencies import (
     verify_add_watch,

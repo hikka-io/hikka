@@ -7,7 +7,9 @@ from datetime import datetime
 
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
-        select(AnimeWatch).filter_by(anime=anime, user=user)
+        select(AnimeWatch).filter(
+            AnimeWatch.anime == anime, AnimeWatch.user == user
+        )
     )
 
 

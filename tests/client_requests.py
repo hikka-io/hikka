@@ -201,3 +201,19 @@ def request_favourite_delete(client, slug, token):
         f"/favourite/anime/{slug}",
         headers={"Auth": token},
     )
+
+
+# Watch
+def request_watch(client, slug, token):
+    return client.get(
+        f"/watch/{slug}",
+        headers={"Auth": token},
+    )
+
+
+def request_watch_add(client, slug, token, data={}):
+    return client.put(
+        f"/watch/{slug}",
+        headers={"Auth": token},
+        json=data,
+    )
