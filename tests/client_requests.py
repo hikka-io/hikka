@@ -217,3 +217,10 @@ def request_watch_add(client, slug, token, data={}):
         headers={"Auth": token},
         json=data,
     )
+
+
+def request_watch_delete(client, slug, token):
+    return client.delete(
+        f"/watch/{slug}",
+        headers={"Auth": token},
+    )
