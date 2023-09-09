@@ -9,7 +9,8 @@ from . import service
 
 
 async def get_anime_and_user(
-    anime: Anime = Depends(get_anime), user: User = Depends(auth_required())
+    anime: Anime = Depends(get_anime),
+    user: User = Depends(auth_required()),
 ) -> Tuple[Anime, User]:
     return anime, user
 

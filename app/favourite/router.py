@@ -1,10 +1,14 @@
-from app.schemas import AnimeFavouriteResponse, SuccessResponse
 from app.models import User, Anime, AnimeFavourite
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from typing import Tuple
 from . import service
+
+from app.schemas import (
+    AnimeFavouriteResponse,
+    SuccessResponse,
+)
 
 from .dependencies import (
     get_anime_favourite,

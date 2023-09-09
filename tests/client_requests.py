@@ -179,3 +179,25 @@ def request_people_info(client, slug):
 
 def request_people_anime(client, slug):
     return client.get(f"/people/{slug}/anime")
+
+
+# Favourite
+def request_favourite(client, slug, token):
+    return client.get(
+        f"/favourite/anime/{slug}",
+        headers={"Auth": token},
+    )
+
+
+def request_favourite_add(client, slug, token):
+    return client.put(
+        f"/favourite/anime/{slug}",
+        headers={"Auth": token},
+    )
+
+
+def request_favourite_delete(client, slug, token):
+    return client.delete(
+        f"/favourite/anime/{slug}",
+        headers={"Auth": token},
+    )

@@ -9,7 +9,10 @@ async def get_anime_favourite(
     session: AsyncSession, anime: AnimeFavourite, user: User
 ) -> Union[AnimeFavourite, None]:
     return await session.scalar(
-        select(AnimeFavourite).filter_by(anime=anime, user=user)
+        select(AnimeFavourite).filter(
+            AnimeFavourite.anime == anime,
+            AnimeFavourite.user == user,
+        )
     )
 
 
