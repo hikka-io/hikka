@@ -8,8 +8,6 @@ from sqlalchemy.orm import Mapped
 from datetime import datetime
 from ..base import Base
 
-from sqlalchemy import and_, text
-
 from ..mixins import (
     ContentMixin,
     UpdatedMixin,
