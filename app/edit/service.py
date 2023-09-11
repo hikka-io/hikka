@@ -136,6 +136,7 @@ async def approve_edit_request(
     content = await get_content_by_id(
         session, edit.content_type, edit.content_id
     )
+
     before = {}
 
     for key, value in edit.after.items():

@@ -21,7 +21,7 @@ from app.models import (
 )
 
 
-async def verify_edit_perms(
+async def validate_edit_perms(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
@@ -30,7 +30,7 @@ async def verify_edit_perms(
     return user
 
 
-async def verify_review_perms(
+async def validate_review_perms(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
         auth_required(
@@ -44,7 +44,7 @@ async def verify_review_perms(
     return user
 
 
-async def verify_edit(
+async def validate_edit_id(
     edit_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
@@ -54,19 +54,46 @@ async def verify_edit(
     return edit
 
 
-async def verify_content_edit(
+async def validate_edit_content_type(
     content_type: ContentTypeEnum,
-    edit: ContentEdit = Depends(verify_edit),
+    edit: ContentEdit = Depends(validate_edit_id),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
     if edit.status != constants.EDIT_PENDING:
         raise Abort("edit", "already-reviewed")
 
-    if edit.content_type != constants.CONTENT_ANIME:
+    if edit.content_type != content_type:
         raise Abort("edit", "wrong-content-type")
 
     if not (await get_content_by_id(session, content_type, edit.content_id)):
         raise Abort("edit", "invalid-content-id")
+
+    return edit
+
+
+# Here we make sure that there aren't any invalid keys and that the edits
+# are actually different compared to the current version
+async def validate_edit_approval(
+    content_type: ContentTypeEnum,
+    edit: ContentEdit = Depends(validate_edit_content_type),
+    session: AsyncSession = Depends(get_session),
+) -> ContentEdit:
+    content = await get_content_by_id(session, content_type, edit.content_id)
+
+    pop_list = []
+
+    for key, value in edit.after.items():
+        if not hasattr(content, key):
+            raise Abort("edit", "invalid-field")
+
+        if getattr(content, key) == value:
+            pop_list.append(key)
+
+    for pop_key in pop_list:
+        edit.after.pop(pop_key)
+
+    if len(edit.after) <= 0:
+        raise Abort("edit", "empty-edit")
 
     return edit
 

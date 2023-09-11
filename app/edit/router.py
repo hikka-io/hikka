@@ -11,12 +11,13 @@ from app.utils import (
 )
 
 from .dependencies import (
+    validate_edit_content_type,
+    validate_edit_approval,
     validate_content_slug,
-    verify_content_edit,
-    verify_review_perms,
-    verify_edit_perms,
+    validate_review_perms,
+    validate_edit_perms,
+    validate_edit_id,
     validate_args,
-    verify_edit,
 )
 
 
@@ -37,7 +38,7 @@ router = APIRouter(prefix="/edit", tags=["Edit"])
     response_model=EditResponse,
 )
 async def get_edit(
-    edit: ContentEdit = Depends(verify_edit),
+    edit: ContentEdit = Depends(validate_edit_id),
 ):
     return edit
 
@@ -63,14 +64,15 @@ async def get_edit_list(
     }
 
 
+# ToDo: Split this endpoint for all content types
 @router.post(
     "/{content_type}/{slug}",
     response_model=EditResponse,
 )
-async def edit_content(
+async def edit_anime_content(
     content_type: ContentTypeEnum,
     args: AnimeEditArgs = Depends(validate_args),
-    user: User = Depends(verify_edit_perms),
+    user: User = Depends(validate_edit_perms),
     content=Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
 ):
@@ -84,8 +86,9 @@ async def edit_content(
     response_model=EditResponse,
 )
 async def approve_anime_edit(
-    user: User = Depends(verify_review_perms),
-    edit: ContentEdit = Depends(verify_content_edit),
+    content_type: ContentTypeEnum,
+    user: User = Depends(validate_review_perms),
+    edit: ContentEdit = Depends(validate_edit_approval),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.approve_edit_request(user, edit, session)
@@ -96,8 +99,8 @@ async def approve_anime_edit(
     response_model=EditResponse,
 )
 async def deny_anime_edit(
-    user: User = Depends(verify_review_perms),
-    edit: ContentEdit = Depends(verify_content_edit),
+    user: User = Depends(validate_review_perms),
+    edit: ContentEdit = Depends(validate_edit_content_type),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.deny_anime_edit_request(user, edit, session)
