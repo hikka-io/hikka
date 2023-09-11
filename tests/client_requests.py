@@ -224,3 +224,11 @@ def request_watch_delete(client, slug, token):
         f"/watch/{slug}",
         headers={"Auth": token},
     )
+
+
+# List
+def request_user_watch_list(client, slug, token):
+    return client.delete(
+        f"/watch/{slug}",
+        headers={"Auth": token},
+    )

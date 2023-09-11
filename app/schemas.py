@@ -33,14 +33,6 @@ class CompanyTypeEnum(str, Enum):
     studio = constants.COMPANY_ANIME_STUDIO
 
 
-class WatchStatusEnum(str, Enum):
-    completed = constants.WATCH_COMPLETED
-    watching = constants.WATCH_WATCHING
-    planned = constants.WATCH_PLANNED
-    on_hold = constants.WATCH_ON_HOLD
-    dropped = constants.WATCH_DROPPED
-
-
 # Args
 class PaginationArgs(ORJSONModel):
     page: int = Field(default=1, gt=0, example=1)
@@ -101,17 +93,6 @@ class PersonResponse(ORJSONModel):
 class AnimeFavouriteResponse(ORJSONModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     created: datetime = Field(example=1686088809)
-    anime: AnimeResponse
-
-
-class WatchResponse(ORJSONModel):
-    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
-    updated: datetime = Field(example=1686088809)
-    created: datetime = Field(example=1686088809)
-    note: Union[str, None] = Field(example="🤯")
-    status: str = Field(example="watching")
-    episodes: int = Field(example=3)
-    score: int = Field(example=8)
     anime: AnimeResponse
 
 

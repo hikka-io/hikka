@@ -1,5 +1,8 @@
+from .schemas import AnimeFavouritePaginationResponse
 from app.models import User, Anime, AnimeFavourite
+from app.utils import pagination, pagination_dict
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import get_user, get_page
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from typing import Tuple
@@ -41,3 +44,24 @@ async def anime_favourite_delete(
 ):
     await service.delete_anime_favourite(session, favourite)
     return {"success": True}
+
+
+@router.get(
+    "/anime/{username}/list",
+    response_model=AnimeFavouritePaginationResponse,
+)
+async def anime_favourite_list(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+    page: int = Depends(get_page),
+):
+    limit, offset = pagination(page)
+    total = await service.get_user_anime_favourite_list_count(session, user)
+    anime = await service.get_user_anime_favourite_list(
+        session, user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": anime.all(),
+    }

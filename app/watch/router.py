@@ -1,14 +1,22 @@
+from app.dependencies import get_user, get_page
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
+from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from .schemas import WatchArgs
 from typing import Tuple
 from . import service
 
-from app.schemas import (
-    SuccessResponse,
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
+
+from .schemas import (
+    WatchPaginationResponse,
+    WatchFilterArgs,
     WatchResponse,
+    WatchArgs,
 )
 
 from .dependencies import (
@@ -40,3 +48,22 @@ async def delete_watch(
 ):
     await service.delete_watch(session, watch)
     return {"success": True}
+
+
+@router.get("/{username}/list", response_model=WatchPaginationResponse)
+async def user_watch_list(
+    session: AsyncSession = Depends(get_session),
+    args: WatchFilterArgs = Depends(),
+    user: User = Depends(get_user),
+    page: int = Depends(get_page),
+):
+    limit, offset = pagination(page)
+    total = await service.get_user_watch_list_count(session, user, args.status)
+    anime = await service.get_user_watch_list(
+        session, user, args.status, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": anime.all(),
+    }
