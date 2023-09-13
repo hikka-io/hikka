@@ -47,8 +47,6 @@ async def follow(session: AsyncSession, followed_user: User, user: User):
 async def unfollow(session: AsyncSession, followed_user: User, user: User):
     follow = await get_follow(session, followed_user, user)
 
-    print(follow.id)
-
     await session.delete(follow)
     await session.commit()
 

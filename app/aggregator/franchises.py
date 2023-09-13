@@ -45,6 +45,6 @@ async def save_anime_franchises_list(session, data):
 
         session.add_all(update_anime)
 
-        print("Processed franchise " + franchise_data["content_id"])
+        # print("Processed franchise " + franchise_data["content_id"])
 
     await session.commit()

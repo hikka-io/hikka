@@ -8,11 +8,16 @@ from . import utils
 import orjson
 
 
+# Dump dict using orjson
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
+
+
 # Custom Pydantic model
 class ORJSONModel(BaseModel):
     class Config:
         json_encoders = {datetime: utils.to_timestamp}
-        json_dumps = utils.orjson_dumps
+        json_dumps = orjson_dumps
         json_loads = orjson.loads
         use_enum_values = True
         orm_mode = True
@@ -26,14 +31,6 @@ class ORJSONModel(BaseModel):
 class CompanyTypeEnum(str, Enum):
     producer = constants.COMPANY_ANIME_PRODUCER
     studio = constants.COMPANY_ANIME_STUDIO
-
-
-class WatchStatusEnum(str, Enum):
-    completed = constants.WATCH_COMPLETED
-    watching = constants.WATCH_WATCHING
-    planned = constants.WATCH_PLANNED
-    on_hold = constants.WATCH_ON_HOLD
-    dropped = constants.WATCH_DROPPED
 
 
 # Args
@@ -71,6 +68,10 @@ class AnimeResponse(ORJSONModel):
     scored_by: int = Field(example=1210150)
     score: float = Field(example=8.11)
     slug: str = Field(example="kono-subarashii-sekai-ni-shukufuku-wo-123456")
+    season: Union[str, None]
+    source: Union[str, None]
+    rating: Union[str, None]
+    year: Union[int, None]
 
 
 class CharacterResponse(ORJSONModel):
@@ -92,17 +93,6 @@ class PersonResponse(ORJSONModel):
 class AnimeFavouriteResponse(ORJSONModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     created: datetime = Field(example=1686088809)
-    anime: AnimeResponse
-
-
-class WatchResponse(ORJSONModel):
-    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
-    updated: datetime = Field(example=1686088809)
-    created: datetime = Field(example=1686088809)
-    note: Union[str, None] = Field(example="🤯")
-    status: str = Field(example="watching")
-    episodes: int = Field(example=3)
-    score: int = Field(example=8)
     anime: AnimeResponse
 
 

@@ -1,0 +1,247 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "dc7ecce6-edde-4b0d-95cc-0d8eb4775e0f"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "bfeef6f3-39ac-410e-bf67-98bb89147623"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "fea58756-964c-4326-b152-917ee4c7aad8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f547aef4-0b8d-4b50-8c6e-a088314edb6c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9143e99a-ac74-4b43-8cf4-c2134fc99742"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d0af8a80-3044-4961-ab2b-076fa5f8b874"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "b0b61b96-7507-4293-89b6-174529d57e72"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "b883ccc6-0e76-4220-ac7b-65e7a4426982"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "ff3a171e-05a6-4d8a-a5df-c09027bc29f3"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [],
+    "episodes_released": null,
+    "start_date": 1034974800,
+    "episodes_total": 1,
+    "voices": [
+        {
+            "character": {
+                "content_id": "f547aef4-0b8d-4b50-8c6e-a088314edb6c"
+            },
+            "person": {
+                "content_id": "790e63bf-4bc9-4c07-9815-ba996c5bf0e3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fea58756-964c-4326-b152-917ee4c7aad8"
+            },
+            "person": {
+                "content_id": "0bc9eba7-9f34-4ec9-85e5-1f536357b927"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "bfeef6f3-39ac-410e-bf67-98bb89147623"
+            },
+            "person": {
+                "content_id": "a869c8ac-6c86-4d89-87e5-0862d512cf21"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9143e99a-ac74-4b43-8cf4-c2134fc99742"
+            },
+            "person": {
+                "content_id": "c7b4d4cc-e7c1-4300-95ed-18b9acc06286"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1034974800,
+    "staff": [
+        {
+            "person": {
+                "content_id": "0d0cb072-3155-4e77-aa2e-45333c92722c"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a5738b93-4429-429a-b974-543ae2e24251"
+            },
+            "roles": [
+                "Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8641b66a-d069-47ba-a929-082d2fb889db"
+            },
+            "roles": [
+                "Sound Effects"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1df066b7-ecad-4e13-8009-23460252ece4"
+            },
+            "roles": [
+                "Background Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5bd97793-7a68-4bdd-a8d7-d4990aef8eac"
+            },
+            "roles": [
+                "Background Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9e5c4fc1-1a1d-4bee-8d75-b7f1453868cc"
+            },
+            "roles": [
+                "Screenplay"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "09c0e5dc-2f79-4bf3-a5eb-88d2a3bbce38"
+            },
+            "roles": [
+                "Art Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b7ab3e63-c91b-4986-9ad5-aa84f5d8da38"
+            },
+            "roles": [
+                "Background Art"
+            ]
+        }
+    ],
+    "created": 1687453353,
+    "updated": 1689286350,
+    "synopsis_en": "High schoolers Sayaka Takai and Akihiko Kannazuki work together at a restaurant chain \"Pia Carrot.\" Both are interested in each other, but before either could make a move Sayaka was temporarily rotated to the newly established branch at a beach resort. While waitress girls at this new location did their best to confront harassment, make new friends, and attract new customers by attending a beauty contest, Sayaka's feeling for Akihiko never stops and has become stronger and stronger.\n\n(Source: ANN)",
+    "synopsis_ua": null,
+    "franchise": "45ca4c39-5e2f-4849-baff-a2b26d5fab51",
+    "title_ja": "Pia Carrot e Youkoso!!: Sayaka no Koi Monogatari",
+    "title_en": "Welcome to Pia Carrot! Sayaka's Love Story",
+    "title_ua": null,
+    "duration": 47,
+    "poster": "/content/anime/pia-carrot-e-youkoso-sayaka-no-koi-monogatari-227414/rsu-i1iEUYXPOL5D_JY_Bw.jpg",
+    "rating": "pg_13",
+    "source": "visual_novel",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://fandc.co.jp/app/catalog/item/527",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=856",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=1837",
+            "text": "ANN"
+        }
+    ],
+    "genre_ids": [
+        "b377cf64-9a8b-455f-9634-d1183b5b88b8",
+        "4a45ce42-05ab-4959-bee1-dda20b929075"
+    ],
+    "synonyms": [
+        "Pia Carrot: The Movie"
+    ],
+    "videos": [],
+    "ost": [
+        {
+            "index": 1,
+            "title": "I Wish",
+            "author": "Reica",
+            "spotify": null,
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Close to You",
+            "author": "Reica",
+            "spotify": null,
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "movie",
+    "content_id": "227414cb-51df-43e8-b82e-49871b372054",
+    "scored_by": 1140,
+    "anitube": [],
+    "toloka": [],
+    "score": 5.8,
+    "stats": {
+        "dropped": 91,
+        "on_hold": 65,
+        "planned": 959,
+        "score_1": 29,
+        "score_2": 32,
+        "score_3": 59,
+        "score_4": 121,
+        "score_5": 231,
+        "score_6": 252,
+        "score_7": 243,
+        "score_8": 90,
+        "score_9": 40,
+        "score_10": 43,
+        "watching": 88,
+        "completed": 1688
+    }
+}

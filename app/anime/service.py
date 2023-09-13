@@ -25,7 +25,7 @@ async def get_anime_info_by_slug(
 ) -> Union[Anime, None]:
     return await session.scalar(
         select(Anime)
-        .filter_by(slug=slug)
+        .filter(Anime.slug == slug)
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
@@ -58,11 +58,21 @@ async def anime_staff(
     )
 
 
+async def anime_episodes_count(session: AsyncSession, anime: Anime) -> int:
+    return await session.scalar(
+        select(func.count(AnimeEpisode.id)).filter(AnimeEpisode.anime == anime)
+    )
+
+
 async def anime_episodes(
-    session: AsyncSession, anime: Anime
+    session: AsyncSession, anime: Anime, limit: int, offset: int
 ) -> list[AnimeStaff]:
     return await session.scalars(
-        select(AnimeEpisode).filter_by(anime=anime).order_by(AnimeEpisode.index)
+        select(AnimeEpisode)
+        .filter(AnimeEpisode.anime == anime)
+        .order_by(AnimeEpisode.index)
+        .limit(limit)
+        .offset(offset)
     )
 
 
@@ -76,7 +86,8 @@ async def anime_recommendations(
             anime_loadonly(selectinload(AnimeRecommendation.recommendation))
         )
         .order_by(desc(AnimeRecommendation.weight))
-        .limit(10)
+        .limit(limit)
+        .offset(offset)
     )
 
 

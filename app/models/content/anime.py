@@ -60,20 +60,23 @@ class Anime(
     stats: Mapped[list] = mapped_column(JSONB, default=[])
     ost: Mapped[list] = mapped_column(JSONB, default=[])
 
-    voices: Mapped[list["AnimeVoice"]] = relationship(back_populates="anime")
+    voices: Mapped[list["AnimeVoice"]] = relationship(
+        back_populates="anime", viewonly=True
+    )
     staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
 
     episodes_list: Mapped[list["AnimeEpisode"]] = relationship(
-        back_populates="anime"
+        back_populates="anime", viewonly=True
     )
 
     characters: Mapped[list["AnimeCharacter"]] = relationship(
-        back_populates="anime"
+        back_populates="anime", viewonly=True
     )
 
     recommendations: Mapped[list["AnimeRecommendation"]] = relationship(
         foreign_keys="[AnimeRecommendation.anime_id]",
         back_populates="anime",
+        viewonly=True,
     )
 
     genres: Mapped[list["AnimeGenre"]] = relationship(
@@ -81,7 +84,7 @@ class Anime(
     )
 
     companies: Mapped[list["CompanyAnime"]] = relationship(
-        back_populates="anime"
+        back_populates="anime", viewonly=True
     )
 
     favourite: Mapped[list["AnimeFavourite"]] = relationship(
@@ -107,6 +110,30 @@ class Anime(
 
     franchise_relation: Mapped["AnimeFranchise"] = relationship(
         back_populates="anime", foreign_keys=[franchise_id]
+    )
+
+    # ToDo: Check AssociationProxy
+    # https://docs.sqlalchemy.org/en/20/orm/extensions/associationproxy.html
+    producers: Mapped[list["Company"]] = relationship(
+        secondary="service_content_companies_anime",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'producer')"
+        ),
+        viewonly=True,
+    )
+
+    studios: Mapped[list["Company"]] = relationship(
+        secondary="service_content_companies_anime",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'studio')"
+        ),
+        viewonly=True,
     )
 
     # Very dirty hacks, but they do the trick

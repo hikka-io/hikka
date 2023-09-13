@@ -1,0 +1,2193 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "f09891a9-d708-4f5a-bf6d-08ecaac1b9d0"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "66c9a285-2e14-4bc2-9ebe-28292ba6f464"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "fc524a18-378f-4ccb-82a0-b4063206c600"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3887b7a9-8af6-4787-9d7f-80439293faf4"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "068fbc97-fff5-4b6b-9c07-c6004f84e5b7"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "03b639e6-6315-436e-b138-c784e9cb1612"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "3effd442-1613-40f6-857e-b7aff0e8c747"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "44a5a6ab-9a2b-48dd-9925-d8e8968de9d8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "dc79062b-6efb-401a-80c3-d1108b7f7884"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b2cdfa80-787f-4259-a9b8-9a521b4c4997"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7dfe57df-8507-4873-9fbd-b38da0bb633f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e8967e69-149f-4eee-9248-e72007f6f343"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4091708a-a256-4ac9-a6ae-255bc11b9e30"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "cca1b9bb-8bf3-4b13-8bb9-c1f5643a70ca"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "770e1a6f-08b0-4e23-9600-0ac7c9a662bf"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "27d1d8c7-15cb-45ae-8806-ef4818819bdb"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e8c5d8c-18f4-4790-bab8-e6bdf9bc8619"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6089af51-4297-4fa7-8358-7578b2860ef5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "ea3288cc-e266-4052-8473-2b1fbee3f7e1"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4928d14e-95c6-4d7d-beb8-284e1c55a7b0"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4011f1b4-21bd-4d16-8bca-3d62dd27a192"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d88e5d1e-fb3d-40ed-888a-35025bcafac1"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7e2ce470-5bb8-4f9b-987b-d060e804885a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "81d32826-00e0-48d2-b6c0-08ecea42d0d5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5f3f0b8b-d287-414d-8de7-d818af768f2d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "56b4ad59-6f0d-492d-ad54-606d67ffc0ee"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "670b006c-80d3-4616-b2ce-5129f81ded6c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "ef4ff0a3-5e10-4133-a723-25110c9682bf"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "3e8340ab-daf6-472c-90a8-06ecb8a750bf"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e3a7f1fe-3b6a-4719-9e91-e748369d0363"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2e7b8b30-4a75-4db4-baf4-85d8e8f4c3d8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7e417ef6-d4c6-4a83-9375-3f42903d2da1"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "fddfc6d7-28a0-4780-a101-7069828eeef0"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "27855c67-b924-422a-89b4-7b7dd1cc73fd"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "af13050c-aa7a-4d44-bdfd-643908663485"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5f053f07-ec0e-4c7b-9ef3-15f0283843b7"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "d1799a78-fbdd-41a5-b19d-767f48267641"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3691b73c-3587-4d07-b406-ca26b91f3d5d"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "55c91c04-190a-43cd-9b06-2a086c508212"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "2249d8d5-2b9f-4eed-90fc-806f732e333a"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "3b16a1c1-718f-4c74-ade7-abe98c4a9710"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "a12c9045-e38a-42a8-b8a4-b22021d48a44"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "e2514611-d478-417f-a063-0f3d28bb5f30"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "51604206-d426-47ce-8df8-712203c07199"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [
+        {
+            "title_native": "狼煙",
+            "aired": 1532293200,
+            "title_ja": "Noroshi",
+            "title_en": "Smoke Signal",
+            "title_ua": null,
+            "type": null,
+            "index": 1
+        },
+        {
+            "title_native": "痛み",
+            "aired": 1532898000,
+            "title_ja": "Itami",
+            "title_en": "Pain",
+            "title_ua": null,
+            "type": null,
+            "index": 2
+        },
+        {
+            "title_native": "オールドストーリー",
+            "aired": 1533502800,
+            "title_ja": "Mukashibanashi",
+            "title_en": "Old Story",
+            "title_ua": null,
+            "type": null,
+            "index": 3
+        },
+        {
+            "title_native": "信頼",
+            "aired": 1534107600,
+            "title_ja": "Shinrai",
+            "title_en": "Trust",
+            "title_ua": null,
+            "type": null,
+            "index": 4
+        },
+        {
+            "title_native": "回答",
+            "aired": 1534712400,
+            "title_ja": "Kaitou",
+            "title_en": "Reply",
+            "title_ua": null,
+            "type": null,
+            "index": 5
+        },
+        {
+            "title_native": "罪",
+            "aired": 1535317200,
+            "title_ja": "Tsumi",
+            "title_en": "Sin",
+            "title_ua": null,
+            "type": null,
+            "index": 6
+        },
+        {
+            "title_native": "願い",
+            "aired": 1535922000,
+            "title_ja": "Negai",
+            "title_en": "Wish",
+            "title_ua": null,
+            "type": null,
+            "index": 7
+        },
+        {
+            "title_native": "オルブド区外壁",
+            "aired": 1536526800,
+            "title_ja": "Orvud-ku Sotokabe",
+            "title_en": "Outside the Walls of Orvud District",
+            "title_ua": null,
+            "type": null,
+            "index": 8
+        },
+        {
+            "title_native": "壁の王",
+            "aired": 1537131600,
+            "title_ja": "Kabe no Ou",
+            "title_en": "Ruler of the Walls",
+            "title_ua": null,
+            "type": null,
+            "index": 9
+        },
+        {
+            "title_native": "友人",
+            "aired": 1537736400,
+            "title_ja": "Yuujin",
+            "title_en": "Friends",
+            "title_ua": null,
+            "type": null,
+            "index": 10
+        },
+        {
+            "title_native": "傍観者",
+            "aired": 1538946000,
+            "title_ja": "Boukansha",
+            "title_en": "Bystander",
+            "title_ua": null,
+            "type": null,
+            "index": 11
+        },
+        {
+            "title_native": "奪還作戦の夜",
+            "aired": 1539550800,
+            "title_ja": "Dakkan Sakusen no Yoru",
+            "title_en": "Night of the Battle to Retake the Wall",
+            "title_ua": null,
+            "type": null,
+            "index": 12
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "The Town Where Everything Began",
+            "title_ua": null,
+            "type": null,
+            "index": 13
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Thunder Spears",
+            "title_ua": null,
+            "type": null,
+            "index": 14
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Descent",
+            "title_ua": null,
+            "type": null,
+            "index": 15
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Perfect Game",
+            "title_ua": null,
+            "type": null,
+            "index": 16
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Hero",
+            "title_ua": null,
+            "type": null,
+            "index": 17
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Midnight Sun",
+            "title_ua": null,
+            "type": null,
+            "index": 18
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "The Basement",
+            "title_ua": null,
+            "type": null,
+            "index": 19
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "That Day",
+            "title_ua": null,
+            "type": null,
+            "index": 20
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "Attack Titan",
+            "title_ua": null,
+            "type": null,
+            "index": 21
+        },
+        {
+            "title_native": null,
+            "aired": null,
+            "title_ja": null,
+            "title_en": "The Other Side of the Wall",
+            "title_ua": null,
+            "type": null,
+            "index": 22
+        }
+    ],
+    "episodes_released": 12,
+    "start_date": 1532293200,
+    "episodes_total": 12,
+    "voices": [
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "person": {
+                "content_id": "d618d85c-393d-49b1-8b24-ce72f2d0d840"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "person": {
+                "content_id": "6767d313-0297-4b07-9b77-a624e505ae9f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "03b639e6-6315-436e-b138-c784e9cb1612"
+            },
+            "person": {
+                "content_id": "80edb0e0-ff8c-4cc5-9320-d0f3ff41d7b2"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "person": {
+                "content_id": "bce93121-9246-4e59-8101-8e16eba5826e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "3e8340ab-daf6-472c-90a8-06ecb8a750bf"
+            },
+            "person": {
+                "content_id": "8aff143e-9827-472a-8f17-b59b67285884"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4091708a-a256-4ac9-a6ae-255bc11b9e30"
+            },
+            "person": {
+                "content_id": "a57b8901-bb1d-4977-8bca-45891d2ddea1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "person": {
+                "content_id": "b349a992-618c-442e-b132-64fd09115d3c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "27855c67-b924-422a-89b4-7b7dd1cc73fd"
+            },
+            "person": {
+                "content_id": "00301381-4ec4-487d-8219-9ede6183be97"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "person": {
+                "content_id": "46a7f485-3c71-452d-b148-30a842ba030d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "person": {
+                "content_id": "1fb2efef-e731-4dad-9380-5a29b5da4c8d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "3effd442-1613-40f6-857e-b7aff0e8c747"
+            },
+            "person": {
+                "content_id": "5757685c-a3a5-40c1-b50e-da420f80541b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "person": {
+                "content_id": "3d2e380d-ad54-46d5-a217-c66a2ae3e56a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "person": {
+                "content_id": "e4a0fc42-2f28-4462-896c-2ab0ccb33303"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "af13050c-aa7a-4d44-bdfd-643908663485"
+            },
+            "person": {
+                "content_id": "796c47f2-98f7-4014-8431-edba3ccf5e94"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "75b8844f-e2b6-40ce-a36b-41e512f18adc"
+            },
+            "person": {
+                "content_id": "7a5ad445-efc1-49b0-8f2b-6f93f49e7960"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "person": {
+                "content_id": "37a875c8-4a1c-4776-a19a-a0aeb86d0234"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "person": {
+                "content_id": "37f89f27-a130-454d-a446-5fd385c668ae"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4091708a-a256-4ac9-a6ae-255bc11b9e30"
+            },
+            "person": {
+                "content_id": "41771152-bc82-4ea8-88ad-49a208f4586b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "person": {
+                "content_id": "2de7ad9e-09d8-4c8c-bb05-abdf6b820581"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "person": {
+                "content_id": "34c95f89-8cfa-4fb5-aaf8-a5eac8dcb14b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "person": {
+                "content_id": "a487b818-a9f6-40dd-9246-30623221fd03"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "person": {
+                "content_id": "4c173ffa-f234-44ad-8d95-a93314ea6c16"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5f053f07-ec0e-4c7b-9ef3-15f0283843b7"
+            },
+            "person": {
+                "content_id": "eb3b9bdc-15a4-4de8-b0df-30b8e0f5e3ff"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e8c5d8c-18f4-4790-bab8-e6bdf9bc8619"
+            },
+            "person": {
+                "content_id": "62d20538-7e9f-48d6-94fd-15cef064e6f3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5f053f07-ec0e-4c7b-9ef3-15f0283843b7"
+            },
+            "person": {
+                "content_id": "896d0c5f-5610-4ec1-97a3-774f20fcab70"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7dfe57df-8507-4873-9fbd-b38da0bb633f"
+            },
+            "person": {
+                "content_id": "c95e34f8-2c4a-4534-bd8d-f831547052f5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "person": {
+                "content_id": "bfce6442-d2eb-4626-931e-85200aace2a6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7e2ce470-5bb8-4f9b-987b-d060e804885a"
+            },
+            "person": {
+                "content_id": "f058909a-b771-4852-bf54-320ec047260c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4fe343b2-76c2-419b-96a0-5f0d7bea4889"
+            },
+            "person": {
+                "content_id": "79961a1f-f27d-4d97-9ba0-9ecfbabdf685"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d88e5d1e-fb3d-40ed-888a-35025bcafac1"
+            },
+            "person": {
+                "content_id": "990de8cb-ff80-4b87-8686-a3c223aef626"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "4e5aee82-a4d7-46d0-9b25-2f617bac0b25"
+            },
+            "person": {
+                "content_id": "91bfc64a-cbde-4ca7-86aa-68d7c82cb034"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6089af51-4297-4fa7-8358-7578b2860ef5"
+            },
+            "person": {
+                "content_id": "e44be38b-f434-47be-8f17-09c319ddff12"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5f3f0b8b-d287-414d-8de7-d818af768f2d"
+            },
+            "person": {
+                "content_id": "ccfcfc79-6347-4f21-b4a7-1ec2353917f7"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "770e1a6f-08b0-4e23-9600-0ac7c9a662bf"
+            },
+            "person": {
+                "content_id": "16e8762c-ab6c-4216-8632-304031afa46c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7e2ce470-5bb8-4f9b-987b-d060e804885a"
+            },
+            "person": {
+                "content_id": "160ee4f1-3cd5-4b5d-a807-b35266a215a1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "person": {
+                "content_id": "cf200eac-24c3-4f93-a42a-e9a834a3ce3b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "770e1a6f-08b0-4e23-9600-0ac7c9a662bf"
+            },
+            "person": {
+                "content_id": "36fcd09b-d7d3-404f-a5eb-e16a687a0388"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "670246fc-ad75-4ab5-8dce-f2aa3f56af24"
+            },
+            "person": {
+                "content_id": "0acc8705-3a05-4c7c-b678-8a3031443f2f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "person": {
+                "content_id": "26b047d8-e929-4779-a15b-daac8f07fb95"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "person": {
+                "content_id": "3d95eb32-3b8b-4e73-a5c0-ab142a3c8a9d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "11eb6826-64a0-4bf2-af38-a55c729d8007"
+            },
+            "person": {
+                "content_id": "2da44d56-b9b8-4665-ad9b-9e99f21791d0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e3a7f1fe-3b6a-4719-9e91-e748369d0363"
+            },
+            "person": {
+                "content_id": "8f319e0f-f47a-4b2c-b75e-033227202a1c"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d0e40e0b-5c34-4cd2-bdb3-0c6c7b001626"
+            },
+            "person": {
+                "content_id": "7fb6623f-be24-419f-b8f7-ca4e2ed5ac32"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "person": {
+                "content_id": "79961a1f-f27d-4d97-9ba0-9ecfbabdf685"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "person": {
+                "content_id": "61f27529-a54c-437e-9143-7bc189b59a24"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "cca1b9bb-8bf3-4b13-8bb9-c1f5643a70ca"
+            },
+            "person": {
+                "content_id": "a8dcebfa-d255-4777-b949-ac55a4956dee"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2e8c5d8c-18f4-4790-bab8-e6bdf9bc8619"
+            },
+            "person": {
+                "content_id": "2da86c1e-0008-4a9f-8070-c2d5150e67de"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "56540949-b44c-4ca6-b0f2-4be454154aec"
+            },
+            "person": {
+                "content_id": "124b1f8e-572b-44ef-b2b0-1068ce4dad4c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "3effd442-1613-40f6-857e-b7aff0e8c747"
+            },
+            "person": {
+                "content_id": "cb33f366-3bcd-4ea2-982b-2240e0fd4a5a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "ea3288cc-e266-4052-8473-2b1fbee3f7e1"
+            },
+            "person": {
+                "content_id": "ad05b3e2-bbde-4ef6-a620-1f38c6dd3ab7"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7e417ef6-d4c6-4a83-9375-3f42903d2da1"
+            },
+            "person": {
+                "content_id": "7f4c99b4-db78-4451-8d0a-8a63da3cb9c4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e7b8b30-4a75-4db4-baf4-85d8e8f4c3d8"
+            },
+            "person": {
+                "content_id": "75445ea7-f265-45d1-a750-6d5d13c5e6c2"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "27d1d8c7-15cb-45ae-8806-ef4818819bdb"
+            },
+            "person": {
+                "content_id": "0f77bd83-e2a4-4daa-aa2f-ac00e4434175"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "44a5a6ab-9a2b-48dd-9925-d8e8968de9d8"
+            },
+            "person": {
+                "content_id": "620b4db2-7ecc-4fbf-8808-78820a3ec69e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "44a5a6ab-9a2b-48dd-9925-d8e8968de9d8"
+            },
+            "person": {
+                "content_id": "8e5ffec8-d974-4ae3-b32e-04b625a8f876"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7e417ef6-d4c6-4a83-9375-3f42903d2da1"
+            },
+            "person": {
+                "content_id": "3d23f5fa-4ed0-49f8-bc1b-0f49b7c81e11"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "person": {
+                "content_id": "88fbabcc-3384-4905-b190-d3eb2f1efa59"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7e417ef6-d4c6-4a83-9375-3f42903d2da1"
+            },
+            "person": {
+                "content_id": "49ac853c-a10a-4597-86f6-8b0ebf60b06a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "person": {
+                "content_id": "8a14f9c8-1380-4858-ad63-8d0ef4998a20"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "27855c67-b924-422a-89b4-7b7dd1cc73fd"
+            },
+            "person": {
+                "content_id": "0113efb5-29d7-4e58-a3cc-1b1147f8bef3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "cca1b9bb-8bf3-4b13-8bb9-c1f5643a70ca"
+            },
+            "person": {
+                "content_id": "92cbd19e-bfb5-44ac-9dba-65b4fcfec472"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "6089af51-4297-4fa7-8358-7578b2860ef5"
+            },
+            "person": {
+                "content_id": "713d4918-c493-4e6b-9d6f-7fae17558a54"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "959c9689-834a-4bcc-9ea9-49304add0859"
+            },
+            "person": {
+                "content_id": "30206884-d429-4e56-919f-2c1ace39757c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e7b8b30-4a75-4db4-baf4-85d8e8f4c3d8"
+            },
+            "person": {
+                "content_id": "679b8dd6-68be-4310-91ef-90455d057243"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "b2cdfa80-787f-4259-a9b8-9a521b4c4997"
+            },
+            "person": {
+                "content_id": "4bb71e9d-7e09-4388-b40b-7f6503f46a12"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4011f1b4-21bd-4d16-8bca-3d62dd27a192"
+            },
+            "person": {
+                "content_id": "30feed73-669b-4566-bb7b-73dd950c451b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "29ba66b3-fc77-4688-bf42-60eeda3f5330"
+            },
+            "person": {
+                "content_id": "0e5747c6-6af5-4ba0-88bc-f0b6f0a842a0"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "person": {
+                "content_id": "f1da1e24-f22f-4755-b577-6f72f81e43f4"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2e713d97-052c-4a24-8a76-d3ace08c7797"
+            },
+            "person": {
+                "content_id": "1fc7d36d-ceda-4494-9b51-c5c12ed1aef4"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "e8967e69-149f-4eee-9248-e72007f6f343"
+            },
+            "person": {
+                "content_id": "49f7acc6-6470-45ac-a58d-cbc77c8c090a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "person": {
+                "content_id": "bf208d4e-3bc6-4107-9c1e-5ee81cef5cbe"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4011f1b4-21bd-4d16-8bca-3d62dd27a192"
+            },
+            "person": {
+                "content_id": "2a01032b-0004-4562-83c3-94d3189bde21"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b2cdfa80-787f-4259-a9b8-9a521b4c4997"
+            },
+            "person": {
+                "content_id": "675eebdf-e165-401a-b623-009e0a716129"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "af13050c-aa7a-4d44-bdfd-643908663485"
+            },
+            "person": {
+                "content_id": "4a90fc9d-f631-47cb-ba31-503939c49edc"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "bf0a442b-4823-4903-8023-469170758032"
+            },
+            "person": {
+                "content_id": "a0ee5f61-ef47-4f78-a47c-a22254cbe06f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "person": {
+                "content_id": "37a875c8-4a1c-4776-a19a-a0aeb86d0234"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f4bd0d29-ea74-40cf-b8a3-6fa2b8ce9ad6"
+            },
+            "person": {
+                "content_id": "05261439-7c91-442a-8bbf-415ef106deef"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5f3f0b8b-d287-414d-8de7-d818af768f2d"
+            },
+            "person": {
+                "content_id": "701df00c-0ab8-4724-a9b9-043d8ec43f20"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d88e5d1e-fb3d-40ed-888a-35025bcafac1"
+            },
+            "person": {
+                "content_id": "92b7dcbd-1d24-4c9e-af2b-a100c00ae7ad"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "44ba3e02-7aa4-428a-9e03-546496b074b2"
+            },
+            "person": {
+                "content_id": "4fc7f060-1eb8-4012-8282-3185abde409a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "091d94f6-7c39-4f87-a986-da49dbe678b3"
+            },
+            "person": {
+                "content_id": "c7a68c17-7cbd-4584-bbc4-e3aaa71bffcb"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "7dfe57df-8507-4873-9fbd-b38da0bb633f"
+            },
+            "person": {
+                "content_id": "7b1c50c3-c737-4733-8366-1e02c353a550"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "person": {
+                "content_id": "3390d8aa-8e14-4420-98e3-71757b9c1fc9"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "03b639e6-6315-436e-b138-c784e9cb1612"
+            },
+            "person": {
+                "content_id": "d6a09ca9-45c3-42b4-927a-bf2d5c6ea0cb"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "34e32bfc-2f9e-4321-8711-321d96e3d2b8"
+            },
+            "person": {
+                "content_id": "f8a6c01e-b8c7-40ff-8a90-35f38015da65"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "81d32826-00e0-48d2-b6c0-08ecea42d0d5"
+            },
+            "person": {
+                "content_id": "d584dbfa-10f7-46b9-9e9b-89d9d241ae8e"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "81d32826-00e0-48d2-b6c0-08ecea42d0d5"
+            },
+            "person": {
+                "content_id": "4cc85682-6177-4f7d-b959-fffacc4fb280"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "56b4ad59-6f0d-492d-ad54-606d67ffc0ee"
+            },
+            "person": {
+                "content_id": "3482585a-c480-4a15-9edb-b5cc335fb0bf"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "ea3288cc-e266-4052-8473-2b1fbee3f7e1"
+            },
+            "person": {
+                "content_id": "5d06349f-7520-4c4b-bfc0-cfe554d6a35f"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e3a7f1fe-3b6a-4719-9e91-e748369d0363"
+            },
+            "person": {
+                "content_id": "0594b7ef-560b-4b48-9663-165e7e088a89"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "49612bf7-d953-4b09-b3ad-f68b115db89c"
+            },
+            "person": {
+                "content_id": "7b681bf8-70ac-4782-b03d-a50f75408d92"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "139f5bf1-d70f-4066-9584-678723769c6b"
+            },
+            "person": {
+                "content_id": "830ac486-a3e1-40a1-982a-6ce8e4902837"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "fddfc6d7-28a0-4780-a101-7069828eeef0"
+            },
+            "person": {
+                "content_id": "776d42b4-5a92-49e8-b47c-cd6398a3d0cd"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "dc79062b-6efb-401a-80c3-d1108b7f7884"
+            },
+            "person": {
+                "content_id": "94948e70-9abe-47e7-befb-c029a24f2af1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c66d1660-2c8b-425b-85ea-ba5c1508f2ca"
+            },
+            "person": {
+                "content_id": "fa1649b6-1476-43d8-8010-a9f2c561a7d6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "84fa4b35-127f-4d48-a6d6-774a96ca1840"
+            },
+            "person": {
+                "content_id": "2e8adc5a-d451-48ab-b208-f50cf4c0a1d9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "f46dda32-b6ef-4b76-89cd-06598ef17ce6"
+            },
+            "person": {
+                "content_id": "747c4722-f81d-4ca8-9455-bb671e6879cb"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4744d61f-d9ce-4826-a067-7e245963ed61"
+            },
+            "person": {
+                "content_id": "1fb2efef-e731-4dad-9380-5a29b5da4c8d"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "27d1d8c7-15cb-45ae-8806-ef4818819bdb"
+            },
+            "person": {
+                "content_id": "dd86eba3-629a-4858-8d61-30b29d532720"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "744706bf-3d89-49cb-9e0b-e6c6daeb62b4"
+            },
+            "person": {
+                "content_id": "206c9bd4-2e8a-414c-b363-84f59bc5e8c1"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "dc79062b-6efb-401a-80c3-d1108b7f7884"
+            },
+            "person": {
+                "content_id": "083ddd18-b4eb-4b59-afc9-803589829e4c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "64b5f917-2d17-439e-b5aa-da7ecb3bd706"
+            },
+            "person": {
+                "content_id": "8d1ff8a3-fe87-4f13-b960-b7495c2a614a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "62a81c86-a9c2-4ec5-ae61-634dd37840da"
+            },
+            "person": {
+                "content_id": "f72bbe17-a319-4642-b12e-ae24af28ec5c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1a5abc2c-46c0-4c3f-b74a-e4a20681ac03"
+            },
+            "person": {
+                "content_id": "3777e510-9d94-44d6-87ca-36a28ecf1057"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fddfc6d7-28a0-4780-a101-7069828eeef0"
+            },
+            "person": {
+                "content_id": "a6454f5a-6af2-4731-a289-380a26c34393"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "e8967e69-149f-4eee-9248-e72007f6f343"
+            },
+            "person": {
+                "content_id": "c5a5659a-70be-4836-ab29-6adf92692958"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1539550800,
+    "staff": [
+        {
+            "person": {
+                "content_id": "77f1b3b6-3531-477b-98ea-7a4b9792700c"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a181871e-1429-48e8-9eda-2b6e302cf6cc"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dd21a259-ba3f-4979-8ab0-d20f62646d19"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "45230432-8bc7-4a46-9492-9e916adb34a9"
+            },
+            "roles": [
+                "Producer",
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9ebea59b-7511-4dc5-9752-ee4520cf2cc9"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "78ebeaad-dd98-45e6-be3b-30950a523b3d"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "141d9354-7b3c-452d-87f1-f136c64ef2ab"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "014155a4-5dc4-412c-8504-2e1983bbf69d"
+            },
+            "roles": [
+                "Assistant Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "05ef79cd-3240-40b8-b734-cb637b8f84e4"
+            },
+            "roles": [
+                "Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e2b437db-745e-46d9-81ea-e1659f3aa54b"
+            },
+            "roles": [
+                "Director",
+                "Storyboard",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "b802cde5-c327-467b-abe9-79070df3b999"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "6b92537e-7f8f-42be-a655-a5eadb8efb13"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fc325188-9b3c-4bce-bf55-2aae06cc3548"
+            },
+            "roles": [
+                "Episode Director",
+                "Assistant Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cdde1f6b-e01f-4a5f-8294-153f0324b50d"
+            },
+            "roles": [
+                "Script",
+                "Dialogue Editing"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f4b22be7-c7c5-4511-8de0-acb4ba0c9126"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a0743aef-90c7-433c-8df0-406a9512f23a"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "034cf9ff-4961-4211-b6ad-f68567163720"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "052c14a7-423b-482a-8745-e220703c417b"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "95b05ac9-de45-4af9-a026-1c9c521d19cf"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4741f11d-b7d2-4abe-82d2-40d2ed80f553"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a6d0fc8f-e9e5-4332-a87b-dfff7eca54b1"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8e642493-864e-4974-ab1c-f67173b4ca89"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "941fa809-57f4-4b4f-b2cc-38219429b4cf"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "492672e9-9610-4e6d-99c1-19ea8b25b65d"
+            },
+            "roles": [
+                "Storyboard",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "dc7e57cf-b2d4-47e7-887e-c7afb2df80ef"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "4b58764a-709a-4e50-aa4c-ce46d21b6b5a"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "0c0027dc-d711-429c-8f30-7bff00b6eb75"
+            },
+            "roles": [
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c5b00cc2-43ef-47e2-85f8-9add8d02c7f3"
+            },
+            "roles": [
+                "Theme Song Lyrics",
+                "Theme Song Arrangement",
+                "Theme Song Performance",
+                "Theme Song Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "2c83fa0a-220b-43b2-8383-79fa43cc3f04"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "997f54c8-dd9d-4ba0-8807-3229b1aa9c9b"
+            },
+            "roles": [
+                "Character Design",
+                "Chief Animation Director",
+                "Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cecba239-2480-4764-8781-e2985013ba86"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f02f929d-8b66-4f01-9f89-c0b61441b0a6"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a8802736-e62a-47b1-86c2-605409c8de2e"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "df198c80-2a6a-4afb-b8d6-d855ea0ccb82"
+            },
+            "roles": [
+                "Color Design"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d8469f2a-0a4f-4649-9778-45c84cb63cf8"
+            },
+            "roles": [
+                "Animation Director",
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "55ac2cc1-5a55-42e3-b095-81e560846e20"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "045f95ce-8fa7-405f-ae53-a0beab625114"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "67972e5b-2d4c-4f7e-828b-b851bfee341f"
+            },
+            "roles": [
+                "Animation Director",
+                "Chief Animation Director",
+                "Assistant Animation Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a25c4b0e-98cb-43e3-9907-f819e8c13020"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "18d33798-aac9-4bc7-8622-9e9dff712d6e"
+            },
+            "roles": [
+                "Series Composition"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cfcadf69-acfd-4d7e-9b34-2719879bc472"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9bdf1bcd-0b72-4630-bab6-5b2b9d88980c"
+            },
+            "roles": [
+                "Planning Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "42b2ab81-e6c0-494f-92ae-dfcb386a5845"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5a46402f-9c72-4605-98cb-7aa2557a7d9a"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e73592b8-9b2b-4f3a-8c6f-fb9e72a9cb00"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "87565d63-dfee-4459-ac6c-9eb1f0610ab4"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a5e68ab6-0e42-4b83-b111-bd5a06bd21ae"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        }
+    ],
+    "created": 1687453302,
+    "updated": 1689287354,
+    "synopsis_en": "Still threatened by the \"Titans\" that rob them of their freedom, mankind remains caged inside the two remaining walls. Efforts to eradicate these monsters continue; however, threats arise not only from the Titans beyond the walls, but from the humans within them as well.\n\nAfter being rescued from the Colossal and Armored Titans, Eren Yaeger devotes himself to improving his Titan form. Krista Lenz struggles to accept the loss of her friend, Captain Levi chooses Eren and his friends to form his new personal squad, and Commander Erwin Smith recovers from his injuries. All seems well for the soldiers, until the government suddenly demands custody of Eren and Krista. The Survey Corps' recent successes have drawn attention, and a familiar face from Levi's past is sent to collect the wanted soldiers. Sought after by the government, Levi and his new squad must evade their adversaries in hopes of keeping Eren and Krista safe.\n\nEren and his fellow soldiers are not only fighting for their survival against the terrifying Titans, but also against the terror of a far more conniving foe: their fellow humans.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Чим більше правди про світ відкривається нашим героям, тим більше вони розуміють, що знають про світ неймовірно мало. Тож, фінальна операція з повернення стіни Марія починається, але попереду наших героїв чекає ще чимало таємниць, які приховує підвал під старим будинком Єґерів у Шіґаншіні. Втім, головний ворог іще не переможений, а нашим героям тільки доведеться дізнатися, що світ насправді значно більший, ніж клаптик землі, обмежений трьома стінами.\n\nДжерело: Toloka",
+    "franchise": "e2283d58-ba06-420e-92de-8fe597d69a02",
+    "title_ja": "Shingeki no Kyojin Season 3",
+    "title_en": "Attack on Titan Season 3",
+    "title_ua": "Атака титанів (сезон 3)",
+    "duration": 23,
+    "poster": "/content/anime/shingeki-no-kyojin-season-3-b22bb3/QMpM0hEJeVm-38GAfv6vXg.jpg",
+    "rating": "r",
+    "source": "manga",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "http://www.shingeki.tv/season3/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/anime_shingeki",
+            "text": "@anime_shingeki"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=13241",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=19819",
+            "text": "ANN"
+        },
+        {
+            "url": "http://en.wikipedia.org/wiki/Attack_on_Titan",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E9%80%B2%E6%92%83%E3%81%AE%E5%B7%A8%E4%BA%BA",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/4983",
+            "text": "Syoboi"
+        },
+        {
+            "url": "http://www.crunchyroll.com/series-254209",
+            "text": "Crunchyroll"
+        },
+        {
+            "url": "https://www.netflix.com/title/70299043",
+            "text": "Netflix"
+        },
+        {
+            "url": "https://shahid.mbc.net/en/series/Attack-On-Titan/series-922170",
+            "text": "Shahid"
+        }
+    ],
+    "genre_ids": [
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "c89748be-c9a0-4a13-8f0d-374593a23d7e",
+        "45a3e2cf-0d37-4bad-bed0-9268f02f7d6b",
+        "20a4b551-7e47-4d44-85a3-2bdfb63cea62",
+        "77572b04-8ab6-4f74-b65e-e1194da761fb"
+    ],
+    "synonyms": [],
+    "videos": [
+        {
+            "url": "https://youtu.be/r1XE8ON8fos",
+            "title": "OP 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Red Swan\" by YOSHIKI feat. HYDE"
+        },
+        {
+            "url": "https://youtu.be/EHzBhrncmac",
+            "title": "PV",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/r8EVptqU6zE",
+            "title": "Announcement",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Red Swan",
+            "author": "YOSHIKI",
+            "spotify": "https://open.spotify.com/track/4GNMgGyZcgnE4nEdYFWJGn",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Akatsuki no Chinkonka (暁の鎮魂歌)",
+            "author": "Linked",
+            "spotify": "https://open.spotify.com/track/6CcVsaoKsG4WvkZWZBvyTn",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "b22bb359-4545-45ce-92d3-df8646554128",
+    "scored_by": 1515984,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 12,
+            "dub": true,
+            "hidden": false,
+            "description": "Головні герої все глибше занурюються в безодню таємниць королівства і вже близькі до істини, але цього разу їх чекає вже боротьба не з титанами, а з людьми, які вкрай зацікавлені в тому, щоб зберегти таємниці, які можуть змінити весь світ. Нас чекають нові герої, ще більше розкриття улюблених персонажів, а також іще більше сюжетних інтриг і таємниць.Додано торрент",
+            "sub": false,
+            "created": 1687706397,
+            "title_ja": "Shingeki no Kyojin Season 3",
+            "episodes": 12,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2018-07/1532425402_01.jpg",
+                "https://anitube.in.ua/uploads/posts/2018-07/1532425408_02.jpg",
+                "https://anitube.in.ua/uploads/posts/2018-07/1532425530_03.jpg",
+                "https://anitube.in.ua/uploads/posts/2018-07/1532425490_04.jpg"
+            ],
+            "updated": 1689360383,
+            "title_ua": "Атака титанів (сезон 3)",
+            "length": 24,
+            "translators": [
+                "Surgeon"
+            ],
+            "slug": "3229-ataka-titanv-sezon-3-shingeki-no-kyojin-tv-3",
+            "episodes_raw": "12 з 12 (24 хв.)",
+            "scored_by": 322,
+            "voices": [
+                "Surgeon",
+                "Helga Victim",
+                "Snovyda",
+                "Crupt",
+                "Schmetterling"
+            ],
+            "url": "https://anitube.in.ua/3229-ataka-titanv-sezon-3-shingeki-no-kyojin-tv-3.html",
+            "director": "Аракі Тецуро, Койдзука Масаші, Хаджіме Ісаяма",
+            "year": 2018,
+            "genres": [
+                {
+                    "name": "Детектив",
+                    "slug": "detective"
+                },
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Містика",
+                    "slug": "mystic"
+                },
+                {
+                    "name": "Пригоди",
+                    "slug": "prigodi"
+                },
+                {
+                    "name": "Фентезі",
+                    "slug": "fantasy"
+                },
+                {
+                    "name": "Шьонен",
+                    "slug": "shounen"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=EHzBhrncmac",
+            "score": 9.3,
+            "teams": [
+                "FanVoxUA"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/a/d2d826cb26fdd21776090aab8a9ebc.jpg",
+            "nsfw": true,
+            "id": "548ce242-fc6d-4561-9c62-af91936ad088"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Атака титанів / Shingeki no Kyojin (сезон 3, частина 1) (2018) HDTVRip 720р",
+            "year": 2018,
+            "title_ja": "Shingeki no Kyojin",
+            "leech": 0,
+            "title_ua": "Атака титанів",
+            "seed": 30,
+            "quality": "720p",
+            "size": 5806,
+            "slug": "94058",
+            "url": "http://toloka.to/t94058",
+            "image": "https://img.hurtom.com/i/2018/08/snk3_poster.jpg",
+            "id": "74ae9edf-bc74-46a8-aa22-b4e25d60b80d",
+            "next_update_info": null,
+            "author": "FanVoxUA",
+            "created": 1539637200,
+            "screenshots": [],
+            "description": "Чим більше правди про світ відкривається нашим героям, тим більше вони розуміють, що знають про світ неймовірно мало. Тож, фінальна операція з повернення стіни Марія починається, але попереду наших героїв чекає ще чимало таємниць, які приховує підвал під старим будинком Єґерів у Шіґаншіні. Втім, головний ворог іще не переможений, а нашим героям тільки доведеться дізнатися, що світ насправді значно більший, ніж клаптик землі, обмежений трьома стінами.",
+            "updated": 1689357006,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 8.62,
+    "stats": {
+        "dropped": 9243,
+        "on_hold": 13316,
+        "planned": 154687,
+        "score_1": 3425,
+        "score_2": 981,
+        "score_3": 1969,
+        "score_4": 5031,
+        "score_5": 12531,
+        "score_6": 39328,
+        "score_7": 153373,
+        "score_8": 414806,
+        "score_9": 486270,
+        "score_10": 398336,
+        "watching": 75734,
+        "completed": 1973737
+    }
+}

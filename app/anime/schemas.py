@@ -110,7 +110,7 @@ class AnimeSearchArgs(ORJSONModel):
             raise ValueError("Score can't be less than 0.")
 
         if scores[1] and scores[1] > 10:
-            raise ValueError("Score can't be more than 1.")
+            raise ValueError("Score can't be more than 10.")
 
         return scores
 
@@ -152,6 +152,7 @@ class AnimeEpisodeResponse(ORJSONModel):
 
 
 class AnimeEpisodesListResponse(ORJSONModel):
+    pagination: PaginationResponse
     list: list[AnimeEpisodeResponse]
 
 
@@ -176,6 +177,10 @@ class GenreResponse(ORJSONModel):
     name_ua: Union[str, None] = Field(example="Комедія")
     slug: str = Field(example="comedy")
     type: str = Field(example="genre")
+
+
+class GenreListResposne(ORJSONModel):
+    list: list[GenreResponse]
 
 
 class AnimeCompanyResponse(ORJSONModel):

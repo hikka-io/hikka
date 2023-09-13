@@ -1,0 +1,35 @@
+{
+    "pagination": {
+        "total": 1,
+        "pages": 1,
+        "page": 1
+    },
+    "list": [
+        {
+            "franchise_entries": [
+                "fcd76158-66b6-4c72-8c1c-5aa801a5efff",
+                "73a73ca9-fcea-4521-ad88-fa5206ad8e78",
+                "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6"
+            ],
+            "updated": 1689529791,
+            "content_id": "4f17027c-2b0f-4ad5-b51e-3c4f729b16e1",
+            "scored_by": 2546236,
+            "score": 8.57
+        },
+        {
+            "franchise_entries": [
+                "0cf69ac6-9238-4e2f-9add-39294c1a0f11",
+                "b88bf4b4-564e-43d4-8f1a-01741d244366",
+                "b22bb359-4545-45ce-92d3-df8646554128",
+                "91a35018-3439-47b1-8eb8-ba2092fd0191",
+                "4877caaf-d76d-46f2-9a73-cbdb2fef202b",
+                "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e",
+                "833be1cc-b3ef-4ebc-8017-07f49203a8a0"
+            ],
+            "updated": 1689529791,
+            "content_id": "e2283d58-ba06-420e-92de-8fe597d69a02",
+            "scored_by": 10568296,
+            "score": 8.6
+        }
+    ]
+}

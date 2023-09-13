@@ -1,6 +1,8 @@
 from app.models import AnimeFavourite, Anime, User
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, desc, func
+from sqlalchemy.orm import selectinload
+from app.service import anime_loadonly
 from datetime import datetime
 from typing import Union
 
@@ -9,7 +11,10 @@ async def get_anime_favourite(
     session: AsyncSession, anime: AnimeFavourite, user: User
 ) -> Union[AnimeFavourite, None]:
     return await session.scalar(
-        select(AnimeFavourite).filter_by(anime=anime, user=user)
+        select(AnimeFavourite).filter(
+            AnimeFavourite.anime == anime,
+            AnimeFavourite.user == user,
+        )
     )
 
 
@@ -35,3 +40,30 @@ async def delete_anime_favourite(
 ):
     await session.delete(favourite)
     await session.commit()
+
+
+async def get_user_anime_favourite_list(
+    session: AsyncSession,
+    user: User,
+    limit: int,
+    offset: int,
+) -> list[AnimeFavourite]:
+    return await session.scalars(
+        select(AnimeFavourite)
+        .filter(AnimeFavourite.user == user)
+        .order_by(desc(AnimeFavourite.created))
+        .options(anime_loadonly(selectinload(AnimeFavourite.anime)))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def get_user_anime_favourite_list_count(
+    session: AsyncSession,
+    user: User,
+) -> int:
+    return await session.scalar(
+        select(func.count(AnimeFavourite.id)).filter(
+            AnimeFavourite.user == user
+        )
+    )

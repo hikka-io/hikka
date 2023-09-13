@@ -10,26 +10,6 @@ from sqlalchemy.ext.asyncio import (
 )
 
 
-# import logging
-
-# # Create a logger instance
-# logger = logging.getLogger("sqlalchemy.engine")
-# logger.setLevel(logging.ERROR)
-
-# # Create a file handler and set its level
-# file_handler = logging.FileHandler("sqlalchemy.log")
-# file_handler.setLevel(logging.ERROR)
-
-# # Create a formatter and add it to the file handler
-# formatter = logging.Formatter(
-#     "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-# )
-# file_handler.setFormatter(formatter)
-
-# # Add the file handler to the logger
-# logger.addHandler(file_handler)
-
-
 class DatabaseSessionManager:
     def __init__(self):
         self._sessionmaker: async_sessionmaker | None = None

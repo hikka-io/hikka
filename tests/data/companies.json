@@ -1,0 +1,321 @@
+{
+    "pagination": {
+        "total": 39,
+        "pages": 1,
+        "page": 1
+    },
+    "list": [
+        {
+            "name_en": "Aniplex",
+            "name_ja": "アニプレックス",
+            "image": "/content/companies/aniplex-332844/JxjBJ_MfcQV0FAaRXM54ew.png",
+            "updated": 1689370629,
+            "content_id": "332844b3-17f3-400f-8a90-426f8179b3cb",
+            "favorites": 2459
+        },
+        {
+            "name_en": "Square Enix",
+            "name_ja": "スクウェア・エニックス",
+            "image": "/content/companies/square-enix-e62cc9/dWNdBvyElzoWY0nkmc6h_Q.png",
+            "updated": 1689370629,
+            "content_id": "e62cc96b-4131-4aab-bf62-eb41c8a1c08a",
+            "favorites": 905
+        },
+        {
+            "name_en": "Mainichi Broadcasting System",
+            "name_ja": "毎日放送",
+            "image": "/content/companies/mainichi-broadcasting-system-55c91c/yeTP-NgJPzhlMCeJQ3NeZg.png",
+            "updated": 1689370629,
+            "content_id": "55c91c04-190a-43cd-9b06-2a086c508212",
+            "favorites": 20
+        },
+        {
+            "name_en": "Studio Moriken",
+            "name_ja": "スタジオモリケン",
+            "image": "/content/companies/studio-moriken-7c33bc/LhUN3sVCynFeb4dhod6i-Q.png",
+            "updated": 1689370628,
+            "content_id": "7c33bc2e-8a72-4622-9c21-8daab91a7993",
+            "favorites": 1
+        },
+        {
+            "name_en": "Bones",
+            "name_ja": "ボンズ",
+            "image": "/content/companies/bones-b0b61b/W-tKpV9pja771AGQqOFnsA.png",
+            "updated": 1689370629,
+            "content_id": "b0b61b96-7507-4293-89b6-174529d57e72",
+            "favorites": 15570
+        },
+        {
+            "name_en": "Frontier Works",
+            "name_ja": "フロンティアワークス",
+            "image": "/content/companies/frontier-works-366772/l4qhTGUGsIksnzlpKMROLw.png",
+            "updated": 1689370628,
+            "content_id": "3667726e-c0bb-468b-a692-7225af426bd6",
+            "favorites": 25
+        },
+        {
+            "name_en": "Media Factory",
+            "name_ja": "メディアファクトリー",
+            "image": "/content/companies/media-factory-deeb3e/7j8xfddFMmLCjco7hZpjLw.png",
+            "updated": 1689370630,
+            "content_id": "deeb3e21-1f1c-4353-9a8e-f0a797e15f10",
+            "favorites": 15
+        },
+        {
+            "name_en": "Kadokawa Shoten",
+            "name_ja": "角川書店",
+            "image": "/content/companies/kadokawa-shoten-132e9a/YG7EOnxi2B5pdTig3dAE5w.png",
+            "updated": 1689370628,
+            "content_id": "132e9aba-25ef-4c91-94bf-cdacba728c99",
+            "favorites": 47
+        },
+        {
+            "name_en": "Movic",
+            "name_ja": "ムービック",
+            "image": "/content/companies/movic-84c014/JG5In2Z0W2j_v-Rog3Ef5g.png",
+            "updated": 1689370630,
+            "content_id": "84c014c0-af1d-46e6-9a38-89958a73bb2c",
+            "favorites": 12
+        },
+        {
+            "name_en": "AT-X",
+            "name_ja": "エー・ティー・エックス",
+            "image": "/content/companies/at-x-b811e0/bvUZdWRT2MED35fTcasdhA.png",
+            "updated": 1689370630,
+            "content_id": "b811e088-16e1-4e45-a7bf-b24a8dcf4b7b",
+            "favorites": 81
+        },
+        {
+            "name_en": "Kadokawa Pictures Japan",
+            "name_ja": "角川映画",
+            "image": "/content/companies/kadokawa-pictures-japan-9be93c/KQ6TwnnVcvnQtYdFA6l3NQ.png",
+            "updated": 1689370629,
+            "content_id": "9be93c18-38b6-4aad-8647-69762d3fe7d2",
+            "favorites": 17
+        },
+        {
+            "name_en": "Nitroplus",
+            "name_ja": "ニトロプラス",
+            "image": "/content/companies/nitroplus-859540/t2D4cXRf3H2g-dsomFYPeA.png",
+            "updated": 1689370628,
+            "content_id": "8595409b-d4ae-4fea-9abd-c2846ba08a65",
+            "favorites": 210
+        },
+        {
+            "name_en": "White Fox",
+            "name_ja": "WHITE FOX",
+            "image": "/content/companies/white-fox-f36038/WQOC8VhBFxrMlWAG3qiRxQ.png",
+            "updated": 1689370629,
+            "content_id": "f36038b3-7a07-431a-8d6e-08011488d90d",
+            "favorites": 5016
+        },
+        {
+            "name_en": "Magic Capsule",
+            "name_ja": null,
+            "image": null,
+            "updated": 1689370629,
+            "content_id": "cf5cd4ef-9156-47ea-af46-65e13f8280e8",
+            "favorites": 3
+        },
+        {
+            "name_en": "Shueisha",
+            "name_ja": "集英社",
+            "image": "/content/companies/shueisha-79ec9a/ZE7kWWso3yl35-HGc9kWJw.png",
+            "updated": 1689370629,
+            "content_id": "79ec9aed-29ae-43f1-846f-45a778c96f50",
+            "favorites": 762
+        },
+        {
+            "name_en": "JR East Marketing & Communications",
+            "name_ja": "ジェイアール東日本企画",
+            "image": "/content/companies/jr-east-marketing-communications-77baae/3kCU6zUnJKHGxy6dm0m6AA.png",
+            "updated": 1689370628,
+            "content_id": "77baaef1-3c61-47e3-aadb-6fe47518e29c",
+            "favorites": 0
+        },
+        {
+            "name_en": "A-1 Pictures",
+            "name_ja": "A-1 Pictures",
+            "image": "/content/companies/a-1-pictures-28c9fc/0fKmzLDp9bNRB5qJ-gbCdg.png",
+            "updated": 1689370629,
+            "content_id": "28c9fc68-930b-4208-b85e-2a414967b348",
+            "favorites": 14040
+        },
+        {
+            "name_en": "Production I.G",
+            "name_ja": "プロダクション・アイジー",
+            "image": "/content/companies/production-ig-d1799a/GWk7Mv9DXCBEHsjw1z8p2A.png",
+            "updated": 1689370629,
+            "content_id": "d1799a78-fbdd-41a5-b19d-767f48267641",
+            "favorites": 6641
+        },
+        {
+            "name_en": "Dentsu",
+            "name_ja": "電通",
+            "image": "/content/companies/dentsu-3691b7/e2_IyKhfYCJf7SNnW386VA.png",
+            "updated": 1689370628,
+            "content_id": "3691b73c-3587-4d07-b406-ca26b91f3d5d",
+            "favorites": 25
+        },
+        {
+            "name_en": "Pony Canyon",
+            "name_ja": "ポニーキャニオン",
+            "image": "/content/companies/pony-canyon-2249d8/wjPIZ4pph9VSMcMDaF6J7w.png",
+            "updated": 1689370630,
+            "content_id": "2249d8d5-2b9f-4eed-90fc-806f732e333a",
+            "favorites": 112
+        },
+        {
+            "name_en": "Kodansha",
+            "name_ja": "講談社",
+            "image": "/content/companies/kodansha-3b16a1/LEjXHORFHFo_ehcf85Ksdw.png",
+            "updated": 1689370628,
+            "content_id": "3b16a1c1-718f-4c74-ade7-abe98c4a9710",
+            "favorites": 437
+        },
+        {
+            "name_en": "Mad Box",
+            "name_ja": "マッドボックス",
+            "image": "/content/companies/mad-box-31f067/6m5CdbjfsAECJmJk1kbo5w.png",
+            "updated": 1689370629,
+            "content_id": "31f06722-a072-452d-839b-bd94783e3b87",
+            "favorites": 4
+        },
+        {
+            "name_en": "Pony Canyon Enterprise",
+            "name_ja": "ポニーキャニオンエンタープライズ",
+            "image": null,
+            "updated": 1689370629,
+            "content_id": "e2514611-d478-417f-a063-0f3d28bb5f30",
+            "favorites": 2
+        },
+        {
+            "name_en": "Wit Studio",
+            "name_ja": "ウィットスタジオ",
+            "image": "/content/companies/wit-studio-516042/OzIm2V_ctRQwf6jbL5uY4A.png",
+            "updated": 1689370629,
+            "content_id": "51604206-d426-47ce-8df8-712203c07199",
+            "favorites": 19747
+        },
+        {
+            "name_en": "Techno Sound",
+            "name_ja": "テクノサウンド",
+            "image": "/content/companies/techno-sound-a12c90/VwURHd19nRMp51IBW0rTvw.png",
+            "updated": 1689370628,
+            "content_id": "a12c9045-e38a-42a8-b8a4-b22021d48a44",
+            "favorites": 0
+        },
+        {
+            "name_en": "MAPPA",
+            "name_ja": "MAPPA",
+            "image": "/content/companies/mappa-360033/1iW_ei5E4F-gH_yg-wrFdA.png",
+            "updated": 1689370629,
+            "content_id": "36003364-f1fa-4fd7-8080-29eb3877a91c",
+            "favorites": 25846
+        },
+        {
+            "name_en": "Toho",
+            "name_ja": "東宝",
+            "image": "/content/companies/toho-9e199d/fQX6WEC-oEyqf9LM4l1KaA.png",
+            "updated": 1689370630,
+            "content_id": "9e199d9e-ebf7-4d01-bbc7-d465ba057554",
+            "favorites": 138
+        },
+        {
+            "name_en": "Sound Team Don Juan",
+            "name_ja": null,
+            "image": null,
+            "updated": 1689370629,
+            "content_id": "80ae5df0-852e-4f5b-b76d-fe40f158c5da",
+            "favorites": 3
+        },
+        {
+            "name_en": "Amuse",
+            "name_ja": "アミューズ",
+            "image": "/content/companies/amuse-47025f/27JYXq7-w0-hPYvBchq_lw.png",
+            "updated": 1689370628,
+            "content_id": "47025ff2-ba50-436e-b463-344c2bafa7e5",
+            "favorites": 6
+        },
+        {
+            "name_en": "Kadokawa",
+            "name_ja": "KADOKAWA",
+            "image": "/content/companies/kadokawa-30430c/-za2AIPqP7pitXFw5h3E3w.png",
+            "updated": 1689370629,
+            "content_id": "30430c57-628d-4b0a-9dcc-3ee46654951e",
+            "favorites": 1931
+        },
+        {
+            "name_en": "voque ting",
+            "name_ja": "ボクチン",
+            "image": null,
+            "updated": 1689370628,
+            "content_id": "78edb2a0-93c1-4b92-80a0-e7962714def3",
+            "favorites": 0
+        },
+        {
+            "name_en": "CoMix Wave Films",
+            "name_ja": "コミックス・ウェーブ・フィルム",
+            "image": "/content/companies/comix-wave-films-06e203/ZYF8QPnJCbk81FWKVAhNBQ.png",
+            "updated": 1689370629,
+            "content_id": "06e20349-3e49-45f4-8996-02012404a907",
+            "favorites": 3313
+        },
+        {
+            "name_en": "Houbunsha",
+            "name_ja": "芳文社",
+            "image": "/content/companies/houbunsha-d29125/S1pNVNNe99B6FyMpIawTrA.png",
+            "updated": 1689370628,
+            "content_id": "d2912523-55b9-4a5f-933f-dddc3316b7bf",
+            "favorites": 35
+        },
+        {
+            "name_en": "CloverWorks",
+            "name_ja": "クローバーワークス",
+            "image": "/content/companies/cloverworks-3c7a54/itlGLo8DHBfKCyxzzonUBw.png",
+            "updated": 1689370629,
+            "content_id": "3c7a542a-415f-4f9f-bc41-10d06277beed",
+            "favorites": 10505
+        },
+        {
+            "name_en": "CyberAgent",
+            "name_ja": "サイバーエージェント",
+            "image": null,
+            "updated": 1689370630,
+            "content_id": "4efc9fe2-1537-4035-983b-786984e6d6b3",
+            "favorites": 0
+        },
+        {
+            "name_en": "Doga Kobo",
+            "name_ja": "動画工房",
+            "image": "/content/companies/doga-kobo-5a9be5/LPZ9u4wzSIRLfTUfOT1k6Q.png",
+            "updated": 1689370629,
+            "content_id": "5a9be504-abcf-4625-b19f-db3385b9ead5",
+            "favorites": 2379
+        },
+        {
+            "name_en": "Geneon Universal Entertainment",
+            "name_ja": "NBCユニバーサルエンターテイメント",
+            "image": "/content/companies/geneon-universal-entertainment-b883cc/aOxWLq4SlDxU-EMeHBafcQ.png",
+            "updated": 1689370628,
+            "content_id": "b883ccc6-0e76-4220-ac7b-65e7a4426982",
+            "favorites": 9
+        },
+        {
+            "name_en": "I-move",
+            "name_ja": null,
+            "image": null,
+            "updated": 1689370628,
+            "content_id": "ff3a171e-05a6-4d8a-a5df-c09027bc29f3",
+            "favorites": 0
+        },
+        {
+            "name_en": "Majin",
+            "name_ja": "魔人",
+            "image": "/content/companies/majin-67e786/p59bdwihm64b42q4xBIEfA.png",
+            "updated": 1689370628,
+            "content_id": "67e786e2-045a-4f7f-b088-d2f164c91501",
+            "favorites": 163
+        }
+    ]
+}

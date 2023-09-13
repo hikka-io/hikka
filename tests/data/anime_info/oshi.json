@@ -1,0 +1,1387 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "2b00e50a-b4b3-4ccc-9851-a167f224dff0"
+            },
+            "weight": 12
+        },
+        {
+            "recommended": {
+                "content_id": "a3ac0776-67f6-474b-83ba-7df7a3c2e3f6"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "a234700d-dc34-4744-888a-c2384c5f20c4"
+            },
+            "weight": 7
+        },
+        {
+            "recommended": {
+                "content_id": "d35fd64d-7e84-4e68-9791-cbcd798ef1cd"
+            },
+            "weight": 5
+        },
+        {
+            "recommended": {
+                "content_id": "f591863e-b56c-49fb-8843-6313efbebea4"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "b19d4488-a6e9-487e-8ea7-3d27ac10d348"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "ad5d9734-77a7-411a-8020-33b2b3e4a34d"
+            },
+            "weight": 3
+        },
+        {
+            "recommended": {
+                "content_id": "dce7bd2a-fefe-4647-8690-e100cb7ec741"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "eec2fb48-0b74-4aab-912d-7643590d4cb3"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "83ac27c6-62e0-41a4-a311-058b84aafc6e"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9940e20a-d381-4d28-a935-089c5e02546b"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "c505148f-8075-41b6-b294-c1b6d0f6f8b0"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "9b3e2e9d-aa70-4952-93d8-8233727b6d7d"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "0b88b121-7631-44cb-a04d-3761ebed5d82"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "5bb07ed4-6c3c-4987-b638-051733e88f67"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3f69f021-5a70-4cf6-ae1f-f547df30ffd0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "094f6a0e-6247-4ed6-be72-486a326b200e"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "7a8cd4ee-a042-49a5-b34e-8117e816f2fb"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "dcd43d60-3ed3-41bc-acc5-a6fb1a7cdfaa"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "ddc4e624-ab2b-4073-b527-0f2e96d953d2"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0c0f0b6a-337a-4953-8d3e-7454833ce0fe"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e25b8de1-7afc-4e42-96c7-30f1952ad27d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "12544df5-f979-409b-a00f-88437e7dd4b0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "73a73ca9-fcea-4521-ad88-fa5206ad8e78"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "586f978b-9876-404f-aabd-cc452ff0402b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "0e4ed71f-b1a3-44f3-b603-3f27def4939f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e97ae030-7e26-4ce2-b693-7e8734d9b0d6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "26ca1e91-8c5b-424c-ba95-bac63c17da58"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e967c4b1-520a-4cff-a674-c57214ad99d6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e54bb980-8817-4254-9161-d879dd15ee3c"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "54e97e8b-c38a-4f81-8c70-b11367a6f7a6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "cb69190b-2894-441f-af2d-e1f9ed8769a0"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d09492be-cb3e-475d-829d-a5d0675f2539"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6a4e307c-7f9a-435d-8dc3-9ebd86730404"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "d25732a1-332b-4e11-9170-4657673a8937"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "f9424236-ed99-4d68-b3f5-a0eb13f506fd"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "93348411-f97b-464b-99bf-b0bc9b9d6200"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "3324cfe8-aaa8-4555-8507-b3fcae5d2975"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9e172d54-b1a8-4aef-a396-67f6dddbfb07"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "e0c9c961-bb79-4c0b-a59f-db0ab7f0da0b"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "d7d4676c-86e3-42e2-93c0-c832eb3dc5e8"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "033c8399-e58d-422e-ba13-ec63bcace084"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "0f62b268-74a6-4d6c-b486-7d1678f12034"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "8d0dbfa9-4cb2-4827-97c3-1cf1ec8a3737"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d70b57f0-4bf8-4132-83f9-1e0ad6c9fd4c"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a1157940-09af-471b-8d0b-1daea87f4af5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "4fdc739a-fc8d-4907-bbcf-5cd0d6136e83"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "de123141-5bad-4fb4-8d9c-57c76a87079d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b76a859f-d004-4eaa-86d7-7ec1d3f7e55e"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b0bdbf2e-0564-42c0-88c0-6ecd619ee716"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1f0feb3c-a569-4206-8e22-a9e3875e4201"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "f354cc33-461f-4623-a963-e9dc576d0970"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c6776e21-db3b-45b3-8820-63c3c240369f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d3f25f32-d237-4bac-b0df-873f63be228b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1adea01a-4cef-48b1-8727-c833e0ee8cc2"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a462e162-ad14-4dfe-971a-06bb88e075f9"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b01dee35-263f-4754-a313-79bf7930a37a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8becf942-b94e-47f2-abc4-0e823e82ba70"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "b833b519-a1d5-466c-8216-54f013ee0465"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e3f670f8-9e74-4e1d-a058-11435f843ecf"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "817541b2-5d39-4a87-94cd-bfe2860e6783"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "16d7b2cd-0529-485a-adeb-8f610ddb4800"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "69c65d65-1b7b-4b57-9b59-f69fd0c20816"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0c195144-1607-4b8d-923e-794fcd9d0ed6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d1f39226-ca05-46f7-bee7-3b32b474f542"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "79ec9aed-29ae-43f1-846f-45a778c96f50"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "4efc9fe2-1537-4035-983b-786984e6d6b3"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "30430c57-628d-4b0a-9dcc-3ee46654951e"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "5a9be504-abcf-4625-b19f-db3385b9ead5"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [
+        {
+            "title_native": "母と子",
+            "aired": 1681246800,
+            "title_ja": "Haha to Ko",
+            "title_en": "Mother and Children",
+            "title_ua": null,
+            "type": null,
+            "index": 1
+        },
+        {
+            "title_native": "三つ目の選択肢",
+            "aired": 1681851600,
+            "title_ja": "Mittsume no Sentakushi",
+            "title_en": "Third Option",
+            "title_ua": null,
+            "type": null,
+            "index": 2
+        },
+        {
+            "title_native": "漫画原作ドラマ",
+            "aired": 1682456400,
+            "title_ja": "Manga Gensaku Drama",
+            "title_en": "Manga Based Drama Series",
+            "title_ua": null,
+            "type": null,
+            "index": 3
+        },
+        {
+            "title_native": "役者",
+            "aired": 1683061200,
+            "title_ja": "Yakusha",
+            "title_en": "Actors",
+            "title_ua": null,
+            "type": null,
+            "index": 4
+        },
+        {
+            "title_native": "恋愛リアリティショー",
+            "aired": 1683666000,
+            "title_ja": "Renai Reality Show",
+            "title_en": "Reality Dating Show",
+            "title_ua": null,
+            "type": null,
+            "index": 5
+        },
+        {
+            "title_native": "エゴサーチ",
+            "aired": 1684270800,
+            "title_ja": "Egosearch",
+            "title_en": "Egosurfing",
+            "title_ua": null,
+            "type": null,
+            "index": 6
+        },
+        {
+            "title_native": "バズ",
+            "aired": 1684875600,
+            "title_ja": "Buzz",
+            "title_en": "Buzz",
+            "title_ua": null,
+            "type": null,
+            "index": 7
+        },
+        {
+            "title_native": "初めて",
+            "aired": 1686085200,
+            "title_ja": "Hajimete",
+            "title_en": "First Time",
+            "title_ua": null,
+            "type": null,
+            "index": 8
+        },
+        {
+            "title_native": "B小町",
+            "aired": 1686690000,
+            "title_ja": "B Komachi",
+            "title_en": "B Komachi",
+            "title_ua": null,
+            "type": null,
+            "index": 9
+        },
+        {
+            "title_native": "プレッシャー",
+            "aired": 1687294800,
+            "title_ja": "Pressure",
+            "title_en": "Pressure",
+            "title_ua": null,
+            "type": null,
+            "index": 10
+        },
+        {
+            "title_native": "アイドル",
+            "aired": 1687899600,
+            "title_ja": "Idol",
+            "title_en": "Idol",
+            "title_ua": null,
+            "type": null,
+            "index": 11
+        }
+    ],
+    "episodes_released": 11,
+    "start_date": 1681246800,
+    "episodes_total": 11,
+    "voices": [
+        {
+            "character": {
+                "content_id": "b833b519-a1d5-466c-8216-54f013ee0465"
+            },
+            "person": {
+                "content_id": "e2183015-f4ca-452d-934e-547d5071d63b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "b833b519-a1d5-466c-8216-54f013ee0465"
+            },
+            "person": {
+                "content_id": "e7b31982-13a1-47c3-b72d-539b4b2480b1"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d70b57f0-4bf8-4132-83f9-1e0ad6c9fd4c"
+            },
+            "person": {
+                "content_id": "ab89974f-f1a2-4cf0-9bed-dc3eb531086c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "817541b2-5d39-4a87-94cd-bfe2860e6783"
+            },
+            "person": {
+                "content_id": "be7a23b6-4988-490d-a7ee-1e0a828a65f3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "033c8399-e58d-422e-ba13-ec63bcace084"
+            },
+            "person": {
+                "content_id": "6d5f7e51-c0ad-4552-a1f5-47ea666de59c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d70b57f0-4bf8-4132-83f9-1e0ad6c9fd4c"
+            },
+            "person": {
+                "content_id": "fd6da708-44ac-4fea-9e1b-eb9e3aefda62"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "8becf942-b94e-47f2-abc4-0e823e82ba70"
+            },
+            "person": {
+                "content_id": "c258c59b-4da3-4ade-b966-a36b39f0bd1e"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "b76a859f-d004-4eaa-86d7-7ec1d3f7e55e"
+            },
+            "person": {
+                "content_id": "1af21e9b-c2bd-43ec-b627-880f8a6151d3"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0f62b268-74a6-4d6c-b486-7d1678f12034"
+            },
+            "person": {
+                "content_id": "5fe096e9-7061-422e-97be-1fc3dd96ebff"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d3f25f32-d237-4bac-b0df-873f63be228b"
+            },
+            "person": {
+                "content_id": "62c26a98-755f-4f26-a8ac-f97c66ba1b9d"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "033c8399-e58d-422e-ba13-ec63bcace084"
+            },
+            "person": {
+                "content_id": "c74d743f-536c-4778-8dd1-08059ab2e415"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1adea01a-4cef-48b1-8727-c833e0ee8cc2"
+            },
+            "person": {
+                "content_id": "e2b5da21-f31d-4a1e-be70-b44ef322178b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1f0feb3c-a569-4206-8e22-a9e3875e4201"
+            },
+            "person": {
+                "content_id": "a21653f9-a1c8-4d92-b39b-e6cffd445e27"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8d0dbfa9-4cb2-4827-97c3-1cf1ec8a3737"
+            },
+            "person": {
+                "content_id": "a054b1db-17f3-43b5-b015-ca8ecd8b3f5b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b01dee35-263f-4754-a313-79bf7930a37a"
+            },
+            "person": {
+                "content_id": "e00c3591-2c61-4aed-a857-586bad09043f"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "de123141-5bad-4fb4-8d9c-57c76a87079d"
+            },
+            "person": {
+                "content_id": "2713dbac-a810-4bc3-a262-7a9008f46d5f"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0f62b268-74a6-4d6c-b486-7d1678f12034"
+            },
+            "person": {
+                "content_id": "58a8b468-2ab6-43d0-b57d-b1e52adfdc9e"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "4fdc739a-fc8d-4907-bbcf-5cd0d6136e83"
+            },
+            "person": {
+                "content_id": "796c47f2-98f7-4014-8431-edba3ccf5e94"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8d0dbfa9-4cb2-4827-97c3-1cf1ec8a3737"
+            },
+            "person": {
+                "content_id": "2bf87257-9c14-4228-8270-fc10fd84c994"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "16d7b2cd-0529-485a-adeb-8f610ddb4800"
+            },
+            "person": {
+                "content_id": "00d37f58-ff4c-4b5b-81fc-c72582f73f09"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e3f670f8-9e74-4e1d-a058-11435f843ecf"
+            },
+            "person": {
+                "content_id": "28d8a79b-227f-4fd9-89b3-45c8609d561e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b76a859f-d004-4eaa-86d7-7ec1d3f7e55e"
+            },
+            "person": {
+                "content_id": "3482585a-c480-4a15-9edb-b5cc335fb0bf"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c6776e21-db3b-45b3-8820-63c3c240369f"
+            },
+            "person": {
+                "content_id": "c5c60696-2a8d-4ec4-bc96-12d04357764a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d7d4676c-86e3-42e2-93c0-c832eb3dc5e8"
+            },
+            "person": {
+                "content_id": "f3db1257-61de-447e-8cce-7ab20482a522"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1adea01a-4cef-48b1-8727-c833e0ee8cc2"
+            },
+            "person": {
+                "content_id": "c804abff-63e8-463a-9768-cd0de2cd2d62"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "69c65d65-1b7b-4b57-9b59-f69fd0c20816"
+            },
+            "person": {
+                "content_id": "e38e60e7-5768-4396-9dc2-cf3385d915d3"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "69c65d65-1b7b-4b57-9b59-f69fd0c20816"
+            },
+            "person": {
+                "content_id": "b6191421-0a86-4b8f-990f-2a859eb5cb79"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e3f670f8-9e74-4e1d-a058-11435f843ecf"
+            },
+            "person": {
+                "content_id": "28354266-eb64-4dbf-a7ea-adf31b98b7da"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "de123141-5bad-4fb4-8d9c-57c76a87079d"
+            },
+            "person": {
+                "content_id": "0808d38a-5eac-4f6b-a3e1-557a66f74f81"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "f354cc33-461f-4623-a963-e9dc576d0970"
+            },
+            "person": {
+                "content_id": "19b148d6-5d50-4964-af42-e6e2db4c925e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0f62b268-74a6-4d6c-b486-7d1678f12034"
+            },
+            "person": {
+                "content_id": "a4b27982-fc7d-4fcb-a9c6-fdcd8c4feb20"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a1157940-09af-471b-8d0b-1daea87f4af5"
+            },
+            "person": {
+                "content_id": "fef75ccc-38ca-48c7-8733-7571ba4f94b9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0c195144-1607-4b8d-923e-794fcd9d0ed6"
+            },
+            "person": {
+                "content_id": "2cf9ee57-6a30-4e0c-94e1-ec050be2daf1"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b0bdbf2e-0564-42c0-88c0-6ecd619ee716"
+            },
+            "person": {
+                "content_id": "d9e6654f-cefa-44c5-9031-27f21aaa8907"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "b01dee35-263f-4754-a313-79bf7930a37a"
+            },
+            "person": {
+                "content_id": "5f5b8bb6-e900-46dc-9cef-154d7b650fb8"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0f62b268-74a6-4d6c-b486-7d1678f12034"
+            },
+            "person": {
+                "content_id": "3ded3f6b-2906-4824-b9a5-a163721e50d2"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d7d4676c-86e3-42e2-93c0-c832eb3dc5e8"
+            },
+            "person": {
+                "content_id": "fc57f4a7-3964-48bb-a235-ebff587fc729"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a462e162-ad14-4dfe-971a-06bb88e075f9"
+            },
+            "person": {
+                "content_id": "55bcceb7-dc9f-4a5c-a021-e19eafda5a89"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "a1157940-09af-471b-8d0b-1daea87f4af5"
+            },
+            "person": {
+                "content_id": "124e3d12-a3ef-40ea-b1ad-6430b28ba032"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8becf942-b94e-47f2-abc4-0e823e82ba70"
+            },
+            "person": {
+                "content_id": "d42f9f9e-f90c-4ea3-b3d1-320aba67f757"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d1f39226-ca05-46f7-bee7-3b32b474f542"
+            },
+            "person": {
+                "content_id": "15019daa-bf63-4f57-a045-5c712e5dcd13"
+            },
+            "language": "ja"
+        }
+    ],
+    "end_date": 1687899600,
+    "staff": [
+        {
+            "person": {
+                "content_id": "3c53ffc3-ff8d-4a2e-a77c-ede73b15da5a"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "04bbc460-3130-412c-abc4-822ff3b38f35"
+            },
+            "roles": [
+                "Director",
+                "Episode Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "bb5bdd76-7361-46a2-8790-4d67fe2f5e8f"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "5b4e1193-0039-497a-8053-98614dbbd1a9"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "23abdd7e-d988-46e2-9262-5559cf62801e"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "05f14f38-2f4b-4a3a-a049-30d6a27b281c"
+            },
+            "roles": [
+                "Theme Song Composition",
+                "Theme Song Arrangement",
+                "Theme Song Lyrics"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "16afbe80-db70-427b-b502-238f850b1a39"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "1a085cf2-86cd-4469-8b4d-999b0d774628"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c644c881-d4f0-485c-8a53-a5b13224cab9"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d8e3da53-3c4c-42c8-af75-2c3b073082a1"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e52556c9-fc07-49d8-912f-85ead6e277be"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f171a66e-fe27-48e1-bf34-9a88eb55cf69"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "0898c380-2152-4d9b-9f8a-42bcd252395c"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "77c24741-fc27-4ac3-8df1-ce25fa71d316"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "f962d5b3-0673-4dfa-b781-e65b0a60c85f"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7079f2e2-388e-445d-b1a6-20b3c6fea3da"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c38cacab-011b-4958-b4c0-05241a728f24"
+            },
+            "roles": [
+                "Key Animation"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "fc57f4a7-3964-48bb-a235-ebff587fc729"
+            },
+            "roles": [
+                "Inserted Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7dd127ec-cbef-47b2-a276-9abf6d74378e"
+            },
+            "roles": [
+                "Executive Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "32579a93-0ccd-44f9-a2dc-6997d0319b92"
+            },
+            "roles": [
+                "Original Character Design"
+            ]
+        }
+    ],
+    "created": 1687273642,
+    "updated": 1689286037,
+    "synopsis_en": "In the entertainment world, celebrities often show exaggerated versions of themselves to the public, concealing their true thoughts and struggles beneath elaborate lies. Fans buy into these fabrications, showering their idols with undying love and support, until something breaks the illusion. Sixteen-year-old rising star Ai Hoshino of pop idol group B Komachi has the world captivated; however, when she announces a hiatus due to health concerns, the news causes many to become worried.\n\nAs a huge fan of Ai, gynecologist Gorou Amemiya cheers her on from his countryside medical practice, wishing he could meet her in person one day. His wish comes true when Ai shows up at his hospital—not sick, but pregnant with twins! While the doctor promises Ai to safely deliver her children, he wonders if this encounter with the idol will forever change the nature of his relationship with her.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.\n\nДжерело: Toloka",
+    "franchise": "03821277-f9ed-444d-bf88-824d143e033d",
+    "title_ja": "\"Oshi no Ko\"",
+    "title_en": "[Oshi No Ko]",
+    "title_ua": "Дитина Улюбленця",
+    "duration": 30,
+    "poster": "/content/anime/oshi-no-ko-421060/-5UVBoFTYN0w9jmImLJwVQ.jpg",
+    "rating": "pg_13",
+    "source": "manga",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "https://ichigoproduction.com/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/anime_oshinoko",
+            "text": "@anime_oshinoko"
+        },
+        {
+            "url": "https://twitter.com/oshinoko_global",
+            "text": "@oshinoko_global"
+        },
+        {
+            "url": "https://www.youtube.com/@anime_oshinoko/",
+            "text": "YouTube"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=17449",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=25783",
+            "text": "ANN"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Oshi_no_Ko#Anime",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E3%80%90%E6%8E%A8%E3%81%97%E3%81%AE%E5%AD%90%E3%80%91#%E3%83%86%E3%83%AC%E3%83%93%E3%82%A2%E3%83%8B%E3%83%A1",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/6676",
+            "text": "Syoboi"
+        },
+        {
+            "url": "https://bangumi.tv/subject/386809",
+            "text": "Bangumi"
+        },
+        {
+            "url": "https://baike.baidu.com/item/%E3%80%90%E6%88%91%E6%8E%A8%E7%9A%84%E5%AD%A9%E5%AD%90%E3%80%91/61376700?fromModule=search-result_lemma",
+            "text": "Baidu Baike"
+        },
+        {
+            "url": "https://movie.douban.com/subject/35936775/",
+            "text": "Douban"
+        },
+        {
+            "url": "https://www.hidive.com/",
+            "text": "HIDIVE"
+        },
+        {
+            "url": "https://www.youtube.com/channel/UC0wNSTMWIL3qaorLx0jie6A",
+            "text": "Ani-One Asia"
+        },
+        {
+            "url": "https://animedigitalnetwork.fr/",
+            "text": "Anime Digital Network"
+        },
+        {
+            "url": "http://www.aniplustv.com/",
+            "text": "Aniplus TV"
+        }
+    ],
+    "genre_ids": [
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "95ae63e0-a4d7-4f88-8596-92216073db24",
+        "f1ff289d-0571-4950-a7ff-122c331eafd8",
+        "95ef7498-ba41-40bc-a40b-34c8d0a36fe2",
+        "bd7b1695-9d1f-4363-be74-3934ed433206"
+    ],
+    "synonyms": [
+        "My Star"
+    ],
+    "videos": [
+        {
+            "url": "https://youtu.be/1yXa8MAmocQ",
+            "title": "Teaser",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/gKWEUJ4r5do",
+            "title": "PV 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/BQ28u-8c-hI",
+            "title": "PV 1",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/hbvzjOZM3AQ",
+            "title": "CM",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "Idol (アイドル)",
+            "author": "YOASOBI",
+            "spotify": null,
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "Idol (アイドル)",
+            "author": "YOASOBI",
+            "spotify": null,
+            "ost_type": "ending"
+        },
+        {
+            "index": 2,
+            "title": "Mephisto (メフィスト)",
+            "author": "Ziyoou-vachi",
+            "spotify": null,
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "4210609f-9fcb-448b-b871-adbd06e1faf8",
+    "scored_by": 301198,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 11,
+            "dub": true,
+            "hidden": false,
+            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
+            "sub": true,
+            "created": 1687706455,
+            "title_ja": "",
+            "episodes": 11,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2023-04/1681668595_screenshot1.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-04/1681668566_screenshot2.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-04/1681668617_screenshot3.jpg",
+                "https://anitube.in.ua/uploads/posts/2023-04/1681668643_screenshot4.jpg"
+            ],
+            "updated": 1689360323,
+            "title_ua": "Дитина улюбленця / Моя зірка",
+            "length": 24,
+            "translators": [
+                "Mashiro",
+                "Foxy",
+                "mileena"
+            ],
+            "slug": "4306-oshi-no-ko",
+            "episodes_raw": "11 з 11 (24 хв.)",
+            "scored_by": 659,
+            "voices": [
+                "sovenya",
+                "RedMind",
+                "Reniko",
+                "Regis",
+                "Eredelka",
+                "Anatas",
+                "Lem0nka",
+                "MeloRin",
+                "Edmon",
+                "Jules",
+                "Slobozhanec",
+                "bulletproof",
+                "TORGVALD",
+                "SERIK",
+                "mileena"
+            ],
+            "url": "https://anitube.in.ua/4306-oshi-no-ko.html",
+            "director": "Кобаяші Рьо",
+            "year": 2023,
+            "genres": [
+                {
+                    "name": "Драма",
+                    "slug": "drama"
+                },
+                {
+                    "name": "Надприродне",
+                    "slug": "supernatural"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=E8vF26E44Po",
+            "score": 9.6,
+            "teams": [
+                "Kaizoku",
+                "InariDuB"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/f730ab28a56695329dbe5dd2f1c772.jpg",
+            "nsfw": false,
+            "id": "809cc694-a058-4076-a693-e3a6ec9c64cd"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Моя зірка (Сезон 1, серії 1-9) / Oshi no Ko (Season 1) (2023) WEB-DL 4K 2160p Ukr/Jap | Sub Ukr",
+            "year": 2023,
+            "title_ja": "Oshi no Ko",
+            "leech": 1,
+            "title_ua": "Моя зірка",
+            "seed": 10,
+            "quality": "4k",
+            "size": 12666,
+            "slug": "667830",
+            "url": "http://toloka.to/t667830",
+            "image": "https://toloka.to/photos/2304250023392760_f0_0.jpg",
+            "id": "2cc925c6-dac3-47a4-9ff5-93242cf22154",
+            "next_update_info": null,
+            "author": "InariDuB",
+            "created": 1687294800,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_001.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_002.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_003.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_004.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_005.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_006.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_007.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_008.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_009.png",
+                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_010.png"
+            ],
+            "description": "Історія починається з Ґоро, лікаря, який за збігом обставин готує до полог свого улюбленого айдола Ай Хошіно, яка взяла перерву в індустрії розваг, аби народити своїх дітей-близнюків. Однак незадовго до пологів Ґоро помирає від нещасного випадку, але відроджується дитиною Ай із повністю збереженими спогадами.",
+            "updated": 1689357008,
+            "hidden": false,
+            "episodes": null
+        },
+        {
+            "title_raw": "Дитина Улюбленця / Oshi no Ko (серії 10 з 11) (2023) WEBRip 1080p H.265 Ukr/Jap | Ukr Sub",
+            "year": 2023,
+            "title_ja": "Oshi no Ko",
+            "leech": 5,
+            "title_ua": "Дитина Улюбленця",
+            "seed": 32,
+            "quality": "1080p",
+            "size": 4556,
+            "slug": "667721",
+            "url": "http://toloka.to/t667721",
+            "image": "https://toloka.to/photos/2304171710512760_f0_0.jpg",
+            "id": "c3c19284-787f-4a4b-a02c-3f09d4b80293",
+            "next_update_info": null,
+            "author": "fanat22012",
+            "created": 1687467600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.00.25_2023.04.16_18.52.23.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.01.44_2023.04.16_18.52.38.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.02.23_2023.04.16_18.52.45.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.28.51_2023.04.16_18.53.04.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.50.27_2023.04.16_18.53.10.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_01.00.26_2023.04.16_18.53.35.md.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_01.00.40_2023.04.16_18.53.41.md.png"
+            ],
+            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
+            "updated": 1689357007,
+            "hidden": false,
+            "episodes": 11
+        },
+        {
+            "title_raw": "Дитина Улюбленця / Oshi no Ko (серії 10 з 11) (2023) WEBRip 4K 2160p Ukr/Jap | Ukr Sub",
+            "year": 2023,
+            "title_ja": "Oshi no Ko",
+            "leech": 0,
+            "title_ua": "Дитина Улюбленця",
+            "seed": 2,
+            "quality": "4k",
+            "size": 14018,
+            "slug": "668128",
+            "url": "http://toloka.to/t668128",
+            "image": "https://toloka.to/photos/2304171710512760_f0_0.jpg",
+            "id": "dcea4990-3ed9-4429-92b7-45699ff1dc41",
+            "next_update_info": null,
+            "author": "fanat22012",
+            "created": 1687467600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_01.04.03.552.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.47.53.498.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.38.04.708.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.24.36.311.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.02.25.145.png",
+                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.35.02.965.png"
+            ],
+            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
+            "updated": 1689357008,
+            "hidden": false,
+            "episodes": 11
+        }
+    ],
+    "score": 8.86,
+    "stats": {
+        "dropped": 8196,
+        "on_hold": 6909,
+        "planned": 131762,
+        "score_1": 5189,
+        "score_2": 755,
+        "score_3": 835,
+        "score_4": 1428,
+        "score_5": 2523,
+        "score_6": 5512,
+        "score_7": 18020,
+        "score_8": 53426,
+        "score_9": 90894,
+        "score_10": 122449,
+        "watching": 220929,
+        "completed": 218562
+    }
+}

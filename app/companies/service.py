@@ -10,7 +10,7 @@ from typing import Union
 async def get_company_by_slug(
     session: AsyncSession, slug: str
 ) -> Union[Company, None]:
-    return await session.scalar(select(Company).filter_by(slug=slug))
+    return await session.scalar(select(Company).filter(Company.slug == slug))
 
 
 async def search_total(session: AsyncSession):
@@ -22,18 +22,26 @@ async def companies_search(
     limit: int,
     offset: int,
 ):
-    query = select(Company).order_by(desc("favorites"), desc("content_id"))
-    query = query.limit(limit).offset(offset)
-    return await session.scalars(query)
+    return await session.scalars(
+        select(Company)
+        .order_by(
+            desc(Company.favorites),
+            desc(Company.content_id),
+        )
+        .limit(limit)
+        .offset(offset)
+    )
 
 
 async def company_anime_total(
     session: AsyncSession, company: Company, company_type: Union[str, None]
 ):
-    query = select(func.count(CompanyAnime.id)).filter_by(company=company)
+    query = select(func.count(CompanyAnime.id)).filter(
+        CompanyAnime.company == company
+    )
 
     if company_type:
-        query = query.filter_by(type=company_type)
+        query = query.filter(CompanyAnime.type == company_type)
 
     return await session.scalar(query)
 
@@ -54,7 +62,9 @@ async def company_anime(
         query.join(Anime)
         .options(anime_loadonly(joinedload(CompanyAnime.anime)))
         .order_by(
-            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+            desc(Anime.score),
+            desc(Anime.scored_by),
+            desc(Anime.content_id),
         )
         .limit(limit)
         .offset(offset)

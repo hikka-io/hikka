@@ -12,14 +12,14 @@ from client_requests import (
 async def test_activation_bad_token(client, create_test_user_not_activated):
     # Try bad activation token
     response = await request_activation(client, "BAD_TOKEN")
-    assert response.json()["code"] == "auth_activation_invalid"
+    assert response.json()["code"] == "auth:activation_invalid"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 async def test_activation_rate_limit(client, create_test_user_not_activated):
     # Try resend activation request before previous one has expired
     response = await request_activation_resend(client, "user@mail.com")
-    assert response.json()["code"] == "auth_activation_valid"
+    assert response.json()["code"] == "auth:activation_valid"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -37,7 +37,7 @@ async def test_activation_expired(
 
     # Test activation with expired token
     response = await request_activation(client, user.activation_token)
-    assert response.json()["code"] == "auth_activation_expired"
+    assert response.json()["code"] == "auth:activation_expired"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 

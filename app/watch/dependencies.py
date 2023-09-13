@@ -25,12 +25,13 @@ async def verify_add_watch(
     anime: Anime = Depends(get_anime),
     user: User = Depends(auth_required()),
 ) -> Tuple[Anime, User, WatchArgs]:
+    # ToDo: should we use episodes_released here (?)
     # User can't set more than 0 episodes if anime not yet aired
-    if not anime.episodes and args.episodes > 0:
+    if not anime.episodes_total and args.episodes_total > 0:
         raise Abort("watch", "bad-episodes")
 
     # Make sure user provided episodes within constraints
-    if anime.episodes and args.episodes > anime.episodes:
+    if anime.episodes_total and args.episodes > anime.episodes_total:
         raise Abort("watch", "bad-episodes")
 
     return anime, user, args

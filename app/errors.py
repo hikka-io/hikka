@@ -95,28 +95,36 @@ class Abort(Exception):
 
 
 def build_error_code(scope: str, message: str):
-    return scope.replace("-", "_") + "_" + message.replace("-", "_")
+    return scope.replace("-", "_") + ":" + message.replace("-", "_")
 
 
-async def abort_handler(request: Request, exc: Abort):
-    error_code = build_error_code(exc.scope, exc.message)
+async def abort_handler(request: Request, exception: Abort):
+    error_code = build_error_code(exception.scope, exception.message)
 
     try:
-        error_message = errors[exc.scope][exc.message][0]
-        status_code = errors[exc.scope][exc.message][1]
+        error_message = errors[exception.scope][exception.message][0]
+        status_code = errors[exception.scope][exception.message][1]
     except Exception:
         error_message = "Unknown error"
         status_code = 400
 
     return JSONResponse(
-        content={"message": error_message, "code": error_code},
         status_code=status_code,
+        content={
+            "message": error_message,
+            "code": error_code,
+        },
     )
 
 
-async def validation_handler(request: Request, exc: RequestValidationError):
-    exc_str = str(exc).replace("\n", " ").replace("   ", " ")
+async def validation_handler(
+    request: Request, exception: RequestValidationError
+):
+    error_message = str(exception).replace("\n", " ").replace("   ", " ")
     return JSONResponse(
-        content={"message": exc_str, "code": "validation_error"},
-        status_code=422,
+        status_code=400,
+        content={
+            "code": "system:validation_error",
+            "message": error_message,
+        },
     )

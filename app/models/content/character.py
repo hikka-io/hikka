@@ -31,11 +31,11 @@ class Character(
     image_relation: Mapped["Image"] = relationship(lazy="selectin")
 
     anime: Mapped[list["AnimeCharacter"]] = relationship(
-        back_populates="character"
+        back_populates="character", viewonly=True
     )
 
     voices: Mapped[list["AnimeVoice"]] = relationship(
-        back_populates="character"
+        back_populates="character", viewonly=True
     )
 
     @hybrid_property

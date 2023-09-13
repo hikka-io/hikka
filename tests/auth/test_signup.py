@@ -26,7 +26,7 @@ async def test_signup_duplicate_email(client, create_test_user):
         client, "user@mail.com", "username2", "password"
     )
 
-    assert response.json()["code"] == "auth_email_exists"
+    assert response.json()["code"] == "auth:email_exists"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -36,5 +36,5 @@ async def test_signup_duplicate_username(client, create_test_user):
         client, "user2@mail.com", "username", "password"
     )
 
-    assert response.json()["code"] == "auth_username_taken"
+    assert response.json()["code"] == "auth:username_taken"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

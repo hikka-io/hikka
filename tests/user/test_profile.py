@@ -16,7 +16,7 @@ async def test_profile(client, create_test_user):
 async def test_bad_profile(client):
     # Unknown user profile
     response = await request_profile(client, "bad_username")
-    assert response.json()["code"] == "user_not_found"
+    assert response.json()["code"] == "user:not_found"
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 

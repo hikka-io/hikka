@@ -1,0 +1,1350 @@
+{
+    "recommendations": [
+        {
+            "recommended": {
+                "content_id": "7a8cd4ee-a042-49a5-b34e-8117e816f2fb"
+            },
+            "weight": 4
+        },
+        {
+            "recommended": {
+                "content_id": "113fb8f7-22d2-4223-9136-363cd9f9f403"
+            },
+            "weight": 2
+        },
+        {
+            "recommended": {
+                "content_id": "52990714-e08d-4627-b9d6-2b0e5fe2b31f"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "48678e0d-0148-4a95-873a-4585b95ddcd8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "34addc73-db1e-4e76-bf09-c8bbc8ea4ae7"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4210609f-9fcb-448b-b871-adbd06e1faf8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "66169980-59a7-4887-9837-3a258a41345b"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "9164df45-2697-4261-a473-ced405e51df8"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "5a92f9a2-4394-4733-bf44-b8a49435654a"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "6572aaf9-d5c5-4a8a-8435-7a4666d491c3"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "a8176a90-8961-48a1-a8c3-0fc474d24f8d"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "c9b7f9fb-5361-4164-adaf-a64d7bab2cd6"
+            },
+            "weight": 1
+        },
+        {
+            "recommended": {
+                "content_id": "4dc217e0-c8f6-4b46-a97a-40c81a46c24e"
+            },
+            "weight": 1
+        }
+    ],
+    "characters": [
+        {
+            "character": {
+                "content_id": "1f638677-31d4-4d1f-b8fa-406f4ea66456"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "fe3906dc-8dc3-4328-87a0-2d2f6312d0f4"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "c36906ae-c10f-48b2-92b7-7439e3276435"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "d1498c1a-7030-4702-a06c-1adebcb4033e"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "819db61e-2f9e-4840-97bc-84487ced67ae"
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "content_id": "8b3498c0-548b-48f3-8bfa-dffec6edc019"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1c506ceb-dbbe-4a5f-bb2c-c9f76224381b"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "e5848319-5737-4a63-bbb7-2f5abfb3b4cb"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c9afe52e-68c5-435d-830b-50ee0dac0b1e"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "5ae5470a-0f5f-4345-a358-56eeee0a2134"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "a23c1ded-1d75-426e-913e-5743fa60c562"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "0ac51f46-c1b5-4a0b-bc9b-d8c043d655e5"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "2664177b-8b7c-44ed-98ac-554b653431e2"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "d98ef109-4766-496d-9bee-3e5a3bf150e8"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c2195390-02f8-49d0-8bde-ff8fbc7a8db6"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "9926908b-e375-46c2-bbcf-82be92b8c35f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "6de34764-18b2-405e-b41f-039181241c68"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c6f95fe4-2c77-496b-a62a-a9c0339a6707"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "05d8e92d-4d17-41f3-8e73-84dffa237ee3"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "50a46672-5639-42f0-bfe5-2d07043a53ea"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "54e94f28-5908-4adf-8b63-ac2f17f05f8d"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8670df4d-a805-4ad3-955e-ee6d5e0684b3"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "7254b9ca-cd72-4b55-860b-b9b9b5654a38"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "842a3025-940f-4160-804c-a7537e75410f"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "400809cd-f0b8-4333-98ea-032799f68283"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "1e94efc6-3143-4492-8b87-d9c7f2bce3ed"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "c7e847c8-682f-4d0c-be84-be08a8d9ed7a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "38b973d6-ade6-499b-91ec-3a197c97ccc4"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "8dd2c247-0136-4a50-aad7-3b33be334243"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "fc06372b-256b-4f59-9808-6a9ebc37788a"
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "content_id": "ecd6a383-9afe-48a5-84ee-4c0fcba1ec5c"
+            },
+            "main": false
+        }
+    ],
+    "companies": [
+        {
+            "company": {
+                "content_id": "332844b3-17f3-400f-8a90-426f8179b3cb"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "55c91c04-190a-43cd-9b06-2a086c508212"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "79ec9aed-29ae-43f1-846f-45a778c96f50"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "77baaef1-3c61-47e3-aadb-6fe47518e29c"
+            },
+            "type": "producer"
+        },
+        {
+            "company": {
+                "content_id": "28c9fc68-930b-4208-b85e-2a414967b348"
+            },
+            "type": "studio"
+        }
+    ],
+    "episodes_list": [
+        {
+            "title_native": "早坂愛は防ぎたい / 生徒会は神ってない / かぐや様は結婚したい / かぐや様は祝いたい",
+            "aired": 1586552400,
+            "title_ja": "Hayasaka Ai wa Fusegitai / Seitokai wa Kamitte Nai / Kaguya-sama wa Kekkon Shitai / Kaguya-sama wa Iwaitai",
+            "title_en": "Ai Hayasaka Wants to Stave Them Off / The Student Council Has Not Achieved Nirvana / Kaguya Wants to Get Married / Kaguya Wants to Celebrate",
+            "title_ua": null,
+            "type": null,
+            "index": 1
+        },
+        {
+            "title_native": "かぐや様は聞き出したい / かぐや様は贈りたい / 藤原千花は確かめたい",
+            "aired": 1587157200,
+            "title_ja": "Kaguya-sama wa Kikidashitai / Kaguya-sama wa Okuritai / Fujiwara Chika wa Tashikametai",
+            "title_en": "Kaguya Wants to Know / Kaguya Wants to Give a Gift / Chika Fujiwara Wants to Confirm It",
+            "title_ua": null,
+            "type": null,
+            "index": 2
+        },
+        {
+            "title_native": "白銀御行は見上げたい / 第67期生徒会 / かぐや様は呼びたくない",
+            "aired": 1587762000,
+            "title_ja": "Shirogane Miyuki wa Miagetai / Dai 67 Ki Seitokai / Kaguya-sama wa Yobitakunai",
+            "title_en": "Miyuki Shirogane Wants to Gaze at the Moon / The 67th Student Council / Kaguya Doesn't Want to Say It",
+            "title_ua": null,
+            "type": null,
+            "index": 3
+        },
+        {
+            "title_native": "早坂愛はオトしたい / かぐや様は告ら“れ”たい / 伊井野ミコは正したい",
+            "aired": 1588366800,
+            "title_ja": "Hayasaka Ai wa Oto Shitai / Kaguya-sama wa Kokura\"re\"tai / Iino Miko wa Tadashitai",
+            "title_en": "Ai Hayasaka Wants Him to Fall for Her / Kaguya Wants to Be Confessed To / Miko Iino Wants to Set Things Right",
+            "title_ua": null,
+            "type": null,
+            "index": 4
+        },
+        {
+            "title_native": "白銀御行はモテたい / 柏木渚は慰めたい / 白銀御行は歌いたい / かぐや様は蹴落としたい",
+            "aired": 1588971600,
+            "title_ja": "Shirogane Miyuki wa Motetai / Kashiwagi Nagisa wa Nagusametai / Shirogane Miyuki wa Utaitai / Kaguya-sama wa Keotoshitai",
+            "title_en": "Miyuki Shirogane Wants Girls to Fall for Him / Nagisa Kashiwagi Wants to Console / Miyuki Shirogane Wants to Sing / Kaguya Wants to Kick Them Down",
+            "title_ua": null,
+            "type": null,
+            "index": 5
+        },
+        {
+            "title_native": "伊井野ミコを笑わせない / 伊井野ミコを笑わせたい / かぐや様は呼ばれない",
+            "aired": 1589576400,
+            "title_ja": "Iino Miko wo Warasenai / Iino Miko wo Warasetai / Kaguya-sama wa Yobarenai",
+            "title_en": "I Don't Want to Make Miko Iino Smile / I Want to Make Miko Iino Smile / Kaguya Isn't Getting Called",
+            "title_ua": null,
+            "type": null,
+            "index": 6
+        },
+        {
+            "title_native": "白銀御行は働きたい / かぐや様は入れたい / かぐや様は堪えたい",
+            "aired": 1590181200,
+            "title_ja": "Shirogane Miyuki wa Hatarakitai / Kaguya-sama wa Iretai / Kaguya-sama wa Taetai",
+            "title_en": "Kaguya Wants to Undress Him / Kaguya Wants to Make Him Let Go / Miyuki Shirogane Wants to Make Her Read / Kaguya <3 Aquarium",
+            "title_ua": null,
+            "type": null,
+            "index": 7
+        },
+        {
+            "title_native": "伊井野ミコは抑えたい / かぐや様は怯えない / かぐや様は診られたい",
+            "aired": 1590786000,
+            "title_ja": "Iino Miko wa Osaetai / Kaguya-sama wa Obienai / Kaguya-sama wa Miraretai",
+            "title_en": "Miko Iino Wants to Control Herself / Kaguya Doesn't Scare Easily / Kaguya Wants to Be Examined",
+            "title_ua": null,
+            "type": null,
+            "index": 8
+        },
+        {
+            "title_native": "そして石上優は目を閉じた② / かぐや様は触りたい / かぐや様は断らない",
+            "aired": 1591390800,
+            "title_ja": "Soshite Ishigami Yuu wa Me wo Tojita 2 / Kaguya-sama wa Sawaritai / Kaguya-sama wa Kotowaranai",
+            "title_en": "Yu Ishigami Closes His Eyes, Part 2 / Kaguya Wants to Touch / Kaguya Doesn't Say No",
+            "title_ua": null,
+            "type": null,
+            "index": 9
+        },
+        {
+            "title_native": "白銀圭は話せない / 白銀御行は踊りたい / 大仏こばちは取り締まりたい / 白銀父は聞き出したい",
+            "aired": 1591995600,
+            "title_ja": "Shirogane Kei wa Hanasenai / Shirogane Miyuki wa Odoritai / Osaragi Kobachi wa Torishimaritai / Shirogane Chichi wa Kikidashitai",
+            "title_en": "Kei Shirogane Can't Speak / Miyuki Shirogane Wants to Dance / Kobachi Osaragi Wants to Crack Down / Miyuki Shirogane's Dad Wants to Find Out",
+            "title_ua": null,
+            "type": null,
+            "index": 10
+        },
+        {
+            "title_native": "そして石上優は目を閉じた③ / 白銀御行と石上優 / 大友京子は気づかない",
+            "aired": 1592600400,
+            "title_ja": "Soshite Ishigami Yuu wa Me wo Tojita 3 / Shirogane Miyuki to Ishigami Yuu / Otomo Kyouko wa Kizukanai",
+            "title_en": "Yu Ishigami Closes His Eyes, Part 3 / Miyuki Shirogane and Yu Ishigami / Kyoko Otomo Doesn't Realize",
+            "title_ua": null,
+            "type": null,
+            "index": 11
+        },
+        {
+            "title_native": "生徒会は撮られたい / 生徒会は撮らせたい / 藤原千花は膨らませたい",
+            "aired": 1593205200,
+            "title_ja": "Seitokai wa Toraretai / Seitokai wa Torasetai / Fujiwara Chika wa Fukuramasetai",
+            "title_en": "The Student Council Would Like a Group Photo / The Student Council is Going to Get That Group Photo / Chika Fujiwara Wants to Inflate",
+            "title_ua": null,
+            "type": null,
+            "index": 12
+        }
+    ],
+    "episodes_released": 12,
+    "start_date": 1586552400,
+    "episodes_total": 12,
+    "voices": [
+        {
+            "character": {
+                "content_id": "ecd6a383-9afe-48a5-84ee-4c0fcba1ec5c"
+            },
+            "person": {
+                "content_id": "cfc76511-1e6c-4ad1-a9cc-3fadd11e136e"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c6f95fe4-2c77-496b-a62a-a9c0339a6707"
+            },
+            "person": {
+                "content_id": "ccdb1cd3-ebda-451a-bff2-7fe2b8c0aa2c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9926908b-e375-46c2-bbcf-82be92b8c35f"
+            },
+            "person": {
+                "content_id": "6276c862-0ae9-4a6e-9b02-6fb8e59164f0"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c7e847c8-682f-4d0c-be84-be08a8d9ed7a"
+            },
+            "person": {
+                "content_id": "8e5ffec8-d974-4ae3-b32e-04b625a8f876"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d1498c1a-7030-4702-a06c-1adebcb4033e"
+            },
+            "person": {
+                "content_id": "aac5abed-7f6c-45aa-9394-2be821e15ee8"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "6de34764-18b2-405e-b41f-039181241c68"
+            },
+            "person": {
+                "content_id": "e784f3ce-e041-4bac-ac92-ee015d658199"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "2664177b-8b7c-44ed-98ac-554b653431e2"
+            },
+            "person": {
+                "content_id": "37f89f27-a130-454d-a446-5fd385c668ae"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "6de34764-18b2-405e-b41f-039181241c68"
+            },
+            "person": {
+                "content_id": "38eba42a-5851-4e9a-9019-b3a70181a26c"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "842a3025-940f-4160-804c-a7537e75410f"
+            },
+            "person": {
+                "content_id": "c3734124-31d1-4ccd-bf38-0d9659b91f64"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "819db61e-2f9e-4840-97bc-84487ced67ae"
+            },
+            "person": {
+                "content_id": "79cf464a-2b3c-4bea-b724-393b8f7e3be5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "a23c1ded-1d75-426e-913e-5743fa60c562"
+            },
+            "person": {
+                "content_id": "bcba4e35-6a12-4b12-b16c-73bb2f83ff51"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1f638677-31d4-4d1f-b8fa-406f4ea66456"
+            },
+            "person": {
+                "content_id": "ff291c90-0211-43be-841a-58301eca6870"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fe3906dc-8dc3-4328-87a0-2d2f6312d0f4"
+            },
+            "person": {
+                "content_id": "92b7dcbd-1d24-4c9e-af2b-a100c00ae7ad"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "54e94f28-5908-4adf-8b63-ac2f17f05f8d"
+            },
+            "person": {
+                "content_id": "d3f4aaea-301f-4e13-9a30-8a5c43fecffc"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c2195390-02f8-49d0-8bde-ff8fbc7a8db6"
+            },
+            "person": {
+                "content_id": "b4b3d30e-5db5-45a2-aadb-3272cf34d495"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7254b9ca-cd72-4b55-860b-b9b9b5654a38"
+            },
+            "person": {
+                "content_id": "b587984d-9fa9-4508-9b83-454b2cc26b29"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c6f95fe4-2c77-496b-a62a-a9c0339a6707"
+            },
+            "person": {
+                "content_id": "14b7577b-9973-4e8c-89e9-9d5f1304d2ce"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c36906ae-c10f-48b2-92b7-7439e3276435"
+            },
+            "person": {
+                "content_id": "b3d871c7-8aff-4732-bb0d-ccc917a87cd6"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c36906ae-c10f-48b2-92b7-7439e3276435"
+            },
+            "person": {
+                "content_id": "2401b2c7-80be-4b4c-8fe8-fa35b30d06b5"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "38b973d6-ade6-499b-91ec-3a197c97ccc4"
+            },
+            "person": {
+                "content_id": "51d78979-4258-4233-9ef8-f4f0c159496b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "e5848319-5737-4a63-bbb7-2f5abfb3b4cb"
+            },
+            "person": {
+                "content_id": "fd8238f1-f1c1-4f45-8956-1e7224b0cbfa"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "5ae5470a-0f5f-4345-a358-56eeee0a2134"
+            },
+            "person": {
+                "content_id": "4a0d1ca4-4028-4845-ba3d-2de3a7a8d715"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1c506ceb-dbbe-4a5f-bb2c-c9f76224381b"
+            },
+            "person": {
+                "content_id": "6cdf51b8-a56a-464f-b322-331a75f867ae"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "54e94f28-5908-4adf-8b63-ac2f17f05f8d"
+            },
+            "person": {
+                "content_id": "d93fbf5e-7547-4bdc-9345-2ab7418136e3"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "400809cd-f0b8-4333-98ea-032799f68283"
+            },
+            "person": {
+                "content_id": "1400cb41-bf09-45ff-abed-489f835601d7"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fc06372b-256b-4f59-9808-6a9ebc37788a"
+            },
+            "person": {
+                "content_id": "0f77bd83-e2a4-4daa-aa2f-ac00e4434175"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "ecd6a383-9afe-48a5-84ee-4c0fcba1ec5c"
+            },
+            "person": {
+                "content_id": "a6d3c0d7-576c-46ca-b91e-a38874e584ab"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c2195390-02f8-49d0-8bde-ff8fbc7a8db6"
+            },
+            "person": {
+                "content_id": "670a9302-4c5f-4392-aa08-ee1e07c22452"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1e94efc6-3143-4492-8b87-d9c7f2bce3ed"
+            },
+            "person": {
+                "content_id": "ba422701-6ed2-4360-aa07-762ee23ac5b9"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "fe3906dc-8dc3-4328-87a0-2d2f6312d0f4"
+            },
+            "person": {
+                "content_id": "3d07f3c8-518f-4331-ba67-928f3eb082c2"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "0ac51f46-c1b5-4a0b-bc9b-d8c043d655e5"
+            },
+            "person": {
+                "content_id": "2de7ad9e-09d8-4c8c-bb05-abdf6b820581"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "8670df4d-a805-4ad3-955e-ee6d5e0684b3"
+            },
+            "person": {
+                "content_id": "3482585a-c480-4a15-9edb-b5cc335fb0bf"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d1498c1a-7030-4702-a06c-1adebcb4033e"
+            },
+            "person": {
+                "content_id": "9c7334c5-1c85-4a2d-a154-edd8ae8be7e8"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "50a46672-5639-42f0-bfe5-2d07043a53ea"
+            },
+            "person": {
+                "content_id": "bddad9ea-ffc5-4ad0-84fb-655f30544836"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "7254b9ca-cd72-4b55-860b-b9b9b5654a38"
+            },
+            "person": {
+                "content_id": "fbc762cb-4a18-4c56-9560-075baee3bdf1"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "fc06372b-256b-4f59-9808-6a9ebc37788a"
+            },
+            "person": {
+                "content_id": "7a4c3cc1-f3d5-4735-91ef-b14447b0774e"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8dd2c247-0136-4a50-aad7-3b33be334243"
+            },
+            "person": {
+                "content_id": "3b80f643-0237-43e3-84dd-5d1e31775012"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8670df4d-a805-4ad3-955e-ee6d5e0684b3"
+            },
+            "person": {
+                "content_id": "19f2ca37-a9b6-443c-aecd-cd3d1846529b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c7e847c8-682f-4d0c-be84-be08a8d9ed7a"
+            },
+            "person": {
+                "content_id": "279935a6-e69b-473b-ba05-374d92d1794a"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1c506ceb-dbbe-4a5f-bb2c-c9f76224381b"
+            },
+            "person": {
+                "content_id": "fd2dcde0-fa90-4d67-92e7-3f623c353844"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "1e94efc6-3143-4492-8b87-d9c7f2bce3ed"
+            },
+            "person": {
+                "content_id": "eb3b9bdc-15a4-4de8-b0df-30b8e0f5e3ff"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "05d8e92d-4d17-41f3-8e73-84dffa237ee3"
+            },
+            "person": {
+                "content_id": "cf200eac-24c3-4f93-a42a-e9a834a3ce3b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "c9afe52e-68c5-435d-830b-50ee0dac0b1e"
+            },
+            "person": {
+                "content_id": "2013f3ee-0f89-4c94-b356-c6debd1835e1"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "2664177b-8b7c-44ed-98ac-554b653431e2"
+            },
+            "person": {
+                "content_id": "77aa1d67-65d1-4a98-85a6-bec69bd24319"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "9926908b-e375-46c2-bbcf-82be92b8c35f"
+            },
+            "person": {
+                "content_id": "b24d8444-dacc-42e2-8bc8-494ce1d4bc7b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "c9afe52e-68c5-435d-830b-50ee0dac0b1e"
+            },
+            "person": {
+                "content_id": "508f6c21-59b4-4b25-aead-d9bccd125926"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "400809cd-f0b8-4333-98ea-032799f68283"
+            },
+            "person": {
+                "content_id": "3d9ee80f-93ee-4e8c-9d85-323067f6743b"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "d98ef109-4766-496d-9bee-3e5a3bf150e8"
+            },
+            "person": {
+                "content_id": "55bcceb7-dc9f-4a5c-a021-e19eafda5a89"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "819db61e-2f9e-4840-97bc-84487ced67ae"
+            },
+            "person": {
+                "content_id": "085d0197-3bee-4787-b694-d6ce312d6eae"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "5ae5470a-0f5f-4345-a358-56eeee0a2134"
+            },
+            "person": {
+                "content_id": "08511ba0-cd44-4e38-abf1-c3e80e25703a"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "0ac51f46-c1b5-4a0b-bc9b-d8c043d655e5"
+            },
+            "person": {
+                "content_id": "7b1416cd-afc9-4d3c-b1ab-1c0c91ae3a7b"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "05d8e92d-4d17-41f3-8e73-84dffa237ee3"
+            },
+            "person": {
+                "content_id": "1c4765e9-b6c4-4077-a630-5ed6736fcf15"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "8dd2c247-0136-4a50-aad7-3b33be334243"
+            },
+            "person": {
+                "content_id": "3889f4fd-ec6f-4bf4-9a59-633bd50cda47"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "1f638677-31d4-4d1f-b8fa-406f4ea66456"
+            },
+            "person": {
+                "content_id": "1bb4ba33-2850-4370-a6be-937cf93732f6"
+            },
+            "language": "en"
+        },
+        {
+            "character": {
+                "content_id": "e5848319-5737-4a63-bbb7-2f5abfb3b4cb"
+            },
+            "person": {
+                "content_id": "4c3eed7f-6e48-4b46-b6e9-a982be885e36"
+            },
+            "language": "ja"
+        },
+        {
+            "character": {
+                "content_id": "d98ef109-4766-496d-9bee-3e5a3bf150e8"
+            },
+            "person": {
+                "content_id": "80edb0e0-ff8c-4cc5-9320-d0f3ff41d7b2"
+            },
+            "language": "en"
+        }
+    ],
+    "end_date": 1593205200,
+    "staff": [
+        {
+            "person": {
+                "content_id": "dd21a259-ba3f-4979-8ab0-d20f62646d19"
+            },
+            "roles": [
+                "Producer"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "9f95e6ce-9493-44dc-8891-79d8594c944d"
+            },
+            "roles": [
+                "Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "cc450445-ba22-4ea6-b9d2-dd2470b4e737"
+            },
+            "roles": [
+                "Sound Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d94a684d-7199-41ad-b540-cc59094db776"
+            },
+            "roles": [
+                "Episode Director",
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "d70058ae-0d93-46fa-8cb3-444e696f24ee"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "69f3a9d0-2ed1-4875-b066-652779d7c6b8"
+            },
+            "roles": [
+                "Script"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c6d6c287-3e1d-4804-bd99-dffd3e637a81"
+            },
+            "roles": [
+                "Storyboard"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "38eba42a-5851-4e9a-9019-b3a70181a26c"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "67616db6-6820-4563-b226-57ee22e49ce6"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a3221b5c-1d54-4885-b9d9-e8d6753e570e"
+            },
+            "roles": [
+                "Theme Song Performance"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "c644c881-d4f0-485c-8a53-a5b13224cab9"
+            },
+            "roles": [
+                "Original Creator"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "68254c41-bee3-47ac-a7cf-3d2c5d95e33a"
+            },
+            "roles": [
+                "Music"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "07a91914-c14a-4777-8f48-34ca7499cfad"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "45230432-8bc7-4a46-9492-9e916adb34a9"
+            },
+            "roles": [
+                "Planning"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "8be221d5-788d-4f0d-a4a7-1ab3d5208cfc"
+            },
+            "roles": [
+                "Editing"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "84f273e7-bf36-4e3f-be88-e61e5b68ee5f"
+            },
+            "roles": [
+                "Director of Photography"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "39d8b069-d751-4e4a-8d23-bef20c735b5d"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "7bd1d3ff-4496-44ee-8b42-f803ad7a2e72"
+            },
+            "roles": [
+                "Casting Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "a420dd45-4d8a-446a-af7b-1b623e5bb2f6"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "90ce5064-913f-4155-80f4-f13bb7040983"
+            },
+            "roles": [
+                "ADR Director"
+            ]
+        }
+    ],
+    "created": 1687453302,
+    "updated": 1689286401,
+    "synopsis_en": "After a slow but eventful summer vacation, Shuchiin Academy's second term is now starting in full force. As August transitions into September, Miyuki Shirogane's birthday looms ever closer, leaving Kaguya Shinomiya in a serious predicament as to how to celebrate it. Furthermore, the tenure of the school's 67th student council is coming to an end. Due to the council members being in different classes, the only time Kaguya and Miyuki have to be together will soon disappear, putting all of their cunning plans at risk.\n\nA long and difficult election that will decide the fate of the new student council awaits, as multiple challengers fight for the coveted title of president.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": "Іскрометна ситуаційна романтична комедія продовжується! Наші герої продовжують свій неймовірно повільний рух до визнання своїх почуттів одне до одного, але ж саме це ми і любимо - саме ті ситуації, в які вони потрапляють, стоячи між власним его та почуттями до партнера! Також на нас чекають іще кілька нових персонажів, явно кожний зі своєю родзинкою!\n\nДжерело: Toloka",
+    "franchise": "4f17027c-2b0f-4ad5-b51e-3c4f729b16e1",
+    "title_ja": "Kaguya-sama wa Kokurasetai? Tensai-tachi no Renai Zunousen",
+    "title_en": "Kaguya-sama: Love is War Season 2",
+    "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (Сезон 2)",
+    "duration": 24,
+    "poster": "/content/anime/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-73a73c/8Tco9tymEr2LREqkwVm6IA.jpg",
+    "rating": "pg_13",
+    "source": "manga",
+    "status": "finished",
+    "nsfw": false,
+    "external": [
+        {
+            "url": "https://kaguya.love/2nd/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://twitter.com/anime_kaguya",
+            "text": "@anime_kaguya"
+        },
+        {
+            "url": "https://www.bilibili.com/bangumi/media/md28228367",
+            "text": "bilibili"
+        },
+        {
+            "url": "https://anidb.net/perl-bin/animedb.pl?show=anime&aid=15207",
+            "text": "AniDB"
+        },
+        {
+            "url": "https://www.animenewsnetwork.com/encyclopedia/anime.php?id=22587",
+            "text": "ANN"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Kaguya-sama:_Love_Is_War#Anime",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E3%81%8B%E3%81%90%E3%82%84%E6%A7%98%E3%81%AF%E5%91%8A%E3%82%89%E3%81%9B%E3%81%9F%E3%81%84%E3%80%9C%E5%A4%A9%E6%89%8D%E3%81%9F%E3%81%A1%E3%81%AE%E6%81%8B%E6%84%9B%E9%A0%AD%E8%84%B3%E6%88%A6%E3%80%9C",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://cal.syoboi.jp/tid/5596",
+            "text": "Syoboi"
+        },
+        {
+            "url": "http://www.crunchyroll.com/series-277391",
+            "text": "Crunchyroll"
+        }
+    ],
+    "genre_ids": [
+        "b3c7aa68-5cb4-40fb-b0e0-47099f10fc7b",
+        "1cd67fa4-f783-4191-aff9-51405e7e2111",
+        "9cb8e61a-0d90-4e3e-84b6-31f4f9684834",
+        "bd7b1695-9d1f-4363-be74-3934ed433206"
+    ],
+    "synonyms": [
+        "Kaguya Wants to be Confessed To: The Geniuses' War of Love and Brains 2nd Season",
+        "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen 2nd Season",
+        "Kaguya-sama: Love is War 2nd Season"
+    ],
+    "videos": [
+        {
+            "url": "https://youtu.be/2Od7QCsyqkE",
+            "title": "OP 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"DADDY! DADDY! DO! feat. Airi Suzuki (DADDY! DADDY! DO! feat. 鈴木愛理)\" by Masayuki Suzuki"
+        },
+        {
+            "url": "https://youtu.be/IpsC_leRaxc",
+            "title": "OP 1 (Artist ver.)",
+            "video_type": "video_music",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/4NEbSnuL6GA",
+            "title": "OP 1 (Anime ver.)",
+            "video_type": "video_music",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/ncnHddqNqhM",
+            "title": "ED 2 (Artist ver.)",
+            "video_type": "video_music",
+            "description": "\"Kaze ni Fukarete (風に吹かれて)\" by Haruka Fukuhara"
+        },
+        {
+            "url": "https://youtu.be/l0Z6_6fi-HI",
+            "title": "ED 2 (Anime ver.)",
+            "video_type": "video_music",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/_NkxM_uLUpw",
+            "title": "Trailer Aniplex USA version",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/oS2oWZjejIg",
+            "title": "PV 2",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/LojGqy7eksA",
+            "title": "PV",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/XUDKv_lj-3Q",
+            "title": "Finale PV",
+            "video_type": "video_promo",
+            "description": null
+        },
+        {
+            "url": "https://youtu.be/nTYVkQ4fy-k",
+            "title": "Announcement",
+            "video_type": "video_promo",
+            "description": null
+        }
+    ],
+    "ost": [
+        {
+            "index": 1,
+            "title": "DADDY! DADDY! DO! feat. Airi Suzuki (DADDY! DADDY! DO! feat. 鈴木愛理)",
+            "author": "Masayuki",
+            "spotify": "https://open.spotify.com/track/4xeWELPxBZKhhCrUr84jmp",
+            "ost_type": "opening"
+        },
+        {
+            "index": 1,
+            "title": "DADDY! DADDY! DO! feat. Airi Suzuki (DADDY! DADDY! DO! feat. 鈴木愛理)",
+            "author": "Masayuki",
+            "spotify": "https://open.spotify.com/track/4xeWELPxBZKhhCrUr84jmp",
+            "ost_type": "ending"
+        },
+        {
+            "index": 2,
+            "title": "Kaze ni Fukarete (風に吹かれて)",
+            "author": "Haruka",
+            "spotify": "https://open.spotify.com/track/0vD5RwfgaoG5hecMTzgn4G",
+            "ost_type": "ending"
+        }
+    ],
+    "media_type": "tv",
+    "content_id": "73a73ca9-fcea-4521-ad88-fa5206ad8e78",
+    "scored_by": 810975,
+    "anitube": [
+        {
+            "next_update_info": null,
+            "max_episodes": 12,
+            "dub": true,
+            "hidden": false,
+            "description": "Герої продовжують свій неймовірно повільний рух до визнання своїх почуттів одне до одного, але ж саме це ми і любимо - саме ті ситуації, в які вони потрапляють, стоячи між власним его та почуттями до партнера! Також на нас чекають іще кілька нових персонажів, явно кожний зі своєю родзинкою!",
+            "sub": false,
+            "created": 1687706809,
+            "title_ja": "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen",
+            "episodes": 12,
+            "screenshots": [
+                "https://anitube.in.ua/uploads/posts/2020-04/1586730698_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_23_21_2020_04_12_16_17_46-min.png",
+                "https://anitube.in.ua/uploads/posts/2020-04/1586730668_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_02_29_2020_04_12_16_16_36-min.png",
+                "https://anitube.in.ua/uploads/posts/2020-04/1586730686_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_07_58_2020_04_12_16_16_53-min.png",
+                "https://anitube.in.ua/uploads/posts/2020-04/1586730729_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_13_56_2020_04_12_16_17_06-min.png"
+            ],
+            "updated": 1689360382,
+            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (Сезон 2)",
+            "length": 25,
+            "translators": [
+                "Surgeon"
+            ],
+            "slug": "3583-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen",
+            "episodes_raw": "12 з 12 (25 хв.)",
+            "scored_by": 181,
+            "voices": [
+                "Surgeon",
+                "Eternal Rage"
+            ],
+            "url": "https://anitube.in.ua/3583-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen.html",
+            "director": "Омата Шінічі",
+            "year": 2020,
+            "genres": [
+                {
+                    "name": "Комедія",
+                    "slug": "comedy"
+                },
+                {
+                    "name": "Психологія",
+                    "slug": "psiho"
+                },
+                {
+                    "name": "Романтика",
+                    "slug": "romance"
+                },
+                {
+                    "name": "Сейнен",
+                    "slug": "seinen"
+                },
+                {
+                    "name": "Школа",
+                    "slug": "school-life"
+                }
+            ],
+            "trailer": "https://www.youtube.com/watch?v=Wv3i6Z6vCzk",
+            "score": 9.3,
+            "teams": [
+                "FanVoxUA"
+            ],
+            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/e/f0f86dd2954adca635dd56ed977248.jpg",
+            "nsfw": false,
+            "id": "2357b6a9-159c-44c9-9beb-f5d709ded2e3"
+        }
+    ],
+    "toloka": [
+        {
+            "title_raw": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (сезон 2) / Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen (2020) WEBDL 720p",
+            "year": 2020,
+            "title_ja": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
+            "leech": 1,
+            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~",
+            "seed": 13,
+            "quality": "720p",
+            "size": 6942,
+            "slug": "109671",
+            "url": "http://toloka.to/t109671",
+            "image": "https://img.hurtom.com/i/2020/04/kaguya2_poster.jpg",
+            "id": "e0fa1c3d-cbf0-49d7-844d-57a653bab819",
+            "next_update_info": null,
+            "author": "FanVoxUA",
+            "created": 1593291600,
+            "screenshots": [
+                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_02.29_2020.04.12_16.16.36.png",
+                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_07.58_2020.04.12_16.16.53.png",
+                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_13.56_2020.04.12_16.17.06.png",
+                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_18.40_2020.04.12_16.17.25.png",
+                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_23.21_2020.04.12_16.17.46.png"
+            ],
+            "description": "Іскрометна ситуаційна романтична комедія продовжується! Наші герої продовжують свій неймовірно повільний рух до визнання своїх почуттів одне до одного, але ж саме це ми і любимо - саме ті ситуації, в які вони потрапляють, стоячи між власним его та почуттями до партнера! Також на нас чекають іще кілька нових персонажів, явно кожний зі своєю родзинкою!",
+            "updated": 1689357007,
+            "hidden": false,
+            "episodes": null
+        }
+    ],
+    "score": 8.64,
+    "stats": {
+        "dropped": 9916,
+        "on_hold": 17526,
+        "planned": 176174,
+        "score_1": 1389,
+        "score_2": 444,
+        "score_3": 679,
+        "score_4": 1720,
+        "score_5": 5633,
+        "score_6": 16952,
+        "score_7": 76050,
+        "score_8": 235664,
+        "score_9": 294279,
+        "score_10": 178299,
+        "watching": 84946,
+        "completed": 978544
+    }
+}

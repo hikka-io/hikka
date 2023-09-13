@@ -14,7 +14,7 @@ async def test_password_reset_not_activated(
 ):
     # Request password reset for not activated account
     response = await request_password_reset(client, "user@mail.com")
-    assert response.json()["code"] == "auth_not_activated"
+    assert response.json()["code"] == "auth:not_activated"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -45,7 +45,7 @@ async def test_password_reset_rate_limit(
 
     # Request password reset again to check rate limit
     response = await request_password_reset(client, "user@mail.com")
-    assert response.json()["code"] == "auth_reset_valid"
+    assert response.json()["code"] == "auth:reset_valid"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -68,7 +68,7 @@ async def test_password_reset_expired(client, test_session, create_test_user):
         client, user.password_reset_token, "new_password"
     )
 
-    assert response.json()["code"] == "auth_reset_expired"
+    assert response.json()["code"] == "auth:reset_expired"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 

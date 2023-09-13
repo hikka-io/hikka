@@ -1,9 +1,9 @@
 from urllib.parse import quote
+from datetime import timezone
 from datetime import datetime
 from app import constants
 import unicodedata
 import secrets
-import orjson
 import math
 import re
 
@@ -13,18 +13,62 @@ def chunkify(lst, size):
     return [lst[i : i + size] for i in range(0, len(lst), size)]
 
 
-# Dump dict using orjson
-def orjson_dumps(v, *, default):
-    return orjson.dumps(v, default=default).decode()
-
-
 # Generate URL safe slug
 def slugify(
     text,
     content_id=None,
-    word_separator="-",
     max_length=240,
 ):
+    # This used to be optional argument
+    # But if we pass special characters like "?" it will break regex module
+    # So it's hardcoded to "-" for the time being
+    word_separator = "-"
+
+    # https://zakon.rada.gov.ua/laws/show/55-2010-%D0%BF
+    transliterate = {
+        "а": "a",
+        "б": "b",
+        "в": "v",
+        "г": "h",
+        "ґ": "g",
+        "д": "d",
+        "е": "e",
+        "є": "ye",
+        "ж": "zh",
+        "з": "z",
+        "и": "y",
+        "і": "i",
+        "ї": "yi",
+        "й": "y",
+        "к": "k",
+        "л": "l",
+        "м": "m",
+        "н": "n",
+        "о": "o",
+        "п": "p",
+        "р": "r",
+        "с": "s",
+        "т": "t",
+        "у": "u",
+        "ф": "f",
+        "х": "kh",
+        "ц": "ts",
+        "ч": "ch",
+        "ш": "sh",
+        "щ": "shch",
+        "ю": "yu",
+        "я": "ya",
+    }
+
+    # Pass trough text and replace cyrillic characters according to
+    # official Ukrainian transliteration
+    text = "".join(
+        transliterate[letter.lower()]
+        if letter.lower() in transliterate
+        else letter
+        for letter in text
+    )
+
     # Remove any diacritics (accents) from the text
     text = (
         unicodedata.normalize("NFKD", text)
@@ -60,18 +104,20 @@ def slugify(
 
     # Fallback if text is empty
     if not text:
-        text = secrets.token_urlsafe(32)
+        # 22 characters (16 bytes)
+        text = secrets.token_urlsafe(16)
 
     return text
 
 
 # Convest timestamp to UTC datetime
-def from_timestamp(timestamp):
+def from_timestamp(timestamp: int):
     return datetime.utcfromtimestamp(timestamp) if timestamp else None
 
 
 # Convert datetime to timestamp
 def to_timestamp(date):
+    date = date.replace(tzinfo=timezone.utc)
     return int(date.timestamp()) if date else None
 
 
@@ -94,18 +140,18 @@ def pagination_dict(total, page, limit):
 # Convert month to season str
 def get_season(date):
     season_map = {
-        12: "winter",
-        1: "winter",
-        2: "winter",
-        3: "spring",
-        4: "spring",
-        5: "spring",
-        6: "summer",
-        7: "summer",
-        8: "summer",
-        9: "fall",
-        10: "fall",
-        11: "fall",
+        12: constants.SEASON_WINTER,
+        1: constants.SEASON_WINTER,
+        2: constants.SEASON_WINTER,
+        3: constants.SEASON_SPRING,
+        4: constants.SEASON_SPRING,
+        5: constants.SEASON_SPRING,
+        6: constants.SEASON_SUMMER,
+        7: constants.SEASON_SUMMER,
+        8: constants.SEASON_SUMMER,
+        9: constants.SEASON_FALL,
+        10: constants.SEASON_FALL,
+        11: constants.SEASON_FALL,
     }
 
     return season_map.get(date.month) if date else None
