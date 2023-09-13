@@ -28,11 +28,11 @@ async def test_anime_filter_years(client, aggregator_anime):
     # Check for bad year placement
     response = await request_anime_search(client, {"years": [2023, 2020]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Check for negative value
     response = await request_anime_search(client, {"years": [None, -1]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

@@ -40,5 +40,5 @@ async def test_anime_filter_genres(
     # And one last test to make sure only correct genres can be used
     response = await request_anime_search(client, {"genres": ["bad-genre"]})
 
-    assert response.json()["code"] == "anime_unknown_genre"
+    assert response.json()["code"] == "anime:unknown_genre"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

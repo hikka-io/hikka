@@ -23,7 +23,7 @@ async def test_watch_bad_note(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
 
 
 async def test_watch_bad_status(
@@ -38,7 +38,7 @@ async def test_watch_bad_status(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
 
 
 async def test_watch_bad_score(
@@ -59,7 +59,7 @@ async def test_watch_bad_score(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
 
     response = await request_watch_add(
         client,
@@ -72,7 +72,7 @@ async def test_watch_bad_score(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
 
 
 async def test_watch_bad_episodes(
@@ -93,4 +93,4 @@ async def test_watch_bad_episodes(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "watch_bad_episodes"
+    assert response.json()["code"] == "watch:bad_episodes"

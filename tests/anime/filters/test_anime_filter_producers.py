@@ -34,5 +34,5 @@ async def test_anime_filter_producers(
         client, {"producers": ["unknown-producer"]}
     )
 
-    assert response.json()["code"] == "anime_unknown_producer"
+    assert response.json()["code"] == "anime:unknown_producer"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

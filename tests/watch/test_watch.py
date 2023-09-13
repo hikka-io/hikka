@@ -14,4 +14,4 @@ async def test_watch(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "watch_not_found"
+    assert response.json()["code"] == "watch:not_found"

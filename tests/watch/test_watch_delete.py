@@ -37,7 +37,7 @@ async def test_watch_delete(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "watch_not_found"
+    assert response.json()["code"] == "watch:not_found"
 
     # Check whether Bocchi is in user's watch list
     response = await request_watch(
@@ -45,4 +45,4 @@ async def test_watch_delete(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "watch_not_found"
+    assert response.json()["code"] == "watch:not_found"

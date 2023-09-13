@@ -16,4 +16,4 @@ async def test_people_info_bad(client):
     response = await request_people_info(client, "bad-person")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "person_not_found"
+    assert response.json()["code"] == "person:not_found"

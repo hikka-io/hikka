@@ -29,7 +29,7 @@ async def test_favourite_delete(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "favourite_not_found"
+    assert response.json()["code"] == "favourite:not_found"
 
     # Check whether Bocchi is favourite anime of user one last time
     response = await request_favourite(
@@ -37,4 +37,4 @@ async def test_favourite_delete(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "favourite_not_found"
+    assert response.json()["code"] == "favourite:not_found"

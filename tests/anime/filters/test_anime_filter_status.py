@@ -30,5 +30,5 @@ async def test_anime_filter_status(client, aggregator_anime):
     # Check for bad status
     response = await request_anime_search(client, {"status": ["bad"]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

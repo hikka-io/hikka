@@ -16,4 +16,4 @@ async def test_companies_info_bad(client):
     response = await request_companies_info(client, "bad-company")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "company_not_found"
+    assert response.json()["code"] == "company:not_found"

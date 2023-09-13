@@ -30,10 +30,10 @@ async def test_anime_filter_score(client, aggregator_anime):
     # Score should be in range of 0 to 10
     response = await request_anime_search(client, {"score": [-1, 5]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     response = await request_anime_search(client, {"score": [5, 11]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

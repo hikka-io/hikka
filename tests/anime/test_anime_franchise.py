@@ -39,4 +39,4 @@ async def test_anime_no_franchise(
     response = await request_anime_franchise(client, "bocchi-the-rock-9e172d")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "anime_no_franchise"
+    assert response.json()["code"] == "anime:no_franchise"

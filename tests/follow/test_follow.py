@@ -26,7 +26,7 @@ async def test_follow_self(
 ):
     # Make sure user can't follow himself
     response = await request_follow_check(client, get_test_token, "username")
-    assert response.json()["code"] == "follow_self"
+    assert response.json()["code"] == "follow:self"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -37,7 +37,7 @@ async def test_follow_unknown_user(
 ):
     # Follow endpoint should throw error if user is not found
     response = await request_follow_check(client, get_test_token, "unknown")
-    assert response.json()["code"] == "user_not_found"
+    assert response.json()["code"] == "user:not_found"
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
@@ -59,7 +59,7 @@ async def test_follow(
 
     # User should not be able to follow same account twice
     response = await request_follow(client, get_test_token, "dummy")
-    assert response.json()["code"] == "follow_already_following"
+    assert response.json()["code"] == "follow:already_following"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
@@ -86,7 +86,7 @@ async def test_unfollow(
 
     # User should not be able to unfollow same account twice
     response = await request_unfollow(client, get_test_token, "dummy")
-    assert response.json()["code"] == "follow_not_following"
+    assert response.json()["code"] == "follow:not_following"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 

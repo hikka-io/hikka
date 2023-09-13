@@ -58,4 +58,4 @@ async def test_anime_info_bad(
     response = await request_anime_info(client, "bad-slug")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "anime_not_found"
+    assert response.json()["code"] == "anime:not_found"

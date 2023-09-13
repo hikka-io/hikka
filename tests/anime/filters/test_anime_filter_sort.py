@@ -26,11 +26,11 @@ async def test_anime_filter_sort(client, aggregator_anime):
     # Check for bad sort field
     response = await request_anime_search(client, {"sort": ["bad_field:asc"]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     # Check for bad sort value
     response = await request_anime_search(client, {"sort": ["scored_by:bad"]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

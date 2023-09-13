@@ -32,5 +32,5 @@ async def test_anime_filter_rating(
     # Check for bad rating
     response = await request_anime_search(client, {"rating": ["bad"]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

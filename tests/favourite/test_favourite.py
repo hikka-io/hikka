@@ -14,4 +14,4 @@ async def test_favourite(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "favourite_not_found"
+    assert response.json()["code"] == "favourite:not_found"

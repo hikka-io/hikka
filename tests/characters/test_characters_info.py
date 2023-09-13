@@ -16,4 +16,4 @@ async def test_characters_info_bad(client):
     response = await request_characters_info(client, "bad-character")
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert response.json()["code"] == "character_not_found"
+    assert response.json()["code"] == "character:not_found"

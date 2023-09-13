@@ -23,7 +23,7 @@ async def test_favourite_add(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "favourite_exists"
+    assert response.json()["code"] == "favourite:exists"
 
     # Check if user has anime in favourite list again
     response = await request_favourite(

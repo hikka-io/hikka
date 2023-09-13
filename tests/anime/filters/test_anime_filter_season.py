@@ -30,5 +30,5 @@ async def test_anime_filter_season(client, aggregator_anime):
     # Check for bad season
     response = await request_anime_search(client, {"season": ["bad"]})
 
-    assert response.json()["code"] == "validation_error"
+    assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

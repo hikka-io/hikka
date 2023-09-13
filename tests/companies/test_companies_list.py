@@ -42,5 +42,5 @@ async def test_companies_no_meilisearch(client, aggregator_companies):
     # When Meilisearch is down search should throw query down error
     response = await request_companies_search(client, {"query": "test"})
 
-    assert response.json()["code"] == "search_query_down"
+    assert response.json()["code"] == "search:query_down"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
