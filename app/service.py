@@ -17,6 +17,10 @@ async def get_anime_by_slug(
     return await session.scalar(select(Anime).filter_by(slug=slug))
 
 
+async def get_anime_by_id(session: AsyncSession, id: str) -> Union[Anime, None]:
+    return await session.scalar(select(Anime).filter_by(id=id))
+
+
 async def get_auth_token(
     session: AsyncSession, secret: str
 ) -> Union[AuthToken, None]:
