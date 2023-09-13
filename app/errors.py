@@ -95,7 +95,7 @@ class Abort(Exception):
 
 
 def build_error_code(scope: str, message: str):
-    return scope.replace("-", "_") + "_" + message.replace("-", "_")
+    return scope.replace("-", "_") + ":" + message.replace("-", "_")
 
 
 async def abort_handler(request: Request, exc: Abort):
