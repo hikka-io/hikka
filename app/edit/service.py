@@ -18,22 +18,21 @@ from app.models import (
 )
 
 content_type_to_class = {
-    constants.CONTENT_ANIME: Anime,
-    # constants.CONTENT_MANGA: ,
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_COMPANY: Company,
-    # constants.CONTENT_EPISODE: AnimeEpisode,
-    constants.CONTENT_GENRE: AnimeGenre,
-    constants.CONTENT_PERSON: Person,
     constants.CONTENT_STAFF: AnimeStaffRole,
+    constants.CONTENT_CHARACTER: Character,
+    constants.CONTENT_GENRE: AnimeGenre,
+    constants.CONTENT_COMPANY: Company,
+    constants.CONTENT_PERSON: Person,
+    constants.CONTENT_ANIME: Anime,
 }
 
 
 async def get_content_by_id(
     session: AsyncSession, content_type: ContentTypeEnum, content_id: str
 ) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole, None]:
+    content_model = content_type_to_class[content_type]
     return await session.scalar(
-        select(content_type_to_class[content_type]).filter_by(id=content_id)
+        select(content_model).filter(content_model.id == content_id)
     )
 
 
@@ -41,8 +40,9 @@ async def get_content_by_id(
 async def get_content_by_slug(
     session: AsyncSession, content_type: ContentTypeEnum, slug: str
 ) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole, None]:
+    content_model = content_type_to_class[content_type]
     return await session.scalar(
-        select(content_type_to_class[content_type]).filter_by(slug=slug)
+        select(content_model).filter(content_model.slug == slug)
     )
 
 
@@ -51,7 +51,7 @@ async def get_edit_by_id(
 ) -> Union[ContentEdit, None]:
     return await session.scalar(
         select(ContentEdit)
-        .filter_by(edit_id=edit_id)
+        .filter(ContentEdit.edit_id == edit_id)
         .options(
             selectinload(ContentEdit.author),
             selectinload(ContentEdit.moderator),
@@ -64,7 +64,9 @@ async def count_edits_by_content_id(
     content_id: str,
 ) -> int:
     return await session.scalar(
-        select(func.count(ContentEdit.id)).filter_by(content_id=content_id)
+        select(func.count(ContentEdit.id)).filter(
+            ContentEdit.content_id == content_id
+        )
     )
 
 
@@ -78,21 +80,21 @@ async def get_edits_by_content_id(
         select(ContentEdit)
         .filter_by(content_id=content_id)
         .options(
-            selectinload(ContentEdit.author),
             selectinload(ContentEdit.moderator),
+            selectinload(ContentEdit.author),
         )
-        .order_by(desc("edit_id"))
+        .order_by(desc(ContentEdit.edit_id))
         .limit(limit)
         .offset(offset)
     )
 
 
 async def create_edit_request(
+    session: AsyncSession,
     args: EditArgs,
     content_id: str,
     content_type: ContentTypeEnum,
     user: User,
-    session: AsyncSession,
 ) -> ContentEdit:
     # Pretty much the only reason we convert it to dict here is so that we can
     # get rid of non-edit fields like "description" in a neat way

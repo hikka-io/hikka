@@ -1,13 +1,15 @@
-from .service import get_edit_by_id, get_content_by_id, get_content_by_slug
-from .schemas import ContentTypeEnum, AnimeEditArgs
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import auth_required
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from typing import Union
+from . import service
 
+from .schemas import (
+    ContentTypeEnum,
+    AnimeEditArgs,
+)
 
 from app.models import (
     AnimeStaffRole,
@@ -17,38 +19,14 @@ from app.models import (
     Company,
     Person,
     Anime,
-    User,
 )
-
-
-async def validate_edit_perms(
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
-    ),
-) -> User:
-    return user
-
-
-async def validate_review_perms(
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(
-            permissions=[
-                constants.PERMISSION_ACCEPT_EDIT,
-                constants.PERMISSION_REJECT_EDIT,
-            ]
-        )
-    ),
-) -> User:
-    return user
 
 
 async def validate_edit_id(
     edit_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
-    if not (edit := await get_edit_by_id(session, edit_id)):
+    if not (edit := await service.get_edit_by_id(session, edit_id)):
         raise Abort("edit", "invalid-id")
 
     return edit
@@ -65,7 +43,13 @@ async def validate_edit_content_type(
     if edit.content_type != content_type:
         raise Abort("edit", "wrong-content-type")
 
-    if not (await get_content_by_id(session, content_type, edit.content_id)):
+    if not (
+        await service.get_content_by_id(
+            session,
+            content_type,
+            edit.content_id,
+        )
+    ):
         raise Abort("edit", "invalid-content-id")
 
     return edit
@@ -78,7 +62,9 @@ async def validate_edit_approval(
     edit: ContentEdit = Depends(validate_edit_content_type),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
-    content = await get_content_by_id(session, content_type, edit.content_id)
+    content = await service.get_content_by_id(
+        session, content_type, edit.content_id
+    )
 
     pop_list = []
 
@@ -98,12 +84,17 @@ async def validate_edit_approval(
     return edit
 
 
+# ToDo: it seams we only need to return content reference here
 async def validate_content_slug(
     slug: str,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole, None]:
-    if not (content := await get_content_by_slug(session, content_type, slug)):
+) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole]:
+    if not (
+        content := await service.get_content_by_slug(
+            session, content_type, slug
+        )
+    ):
         raise Abort("edit", "content-not-found")
 
     return content
