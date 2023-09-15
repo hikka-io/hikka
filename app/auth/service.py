@@ -5,6 +5,7 @@ from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
+from app import constants
 from typing import Union
 
 
@@ -57,23 +58,24 @@ async def create_oauth_user(
 
     user = User(
         **{
-            "username": None,
+            "activated": email is not None,
+            "role": constants.ROLE_USER,
             "password_hash": None,
-            "email": email,
             "last_active": now,
+            "username": None,
+            "email": email,
             "created": now,
             "login": now,
-            "activated": email is not None,
         }
     )
 
     oauth = UserOAuth(
         **{
-            "user": user,
-            "provider": provider,
             "oauth_id": user_data["id"],
+            "provider": provider,
             "last_used": now,
             "created": now,
+            "user": user,
         }
     )
 
@@ -103,6 +105,7 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
             "activation_token": activation_token,
             "password_hash": password_hash,
             "username": signup.username,
+            "role": constants.ROLE_USER,
             "email": signup.email,
             "last_active": now,
             "created": now,
@@ -185,7 +188,7 @@ async def set_username(session: AsyncSession, user: User, username: str):
     return user
 
 
-# WIP: Need to send an activation email
+# ToDo: Need to send an activation email
 async def set_email(session: AsyncSession, user: User, email: str):
     user.email = email
     session.add(user)

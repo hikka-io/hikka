@@ -97,6 +97,7 @@ CONTENT_PERSON = "person"
 CONTENT_STAFF = "staff"
 
 # Roles
+# ToDo: move to separate file (?)
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
