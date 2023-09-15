@@ -1,15 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from .schemas import ContentTypeEnum, EditArgs
 from app.database import get_session
 from app.models import ContentEdit
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
-
-from .schemas import (
-    ContentTypeEnum,
-    AnimeEditArgs,
-)
 
 
 async def validate_edit_id(
@@ -92,7 +88,7 @@ async def validate_content_slug(
 
 
 # ToDo: move this to a model_validator once we migrate to Pydantic 2
-async def validate_args(args: AnimeEditArgs) -> AnimeEditArgs:
+async def validate_edit_args(args: EditArgs) -> EditArgs:
     for arg in args:
         if arg[1] is not None:
             return args

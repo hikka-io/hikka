@@ -45,9 +45,10 @@ class ContentTypeEnum(str, Enum):
 # Args
 class EditArgs(ORJSONModel):
     description: Union[str, None] = Field(example="...")
+    after: dict
 
 
-class AnimeEditArgs(EditArgs):
+class AnimeEditArgs(ORJSONModel):
     synopsis_en: Union[str, None] = Field(example="...")
     synopsis_ua: Union[str, None] = Field(example="...")
     synonyms: Union[list[str], None] = Field()

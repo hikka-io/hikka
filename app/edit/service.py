@@ -97,10 +97,10 @@ async def get_edits(
 
 async def create_pending_edit(
     session: AsyncSession,
-    args: EditArgs,
-    content_id: str,
     content_type: ContentTypeEnum,
-    user: User,
+    content_id: str,
+    args: EditArgs,
+    author: User,
 ) -> ContentEdit:
     """Create edit for given content_id with pending status"""
 
@@ -127,9 +127,9 @@ async def create_pending_edit(
             "content_type": content_type,
             "description": description,
             "content_id": content_id,
+            "author": author,
             "created": now,
             "updated": now,
-            "author": user,
             "after": after,
         }
     )
@@ -141,9 +141,9 @@ async def create_pending_edit(
 
 
 async def approve_pending_edit(
-    user: User,
-    edit: ContentEdit,
     session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
 ) -> ContentEdit:
     """Approve edit for given content_id"""
 
@@ -158,9 +158,9 @@ async def approve_pending_edit(
         setattr(content, key, value)
 
     edit.status = constants.EDIT_APPROVED
-    edit.before = before
     edit.updated = datetime.now()
-    edit.moderator = user
+    edit.moderator = moderator
+    edit.before = before
 
     session.add(edit)
     session.add(content)
@@ -170,15 +170,15 @@ async def approve_pending_edit(
 
 
 async def deny_pending_edit(
-    user: User,
-    edit: ContentEdit,
     session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
 ) -> ContentEdit:
     """Deny edit for given content_id"""
 
     edit.status = constants.EDIT_DENIED
     edit.updated = datetime.now()
-    edit.moderator = user
+    edit.moderator = moderator
 
     session.add(edit)
     await session.commit()

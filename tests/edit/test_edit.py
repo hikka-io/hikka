@@ -1,6 +1,8 @@
 from client_requests import request_edit
 from fastapi import status
 
+# ToDo: tests for bad permissions
+
 
 async def test_edit(client):
     # Try to fetch unknown edit
