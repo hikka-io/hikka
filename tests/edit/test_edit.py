@@ -2,6 +2,12 @@ from client_requests import request_edit
 from fastapi import status
 
 # ToDo: tests for bad permissions
+# ToDo: test for creating edit
+# ToDo: test for getting list of edits
+# ToDo: test for getting edit info
+# ToDo: test for updating the edit
+# ToDo: test for approving the edit
+# ToDo: test for denying the edit
 
 
 async def test_edit(client):

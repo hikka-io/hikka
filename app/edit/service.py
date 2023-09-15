@@ -41,7 +41,7 @@ async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
     )
 
 
-async def get_content_by_id(
+async def get_content(
     session: AsyncSession, content_type: ContentTypeEnum, content_id: str
 ) -> AnimeStaffRole | AnimeGenre | Character | Company | Person | Anime | None:
     """Return editable content by content_type and content_id"""
@@ -147,9 +147,7 @@ async def approve_pending_edit(
 ) -> ContentEdit:
     """Approve edit for given content_id"""
 
-    content = await get_content_by_id(
-        session, edit.content_type, edit.content_id
-    )
+    content = await get_content(session, edit.content_type, edit.content_id)
 
     before = {}
 

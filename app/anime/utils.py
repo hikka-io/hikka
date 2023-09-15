@@ -4,13 +4,14 @@ from sqlalchemy import desc, asc
 
 def build_anime_filters(search: AnimeSearchArgs):
     rating = [f"rating = {rating}" for rating in search.rating]
-
     status = [f"status = {status}" for status in search.status]
-
     source = [f"source = {source}" for source in search.source]
 
-    season = [f"season = {season}" for season in search.season]
+    media_type = [
+        f"media_type = {media_type}" for media_type in search.media_type
+    ]
 
+    season = [f"season = {season}" for season in search.season]
     producers = [f"producers = {producer}" for producer in search.producers]
     studios = [f"studios = {studio}" for studio in search.studios]
     genres = [f"genres = {genre}" for genre in search.genres]
@@ -28,18 +29,19 @@ def build_anime_filters(search: AnimeSearchArgs):
         score.append([f"score>={search.score[0]}"])
 
     if search.score[1]:
-        score.append([f"year<={search.score[1]}"])
+        score.append([f"score<={search.score[1]}"])
 
     return [
         rating,
         status,
         source,
+        media_type,
         season,
         producers,
         studios,
         *genres,
         *year,
-        # *score,
+        *score,
     ]
 
 

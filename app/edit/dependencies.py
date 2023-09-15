@@ -11,6 +11,8 @@ from . import service
 async def validate_edit_id(
     edit_id: int, session: AsyncSession = Depends(get_session)
 ) -> ContentEdit:
+    """Check whether ContentEdit with edit_id exists"""
+
     if not (edit := await service.get_edit(session, edit_id)):
         raise Abort("edit", "not-found")
 
@@ -22,6 +24,7 @@ async def validate_edit_content_type(
     edit: ContentEdit = Depends(validate_edit_id),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
+    # ToDo: move this check into separate dependency
     if edit.status != constants.EDIT_PENDING:
         raise Abort("edit", "already-reviewed")
 
@@ -29,7 +32,7 @@ async def validate_edit_content_type(
         raise Abort("edit", "wrong-content-type")
 
     if not (
-        await service.get_content_by_id(
+        await service.get_content(
             session,
             content_type,
             edit.content_id,
@@ -49,9 +52,7 @@ async def validate_edit_approval(
 ) -> ContentEdit:
     # ToDo: check if edit can be approved (pending type)
 
-    content = await service.get_content_by_id(
-        session, content_type, edit.content_id
-    )
+    content = await service.get_content(session, content_type, edit.content_id)
 
     pop_list = []
 
