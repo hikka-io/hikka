@@ -97,8 +97,6 @@ async def validate_content_slug(
 
 
 # ToDo: move this to a model_validator once we migrate to Pydantic 2
-# ToDo: Pydantic 2 (?)
-# schema.model_validate(args.after, strict=True)
 async def validate_edit_args(
     content_type: ContentTypeEnum, args: EditArgs
 ) -> EditArgs:

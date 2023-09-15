@@ -16,7 +16,10 @@ async def test_create_edit(
         "anime",
         "bocchi-the-rock-9e172d",
         {
-            "after": {},
+            "description": "Тестовий опис",
+            "after": {
+                "title_ua": "Тестовий заголовок",
+            },
         },
     )
 
