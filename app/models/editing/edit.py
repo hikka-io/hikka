@@ -26,7 +26,7 @@ class ContentEdit(
     status: Mapped[str]
 
     edit_id: Mapped[int] = mapped_column(
-        unique=True, index=True, autoincrement=True
+        unique=True, index=True, autoincrement=True, primary_key=True
     )
 
     before: Mapped[dict] = mapped_column(JSONB, nullable=True)

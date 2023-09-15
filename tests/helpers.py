@@ -1,6 +1,7 @@
 from app.auth.utils import hashpwd, new_token
 from datetime import datetime, timedelta
 from app.models import User, UserOAuth
+from app import constants
 import aiofiles
 import json
 
@@ -12,7 +13,11 @@ async def load_json(path):
 
 
 async def create_user(
-    test_session, activated=True, username="username", email="user@mail.com"
+    test_session,
+    activated=True,
+    username="username",
+    email="user@mail.com",
+    role=constants.ROLE_USER,
 ):
     now = datetime.utcnow()
 
@@ -26,6 +31,7 @@ async def create_user(
             "last_active": now,
             "created": now,
             "email": email,
+            "role": role,
             "login": now,
         }
     )
@@ -41,11 +47,11 @@ async def create_oauth(test_session, user_id):
 
     oauth = UserOAuth(
         **{
-            "provider": "google",
             "oauth_id": "test-id",
+            "provider": "google",
+            "user_id": user_id,
             "last_used": now,
             "created": now,
-            "user_id": user_id,
         }
     )
 

@@ -53,6 +53,7 @@ errors = {
         "wrong-content-type": ["Wrong content type", 400],
         "content-not-found": ["Content not found", 404],
         "empty-edit": ["This edit is empty", 400],
+        "bad-edit": ["This edit is invalid", 400],
         "invalid-field": ["Invalid field", 400],
         "not-found": ["Edit not found", 404],
     },

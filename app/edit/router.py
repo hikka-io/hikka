@@ -51,9 +51,8 @@ async def get_edit_list(
     }
 
 
-# ToDo: Split this endpoint for all content types
 @router.post("/{content_type}/{slug}", response_model=EditResponse)
-async def edit_content(
+async def create_edit(
     content_type: ContentTypeEnum,
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),

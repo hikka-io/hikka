@@ -1,11 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import ContentTypeEnum, EditArgs
+from pydantic import ValidationError
 from app.database import get_session
 from app.models import ContentEdit
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
+
+from .schemas import (
+    ContentTypeEnum,
+    AnimeEditArgs,
+    EditArgs,
+)
 
 
 async def validate_edit_id(
@@ -77,6 +83,8 @@ async def validate_content_slug(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ) -> str:
+    """Return content reference by content_type and slug"""
+
     if not (
         content := await service.get_content_by_slug(
             session, content_type, slug
@@ -89,9 +97,26 @@ async def validate_content_slug(
 
 
 # ToDo: move this to a model_validator once we migrate to Pydantic 2
-async def validate_edit_args(args: EditArgs) -> EditArgs:
-    for arg in args:
-        if arg[1] is not None:
-            return args
+# ToDo: Pydantic 2 (?)
+# schema.model_validate(args.after, strict=True)
+async def validate_edit_args(
+    content_type: ContentTypeEnum, args: EditArgs
+) -> EditArgs:
+    """Validate proposed changes based on content_type"""
 
-    raise Abort("edit", "empty-edit")
+    # Make sure we know how to validate proposed content changes
+    schemas = {constants.CONTENT_ANIME: AnimeEditArgs}
+    if not (schema := schemas.get(content_type)):
+        raise Abort("edit", "wrong-content-type")
+
+    # Validate after field with provided schema
+    try:
+        args.after = schema(**args.after)
+    except ValidationError:
+        raise Abort("edit", "bad-edit")
+
+    # User must propose at least some changes
+    if args.after == {}:
+        raise Abort("edit", "empty-edit")
+
+    return args

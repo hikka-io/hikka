@@ -49,6 +49,7 @@ from .watch import request_watch_list
 from .watch import request_watch_add
 from .watch import request_watch
 
+from .edit import request_create_edit
 from .edit import request_edit
 
 __all__ = [
@@ -93,5 +94,6 @@ __all__ = [
     "request_watch_list",
     "request_watch_add",
     "request_watch",
+    "request_create_edit",
     "request_edit",
 ]

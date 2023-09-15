@@ -13,6 +13,10 @@ from app.schemas import (
 
 
 # Enums
+class ContentTypeEnum(str, Enum):
+    content_anime = constants.CONTENT_ANIME
+
+
 class AnimeVideoTypeEnum(str, Enum):
     video_promo = constants.VIDEO_PROMO
     video_music = constants.VIDEO_MUSIC
@@ -28,18 +32,6 @@ class EditStatusEnum(str, Enum):
     edit_approved = constants.EDIT_APPROVED
     edit_denied = constants.EDIT_DENIED
     edit_closed = constants.EDIT_CLOSED
-
-
-# ToDo: not sure if it's the best way to do that
-class ContentTypeEnum(str, Enum):
-    content_anime = constants.CONTENT_ANIME
-    # content_manga = constants.CONTENT_MANGA
-    # content_character = constants.CONTENT_CHARACTER
-    # content_company = constants.CONTENT_COMPANY
-    # content_episode = constants.CONTENT_EPISODE
-    # content_genre = constants.CONTENT_GENRE
-    # content_person = constants.CONTENT_PERSON
-    # content_staff = constants.CONTENT_STAFF
 
 
 # Args

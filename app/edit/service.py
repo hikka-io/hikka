@@ -104,28 +104,15 @@ async def create_pending_edit(
 ) -> ContentEdit:
     """Create edit for given content_id with pending status"""
 
-    # ToDo: this function looks atrocious -> refactor it
-
-    # Pretty much the only reason we convert it to dict here is so that we can
-    # get rid of non-edit fields like "description" in a neat way
-    args = args.dict()
-    description = args.pop("description")
-
-    after = {}
-
-    for key, value in args.items():
-        if not value:
-            continue
-
-        after[key] = value
+    after = args.after.dict(exclude_none=True)
 
     now = datetime.utcnow()
 
     edit = ContentEdit(
         **{
             "status": constants.EDIT_PENDING,
+            "description": args.description,
             "content_type": content_type,
-            "description": description,
             "content_id": content_id,
             "author": author,
             "created": now,
