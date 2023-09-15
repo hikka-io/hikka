@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_session
+from app.models import ContentEdit
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
-from typing import Union
 from . import service
 
 from .schemas import (
@@ -11,23 +11,12 @@ from .schemas import (
     AnimeEditArgs,
 )
 
-from app.models import (
-    AnimeStaffRole,
-    ContentEdit,
-    AnimeGenre,
-    Character,
-    Company,
-    Person,
-    Anime,
-)
-
 
 async def validate_edit_id(
-    edit_id: int,
-    session: AsyncSession = Depends(get_session),
+    edit_id: int, session: AsyncSession = Depends(get_session)
 ) -> ContentEdit:
-    if not (edit := await service.get_edit_by_id(session, edit_id)):
-        raise Abort("edit", "invalid-id")
+    if not (edit := await service.get_edit(session, edit_id)):
+        raise Abort("edit", "not-found")
 
     return edit
 
@@ -62,6 +51,8 @@ async def validate_edit_approval(
     edit: ContentEdit = Depends(validate_edit_content_type),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
+    # ToDo: check if edit can be approved (pending type)
+
     content = await service.get_content_by_id(
         session, content_type, edit.content_id
     )
@@ -84,20 +75,20 @@ async def validate_edit_approval(
     return edit
 
 
-# ToDo: it seams we only need to return content reference here
 async def validate_content_slug(
     slug: str,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole]:
+) -> str:
     if not (
         content := await service.get_content_by_slug(
             session, content_type, slug
         )
     ):
+        # ToDo: return not-found by content type
         raise Abort("edit", "content-not-found")
 
-    return content
+    return content.reference
 
 
 # ToDo: move this to a model_validator once we migrate to Pydantic 2

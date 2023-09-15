@@ -49,6 +49,8 @@ from .watch import request_watch_list
 from .watch import request_watch_add
 from .watch import request_watch
 
+from .edit import request_edit
+
 __all__ = [
     "request_activation_resend",
     "request_password_confirm",
@@ -91,4 +93,5 @@ __all__ = [
     "request_watch_list",
     "request_watch_add",
     "request_watch",
+    "request_edit",
 ]

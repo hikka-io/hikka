@@ -54,7 +54,7 @@ errors = {
         "content-not-found": ["Content not found", 404],
         "empty-edit": ["This edit is empty", 400],
         "invalid-field": ["Invalid field", 400],
-        "invalid-id": ["Invalid edit id", 400],
+        "not-found": ["Edit not found", 404],
     },
     "studio": {
         "not-found": ["Studio not found", 404],
