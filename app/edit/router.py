@@ -61,6 +61,7 @@ async def create_edit(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
 ):
+    # ToDo: check if edit has any differences compared to current version (?)
     return await service.create_pending_edit(
         session, content_type, content_id, args, author
     )

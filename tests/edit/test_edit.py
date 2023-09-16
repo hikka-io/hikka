@@ -16,12 +16,22 @@ async def test_create_edit(
         "anime",
         "bocchi-the-rock-9e172d",
         {
-            "description": "Тестовий опис",
-            "after": {
-                "title_ua": "Тестовий заголовок",
-            },
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi The Rock!"},
         },
     )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.json()["created"], int)
+
+    assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
+    assert response.json()["description"] == "Brief description"
+    assert response.json()["author"]["username"] == "username"
+    assert response.json()["content_type"] == "anime"
+    assert response.json()["status"] == "pending"
+    assert response.json()["moderator"] is None
+    assert response.json()["before"] is None
+    assert response.json()["edit_id"] == 1
 
     from pprint import pprint
 

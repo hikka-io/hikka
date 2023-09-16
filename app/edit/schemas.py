@@ -54,8 +54,6 @@ class AnimeEditArgs(ORJSONModel):
         max_length=255,
     )
 
-    # poster: Union[str, None] = Field()
-
 
 # Response
 # ToDo: make universal UserResponse
