@@ -62,7 +62,6 @@ class UserResponse(ORJSONModel):
 
 
 class EditResponse(ORJSONModel):
-    content_id: str = Field(example="2a407b0c-e28c-4bc4-80bb-d54f8e4c51a6")
     content_type: ContentTypeEnum = Field(example="anime")
     description: Union[str, None] = Field(example="...")
     status: EditStatusEnum = Field(example="pending")
@@ -73,6 +72,7 @@ class EditResponse(ORJSONModel):
     before: Union[dict, None]
     author: UserResponse
     after: dict
+    slug: str
 
 
 class EditListResponse(ORJSONModel):

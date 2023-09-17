@@ -33,6 +33,9 @@ async def test_create_edit(
     assert response.json()["before"] is None
     assert response.json()["edit_id"] == 1
 
+    # Get edit with id
+    response = await request_edit(client, 1)
+
     from pprint import pprint
 
     pprint(response.json())
