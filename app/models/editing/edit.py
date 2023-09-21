@@ -1,16 +1,12 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
+from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from ..base import Base
 from uuid import UUID
-
-from ..mixins import (
-    CreatedMixin,
-    UpdatedMixin,
-)
 
 
 class ContentEdit(
