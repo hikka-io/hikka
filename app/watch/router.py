@@ -4,6 +4,7 @@ from app.models import User, Anime, AnimeWatch
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import constants
 from typing import Tuple
 from . import service
 
@@ -14,6 +15,7 @@ from app.utils import (
 
 from .schemas import (
     WatchPaginationResponse,
+    WatchStatsResponse,
     WatchFilterArgs,
     WatchResponse,
     WatchArgs,
@@ -66,4 +68,43 @@ async def user_watch_list(
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": anime.all(),
+    }
+
+
+@router.get(
+    "/{username}/stats",
+    summary="Get user watch list stats",
+    response_model=WatchStatsResponse,
+)
+async def user_watch_stats(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    # This looks awful -> refactor it into something better
+    completed = await service.get_user_watch_stats(
+        session, user, constants.WATCH_COMPLETED
+    )
+
+    watching = await service.get_user_watch_stats(
+        session, user, constants.WATCH_WATCHING
+    )
+
+    planned = await service.get_user_watch_stats(
+        session, user, constants.WATCH_PLANNED
+    )
+
+    on_hold = await service.get_user_watch_stats(
+        session, user, constants.WATCH_ON_HOLD
+    )
+
+    dropped = await service.get_user_watch_stats(
+        session, user, constants.WATCH_DROPPED
+    )
+
+    return {
+        "completed": completed,
+        "watching": watching,
+        "planned": planned,
+        "on_hold": on_hold,
+        "dropped": dropped,
     }

@@ -14,7 +14,7 @@ async def test_anime_filter_status(client, aggregator_anime):
     response = await request_anime_search(client, {"status": ["finished"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
     assert response.json()["list"][0]["status"] == "finished"
 
     # Get anime with both ongoing and finished statuses
@@ -23,7 +23,7 @@ async def test_anime_filter_status(client, aggregator_anime):
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
     assert response.json()["list"][0]["status"] == "finished"
     assert response.json()["list"][4]["status"] == "ongoing"
 

@@ -14,7 +14,7 @@ async def test_anime_episodes(
 
     # Check pagination data
     assert response.json()["pagination"]["total"] == 25
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
 
     # Check episode indexes and names
     assert response.json()["list"][0]["index"] == 1
@@ -40,12 +40,12 @@ async def test_anime_episodes_pagination(
     assert response.status_code == status.HTTP_200_OK
 
     assert response.json()["pagination"]["total"] == 25
-    assert response.json()["pagination"]["pages"] == 3
+    assert response.json()["pagination"]["pages"] == 2
     assert response.json()["pagination"]["page"] == 2
 
     # Check episode indexes and names on second page
-    assert response.json()["list"][0]["index"] == 13
-    assert response.json()["list"][0]["title_en"] == "Primordial Desire"
+    assert response.json()["list"][0]["index"] == 16
+    assert response.json()["list"][0]["title_en"] == "What To Do Now"
 
-    assert response.json()["list"][11]["index"] == 24
-    assert response.json()["list"][11]["title_en"] == "Mercy"
+    assert response.json()["list"][8]["index"] == 24
+    assert response.json()["list"][8]["title_en"] == "Mercy"

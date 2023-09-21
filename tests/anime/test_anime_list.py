@@ -45,4 +45,4 @@ async def test_anime_pagination(client, aggregator_anime):
     assert response.json()["pagination"]["page"] == 2
 
     # Check first anime on second page
-    assert response.json()["list"][0]["slug"] == "shingeki-no-kyojin-0cf69a"
+    assert response.json()["list"][0]["slug"] == "euphoria-167704"

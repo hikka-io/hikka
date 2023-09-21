@@ -16,3 +16,4 @@ class UserResponse(ORJSONModel):
     description: Union[str, None] = Field(example="Hikka")
     created: datetime = Field(example=1686088809)
     username: str = Field(example="hikka")
+    avatar: str

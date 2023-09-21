@@ -11,7 +11,8 @@ from typing import Union
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
-            AnimeWatch.anime == anime, AnimeWatch.user == user
+            AnimeWatch.anime == anime,
+            AnimeWatch.user == user,
         )
     )
 
@@ -71,3 +72,12 @@ async def get_user_watch_list_count(
     query = select(func.count(AnimeWatch.id)).filter_by(user=user)
     query = query.filter(AnimeWatch.status == status) if status else query
     return await session.scalar(query)
+
+
+async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
+    return await session.scalar(
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.status == status,
+            AnimeWatch.user == user,
+        )
+    )
