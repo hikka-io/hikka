@@ -13,7 +13,7 @@ async def test_anime_staff(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 19
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
 
     # Check first staff member
     assert response.json()["list"][0]["roles"] == [

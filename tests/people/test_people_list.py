@@ -10,8 +10,8 @@ async def test_people_list(client, aggregator_people):
 
     # Make sure pagination data is ok
     assert response.json()["pagination"]["total"] == 865
-    assert response.json()["pagination"]["pages"] == 73
-    assert len(response.json()["list"]) == 12
+    assert response.json()["pagination"]["pages"] == 58
+    assert len(response.json()["list"]) == 15
 
     # Check first and last people slugs
     assert response.json()["list"][0]["slug"] == "hiroshi-kamiya-124b1f"
@@ -26,13 +26,13 @@ async def test_people_pagination(client, aggregator_people):
 
     # Make sure pagination data is ok
     assert response.json()["pagination"]["total"] == 865
-    assert response.json()["pagination"]["pages"] == 73
+    assert response.json()["pagination"]["pages"] == 58
     assert response.json()["pagination"]["page"] == 2
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
 
     # Check first and last people slugs
-    assert response.json()["list"][0]["slug"] == "yuuichi-nakamura-ed1264"
-    assert response.json()["list"][11]["slug"] == "nana-mizuki-cceb6a"
+    assert response.json()["list"][0]["slug"] == "natsuki-hanae-0b8b74"
+    assert response.json()["list"][11]["slug"] == "hiromu-arakawa-ea706d"
 
 
 async def test_people_no_meilisearch(client):
