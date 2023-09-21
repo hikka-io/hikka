@@ -27,3 +27,7 @@ def request_watch_list(client, username, status=None):
         endpoint += f"?status={status}"
 
     return client.get(endpoint)
+
+
+def request_watch_stats(client, username):
+    return client.get(f"/watch/{username}/stats")
