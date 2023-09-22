@@ -79,4 +79,4 @@ class User(Base):
 
     @hybrid_property
     def avatar(self):
-        return "https://cdn.hikka.io/hikka.jpg"
+        return "https://cdn.hikka.io/avatar.jpg"
