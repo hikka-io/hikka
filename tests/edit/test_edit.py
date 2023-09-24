@@ -5,6 +5,7 @@ from fastapi import status
 
 async def test_create_edit(
     client,
+    aggregator_people,
     aggregator_anime,
     aggregator_anime_info,
     create_test_user,
@@ -33,10 +34,20 @@ async def test_create_edit(
     assert response.json()["before"] is None
     assert response.json()["edit_id"] == 1
 
-    # Get edit with id
-    response = await request_edit(client, 1)
+    # # Get edit with id
+    # response = await request_edit(client, 1)
 
     from pprint import pprint
+
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "person",
+        "justin-cook-77f1b3",
+        {
+            "after": {"name_ua": "Джастін Кук"},
+        },
+    )
 
     pprint(response.json())
 

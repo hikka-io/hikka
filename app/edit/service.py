@@ -6,8 +6,8 @@ from datetime import datetime
 from app import constants
 
 from app.models import (
+    PersonContentEdit,
     AnimeContentEdit,
-    # ContentEdit,
     Person,
     Anime,
     User,
@@ -15,14 +15,19 @@ from app.models import (
 
 # This is hack-ish way to have single function for different types of content
 # As long as it does the job we can keep it (why not)
-content_type_to_class = {
+content_type_to_content_class = {
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
 }
 
+content_type_to_edit_class = {
+    constants.CONTENT_PERSON: PersonContentEdit,
+    constants.CONTENT_ANIME: AnimeContentEdit,
+}
+
 
 async def get_edit(
-    session: AsyncSession, edit_id: int
+    session: AsyncSession, content_type: str, edit_id: int
 ) -> AnimeContentEdit | None:
     """Return AnimeContentEdit by edit_id"""
 
@@ -41,7 +46,7 @@ async def get_content(
 ) -> Person | Anime | None:
     """Return editable content by content_type and content_id"""
 
-    content_model = content_type_to_class[content_type]
+    content_model = content_type_to_content_class[content_type]
     return await session.scalar(
         select(content_model).filter(content_model.id == content_id)
     )
@@ -53,7 +58,7 @@ async def get_content_by_slug(
 ) -> Person | Anime | None:
     """Return editable content by content_type and slug"""
 
-    content_model = content_type_to_class[content_type]
+    content_model = content_type_to_content_class[content_type]
     return await session.scalar(
         select(content_model).filter(content_model.slug == slug)
     )
@@ -99,11 +104,15 @@ async def create_pending_edit(
 ) -> AnimeContentEdit:
     """Create edit for given content_id with pending status"""
 
+    edit_model = content_type_to_edit_class[content_type]
+
+    print(args.after)
+
     after = args.after.dict(exclude_none=True)
 
     now = datetime.utcnow()
 
-    edit = AnimeContentEdit(
+    edit = edit_model(
         **{
             "status": constants.EDIT_PENDING,
             "description": args.description,

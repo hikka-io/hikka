@@ -12,6 +12,7 @@ from app.schemas import (
 
 # Enums
 class ContentTypeEnum(str, Enum):
+    content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
 
 
@@ -53,6 +54,12 @@ class AnimeEditArgs(ORJSONModel):
         example="Клинок, який знищує демонів: Арка Нескінченного потяга",
         max_length=255,
     )
+
+
+class PersonEditArgs(ORJSONModel):
+    name_native: Union[str, None] = Field(example="丸山 博雄", max_length=255)
+    name_en: Union[str, None] = Field(example="Hiroo Maruyama", max_length=255)
+    name_ua: Union[str, None] = Field(example="Хіро Маруяма", max_length=255)
 
 
 # Response

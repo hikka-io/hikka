@@ -9,6 +9,7 @@ from . import service
 
 from .schemas import (
     ContentTypeEnum,
+    PersonEditArgs,
     AnimeEditArgs,
     EditArgs,
 )
@@ -57,6 +58,7 @@ async def validate_edit_approval(
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
     # ToDo: check if edit can be approved (pending type)
+    # ToDo: check if edit has any differences compared to current version (?)
 
     content = await service.get_content(session, content_type, edit.content_id)
 
@@ -103,7 +105,11 @@ async def validate_edit_args(
     """Validate proposed changes based on content_type"""
 
     # Make sure we know how to validate proposed content changes
-    schemas = {constants.CONTENT_ANIME: AnimeEditArgs}
+    schemas = {
+        constants.CONTENT_PERSON: PersonEditArgs,
+        constants.CONTENT_ANIME: AnimeEditArgs,
+    }
+
     if not (schema := schemas.get(content_type)):
         raise Abort("edit", "wrong-content-type")
 
