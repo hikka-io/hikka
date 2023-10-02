@@ -185,7 +185,6 @@ async def set_username(session: AsyncSession, user: User, username: str):
     return user
 
 
-# WIP: Need to send an activation email
 async def set_email(session: AsyncSession, user: User, email: str):
     user.email = email
     session.add(user)
