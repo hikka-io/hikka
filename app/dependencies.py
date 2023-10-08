@@ -79,7 +79,7 @@ def auth_required(
             if not has_permission:
                 raise Abort("permission", "denied")
 
-        token.expiration = now + timedelta(days=3)
+        token.expiration = now + timedelta(days=7)
         token.user.last_active = now
 
         session.add(token)
