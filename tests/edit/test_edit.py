@@ -3,6 +3,10 @@ from client_requests import request_edit
 from fastapi import status
 
 
+from app.models import ContentEdit, AnimeContentEdit, PersonContentEdit
+from sqlalchemy import select
+
+
 async def test_create_edit(
     client,
     aggregator_people,
@@ -10,6 +14,7 @@ async def test_create_edit(
     aggregator_anime_info,
     create_test_user,
     get_test_token,
+    test_session,
 ):
     response = await request_create_edit(
         client,
@@ -48,6 +53,17 @@ async def test_create_edit(
             "after": {"name_ua": "Джастін Кук"},
         },
     )
+
+    edits = await test_session.scalars(select(ContentEdit))
+
+    for edit in edits:
+        print(
+            edit.content_type,
+            isinstance(edit, AnimeContentEdit),
+            isinstance(edit, PersonContentEdit),
+        )
+
+    response = await request_edit(client, 1)
 
     pprint(response.json())
 

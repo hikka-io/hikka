@@ -1,13 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import EditArgs, ContentTypeEnum
 from sqlalchemy import select, desc, func
-from sqlalchemy.orm import selectinload
 from datetime import datetime
 from app import constants
 
 from app.models import (
     PersonContentEdit,
     AnimeContentEdit,
+    ContentEdit,
     Person,
     Anime,
     User,
@@ -26,18 +26,11 @@ content_type_to_edit_class = {
 }
 
 
-async def get_edit(
-    session: AsyncSession, content_type: str, edit_id: int
-) -> AnimeContentEdit | None:
-    """Return AnimeContentEdit by edit_id"""
+async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
+    """Return ContentEdit by edit_id"""
 
     return await session.scalar(
-        select(AnimeContentEdit)
-        .filter(AnimeContentEdit.edit_id == edit_id)
-        .options(
-            selectinload(AnimeContentEdit.moderator),
-            selectinload(AnimeContentEdit.author),
-        )
+        select(ContentEdit).filter(ContentEdit.edit_id == edit_id)
     )
 
 
@@ -68,8 +61,8 @@ async def count_edits(session: AsyncSession, content_id: str) -> int:
     """Count edits for give content"""
 
     return await session.scalar(
-        select(func.count(AnimeContentEdit.id)).filter(
-            AnimeContentEdit.content_id == content_id
+        select(func.count(ContentEdit.id)).filter(
+            ContentEdit.content_id == content_id
         )
     )
 
@@ -79,17 +72,13 @@ async def get_edits(
     content_id: str,
     limit: int,
     offset: int,
-) -> list[AnimeContentEdit]:
+) -> list[ContentEdit]:
     """Return edits for give content"""
 
     return await session.scalars(
-        select(AnimeContentEdit)
-        .filter(AnimeContentEdit.content_id == content_id)
-        .options(
-            selectinload(AnimeContentEdit.moderator),
-            selectinload(AnimeContentEdit.author),
-        )
-        .order_by(desc(AnimeContentEdit.edit_id))
+        select(ContentEdit)
+        .filter(ContentEdit.content_id == content_id)
+        .order_by(desc(ContentEdit.edit_id))
         .limit(limit)
         .offset(offset)
     )
@@ -106,13 +95,12 @@ async def create_pending_edit(
 
     edit_model = content_type_to_edit_class[content_type]
 
-    print(args.after)
-
     after = args.after.dict(exclude_none=True)
 
     now = datetime.utcnow()
 
     edit = edit_model(
+        # edit = ContentEdit(
         **{
             "status": constants.EDIT_PENDING,
             "description": args.description,
@@ -136,9 +124,9 @@ async def create_pending_edit(
 
 async def approve_pending_edit(
     session: AsyncSession,
-    edit: AnimeContentEdit,
+    edit: ContentEdit,
     moderator: User,
-) -> AnimeContentEdit:
+) -> ContentEdit:
     """Approve edit for given content_id"""
 
     content = await get_content(session, edit.content_type, edit.content_id)
@@ -163,9 +151,9 @@ async def approve_pending_edit(
 
 async def deny_pending_edit(
     session: AsyncSession,
-    edit: AnimeContentEdit,
+    edit: ContentEdit,
     moderator: User,
-) -> AnimeContentEdit:
+) -> ContentEdit:
     """Deny edit for given content_id"""
 
     edit.status = constants.EDIT_DENIED

@@ -36,18 +36,25 @@ class ContentEdit(
     author_id = mapped_column(ForeignKey("service_users.id"))
 
     moderator: Mapped["User"] = relationship(
-        back_populates="decisions", foreign_keys=[moderator_id]
+        back_populates="decisions",
+        foreign_keys=[moderator_id],
+        lazy="selectin",
     )
 
     author: Mapped["User"] = relationship(
-        back_populates="edits", foreign_keys=[author_id]
+        back_populates="edits",
+        foreign_keys=[author_id],
+        lazy="selectin",
     )
 
     content_id: Mapped[UUID]
 
 
 class AnimeContentEdit(ContentEdit):
-    __mapper_args__ = {"polymorphic_identity": "anime"}
+    __mapper_args__ = {
+        "polymorphic_identity": "anime",
+        "eager_defaults": True,
+    }
 
     content_id = mapped_column(
         ForeignKey("service_content_anime.id", ondelete="CASCADE"),
@@ -58,7 +65,7 @@ class AnimeContentEdit(ContentEdit):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeContentEdit.content_id",
         foreign_keys=[content_id],
-        lazy="selectin",
+        lazy="immediate",  # ToDo: check if it is good idea
     )
 
     @hybrid_property
@@ -78,7 +85,7 @@ class PersonContentEdit(ContentEdit):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonContentEdit.content_id",
         foreign_keys=[content_id],
-        lazy="selectin",
+        lazy="immediate",  # ToDo: check if it is good idea
     )
 
     @hybrid_property
