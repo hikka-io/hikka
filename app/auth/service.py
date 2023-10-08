@@ -140,9 +140,11 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     # Update user login time
     user.login = now
 
+    # After auth token will be valid only for 30 minutes
+    # If unused it will expire
     token = AuthToken(
         **{
-            "expiration": now + timedelta(days=7),
+            "expiration": now + timedelta(minutes=30),
             "secret": new_token(),
             "created": now,
             "user": user,
