@@ -79,7 +79,8 @@ def auth_required(
             if not has_permission:
                 raise Abort("permission", "denied")
 
-        token.expiration = now + timedelta(days=3)
+        # After each authenticated request token expiration will be reset
+        token.expiration = now + timedelta(days=7)
         token.user.last_active = now
 
         session.add(token)
