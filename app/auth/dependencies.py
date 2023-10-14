@@ -80,8 +80,8 @@ async def validate_signup(
     if await get_user_by_email(session, signup.email):
         raise Abort("auth", "email-exists")
 
-    # if signup.email not in test_emails:
-    #     raise Abort("auth", "banned")
+    if signup.email not in []:
+        raise Abort("auth", "not-available")
 
     return signup
 

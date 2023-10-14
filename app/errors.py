@@ -34,7 +34,7 @@ errors = {
         "oauth-error": ["Error during OAuth", 400],
         "user-not-found": ["User not found", 404],
         "email-set": ["Email already set", 400],
-        "banned": ["Banned", 403],
+        "not-available": ["Signup not available ", 400],
     },
     "permission": {
         "denied": ["You don't have permission for this action", 403],
