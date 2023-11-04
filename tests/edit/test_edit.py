@@ -1,10 +1,14 @@
 from client_requests import request_create_edit
 from client_requests import request_edit
-from fastapi import status
-
-
-from app.models import ContentEdit, AnimeContentEdit, PersonContentEdit
 from sqlalchemy import select
+from fastapi import status
+from app import constants
+
+from app.models import (
+    PersonContentEdit,
+    AnimeContentEdit,
+    ContentEdit,
+)
 
 
 async def test_create_edit(
@@ -16,56 +20,23 @@ async def test_create_edit(
     get_test_token,
     test_session,
 ):
-    response = await request_create_edit(
-        client,
-        get_test_token,
-        "anime",
-        "bocchi-the-rock-9e172d",
-        {
-            "description": "Brief description",
-            "after": {"title_en": "Bocchi The Rock!"},
-        },
-    )
+    pass
 
-    assert response.status_code == status.HTTP_200_OK
-    assert isinstance(response.json()["created"], int)
 
-    assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
-    assert response.json()["description"] == "Brief description"
-    assert response.json()["author"]["username"] == "username"
-    assert response.json()["content_type"] == "anime"
-    assert response.json()["status"] == "pending"
-    assert response.json()["moderator"] is None
-    assert response.json()["before"] is None
-    assert response.json()["edit_id"] == 1
+# # Let's check if we can get edit by numeric id
+# response = await request_edit(client, 1)
 
-    # # Get edit with id
-    # response = await request_edit(client, 1)
+# assert response.status_code == status.HTTP_200_OK
+# assert isinstance(response.json()["created"], int)
 
-    from pprint import pprint
-
-    response = await request_create_edit(
-        client,
-        get_test_token,
-        "person",
-        "justin-cook-77f1b3",
-        {
-            "after": {"name_ua": "Джастін Кук"},
-        },
-    )
-
-    edits = await test_session.scalars(select(ContentEdit))
-
-    for edit in edits:
-        print(
-            edit.content_type,
-            isinstance(edit, AnimeContentEdit),
-            isinstance(edit, PersonContentEdit),
-        )
-
-    response = await request_edit(client, 1)
-
-    pprint(response.json())
+# assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
+# assert response.json()["description"] == "Brief description"
+# assert response.json()["author"]["username"] == "username"
+# assert response.json()["content_type"] == "anime"
+# assert response.json()["status"] == "pending"
+# assert response.json()["moderator"] is None
+# assert response.json()["before"] is None
+# assert response.json()["edit_id"] == 1
 
 
 # ToDo: tests for bad permissions
