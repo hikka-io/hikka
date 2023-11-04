@@ -8,3 +8,7 @@ def request_create_edit(client, token, content_type, slug, data={}):
         headers={"Auth": token},
         json=data,
     )
+
+
+def request_content_edit_list(client, content_type, slug):
+    return client.get(f"/edit/{content_type}/{slug}/list")

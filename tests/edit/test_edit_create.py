@@ -10,7 +10,7 @@ from app.models import (
 )
 
 
-async def test_create_edit(
+async def test_edit_create(
     client,
     aggregator_people,
     aggregator_anime,

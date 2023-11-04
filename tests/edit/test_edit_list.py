@@ -1,9 +1,9 @@
+from client_requests import request_content_edit_list
 from client_requests import request_create_edit
-from client_requests import request_edit
 from fastapi import status
 
 
-async def test_edit(
+async def test_edit_list(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -23,27 +23,23 @@ async def test_edit(
         },
     )
 
+    # Check status
+    assert response.status_code == status.HTTP_200_OK
+
+    # Get list of Bocchi edits
+    response = await request_content_edit_list(
+        client, "anime", "bocchi-the-rock-9e172d"
+    )
+
     # Check status and data
     assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()["list"]) == 1
 
-    # Let's check if we can get edit by numeric id
-    response = await request_edit(client, 1)
-
-    assert response.status_code == status.HTTP_200_OK
-    assert isinstance(response.json()["created"], int)
-
-    assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
-    assert response.json()["description"] == "Brief description"
-    assert response.json()["author"]["username"] == "username"
-    assert response.json()["content_type"] == "anime"
-    assert response.json()["status"] == "pending"
-    assert response.json()["moderator"] is None
-    assert response.json()["before"] is None
-    assert response.json()["edit_id"] == 1
-
-
-# ToDo: tests for bad permissions
-# ToDo: test for getting list of edits
-# ToDo: test for updating the edit
-# ToDo: test for approving the edit
-# ToDo: test for denying the edit
+    assert response.json()["list"][0]["after"]["title_en"] == "Bocchi The Rock!"
+    assert response.json()["list"][0]["description"] == "Brief description"
+    assert response.json()["list"][0]["author"]["username"] == "username"
+    assert response.json()["list"][0]["content_type"] == "anime"
+    assert response.json()["list"][0]["status"] == "pending"
+    assert response.json()["list"][0]["moderator"] is None
+    assert response.json()["list"][0]["before"] is None
+    assert response.json()["list"][0]["edit_id"] == 1

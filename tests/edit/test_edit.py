@@ -49,7 +49,6 @@ async def test_edit(
 
 
 # ToDo: tests for bad permissions
-# ToDo: test for getting list of edits
 # ToDo: test for updating the edit
 # ToDo: test for approving the edit
 # ToDo: test for denying the edit
