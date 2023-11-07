@@ -26,6 +26,7 @@ errors = {
         "reset-invalid": ["Reset token is invalid", 400],
         "already-activated": ["Already activated", 400],
         "invalid-token": ["Auth token is invalid", 400],
+        "missing-token": ["Auth token is missing", 400],
         "invalid-password": ["Invalid password", 400],
         "username-set": ["Username already set", 400],
         "not-activated": ["User not activated", 400],
