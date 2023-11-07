@@ -1,6 +1,7 @@
+from app.models import User, UserOAuth, AuthToken
 from app.auth.utils import hashpwd, new_token
 from datetime import datetime, timedelta
-from app.models import User, UserOAuth
+from sqlalchemy import select
 from app import constants
 import aiofiles
 import json
@@ -59,3 +60,23 @@ async def create_oauth(test_session, user_id):
     await test_session.commit()
 
     return oauth
+
+
+async def create_token(test_session, email, token_secret):
+    now = datetime.utcnow()
+
+    user = await test_session.scalar(select(User).filter(User.email == email))
+
+    token = AuthToken(
+        **{
+            "expiration": now + timedelta(minutes=30),
+            "secret": token_secret,
+            "created": now,
+            "user": user,
+        }
+    )
+
+    test_session.add(token)
+    await test_session.commit()
+
+    return token
