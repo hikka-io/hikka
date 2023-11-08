@@ -1,11 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import ValidationError
+from app.dependencies import auth_required
+from app.models import ContentEdit, User
 from app.database import get_session
-from app.models import ContentEdit
+from pydantic import ValidationError
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
+
 
 from .schemas import (
     ContentTypeEnum,
@@ -26,15 +28,36 @@ async def validate_edit_id(
     return edit
 
 
+async def validate_edit_id_pending(
+    edit: ContentEdit = Depends(validate_edit_id),
+):
+    """Ensure edit has pending status"""
+
+    if edit.status != constants.EDIT_PENDING:
+        raise Abort("edit", "not-pending")
+
+    return edit
+
+
+async def validate_edit_close(
+    edit: ContentEdit = Depends(validate_edit_id_pending),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_CLOSE_EDIT])
+    ),
+):
+    """Check if user which is trying to close edit it the author"""
+
+    if user != edit.author:
+        raise Abort("edit", "not-author")
+
+    return edit
+
+
 async def validate_edit_content_type(
     # content_type: ContentTypeEnum,
-    edit: ContentEdit = Depends(validate_edit_id),
+    edit: ContentEdit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
-    # ToDo: move this check into separate dependency
-    if edit.status != constants.EDIT_PENDING:
-        raise Abort("edit", "already-reviewed")
-
     # if edit.content_type != content_type:
     #     raise Abort("edit", "wrong-content-type")
 

@@ -107,21 +107,25 @@ ROLE_BANNED = "banned"
 PERMISSION_CREATE_EDIT = "content:create_edit"
 PERMISSION_ACCEPT_EDIT = "content:accept_edit"
 PERMISSION_REJECT_EDIT = "content:reject_edit"
+PERMISSION_CLOSE_EDIT = "content:close_edit"
 
 # Role permissions
 ROLES = {
     ROLE_USER: [
         PERMISSION_CREATE_EDIT,
+        PERMISSION_CLOSE_EDIT,
     ],
     ROLE_MODERATOR: [
         PERMISSION_CREATE_EDIT,
         PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
+        PERMISSION_CLOSE_EDIT,
     ],
     ROLE_ADMIN: [
         PERMISSION_CREATE_EDIT,
         PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
+        PERMISSION_CLOSE_EDIT,
     ],
     ROLE_BANNED: [],
 }

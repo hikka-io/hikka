@@ -49,9 +49,10 @@ errors = {
         "not-found": ["Anime not found", 404],
     },
     "edit": {
-        "already-reviewed": ["Edit already reviewed", 400],
+        "not-pending": ["Only pending edit can be changed", 400],
         "invalid-content-id": ["Invalid content id", 400],
         "wrong-content-type": ["Wrong content type", 400],
+        "not-author": ["Only author can close edit", 400],
         "content-not-found": ["Content not found", 404],
         "empty-edit": ["This edit is empty", 400],
         "bad-edit": ["This edit is invalid", 400],

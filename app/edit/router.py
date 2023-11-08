@@ -13,8 +13,10 @@ from app.utils import (
 
 from .dependencies import (
     validate_edit_content_type,
+    validate_edit_id_pending,
     validate_edit_approval,
     validate_content_slug,
+    validate_edit_close,
     validate_edit_args,
     validate_edit_id,
 )
@@ -51,7 +53,7 @@ async def get_edit_list(
     }
 
 
-@router.post("/{content_type}/{slug}", response_model=EditResponse)
+@router.put("/{content_type}/{slug}", response_model=EditResponse)
 async def create_edit(
     content_type: ContentTypeEnum,
     content_id: str = Depends(validate_content_slug),
@@ -66,29 +68,37 @@ async def create_edit(
     )
 
 
-@router.post("/{edit_id}/approve", response_model=EditResponse)
-async def approve_edit(
-    edit: ContentEdit = Depends(validate_edit_approval),
+@router.post("/{edit_id}/close", response_model=EditResponse)
+async def close_edit(
+    edit: ContentEdit = Depends(validate_edit_close),
     session: AsyncSession = Depends(get_session),
-    moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
-    ),
 ):
-    return await service.approve_pending_edit(session, edit, moderator)
+    return await service.close_pending_edit(session, edit)
 
 
-@router.post("/{edit_id}/deny", response_model=EditResponse)
-async def deny_edit(
-    edit: ContentEdit = Depends(validate_edit_content_type),
-    session: AsyncSession = Depends(get_session),
-    moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_REJECT_EDIT])
-    ),
-):
-    return await service.deny_pending_edit(session, edit, moderator)
+# @router.post("/{edit_id}/approve", response_model=EditResponse)
+# async def approve_edit(
+#     edit: ContentEdit = Depends(validate_edit_approval),
+#     session: AsyncSession = Depends(get_session),
+#     moderator: User = Depends(
+#         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
+#     ),
+# ):
+#     return await service.approve_pending_edit(session, edit, moderator)
 
 
+# @router.post("/{edit_id}/deny", response_model=EditResponse)
+# async def deny_edit(
+#     edit: ContentEdit = Depends(validate_edit_content_type),
+#     session: AsyncSession = Depends(get_session),
+#     moderator: User = Depends(
+#         auth_required(permissions=[constants.PERMISSION_REJECT_EDIT])
+#     ),
+# ):
+#     return await service.deny_pending_edit(session, edit, moderator)
+
+
+# ToDo: edit list
 # ToDo: fix approve
 # ToDo: fix deny
-# ToDo: cancel edit
 # ToDo: update edit

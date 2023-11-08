@@ -122,45 +122,57 @@ async def create_pending_edit(
     return edit
 
 
-async def approve_pending_edit(
-    session: AsyncSession,
-    edit: ContentEdit,
-    moderator: User,
-) -> ContentEdit:
-    """Approve edit for given content_id"""
+async def close_pending_edit(session: AsyncSession, edit: ContentEdit):
+    """Close pending edit"""
 
-    content = await get_content(session, edit.content_type, edit.content_id)
-
-    before = {}
-
-    for key, value in edit.after.items():
-        before[key] = getattr(content, key)
-        setattr(content, key, value)
-
-    edit.status = constants.EDIT_APPROVED
+    edit.status = constants.EDIT_CLOSED
     edit.updated = datetime.now()
-    edit.moderator = moderator
-    edit.before = before
-
-    session.add(edit)
-    session.add(content)
-    await session.commit()
-
-    return edit
-
-
-async def deny_pending_edit(
-    session: AsyncSession,
-    edit: ContentEdit,
-    moderator: User,
-) -> ContentEdit:
-    """Deny edit for given content_id"""
-
-    edit.status = constants.EDIT_DENIED
-    edit.updated = datetime.now()
-    edit.moderator = moderator
 
     session.add(edit)
     await session.commit()
 
     return edit
+
+
+# async def approve_pending_edit(
+#     session: AsyncSession,
+#     edit: ContentEdit,
+#     moderator: User,
+# ) -> ContentEdit:
+#     """Approve edit for given content_id"""
+
+#     content = await get_content(session, edit.content_type, edit.content_id)
+
+#     before = {}
+
+#     for key, value in edit.after.items():
+#         before[key] = getattr(content, key)
+#         setattr(content, key, value)
+
+#     edit.status = constants.EDIT_APPROVED
+#     edit.updated = datetime.now()
+#     edit.moderator = moderator
+#     edit.before = before
+
+#     session.add(edit)
+#     session.add(content)
+#     await session.commit()
+
+#     return edit
+
+
+# async def deny_pending_edit(
+#     session: AsyncSession,
+#     edit: ContentEdit,
+#     moderator: User,
+# ) -> ContentEdit:
+#     """Deny edit for given content_id"""
+
+#     edit.status = constants.EDIT_DENIED
+#     edit.updated = datetime.now()
+#     edit.moderator = moderator
+
+#     session.add(edit)
+#     await session.commit()
+
+#     return edit
