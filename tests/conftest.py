@@ -5,10 +5,10 @@ from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
 from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
-from datetime import datetime, timedelta
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
 from app.settings import get_settings
+from app.models import Anime, Base
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from sqlalchemy import select
@@ -16,17 +16,11 @@ from httpx import Response
 from app import create_app
 from app import aggregator
 from unittest import mock
+from app import constants
 import helpers
 import asyncio
 import pytest
 
-
-from app.models import (
-    AuthToken,
-    Anime,
-    User,
-    Base,
-)
 
 # This is needed to obtain PostgreSQL version
 test_db = factories.postgresql_proc()
@@ -101,9 +95,27 @@ async def create_test_user(test_session):
 
 
 @pytest.fixture
+async def create_test_user_moderator(test_session):
+    await helpers.create_user(
+        test_session,
+        role=constants.ROLE_MODERATOR,
+    )
+
+
+@pytest.fixture
 async def create_dummy_user(test_session):
     await helpers.create_user(
         test_session, username="dummy", email="dummy@mail.com"
+    )
+
+
+@pytest.fixture
+async def create_dummy_user_banned(test_session):
+    await helpers.create_user(
+        test_session,
+        username="dummy",
+        email="dummy@mail.com",
+        role=constants.ROLE_BANNED,
     )
 
 
@@ -120,23 +132,18 @@ async def create_test_user_with_oauth(test_session):
 
 @pytest.fixture
 async def get_test_token(test_session):
-    now = datetime.utcnow()
-
-    user = await test_session.scalar(
-        select(User).filter(User.email == "user@mail.com")
+    token = await helpers.create_token(
+        test_session, "user@mail.com", "SECRET_TOKEN"
     )
 
-    token = AuthToken(
-        **{
-            "expiration": now + timedelta(minutes=30),
-            "secret": "SECRET_TOKEN",
-            "created": now,
-            "user": user,
-        }
-    )
+    return token.secret
 
-    test_session.add(token)
-    await test_session.commit()
+
+@pytest.fixture
+async def get_dummy_token(test_session):
+    token = await helpers.create_token(
+        test_session, "dummy@mail.com", "DUMMY_TOKEN"
+    )
 
     return token.secret
 

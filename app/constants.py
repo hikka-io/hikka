@@ -97,9 +97,11 @@ CONTENT_PERSON = "person"
 CONTENT_STAFF = "staff"
 
 # Roles
+# ToDo: move to separate file (?)
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
+ROLE_BANNED = "banned"
 
 # Permissions
 PERMISSION_CREATE_EDIT = "content:create_edit"
@@ -121,4 +123,5 @@ ROLES = {
         PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
     ],
+    ROLE_BANNED: [],
 }

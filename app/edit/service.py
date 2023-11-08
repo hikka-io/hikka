@@ -1,68 +1,65 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import EditArgs, ContentTypeEnum
 from sqlalchemy import select, desc, func
-from sqlalchemy.orm import selectinload
 from datetime import datetime
 from app import constants
-from typing import Union
 
 from app.models import (
-    AnimeStaffRole,
+    PersonContentEdit,
+    AnimeContentEdit,
     ContentEdit,
-    AnimeGenre,
-    Character,
-    Company,
     Person,
     Anime,
     User,
 )
 
-content_type_to_class = {
-    constants.CONTENT_STAFF: AnimeStaffRole,
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_GENRE: AnimeGenre,
-    constants.CONTENT_COMPANY: Company,
+# This is hack-ish way to have single function for different types of content
+# As long as it does the job we can keep it (why not)
+content_type_to_content_class = {
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
 }
 
+content_type_to_edit_class = {
+    constants.CONTENT_PERSON: PersonContentEdit,
+    constants.CONTENT_ANIME: AnimeContentEdit,
+}
 
-async def get_content_by_id(
+
+async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
+    """Return ContentEdit by edit_id"""
+
+    return await session.scalar(
+        select(ContentEdit).filter(ContentEdit.edit_id == edit_id)
+    )
+
+
+async def get_content(
     session: AsyncSession, content_type: ContentTypeEnum, content_id: str
-) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole, None]:
-    content_model = content_type_to_class[content_type]
+) -> Person | Anime | None:
+    """Return editable content by content_type and content_id"""
+
+    content_model = content_type_to_content_class[content_type]
     return await session.scalar(
         select(content_model).filter(content_model.id == content_id)
     )
 
 
-# Todo: figure out what to do with anime episodes that do not have a slug
+# ToDo: figure out what to do with anime episodes that do not have a slug
 async def get_content_by_slug(
     session: AsyncSession, content_type: ContentTypeEnum, slug: str
-) -> Union[Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole, None]:
-    content_model = content_type_to_class[content_type]
+) -> Person | Anime | None:
+    """Return editable content by content_type and slug"""
+
+    content_model = content_type_to_content_class[content_type]
     return await session.scalar(
         select(content_model).filter(content_model.slug == slug)
     )
 
 
-async def get_edit_by_id(
-    session: AsyncSession, edit_id: int
-) -> Union[ContentEdit, None]:
-    return await session.scalar(
-        select(ContentEdit)
-        .filter(ContentEdit.edit_id == edit_id)
-        .options(
-            selectinload(ContentEdit.author),
-            selectinload(ContentEdit.moderator),
-        )
-    )
+async def count_edits(session: AsyncSession, content_id: str) -> int:
+    """Count edits for give content"""
 
-
-async def count_edits_by_content_id(
-    session: AsyncSession,
-    content_id: str,
-) -> int:
     return await session.scalar(
         select(func.count(ContentEdit.id)).filter(
             ContentEdit.content_id == content_id
@@ -70,74 +67,69 @@ async def count_edits_by_content_id(
     )
 
 
-async def get_edits_by_content_id(
+async def get_edits(
     session: AsyncSession,
     content_id: str,
     limit: int,
     offset: int,
-):
+) -> list[ContentEdit]:
+    """Return edits for give content"""
+
     return await session.scalars(
         select(ContentEdit)
-        .filter_by(content_id=content_id)
-        .options(
-            selectinload(ContentEdit.moderator),
-            selectinload(ContentEdit.author),
-        )
+        .filter(ContentEdit.content_id == content_id)
         .order_by(desc(ContentEdit.edit_id))
         .limit(limit)
         .offset(offset)
     )
 
 
-async def create_edit_request(
+async def create_pending_edit(
     session: AsyncSession,
-    args: EditArgs,
-    content_id: str,
     content_type: ContentTypeEnum,
-    user: User,
-) -> ContentEdit:
-    # Pretty much the only reason we convert it to dict here is so that we can
-    # get rid of non-edit fields like "description" in a neat way
-    args = args.dict()
-    description = args.pop("description")
+    content_id: str,
+    args: EditArgs,
+    author: User,
+) -> AnimeContentEdit:
+    """Create edit for given content_id with pending status"""
 
-    after = {}
+    edit_model = content_type_to_edit_class[content_type]
 
-    for key, value in args.items():
-        if not value:
-            continue
-
-        after[key] = value
+    after = args.after.dict(exclude_none=True)
 
     now = datetime.utcnow()
 
-    edit = ContentEdit(
+    edit = edit_model(
+        # edit = ContentEdit(
         **{
             "status": constants.EDIT_PENDING,
-            "content_id": content_id,
+            "description": args.description,
             "content_type": content_type,
-            "after": after,
+            "content_id": content_id,
+            "author": author,
             "created": now,
             "updated": now,
-            "author": user,
-            "description": description,
+            "after": after,
         }
     )
 
     session.add(edit)
     await session.commit()
 
+    # This step is needed to load content relation for slug
+    await session.refresh(edit)
+
     return edit
 
 
-async def approve_edit_request(
-    user: User,
-    edit: ContentEdit,
+async def approve_pending_edit(
     session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
 ) -> ContentEdit:
-    content = await get_content_by_id(
-        session, edit.content_type, edit.content_id
-    )
+    """Approve edit for given content_id"""
+
+    content = await get_content(session, edit.content_type, edit.content_id)
 
     before = {}
 
@@ -146,9 +138,9 @@ async def approve_edit_request(
         setattr(content, key, value)
 
     edit.status = constants.EDIT_APPROVED
-    edit.before = before
     edit.updated = datetime.now()
-    edit.moderator = user
+    edit.moderator = moderator
+    edit.before = before
 
     session.add(edit)
     session.add(content)
@@ -157,14 +149,16 @@ async def approve_edit_request(
     return edit
 
 
-async def deny_anime_edit_request(
-    user: User,
-    edit: ContentEdit,
+async def deny_pending_edit(
     session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
 ) -> ContentEdit:
+    """Deny edit for given content_id"""
+
     edit.status = constants.EDIT_DENIED
     edit.updated = datetime.now()
-    edit.moderator = user
+    edit.moderator = moderator
 
     session.add(edit)
     await session.commit()
