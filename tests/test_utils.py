@@ -72,17 +72,17 @@ def test_timestamp():
 
 def test_pagination():
     page = 3
-    total = 24
+    total = 50
 
     limit, offset = utils.pagination(page, constants.SEARCH_RESULT_LIMIT)
 
-    assert limit == 12
-    assert offset == 24
+    assert limit == 15
+    assert offset == 30
 
     assert {
         "page": 3,
-        "pages": 2,
-        "total": 24,
+        "pages": 4,
+        "total": 50,
     } == utils.pagination_dict(
         total,
         page,

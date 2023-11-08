@@ -72,6 +72,8 @@ async def validate_set_email(
 async def validate_signup(
     signup: SignupArgs, session: AsyncSession = Depends(get_session)
 ) -> SignupArgs:
+    settings = get_settings()
+
     # Check if username is availaible
     if await get_user_by_username(session, signup.username):
         raise Abort("auth", "username-taken")
@@ -80,8 +82,9 @@ async def validate_signup(
     if await get_user_by_email(session, signup.email):
         raise Abort("auth", "email-exists")
 
-    # if signup.email not in test_emails:
-    #     raise Abort("auth", "banned")
+    if len(settings.backend.auth_emails) > 0:
+        if signup.email not in settings.backend.auth_emails:
+            raise Abort("auth", "not-available")
 
     return signup
 

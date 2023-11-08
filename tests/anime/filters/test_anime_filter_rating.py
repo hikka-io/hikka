@@ -25,7 +25,7 @@ async def test_anime_filter_rating(
     response = await request_anime_search(client, {"rating": ["r", "pg_13"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
     assert response.json()["list"][0]["rating"] == "r"
     assert response.json()["list"][1]["rating"] == "pg_13"
 

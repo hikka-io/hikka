@@ -4,13 +4,13 @@ from client_requests import request_watch_add
 from fastapi import status
 
 
-async def test_watch_add(
+async def test_watch_list(
     client,
     create_test_user,
     aggregator_anime,
     get_test_token,
 ):
-    # User favourite list should be empty when we start
+    # User watch list should be empty when we start
     response = await request_watch_list(client, "username")
 
     assert response.status_code == status.HTTP_200_OK

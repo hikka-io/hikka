@@ -143,6 +143,8 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     # Update user login time
     user.login = now
 
+    # After auth token will be valid only for 30 minutes
+    # If unused it will expire
     token = AuthToken(
         **{
             "expiration": now + timedelta(minutes=30),
@@ -188,7 +190,6 @@ async def set_username(session: AsyncSession, user: User, username: str):
     return user
 
 
-# ToDo: Need to send an activation email
 async def set_email(session: AsyncSession, user: User, email: str):
     user.email = email
     session.add(user)

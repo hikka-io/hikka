@@ -10,8 +10,8 @@ async def test_characters_list(client, aggregator_characters):
 
     # Make sure pagination data is ok
     assert response.json()["pagination"]["total"] == 419
-    assert response.json()["pagination"]["pages"] == 35
-    assert len(response.json()["list"]) == 12
+    assert response.json()["pagination"]["pages"] == 28
+    assert len(response.json()["list"]) == 15
 
     # Check first and last character slugs
     assert response.json()["list"][0]["slug"] == "levi-565409"
@@ -26,13 +26,13 @@ async def test_characters_pagination(client, aggregator_characters):
 
     # Make sure pagination data is ok
     assert response.json()["pagination"]["total"] == 419
-    assert response.json()["pagination"]["pages"] == 35
+    assert response.json()["pagination"]["pages"] == 28
     assert response.json()["pagination"]["page"] == 2
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
 
     # Check first and last character slugs
-    assert response.json()["list"][0]["slug"] == "hange-zoe-64b5f9"
-    assert response.json()["list"][11]["slug"] == "mitsuha-miyamizu-e73fef"
+    assert response.json()["list"][0]["slug"] == "gabi-braun-41f94a"
+    assert response.json()["list"][11]["slug"] == "ai-hoshino-d7d467"
 
 
 async def test_characters_no_meilisearch(client):

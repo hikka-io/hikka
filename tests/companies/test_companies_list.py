@@ -10,8 +10,8 @@ async def test_companies_list(client, aggregator_companies):
 
     # Make sure pagination data is ok
     assert response.json()["pagination"]["total"] == 39
-    assert response.json()["pagination"]["pages"] == 4
-    assert len(response.json()["list"]) == 12
+    assert response.json()["pagination"]["pages"] == 3
+    assert len(response.json()["list"]) == 15
 
     # Check first and last company slugs
     assert response.json()["list"][0]["slug"] == "mappa-360033"
@@ -26,16 +26,13 @@ async def test_companies_pagination(client, aggregator_companies):
 
     # Check data and length
     assert response.json()["pagination"]["total"] == 39
-    assert response.json()["pagination"]["pages"] == 4
+    assert response.json()["pagination"]["pages"] == 3
     assert response.json()["pagination"]["page"] == 2
-    assert len(response.json()["list"]) == 12
+    assert len(response.json()["list"]) == 15
 
     # Check first and last company slugs
-    assert response.json()["list"][0]["slug"] == "shueisha-79ec9a"
-    assert (
-        response.json()["list"][11]["slug"]
-        == "mainichi-broadcasting-system-55c91c"
-    )
+    assert response.json()["list"][0]["slug"] == "majin-67e786"
+    assert response.json()["list"][11]["slug"] == "movic-84c014"
 
 
 async def test_companies_no_meilisearch(client, aggregator_companies):

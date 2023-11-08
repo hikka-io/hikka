@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -69,3 +70,7 @@ class User(Base):
         foreign_keys="[ContentEdit.moderator_id]",
         back_populates="moderator",
     )
+
+    @hybrid_property
+    def avatar(self):
+        return "https://cdn.hikka.io/avatar.jpg"

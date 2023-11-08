@@ -26,6 +26,7 @@ errors = {
         "reset-invalid": ["Reset token is invalid", 400],
         "already-activated": ["Already activated", 400],
         "invalid-token": ["Auth token is invalid", 400],
+        "missing-token": ["Auth token is missing", 400],
         "invalid-password": ["Invalid password", 400],
         "username-set": ["Username already set", 400],
         "not-activated": ["User not activated", 400],
@@ -34,7 +35,7 @@ errors = {
         "oauth-error": ["Error during OAuth", 400],
         "user-not-found": ["User not found", 404],
         "email-set": ["Email already set", 400],
-        "banned": ["Banned", 403],
+        "not-available": ["Signup not available ", 400],
     },
     "permission": {
         "denied": ["You don't have permission for this action", 403],
