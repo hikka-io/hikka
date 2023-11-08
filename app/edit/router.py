@@ -88,5 +88,7 @@ async def deny_edit(
     return await service.deny_pending_edit(session, edit, moderator)
 
 
+# ToDo: fix approve
+# ToDo: fix deny
 # ToDo: cancel edit
 # ToDo: update edit

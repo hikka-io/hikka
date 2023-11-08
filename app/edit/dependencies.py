@@ -27,7 +27,7 @@ async def validate_edit_id(
 
 
 async def validate_edit_content_type(
-    content_type: ContentTypeEnum,
+    # content_type: ContentTypeEnum,
     edit: ContentEdit = Depends(validate_edit_id),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
@@ -35,17 +35,18 @@ async def validate_edit_content_type(
     if edit.status != constants.EDIT_PENDING:
         raise Abort("edit", "already-reviewed")
 
-    if edit.content_type != content_type:
-        raise Abort("edit", "wrong-content-type")
+    # if edit.content_type != content_type:
+    #     raise Abort("edit", "wrong-content-type")
 
-    if not (
-        await service.get_content(
-            session,
-            content_type,
-            edit.content_id,
-        )
-    ):
-        raise Abort("edit", "invalid-content-id")
+    # ToDo: Figure out what to do with that!
+    # if not (
+    #     await service.get_content(
+    #         session,
+    #         content_type,
+    #         edit.content_id,
+    #     )
+    # ):
+    #     raise Abort("edit", "invalid-content-id")
 
     return edit
 
@@ -53,12 +54,14 @@ async def validate_edit_content_type(
 # Here we make sure that there aren't any invalid keys and that the edits
 # are actually different compared to the current version
 async def validate_edit_approval(
-    content_type: ContentTypeEnum,
+    # content_type: ContentTypeEnum,
     edit: ContentEdit = Depends(validate_edit_content_type),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
     # ToDo: check if edit can be approved (pending type)
     # ToDo: check if edit has any differences compared to current version (?)
+
+    content_type = "anime"  # ToDo: remove this
 
     content = await service.get_content(session, content_type, edit.content_id)
 
