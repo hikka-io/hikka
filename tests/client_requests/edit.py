@@ -14,15 +14,13 @@ def request_create_edit(client, token, content_type, slug, data={}):
     )
 
 
+def request_close_edit(client, token, edit_id):
+    return client.post(f"/edit/{edit_id}/close", headers={"Auth": token})
+
+
 def request_approve_edit(client, token, edit_id):
-    return client.post(
-        f"/edit/{edit_id}/approve",
-        headers={"Auth": token},
-    )
+    return client.post(f"/edit/{edit_id}/approve", headers={"Auth": token})
 
 
 def request_deny_edit(client, token, edit_id):
-    return client.post(
-        f"/edit/{edit_id}/deny",
-        headers={"Auth": token},
-    )
+    return client.post(f"/edit/{edit_id}/deny", headers={"Auth": token})
