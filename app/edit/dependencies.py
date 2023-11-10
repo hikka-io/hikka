@@ -53,39 +53,12 @@ async def validate_edit_close(
     return edit
 
 
-# async def validate_edit_content_type(
-#     # content_type: ContentTypeEnum,
-#     edit: ContentEdit = Depends(validate_edit_id_pending),
-#     session: AsyncSession = Depends(get_session),
-# ) -> ContentEdit:
-#     # if edit.content_type != content_type:
-#     #     raise Abort("edit", "wrong-content-type")
-
-#     # ToDo: Figure out what to do with that!
-#     # if not (
-#     #     await service.get_content(
-#     #         session,
-#     #         content_type,
-#     #         edit.content_id,
-#     #     )
-#     # ):
-#     #     raise Abort("edit", "invalid-content-id")
-
-#     return edit
-
-
 # Here we make sure that there aren't any invalid keys and that the edits
 # are actually different compared to the current version
-async def validate_edit_approval(
+async def validate_edit_accept(
     edit: ContentEdit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
-    # ToDo: check if edit has any differences compared to current version (?)
-
-    # content_type = "anime"  # ToDo: remove this
-
-    # content = await service.get_content(session, content_type, edit.content_id)
-
     content = edit.content
 
     pop_list = []
@@ -118,7 +91,7 @@ async def validate_content_slug(
             session, content_type, slug
         )
     ):
-        # ToDo: return not-found by content type
+        # ToDo: return not-found by content type (?)
         raise Abort("edit", "content-not-found")
 
     return content.reference

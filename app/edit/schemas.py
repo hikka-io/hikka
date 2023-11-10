@@ -27,7 +27,7 @@ class AnimeOSTTypeEnum(str, Enum):
 
 
 class EditStatusEnum(str, Enum):
-    edit_approved = constants.EDIT_APPROVED
+    edit_accepted = constants.EDIT_ACCEPTED
     edit_pending = constants.EDIT_PENDING
     edit_denied = constants.EDIT_DENIED
     edit_closed = constants.EDIT_CLOSED

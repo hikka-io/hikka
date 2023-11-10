@@ -125,12 +125,12 @@ async def close_pending_edit(
     return edit
 
 
-async def approve_pending_edit(
+async def accept_pending_edit(
     session: AsyncSession,
     edit: ContentEdit,
     moderator: User,
 ) -> ContentEdit:
-    """Approve pending edit"""
+    """Accept pending edit"""
 
     content = edit.content
 
@@ -140,7 +140,7 @@ async def approve_pending_edit(
         before[key] = getattr(content, key)
         setattr(content, key, value)
 
-    edit.status = constants.EDIT_APPROVED
+    edit.status = constants.EDIT_ACCEPTED
     edit.updated = datetime.now()
     edit.moderator = moderator
     edit.before = before

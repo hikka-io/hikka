@@ -18,8 +18,8 @@ def request_close_edit(client, token, edit_id):
     return client.post(f"/edit/{edit_id}/close", headers={"Auth": token})
 
 
-def request_approve_edit(client, token, edit_id):
-    return client.post(f"/edit/{edit_id}/approve", headers={"Auth": token})
+def request_accept_edit(client, token, edit_id):
+    return client.post(f"/edit/{edit_id}/accept", headers={"Auth": token})
 
 
 def request_deny_edit(client, token, edit_id):

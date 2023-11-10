@@ -83,7 +83,7 @@ COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
 
 EDIT_PENDING = "pending"
-EDIT_APPROVED = "approved"
+EDIT_ACCEPTED = "accepted"
 EDIT_DENIED = "denied"
 EDIT_CLOSED = "closed"
 

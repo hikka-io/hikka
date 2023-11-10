@@ -51,7 +51,7 @@ from .watch import request_watch_add
 from .watch import request_watch
 
 from .edit import request_content_edit_list
-from .edit import request_approve_edit
+from .edit import request_accept_edit
 from .edit import request_create_edit
 from .edit import request_close_edit
 from .edit import request_deny_edit
@@ -101,7 +101,7 @@ __all__ = [
     "request_watch_add",
     "request_watch",
     "request_content_edit_list",
-    "request_approve_edit",
+    "request_accept_edit",
     "request_create_edit",
     "request_close_edit",
     "request_deny_edit",
