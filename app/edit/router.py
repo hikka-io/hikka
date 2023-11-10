@@ -12,8 +12,6 @@ from app.utils import (
 )
 
 from .dependencies import (
-    validate_edit_content_type,
-    validate_edit_id_pending,
     validate_edit_approval,
     validate_content_slug,
     validate_edit_close,
@@ -76,15 +74,15 @@ async def close_edit(
     return await service.close_pending_edit(session, edit)
 
 
-# @router.post("/{edit_id}/approve", response_model=EditResponse)
-# async def approve_edit(
-#     edit: ContentEdit = Depends(validate_edit_approval),
-#     session: AsyncSession = Depends(get_session),
-#     moderator: User = Depends(
-#         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
-#     ),
-# ):
-#     return await service.approve_pending_edit(session, edit, moderator)
+@router.post("/{edit_id}/approve", response_model=EditResponse)
+async def approve_edit(
+    edit: ContentEdit = Depends(validate_edit_approval),
+    session: AsyncSession = Depends(get_session),
+    moderator: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
+    ),
+):
+    return await service.approve_pending_edit(session, edit, moderator)
 
 
 # @router.post("/{edit_id}/deny", response_model=EditResponse)

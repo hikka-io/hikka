@@ -34,17 +34,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
     )
 
 
-async def get_content(
-    session: AsyncSession, content_type: ContentTypeEnum, content_id: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and content_id"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.id == content_id)
-    )
-
-
 # ToDo: figure out what to do with anime episodes that do not have a slug
 async def get_content_by_slug(
     session: AsyncSession, content_type: ContentTypeEnum, slug: str
@@ -100,7 +89,6 @@ async def create_pending_edit(
     now = datetime.utcnow()
 
     edit = edit_model(
-        # edit = ContentEdit(
         **{
             "status": constants.EDIT_PENDING,
             "description": args.description,
@@ -122,7 +110,10 @@ async def create_pending_edit(
     return edit
 
 
-async def close_pending_edit(session: AsyncSession, edit: ContentEdit):
+async def close_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+) -> ContentEdit:
     """Close pending edit"""
 
     edit.status = constants.EDIT_CLOSED
@@ -134,31 +125,31 @@ async def close_pending_edit(session: AsyncSession, edit: ContentEdit):
     return edit
 
 
-# async def approve_pending_edit(
-#     session: AsyncSession,
-#     edit: ContentEdit,
-#     moderator: User,
-# ) -> ContentEdit:
-#     """Approve edit for given content_id"""
+async def approve_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
+) -> ContentEdit:
+    """Approve pending edit"""
 
-#     content = await get_content(session, edit.content_type, edit.content_id)
+    content = edit.content
 
-#     before = {}
+    before = {}
 
-#     for key, value in edit.after.items():
-#         before[key] = getattr(content, key)
-#         setattr(content, key, value)
+    for key, value in edit.after.items():
+        before[key] = getattr(content, key)
+        setattr(content, key, value)
 
-#     edit.status = constants.EDIT_APPROVED
-#     edit.updated = datetime.now()
-#     edit.moderator = moderator
-#     edit.before = before
+    edit.status = constants.EDIT_APPROVED
+    edit.updated = datetime.now()
+    edit.moderator = moderator
+    edit.before = before
 
-#     session.add(edit)
-#     session.add(content)
-#     await session.commit()
+    session.add(edit)
+    session.add(content)
+    await session.commit()
 
-#     return edit
+    return edit
 
 
 # async def deny_pending_edit(
