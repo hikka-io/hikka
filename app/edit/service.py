@@ -152,18 +152,18 @@ async def accept_pending_edit(
     return edit
 
 
-# async def deny_pending_edit(
-#     session: AsyncSession,
-#     edit: ContentEdit,
-#     moderator: User,
-# ) -> ContentEdit:
-#     """Deny edit for given content_id"""
+async def deny_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+    moderator: User,
+) -> ContentEdit:
+    """Deny pending edit"""
 
-#     edit.status = constants.EDIT_DENIED
-#     edit.updated = datetime.now()
-#     edit.moderator = moderator
+    edit.status = constants.EDIT_DENIED
+    edit.updated = datetime.now()
+    edit.moderator = moderator
 
-#     session.add(edit)
-#     await session.commit()
+    session.add(edit)
+    await session.commit()
 
-#     return edit
+    return edit
