@@ -1,9 +1,9 @@
 from app.dependencies import get_page, auth_required
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import ContentEdit, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import constants
-from typing import Union
 from . import service
 
 from app.utils import (
@@ -15,26 +15,15 @@ from .dependencies import (
     validate_edit_content_type,
     validate_edit_approval,
     validate_content_slug,
+    validate_edit_args,
     validate_edit_id,
-    validate_args,
 )
 
 from .schemas import (
     EditListResponse,
     ContentTypeEnum,
-    AnimeEditArgs,
     EditResponse,
-)
-
-from app.models import (
-    AnimeStaffRole,
-    ContentEdit,
-    AnimeGenre,
-    Character,
-    Company,
-    Person,
-    Anime,
-    User,
+    EditArgs,
 )
 
 
@@ -47,18 +36,14 @@ async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
 
 
 @router.get("/{content_type}/{slug}/list", response_model=EditListResponse)
-async def get_edits_list(
-    page: int = Depends(get_page),
+async def get_edit_list(
+    content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
-    content: Union[
-        Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole
-    ] = Depends(validate_content_slug),
+    page: int = Depends(get_page),
 ):
     limit, offset = pagination(page)
-    total = await service.count_edits_by_content_id(session, content.id)
-    edits = await service.get_edits_by_content_id(
-        session, content.id, limit, offset
-    )
+    total = await service.count_edits(session, content_id)
+    edits = await service.get_edits(session, content_id, limit, offset)
 
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -66,41 +51,44 @@ async def get_edits_list(
     }
 
 
-# ToDo: Split this endpoint for all content types
 @router.post("/{content_type}/{slug}", response_model=EditResponse)
-async def edit_anime_content(
+async def create_edit(
     content_type: ContentTypeEnum,
-    args: AnimeEditArgs = Depends(validate_args),
+    content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
-    content: Union[
-        Anime, Character, Company, AnimeGenre, Person, AnimeStaffRole
-    ] = Depends(validate_content_slug),
-    user: User = Depends(
+    args: EditArgs = Depends(validate_edit_args),
+    author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
 ):
-    return await service.create_edit_request(
-        session, args, content.id, content_type, user
+    return await service.create_pending_edit(
+        session, content_type, content_id, args, author
     )
 
 
 @router.post("/{edit_id}/approve", response_model=EditResponse)
-async def approve_anime_edit(
+async def approve_edit(
     edit: ContentEdit = Depends(validate_edit_approval),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(
+    moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
     ),
 ):
-    return await service.approve_edit_request(user, edit, session)
+    return await service.approve_pending_edit(session, edit, moderator)
 
 
 @router.post("/{edit_id}/deny", response_model=EditResponse)
-async def deny_anime_edit(
+async def deny_edit(
     edit: ContentEdit = Depends(validate_edit_content_type),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(
+    moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_REJECT_EDIT])
     ),
 ):
-    return await service.deny_anime_edit_request(user, edit, session)
+    return await service.deny_pending_edit(session, edit, moderator)
+
+
+# ToDo: fix approve
+# ToDo: fix deny
+# ToDo: cancel edit
+# ToDo: update edit

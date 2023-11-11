@@ -1,35 +1,12 @@
-from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
+from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from app import constants
+from sqlalchemy import ForeignKey
 from ..base import Base
 from uuid import UUID
-
-from ..mixins import (
-    CreatedMixin,
-    UpdatedMixin,
-)
-
-
-statuses = (
-    constants.EDIT_PENDING,
-    constants.EDIT_APPROVED,
-    constants.EDIT_DENIED,
-    constants.EDIT_CLOSED,
-)
-
-content_types = (
-    constants.CONTENT_ANIME,
-    constants.CONTENT_MANGA,
-    constants.CONTENT_CHARACTER,
-    constants.CONTENT_COMPANY,
-    constants.CONTENT_EPISODE,
-    constants.CONTENT_GENRE,
-    constants.CONTENT_PERSON,
-    constants.CONTENT_STAFF,
-)
 
 
 class ContentEdit(
@@ -38,29 +15,79 @@ class ContentEdit(
     UpdatedMixin,
 ):
     __tablename__ = "service_edits"
+    __mapper_args__ = {
+        "polymorphic_identity": "default",
+        "polymorphic_on": "content_type",
+    }
+
+    description: Mapped[str] = mapped_column(nullable=True)
+    hidden: Mapped[bool] = mapped_column(default=False)
+    content_type: Mapped[str]
+    status: Mapped[str]
 
     edit_id: Mapped[int] = mapped_column(
-        Integer, unique=True, index=True, primary_key=True, autoincrement=True
-    )
-    status: Mapped[str] = mapped_column(Enum(*statuses, name="status"))
-    description: Mapped[str] = mapped_column(String(140), nullable=True)
-    hidden: Mapped[bool] = mapped_column(Boolean, default=False)
-
-    content_id: Mapped[UUID]
-    content_type: Mapped[str] = mapped_column(
-        Enum(*content_types, name="content_type")
+        unique=True, index=True, autoincrement=True, primary_key=True
     )
 
     before: Mapped[dict] = mapped_column(JSONB, nullable=True)
     after: Mapped[dict] = mapped_column(JSONB)
 
-    author_id = mapped_column(ForeignKey("service_users.id"))
     moderator_id = mapped_column(ForeignKey("service_users.id"))
-
-    author: Mapped["User"] = relationship(
-        back_populates="edits", foreign_keys=[author_id]
-    )
+    author_id = mapped_column(ForeignKey("service_users.id"))
 
     moderator: Mapped["User"] = relationship(
-        back_populates="decisions", foreign_keys=[moderator_id]
+        back_populates="decisions",
+        foreign_keys=[moderator_id],
+        lazy="selectin",
     )
+
+    author: Mapped["User"] = relationship(
+        back_populates="edits",
+        foreign_keys=[author_id],
+        lazy="selectin",
+    )
+
+    content_id: Mapped[UUID]
+
+
+class AnimeContentEdit(ContentEdit):
+    __mapper_args__ = {
+        "polymorphic_identity": "anime",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Anime"] = relationship(
+        primaryjoin="Anime.id == AnimeContentEdit.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+    )
+
+    @hybrid_property
+    def slug(self):
+        return self.content.slug
+
+
+class PersonContentEdit(ContentEdit):
+    __mapper_args__ = {"polymorphic_identity": "person"}
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Person"] = relationship(
+        primaryjoin="Person.id == PersonContentEdit.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+    )
+
+    @hybrid_property
+    def slug(self):
+        return self.content.slug
