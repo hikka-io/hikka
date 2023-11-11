@@ -84,8 +84,6 @@ async def create_pending_edit(
 
     edit_model = content_type_to_edit_class[content_type]
 
-    after = args.after.dict(exclude_none=True)
-
     now = datetime.utcnow()
 
     edit = edit_model(
@@ -94,10 +92,10 @@ async def create_pending_edit(
             "description": args.description,
             "content_type": content_type,
             "content_id": content_id,
+            "after": args.after,
             "author": author,
             "created": now,
             "updated": now,
-            "after": after,
         }
     )
 

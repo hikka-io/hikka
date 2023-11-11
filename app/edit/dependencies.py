@@ -91,7 +91,6 @@ async def validate_content_slug(
             session, content_type, slug
         )
     ):
-        # ToDo: return not-found by content type (?)
         raise Abort("edit", "content-not-found")
 
     return content.reference
@@ -113,12 +112,11 @@ async def validate_edit_args(
         raise Abort("edit", "wrong-content-type")
 
     # Validate after field with provided schema
+    # This checks heavily depends on Pydantic's Extra.forbid option
     try:
-        args.after = schema(**args.after)
+        schema(**args.after)
     except ValidationError:
         raise Abort("edit", "bad-edit")
-
-    print("\n\n", dict(args.after), "\n\n")
 
     # User must propose at least some changes
     if args.after == {}:
