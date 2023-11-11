@@ -45,10 +45,12 @@ class AnimeEditArgs(ORJSONModel):
     synonyms: Union[list[str], None] = Field()
 
     title_ja: Union[str, None] = Field(
-        example="Kimetsu no Yaiba: Mugen Ressha-hen", max_length=255
+        example="Kimetsu no Yaiba: Mugen Ressha-hen",
+        max_length=255,
     )
     title_en: Union[str, None] = Field(
-        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc", max_length=255
+        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc",
+        max_length=255,
     )
     title_ua: Union[str, None] = Field(
         example="Клинок, який знищує демонів: Арка Нескінченного потяга",

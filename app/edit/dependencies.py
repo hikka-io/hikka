@@ -118,6 +118,8 @@ async def validate_edit_args(
     except ValidationError:
         raise Abort("edit", "bad-edit")
 
+    print("\n\n", dict(args.after), "\n\n")
+
     # User must propose at least some changes
     if args.after == {}:
         raise Abort("edit", "empty-edit")
