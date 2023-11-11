@@ -109,7 +109,7 @@ async def test_edit_create_bad_content(
         "rock-the-bocchi-9e172d",
         {
             "description": "Brief description",
-            "after": {"title_bad": "Bocchi The Rock!"},
+            "after": {"title_en": "Bocchi the Rock!"},
         },
     )
 
@@ -165,4 +165,4 @@ async def test_edit_create_empty_edit(
 
     # Check status
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "edit:empty_edit"
+    assert response.json()["code"] == "system:validation_error"

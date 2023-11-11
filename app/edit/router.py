@@ -12,12 +12,12 @@ from app.utils import (
 )
 
 from .dependencies import (
-    validate_edit_args_update,
+    validate_edit_create_args,
+    validate_edit_update_args,
     validate_edit_id_pending,
     validate_content_slug,
     validate_edit_accept,
     validate_edit_modify,
-    validate_edit_args,
     validate_edit_id,
 )
 
@@ -56,9 +56,9 @@ async def get_edit_list(
 @router.put("/{content_type}/{slug}", response_model=EditResponse)
 async def create_edit(
     content_type: ContentTypeEnum,
+    args: EditArgs = Depends(validate_edit_create_args),
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
-    args: EditArgs = Depends(validate_edit_args),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
@@ -70,7 +70,7 @@ async def create_edit(
 
 @router.post("/{edit_id}/update", response_model=EditResponse)
 async def update_edit(
-    args: EditArgs = Depends(validate_edit_args_update),
+    args: EditArgs = Depends(validate_edit_update_args),
     edit: ContentEdit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
 ):

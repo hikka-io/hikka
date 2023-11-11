@@ -1,5 +1,5 @@
+from pydantic import Field, validator
 from datetime import datetime
-from pydantic import Field
 from app import constants
 from typing import Union
 from enum import Enum
@@ -37,6 +37,13 @@ class EditStatusEnum(str, Enum):
 class EditArgs(ORJSONModel):
     description: Union[str, None] = Field(example="...", max_length=420)
     after: dict
+
+    @validator("after")
+    def validate_after(cls, after):
+        if after == {}:
+            raise ValueError("After field can't be empty")
+
+        return after
 
 
 class AnimeEditArgs(ORJSONModel):

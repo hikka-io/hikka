@@ -2,17 +2,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.models import ContentEdit, User
 from app.database import get_session
-from pydantic import ValidationError
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
+from . import utils
 
 
 from .schemas import (
     ContentTypeEnum,
-    PersonEditArgs,
-    AnimeEditArgs,
     EditArgs,
 )
 
@@ -97,49 +95,25 @@ async def validate_content_slug(
     return content.reference
 
 
-# ToDo: move this to a model_validator once we migrate to Pydantic 2
-# ToDo: make sure we can get rid of this attrocity
-def edit_args_hack(
+async def validate_edit_create_args(
     content_type: ContentTypeEnum,
     args: EditArgs,
-):
-    # Make sure we know how to validate proposed content changes
-    schemas = {
-        constants.CONTENT_PERSON: PersonEditArgs,
-        constants.CONTENT_ANIME: AnimeEditArgs,
-    }
+) -> EditArgs:
+    """Validate create edit args"""
 
-    if not (schema := schemas.get(content_type)):
-        raise Abort("edit", "wrong-content-type")
-
-    # Validate after field with provided schema
-    # This checks heavily depends on Pydantic's Extra.forbid option
-    try:
-        schema(**args.after)
-    except ValidationError:
+    if not utils.check_edit_schema(content_type, args):
         raise Abort("edit", "bad-edit")
-
-    # User must propose at least some changes
-    if args.after == {}:
-        raise Abort("edit", "empty-edit")
 
     return args
 
 
-# ToDo: get rid of this as well
-async def validate_edit_args(
-    content_type: ContentTypeEnum,
-    args: EditArgs,
-) -> EditArgs:
-    """Validate proposed changes based on content_type"""
-
-    return edit_args_hack(content_type, args)
-
-
-async def validate_edit_args_update(
+async def validate_edit_update_args(
     args: EditArgs,
     edit: ContentEdit = Depends(validate_edit_modify),
-):
-    """Validate updating of pending edit"""
+) -> EditArgs:
+    """Validate update edit args"""
 
-    return edit_args_hack(edit.content_type, args)
+    if not utils.check_edit_schema(edit.content_type, args):
+        raise Abort("edit", "bad-edit")
+
+    return args
