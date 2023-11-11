@@ -18,7 +18,8 @@ from .schemas import (
 
 
 async def validate_edit_id(
-    edit_id: int, session: AsyncSession = Depends(get_session)
+    edit_id: int,
+    session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
     """Check whether ContentEdit with edit_id exists"""
 
@@ -39,13 +40,13 @@ async def validate_edit_id_pending(
     return edit
 
 
-async def validate_edit_close(
+async def validate_edit_modify(
     edit: ContentEdit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_CLOSE_EDIT])
+        auth_required(permissions=[constants.PERMISSION_MODIFY_EDIT])
     ),
 ):
-    """Check if user which is trying to close edit it the author"""
+    """Check if user which is trying to modify edit it the author"""
 
     if user != edit.author:
         raise Abort("edit", "not-author")
@@ -97,11 +98,11 @@ async def validate_content_slug(
 
 
 # ToDo: move this to a model_validator once we migrate to Pydantic 2
-async def validate_edit_args(
-    content_type: ContentTypeEnum, args: EditArgs
-) -> EditArgs:
-    """Validate proposed changes based on content_type"""
-
+# ToDo: make sure we can get rid of this attrocity
+def edit_args_hack(
+    content_type: ContentTypeEnum,
+    args: EditArgs,
+):
     # Make sure we know how to validate proposed content changes
     schemas = {
         constants.CONTENT_PERSON: PersonEditArgs,
@@ -123,3 +124,22 @@ async def validate_edit_args(
         raise Abort("edit", "empty-edit")
 
     return args
+
+
+# ToDo: get rid of this as well
+async def validate_edit_args(
+    content_type: ContentTypeEnum,
+    args: EditArgs,
+) -> EditArgs:
+    """Validate proposed changes based on content_type"""
+
+    return edit_args_hack(content_type, args)
+
+
+async def validate_edit_args_update(
+    args: EditArgs,
+    edit: ContentEdit = Depends(validate_edit_modify),
+):
+    """Validate updating of pending edit"""
+
+    return edit_args_hack(edit.content_type, args)

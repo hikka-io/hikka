@@ -12,10 +12,11 @@ from app.utils import (
 )
 
 from .dependencies import (
+    validate_edit_args_update,
     validate_edit_id_pending,
     validate_content_slug,
     validate_edit_accept,
-    validate_edit_close,
+    validate_edit_modify,
     validate_edit_args,
     validate_edit_id,
 )
@@ -67,9 +68,18 @@ async def create_edit(
     )
 
 
+@router.post("/{edit_id}/update", response_model=EditResponse)
+async def update_edit(
+    args: EditArgs = Depends(validate_edit_args_update),
+    edit: ContentEdit = Depends(validate_edit_modify),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.update_pending_edit(session, edit, args)
+
+
 @router.post("/{edit_id}/close", response_model=EditResponse)
 async def close_edit(
-    edit: ContentEdit = Depends(validate_edit_close),
+    edit: ContentEdit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.close_pending_edit(session, edit)

@@ -108,6 +108,23 @@ async def create_pending_edit(
     return edit
 
 
+async def update_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+    args: EditArgs,
+) -> ContentEdit:
+    """Update pending edit"""
+
+    edit.updated = datetime.now()
+    edit.description = args.description
+    edit.after = args.after
+
+    session.add(edit)
+    await session.commit()
+
+    return edit
+
+
 async def close_pending_edit(
     session: AsyncSession,
     edit: ContentEdit,
