@@ -5,7 +5,6 @@ from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
-from typing import Union
 from . import utils
 
 from app.models import (
@@ -22,7 +21,7 @@ from app.models import (
 
 async def get_anime_info_by_slug(
     session: AsyncSession, slug: str
-) -> Union[Anime, None]:
+) -> Anime | None:
     return await session.scalar(
         select(Anime)
         .filter(Anime.slug == slug)

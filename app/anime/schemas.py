@@ -2,7 +2,6 @@ from pydantic import constr, PositiveInt
 from pydantic import Field, validator
 from datetime import datetime
 from app import constants
-from typing import Union
 from enum import Enum
 
 from app.schemas import (
@@ -68,15 +67,15 @@ class SourceEnum(str, Enum):
 
 # Args
 class AnimeSearchArgs(ORJSONModel):
-    query: Union[constr(min_length=3, max_length=255), None] = None
+    query: constr(min_length=3, max_length=255) | None = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
     page: int = Field(default=1, gt=0, example=1)
 
-    years: list[Union[PositiveInt, None]] = Field(
+    years: list[PositiveInt | None] = Field(
         default=[None, None], min_items=2, max_items=2, example=[2000, 2020]
     )
 
-    score: list[Union[int, None]] = Field(
+    score: list[int | None] = Field(
         default=[None, None], min_items=2, max_items=2, example=[0, 10]
     )
 
@@ -138,14 +137,14 @@ class AnimeSearchArgs(ORJSONModel):
 
 # Responses
 class AnimeEpisodeResponse(ORJSONModel):
-    aired: Union[datetime, None] = Field(example=1686088809)
-    title_ua: Union[str, None] = Field(
+    aired: datetime | None = Field(example=1686088809)
+    title_ua: str | None = Field(
         example="Самопроголошена богиня і переродження в паралельному світі!"
     )
-    title_en: Union[str, None] = Field(
+    title_en: str | None = Field(
         example="This Self-Proclaimed Goddess and Reincarnation in Another World!"  # noqa: E501
     )
-    title_ja: Union[str, None] = Field(
+    title_ja: str | None = Field(
         example="Kono Jishou Megami to Isekai Tenshou wo!"
     )
     index: int = Field(example=1)
@@ -162,19 +161,19 @@ class AnimeCharacterResponse(ORJSONModel):
 
 
 class RoleResponse(ORJSONModel):
-    name_ua: Union[str, None]
-    name_en: Union[str, None]
+    name_ua: str | None
+    name_en: str | None
     slug: str
 
 
 class AnimeStaffResponse(ORJSONModel):
-    person: Union[PersonResponse, None]
+    person: PersonResponse | None
     roles: list[RoleResponse]
 
 
 class GenreResponse(ORJSONModel):
-    name_en: Union[str, None] = Field(example="Comedy")
-    name_ua: Union[str, None] = Field(example="Комедія")
+    name_en: str | None = Field(example="Comedy")
+    name_ua: str | None = Field(example="Комедія")
     slug: str = Field(example="comedy")
     type: str = Field(example="genre")
 
@@ -228,16 +227,16 @@ class AnimeExternalResponse(ORJSONModel):
 
 class AnimeVideoResponse(ORJSONModel):
     url: str = Field(example="https://youtu.be/_4W1OQoDEDg")
-    title: Union[str, None] = Field(example="ED 2 (Artist ver.)")
-    description: Union[str, None] = Field(example="...")
+    title: str | None = Field(example="ED 2 (Artist ver.)")
+    description: str | None = Field(example="...")
     video_type: str = Field(example="video_music")
 
 
 class AnimeOSTResponse(ORJSONModel):
     index: int = Field(example=1)
-    title: Union[str, None] = Field(example="fantastic dreamer")
-    author: Union[str, None] = Field(example="Machico")
-    spotify: Union[str, None] = Field(
+    title: str | None = Field(example="fantastic dreamer")
+    author: str | None = Field(example="Machico")
+    spotify: str | None = Field(
         example="https://open.spotify.com/track/3BIhcWQV2hGRoEXdLL3Fzw"
     )
     ost_type: str = Field(example="opening")
@@ -247,28 +246,28 @@ class AnimeInfoResponse(ORJSONModel):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
-    start_date: Union[datetime, None] = Field(example=1686088809)
-    end_date: Union[datetime, None] = Field(example=1686088809)
+    start_date: datetime | None = Field(example=1686088809)
+    end_date: datetime | None = Field(example=1686088809)
 
-    episodes_released: Union[int, None] = Field(example=10)
-    episodes_total: Union[int, None] = Field(example=10)
-    synopsis_en: Union[str, None] = Field(example="...")
-    synopsis_ua: Union[str, None] = Field(example="...")
-    media_type: Union[str, None] = Field(example="tv")
-    title_ua: Union[str, None] = Field(
+    episodes_released: int | None = Field(example=10)
+    episodes_total: int | None = Field(example=10)
+    synopsis_en: str | None = Field(example="...")
+    synopsis_ua: str | None = Field(example="...")
+    media_type: str | None = Field(example="tv")
+    title_ua: str | None = Field(
         example="Цей прекрасний світ, благословенний Богом!"
     )
-    title_en: Union[str, None] = Field(
+    title_en: str | None = Field(
         example="KonoSuba: God's Blessing on This Wonderful World!"
     )
-    title_ja: Union[str, None] = Field(
+    title_ja: str | None = Field(
         example="Kono Subarashii Sekai ni Shukufuku wo!"
     )
-    duration: Union[int, None] = Field(example=23)
-    poster: Union[str, None] = Field(example="https://cdn.hikka.io/hikka.jpg")
-    status: Union[str, None] = Field(example="finished")
-    source: Union[str, None] = Field(example="light_novel")
-    rating: Union[str, None] = Field(example="pg_13")
+    duration: int | None = Field(example=23)
+    poster: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
+    status: str | None = Field(example="finished")
+    source: str | None = Field(example="light_novel")
+    rating: str | None = Field(example="pg_13")
     has_franchise: bool = Field(example=True)
     scored_by: int = Field(example=1210150)
     score: float = Field(example=8.11)

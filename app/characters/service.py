@@ -4,12 +4,11 @@ from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, desc
 from sqlalchemy import func
-from typing import Union
 
 
 async def get_character_by_slug(
     session: AsyncSession, slug: str
-) -> Union[Character, None]:
+) -> Character | None:
     return await session.scalar(
         select(Character).filter(Character.slug == slug)
     )

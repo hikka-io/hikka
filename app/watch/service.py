@@ -5,7 +5,6 @@ from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
 from .schemas import WatchArgs
 from datetime import datetime
-from typing import Union
 
 
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
@@ -49,7 +48,7 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch):
 async def get_user_watch_list(
     session: AsyncSession,
     user: User,
-    status: Union[str, None],
+    status: str | None,
     limit: int,
     offset: int,
 ) -> list[AnimeWatch]:
@@ -67,7 +66,7 @@ async def get_user_watch_list(
 async def get_user_watch_list_count(
     session: AsyncSession,
     user: User,
-    status: Union[str, None],
+    status: str | None,
 ) -> int:
     query = select(func.count(AnimeWatch.id)).filter_by(user=user)
     query = query.filter(AnimeWatch.status == status) if status else query

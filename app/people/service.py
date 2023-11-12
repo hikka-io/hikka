@@ -2,15 +2,11 @@ from app.models import AnimeStaff, Anime, Person
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
-from sqlalchemy.orm import selectinload
 from sqlalchemy import select, desc
 from sqlalchemy import func
-from typing import Union
 
 
-async def get_person_by_slug(
-    session: AsyncSession, slug: str
-) -> Union[Person, None]:
+async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
     return await session.scalar(select(Person).filter(Person.slug == slug))
 
 

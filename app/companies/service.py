@@ -4,12 +4,11 @@ from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, desc
 from sqlalchemy import func
-from typing import Union
 
 
 async def get_company_by_slug(
     session: AsyncSession, slug: str
-) -> Union[Company, None]:
+) -> Company | None:
     return await session.scalar(select(Company).filter(Company.slug == slug))
 
 
@@ -34,7 +33,7 @@ async def companies_search(
 
 
 async def company_anime_total(
-    session: AsyncSession, company: Company, company_type: Union[str, None]
+    session: AsyncSession, company: Company, company_type: str | None
 ):
     query = select(func.count(CompanyAnime.id)).filter(
         CompanyAnime.company == company
@@ -49,7 +48,7 @@ async def company_anime_total(
 async def company_anime(
     session: AsyncSession,
     company: Company,
-    company_type: Union[str, None],
+    company_type: str | None,
     limit: int,
     offset: int,
 ):

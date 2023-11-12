@@ -4,12 +4,11 @@ from sqlalchemy import select, desc, func
 from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
 from datetime import datetime
-from typing import Union
 
 
 async def get_anime_favourite(
     session: AsyncSession, anime: AnimeFavourite, user: User
-) -> Union[AnimeFavourite, None]:
+) -> AnimeFavourite | None:
     return await session.scalar(
         select(AnimeFavourite).filter(
             AnimeFavourite.anime == anime,
