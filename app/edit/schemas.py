@@ -77,6 +77,10 @@ class UserResponse(ORJSONModel):
     username: str = Field(example="hikka")
 
 
+class ContentSlugResponse(ORJSONModel):
+    slug: str
+
+
 class EditResponse(ORJSONModel):
     content_type: ContentTypeEnum = Field(example="anime")
     description: Union[str, None] = Field(example="...")
@@ -88,7 +92,9 @@ class EditResponse(ORJSONModel):
     before: Union[dict, None]
     author: UserResponse
     after: dict
-    slug: str
+
+    # ToDo: find better way to do that
+    content: ContentSlugResponse
 
 
 class EditListResponse(ORJSONModel):

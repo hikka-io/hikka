@@ -38,6 +38,7 @@ async def test_edit(
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.json()["created"], int)
 
+    assert response.json()["content"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["description"] == "Brief description"
     assert response.json()["author"]["username"] == "username"
@@ -46,9 +47,3 @@ async def test_edit(
     assert response.json()["moderator"] is None
     assert response.json()["before"] is None
     assert response.json()["edit_id"] == 1
-
-
-# ToDo: tests for bad permissions
-# ToDo: test for updating the edit
-# ToDo: test for approving the edit
-# ToDo: test for denying the edit
