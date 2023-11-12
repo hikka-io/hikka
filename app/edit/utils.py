@@ -23,7 +23,7 @@ def check_edit_schema(
         return False
 
     # Validate after field with provided schema
-    # This checks heavily depends on Pydantic's Extra.forbid option enabled
+    # This check heavily depends on Pydantic's extra="forbid" option
     try:
         schema(**args.after)
     except ValidationError:

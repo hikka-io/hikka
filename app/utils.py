@@ -116,8 +116,8 @@ def from_timestamp(timestamp: int):
 
 
 # Convert datetime to timestamp
-def to_timestamp(date):
-    date = date.replace(tzinfo=timezone.utc)
+def to_timestamp(date: datetime | None) -> int | None:
+    date = date.replace(tzinfo=timezone.utc) if date else date
     return int(date.timestamp()) if date else None
 
 

@@ -1,4 +1,4 @@
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from datetime import datetime
 from app import constants
 from enum import Enum
@@ -6,7 +6,7 @@ from enum import Enum
 from app.schemas import (
     PaginationResponse,
     UserResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
@@ -34,11 +34,11 @@ class EditStatusEnum(str, Enum):
 
 
 # Args
-class EditArgs(ORJSONModel):
-    description: str | None = Field(example="...", max_length=420)
+class EditArgs(CustomModel):
+    description: str | None = Field(None, examples=["..."], max_length=420)
     after: dict
 
-    @validator("after")
+    @field_validator("after")
     def validate_after(cls, after):
         if after == {}:
             raise ValueError("After field can't be empty")
@@ -46,44 +46,51 @@ class EditArgs(ORJSONModel):
         return after
 
 
-class AnimeEditArgs(ORJSONModel):
-    synopsis_en: str | None = Field(example="...")
-    synopsis_ua: str | None = Field(example="...")
-    synonyms: list[str] | None = Field()
+class AnimeEditArgs(CustomModel):
+    synopsis_en: str | None = Field(None, examples=["..."])
+    synopsis_ua: str | None = Field(None, examples=["..."])
+    synonyms: list[str] | None = None
 
     title_ja: str | None = Field(
-        example="Kimetsu no Yaiba: Mugen Ressha-hen",
+        None,
+        examples=["Kimetsu no Yaiba: Mugen Ressha-hen"],
         max_length=255,
     )
+
     title_en: str | None = Field(
-        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc",
+        None,
+        examples=["Demon Slayer: Kimetsu no Yaiba Mugen Train Arc"],
         max_length=255,
     )
+
     title_ua: str | None = Field(
-        example="Клинок, який знищує демонів: Арка Нескінченного потяга",
+        None,
+        examples=["Клинок, який знищує демонів: Арка Нескінченного потяга"],
         max_length=255,
     )
 
 
-class PersonEditArgs(ORJSONModel):
-    name_native: str | None = Field(example="丸山 博雄", max_length=255)
-    name_en: str | None = Field(example="Hiroo Maruyama", max_length=255)
-    name_ua: str | None = Field(example="Хіро Маруяма", max_length=255)
+class PersonEditArgs(CustomModel):
+    name_native: str | None = Field(None, examples=["丸山 博雄"], max_length=255)
+    name_ua: str | None = Field(None, examples=["Хіро Маруяма"], max_length=255)
+    name_en: str | None = Field(
+        None, examples=["Hiroo Maruyama"], max_length=255
+    )
 
 
 # Response
-class ContentSlugResponse(ORJSONModel):
+class ContentSlugResponse(CustomModel):
     slug: str
 
 
-class EditResponse(ORJSONModel):
-    content_type: ContentTypeEnum = Field(example="anime")
-    status: EditStatusEnum = Field(example="pending")
-    description: str | None = Field(example="...")
-    created: datetime = Field(example=1693850684)
-    updated: datetime = Field(example=1693850684)
+class EditResponse(CustomModel):
+    content_type: ContentTypeEnum = Field(examples=["anime"])
+    status: EditStatusEnum = Field(examples=["pending"])
+    description: str | None = Field(examples=["..."])
+    created: datetime = Field(examples=[1693850684])
+    updated: datetime = Field(examples=[1693850684])
+    edit_id: int = Field(examples=[3])
     moderator: UserResponse | None
-    edit_id: int = Field(example=3)
     author: UserResponse
     before: dict | None
     after: dict
@@ -92,6 +99,6 @@ class EditResponse(ORJSONModel):
     content: ContentSlugResponse
 
 
-class EditListResponse(ORJSONModel):
+class EditListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[EditResponse]
