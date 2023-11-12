@@ -1,6 +1,6 @@
 from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
-from meilisearch_python_sdk import Client
+from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
 from app.settings import get_settings
 from sqlalchemy import select, func
@@ -62,7 +62,7 @@ async def meilisearch_populate(session: AsyncSession):
 
     settings = get_settings()
 
-    async with Client(**settings.meilisearch) as client:
+    async with AsyncClient(**settings.meilisearch) as client:
         index = client.index(constants.SEARCH_INDEX_CHARACTERS)
 
         await update_characters_settings(index)

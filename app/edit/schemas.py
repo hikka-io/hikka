@@ -1,4 +1,4 @@
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from datetime import datetime
 from app import constants
 from enum import Enum
@@ -38,7 +38,7 @@ class EditArgs(CustomModel):
     description: str | None = Field(examples=["..."], max_length=420)
     after: dict
 
-    @validator("after")
+    @field_validator("after")
     def validate_after(cls, after):
         if after == {}:
             raise ValueError("After field can't be empty")

@@ -1,5 +1,5 @@
+from pydantic import Field, field_validator
 from pydantic import constr, PositiveInt
-from pydantic import Field, validator
 from datetime import datetime
 from app import constants
 from enum import Enum
@@ -95,7 +95,7 @@ class AnimeSearchArgs(CustomModel):
     studios: list[str] = []
     genres: list[str] = []
 
-    @validator("years")
+    @field_validator("years")
     def validate_years(cls, years):
         if all(year is not None for year in years) and years[0] > years[1]:
             raise ValueError(
@@ -104,7 +104,7 @@ class AnimeSearchArgs(CustomModel):
 
         return years
 
-    @validator("score")
+    @field_validator("score")
     def validate_score(cls, scores):
         if all(score is not None for score in scores) and scores[0] > scores[1]:
             raise ValueError(
@@ -119,7 +119,7 @@ class AnimeSearchArgs(CustomModel):
 
         return scores
 
-    @validator("sort")
+    @field_validator("sort")
     def validate_sort(cls, sort_list):
         valid_fields = ["score", "scored_by"]
         valid_orders = ["asc", "desc"]
