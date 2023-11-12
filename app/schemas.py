@@ -104,3 +104,11 @@ class CompanyResponse(ORJSONModel):
     image: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
     slug: str = Field(example="hikka-inc-123456")
     name: str = Field(example="Hikka Inc.")
+
+
+class UserResponse(ORJSONModel):
+    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
+    description: str | None = Field(example="Hikka")
+    created: datetime = Field(example=1686088809)
+    username: str | None = Field(example="hikka")
+    avatar: str

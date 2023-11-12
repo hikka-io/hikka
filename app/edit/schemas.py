@@ -5,6 +5,7 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    UserResponse,
     ORJSONModel,
 )
 
@@ -71,11 +72,6 @@ class PersonEditArgs(ORJSONModel):
 
 
 # Response
-# ToDo: make universal UserResponse
-class UserResponse(ORJSONModel):
-    username: str = Field(example="hikka")
-
-
 class ContentSlugResponse(ORJSONModel):
     slug: str
 

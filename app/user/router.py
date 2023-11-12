@@ -1,8 +1,9 @@
 from app.dependencies import auth_required, get_user
-from .schemas import UserResponse, DescriptionArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app.schemas import UserResponse
+from .schemas import DescriptionArgs
 from app.models import User
 from . import service
 

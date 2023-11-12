@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.models import User, UserOAuth
+from app.schemas import UserResponse
 from app.database import get_session
 from app import constants
 from typing import Tuple
@@ -25,7 +26,6 @@ from .dependencies import (
 from .schemas import (
     ProviderUrlResponse,
     TokenResponse,
-    UserResponse,
     UsernameArgs,
     SignupArgs,
     EmailArgs,
