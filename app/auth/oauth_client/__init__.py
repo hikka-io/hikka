@@ -20,7 +20,6 @@ from typing import (
     Awaitable,
     Generator,
     Optional,
-    Union,
     Tuple,
     Type,
     List,
@@ -29,7 +28,7 @@ from typing import (
 )
 
 
-TRes = Union[Dict[str, "TRes"], List["TRes"], str, int, float, bool, None]
+TRes = Dict[str, "TRes"] | List["TRes"] | str | int | float | bool | None
 THeaders = Dict[str, str]
 TParams = Dict[str, str]
 

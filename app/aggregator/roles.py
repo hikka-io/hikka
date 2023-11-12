@@ -9,7 +9,9 @@ async def update_anime_roles(session, data):
     for role_name in data:
         slug = utils.slugify(role_name)
 
-        if await session.scalar(select(AnimeStaffRole).filter_by(slug=slug)):
+        if await session.scalar(
+            select(AnimeStaffRole).filter(AnimeStaffRole.slug == slug)
+        ):
             continue
 
         role = AnimeStaffRole(

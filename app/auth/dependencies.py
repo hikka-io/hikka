@@ -9,7 +9,6 @@ from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
 from .utils import checkpwd
-from typing import Union
 from . import oauth
 
 from .service import (
@@ -146,7 +145,7 @@ async def get_user_oauth(
     data: dict[str, str] = Depends(get_oauth_info),
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
-) -> Union[UserOAuth, None]:
+) -> UserOAuth | None:
     if not (oauth := await get_oauth_by_id(session, data["id"], provider)):
         email = data.get("email")
 

@@ -2,15 +2,11 @@ from app.models import AnimeStaff, Anime, Person
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
-from sqlalchemy.orm import selectinload
 from sqlalchemy import select, desc
 from sqlalchemy import func
-from typing import Union
 
 
-async def get_person_by_slug(
-    session: AsyncSession, slug: str
-) -> Union[Person, None]:
+async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
     return await session.scalar(select(Person).filter(Person.slug == slug))
 
 
@@ -36,7 +32,7 @@ async def people_search(
 
 async def person_anime_total(session: AsyncSession, person: Person):
     return await session.scalar(
-        select(func.count(AnimeStaff.id)).filter_by(person=person)
+        select(func.count(AnimeStaff.id)).filter(AnimeStaff.person == person)
     )
 
 
@@ -48,10 +44,9 @@ async def person_anime(
 ):
     return await session.scalars(
         select(AnimeStaff)
-        .filter_by(person=person)
+        .filter(AnimeStaff.person == person)
         .join(Anime)
         .options(anime_loadonly(joinedload(AnimeStaff.anime)))
-        # .options(selectinload(AnimeStaff.roles))
         .order_by(
             desc(Anime.score),
             desc(Anime.scored_by),

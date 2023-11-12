@@ -1,6 +1,5 @@
 from pydantic import Field
 from app import constants
-from typing import Union
 from enum import Enum
 
 from app.schemas import (
@@ -20,8 +19,8 @@ class CompanyAnimeTypeEnum(str, Enum):
 
 # Args
 class CompanyAnimeArgs(ORJSONModel):
-    type: Union[CompanyAnimeTypeEnum, None] = None
     page: int = Field(default=1, gt=0, example=1)
+    type: CompanyAnimeTypeEnum | None = None
 
 
 # Responses

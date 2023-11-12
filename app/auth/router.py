@@ -2,9 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.models import User, UserOAuth
+from app.schemas import UserResponse
 from app.database import get_session
-from typing import Tuple, Union
 from app import constants
+from typing import Tuple
 from . import service
 from . import oauth
 
@@ -25,7 +26,6 @@ from .dependencies import (
 from .schemas import (
     ProviderUrlResponse,
     TokenResponse,
-    UserResponse,
     UsernameArgs,
     SignupArgs,
     EmailArgs,
@@ -190,7 +190,7 @@ async def provider_url(provider: str = Depends(validate_provider)):
     summary="Get auth token using OAuth",
 )
 async def oauth_token(
-    oauth_user: Union[UserOAuth, None] = Depends(get_user_oauth),
+    oauth_user: UserOAuth | None = Depends(get_user_oauth),
     data: dict[str, str] = Depends(get_oauth_info),
     session: AsyncSession = Depends(get_session),
     provider: str = Depends(validate_provider),

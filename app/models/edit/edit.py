@@ -68,9 +68,9 @@ class AnimeContentEdit(ContentEdit):
         lazy="immediate",  # ToDo: check if it is good idea
     )
 
-    @hybrid_property
-    def slug(self):
-        return self.content.slug
+    # @hybrid_property
+    # def slug(self):
+    #     return self.content.slug
 
 
 class PersonContentEdit(ContentEdit):
@@ -88,6 +88,6 @@ class PersonContentEdit(ContentEdit):
         lazy="immediate",  # ToDo: check if it is good idea
     )
 
-    @hybrid_property
-    def slug(self):
-        return self.content.slug
+    # @hybrid_property
+    # def slug(self):
+    #     return self.content.slug

@@ -1,7 +1,6 @@
 from pydantic import EmailStr, Field
 from app.schemas import ORJSONModel
 from datetime import datetime
-from typing import Union
 
 
 # Args
@@ -37,11 +36,6 @@ class CodeArgs(ORJSONModel):
 
 
 # Responses
-class UserResponse(ORJSONModel):
-    created: datetime = Field(example=1686088809)
-    username: Union[str, None] = Field(example="hikka")
-
-
 class ProviderUrlResponse(ORJSONModel):
     url: str = Field(example="https://accounts.google.com/o/oauth2/v2/auth")
 

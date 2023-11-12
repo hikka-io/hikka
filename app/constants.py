@@ -83,7 +83,7 @@ COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
 
 EDIT_PENDING = "pending"
-EDIT_APPROVED = "approved"
+EDIT_ACCEPTED = "accepted"
 EDIT_DENIED = "denied"
 EDIT_CLOSED = "closed"
 
@@ -107,21 +107,25 @@ ROLE_BANNED = "banned"
 PERMISSION_CREATE_EDIT = "content:create_edit"
 PERMISSION_ACCEPT_EDIT = "content:accept_edit"
 PERMISSION_REJECT_EDIT = "content:reject_edit"
+PERMISSION_MODIFY_EDIT = "content:modify_edit"
 
 # Role permissions
 ROLES = {
     ROLE_USER: [
         PERMISSION_CREATE_EDIT,
+        PERMISSION_MODIFY_EDIT,
     ],
     ROLE_MODERATOR: [
         PERMISSION_CREATE_EDIT,
         PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
+        PERMISSION_MODIFY_EDIT,
     ],
     ROLE_ADMIN: [
         PERMISSION_CREATE_EDIT,
         PERMISSION_ACCEPT_EDIT,
         PERMISSION_REJECT_EDIT,
+        PERMISSION_MODIFY_EDIT,
     ],
     ROLE_BANNED: [],
 }

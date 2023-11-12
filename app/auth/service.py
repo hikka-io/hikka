@@ -6,31 +6,28 @@ from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
 from app import constants
-from typing import Union
 
 
 async def get_user_by_activation(
     session: AsyncSession, token: str
-) -> Union[User, None]:
-    return await session.scalar(select(User).filter_by(activation_token=token))
+) -> User | None:
+    return await session.scalar(
+        select(User).filter(User.activation_token == token)
+    )
 
 
-async def get_user_by_email(
-    session: AsyncSession, email: str
-) -> Union[User, None]:
-    return await session.scalar(select(User).filter_by(email=email))
+async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
+    return await session.scalar(select(User).filter(User.email == email))
 
 
 async def get_oauth_by_id(
     session: AsyncSession, oauth_id: str, provider: str
-) -> Union[UserOAuth, None]:
+) -> UserOAuth | None:
     return await session.scalar(
         select(UserOAuth)
-        .filter_by(
-            **{
-                "provider": provider,
-                "oauth_id": oauth_id,
-            }
+        .filter(
+            UserOAuth.provider == provider,
+            UserOAuth.oauth_id == oauth_id,
         )
         .options(selectinload(UserOAuth.user))
     )
@@ -38,15 +35,13 @@ async def get_oauth_by_id(
 
 async def get_user_by_username(
     session: AsyncSession, username: str
-) -> Union[User, None]:
-    return await session.scalar(select(User).filter_by(username=username))
+) -> User | None:
+    return await session.scalar(select(User).filter(User.username == username))
 
 
-async def get_user_by_reset(
-    session: AsyncSession, token: str
-) -> Union[User, None]:
+async def get_user_by_reset(session: AsyncSession, token: str) -> User | None:
     return await session.scalar(
-        select(User).filter_by(password_reset_token=token)
+        select(User).filter(User.password_reset_token == token)
     )
 
 

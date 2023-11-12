@@ -66,3 +66,103 @@ async def test_edit_create(
 
     assert isinstance(edits[1], PersonContentEdit)
     assert edits[1].content_type == constants.CONTENT_PERSON
+
+
+async def test_edit_create_bad_permission(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_dummy_user_banned,
+    get_dummy_token,
+    test_session,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_dummy_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["code"] == "permission:denied"
+
+
+async def test_edit_create_bad_content(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "rock-the-bocchi-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi the Rock!"},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["code"] == "edit:content_not_found"
+
+
+async def test_edit_create_bad_edit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_bad": "Bocchi The Rock!"},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "edit:bad_edit"
+
+
+async def test_edit_create_empty_edit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "system:validation_error"

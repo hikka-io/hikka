@@ -1,15 +1,13 @@
 from app.schemas import PaginationResponse
-from app.schemas import ORJSONModel
 from pydantic import Field
+
+from app.schemas import (
+    ORJSONModel,
+    UserResponse,
+)
 
 
 # Responses
-class UserResponse(ORJSONModel):
-    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
-    username: str = Field(example="hikka")
-    avatar: str
-
-
 class UserPaginationResponse(ORJSONModel):
     pagination: PaginationResponse
     list: list[UserResponse]

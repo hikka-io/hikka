@@ -59,7 +59,7 @@ async def send_emails():
     async with sessionmanager.session() as session:
         emails = await session.scalars(
             select(EmailMessage)
-            .filter_by(sent=False)
+            .filter(EmailMessage.sent == False)  # noqa: E712
             .options(selectinload(EmailMessage.user))
             .limit(100)
         )

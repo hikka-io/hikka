@@ -1,7 +1,6 @@
 from datetime import datetime
 from pydantic import Field
 from app import constants
-from typing import Union
 from enum import Enum
 
 from app.schemas import (
@@ -22,14 +21,14 @@ class WatchStatusEnum(str, Enum):
 
 # Args
 class WatchArgs(ORJSONModel):
-    note: Union[str, None] = Field(default=None, max_length=140, example="🤯")
+    note: str | None = Field(default=None, max_length=140, example="🤯")
     score: int = Field(default=0, ge=0, le=10, example=8)
     episodes: int = Field(default=0, ge=0, example=3)
     status: WatchStatusEnum
 
 
 class WatchFilterArgs(ORJSONModel):
-    status: Union[WatchStatusEnum, None] = None
+    status: WatchStatusEnum | None = None
 
 
 # Responses
@@ -37,8 +36,8 @@ class WatchResponse(ORJSONModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     updated: datetime = Field(example=1686088809)
     created: datetime = Field(example=1686088809)
-    note: Union[str, None] = Field(example="🤯")
     status: str = Field(example="watching")
+    note: str | None = Field(example="🤯")
     episodes: int = Field(example=3)
     score: int = Field(example=8)
     anime: AnimeResponse

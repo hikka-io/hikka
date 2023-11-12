@@ -1,6 +1,3 @@
-from pydantic import Field
-from typing import Union
-
 from app.schemas import (
     PaginationResponse,
     PersonResponse,
@@ -11,8 +8,8 @@ from app.schemas import (
 
 # Responses
 class AnimeStaffRoleResponse(ORJSONModel):
-    name_en: Union[str, None]
-    name_ua: Union[str, None]
+    name_en: str | None
+    name_ua: str | None
 
 
 class PersonAnimeResponse(ORJSONModel):

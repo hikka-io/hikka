@@ -89,7 +89,9 @@ async def save_anime_genres(session, data):
         slug = utils.slugify(genre_data["name"])
         name_ua = TRANSLATIONS.get(slug)
 
-        if await session.scalar(select(AnimeGenre).filter_by(slug=slug)):
+        if await session.scalar(
+            select(AnimeGenre).filter(AnimeGenre.slug == slug)
+        ):
             continue
 
         genre = AnimeGenre(
