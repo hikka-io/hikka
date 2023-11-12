@@ -13,7 +13,9 @@ class EmailArgs(ORJSONModel):
 
 
 class UsernameArgs(ORJSONModel):
-    username: str = Field(regex="^[A-Za-z][A-Za-z0-9_]{4,15}$", example="hikka")
+    username: str = Field(
+        pattern="^[A-Za-z][A-Za-z0-9_]{4,15}$", example="hikka"
+    )
 
 
 class SignupArgs(UsernameArgs):
