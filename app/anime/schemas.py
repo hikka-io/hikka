@@ -11,7 +11,7 @@ from app.schemas import (
     CompanyResponse,
     PersonResponse,
     AnimeResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
@@ -66,7 +66,7 @@ class SourceEnum(str, Enum):
 
 
 # Args
-class AnimeSearchArgs(ORJSONModel):
+class AnimeSearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
     page: int = Field(default=1, gt=0, example=1)
@@ -136,7 +136,7 @@ class AnimeSearchArgs(ORJSONModel):
 
 
 # Responses
-class AnimeEpisodeResponse(ORJSONModel):
+class AnimeEpisodeResponse(CustomModel):
     aired: datetime | None = Field(example=1686088809)
     title_ua: str | None = Field(
         example="Самопроголошена богиня і переродження в паралельному світі!"
@@ -150,59 +150,59 @@ class AnimeEpisodeResponse(ORJSONModel):
     index: int = Field(example=1)
 
 
-class AnimeEpisodesListResponse(ORJSONModel):
+class AnimeEpisodesListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[AnimeEpisodeResponse]
 
 
-class AnimeCharacterResponse(ORJSONModel):
+class AnimeCharacterResponse(CustomModel):
     main: bool = Field(example=True)
     character: CharacterResponse
 
 
-class RoleResponse(ORJSONModel):
+class RoleResponse(CustomModel):
     name_ua: str | None
     name_en: str | None
     slug: str
 
 
-class AnimeStaffResponse(ORJSONModel):
+class AnimeStaffResponse(CustomModel):
     person: PersonResponse | None
     roles: list[RoleResponse]
 
 
-class GenreResponse(ORJSONModel):
+class GenreResponse(CustomModel):
     name_en: str | None = Field(example="Comedy")
     name_ua: str | None = Field(example="Комедія")
     slug: str = Field(example="comedy")
     type: str = Field(example="genre")
 
 
-class GenreListResposne(ORJSONModel):
+class GenreListResposne(CustomModel):
     list: list[GenreResponse]
 
 
-class AnimeCompanyResponse(ORJSONModel):
+class AnimeCompanyResponse(CustomModel):
     company: CompanyResponse
     type: CompanyTypeEnum
 
 
-class AnimeCharacterPaginationResponse(ORJSONModel):
+class AnimeCharacterPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[AnimeCharacterResponse]
 
 
-class AnimeStaffPaginationResponse(ORJSONModel):
+class AnimeStaffPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[AnimeStaffResponse]
 
 
-class AnimeSearchPaginationResponse(ORJSONModel):
+class AnimeSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[AnimeResponse]
 
 
-class AnimeStatsResponse(ORJSONModel):
+class AnimeStatsResponse(CustomModel):
     completed: int = Field(example=1502335)
     watching: int = Field(example=83106)
     planned: int = Field(example=206073)
@@ -220,19 +220,19 @@ class AnimeStatsResponse(ORJSONModel):
     score_10: int = Field(example=184038)
 
 
-class AnimeExternalResponse(ORJSONModel):
+class AnimeExternalResponse(CustomModel):
     url: str = Field(example="https://www.konosuba.com/")
     text: str = Field(example="Official Site")
 
 
-class AnimeVideoResponse(ORJSONModel):
+class AnimeVideoResponse(CustomModel):
     url: str = Field(example="https://youtu.be/_4W1OQoDEDg")
     title: str | None = Field(example="ED 2 (Artist ver.)")
     description: str | None = Field(example="...")
     video_type: str = Field(example="video_music")
 
 
-class AnimeOSTResponse(ORJSONModel):
+class AnimeOSTResponse(CustomModel):
     index: int = Field(example=1)
     title: str | None = Field(example="fantastic dreamer")
     author: str | None = Field(example="Machico")
@@ -242,7 +242,7 @@ class AnimeOSTResponse(ORJSONModel):
     ost_type: str = Field(example="opening")
 
 
-class AnimeInfoResponse(ORJSONModel):
+class AnimeInfoResponse(CustomModel):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 

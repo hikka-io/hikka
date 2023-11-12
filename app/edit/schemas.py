@@ -6,7 +6,7 @@ from enum import Enum
 from app.schemas import (
     PaginationResponse,
     UserResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
@@ -34,7 +34,7 @@ class EditStatusEnum(str, Enum):
 
 
 # Args
-class EditArgs(ORJSONModel):
+class EditArgs(CustomModel):
     description: str | None = Field(example="...", max_length=420)
     after: dict
 
@@ -46,7 +46,7 @@ class EditArgs(ORJSONModel):
         return after
 
 
-class AnimeEditArgs(ORJSONModel):
+class AnimeEditArgs(CustomModel):
     synopsis_en: str | None = Field(example="...")
     synopsis_ua: str | None = Field(example="...")
     synonyms: list[str] | None = Field()
@@ -65,18 +65,18 @@ class AnimeEditArgs(ORJSONModel):
     )
 
 
-class PersonEditArgs(ORJSONModel):
+class PersonEditArgs(CustomModel):
     name_native: str | None = Field(example="丸山 博雄", max_length=255)
     name_en: str | None = Field(example="Hiroo Maruyama", max_length=255)
     name_ua: str | None = Field(example="Хіро Маруяма", max_length=255)
 
 
 # Response
-class ContentSlugResponse(ORJSONModel):
+class ContentSlugResponse(CustomModel):
     slug: str
 
 
-class EditResponse(ORJSONModel):
+class EditResponse(CustomModel):
     content_type: ContentTypeEnum = Field(example="anime")
     status: EditStatusEnum = Field(example="pending")
     description: str | None = Field(example="...")
@@ -92,6 +92,6 @@ class EditResponse(ORJSONModel):
     content: ContentSlugResponse
 
 
-class EditListResponse(ORJSONModel):
+class EditListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[EditResponse]

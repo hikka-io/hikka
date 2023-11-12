@@ -1,18 +1,18 @@
 from pydantic import EmailStr, Field
-from app.schemas import ORJSONModel
+from app.schemas import CustomModel
 from datetime import datetime
 
 
 # Args
-class TokenArgs(ORJSONModel):
+class TokenArgs(CustomModel):
     token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
 
 
-class EmailArgs(ORJSONModel):
+class EmailArgs(CustomModel):
     email: EmailStr = Field(example="hikka@email.com")
 
 
-class UsernameArgs(ORJSONModel):
+class UsernameArgs(CustomModel):
     username: str = Field(
         pattern="^[A-Za-z][A-Za-z0-9_]{4,15}$", example="hikka"
     )
@@ -23,26 +23,26 @@ class SignupArgs(UsernameArgs):
     email: EmailStr = Field(example="hikka@email.com")
 
 
-class LoginArgs(ORJSONModel):
+class LoginArgs(CustomModel):
     password: str = Field(min_length=8, max_length=64, example="password")
     email: EmailStr = Field(example="hikka@email.com")
 
 
-class ComfirmResetArgs(ORJSONModel):
+class ComfirmResetArgs(CustomModel):
     password: str = Field(min_length=8, max_length=64, example="password")
     token: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
 
 
-class CodeArgs(ORJSONModel):
+class CodeArgs(CustomModel):
     code: str
 
 
 # Responses
-class ProviderUrlResponse(ORJSONModel):
+class ProviderUrlResponse(CustomModel):
     url: str = Field(example="https://accounts.google.com/o/oauth2/v2/auth")
 
 
-class TokenResponse(ORJSONModel):
+class TokenResponse(CustomModel):
     secret: str = Field(example="CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA")
     expiration: datetime = Field(example=1686088809)
     created: datetime = Field(example=1686088809)

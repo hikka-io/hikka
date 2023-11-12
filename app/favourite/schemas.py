@@ -1,11 +1,11 @@
 from app.schemas import (
     AnimeFavouriteResponse,
     PaginationResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
 # Responses
-class AnimeFavouritePaginationResponse(ORJSONModel):
+class AnimeFavouritePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[AnimeFavouriteResponse]

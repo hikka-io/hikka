@@ -6,7 +6,7 @@ from enum import Enum
 from app.schemas import (
     PaginationResponse,
     AnimeResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
@@ -20,19 +20,19 @@ class WatchStatusEnum(str, Enum):
 
 
 # Args
-class WatchArgs(ORJSONModel):
+class WatchArgs(CustomModel):
     note: str | None = Field(default=None, max_length=140, example="🤯")
     score: int = Field(default=0, ge=0, le=10, example=8)
     episodes: int = Field(default=0, ge=0, example=3)
     status: WatchStatusEnum
 
 
-class WatchFilterArgs(ORJSONModel):
+class WatchFilterArgs(CustomModel):
     status: WatchStatusEnum | None = None
 
 
 # Responses
-class WatchResponse(ORJSONModel):
+class WatchResponse(CustomModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     updated: datetime = Field(example=1686088809)
     created: datetime = Field(example=1686088809)
@@ -43,12 +43,12 @@ class WatchResponse(ORJSONModel):
     anime: AnimeResponse
 
 
-class WatchPaginationResponse(ORJSONModel):
+class WatchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[WatchResponse]
 
 
-class WatchStatsResponse(ORJSONModel):
+class WatchStatsResponse(CustomModel):
     completed: int = Field(example=20)
     watching: int = Field(example=3)
     planned: int = Field(example=7)

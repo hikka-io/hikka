@@ -10,7 +10,7 @@ from . import utils
 
 
 # Custom Pydantic model
-class ORJSONModel(BaseModel):
+class CustomModel(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         use_enum_values=True,
@@ -44,23 +44,23 @@ class CompanyTypeEnum(str, Enum):
 
 
 # Args
-class PaginationArgs(ORJSONModel):
+class PaginationArgs(CustomModel):
     page: int = Field(default=1, gt=0, example=1)
 
 
 # Responses
-class PaginationResponse(ORJSONModel):
+class PaginationResponse(CustomModel):
     total: int = Field(example=20)
     pages: int = Field(example=2)
     page: int = Field(example=1)
 
 
-class QuerySearchArgs(ORJSONModel):
+class QuerySearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     page: int = Field(default=1, gt=0, example=1)
 
 
-class AnimeResponse(ORJSONModel):
+class AnimeResponse(CustomModel):
     media_type: str | None = Field(example="tv")
     title_ua: str | None = Field(
         example="Цей прекрасний світ, благословенний Богом!"
@@ -84,7 +84,7 @@ class AnimeResponse(ORJSONModel):
     year: int | None
 
 
-class CharacterResponse(ORJSONModel):
+class CharacterResponse(CustomModel):
     name_ua: str | None = Field(example="Меґумін")
     name_en: str | None = Field(example="Megumin")
     name_ja: str | None = Field(example="めぐみん")
@@ -92,7 +92,7 @@ class CharacterResponse(ORJSONModel):
     slug: str = Field(example="megumin-123456")
 
 
-class PersonResponse(ORJSONModel):
+class PersonResponse(CustomModel):
     name_native: str | None = Field(example="高橋 李依")
     name_ua: str | None = Field(example="Ріє Такахаші")
     name_en: str | None = Field(example="Rie Takahashi")
@@ -100,23 +100,23 @@ class PersonResponse(ORJSONModel):
     slug: str = Field(example="rie-takahashi-123456")
 
 
-class AnimeFavouriteResponse(ORJSONModel):
+class AnimeFavouriteResponse(CustomModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     created: datetime = Field(example=1686088809)
     anime: AnimeResponse
 
 
-class SuccessResponse(ORJSONModel):
+class SuccessResponse(CustomModel):
     success: bool = Field(example=True)
 
 
-class CompanyResponse(ORJSONModel):
+class CompanyResponse(CustomModel):
     image: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
     slug: str = Field(example="hikka-inc-123456")
     name: str = Field(example="Hikka Inc.")
 
 
-class UserResponse(ORJSONModel):
+class UserResponse(CustomModel):
     reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
     description: str | None = Field(example="Hikka")
     created: datetime = Field(example=1686088809)

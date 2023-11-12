@@ -7,7 +7,7 @@ from app.schemas import (
     CompanyResponse,
     CompanyTypeEnum,
     AnimeResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
@@ -18,22 +18,22 @@ class CompanyAnimeTypeEnum(str, Enum):
 
 
 # Args
-class CompanyAnimeArgs(ORJSONModel):
+class CompanyAnimeArgs(CustomModel):
     page: int = Field(default=1, gt=0, example=1)
     type: CompanyAnimeTypeEnum | None = None
 
 
 # Responses
-class CompanyAnimeResponse(ORJSONModel):
+class CompanyAnimeResponse(CustomModel):
     anime: AnimeResponse
     type: CompanyTypeEnum
 
 
-class CompaniesSearchPaginationResponse(ORJSONModel):
+class CompaniesSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CompanyResponse]
 
 
-class CompanyAnimePaginationResponse(ORJSONModel):
+class CompanyAnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CompanyAnimeResponse]
