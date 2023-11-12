@@ -10,7 +10,7 @@ from app.schemas import (
 
 # Responses
 class CharacterAnimeResponse(CustomModel):
-    main: bool = Field(example=True)
+    main: bool = Field(examples=[True])
     anime: AnimeResponse
 
 

@@ -19,7 +19,7 @@ class CompanyAnimeTypeEnum(str, Enum):
 
 # Args
 class CompanyAnimeArgs(CustomModel):
-    page: int = Field(default=1, gt=0, example=1)
+    page: int = Field(default=1, gt=0, examples=[1])
     type: CompanyAnimeTypeEnum | None = None
 
 

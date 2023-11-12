@@ -69,14 +69,20 @@ class SourceEnum(str, Enum):
 class AnimeSearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
-    page: int = Field(default=1, gt=0, example=1)
+    page: int = Field(default=1, gt=0, examples=[1])
 
     years: list[PositiveInt | None] = Field(
-        default=[None, None], min_items=2, max_items=2, example=[2000, 2020]
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[2000, 2020]],
     )
 
     score: list[int | None] = Field(
-        default=[None, None], min_items=2, max_items=2, example=[0, 10]
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
     )
 
     media_type: list[AnimeMediaEnum] = []
@@ -137,17 +143,19 @@ class AnimeSearchArgs(CustomModel):
 
 # Responses
 class AnimeEpisodeResponse(CustomModel):
-    aired: datetime | None = Field(example=1686088809)
+    aired: datetime | None = Field(examples=[1686088809])
     title_ua: str | None = Field(
-        example="Самопроголошена богиня і переродження в паралельному світі!"
+        examples=["Самопроголошена богиня і переродження в паралельному світі!"]
     )
     title_en: str | None = Field(
-        example="This Self-Proclaimed Goddess and Reincarnation in Another World!"  # noqa: E501
+        examples=[
+            "This Self-Proclaimed Goddess and Reincarnation in Another World!"
+        ]
     )
     title_ja: str | None = Field(
-        example="Kono Jishou Megami to Isekai Tenshou wo!"
+        examples=["Kono Jishou Megami to Isekai Tenshou wo!"]
     )
-    index: int = Field(example=1)
+    index: int = Field(examples=[1])
 
 
 class AnimeEpisodesListResponse(CustomModel):
@@ -156,7 +164,7 @@ class AnimeEpisodesListResponse(CustomModel):
 
 
 class AnimeCharacterResponse(CustomModel):
-    main: bool = Field(example=True)
+    main: bool = Field(examples=[True])
     character: CharacterResponse
 
 
@@ -172,10 +180,10 @@ class AnimeStaffResponse(CustomModel):
 
 
 class GenreResponse(CustomModel):
-    name_en: str | None = Field(example="Comedy")
-    name_ua: str | None = Field(example="Комедія")
-    slug: str = Field(example="comedy")
-    type: str = Field(example="genre")
+    name_ua: str | None = Field(examples=["Комедія"])
+    name_en: str | None = Field(examples=["Comedy"])
+    slug: str = Field(examples=["comedy"])
+    type: str = Field(examples=["genre"])
 
 
 class GenreListResposne(CustomModel):
@@ -203,78 +211,78 @@ class AnimeSearchPaginationResponse(CustomModel):
 
 
 class AnimeStatsResponse(CustomModel):
-    completed: int = Field(example=1502335)
-    watching: int = Field(example=83106)
-    planned: int = Field(example=206073)
-    dropped: int = Field(example=33676)
-    on_hold: int = Field(example=30222)
-    score_1: int = Field(example=3087)
-    score_2: int = Field(example=2633)
-    score_3: int = Field(example=4583)
-    score_4: int = Field(example=11343)
-    score_5: int = Field(example=26509)
-    score_6: int = Field(example=68501)
-    score_7: int = Field(example=211113)
-    score_8: int = Field(example=398095)
-    score_9: int = Field(example=298198)
-    score_10: int = Field(example=184038)
+    completed: int = Field(examples=[1502335])
+    watching: int = Field(examples=[83106])
+    planned: int = Field(examples=[206073])
+    dropped: int = Field(examples=[33676])
+    on_hold: int = Field(examples=[30222])
+    score_1: int = Field(examples=[3087])
+    score_2: int = Field(examples=[2633])
+    score_3: int = Field(examples=[4583])
+    score_4: int = Field(examples=[11343])
+    score_5: int = Field(examples=[26509])
+    score_6: int = Field(examples=[68501])
+    score_7: int = Field(examples=[211113])
+    score_8: int = Field(examples=[398095])
+    score_9: int = Field(examples=[298198])
+    score_10: int = Field(examples=[184038])
 
 
 class AnimeExternalResponse(CustomModel):
-    url: str = Field(example="https://www.konosuba.com/")
-    text: str = Field(example="Official Site")
+    url: str = Field(examples=["https://www.konosuba.com/"])
+    text: str = Field(examples=["Official Site"])
 
 
 class AnimeVideoResponse(CustomModel):
-    url: str = Field(example="https://youtu.be/_4W1OQoDEDg")
-    title: str | None = Field(example="ED 2 (Artist ver.)")
-    description: str | None = Field(example="...")
-    video_type: str = Field(example="video_music")
+    url: str = Field(examples=["https://youtu.be/_4W1OQoDEDg"])
+    title: str | None = Field(examples=["ED 2 (Artist ver.)"])
+    description: str | None = Field(examples=["..."])
+    video_type: str = Field(examples=["video_music"])
 
 
 class AnimeOSTResponse(CustomModel):
-    index: int = Field(example=1)
-    title: str | None = Field(example="fantastic dreamer")
-    author: str | None = Field(example="Machico")
+    index: int = Field(examples=[1])
+    title: str | None = Field(examples=["fantastic dreamer"])
+    author: str | None = Field(examples=["Machico"])
     spotify: str | None = Field(
-        example="https://open.spotify.com/track/3BIhcWQV2hGRoEXdLL3Fzw"
+        examples=["https://open.spotify.com/track/3BIhcWQV2hGRoEXdLL3Fzw"]
     )
-    ost_type: str = Field(example="opening")
+    ost_type: str = Field(examples=["opening"])
 
 
 class AnimeInfoResponse(CustomModel):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
-    start_date: datetime | None = Field(example=1686088809)
-    end_date: datetime | None = Field(example=1686088809)
+    start_date: datetime | None = Field(examples=[1686088809])
+    end_date: datetime | None = Field(examples=[1686088809])
 
-    episodes_released: int | None = Field(example=10)
-    episodes_total: int | None = Field(example=10)
-    synopsis_en: str | None = Field(example="...")
-    synopsis_ua: str | None = Field(example="...")
-    media_type: str | None = Field(example="tv")
+    episodes_released: int | None = Field(examples=[10])
+    episodes_total: int | None = Field(examples=[10])
+    synopsis_en: str | None = Field(examples=["..."])
+    synopsis_ua: str | None = Field(examples=["..."])
+    media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
-        example="Цей прекрасний світ, благословенний Богом!"
+        examples=["Цей прекрасний світ, благословенний Богом!"]
     )
     title_en: str | None = Field(
-        example="KonoSuba: God's Blessing on This Wonderful World!"
+        examples=["KonoSuba: God's Blessing on This Wonderful World!"]
     )
     title_ja: str | None = Field(
-        example="Kono Subarashii Sekai ni Shukufuku wo!"
+        examples=["Kono Subarashii Sekai ni Shukufuku wo!"]
     )
-    duration: int | None = Field(example=23)
-    poster: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
-    status: str | None = Field(example="finished")
-    source: str | None = Field(example="light_novel")
-    rating: str | None = Field(example="pg_13")
-    has_franchise: bool = Field(example=True)
-    scored_by: int = Field(example=1210150)
-    score: float = Field(example=8.11)
-    nsfw: bool = Field(example=False)
-    slug: str = Field(example="kono-subarashii-sekai-ni-shukufuku-wo-123456")
+    duration: int | None = Field(examples=[23])
+    poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    status: str | None = Field(examples=["finished"])
+    source: str | None = Field(examples=["light_novel"])
+    rating: str | None = Field(examples=["pg_13"])
+    has_franchise: bool = Field(examples=[True])
+    scored_by: int = Field(examples=[1210150])
+    score: float = Field(examples=[8.11])
+    nsfw: bool = Field(examples=[False])
+    slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
 
-    synonyms: list[str] = Field(example=["Konosuba"])
+    synonyms: list[str] = Field(examples=["Konosuba"])
     external: list[AnimeExternalResponse]
     videos: list[AnimeVideoResponse]
     ost: list[AnimeOSTResponse]

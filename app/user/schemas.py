@@ -5,5 +5,5 @@ from pydantic import Field
 # Args
 class DescriptionArgs(CustomModel):
     description: str | None = Field(
-        default=None, max_length=140, example="Hikka"
+        default=None, max_length=140, examples=["Hikka"]
     )

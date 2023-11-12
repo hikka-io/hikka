@@ -6,8 +6,8 @@ from pydantic import Field
 
 
 class ErrorResponse(CustomModel):
-    message: str = Field(example="Example error message")
-    code: str = Field(example="example_error")
+    message: str = Field(examples=["Example error message"])
+    code: str = Field(examples=["example_error"])
 
 
 errors = {

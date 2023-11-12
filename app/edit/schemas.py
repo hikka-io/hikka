@@ -35,7 +35,7 @@ class EditStatusEnum(str, Enum):
 
 # Args
 class EditArgs(CustomModel):
-    description: str | None = Field(example="...", max_length=420)
+    description: str | None = Field(examples=["..."], max_length=420)
     after: dict
 
     @validator("after")
@@ -47,28 +47,28 @@ class EditArgs(CustomModel):
 
 
 class AnimeEditArgs(CustomModel):
-    synopsis_en: str | None = Field(example="...")
-    synopsis_ua: str | None = Field(example="...")
+    synopsis_en: str | None = Field(examples=["..."])
+    synopsis_ua: str | None = Field(examples=["..."])
     synonyms: list[str] | None = Field()
 
     title_ja: str | None = Field(
-        example="Kimetsu no Yaiba: Mugen Ressha-hen",
+        examples=["Kimetsu no Yaiba: Mugen Ressha-hen"],
         max_length=255,
     )
     title_en: str | None = Field(
-        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc",
+        examples=["Demon Slayer: Kimetsu no Yaiba Mugen Train Arc"],
         max_length=255,
     )
     title_ua: str | None = Field(
-        example="Клинок, який знищує демонів: Арка Нескінченного потяга",
+        examples=["Клинок, який знищує демонів: Арка Нескінченного потяга"],
         max_length=255,
     )
 
 
 class PersonEditArgs(CustomModel):
-    name_native: str | None = Field(example="丸山 博雄", max_length=255)
-    name_en: str | None = Field(example="Hiroo Maruyama", max_length=255)
-    name_ua: str | None = Field(example="Хіро Маруяма", max_length=255)
+    name_native: str | None = Field(examples=["丸山 博雄"], max_length=255)
+    name_en: str | None = Field(examples=["Hiroo Maruyama"], max_length=255)
+    name_ua: str | None = Field(examples=["Хіро Маруяма"], max_length=255)
 
 
 # Response
@@ -77,13 +77,13 @@ class ContentSlugResponse(CustomModel):
 
 
 class EditResponse(CustomModel):
-    content_type: ContentTypeEnum = Field(example="anime")
-    status: EditStatusEnum = Field(example="pending")
-    description: str | None = Field(example="...")
-    created: datetime = Field(example=1693850684)
-    updated: datetime = Field(example=1693850684)
+    content_type: ContentTypeEnum = Field(examples=["anime"])
+    status: EditStatusEnum = Field(examples=["pending"])
+    description: str | None = Field(examples=["..."])
+    created: datetime = Field(examples=[1693850684])
+    updated: datetime = Field(examples=[1693850684])
+    edit_id: int = Field(examples=[3])
     moderator: UserResponse | None
-    edit_id: int = Field(example=3)
     author: UserResponse
     before: dict | None
     after: dict

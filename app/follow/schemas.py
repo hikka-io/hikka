@@ -14,9 +14,9 @@ class UserPaginationResponse(CustomModel):
 
 
 class FollowStatsResponse(CustomModel):
-    followers: int = Field(example=10)
-    following: int = Field(example=3)
+    followers: int = Field(examples=[10])
+    following: int = Field(examples=[3])
 
 
 class FollowResponse(CustomModel):
-    follow: bool = Field(example=True)
+    follow: bool = Field(examples=[True])

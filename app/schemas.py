@@ -45,39 +45,39 @@ class CompanyTypeEnum(str, Enum):
 
 # Args
 class PaginationArgs(CustomModel):
-    page: int = Field(default=1, gt=0, example=1)
+    page: int = Field(default=1, gt=0, examples=[1])
 
 
 # Responses
 class PaginationResponse(CustomModel):
-    total: int = Field(example=20)
-    pages: int = Field(example=2)
-    page: int = Field(example=1)
+    total: int = Field(examples=[20])
+    pages: int = Field(examples=[2])
+    page: int = Field(examples=[1])
 
 
 class QuerySearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
-    page: int = Field(default=1, gt=0, example=1)
+    page: int = Field(default=1, gt=0, examples=[1])
 
 
 class AnimeResponse(CustomModel):
-    media_type: str | None = Field(example="tv")
+    media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
-        example="Цей прекрасний світ, благословенний Богом!"
+        examples=["Цей прекрасний світ, благословенний Богом!"]
     )
     title_en: str | None = Field(
-        example="KonoSuba: God's Blessing on This Wonderful World!"
+        examples=["KonoSuba: God's Blessing on This Wonderful World!"]
     )
     title_ja: str | None = Field(
-        example="Kono Subarashii Sekai ni Shukufuku wo!"
+        examples=["Kono Subarashii Sekai ni Shukufuku wo!"]
     )
-    episodes_released: int | None = Field(example="10")
-    episodes_total: int | None = Field(example="10")
-    poster: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
-    status: str | None = Field(example="finished")
-    scored_by: int = Field(example=1210150)
-    score: float = Field(example=8.11)
-    slug: str = Field(example="kono-subarashii-sekai-ni-shukufuku-wo-123456")
+    episodes_released: int | None = Field(examples=["10"])
+    episodes_total: int | None = Field(examples=["10"])
+    poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    status: str | None = Field(examples=["finished"])
+    scored_by: int = Field(examples=[1210150])
+    score: float = Field(examples=[8.11])
+    slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
     season: str | None
     source: str | None
     rating: str | None
@@ -85,40 +85,40 @@ class AnimeResponse(CustomModel):
 
 
 class CharacterResponse(CustomModel):
-    name_ua: str | None = Field(example="Меґумін")
-    name_en: str | None = Field(example="Megumin")
-    name_ja: str | None = Field(example="めぐみん")
-    image: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
-    slug: str = Field(example="megumin-123456")
+    name_ua: str | None = Field(examples=["Меґумін"])
+    name_en: str | None = Field(examples=["Megumin"])
+    name_ja: str | None = Field(examples=["めぐみん"])
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    slug: str = Field(examples=["megumin-123456"])
 
 
 class PersonResponse(CustomModel):
-    name_native: str | None = Field(example="高橋 李依")
-    name_ua: str | None = Field(example="Ріє Такахаші")
-    name_en: str | None = Field(example="Rie Takahashi")
-    image: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
-    slug: str = Field(example="rie-takahashi-123456")
+    name_native: str | None = Field(examples=["高橋 李依"])
+    name_ua: str | None = Field(examples=["Ріє Такахаші"])
+    name_en: str | None = Field(examples=["Rie Takahashi"])
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    slug: str = Field(examples=["rie-takahashi-123456"])
 
 
 class AnimeFavouriteResponse(CustomModel):
-    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
-    created: datetime = Field(example=1686088809)
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    created: datetime = Field(examples=[1686088809])
     anime: AnimeResponse
 
 
 class SuccessResponse(CustomModel):
-    success: bool = Field(example=True)
+    success: bool = Field(examples=[True])
 
 
 class CompanyResponse(CustomModel):
-    image: str | None = Field(example="https://cdn.hikka.io/hikka.jpg")
-    slug: str = Field(example="hikka-inc-123456")
-    name: str = Field(example="Hikka Inc.")
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    slug: str = Field(examples=["hikka-inc-123456"])
+    name: str = Field(examples=["Hikka Inc."])
 
 
 class UserResponse(CustomModel):
-    reference: str = Field(example="c773d0bf-1c42-4c18-aec8-1bdd8cb0a434")
-    description: str | None = Field(example="Hikka")
-    created: datetime = Field(example=1686088809)
-    username: str | None = Field(example="hikka")
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    description: str | None = Field(examples=["Hikka"])
+    username: str | None = Field(examples=["hikka"])
+    created: datetime = Field(examples=[1686088809])
     avatar: str
