@@ -35,7 +35,7 @@ class EditStatusEnum(str, Enum):
 
 # Args
 class EditArgs(CustomModel):
-    description: str | None = Field(examples=["..."], max_length=420)
+    description: str | None = Field(None, examples=["..."], max_length=420)
     after: dict
 
     @field_validator("after")
@@ -47,28 +47,35 @@ class EditArgs(CustomModel):
 
 
 class AnimeEditArgs(CustomModel):
-    synopsis_en: str | None = Field(examples=["..."])
-    synopsis_ua: str | None = Field(examples=["..."])
-    synonyms: list[str] | None = Field()
+    synopsis_en: str | None = Field(None, examples=["..."])
+    synopsis_ua: str | None = Field(None, examples=["..."])
+    synonyms: list[str] | None = None
 
     title_ja: str | None = Field(
+        None,
         examples=["Kimetsu no Yaiba: Mugen Ressha-hen"],
         max_length=255,
     )
+
     title_en: str | None = Field(
+        None,
         examples=["Demon Slayer: Kimetsu no Yaiba Mugen Train Arc"],
         max_length=255,
     )
+
     title_ua: str | None = Field(
+        None,
         examples=["Клинок, який знищує демонів: Арка Нескінченного потяга"],
         max_length=255,
     )
 
 
 class PersonEditArgs(CustomModel):
-    name_native: str | None = Field(examples=["丸山 博雄"], max_length=255)
-    name_en: str | None = Field(examples=["Hiroo Maruyama"], max_length=255)
-    name_ua: str | None = Field(examples=["Хіро Маруяма"], max_length=255)
+    name_native: str | None = Field(None, examples=["丸山 博雄"], max_length=255)
+    name_ua: str | None = Field(None, examples=["Хіро Маруяма"], max_length=255)
+    name_en: str | None = Field(
+        None, examples=["Hiroo Maruyama"], max_length=255
+    )
 
 
 # Response
