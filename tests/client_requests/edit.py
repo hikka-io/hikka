@@ -14,6 +14,14 @@ def request_create_edit(client, token, content_type, slug, data={}):
     )
 
 
+def request_update_edit(client, token, edit_id, data={}):
+    return client.post(
+        f"/edit/{edit_id}/update",
+        headers={"Auth": token},
+        json=data,
+    )
+
+
 def request_close_edit(client, token, edit_id):
     return client.post(f"/edit/{edit_id}/close", headers={"Auth": token})
 
