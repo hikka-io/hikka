@@ -6,6 +6,10 @@ def request_content_edit_list(client, content_type, slug):
     return client.get(f"/edit/{content_type}/{slug}/list")
 
 
+def request_edit_list(client):
+    return client.get("/edit/list")
+
+
 def request_create_edit(client, token, content_type, slug, data={}):
     return client.put(
         f"/edit/{content_type}/{slug}",

@@ -56,6 +56,7 @@ from .edit import request_create_edit
 from .edit import request_update_edit
 from .edit import request_close_edit
 from .edit import request_deny_edit
+from .edit import request_edit_list
 from .edit import request_edit
 
 __all__ = [
@@ -107,5 +108,6 @@ __all__ = [
     "request_update_edit",
     "request_close_edit",
     "request_deny_edit",
+    "request_edit_list",
     "request_edit",
 ]
