@@ -1,30 +1,40 @@
-from pydantic import BaseModel, Extra, Field, constr
 from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel, ConfigDict
+from pydantic import model_serializer
+from pydantic import Field, constr
 from datetime import datetime
+from typing import Callable
 from . import constants
 from enum import Enum
 from . import utils
-import orjson
-
-
-# Dump dict using orjson
-def orjson_dumps(v, *, default):
-    return orjson.dumps(v, default=default).decode()
 
 
 # Custom Pydantic model
 class ORJSONModel(BaseModel):
-    class Config:
-        json_encoders = {datetime: utils.to_timestamp}
-        json_dumps = orjson_dumps
-        json_loads = orjson.loads
-        use_enum_values = True
-        extra = Extra.forbid
-        orm_mode = True
+    model_config = ConfigDict(
+        populate_by_name=True,
+        use_enum_values=True,
+        from_attributes=True,
+        extra="forbid",
+    )
 
     def serializable_dict(self, **kwargs):
-        default_dict = super().dict(**kwargs)
+        default_dict = self.model_dump()
         return jsonable_encoder(default_dict)
+
+    @model_serializer(mode="wrap")
+    def serialize(self, original_serializer: Callable) -> dict:
+        # Based on https://github.com/pydantic/pydantic/discussions/7199#discussioncomment-6841388
+
+        result = original_serializer(self)
+
+        for field_name, field_info in self.model_fields.items():
+            if field_info.annotation == datetime:
+                result[field_name] = utils.to_timestamp(
+                    getattr(self, field_name)
+                )
+
+        return result
 
 
 # Enums
