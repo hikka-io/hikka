@@ -1,6 +1,6 @@
-from meilisearch_python_async.models.settings import MeilisearchSettings
+from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
-from meilisearch_python_async import Client
+from meilisearch_python_sdk import Client
 from app.database import sessionmanager
 from app.settings import get_settings
 from sqlalchemy import select, func

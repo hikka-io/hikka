@@ -1,5 +1,5 @@
-from meilisearch_python_async.errors import MeilisearchError
-from meilisearch_python_async import Client
+from meilisearch_python_sdk.errors import MeilisearchError
+from meilisearch_python_sdk import Client
 from app.settings import get_settings
 from app.utils import pagination_dict
 from app.errors import Abort

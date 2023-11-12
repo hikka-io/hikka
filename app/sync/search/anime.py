@@ -1,7 +1,7 @@
-from meilisearch_python_async.models.settings import MeilisearchSettings
+from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import get_season, pagination
-from meilisearch_python_async import Client
+from meilisearch_python_sdk import Client
 from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
