@@ -12,7 +12,7 @@ async def update_anime_info(semaphore, content_id):
         async with sessionmanager.session() as session:
             anime = await session.scalar(
                 select(Anime)
-                .filter_by(content_id=content_id)
+                .filter(Anime.content_id == content_id)
                 .options(selectinload(Anime.genres))
             )
 
@@ -27,7 +27,7 @@ async def aggregator_anime_info():
     async with sessionmanager.session() as session:
         anime_list = await session.scalars(
             select(Anime.content_id)
-            .filter_by(needs_update=True)
+            .filter(Anime.needs_update == True)  # noqa: E712
             .order_by(desc("score"), desc("scored_by"))
         )
 

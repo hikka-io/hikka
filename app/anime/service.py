@@ -37,7 +37,7 @@ async def anime_characters(
 ) -> list[AnimeCharacter]:
     return await session.scalars(
         select(AnimeCharacter)
-        .filter_by(anime=anime)
+        .filter(AnimeCharacter.anime == anime)
         .options(selectinload(AnimeCharacter.character))
         .limit(limit)
         .offset(offset)
@@ -49,7 +49,7 @@ async def anime_staff(
 ) -> list[AnimeStaff]:
     return await session.scalars(
         select(AnimeStaff)
-        .filter_by(anime=anime)
+        .filter(AnimeStaff.anime == anime)
         .options(selectinload(AnimeStaff.person))
         .options(selectinload(AnimeStaff.roles))
         .limit(limit)
@@ -80,7 +80,7 @@ async def anime_recommendations(
 ) -> list[Anime]:
     return await session.scalars(
         select(AnimeRecommendation)
-        .filter_by(anime=anime)
+        .filter(AnimeRecommendation.anime == anime)
         .options(
             anime_loadonly(selectinload(AnimeRecommendation.recommendation))
         )
@@ -92,13 +92,15 @@ async def anime_recommendations(
 
 async def anime_staff_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
-        select(func.count(AnimeStaff.id)).filter_by(anime=anime)
+        select(func.count(AnimeStaff.id)).filter(AnimeStaff.anime == anime)
     )
 
 
 async def franchise_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
-        select(func.count(Anime.id)).filter_by(franchise_id=anime.franchise_id)
+        select(func.count(Anime.id)).filter(
+            Anime.franchise_id == anime.franchise_id
+        )
     )
 
 
@@ -107,7 +109,7 @@ async def franchise(
 ):
     return await session.scalars(
         select(Anime)
-        .filter_by(franchise_id=anime.franchise_id)
+        .filter(Anime.franchise_id == anime.franchise_id)
         .order_by(desc(Anime.start_date))
         .limit(limit)
         .offset(offset)
@@ -118,13 +120,17 @@ async def anime_recommendations_count(
     session: AsyncSession, anime: Anime
 ) -> int:
     return await session.scalar(
-        select(func.count(AnimeRecommendation.id)).filter_by(anime=anime)
+        select(func.count(AnimeRecommendation.id)).filter(
+            AnimeRecommendation.anime == anime
+        )
     )
 
 
 async def anime_characters_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
-        select(func.count(AnimeCharacter.id)).filter_by(anime=anime)
+        select(func.count(AnimeCharacter.id)).filter(
+            AnimeCharacter.anime == anime
+        )
     )
 
 

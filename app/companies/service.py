@@ -52,10 +52,10 @@ async def company_anime(
     limit: int,
     offset: int,
 ):
-    query = select(CompanyAnime).filter_by(company=company)
+    query = select(CompanyAnime).filter(CompanyAnime.company == company)
 
     if company_type:
-        query = query.filter_by(type=company_type)
+        query = query.filter(CompanyAnime.type == company_type)
 
     return await session.scalars(
         query.join(Anime)

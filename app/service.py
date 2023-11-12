@@ -7,15 +7,15 @@ from sqlalchemy import select
 async def get_user_by_username(
     session: AsyncSession, username: str
 ) -> User | None:
-    return await session.scalar(select(User).filter_by(username=username))
+    return await session.scalar(select(User).filter(User.username == username))
 
 
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
-    return await session.scalar(select(Anime).filter_by(slug=slug))
+    return await session.scalar(select(Anime).filter(Anime.slug == slug))
 
 
 async def get_anime_by_id(session: AsyncSession, id: str) -> Anime | None:
-    return await session.scalar(select(Anime).filter_by(id=id))
+    return await session.scalar(select(Anime).filter(Anime.id == id))
 
 
 async def get_auth_token(
@@ -23,7 +23,7 @@ async def get_auth_token(
 ) -> AuthToken | None:
     return await session.scalar(
         select(AuthToken)
-        .filter_by(secret=secret)
+        .filter(AuthToken.secret == secret)
         .options(selectinload(AuthToken.user))
     )
 

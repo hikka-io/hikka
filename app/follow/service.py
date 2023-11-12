@@ -18,9 +18,9 @@ async def count_following(session: AsyncSession, user: User):
 
 async def get_follow(session: AsyncSession, followed_user: User, user: User):
     return await session.scalar(
-        select(Follow).filter_by(
-            followed_user=followed_user,
-            user=user,
+        select(Follow).filter(
+            Follow.followed_user == followed_user,
+            Follow.user == user,
         )
     )
 

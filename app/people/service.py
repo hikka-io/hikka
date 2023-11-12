@@ -32,7 +32,7 @@ async def people_search(
 
 async def person_anime_total(session: AsyncSession, person: Person):
     return await session.scalar(
-        select(func.count(AnimeStaff.id)).filter_by(person=person)
+        select(func.count(AnimeStaff.id)).filter(AnimeStaff.person == person)
     )
 
 
@@ -44,10 +44,9 @@ async def person_anime(
 ):
     return await session.scalars(
         select(AnimeStaff)
-        .filter_by(person=person)
+        .filter(AnimeStaff.person == person)
         .join(Anime)
         .options(anime_loadonly(joinedload(AnimeStaff.anime)))
-        # .options(selectinload(AnimeStaff.roles))
         .order_by(
             desc(Anime.score),
             desc(Anime.scored_by),

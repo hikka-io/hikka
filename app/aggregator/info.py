@@ -91,10 +91,10 @@ async def process_companies_anime(session, anime, data):
 
         # ToDo: cache here
         if await session.scalar(
-            select(CompanyAnime).filter_by(
-                type=entry["type"],
-                company=company,
-                anime=anime,
+            select(CompanyAnime).filter(
+                CompanyAnime.type == entry["type"],
+                CompanyAnime.company == company,
+                CompanyAnime.anime == anime,
             )
         ):
             continue
@@ -169,7 +169,10 @@ async def process_characters_and_voices(session, anime, data):
             continue
 
         if not await session.scalar(
-            select(AnimeCharacter).filter_by(anime=anime, character=character)
+            select(AnimeCharacter).filter(
+                AnimeCharacter.anime == anime,
+                AnimeCharacter.character == character,
+            )
         ):
             character_role = AnimeCharacter(
                 **{
@@ -334,7 +337,7 @@ async def process_staff(session, anime, data):
 
     cache = await session.scalars(
         select(AnimeStaff)
-        .filter_by(anime=anime)
+        .filter(AnimeStaff.anime == anime)
         .options(selectinload(AnimeStaff.roles))
     )
 

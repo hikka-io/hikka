@@ -52,8 +52,8 @@ async def get_user_watch_list(
     limit: int,
     offset: int,
 ) -> list[AnimeWatch]:
-    query = select(AnimeWatch).filter_by(user=user)
-    query = query.filter_by(status=status) if status else query
+    query = select(AnimeWatch).filter(AnimeWatch.user == user)
+    query = query.filter(AnimeWatch.status == status) if status else query
 
     return await session.scalars(
         query.order_by(desc(AnimeWatch.updated))
@@ -68,7 +68,7 @@ async def get_user_watch_list_count(
     user: User,
     status: str | None,
 ) -> int:
-    query = select(func.count(AnimeWatch.id)).filter_by(user=user)
+    query = select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
     query = query.filter(AnimeWatch.status == status) if status else query
     return await session.scalar(query)
 
