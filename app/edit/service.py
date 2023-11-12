@@ -46,8 +46,10 @@ async def get_content_by_slug(
     )
 
 
-async def count_edits(session: AsyncSession, content_id: str) -> int:
-    """Count edits for give content"""
+async def count_edits_by_content_id(
+    session: AsyncSession, content_id: str
+) -> int:
+    """Count edits for given content"""
 
     return await session.scalar(
         select(func.count(ContentEdit.id)).filter(
@@ -56,17 +58,38 @@ async def count_edits(session: AsyncSession, content_id: str) -> int:
     )
 
 
-async def get_edits(
+async def get_edits_by_content_id(
     session: AsyncSession,
     content_id: str,
     limit: int,
     offset: int,
 ) -> list[ContentEdit]:
-    """Return edits for give content"""
+    """Return edits for given content"""
 
     return await session.scalars(
         select(ContentEdit)
         .filter(ContentEdit.content_id == content_id)
+        .order_by(desc(ContentEdit.edit_id))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def count_edits(session: AsyncSession) -> int:
+    """Count all edits"""
+
+    return await session.scalar(select(func.count(ContentEdit.id)))
+
+
+async def get_edits(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+) -> list[ContentEdit]:
+    """Return all edits"""
+
+    return await session.scalars(
+        select(ContentEdit)
         .order_by(desc(ContentEdit.edit_id))
         .limit(limit)
         .offset(offset)

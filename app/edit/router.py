@@ -32,25 +32,42 @@ from .schemas import (
 router = APIRouter(prefix="/edit", tags=["Edit"])
 
 
-@router.get("/{edit_id}", response_model=EditResponse)
-async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
-    return edit
-
-
 @router.get("/{content_type}/{slug}/list", response_model=EditListResponse)
-async def get_edit_list(
+async def get_content_edit_list(
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
 ):
     limit, offset = pagination(page)
-    total = await service.count_edits(session, content_id)
-    edits = await service.get_edits(session, content_id, limit, offset)
+    total = await service.count_edits_by_content_id(session, content_id)
+    edits = await service.get_edits_by_content_id(
+        session, content_id, limit, offset
+    )
 
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": edits.all(),
     }
+
+
+@router.get("/list", response_model=EditListResponse)
+async def get_edit_list(
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+):
+    limit, offset = pagination(page)
+    total = await service.count_edits(session)
+    edits = await service.get_edits(session, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": edits.all(),
+    }
+
+
+@router.get("/{edit_id}", response_model=EditResponse)
+async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
+    return edit
 
 
 @router.put("/{content_type}/{slug}", response_model=EditResponse)
@@ -105,6 +122,3 @@ async def deny_edit(
     ),
 ):
     return await service.deny_pending_edit(session, edit, moderator)
-
-
-# ToDo: edit list
