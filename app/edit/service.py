@@ -34,17 +34,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
     )
 
 
-async def get_content(
-    session: AsyncSession, content_type: ContentTypeEnum, content_id: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and content_id"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.id == content_id)
-    )
-
-
 # ToDo: figure out what to do with anime episodes that do not have a slug
 async def get_content_by_slug(
     session: AsyncSession, content_type: ContentTypeEnum, slug: str
@@ -57,8 +46,10 @@ async def get_content_by_slug(
     )
 
 
-async def count_edits(session: AsyncSession, content_id: str) -> int:
-    """Count edits for give content"""
+async def count_edits_by_content_id(
+    session: AsyncSession, content_id: str
+) -> int:
+    """Count edits for given content"""
 
     return await session.scalar(
         select(func.count(ContentEdit.id)).filter(
@@ -67,17 +58,38 @@ async def count_edits(session: AsyncSession, content_id: str) -> int:
     )
 
 
-async def get_edits(
+async def get_edits_by_content_id(
     session: AsyncSession,
     content_id: str,
     limit: int,
     offset: int,
 ) -> list[ContentEdit]:
-    """Return edits for give content"""
+    """Return edits for given content"""
 
     return await session.scalars(
         select(ContentEdit)
         .filter(ContentEdit.content_id == content_id)
+        .order_by(desc(ContentEdit.edit_id))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def count_edits(session: AsyncSession) -> int:
+    """Count all edits"""
+
+    return await session.scalar(select(func.count(ContentEdit.id)))
+
+
+async def get_edits(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+) -> list[ContentEdit]:
+    """Return all edits"""
+
+    return await session.scalars(
+        select(ContentEdit)
         .order_by(desc(ContentEdit.edit_id))
         .limit(limit)
         .offset(offset)
@@ -95,21 +107,18 @@ async def create_pending_edit(
 
     edit_model = content_type_to_edit_class[content_type]
 
-    after = args.after.dict(exclude_none=True)
-
     now = datetime.utcnow()
 
     edit = edit_model(
-        # edit = ContentEdit(
         **{
             "status": constants.EDIT_PENDING,
             "description": args.description,
             "content_type": content_type,
             "content_id": content_id,
+            "after": args.after,
             "author": author,
             "created": now,
             "updated": now,
-            "after": after,
         }
     )
 
@@ -122,14 +131,46 @@ async def create_pending_edit(
     return edit
 
 
-async def approve_pending_edit(
+async def update_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+    args: EditArgs,
+) -> ContentEdit:
+    """Update pending edit"""
+
+    edit.updated = datetime.now()
+    edit.description = args.description
+    edit.after = args.after
+
+    session.add(edit)
+    await session.commit()
+
+    return edit
+
+
+async def close_pending_edit(
+    session: AsyncSession,
+    edit: ContentEdit,
+) -> ContentEdit:
+    """Close pending edit"""
+
+    edit.status = constants.EDIT_CLOSED
+    edit.updated = datetime.now()
+
+    session.add(edit)
+    await session.commit()
+
+    return edit
+
+
+async def accept_pending_edit(
     session: AsyncSession,
     edit: ContentEdit,
     moderator: User,
 ) -> ContentEdit:
-    """Approve edit for given content_id"""
+    """Accept pending edit"""
 
-    content = await get_content(session, edit.content_type, edit.content_id)
+    content = edit.content
 
     before = {}
 
@@ -137,7 +178,7 @@ async def approve_pending_edit(
         before[key] = getattr(content, key)
         setattr(content, key, value)
 
-    edit.status = constants.EDIT_APPROVED
+    edit.status = constants.EDIT_ACCEPTED
     edit.updated = datetime.now()
     edit.moderator = moderator
     edit.before = before
@@ -154,7 +195,7 @@ async def deny_pending_edit(
     edit: ContentEdit,
     moderator: User,
 ) -> ContentEdit:
-    """Deny edit for given content_id"""
+    """Deny pending edit"""
 
     edit.status = constants.EDIT_DENIED
     edit.updated = datetime.now()

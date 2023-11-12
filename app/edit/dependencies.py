@@ -1,22 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import ValidationError
+from app.dependencies import auth_required
+from app.models import ContentEdit, User
 from app.database import get_session
-from app.models import ContentEdit
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
+from . import utils
+
 
 from .schemas import (
     ContentTypeEnum,
-    PersonEditArgs,
-    AnimeEditArgs,
     EditArgs,
 )
 
 
 async def validate_edit_id(
-    edit_id: int, session: AsyncSession = Depends(get_session)
+    edit_id: int,
+    session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
     """Check whether ContentEdit with edit_id exists"""
 
@@ -26,44 +27,38 @@ async def validate_edit_id(
     return edit
 
 
-async def validate_edit_content_type(
-    # content_type: ContentTypeEnum,
+async def validate_edit_id_pending(
     edit: ContentEdit = Depends(validate_edit_id),
-    session: AsyncSession = Depends(get_session),
-) -> ContentEdit:
-    # ToDo: move this check into separate dependency
+):
+    """Ensure edit has pending status"""
+
     if edit.status != constants.EDIT_PENDING:
-        raise Abort("edit", "already-reviewed")
+        raise Abort("edit", "not-pending")
 
-    # if edit.content_type != content_type:
-    #     raise Abort("edit", "wrong-content-type")
+    return edit
 
-    # ToDo: Figure out what to do with that!
-    # if not (
-    #     await service.get_content(
-    #         session,
-    #         content_type,
-    #         edit.content_id,
-    #     )
-    # ):
-    #     raise Abort("edit", "invalid-content-id")
+
+async def validate_edit_modify(
+    edit: ContentEdit = Depends(validate_edit_id_pending),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_MODIFY_EDIT])
+    ),
+):
+    """Check if user which is trying to modify edit it the author"""
+
+    if user != edit.author:
+        raise Abort("edit", "not-author")
 
     return edit
 
 
 # Here we make sure that there aren't any invalid keys and that the edits
 # are actually different compared to the current version
-async def validate_edit_approval(
-    # content_type: ContentTypeEnum,
-    edit: ContentEdit = Depends(validate_edit_content_type),
+async def validate_edit_accept(
+    edit: ContentEdit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
 ) -> ContentEdit:
-    # ToDo: check if edit can be approved (pending type)
-    # ToDo: check if edit has any differences compared to current version (?)
-
-    content_type = "anime"  # ToDo: remove this
-
-    content = await service.get_content(session, content_type, edit.content_id)
+    content = edit.content
 
     pop_list = []
 
@@ -95,35 +90,30 @@ async def validate_content_slug(
             session, content_type, slug
         )
     ):
-        # ToDo: return not-found by content type
         raise Abort("edit", "content-not-found")
 
     return content.reference
 
 
-# ToDo: move this to a model_validator once we migrate to Pydantic 2
-async def validate_edit_args(
-    content_type: ContentTypeEnum, args: EditArgs
+async def validate_edit_create_args(
+    content_type: ContentTypeEnum,
+    args: EditArgs,
 ) -> EditArgs:
-    """Validate proposed changes based on content_type"""
+    """Validate create edit args"""
 
-    # Make sure we know how to validate proposed content changes
-    schemas = {
-        constants.CONTENT_PERSON: PersonEditArgs,
-        constants.CONTENT_ANIME: AnimeEditArgs,
-    }
-
-    if not (schema := schemas.get(content_type)):
-        raise Abort("edit", "wrong-content-type")
-
-    # Validate after field with provided schema
-    try:
-        args.after = schema(**args.after)
-    except ValidationError:
+    if not utils.check_edit_schema(content_type, args):
         raise Abort("edit", "bad-edit")
 
-    # User must propose at least some changes
-    if args.after == {}:
-        raise Abort("edit", "empty-edit")
+    return args
+
+
+async def validate_edit_update_args(
+    args: EditArgs,
+    edit: ContentEdit = Depends(validate_edit_modify),
+) -> EditArgs:
+    """Validate update edit args"""
+
+    if not utils.check_edit_schema(edit.content_type, args):
+        raise Abort("edit", "bad-edit")
 
     return args

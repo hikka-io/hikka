@@ -12,10 +12,12 @@ from app.utils import (
 )
 
 from .dependencies import (
-    validate_edit_content_type,
-    validate_edit_approval,
+    validate_edit_create_args,
+    validate_edit_update_args,
+    validate_edit_id_pending,
     validate_content_slug,
-    validate_edit_args,
+    validate_edit_accept,
+    validate_edit_modify,
     validate_edit_id,
 )
 
@@ -30,20 +32,17 @@ from .schemas import (
 router = APIRouter(prefix="/edit", tags=["Edit"])
 
 
-@router.get("/{edit_id}", response_model=EditResponse)
-async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
-    return edit
-
-
 @router.get("/{content_type}/{slug}/list", response_model=EditListResponse)
-async def get_edit_list(
+async def get_content_edit_list(
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
 ):
     limit, offset = pagination(page)
-    total = await service.count_edits(session, content_id)
-    edits = await service.get_edits(session, content_id, limit, offset)
+    total = await service.count_edits_by_content_id(session, content_id)
+    edits = await service.get_edits_by_content_id(
+        session, content_id, limit, offset
+    )
 
     return {
         "pagination": pagination_dict(total, page, limit),
@@ -51,12 +50,32 @@ async def get_edit_list(
     }
 
 
-@router.post("/{content_type}/{slug}", response_model=EditResponse)
+@router.get("/list", response_model=EditListResponse)
+async def get_edit_list(
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+):
+    limit, offset = pagination(page)
+    total = await service.count_edits(session)
+    edits = await service.get_edits(session, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": edits.all(),
+    }
+
+
+@router.get("/{edit_id}", response_model=EditResponse)
+async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
+    return edit
+
+
+@router.put("/{content_type}/{slug}", response_model=EditResponse)
 async def create_edit(
     content_type: ContentTypeEnum,
+    args: EditArgs = Depends(validate_edit_create_args),
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
-    args: EditArgs = Depends(validate_edit_args),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
@@ -66,29 +85,40 @@ async def create_edit(
     )
 
 
-@router.post("/{edit_id}/approve", response_model=EditResponse)
-async def approve_edit(
-    edit: ContentEdit = Depends(validate_edit_approval),
+@router.post("/{edit_id}/update", response_model=EditResponse)
+async def update_edit(
+    args: EditArgs = Depends(validate_edit_update_args),
+    edit: ContentEdit = Depends(validate_edit_modify),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.update_pending_edit(session, edit, args)
+
+
+@router.post("/{edit_id}/close", response_model=EditResponse)
+async def close_edit(
+    edit: ContentEdit = Depends(validate_edit_modify),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.close_pending_edit(session, edit)
+
+
+@router.post("/{edit_id}/accept", response_model=EditResponse)
+async def accept_edit(
+    edit: ContentEdit = Depends(validate_edit_accept),
     session: AsyncSession = Depends(get_session),
     moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
     ),
 ):
-    return await service.approve_pending_edit(session, edit, moderator)
+    return await service.accept_pending_edit(session, edit, moderator)
 
 
 @router.post("/{edit_id}/deny", response_model=EditResponse)
 async def deny_edit(
-    edit: ContentEdit = Depends(validate_edit_content_type),
+    edit: ContentEdit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
     moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_REJECT_EDIT])
+        auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
     ),
 ):
     return await service.deny_pending_edit(session, edit, moderator)
-
-
-# ToDo: fix approve
-# ToDo: fix deny
-# ToDo: cancel edit
-# ToDo: update edit

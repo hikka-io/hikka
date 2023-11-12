@@ -1,5 +1,5 @@
+from pydantic import BaseModel, Extra, Field, constr
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field, constr
 from datetime import datetime
 from typing import Union
 from . import constants
@@ -20,6 +20,7 @@ class ORJSONModel(BaseModel):
         json_dumps = orjson_dumps
         json_loads = orjson.loads
         use_enum_values = True
+        extra = Extra.forbid
         orm_mode = True
 
     def serializable_dict(self, **kwargs):

@@ -1,5 +1,5 @@
+from pydantic import Field, validator
 from datetime import datetime
-from pydantic import Field
 from app import constants
 from typing import Union
 from enum import Enum
@@ -27,7 +27,7 @@ class AnimeOSTTypeEnum(str, Enum):
 
 
 class EditStatusEnum(str, Enum):
-    edit_approved = constants.EDIT_APPROVED
+    edit_accepted = constants.EDIT_ACCEPTED
     edit_pending = constants.EDIT_PENDING
     edit_denied = constants.EDIT_DENIED
     edit_closed = constants.EDIT_CLOSED
@@ -38,6 +38,13 @@ class EditArgs(ORJSONModel):
     description: Union[str, None] = Field(example="...", max_length=420)
     after: dict
 
+    @validator("after")
+    def validate_after(cls, after):
+        if after == {}:
+            raise ValueError("After field can't be empty")
+
+        return after
+
 
 class AnimeEditArgs(ORJSONModel):
     synopsis_en: Union[str, None] = Field(example="...")
@@ -45,10 +52,12 @@ class AnimeEditArgs(ORJSONModel):
     synonyms: Union[list[str], None] = Field()
 
     title_ja: Union[str, None] = Field(
-        example="Kimetsu no Yaiba: Mugen Ressha-hen", max_length=255
+        example="Kimetsu no Yaiba: Mugen Ressha-hen",
+        max_length=255,
     )
     title_en: Union[str, None] = Field(
-        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc", max_length=255
+        example="Demon Slayer: Kimetsu no Yaiba Mugen Train Arc",
+        max_length=255,
     )
     title_ua: Union[str, None] = Field(
         example="Клинок, який знищує демонів: Арка Нескінченного потяга",
@@ -68,6 +77,10 @@ class UserResponse(ORJSONModel):
     username: str = Field(example="hikka")
 
 
+class ContentSlugResponse(ORJSONModel):
+    slug: str
+
+
 class EditResponse(ORJSONModel):
     content_type: ContentTypeEnum = Field(example="anime")
     description: Union[str, None] = Field(example="...")
@@ -79,7 +92,9 @@ class EditResponse(ORJSONModel):
     before: Union[dict, None]
     author: UserResponse
     after: dict
-    slug: str
+
+    # ToDo: find better way to do that
+    content: ContentSlugResponse
 
 
 class EditListResponse(ORJSONModel):
