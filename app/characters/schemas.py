@@ -4,21 +4,21 @@ from app.schemas import (
     PaginationResponse,
     CharacterResponse,
     AnimeResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
 # Responses
-class CharacterAnimeResponse(ORJSONModel):
-    main: bool = Field(example=True)
+class CharacterAnimeResponse(CustomModel):
+    main: bool = Field(examples=[True])
     anime: AnimeResponse
 
 
-class CharactersSearchPaginationResponse(ORJSONModel):
+class CharactersSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CharacterResponse]
 
 
-class CharacterAnimePaginationResponse(ORJSONModel):
+class CharacterAnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CharacterAnimeResponse]

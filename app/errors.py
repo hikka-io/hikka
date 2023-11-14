@@ -1,13 +1,13 @@
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from .schemas import ORJSONModel
+from .schemas import CustomModel
 from fastapi import Request
 from pydantic import Field
 
 
-class ErrorResponse(ORJSONModel):
-    message: str = Field(example="Example error message")
-    code: str = Field(example="example_error")
+class ErrorResponse(CustomModel):
+    message: str = Field(examples=["Example error message"])
+    code: str = Field(examples=["example_error"])
 
 
 errors = {

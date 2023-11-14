@@ -1,7 +1,7 @@
-from meilisearch_python_async.models.settings import MeilisearchSettings
+from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
+from meilisearch_python_sdk import AsyncClient
 from app.utils import get_season, pagination
-from meilisearch_python_async import Client
 from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
@@ -43,13 +43,13 @@ async def update_anime_settings(index):
                 "title_en",
                 "title_ja",
                 "poster",
+                "status",
+                "season",
+                "source",
+                "rating",
                 "score",
                 "slug",
-                # ToDo: remove those
-                # "genres",
-                # "studios",
-                # "producers",
-                # "year",
+                "year",
             ],
             sortable_attributes=["scored_by", "score", "year"],
             distinct_attribute="slug",
@@ -120,7 +120,7 @@ async def meilisearch_populate(session: AsyncSession):
 
     settings = get_settings()
 
-    async with Client(**settings.meilisearch) as client:
+    async with AsyncClient(**settings.meilisearch) as client:
         index = client.index(constants.SEARCH_INDEX_ANIME)
 
         await update_anime_settings(index)

@@ -28,7 +28,7 @@ async def save_watch(
         watch.user = user
 
     # Set attributes from args to watch record
-    for key, value in args.dict().items():
+    for key, value in args.model_dump().items():
         setattr(watch, key, value)
 
     # Save watch record

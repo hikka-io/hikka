@@ -2,26 +2,26 @@ from app.schemas import (
     PaginationResponse,
     PersonResponse,
     AnimeResponse,
-    ORJSONModel,
+    CustomModel,
 )
 
 
 # Responses
-class AnimeStaffRoleResponse(ORJSONModel):
+class AnimeStaffRoleResponse(CustomModel):
     name_en: str | None
     name_ua: str | None
 
 
-class PersonAnimeResponse(ORJSONModel):
+class PersonAnimeResponse(CustomModel):
     roles: list[AnimeStaffRoleResponse]
     anime: AnimeResponse
 
 
-class PersonSearchPaginationResponse(ORJSONModel):
+class PersonSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[PersonResponse]
 
 
-class PersonAnimePaginationResponse(ORJSONModel):
+class PersonAnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[PersonAnimeResponse]
