@@ -40,7 +40,7 @@ async def save_companies(session, data):
 
             add_companies.append(company)
 
-            print(f"Updated company: {company.name} ({company.favorites})")
+            # print(f"Updated company: {company.name} ({company.favorites})")
 
         else:
             if not (image := image_cache.get(company_data["image"])):
@@ -69,7 +69,7 @@ async def save_companies(session, data):
 
             add_companies.append(company)
 
-            print(f"Added company: {company.name} ({company.favorites})")
+            # print(f"Added company: {company.name} ({company.favorites})")
 
     session.add_all(add_companies)
     await session.commit()
