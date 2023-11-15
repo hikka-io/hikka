@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from app.models import ContentEdit, User
+from app.models import Edit, User
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
@@ -18,8 +18,8 @@ from .schemas import (
 async def validate_edit_id(
     edit_id: int,
     session: AsyncSession = Depends(get_session),
-) -> ContentEdit:
-    """Check whether ContentEdit with edit_id exists"""
+) -> Edit:
+    """Check whether Edit with edit_id exists"""
 
     if not (edit := await service.get_edit(session, edit_id)):
         raise Abort("edit", "not-found")
@@ -28,7 +28,7 @@ async def validate_edit_id(
 
 
 async def validate_edit_id_pending(
-    edit: ContentEdit = Depends(validate_edit_id),
+    edit: Edit = Depends(validate_edit_id),
 ):
     """Ensure edit has pending status"""
 
@@ -39,7 +39,7 @@ async def validate_edit_id_pending(
 
 
 async def validate_edit_modify(
-    edit: ContentEdit = Depends(validate_edit_id_pending),
+    edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
         auth_required(permissions=[constants.PERMISSION_MODIFY_EDIT])
     ),
@@ -55,9 +55,9 @@ async def validate_edit_modify(
 # Here we make sure that there aren't any invalid keys and that the edits
 # are actually different compared to the current version
 async def validate_edit_accept(
-    edit: ContentEdit = Depends(validate_edit_id_pending),
+    edit: Edit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
-) -> ContentEdit:
+) -> Edit:
     content = edit.content
 
     pop_list = []
@@ -109,7 +109,7 @@ async def validate_edit_create_args(
 
 async def validate_edit_update_args(
     args: EditArgs,
-    edit: ContentEdit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_modify),
 ) -> EditArgs:
     """Validate update edit args"""
 

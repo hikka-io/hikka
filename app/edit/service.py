@@ -5,9 +5,9 @@ from datetime import datetime
 from app import constants
 
 from app.models import (
-    PersonContentEdit,
-    AnimeContentEdit,
-    ContentEdit,
+    PersonEdit,
+    AnimeEdit,
+    Edit,
     Person,
     Anime,
     User,
@@ -21,17 +21,15 @@ content_type_to_content_class = {
 }
 
 content_type_to_edit_class = {
-    constants.CONTENT_PERSON: PersonContentEdit,
-    constants.CONTENT_ANIME: AnimeContentEdit,
+    constants.CONTENT_PERSON: PersonEdit,
+    constants.CONTENT_ANIME: AnimeEdit,
 }
 
 
-async def get_edit(session: AsyncSession, edit_id: int) -> ContentEdit | None:
-    """Return ContentEdit by edit_id"""
+async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
+    """Return Edit by edit_id"""
 
-    return await session.scalar(
-        select(ContentEdit).filter(ContentEdit.edit_id == edit_id)
-    )
+    return await session.scalar(select(Edit).filter(Edit.edit_id == edit_id))
 
 
 # ToDo: figure out what to do with anime episodes that do not have a slug
@@ -52,9 +50,7 @@ async def count_edits_by_content_id(
     """Count edits for given content"""
 
     return await session.scalar(
-        select(func.count(ContentEdit.id)).filter(
-            ContentEdit.content_id == content_id
-        )
+        select(func.count(Edit.id)).filter(Edit.content_id == content_id)
     )
 
 
@@ -63,13 +59,13 @@ async def get_edits_by_content_id(
     content_id: str,
     limit: int,
     offset: int,
-) -> list[ContentEdit]:
+) -> list[Edit]:
     """Return edits for given content"""
 
     return await session.scalars(
-        select(ContentEdit)
-        .filter(ContentEdit.content_id == content_id)
-        .order_by(desc(ContentEdit.edit_id))
+        select(Edit)
+        .filter(Edit.content_id == content_id)
+        .order_by(desc(Edit.edit_id))
         .limit(limit)
         .offset(offset)
     )
@@ -78,21 +74,18 @@ async def get_edits_by_content_id(
 async def count_edits(session: AsyncSession) -> int:
     """Count all edits"""
 
-    return await session.scalar(select(func.count(ContentEdit.id)))
+    return await session.scalar(select(func.count(Edit.id)))
 
 
 async def get_edits(
     session: AsyncSession,
     limit: int,
     offset: int,
-) -> list[ContentEdit]:
+) -> list[Edit]:
     """Return all edits"""
 
     return await session.scalars(
-        select(ContentEdit)
-        .order_by(desc(ContentEdit.edit_id))
-        .limit(limit)
-        .offset(offset)
+        select(Edit).order_by(desc(Edit.edit_id)).limit(limit).offset(offset)
     )
 
 
@@ -102,7 +95,7 @@ async def create_pending_edit(
     content_id: str,
     args: EditArgs,
     author: User,
-) -> AnimeContentEdit:
+) -> AnimeEdit:
     """Create edit for given content_id with pending status"""
 
     edit_model = content_type_to_edit_class[content_type]
@@ -133,9 +126,9 @@ async def create_pending_edit(
 
 async def update_pending_edit(
     session: AsyncSession,
-    edit: ContentEdit,
+    edit: Edit,
     args: EditArgs,
-) -> ContentEdit:
+) -> Edit:
     """Update pending edit"""
 
     edit.updated = datetime.now()
@@ -150,8 +143,8 @@ async def update_pending_edit(
 
 async def close_pending_edit(
     session: AsyncSession,
-    edit: ContentEdit,
-) -> ContentEdit:
+    edit: Edit,
+) -> Edit:
     """Close pending edit"""
 
     edit.status = constants.EDIT_CLOSED
@@ -165,9 +158,9 @@ async def close_pending_edit(
 
 async def accept_pending_edit(
     session: AsyncSession,
-    edit: ContentEdit,
+    edit: Edit,
     moderator: User,
-) -> ContentEdit:
+) -> Edit:
     """Accept pending edit"""
 
     content = edit.content
@@ -192,9 +185,9 @@ async def accept_pending_edit(
 
 async def deny_pending_edit(
     session: AsyncSession,
-    edit: ContentEdit,
+    edit: Edit,
     moderator: User,
-) -> ContentEdit:
+) -> Edit:
     """Deny pending edit"""
 
     edit.status = constants.EDIT_DENIED

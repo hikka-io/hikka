@@ -9,7 +9,7 @@ from ..base import Base
 from uuid import UUID
 
 
-class ContentEdit(
+class Edit(
     Base,
     CreatedMixin,
     UpdatedMixin,
@@ -50,7 +50,7 @@ class ContentEdit(
     content_id: Mapped[UUID]
 
 
-class AnimeContentEdit(ContentEdit):
+class AnimeEdit(Edit):
     __mapper_args__ = {
         "polymorphic_identity": "anime",
         "eager_defaults": True,
@@ -63,7 +63,7 @@ class AnimeContentEdit(ContentEdit):
     )
 
     content: Mapped["Anime"] = relationship(
-        primaryjoin="Anime.id == AnimeContentEdit.content_id",
+        primaryjoin="Anime.id == AnimeEdit.content_id",
         foreign_keys=[content_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )
@@ -73,7 +73,7 @@ class AnimeContentEdit(ContentEdit):
     #     return self.content.slug
 
 
-class PersonContentEdit(ContentEdit):
+class PersonEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "person"}
 
     content_id = mapped_column(
@@ -83,7 +83,7 @@ class PersonContentEdit(ContentEdit):
     )
 
     content: Mapped["Person"] = relationship(
-        primaryjoin="Person.id == PersonContentEdit.content_id",
+        primaryjoin="Person.id == PersonEdit.content_id",
         foreign_keys=[content_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )

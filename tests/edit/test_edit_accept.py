@@ -1,6 +1,6 @@
 from client_requests import request_accept_edit
 from client_requests import request_create_edit
-from app.models import ContentEdit, Anime
+from app.models import Edit, Anime
 from sqlalchemy import select
 from fastapi import status
 from app import constants
@@ -100,9 +100,7 @@ async def test_edit_accept_bad_empty_edit(
     assert response.status_code == status.HTTP_200_OK
 
     # Get edit record from database
-    edit = await test_session.scalar(
-        select(ContentEdit).filter(ContentEdit.edit_id == 1)
-    )
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
 
     # Set old title before accepting it
     edit.after = {"title_en": "Bocchi the Rock!"}
@@ -142,9 +140,7 @@ async def test_edit_accept_bad_invalid_field(
     assert response.status_code == status.HTTP_200_OK
 
     # Get edit record from database
-    edit = await test_session.scalar(
-        select(ContentEdit).filter(ContentEdit.edit_id == 1)
-    )
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
 
     # Set old title before accepting it
     edit.after = {"title_bad": "Bocchi the Rock!"}

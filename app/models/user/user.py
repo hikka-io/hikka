@@ -61,13 +61,13 @@ class User(Base):
         back_populates="user",
     )
 
-    edits: Mapped[list["ContentEdit"]] = relationship(
-        foreign_keys="[ContentEdit.author_id]",
+    edits: Mapped[list["Edit"]] = relationship(
+        foreign_keys="[Edit.author_id]",
         back_populates="author",
     )
 
-    decisions: Mapped[list["ContentEdit"]] = relationship(
-        foreign_keys="[ContentEdit.moderator_id]",
+    decisions: Mapped[list["Edit"]] = relationship(
+        foreign_keys="[Edit.moderator_id]",
         back_populates="moderator",
     )
 
