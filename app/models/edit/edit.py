@@ -1,4 +1,3 @@
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
