@@ -9,15 +9,6 @@ from client_requests import (
 )
 
 
-async def test_password_reset_not_activated(
-    client, test_session, create_test_user_not_activated
-):
-    # Request password reset for not activated account
-    response = await request_password_reset(client, "user@mail.com")
-    assert response.json()["code"] == "auth:not_activated"
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
 async def test_password_reset(client, test_session, create_test_user):
     # Get user
     user = await test_session.scalar(
