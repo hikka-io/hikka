@@ -96,11 +96,11 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
 
     user = User(
         **{
+            "role": constants.ROLE_NOT_ACTIVATED,
             "activation_expire": now + timedelta(hours=3),
             "activation_token": activation_token,
             "password_hash": password_hash,
             "username": signup.username,
-            "role": constants.ROLE_USER,
             "email": signup.email,
             "last_active": now,
             "created": now,
@@ -198,6 +198,10 @@ async def activate_user(session: AsyncSession, user: User) -> User:
     user.activation_expire = None
     user.activation_token = None
     user.activated = True
+
+    # Only set user role if it's not activated
+    if user.role == constants.ROLE_NOT_ACTIVATED:
+        user.role = constants.ROLE_USER
 
     session.add(user)
     await session.commit()
