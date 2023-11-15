@@ -102,6 +102,7 @@ ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
 ROLE_BANNED = "banned"
+ROLE_NOT_ACTIVATED = "not_activated"
 
 # Permissions
 PERMISSION_CREATE_EDIT = "content:create_edit"
@@ -128,4 +129,5 @@ ROLES = {
         PERMISSION_MODIFY_EDIT,
     ],
     ROLE_BANNED: [],
+    ROLE_NOT_ACTIVATED: [],
 }

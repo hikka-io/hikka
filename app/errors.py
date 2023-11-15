@@ -29,7 +29,6 @@ errors = {
         "missing-token": ["Auth token is missing", 400],
         "invalid-password": ["Invalid password", 400],
         "username-set": ["Username already set", 400],
-        "not-activated": ["User not activated", 400],
         "token-expired": ["Token has expired", 400],
         "invalid-code": ["Invalid OAuth code", 400],
         "oauth-error": ["Error during OAuth", 400],
