@@ -99,10 +99,6 @@ async def validate_login(
     if not checkpwd(login.password, user.password_hash):
         raise Abort("auth", "invalid-password")
 
-    # Make sure user is activated
-    if not user.activated:
-        raise Abort("auth", "not-activated")
-
     return user
 
 
@@ -192,10 +188,6 @@ async def validate_activation_resend(
 async def validate_password_reset(
     user: User = Depends(body_email_user),
 ) -> User:
-    # Make sure user is activated
-    if not user.activated:
-        raise Abort("auth", "not-activated")
-
     # Prevent sending new password reset email if previous token still valid
     if user.password_reset_expire:
         if datetime.utcnow() < user.password_reset_expire:
