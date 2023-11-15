@@ -29,7 +29,7 @@ class CustomModel(BaseModel):
         result = original_serializer(self)
 
         for field_name, field_info in self.model_fields.items():
-            if field_info.annotation == datetime:
+            if type(getattr(self, field_name)) == datetime:
                 result[field_name] = utils.to_timestamp(
                     getattr(self, field_name)
                 )
