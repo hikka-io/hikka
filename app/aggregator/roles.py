@@ -23,7 +23,7 @@ async def update_anime_roles(session, data):
 
         create_roles.append(role)
 
-        print(f"Added anime staff role: {role.name_en}")
+        # print(f"Added anime staff role: {role.name_en}")
 
     session.add_all(create_roles)
     await session.commit()

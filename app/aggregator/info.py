@@ -478,4 +478,4 @@ async def update_anime_info(session, anime, data):
 
     await session.commit()
 
-    print(f"Synced anime {anime.title_ja}")
+    # print(f"Synced anime {anime.title_ja}")
