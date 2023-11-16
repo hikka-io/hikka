@@ -1,4 +1,5 @@
 from pydantic import ValidationError
+from app.models import Edit
 from app import constants
 
 from .schemas import (
@@ -30,3 +31,28 @@ def check_edit_schema(
         return False
 
     return True
+
+
+def check_invalid_fields(edit: Edit):
+    """Check if content has unknown fields"""
+
+    for key, _ in edit.after.items():
+        if not hasattr(edit.content, key):
+            return True
+
+    return False
+
+
+def check_edits(edit: Edit):
+    """Check if Edit has differences from content"""
+
+    pop_list = []
+
+    for key, value in edit.after.items():
+        if getattr(edit.content, key) == value:
+            pop_list.append(key)
+
+    for pop_key in pop_list:
+        edit.after.pop(pop_key)
+
+    return len(edit.after) > 0

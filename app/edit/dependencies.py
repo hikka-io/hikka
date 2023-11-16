@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from app.models import Edit, User
 from app.database import get_session
+from app.models import Edit, User
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
@@ -58,21 +58,12 @@ async def validate_edit_accept(
     edit: Edit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
 ) -> Edit:
-    content = edit.content
+    """Validate edit right before accepting it"""
 
-    pop_list = []
+    if utils.check_invalid_fields(edit):
+        raise Abort("edit", "invalid-field")
 
-    for key, value in edit.after.items():
-        if not hasattr(content, key):
-            raise Abort("edit", "invalid-field")
-
-        if getattr(content, key) == value:
-            pop_list.append(key)
-
-    for pop_key in pop_list:
-        edit.after.pop(pop_key)
-
-    if len(edit.after) <= 0:
+    if not utils.check_edits(edit):
         raise Abort("edit", "empty-edit")
 
     return edit
