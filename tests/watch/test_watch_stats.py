@@ -10,7 +10,7 @@ async def test_watch_stats(
     get_test_token,
 ):
     # User watch stats should be zero when we start
-    response = await request_watch_stats(client, "username")
+    response = await request_watch_stats(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
@@ -46,7 +46,7 @@ async def test_watch_stats(
     )
 
     # Now let's check again
-    response = await request_watch_stats(client, "username")
+    response = await request_watch_stats(client, "testuser")
 
     from pprint import pprint
 

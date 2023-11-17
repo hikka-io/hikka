@@ -4,9 +4,9 @@ from fastapi import status
 from app import constants
 
 from app.models import (
-    PersonContentEdit,
-    AnimeContentEdit,
-    ContentEdit,
+    PersonEdit,
+    AnimeEdit,
+    Edit,
 )
 
 
@@ -37,7 +37,7 @@ async def test_edit_create(
 
     assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["description"] == "Brief description"
-    assert response.json()["author"]["username"] == "username"
+    assert response.json()["author"]["username"] == "testuser"
     assert response.json()["content_type"] == "anime"
     assert response.json()["status"] == "pending"
     assert response.json()["moderator"] is None
@@ -59,12 +59,12 @@ async def test_edit_create(
     assert response.status_code == status.HTTP_200_OK
 
     # And now check if SQLAlchemy's polymorphic identity works
-    edits = (await test_session.scalars(select(ContentEdit))).all()
+    edits = (await test_session.scalars(select(Edit))).all()
 
-    assert isinstance(edits[0], AnimeContentEdit)
+    assert isinstance(edits[0], AnimeEdit)
     assert edits[0].content_type == constants.CONTENT_ANIME
 
-    assert isinstance(edits[1], PersonContentEdit)
+    assert isinstance(edits[1], PersonEdit)
     assert edits[1].content_type == constants.CONTENT_PERSON
 
 

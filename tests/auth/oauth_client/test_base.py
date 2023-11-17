@@ -28,7 +28,7 @@ async def test_client(oauth_http):
 
     data = await google.request("GET", "/")
     assert data == {
-        "email": "user@mail.com",
+        "email": "testuser@mail.com",
         "response": "ok",
         "id": "test-id",
     }

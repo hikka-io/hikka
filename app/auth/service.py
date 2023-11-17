@@ -6,6 +6,7 @@ from .utils import hashpwd, new_token
 from .schemas import SignupArgs
 from sqlalchemy import select
 from app import constants
+import secrets
 
 
 async def get_user_by_activation(
@@ -51,13 +52,24 @@ async def create_oauth_user(
     email = user_data.get("email")
     now = datetime.utcnow()
 
+    # I really hate this part of code
+    # but we need it for better user experience
+    # when new account is created via oauth
+    username = email.split("@")[0] if email else secrets.token_urlsafe(4)
+
+    while True:
+        if not (await get_user_by_username(session, username)):
+            break
+
+        username += "-" + secrets.token_urlsafe(4)
+
     user = User(
         **{
             "activated": email is not None,
             "role": constants.ROLE_USER,
             "password_hash": None,
+            "username": username,
             "last_active": now,
-            "username": None,
             "email": email,
             "created": now,
             "login": now,

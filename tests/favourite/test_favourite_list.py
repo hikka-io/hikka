@@ -10,7 +10,7 @@ async def test_favourite_add(
     get_test_token,
 ):
     # User favourite list should be empty when we start
-    response = await request_favourite_list(client, "username")
+    response = await request_favourite_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 0
@@ -19,7 +19,7 @@ async def test_favourite_add(
     await request_favourite_add(client, "kimi-no-na-wa-945779", get_test_token)
 
     # Now let's check again
-    response = await request_favourite_list(client, "username")
+    response = await request_favourite_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
@@ -29,7 +29,7 @@ async def test_favourite_add(
     await request_favourite_add(client, "oshi-no-ko-421060", get_test_token)
 
     # Now let's check again (again)
-    response = await request_favourite_list(client, "username")
+    response = await request_favourite_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 2

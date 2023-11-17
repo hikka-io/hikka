@@ -1,6 +1,6 @@
 from app.dependencies import get_page, auth_required
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import ContentEdit, User
+from app.models import Edit, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import constants
@@ -66,7 +66,7 @@ async def get_edit_list(
 
 
 @router.get("/{edit_id}", response_model=EditResponse)
-async def get_edit(edit: ContentEdit = Depends(validate_edit_id)):
+async def get_edit(edit: Edit = Depends(validate_edit_id)):
     return edit
 
 
@@ -88,7 +88,7 @@ async def create_edit(
 @router.post("/{edit_id}/update", response_model=EditResponse)
 async def update_edit(
     args: EditArgs = Depends(validate_edit_update_args),
-    edit: ContentEdit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.update_pending_edit(session, edit, args)
@@ -96,7 +96,7 @@ async def update_edit(
 
 @router.post("/{edit_id}/close", response_model=EditResponse)
 async def close_edit(
-    edit: ContentEdit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.close_pending_edit(session, edit)
@@ -104,7 +104,7 @@ async def close_edit(
 
 @router.post("/{edit_id}/accept", response_model=EditResponse)
 async def accept_edit(
-    edit: ContentEdit = Depends(validate_edit_accept),
+    edit: Edit = Depends(validate_edit_accept),
     session: AsyncSession = Depends(get_session),
     moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
@@ -115,7 +115,7 @@ async def accept_edit(
 
 @router.post("/{edit_id}/deny", response_model=EditResponse)
 async def deny_edit(
-    edit: ContentEdit = Depends(validate_edit_id_pending),
+    edit: Edit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
     moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])

@@ -5,9 +5,9 @@ from .user.oauth import UserOAuth
 from .user.follow import Follow
 from .user.user import User
 
-from .edit.edit import PersonContentEdit
-from .edit.edit import AnimeContentEdit
-from .edit.edit import ContentEdit
+from .edit.edit import PersonEdit
+from .edit.edit import AnimeEdit
+from .edit.edit import Edit
 
 from .list.favourite import AnimeFavourite
 from .list.watch import AnimeWatch
@@ -39,9 +39,9 @@ __all__ = [
     "UserOAuth",
     "Follow",
     "User",
-    "PersonContentEdit",
-    "AnimeContentEdit",
-    "ContentEdit",
+    "PersonEdit",
+    "AnimeEdit",
+    "Edit",
     "AnimeFavourite",
     "AnimeWatch",
     "AnimeRecommendation",

@@ -40,9 +40,9 @@ async def save_characters(session, data):
 
             add_characters.append(character)
 
-            print(
-                f"Updated character: {character.name_en} ({character.favorites})"  # noqa: E501
-            )
+            # print(
+            #     f"Updated character: {character.name_en} ({character.favorites})"  # noqa: E501
+            # )
 
         else:
             if not (image := image_cache.get(character_data["image"])):
@@ -72,9 +72,9 @@ async def save_characters(session, data):
 
             add_characters.append(character)
 
-            print(
-                f"Added character: {character.name_en} ({character.favorites})"
-            )
+            # print(
+            #     f"Added character: {character.name_en} ({character.favorites})"
+            # )
 
     session.add_all(add_characters)
     await session.commit()

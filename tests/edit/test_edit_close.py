@@ -1,6 +1,6 @@
 from client_requests import request_create_edit
 from client_requests import request_close_edit
-from app.models import ContentEdit
+from app.models import Edit
 from sqlalchemy import select
 from fastapi import status
 from app import constants
@@ -37,9 +37,7 @@ async def test_edit_close(
     assert response.json()["status"] == constants.EDIT_CLOSED
 
     # Get edit record from database
-    edit = await test_session.scalar(
-        select(ContentEdit).filter(ContentEdit.edit_id == 1)
-    )
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
 
     # Status should be closed
     assert edit.status == constants.EDIT_CLOSED

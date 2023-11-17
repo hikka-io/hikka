@@ -38,7 +38,7 @@ async def save_people(session, data):
 
             add_people.append(person)
 
-            print(f"Updated person: {person.name_en} ({person.favorites})")
+            # print(f"Updated person: {person.name_en} ({person.favorites})")
 
         else:
             if not (image := image_cache.get(person_data["image"])):
@@ -68,7 +68,7 @@ async def save_people(session, data):
 
             add_people.append(person)
 
-            print(f"Added person: {person.name_en} ({person.favorites})")
+            # print(f"Added person: {person.name_en} ({person.favorites})")
 
     session.add_all(add_people)
     await session.commit()

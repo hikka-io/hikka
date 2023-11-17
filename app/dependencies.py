@@ -49,10 +49,7 @@ async def get_request_auth_token(
 
 
 # Check user auth token
-def auth_required(
-    oauth_skip: bool = False,
-    permissions: list = [],
-):
+def auth_required(permissions: list = []):
     async def auth(
         auth_token: str = Depends(get_request_auth_token),
         session: AsyncSession = Depends(get_session),
@@ -68,12 +65,6 @@ def auth_required(
 
         if token.user.banned:
             raise Abort("auth", "banned")
-
-        if not token.user.username and not oauth_skip:
-            raise Abort("auth", "username-required")
-
-        if not token.user.email and not oauth_skip:
-            raise Abort("auth", "email-required")
 
         now = datetime.utcnow()
 

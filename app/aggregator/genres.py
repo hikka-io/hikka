@@ -106,7 +106,7 @@ async def save_anime_genres(session, data):
 
         create_genres.append(genre)
 
-        print(f"Added genre: {genre.name_en}")
+        # print(f"Added genre: {genre.name_en}")
 
     session.add_all(create_genres)
     await session.commit()
