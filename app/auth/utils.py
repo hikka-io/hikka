@@ -8,8 +8,11 @@ def hashpwd(password: str) -> str:
 
 
 # Check bcrypt password hash
-def checkpwd(password: str, bcrypt_hash: str) -> bool:
-    return bcrypt.checkpw(str.encode(password), str.encode(bcrypt_hash))
+def checkpwd(password: str, bcrypt_hash: str | None) -> bool:
+    if bcrypt_hash:
+        return bcrypt.checkpw(str.encode(password), str.encode(bcrypt_hash))
+
+    return False
 
 
 # Genereate new random token
