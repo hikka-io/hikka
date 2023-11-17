@@ -15,9 +15,12 @@ async def test_short_username(client):
 
 
 async def test_long_username(client):
-    # Max username lenght is 16 characters
+    # Max username lenght is 64 characters
     response = await request_signup(
-        client, "test@mail.com", "abcdefghijklmnopq", "password"
+        client,
+        "test@mail.com",
+        "abcdefghijklmnopabcdefghijklmnopabcdefghijklmnopabcdefghijklmnopq",
+        "password",
     )
 
     assert response.json()["code"] == "system:validation_error"

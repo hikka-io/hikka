@@ -55,13 +55,28 @@ async def create_oauth_user(
     # I really hate this part of code
     # but we need it for better user experience
     # when new account is created via oauth
-    username = email.split("@")[0] if email else secrets.token_urlsafe(4)
+    username = secrets.token_urlsafe(16)
+
+    # If email is present we split it and get first 32 characters
+    if email:
+        username = email.split("@")[0][:32]
+
+    # Just in case
+    max_attempts = 5
+    attempts = 0
 
     while True:
+        # If for some reason we exceed attempts or 64 character limit
+        # Just generate random username
+        if attempts > max_attempts or len(username) > 64:
+            username = secrets.token_urlsafe(16)
+            break
+
         if not (await get_user_by_username(session, username)):
             break
 
         username += "-" + secrets.token_urlsafe(4)
+        attempts += 1
 
     user = User(
         **{
