@@ -1,7 +1,11 @@
 def request_signup(client, email, username, password):
     return client.post(
         "/auth/signup",
-        json={"email": email, "username": username, "password": password},
+        json={
+            "email": email,
+            "username": username,
+            "password": password,
+        },
     )
 
 

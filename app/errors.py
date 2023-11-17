@@ -12,10 +12,8 @@ class ErrorResponse(CustomModel):
 
 errors = {
     "auth": {
-        "username-required": ["Username is required to do that action", 400],
         "activation-valid": ["Previous activation token still valid", 400],
         "reset-valid": ["Previous password reset token still valid", 400],
-        "email-required": ["Email is required to do that action", 400],
         "email-exists": ["User with that email already exists", 400],
         "activation-expired": ["Activation token has expired", 400],
         "activation-invalid": ["Activation token is invalid", 400],

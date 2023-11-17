@@ -145,7 +145,7 @@ async def password_reset(
 )
 async def username(
     args: UsernameArgs = Depends(validate_set_username),
-    user: User = Depends(auth_required(oauth_skip=True)),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.set_username(session, user, args.username)
@@ -158,7 +158,7 @@ async def username(
 )
 async def email(
     args: EmailArgs = Depends(validate_set_email),
-    user: User = Depends(auth_required(oauth_skip=True)),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
     user = await service.set_email(session, user, args.email)

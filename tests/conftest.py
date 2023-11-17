@@ -95,6 +95,11 @@ async def create_test_user(test_session):
 
 
 @pytest.fixture
+async def create_test_user_oauth(test_session):
+    await helpers.create_user(test_session, email="testuser@mail.com")
+
+
+@pytest.fixture
 async def create_test_user_moderator(test_session):
     await helpers.create_user(
         test_session,
@@ -162,7 +167,7 @@ def oauth_http(oauth_response):
     with mock.patch("httpx.AsyncClient.request") as mocked:
         mocked.return_value = oauth_response(
             json={
-                "email": "user@mail.com",
+                "email": "testuser@mail.com",
                 "response": "ok",
                 "id": "test-id",
             }

@@ -16,7 +16,7 @@ async def load_json(path):
 async def create_user(
     test_session,
     activated=True,
-    username="username",
+    username="testuser",
     email="user@mail.com",
     role=constants.ROLE_USER,
 ):

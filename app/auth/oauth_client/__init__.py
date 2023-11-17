@@ -354,33 +354,6 @@ class OAuth2Client(Client):
         return self.access_token or "", data
 
 
-class DiscordClient(OAuth2Client):
-    """Support Discord API.
-
-    * Dashboard: https://discordapp.com/developers/applications/me
-    * Docs: https://discordapp.com/developers/docs/topics/oauth2
-    * API refer: https://discordapp.com/developers/docs/reference
-    """
-
-    access_token_url = "https://discordapp.com/api/oauth2/token"
-    authorize_url = "https://discordapp.com/api/oauth2/authorize"
-    base_url = "https://discordapp.com/api/v6/"
-    name = "discord"
-    user_info_url = "https://discordapp.com/api/v6/users/@me"
-
-    @staticmethod
-    def user_parse(data: TRes):
-        """Parse information from the provider."""
-        assert isinstance(data, dict)
-        yield "id", data.get("id")
-        yield "username", data.get("username")
-        yield "discriminator", data.get("discriminator")
-        yield "picture", "https://cdn.discordapp.com/avatars/{}/{}.png".format(
-            data.get("id"),
-            data.get("avatar"),
-        )
-
-
 class GoogleClient(OAuth2Client):
     """Support Google.
 
@@ -407,39 +380,3 @@ class GoogleClient(OAuth2Client):
         yield "locale", data.get("locale")
         yield "picture", data.get("picture")
         yield "gender", data.get("gender")
-
-
-class GithubClient(OAuth2Client):
-    """Support Github.
-
-    * Dashboard: https://github.com/settings/applications/
-    * Docs: http://developer.github.com/v3/#authentication
-    * API reference: http://developer.github.com/v3/
-    """
-
-    access_token_url = "https://github.com/login/oauth/access_token"
-    authorize_url = "https://github.com/login/oauth/authorize"
-    base_url = "https://api.github.com"
-    name = "github"
-    user_info_url = "https://api.github.com/user"
-
-    @staticmethod
-    def user_parse(data):
-        """Parse information from provider."""
-        yield "id", data.get("id")
-        yield "email", data.get("email")
-        first_name, _, last_name = (data.get("name") or "").partition(" ")
-        yield "first_name", first_name
-        yield "last_name", last_name
-        yield "username", data.get("login")
-        yield "picture", data.get("avatar_url")
-        yield "link", data.get("html_url")
-        location = data.get("location", "")
-        if location:
-            split_location = location.split(",")
-            yield "country", split_location[0].strip()
-            if len(split_location) > 1:
-                yield "city", split_location[1].strip()
-
-
-# ruff: noqa: S105

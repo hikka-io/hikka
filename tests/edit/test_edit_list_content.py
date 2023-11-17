@@ -37,7 +37,7 @@ async def test_edit_list_content(
 
     assert response.json()["list"][0]["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["list"][0]["description"] == "Brief description"
-    assert response.json()["list"][0]["author"]["username"] == "username"
+    assert response.json()["list"][0]["author"]["username"] == "testuser"
     assert response.json()["list"][0]["content_type"] == "anime"
     assert response.json()["list"][0]["status"] == "pending"
     assert response.json()["list"][0]["moderator"] is None

@@ -11,7 +11,7 @@ async def test_watch_list(
     get_test_token,
 ):
     # User watch list should be empty when we start
-    response = await request_watch_list(client, "username")
+    response = await request_watch_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 0
@@ -28,7 +28,7 @@ async def test_watch_list(
         },
     )
 
-    response = await request_watch_list(client, "username")
+    response = await request_watch_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
@@ -49,7 +49,7 @@ async def test_watch_list(
         },
     )
 
-    response = await request_watch_list(client, "username")
+    response = await request_watch_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 2
@@ -61,7 +61,7 @@ async def test_watch_list(
     )
 
     # Try filtering by watch entry staus
-    response = await request_watch_list(client, "username", "watching")
+    response = await request_watch_list(client, "testuser", "watching")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
@@ -73,7 +73,7 @@ async def test_watch_list(
     # And now delete Bocchi from user's watch list
     await request_watch_delete(client, "bocchi-the-rock-9e172d", get_test_token)
 
-    response = await request_watch_list(client, "username")
+    response = await request_watch_list(client, "testuser")
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1

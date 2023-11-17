@@ -36,7 +36,7 @@ async def test_start_number_username(client):
 
 async def test_short_password(client):
     # Min password length is 8 characters
-    response = await request_signup(client, "test@mail.com", "username", "abc")
+    response = await request_signup(client, "test@mail.com", "testuser", "abc")
 
     assert response.json()["code"] == "system:validation_error"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -46,7 +46,7 @@ async def test_long_password(client):
     # Max password length is 64 characters
     response = await request_signup(
         client,
-        "username",
+        "testuser",
         "abcdefghijklmnopqabcdefghijklmnopqabcdefghijklmnopqabcdefghijklmn",
         "test@mail.com",
     )
@@ -57,7 +57,7 @@ async def test_long_password(client):
 
 async def test_bad_email(client):
     response = await request_signup(
-        client, "username", "password", "badmail.com"
+        client, "testuser", "password", "badmail.com"
     )
 
     assert response.json()["code"] == "system:validation_error"

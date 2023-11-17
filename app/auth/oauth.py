@@ -1,4 +1,4 @@
-from .oauth_client import GoogleClient, DiscordClient, GithubClient
+from .oauth_client import GoogleClient
 from app.settings import get_settings
 
 oauth_client_args = {
@@ -10,8 +10,6 @@ oauth_client_args = {
         },
         "client": GoogleClient,
     },
-    "discord": {"client": DiscordClient},
-    "github": {"client": GithubClient},
 }
 
 
@@ -38,7 +36,7 @@ async def get_url(provider: str) -> dict[str, str]:
     url = client.get_authorize_url(
         **{
             "redirect_uri": oauth_provider["redirect_uri"],
-            **oauth_client_args[provider]["args"],  # type: ignore
+            **oauth_client_args[provider]["args"],
             # "state": "hikka",  # ToDo: generate state server side
         }
     )

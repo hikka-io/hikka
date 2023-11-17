@@ -42,7 +42,7 @@ async def body_email_user(
 
 async def validate_set_username(
     args: UsernameArgs,
-    user: User = Depends(auth_required(oauth_skip=True)),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ) -> UsernameArgs:
     if user.username:
@@ -56,7 +56,7 @@ async def validate_set_username(
 
 async def validate_set_email(
     args: EmailArgs,
-    user: User = Depends(auth_required(oauth_skip=True)),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ) -> UsernameArgs:
     if user.email:

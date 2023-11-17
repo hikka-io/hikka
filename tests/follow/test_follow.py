@@ -25,7 +25,7 @@ async def test_follow_self(
     get_test_token,
 ):
     # Make sure user can't follow himself
-    response = await request_follow_check(client, get_test_token, "username")
+    response = await request_follow_check(client, get_test_token, "testuser")
     assert response.json()["code"] == "follow:self"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -102,7 +102,7 @@ async def test_stats(
     assert response.status_code == status.HTTP_200_OK
 
     # Check test user stats
-    response = await request_follow_stats(client, "username")
+    response = await request_follow_stats(client, "testuser")
     assert response.json() == {"followers": 0, "following": 1}
 
     # Check dummy user stats
@@ -122,11 +122,11 @@ async def test_followers(
     assert response.status_code == status.HTTP_200_OK
 
     # Check following
-    response = await request_following(client, "username")
+    response = await request_following(client, "testuser")
     assert len(response.json()["list"]) == 1
     assert response.json()["list"][0]["username"] == "dummy"
 
     # Check followers
     response = await request_followers(client, "dummy")
     assert len(response.json()["list"]) == 1
-    assert response.json()["list"][0]["username"] == "username"
+    assert response.json()["list"][0]["username"] == "testuser"

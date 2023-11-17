@@ -8,8 +8,8 @@ from client_requests import (
 
 async def test_profile(client, create_test_user):
     # User profile
-    response = await request_profile(client, "username")
-    assert response.json()["username"] == "username"
+    response = await request_profile(client, "testuser")
+    assert response.json()["username"] == "testuser"
     assert response.status_code == status.HTTP_200_OK
 
 
@@ -23,5 +23,5 @@ async def test_bad_profile(client):
 async def test_me(client, create_test_user, get_test_token):
     # Get own profile
     response = await request_me(client, get_test_token)
-    assert response.json()["username"] == "username"
+    assert response.json()["username"] == "testuser"
     assert response.status_code == status.HTTP_200_OK
