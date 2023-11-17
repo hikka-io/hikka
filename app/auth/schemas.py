@@ -14,7 +14,7 @@ class EmailArgs(CustomModel):
 
 class UsernameArgs(CustomModel):
     username: str = Field(
-        pattern="^[A-Za-z][A-Za-z0-9_]{4,15}$", examples=["hikka"]
+        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
     )
 
 
