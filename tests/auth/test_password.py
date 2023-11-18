@@ -79,6 +79,7 @@ async def test_password_reset_confirm(client, test_session, create_test_user):
     )
 
     assert response.status_code == status.HTTP_200_OK
+    assert response.json().get("secret") is not None
 
     # Get old password hash to make sure it has been changed
     old_password_hash = user.password_hash

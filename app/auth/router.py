@@ -72,14 +72,15 @@ async def login(
 
 @router.post(
     "/activation",
-    response_model=UserResponse,
+    response_model=TokenResponse,
     summary="Activate account",
 )
 async def activation(
     user: User = Depends(validate_activation),
     session: AsyncSession = Depends(get_session),
 ):
-    return await service.activate_user(session, user)
+    await service.activate_user(session, user)
+    return await service.create_auth_token(session, user)
 
 
 @router.post(
@@ -128,14 +129,15 @@ async def reset_password(
 
 @router.post(
     "/password/confirm",
-    response_model=UserResponse,
+    response_model=TokenResponse,
     summary="Confirm password reset",
 )
 async def password_reset(
     confirm: Tuple[User, str] = Depends(validate_password_confirm),
     session: AsyncSession = Depends(get_session),
 ):
-    return await service.change_password(session, *confirm)
+    user = await service.change_password(session, *confirm)
+    return await service.create_auth_token(session, user)
 
 
 @router.put(
