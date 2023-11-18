@@ -37,7 +37,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 @router.post(
     "/signup",
-    response_model=UserResponse,
+    response_model=TokenResponse,
     summary="Signup",
 )
 async def signup(
@@ -55,7 +55,7 @@ async def signup(
         user,
     )
 
-    return user
+    return await service.create_auth_token(session, user)
 
 
 @router.post(

@@ -11,6 +11,7 @@ async def test_signup(client, test_session):
     )
 
     assert response.status_code == status.HTTP_200_OK
+    assert response.json().get("secret") is not None
 
     # Get newly created account
     user = await test_session.scalar(
