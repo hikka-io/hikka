@@ -72,7 +72,9 @@ async def test_activation(client, test_session, create_test_user_not_activated):
 
     # Activate account
     response = await request_activation(client, user.activation_token)
+
     assert response.status_code == status.HTTP_200_OK
+    assert response.json().get("secret") is not None
 
     # Make sure account has been activated and data cleaned
     await test_session.refresh(user)
