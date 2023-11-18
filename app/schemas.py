@@ -122,3 +122,4 @@ class UserResponse(CustomModel):
     username: str | None = Field(examples=["hikka"])
     created: datetime = Field(examples=[1686088809])
     avatar: str
+    role: str

@@ -3,8 +3,12 @@ from datetime import datetime
 from app import constants
 from enum import Enum
 
+from typing import Union
+
 from app.schemas import (
     PaginationResponse,
+    PersonResponse,
+    AnimeResponse,
     UserResponse,
     CustomModel,
 )
@@ -95,8 +99,8 @@ class EditResponse(CustomModel):
     before: dict | None
     after: dict
 
-    # ToDo: find better way to do that
-    content: ContentSlugResponse
+    # ToDo: maybe we should use Pydantic's discriminator here?
+    content: AnimeResponse | PersonResponse
 
 
 class EditListResponse(CustomModel):
