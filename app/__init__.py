@@ -28,7 +28,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app = FastAPI(
         title="Hikka API",
-        version="0.1.3",
+        version="0.1.4",
         openapi_tags=[
             {"name": "Auth"},
             {"name": "User"},
@@ -39,7 +39,6 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "People"},
             {"name": "Favourite"},
             {"name": "Watch"},
-            {"name": "List"},
             {"name": "Edit"},
         ],
         lifespan=lifespan,
