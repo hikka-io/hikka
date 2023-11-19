@@ -1,10 +1,15 @@
-from app.dependencies import get_page, auth_required
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Edit, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app.models import Edit, User
 from app import constants
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    check_captcha,
+    get_page,
+)
 
 from app.utils import (
     pagination_dict,
@@ -79,6 +84,7 @@ async def create_edit(
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
+    _: bool = Depends(check_captcha),
 ):
     return await service.create_pending_edit(
         session, content_type, content_id, args, author
@@ -90,6 +96,7 @@ async def update_edit(
     args: EditArgs = Depends(validate_edit_update_args),
     edit: Edit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
+    _: bool = Depends(check_captcha),
 ):
     return await service.update_pending_edit(session, edit, args)
 
