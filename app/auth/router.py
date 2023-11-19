@@ -84,7 +84,6 @@ async def login(
 async def activation(
     user: User = Depends(validate_activation),
     session: AsyncSession = Depends(get_session),
-    _: bool = Depends(check_captcha),
 ):
     await service.activate_user(session, user)
     return await service.create_auth_token(session, user)
@@ -98,7 +97,6 @@ async def activation(
 async def activation_resend(
     user: User = Depends(validate_activation_resend),
     session: AsyncSession = Depends(get_session),
-    _: bool = Depends(check_captcha),
 ):
     user = await service.create_activation_token(session, user)
 
@@ -121,7 +119,6 @@ async def activation_resend(
 async def reset_password(
     user: User = Depends(validate_password_reset),
     session: AsyncSession = Depends(get_session),
-    _: bool = Depends(check_captcha),
 ):
     user = await service.create_password_token(session, user)
 
@@ -144,7 +141,6 @@ async def reset_password(
 async def password_reset(
     confirm: Tuple[User, str] = Depends(validate_password_confirm),
     session: AsyncSession = Depends(get_session),
-    _: bool = Depends(check_captcha),
 ):
     user = await service.change_password(session, *confirm)
     return await service.create_auth_token(session, user)
