@@ -1,4 +1,4 @@
-def request_signup(client, email, username, password):
+def request_signup(client, email, username, password, captcha="fake_captcha"):
     return client.post(
         "/auth/signup",
         json={
@@ -6,13 +6,15 @@ def request_signup(client, email, username, password):
             "username": username,
             "password": password,
         },
+        headers={"Captcha": captcha},
     )
 
 
-def request_login(client, email, password):
+def request_login(client, email, password, captcha="fake_captcha"):
     return client.post(
         "/auth/login",
         json={"email": email, "password": password},
+        headers={"Captcha": captcha},
     )
 
 

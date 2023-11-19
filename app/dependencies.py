@@ -1,12 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from app.settings import get_settings
+from app.database import get_session
 from fastapi import Depends, Cookie
-from .database import get_session
+from app.models import User, Anime
 from fastapi import Header, Query
-from .models import User, Anime
 from typing import Annotated
-from .errors import Abort
+from app.errors import Abort
 from app import constants
+from app import utils
 
 from .service import (
     get_user_by_username,
@@ -92,3 +94,23 @@ def auth_required(permissions: list = []):
         return token.user
 
     return auth
+
+
+# Validate captcha
+async def check_captcha(
+    captcha: Annotated[str, Header(alias="captcha")]
+) -> bool:
+    settings = get_settings()
+
+    if not captcha:
+        raise Abort("captcha", "invalid")
+
+    if settings.captcha["test"] and captcha == settings.captcha["test"]:
+        return True
+
+    if not await utils.check_cloudflare_captcha(
+        captcha, settings.captcha["secret_key"]
+    ):
+        raise Abort("captcha", "invalid")
+
+    return True

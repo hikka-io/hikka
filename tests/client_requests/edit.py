@@ -10,18 +10,37 @@ def request_edit_list(client):
     return client.get("/edit/list")
 
 
-def request_create_edit(client, token, content_type, slug, data={}):
+def request_create_edit(
+    client,
+    token,
+    content_type,
+    slug,
+    data={},
+    captcha="fake_captcha",
+):
     return client.put(
         f"/edit/{content_type}/{slug}",
-        headers={"Auth": token},
+        headers={
+            "Auth": token,
+            "Captcha": captcha,
+        },
         json=data,
     )
 
 
-def request_update_edit(client, token, edit_id, data={}):
+def request_update_edit(
+    client,
+    token,
+    edit_id,
+    data={},
+    captcha="fake_captcha",
+):
     return client.post(
         f"/edit/{edit_id}/update",
-        headers={"Auth": token},
+        headers={
+            "Auth": token,
+            "Captcha": captcha,
+        },
         json=data,
     )
 

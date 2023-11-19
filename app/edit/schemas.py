@@ -83,10 +83,6 @@ class PersonEditArgs(CustomModel):
 
 
 # Response
-class ContentSlugResponse(CustomModel):
-    slug: str
-
-
 class EditResponse(CustomModel):
     content_type: ContentTypeEnum = Field(examples=["anime"])
     status: EditStatusEnum = Field(examples=["pending"])

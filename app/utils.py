@@ -3,6 +3,7 @@ from datetime import timezone
 from datetime import datetime
 from app import constants
 import unicodedata
+import aiohttp
 import secrets
 import math
 import re
@@ -155,3 +156,18 @@ def get_season(date):
     }
 
     return season_map.get(date.month) if date else None
+
+
+# Function to check captcha
+async def check_cloudflare_captcha(response, secret):
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+                data={"response": response, "secret": secret},
+            ) as result:
+                data = await result.json()
+                return data["success"]
+
+    except aiohttp.ClientConnectorError:
+        return False

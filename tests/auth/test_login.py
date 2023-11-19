@@ -13,3 +13,13 @@ async def test_login_bad_password(client, create_test_user):
     response = await request_login(client, "user@mail.com", "bad_password")
     assert response.json()["code"] == "auth:invalid_password"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_login_bad_captcha(client, create_test_user):
+    # Login with bad captcha
+    response = await request_login(
+        client, "user@mail.com", "password", "bad_captcha"
+    )
+
+    assert response.json()["code"] == "captcha:invalid"
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
