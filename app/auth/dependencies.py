@@ -171,7 +171,7 @@ async def validate_activation(
 
 
 async def validate_activation_resend(
-    user: User = Depends(body_email_user),
+    user: User = Depends(auth_required()),
 ) -> User:
     # Make sure user not yet activated
     if user.activated:
