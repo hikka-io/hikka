@@ -1,11 +1,11 @@
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from .database import sessionmanager
+from app.database import sessionmanager
 import fastapi.openapi.utils as fu
-from .settings import get_settings
+from app.utils import get_settings
 from fastapi import FastAPI
-from . import errors
+from app import errors
 
 
 def create_app(init_db: bool = True) -> FastAPI:

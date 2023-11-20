@@ -1,4 +1,6 @@
+from functools import lru_cache
 from urllib.parse import quote
+from dynaconf import Dynaconf
 from datetime import timezone
 from datetime import datetime
 from app import constants
@@ -7,6 +9,17 @@ import aiohttp
 import secrets
 import math
 import re
+
+
+@lru_cache()
+def get_settings():
+    """Returns lru cached system settings"""
+
+    return Dynaconf(
+        settings_files=["settings.toml"],
+        default_env="default",
+        environments=True,
+    )
 
 
 # Split list into chunks

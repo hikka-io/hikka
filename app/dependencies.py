@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
-from app.settings import get_settings
+from app.utils import get_settings
 from app.database import get_session
 from fastapi import Depends, Cookie
 from app.models import User, Anime

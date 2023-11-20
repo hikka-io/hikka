@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
-from app.settings import get_settings
+from app.utils import get_settings
 from app.database import get_session
 from .oauth_client import OAuthError
 from datetime import datetime

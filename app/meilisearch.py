@@ -1,6 +1,6 @@
 from meilisearch_python_sdk.errors import MeilisearchError
 from meilisearch_python_sdk import AsyncClient
-from app.settings import get_settings
+from app.utils import get_settings
 from app.utils import pagination_dict
 from app.errors import Abort
 from app import constants
