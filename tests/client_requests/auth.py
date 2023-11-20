@@ -25,10 +25,10 @@ def request_activation(client, token):
     )
 
 
-def request_activation_resend(client, email):
+def request_activation_resend(client, token):
     return client.post(
         "/auth/activation/resend",
-        json={"email": email},
+        headers={"Auth": token},
     )
 
 

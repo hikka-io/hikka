@@ -16,9 +16,11 @@ async def test_activation_bad_token(client, create_test_user_not_activated):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-async def test_activation_rate_limit(client, create_test_user_not_activated):
+async def test_activation_rate_limit(
+    client, create_test_user_not_activated, get_test_token
+):
     # Try resend activation request before previous one has expired
-    response = await request_activation_resend(client, "user@mail.com")
+    response = await request_activation_resend(client, get_test_token)
     assert response.json()["code"] == "auth:activation_valid"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -42,7 +44,7 @@ async def test_activation_expired(
 
 
 async def test_activation_resend(
-    client, test_session, create_test_user_not_activated
+    client, test_session, create_test_user_not_activated, get_test_token
 ):
     # Force expire activation token
     user = await test_session.scalar(
@@ -56,7 +58,7 @@ async def test_activation_resend(
     await test_session.commit()
 
     # Resend activation request and generate new token
-    response = await request_activation_resend(client, "user@mail.com")
+    response = await request_activation_resend(client, get_test_token)
     assert response.status_code == status.HTTP_200_OK
 
     # Make sure new token has been created
