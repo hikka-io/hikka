@@ -40,6 +40,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Favourite"},
             {"name": "Watch"},
             {"name": "Edit"},
+            {"name": "Settings"},
         ],
         lifespan=lifespan,
         # redoc_url=None,
