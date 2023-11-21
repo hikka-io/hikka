@@ -8,10 +8,6 @@ class TokenArgs(CustomModel):
     token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
 
 
-class EmailArgs(CustomModel):
-    email: EmailStr = Field(examples=["hikka@email.com"])
-
-
 class SignupArgs(UsernameArgs):
     password: str = Field(min_length=8, max_length=64, examples=["password"])
     email: EmailStr = Field(examples=["hikka@email.com"])

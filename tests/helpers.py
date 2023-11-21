@@ -27,7 +27,7 @@ async def create_user(
             "activation_expire": datetime.utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
             "activation_token": new_token(),
-            "activated": activated,
+            "email_confirmed": activated,
             "username": username,
             "last_active": now,
             "created": now,

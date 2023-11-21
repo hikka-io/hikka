@@ -75,7 +75,7 @@ async def create_oauth_user(
 
     user = User(
         **{
-            "activated": email is not None,
+            "email_confirmed": email is not None,
             "role": constants.ROLE_USER,
             "password_hash": None,
             "username": username,
@@ -211,7 +211,7 @@ async def activate_user(session: AsyncSession, user: User) -> User:
     # Activate user and delete token
     user.activation_expire = None
     user.activation_token = None
-    user.activated = True
+    user.email_confirmed = True
 
     # Only set user role if it's not activated
     if user.role == constants.ROLE_NOT_ACTIVATED:

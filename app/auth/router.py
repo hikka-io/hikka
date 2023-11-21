@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import check_captcha
 from fastapi import APIRouter, Depends
 from app.models import User, UserOAuth
 from app.schemas import UserResponse
@@ -8,13 +9,7 @@ from typing import Tuple
 from . import service
 from . import oauth
 
-from app.dependencies import (
-    # auth_required,
-    check_captcha,
-)
-
 from .dependencies import (
-    # validate_set_username,
     # validate_set_email,
     validate_activation_resend,
     validate_password_confirm,
@@ -28,8 +23,6 @@ from .dependencies import (
 )
 
 from .schemas import (
-    # UsernameArgs,
-    # EmailArgs,
     ProviderUrlResponse,
     TokenResponse,
     SignupArgs,

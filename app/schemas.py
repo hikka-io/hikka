@@ -1,7 +1,7 @@
 from fastapi.encoders import jsonable_encoder
+from pydantic import Field, EmailStr, constr
 from pydantic import BaseModel, ConfigDict
 from pydantic import model_serializer
-from pydantic import Field, constr
 from datetime import datetime
 from typing import Callable
 from . import constants
@@ -57,6 +57,10 @@ class UsernameArgs(CustomModel):
     username: str = Field(
         pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
     )
+
+
+class EmailArgs(CustomModel):
+    email: EmailStr = Field(examples=["hikka@email.com"])
 
 
 # Responses

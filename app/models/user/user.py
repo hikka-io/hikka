@@ -15,8 +15,9 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
     description: Mapped[str] = mapped_column(String(140), nullable=True)
     username: Mapped[str] = mapped_column(String(64), index=True)
-    activated: Mapped[bool] = mapped_column(default=False)
     banned: Mapped[bool] = mapped_column(default=False)
+
+    email_confirmed: Mapped[bool] = mapped_column(default=False)
 
     activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
     activation_expire: Mapped[datetime] = mapped_column(nullable=True)
