@@ -40,20 +40,6 @@ async def body_email_user(
     return user
 
 
-async def validate_set_username(
-    args: UsernameArgs,
-    user: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
-) -> UsernameArgs:
-    if user.username:
-        raise Abort("auth", "username-set")
-
-    if await get_user_by_username(session, args.username):
-        raise Abort("auth", "username-taken")
-
-    return args
-
-
 async def validate_set_email(
     args: EmailArgs,
     user: User = Depends(auth_required()),

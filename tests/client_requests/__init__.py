@@ -60,6 +60,7 @@ from .edit import request_edit_list
 from .edit import request_edit
 
 from .settings import request_settings_description
+from .settings import request_settings_username
 
 __all__ = [
     "request_activation_resend",
@@ -113,4 +114,5 @@ __all__ = [
     "request_edit_list",
     "request_edit",
     "request_settings_description",
+    "request_settings_username",
 ]

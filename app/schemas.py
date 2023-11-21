@@ -53,6 +53,12 @@ class QuerySearchArgs(CustomModel):
     page: int = Field(default=1, gt=0, examples=[1])
 
 
+class UsernameArgs(CustomModel):
+    username: str = Field(
+        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
+    )
+
+
 # Responses
 class PaginationResponse(CustomModel):
     total: int = Field(examples=[20])

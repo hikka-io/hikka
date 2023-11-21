@@ -1,5 +1,6 @@
 from app.models import User, EmailMessage, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_user_by_username
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from .utils import hashpwd, new_token
@@ -32,12 +33,6 @@ async def get_oauth_by_id(
         )
         .options(selectinload(UserOAuth.user))
     )
-
-
-async def get_user_by_username(
-    session: AsyncSession, username: str
-) -> User | None:
-    return await session.scalar(select(User).filter(User.username == username))
 
 
 async def get_user_by_reset(session: AsyncSession, token: str) -> User | None:
@@ -198,14 +193,6 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
     user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
     user.password_reset_token = new_token()
 
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
-async def set_username(session: AsyncSession, user: User, username: str):
-    user.username = username
     session.add(user)
     await session.commit()
 

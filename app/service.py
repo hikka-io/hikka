@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .models import User, AuthToken, Anime
+from app.models import User, AuthToken, Anime
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 

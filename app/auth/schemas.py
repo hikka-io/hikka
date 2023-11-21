@@ -1,5 +1,5 @@
+from app.schemas import CustomModel, UsernameArgs
 from pydantic import EmailStr, Field
-from app.schemas import CustomModel
 from datetime import datetime
 
 
@@ -10,12 +10,6 @@ class TokenArgs(CustomModel):
 
 class EmailArgs(CustomModel):
     email: EmailStr = Field(examples=["hikka@email.com"])
-
-
-class UsernameArgs(CustomModel):
-    username: str = Field(
-        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
-    )
 
 
 class SignupArgs(UsernameArgs):

@@ -34,6 +34,9 @@ errors = {
         "email-set": ["Email already set", 400],
         "not-available": ["Signup not available ", 400],
     },
+    "settings": {
+        "username-taken": ["Username already taken", 400],
+    },
     "permission": {
         "denied": ["You don't have permission for this action", 403],
     },
