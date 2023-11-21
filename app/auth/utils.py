@@ -1,4 +1,3 @@
-import secrets
 import bcrypt
 
 
@@ -13,8 +12,3 @@ def checkpwd(password: str, bcrypt_hash: str | None) -> bool:
         return bcrypt.checkpw(str.encode(password), str.encode(bcrypt_hash))
 
     return False
-
-
-# Genereate new random token
-def new_token():
-    return secrets.token_urlsafe(32)

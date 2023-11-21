@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, AuthToken, Anime
+from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
+from app.utils import new_token
 from sqlalchemy import select
 
 
@@ -26,6 +28,17 @@ async def get_auth_token(
         .filter(AuthToken.secret == secret)
         .options(selectinload(AuthToken.user))
     )
+
+
+async def create_activation_token(session: AsyncSession, user: User) -> User:
+    # Generate new token
+    user.activation_expire = datetime.utcnow() + timedelta(hours=3)
+    user.activation_token = new_token()
+
+    session.add(user)
+    await session.commit()
+
+    return user
 
 
 def anime_loadonly(statement):

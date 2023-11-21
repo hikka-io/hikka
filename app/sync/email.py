@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from app.utils import get_settings
+from app.settings import get_settings
 from app.models import EmailMessage
 from sqlalchemy import select
 from datetime import datetime
@@ -12,7 +12,7 @@ email_from = "Hikka <noreply@mail.hikka.io>"
 
 templates = {
     "activation": {
-        "subject": "Активація акаунту",
+        "subject": "Підтвердження пошти",
         "template": "https://hikka.io/activation/CONTENT",
     },
     "password_reset": {

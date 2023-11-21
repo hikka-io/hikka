@@ -3,9 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from .utils import hashpwd, new_token
 from .schemas import SignupArgs
+from app.utils import new_token
 from sqlalchemy import select
+from .utils import hashpwd
 from app import constants
 import secrets
 
@@ -177,30 +178,11 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     return token
 
 
-async def create_activation_token(session: AsyncSession, user: User) -> User:
-    # Generate new token
-    user.activation_expire = datetime.utcnow() + timedelta(hours=3)
-    user.activation_token = new_token()
-
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
 async def create_password_token(session: AsyncSession, user: User) -> User:
     # Generate new password reset token
     user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
     user.password_reset_token = new_token()
 
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
-async def set_email(session: AsyncSession, user: User, email: str):
-    user.email = email
     session.add(user)
     await session.commit()
 

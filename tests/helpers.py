@@ -1,6 +1,7 @@
 from app.models import User, UserOAuth, AuthToken
-from app.auth.utils import hashpwd, new_token
 from datetime import datetime, timedelta
+from app.auth.utils import hashpwd
+from app.utils import new_token
 from sqlalchemy import select
 from app import constants
 import aiofiles

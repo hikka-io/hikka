@@ -11,6 +11,12 @@ import math
 import re
 
 
+def new_token():
+    """Genereate new random token"""
+
+    return secrets.token_urlsafe(32)
+
+
 @lru_cache()
 def get_settings():
     """Returns lru cached system settings"""

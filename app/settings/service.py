@@ -26,3 +26,14 @@ async def set_username(session: AsyncSession, user: User, username: str):
     await session.commit()
 
     return user
+
+
+async def set_email(session: AsyncSession, user: User, email: str):
+    """Changed email"""
+
+    user.email = email
+
+    session.add(user)
+    await session.commit()
+
+    return user

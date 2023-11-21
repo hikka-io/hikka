@@ -3,6 +3,10 @@ from app import constants
 from app import utils
 
 
+def test_token():
+    assert len(utils.new_token()) == 43
+
+
 def test_slugify():
     # Simple test for slug creation
     assert (

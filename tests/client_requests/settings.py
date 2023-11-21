@@ -1,5 +1,5 @@
 def request_settings_description(client, token, description):
-    return client.post(
+    return client.put(
         "/settings/description",
         headers={"Auth": token},
         json={"description": description},

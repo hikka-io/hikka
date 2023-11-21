@@ -26,8 +26,13 @@ async def validate_set_username(
 
 async def validate_set_email(
     args: EmailArgs,
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ) -> UsernameArgs:
+    if user.last_email_change:
+        if user.last_email_change + timedelta(days=1) > datetime.utcnow():
+            raise Abort("settings", "email-cooldown")
+
     if await get_user_by_email(session, args.email):
         raise Abort("auth", "email-exists")
 
