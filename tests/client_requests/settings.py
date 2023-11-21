@@ -12,3 +12,11 @@ def request_settings_username(client, token, username):
         headers={"Auth": token},
         json={"username": username},
     )
+
+
+def request_settings_email(client, token, email):
+    return client.put(
+        "/settings/email",
+        headers={"Auth": token},
+        json={"email": email},
+    )

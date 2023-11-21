@@ -19,10 +19,6 @@ async def get_user_by_activation(
     )
 
 
-async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
-    return await session.scalar(select(User).filter(User.email == email))
-
-
 async def get_oauth_by_id(
     session: AsyncSession, oauth_id: str, provider: str
 ) -> UserOAuth | None:
@@ -135,24 +131,6 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
     await session.commit()
 
     return user
-
-
-async def create_email(
-    session: AsyncSession, email_type: str, content: str, user: User
-) -> EmailMessage:
-    message = EmailMessage(
-        **{
-            "created": datetime.utcnow(),
-            "content": content,
-            "type": email_type,
-            "user": user,
-        }
-    )
-
-    session.add(message)
-    await session.commit()
-
-    return message
 
 
 async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:

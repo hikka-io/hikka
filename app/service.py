@@ -1,5 +1,5 @@
+from app.models import User, AuthToken, Anime, EmailMessage
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User, AuthToken, Anime
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from app.utils import new_token
@@ -10,6 +10,10 @@ async def get_user_by_username(
     session: AsyncSession, username: str
 ) -> User | None:
     return await session.scalar(select(User).filter(User.username == username))
+
+
+async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
+    return await session.scalar(select(User).filter(User.email == email))
 
 
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
@@ -39,6 +43,24 @@ async def create_activation_token(session: AsyncSession, user: User) -> User:
     await session.commit()
 
     return user
+
+
+async def create_email(
+    session: AsyncSession, email_type: str, content: str, user: User
+) -> EmailMessage:
+    message = EmailMessage(
+        **{
+            "created": datetime.utcnow(),
+            "content": content,
+            "type": email_type,
+            "user": user,
+        }
+    )
+
+    session.add(message)
+    await session.commit()
+
+    return message
 
 
 def anime_loadonly(statement):

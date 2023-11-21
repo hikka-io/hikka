@@ -31,6 +31,8 @@ async def set_username(session: AsyncSession, user: User, username: str):
 async def set_email(session: AsyncSession, user: User, email: str):
     """Changed email"""
 
+    user.last_email_change = datetime.utcnow()
+    user.email_confirmed = False
     user.email = email
 
     session.add(user)

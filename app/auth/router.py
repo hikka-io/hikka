@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import create_activation_token
 from app.dependencies import check_captcha
 from fastapi import APIRouter, Depends
 from app.models import User, UserOAuth
@@ -9,6 +8,11 @@ from app import constants
 from typing import Tuple
 from . import service
 from . import oauth
+
+from app.service import (
+    create_activation_token,
+    create_email,
+)
 
 from .dependencies import (
     validate_activation_resend,
@@ -46,7 +50,7 @@ async def signup(
     user = await service.create_user(session, signup)
 
     # Add activation email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_ACTIVATION,
         user.activation_token,
@@ -94,7 +98,7 @@ async def activation_resend(
     user = await create_activation_token(session, user)
 
     # Add new activation email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_ACTIVATION,
         user.activation_token,
@@ -116,7 +120,7 @@ async def reset_password(
     user = await service.create_password_token(session, user)
 
     # Add new password reset email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_PASSWORD_RESET,
         user.password_reset_token,

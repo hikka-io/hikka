@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import get_user_by_username
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
 from app.database import get_session
@@ -12,9 +11,13 @@ from fastapi import Depends
 from .utils import checkpwd
 from . import oauth
 
+from app.service import (
+    get_user_by_username,
+    get_user_by_email,
+)
+
 from .service import (
     get_user_by_activation,
-    get_user_by_email,
     get_user_by_reset,
     get_oauth_by_id,
 )
