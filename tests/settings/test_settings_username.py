@@ -12,6 +12,15 @@ async def test_settings_username(client, create_test_user, get_test_token):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["username"] == "new_username"
 
+    # Change username again
+    response = await request_settings_username(
+        client, get_test_token, "new_username_2"
+    )
+
+    # It should hit rate limit
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "settings:username_cooldown"
+
 
 async def test_settings_username_taken(
     client, create_dummy_user, create_test_user, get_test_token

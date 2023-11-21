@@ -35,6 +35,7 @@ errors = {
         "not-available": ["Signup not available ", 400],
     },
     "settings": {
+        "username-cooldown": ["Username can be changed once per hour", 400],
         "username-taken": ["Username already taken", 400],
     },
     "permission": {

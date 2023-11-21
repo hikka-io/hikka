@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime
 from app.models import User
 
 
@@ -18,6 +19,7 @@ async def change_description(
 async def set_username(session: AsyncSession, user: User, username: str):
     """Changed username"""
 
+    user.last_username_change = datetime.utcnow()
     user.username = username
 
     session.add(user)
