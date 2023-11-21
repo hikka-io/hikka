@@ -12,7 +12,7 @@ email_from = "Hikka <noreply@mail.hikka.io>"
 
 templates = {
     "activation": {
-        "subject": "Активація акаунту",
+        "subject": "Підтвердження пошти",
         "template": "https://hikka.io/activation/CONTENT",
     },
     "password_reset": {

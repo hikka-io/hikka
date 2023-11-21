@@ -7,7 +7,7 @@ from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
-from app.settings import get_settings
+from app.utils import get_settings
 from app.models import Anime, Base
 from contextlib import ExitStack
 from sqlalchemy import make_url

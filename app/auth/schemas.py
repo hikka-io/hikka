@@ -1,36 +1,26 @@
-from pydantic import EmailStr, Field
-from app.schemas import CustomModel
 from datetime import datetime
+from pydantic import Field
+
+from app.schemas import (
+    UsernameArgs,
+    PasswordArgs,
+    CustomModel,
+    EmailArgs,
+    TokenArgs,
+)
 
 
 # Args
-class TokenArgs(CustomModel):
-    token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
+class SignupArgs(UsernameArgs, PasswordArgs, EmailArgs):
+    pass
 
 
-class EmailArgs(CustomModel):
-    email: EmailStr = Field(examples=["hikka@email.com"])
+class LoginArgs(PasswordArgs, EmailArgs):
+    pass
 
 
-class UsernameArgs(CustomModel):
-    username: str = Field(
-        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
-    )
-
-
-class SignupArgs(UsernameArgs):
-    password: str = Field(min_length=8, max_length=64, examples=["password"])
-    email: EmailStr = Field(examples=["hikka@email.com"])
-
-
-class LoginArgs(CustomModel):
-    password: str = Field(min_length=8, max_length=64, examples=["password"])
-    email: EmailStr = Field(examples=["hikka@email.com"])
-
-
-class ComfirmResetArgs(CustomModel):
-    password: str = Field(min_length=8, max_length=64, examples=["password"])
-    token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
+class ComfirmResetArgs(PasswordArgs, TokenArgs):
+    pass
 
 
 class CodeArgs(CustomModel):

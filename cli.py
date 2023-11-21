@@ -1,5 +1,5 @@
 from app.database import sessionmanager
-from app.settings import get_settings
+from app.utils import get_settings
 from app.sync import update_search
 import asyncio
 import typer

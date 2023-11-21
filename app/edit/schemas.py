@@ -3,8 +3,6 @@ from datetime import datetime
 from app import constants
 from enum import Enum
 
-from typing import Union
-
 from app.schemas import (
     PaginationResponse,
     PersonResponse,

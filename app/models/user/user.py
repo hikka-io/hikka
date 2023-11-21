@@ -15,7 +15,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
     description: Mapped[str] = mapped_column(String(140), nullable=True)
     username: Mapped[str] = mapped_column(String(64), index=True)
-    activated: Mapped[bool] = mapped_column(default=False)
+    email_confirmed: Mapped[bool] = mapped_column(default=False)
     banned: Mapped[bool] = mapped_column(default=False)
 
     activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
@@ -23,6 +23,9 @@ class User(Base):
 
     password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True)
     password_reset_expire: Mapped[datetime] = mapped_column(nullable=True)
+
+    last_username_change: Mapped[datetime] = mapped_column(nullable=True)
+    last_email_change: Mapped[datetime] = mapped_column(nullable=True)
 
     last_active: Mapped[datetime]
     created: Mapped[datetime]

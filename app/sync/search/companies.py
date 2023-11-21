@@ -2,7 +2,7 @@ from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
-from app.settings import get_settings
+from app.utils import get_settings
 from sqlalchemy import select, func
 from app.utils import pagination
 from app.models import Company

@@ -1,6 +1,6 @@
 from app.sync.aggregator.info import update_anime_info
 from app.database import sessionmanager
-from app.settings import get_settings
+from app.utils import get_settings
 from sqlalchemy import select, desc
 from sqlalchemy import make_url
 from app.models import Anime

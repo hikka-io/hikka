@@ -1,12 +1,45 @@
+from functools import lru_cache
 from urllib.parse import quote
+from dynaconf import Dynaconf
 from datetime import timezone
 from datetime import datetime
 from app import constants
 import unicodedata
 import aiohttp
 import secrets
+import bcrypt
 import math
 import re
+
+
+# Get bcrypt hash of password
+def hashpwd(password: str) -> str:
+    return bcrypt.hashpw(str.encode(password), bcrypt.gensalt()).decode()
+
+
+# Check bcrypt password hash
+def checkpwd(password: str, bcrypt_hash: str | None) -> bool:
+    if bcrypt_hash:
+        return bcrypt.checkpw(str.encode(password), str.encode(bcrypt_hash))
+
+    return False
+
+
+def new_token():
+    """Genereate new random token"""
+
+    return secrets.token_urlsafe(32)
+
+
+@lru_cache()
+def get_settings():
+    """Returns lru cached system settings"""
+
+    return Dynaconf(
+        settings_files=["settings.toml"],
+        default_env="default",
+        environments=True,
+    )
 
 
 # Split list into chunks

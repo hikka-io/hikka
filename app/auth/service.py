@@ -1,10 +1,12 @@
-from app.models import User, EmailMessage, AuthToken, UserOAuth
+from app.models import User, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_user_by_username
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from .utils import hashpwd, new_token
 from .schemas import SignupArgs
+from app.utils import new_token
 from sqlalchemy import select
+from app.utils import hashpwd
 from app import constants
 import secrets
 
@@ -15,10 +17,6 @@ async def get_user_by_activation(
     return await session.scalar(
         select(User).filter(User.activation_token == token)
     )
-
-
-async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
-    return await session.scalar(select(User).filter(User.email == email))
 
 
 async def get_oauth_by_id(
@@ -32,12 +30,6 @@ async def get_oauth_by_id(
         )
         .options(selectinload(UserOAuth.user))
     )
-
-
-async def get_user_by_username(
-    session: AsyncSession, username: str
-) -> User | None:
-    return await session.scalar(select(User).filter(User.username == username))
 
 
 async def get_user_by_reset(session: AsyncSession, token: str) -> User | None:
@@ -80,7 +72,7 @@ async def create_oauth_user(
 
     user = User(
         **{
-            "activated": email is not None,
+            "email_confirmed": email is not None,
             "role": constants.ROLE_USER,
             "password_hash": None,
             "username": username,
@@ -141,24 +133,6 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
     return user
 
 
-async def create_email(
-    session: AsyncSession, email_type: str, content: str, user: User
-) -> EmailMessage:
-    message = EmailMessage(
-        **{
-            "created": datetime.utcnow(),
-            "content": content,
-            "type": email_type,
-            "user": user,
-        }
-    )
-
-    session.add(message)
-    await session.commit()
-
-    return message
-
-
 async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     now = datetime.utcnow()
 
@@ -182,17 +156,6 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
     return token
 
 
-async def create_activation_token(session: AsyncSession, user: User) -> User:
-    # Generate new token
-    user.activation_expire = datetime.utcnow() + timedelta(hours=3)
-    user.activation_token = new_token()
-
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
 async def create_password_token(session: AsyncSession, user: User) -> User:
     # Generate new password reset token
     user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
@@ -204,27 +167,11 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
     return user
 
 
-async def set_username(session: AsyncSession, user: User, username: str):
-    user.username = username
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
-async def set_email(session: AsyncSession, user: User, email: str):
-    user.email = email
-    session.add(user)
-    await session.commit()
-
-    return user
-
-
 async def activate_user(session: AsyncSession, user: User) -> User:
     # Activate user and delete token
     user.activation_expire = None
     user.activation_token = None
-    user.activated = True
+    user.email_confirmed = True
 
     # Only set user role if it's not activated
     if user.role == constants.ROLE_NOT_ACTIVATED:

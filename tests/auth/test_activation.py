@@ -83,4 +83,4 @@ async def test_activation(client, test_session, create_test_user_not_activated):
 
     assert user.activation_expire is None
     assert user.activation_token is None
-    assert user.activated is True
+    assert user.email_confirmed is True

@@ -1,29 +1,30 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import get_user_by_username
+from app.utils import get_settings, checkpwd
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
-from app.settings import get_settings
 from app.database import get_session
 from .oauth_client import OAuthError
+from app.schemas import EmailArgs
 from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
-from .utils import checkpwd
 from . import oauth
+
+from app.service import (
+    get_user_by_username,
+    get_user_by_email,
+)
 
 from .service import (
     get_user_by_activation,
-    get_user_by_email,
     get_user_by_reset,
     get_oauth_by_id,
 )
 
 from .schemas import (
     ComfirmResetArgs,
-    UsernameArgs,
     SignupArgs,
     LoginArgs,
-    EmailArgs,
     TokenArgs,
     CodeArgs,
 )
@@ -38,34 +39,6 @@ async def body_email_user(
         raise Abort("auth", "user-not-found")
 
     return user
-
-
-async def validate_set_username(
-    args: UsernameArgs,
-    user: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
-) -> UsernameArgs:
-    if user.username:
-        raise Abort("auth", "username-set")
-
-    if await get_user_by_username(session, args.username):
-        raise Abort("auth", "username-taken")
-
-    return args
-
-
-async def validate_set_email(
-    args: EmailArgs,
-    user: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
-) -> UsernameArgs:
-    if user.email:
-        raise Abort("auth", "email-set")
-
-    if await get_user_by_email(session, args.email):
-        raise Abort("auth", "email-exists")
-
-    return args
 
 
 async def validate_signup(
@@ -174,7 +147,7 @@ async def validate_activation_resend(
     user: User = Depends(auth_required()),
 ) -> User:
     # Make sure user not yet activated
-    if user.activated:
+    if user.email_confirmed:
         raise Abort("auth", "already-activated")
 
     # Prevent sending new activation email if previous token still valid

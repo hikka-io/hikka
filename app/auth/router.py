@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import check_captcha
 from fastapi import APIRouter, Depends
 from app.models import User, UserOAuth
 from app.schemas import UserResponse
@@ -8,14 +9,12 @@ from typing import Tuple
 from . import service
 from . import oauth
 
-from app.dependencies import (
-    # auth_required,
-    check_captcha,
+from app.service import (
+    create_activation_token,
+    create_email,
 )
 
 from .dependencies import (
-    # validate_set_username,
-    # validate_set_email,
     validate_activation_resend,
     validate_password_confirm,
     validate_password_reset,
@@ -28,8 +27,6 @@ from .dependencies import (
 )
 
 from .schemas import (
-    # UsernameArgs,
-    # EmailArgs,
     ProviderUrlResponse,
     TokenResponse,
     SignupArgs,
@@ -53,7 +50,7 @@ async def signup(
     user = await service.create_user(session, signup)
 
     # Add activation email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_ACTIVATION,
         user.activation_token,
@@ -98,10 +95,10 @@ async def activation_resend(
     user: User = Depends(validate_activation_resend),
     session: AsyncSession = Depends(get_session),
 ):
-    user = await service.create_activation_token(session, user)
+    user = await create_activation_token(session, user)
 
     # Add new activation email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_ACTIVATION,
         user.activation_token,
@@ -123,7 +120,7 @@ async def reset_password(
     user = await service.create_password_token(session, user)
 
     # Add new password reset email to database
-    await service.create_email(
+    await create_email(
         session,
         constants.EMAIL_PASSWORD_RESET,
         user.password_reset_token,
@@ -172,40 +169,3 @@ async def oauth_token(
     await service.update_oauth_timestamp(session, oauth_user)
 
     return await service.create_auth_token(session, oauth_user.user)
-
-
-# @router.put(
-#     "/username",
-#     response_model=UserResponse,
-#     summary="Set a username",
-# )
-# async def username(
-#     args: UsernameArgs = Depends(validate_set_username),
-#     user: User = Depends(auth_required()),
-#     session: AsyncSession = Depends(get_session),
-# ):
-#     return await service.set_username(session, user, args.username)
-
-
-# @router.put(
-#     "/email",
-#     response_model=UserResponse,
-#     summary="Set a email",
-# )
-# async def email(
-#     args: EmailArgs = Depends(validate_set_email),
-#     user: User = Depends(auth_required()),
-#     session: AsyncSession = Depends(get_session),
-# ):
-#     user = await service.set_email(session, user, args.email)
-#     user = await service.create_activation_token(session, user)
-
-#     # Add new activation email to database
-#     await service.create_email(
-#         session,
-#         constants.EMAIL_ACTIVATION,
-#         user.activation_token,
-#         user,
-#     )
-
-#     return user

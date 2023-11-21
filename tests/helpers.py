@@ -1,7 +1,8 @@
 from app.models import User, UserOAuth, AuthToken
-from app.auth.utils import hashpwd, new_token
 from datetime import datetime, timedelta
+from app.utils import new_token
 from sqlalchemy import select
+from app.utils import hashpwd
 from app import constants
 import aiofiles
 import json
@@ -27,7 +28,7 @@ async def create_user(
             "activation_expire": datetime.utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
             "activation_token": new_token(),
-            "activated": activated,
+            "email_confirmed": activated,
             "username": username,
             "last_active": now,
             "created": now,

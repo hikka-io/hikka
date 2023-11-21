@@ -1,5 +1,5 @@
 from .oauth_client import GoogleClient
-from app.settings import get_settings
+from app.utils import get_settings
 
 oauth_client_args = {
     "google": {

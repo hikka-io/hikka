@@ -1,7 +1,7 @@
 from fastapi.encoders import jsonable_encoder
+from pydantic import Field, EmailStr, constr
 from pydantic import BaseModel, ConfigDict
 from pydantic import model_serializer
-from pydantic import Field, constr
 from datetime import datetime
 from typing import Callable
 from . import constants
@@ -51,6 +51,24 @@ class PaginationArgs(CustomModel):
 class QuerySearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     page: int = Field(default=1, gt=0, examples=[1])
+
+
+class UsernameArgs(CustomModel):
+    username: str = Field(
+        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
+    )
+
+
+class EmailArgs(CustomModel):
+    email: EmailStr = Field(examples=["hikka@email.com"])
+
+
+class TokenArgs(CustomModel):
+    token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
+
+
+class PasswordArgs(CustomModel):
+    password: str = Field(min_length=8, max_length=64, examples=["password"])
 
 
 # Responses
