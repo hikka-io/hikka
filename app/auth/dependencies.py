@@ -1,14 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import get_settings, checkpwd
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
 from app.database import get_session
 from .oauth_client import OAuthError
-from app.utils import get_settings
 from app.schemas import EmailArgs
 from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
-from .utils import checkpwd
 from . import oauth
 
 from app.service import (

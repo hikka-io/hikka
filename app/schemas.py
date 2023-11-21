@@ -63,6 +63,14 @@ class EmailArgs(CustomModel):
     email: EmailStr = Field(examples=["hikka@email.com"])
 
 
+class TokenArgs(CustomModel):
+    token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
+
+
+class PasswordArgs(CustomModel):
+    password: str = Field(min_length=8, max_length=64, examples=["password"])
+
+
 # Responses
 class PaginationResponse(CustomModel):
     total: int = Field(examples=[20])

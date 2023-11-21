@@ -20,3 +20,11 @@ def request_settings_email(client, token, email):
         headers={"Auth": token},
         json={"email": email},
     )
+
+
+def request_settings_password(client, token, password):
+    return client.put(
+        "/settings/password",
+        headers={"Auth": token},
+        json={"password": password},
+    )

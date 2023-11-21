@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app.schemas import PasswordArgs
 from .schemas import DescriptionArgs
 from app.models import User
 from app import constants
@@ -38,6 +39,19 @@ async def change_description(
     session: AsyncSession = Depends(get_session),
 ):
     return await service.change_description(session, user, args.description)
+
+
+@router.put(
+    "/password",
+    response_model=UserResponse,
+    summary="Change password",
+)
+async def change_password(
+    args: PasswordArgs,
+    user: User = Depends(auth_required()),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.set_password(session, user, args.password)
 
 
 @router.put(

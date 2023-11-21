@@ -61,6 +61,7 @@ from .edit import request_edit
 
 from .settings import request_settings_description
 from .settings import request_settings_username
+from .settings import request_settings_password
 from .settings import request_settings_email
 
 __all__ = [
@@ -116,5 +117,6 @@ __all__ = [
     "request_edit",
     "request_settings_description",
     "request_settings_username",
+    "request_settings_password",
     "request_settings_email",
 ]

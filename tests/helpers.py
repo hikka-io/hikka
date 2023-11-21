@@ -1,8 +1,8 @@
 from app.models import User, UserOAuth, AuthToken
 from datetime import datetime, timedelta
-from app.auth.utils import hashpwd
 from app.utils import new_token
 from sqlalchemy import select
+from app.utils import hashpwd
 from app import constants
 import aiofiles
 import json

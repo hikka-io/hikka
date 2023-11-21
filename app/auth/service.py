@@ -1,4 +1,4 @@
-from app.models import User, EmailMessage, AuthToken, UserOAuth
+from app.models import User, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from datetime import datetime, timedelta
@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
 from app.utils import new_token
 from sqlalchemy import select
-from .utils import hashpwd
+from app.utils import hashpwd
 from app import constants
 import secrets
 
