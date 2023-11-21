@@ -10,7 +10,7 @@ router = APIRouter(prefix="/user", tags=["User"])
 @router.get(
     "/me",
     response_model=UserResponse,
-    summary="Logged user profile",
+    summary="Current user profile",
 )
 async def profile(user: User = Depends(auth_required())):
     return user

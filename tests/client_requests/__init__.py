@@ -59,6 +59,8 @@ from .edit import request_deny_edit
 from .edit import request_edit_list
 from .edit import request_edit
 
+from .settings import request_settings_description
+
 __all__ = [
     "request_activation_resend",
     "request_password_confirm",
@@ -110,4 +112,5 @@ __all__ = [
     "request_deny_edit",
     "request_edit_list",
     "request_edit",
+    "request_settings_description",
 ]

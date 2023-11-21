@@ -5,7 +5,9 @@ from app.models import User
 async def change_description(
     session: AsyncSession, user: User, description: str
 ) -> User:
-    user.description = description
+    """Change user description"""
+
+    user.description = description if description else None
 
     session.add(user)
     await session.commit()

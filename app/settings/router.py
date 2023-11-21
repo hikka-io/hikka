@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.schemas import UserResponse
