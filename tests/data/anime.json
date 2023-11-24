@@ -22,7 +22,8 @@
             "media_type": "tv",
             "scored_by": 2028821,
             "score": 9.1,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 5114
         },
         {
             "episodes_released": 24,
@@ -41,7 +42,8 @@
             "media_type": "tv",
             "scored_by": 1342602,
             "score": 9.07,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 9253
         },
         {
             "episodes_released": 13,
@@ -60,7 +62,8 @@
             "media_type": "tv",
             "scored_by": 459909,
             "score": 9.05,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 43608
         },
         {
             "episodes_released": 12,
@@ -79,7 +82,8 @@
             "media_type": "tv",
             "scored_by": 810975,
             "score": 8.64,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 40591
         },
         {
             "episodes_released": 12,
@@ -98,7 +102,8 @@
             "media_type": "tv",
             "scored_by": 1037865,
             "score": 8.41,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 37999
         },
         {
             "episodes_released": 25,
@@ -117,7 +122,8 @@
             "media_type": "tv",
             "scored_by": 2673779,
             "score": 8.54,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 16498
         },
         {
             "episodes_released": 12,
@@ -136,7 +142,8 @@
             "media_type": "tv",
             "scored_by": 1771366,
             "score": 8.51,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 25777
         },
         {
             "episodes_released": 12,
@@ -155,7 +162,8 @@
             "media_type": "tv",
             "scored_by": 1515984,
             "score": 8.62,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 35760
         },
         {
             "episodes_released": 10,
@@ -174,7 +182,8 @@
             "media_type": "tv",
             "scored_by": 1482063,
             "score": 9.05,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 38524
         },
         {
             "episodes_released": 16,
@@ -193,7 +202,8 @@
             "media_type": "tv",
             "scored_by": 1229333,
             "score": 8.8,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 40028
         },
         {
             "episodes_released": 12,
@@ -212,7 +222,8 @@
             "media_type": "tv",
             "scored_by": 638807,
             "score": 8.77,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 48583
         },
         {
             "episodes_released": 1,
@@ -231,7 +242,8 @@
             "media_type": "special",
             "scored_by": 164137,
             "score": 9.04,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 51535
         },
         {
             "episodes_released": null,
@@ -250,7 +262,8 @@
             "media_type": "movie",
             "scored_by": 1817186,
             "score": 8.85,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 32281
         },
         {
             "episodes_released": 12,
@@ -269,7 +282,8 @@
             "media_type": "tv",
             "scored_by": 258904,
             "score": 8.84,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 47917
         },
         {
             "episodes_released": 11,
@@ -288,7 +302,8 @@
             "media_type": "tv",
             "scored_by": 301198,
             "score": 8.86,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 52034
         },
         {
             "episodes_released": null,
@@ -307,7 +322,8 @@
             "media_type": "movie",
             "scored_by": 1140,
             "score": 5.8,
-            "nsfw": false
+            "nsfw": false,
+            "mal_id": 216
         },
         {
             "episodes_released": 0,
@@ -326,7 +342,8 @@
             "media_type": "ova",
             "scored_by": 43947,
             "score": 5.85,
-            "nsfw": true
+            "nsfw": true,
+            "mal_id": 10851
         }
     ]
 }

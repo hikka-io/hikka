@@ -67,6 +67,7 @@ async def save_anime_list(session, data):
                     "title_en": anime_data["title_en"],
                     "title_ja": anime_data["title_ja"],
                     "title_ua": anime_data["title_ua"],
+                    "mal_id": anime_data["mal_id"],
                     "status": anime_data["status"],
                     "season": anime_data["season"],
                     "score": anime_data["score"],

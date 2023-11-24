@@ -16,3 +16,4 @@ async def test_import_anime(test_session, aggregator_anime):
 
     assert anime is not None
     assert anime.title_ja == "Fullmetal Alchemist: Brotherhood"
+    assert anime.mal_id == 5114

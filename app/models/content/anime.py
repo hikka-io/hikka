@@ -9,18 +9,18 @@ from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
+    IgnoredFieldsMixin,
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
-    IgnoredFieldsMixin,
 )
 
 
 class Anime(
     Base,
+    SlugMixin,
     ContentMixin,
     UpdatedMixin,
-    SlugMixin,
     IgnoredFieldsMixin,
 ):
     __tablename__ = "service_content_anime"
@@ -33,6 +33,7 @@ class Anime(
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)
 
     # Service fields
+    mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     needs_update: Mapped[bool] = mapped_column(default=False)
     updated: Mapped[datetime]
 
