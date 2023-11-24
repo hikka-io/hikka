@@ -155,7 +155,7 @@ def to_timestamp(date: datetime | None) -> int | None:
     return int(date.timestamp()) if date else None
 
 
-# Helper function for toroise pagination
+# Helper function for pagination
 def pagination(page, limit=constants.SEARCH_RESULT_LIMIT):
     offset = (limit * (page)) - limit
 
