@@ -7,11 +7,11 @@ from app.sync import (
     # aggregator_anime_genres,
     # aggregator_anime_roles,
     # aggregator_characters,
-    # aggregator_anime_info,
+    aggregator_anime_info,
     # aggregator_companies,
     # aggregator_people,
     # aggregator_anime,
-    update_search,
+    # update_search,
 )
 
 
@@ -26,9 +26,9 @@ async def import_aggregator():
     # await aggregator_companies()
     # await aggregator_people()
     # await aggregator_anime()
-    # await aggregator_anime_info()
+    await aggregator_anime_info()
     # await aggregator_anime_franchises()
-    await update_search()
+    # await update_search()
 
     await sessionmanager.close()
 

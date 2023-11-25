@@ -422,6 +422,7 @@ async def update_anime_info(session, anime, data):
     anime.source = data["source"]
     anime.rating = data["rating"]
     anime.status = data["status"]
+    anime.mal_id = data["mal_id"]
     anime.score = data["score"]
     anime.nsfw = data["nsfw"]
 
@@ -478,4 +479,4 @@ async def update_anime_info(session, anime, data):
 
     await session.commit()
 
-    # print(f"Synced anime {anime.title_ja}")
+    print(f"Synced anime {anime.title_ja} ({anime.mal_id})")
