@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from app.settings import get_settings
 from app.models import EmailMessage
+from app.utils import get_settings
 from sqlalchemy import select
 from datetime import datetime
 import aiohttp
