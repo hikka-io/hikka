@@ -102,13 +102,13 @@ async def change_email(
     summary="Import watch list",
 )
 async def import_watch(
-    background_tasks: BackgroundTasks,
     args: ImportAnimeListArgs,
+    background_tasks: BackgroundTasks,
     user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
     # Run watch list import in background
-    # This task may block event loop so we should keep it in mind
+    # This task may block event loop so we should keep that in mind
     # https://stackoverflow.com/a/67601373
     background_tasks.add_task(
         service.import_watch_list,

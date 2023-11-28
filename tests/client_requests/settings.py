@@ -28,3 +28,11 @@ def request_settings_password(client, token, password):
         headers={"Auth": token},
         json={"password": password},
     )
+
+
+def request_settings_import_watch(client, token, data):
+    return client.post(
+        "/settings/import/watch",
+        headers={"Auth": token},
+        json=data,
+    )
