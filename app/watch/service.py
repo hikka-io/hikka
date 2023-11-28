@@ -51,8 +51,11 @@ async def get_user_watch_list(
     query = query.filter(AnimeWatch.status == status) if status else query
 
     return await session.scalars(
-        query.order_by(desc(AnimeWatch.updated))
+        query.join(Anime)
         .options(anime_loadonly(selectinload(AnimeWatch.anime)))
+        .order_by(
+            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+        )
         .limit(limit)
         .offset(offset)
     )
