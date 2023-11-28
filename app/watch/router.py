@@ -62,7 +62,7 @@ async def user_watch_list(
     limit, offset = pagination(page)
     total = await service.get_user_watch_list_count(session, user, args.status)
     anime = await service.get_user_watch_list(
-        session, user, args.status, limit, offset
+        session, user, args.status, args.order, args.sort, limit, offset
     )
 
     return {

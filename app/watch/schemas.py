@@ -19,6 +19,17 @@ class WatchStatusEnum(str, Enum):
     dropped = constants.WATCH_DROPPED
 
 
+class WatchOrderEnum(str, Enum):
+    media_type = constants.WATCH_ORDER_MEDIA_TYPE
+    episodes = constants.WATCH_ORDER_EPISODES
+    score = constants.WATCH_ORDER_SCORE
+
+
+class WatchSortEnum(str, Enum):
+    desc = constants.SORT_DESC
+    asc = constants.SORT_ASC
+
+
 # Args
 class WatchArgs(CustomModel):
     note: str | None = Field(default=None, max_length=140, examples=["🤯"])
@@ -29,6 +40,8 @@ class WatchArgs(CustomModel):
 
 class WatchFilterArgs(CustomModel):
     status: WatchStatusEnum | None = None
+    order: WatchOrderEnum = Field(default=constants.WATCH_ORDER_SCORE)
+    sort: WatchSortEnum = Field(default=constants.SORT_DESC)
 
 
 # Responses
