@@ -6,7 +6,7 @@ from fastapi import status
 from app import constants
 
 
-async def test_settings_import_watch(
+async def test_settings_import_watch_overwrite(
     client,
     create_test_user,
     aggregator_anime,
@@ -26,17 +26,28 @@ async def test_settings_import_watch(
         },
     )
 
+    # Check entries in database
+    user = await test_session.scalar(
+        select(User).filter(User.username == "testuser")
+    )
+
+    watch_count = await test_session.scalar(
+        select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+    )
+
+    assert watch_count == 1
+
     # Create import request
     response = await request_settings_import_watch(
         client,
         get_test_token,
         {
-            "overwrite": False,
+            "overwrite": True,
             "anime": [
                 {
-                    "my_status": "Watching",
+                    "my_status": "Completed",
                     "series_animedb_id": 47917,
-                    "my_watched_episodes": 9,
+                    "my_watched_episodes": 12,
                     "my_comments": {},
                     "my_score": 10,
                 },
@@ -62,11 +73,7 @@ async def test_settings_import_watch(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["success"] is True
 
-    # Check entries in database
-    user = await test_session.scalar(
-        select(User).filter(User.username == "testuser")
-    )
-
+    # Check watch count again
     watch_count = await test_session.scalar(
         select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
     )
@@ -78,7 +85,7 @@ async def test_settings_import_watch(
         select(Anime).filter(Anime.slug == "bocchi-the-rock-9e172d")
     )
 
-    # Watch entry shouldn't be changed after import
+    # Watch entry should be changed after import
     watch = await test_session.scalar(
         select(AnimeWatch).filter(
             AnimeWatch.anime == anime_bocchi, AnimeWatch.user == user
@@ -86,6 +93,6 @@ async def test_settings_import_watch(
     )
 
     assert watch is not None
-    assert watch.status == constants.WATCH_WATCHING
-    assert watch.episodes == 10
-    assert watch.score == 8
+    assert watch.status == constants.WATCH_COMPLETED
+    assert watch.episodes == 12
+    assert watch.score == 10
