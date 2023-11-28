@@ -22,8 +22,8 @@ class WatchStatusEnum(str, Enum):
 # Args
 class WatchArgs(CustomModel):
     note: str | None = Field(default=None, max_length=140, examples=["🤯"])
+    episodes: int = Field(default=0, ge=0, le=10000, examples=[3])
     score: int = Field(default=0, ge=0, le=10, examples=[8])
-    episodes: int = Field(default=0, ge=0, examples=[3])
     status: WatchStatusEnum
 
 
@@ -34,10 +34,10 @@ class WatchFilterArgs(CustomModel):
 # Responses
 class WatchResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    note: str | None = Field(max_length=140, examples=["🤯"])
     updated: datetime = Field(examples=[1686088809])
     created: datetime = Field(examples=[1686088809])
     status: str = Field(examples=["watching"])
-    note: str | None = Field(examples=["🤯"])
     episodes: int = Field(examples=[3])
     score: int = Field(examples=[8])
     anime: AnimeResponse
