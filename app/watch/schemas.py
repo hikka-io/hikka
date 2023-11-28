@@ -22,8 +22,8 @@ class WatchStatusEnum(str, Enum):
 # Args
 class WatchArgs(CustomModel):
     note: str | None = Field(default=None, max_length=140, examples=["🤯"])
+    episodes: int = Field(default=0, ge=0, le=10000, examples=[3])
     score: int = Field(default=0, ge=0, le=10, examples=[8])
-    episodes: int = Field(default=0, ge=0, examples=[3])
     status: WatchStatusEnum
 
 

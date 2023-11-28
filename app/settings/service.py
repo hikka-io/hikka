@@ -96,6 +96,15 @@ async def import_watch_list(
                 data.my_comments if isinstance(data.my_comments, str) else None
             )
 
+            # Make sure episodes count is within our internal limit
+            import_episodes = data.my_watched_episodes
+
+            if import_episodes > 10000:
+                import_episodes = 10000
+
+            if anime.episodes_total and import_episodes > anime.episodes_total:
+                import_episodes = anime.episodes_total
+
             if watch := await get_anime_watch(session, anime, user):
                 # If anime already in list and usrer don't want to overwrite it
                 # Just skipt it
@@ -108,7 +117,7 @@ async def import_watch_list(
                 watch.anime = anime
                 watch.user = user
 
-            watch.episodes = data.my_watched_episodes
+            watch.episodes = import_episodes
             watch.status = import_status
             watch.score = data.my_score
             watch.note = import_note
