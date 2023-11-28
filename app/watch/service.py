@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
-from sqlalchemy import select, desc, func
+from sqlalchemy import select, desc, asc, func
 from sqlalchemy.orm import selectinload
 from .schemas import WatchArgs
 from datetime import datetime
+from app import constants
 
 from app.service import (
     get_anime_watch,
@@ -44,18 +45,39 @@ async def get_user_watch_list(
     session: AsyncSession,
     user: User,
     status: str | None,
+    order: str,
+    sort: str,
     limit: int,
     offset: int,
 ) -> list[AnimeWatch]:
     query = select(AnimeWatch).filter(AnimeWatch.user == user)
     query = query.filter(AnimeWatch.status == status) if status else query
+    query = query.join(Anime)
+
+    if order == constants.WATCH_ORDER_SCORE:
+        query = query.order_by(
+            desc(AnimeWatch.score)
+            if sort == constants.SORT_DESC
+            else asc(AnimeWatch.score)
+        )
+
+    if order == constants.WATCH_ORDER_EPISODES:
+        query = query.order_by(
+            desc(AnimeWatch.episodes)
+            if sort == constants.SORT_DESC
+            else asc(AnimeWatch.episodes)
+        )
+
+    if order == constants.WATCH_ORDER_MEDIA_TYPE:
+        query = query.order_by(
+            desc(Anime.media_type)
+            if sort == constants.SORT_DESC
+            else asc(Anime.media_type)
+        )
 
     return await session.scalars(
-        query.join(Anime)
+        query.order_by(desc(Anime.content_id))
         .options(anime_loadonly(selectinload(AnimeWatch.anime)))
-        .order_by(
-            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
-        )
         .limit(limit)
         .offset(offset)
     )

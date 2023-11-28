@@ -8,6 +8,10 @@ AGGREGATOR = "http://localhost:7777/database"
 # CDN endpoing
 CDN_ENDPOINT = "https://cdn.hikka.io"
 
+# Sort options
+SORT_DESC = "desc"
+SORT_ASC = "asc"
+
 # Watch list statuses
 WATCH_PLANNED = "planned"
 WATCH_WATCHING = "watching"
@@ -22,6 +26,11 @@ WATCH = [
     WATCH_ON_HOLD,
     WATCH_DROPPED,
 ]
+
+# Watch list orders
+WATCH_ORDER_MEDIA_TYPE = "episodes"
+WATCH_ORDER_EPISODES = "episodes"
+WATCH_ORDER_SCORE = "score"
 
 # Seasons
 SEASON_WINTER = "winter"
