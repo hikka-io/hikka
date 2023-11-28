@@ -37,6 +37,10 @@ class CustomModel(BaseModel):
         return result
 
 
+class CustomModelExtraIgnore(CustomModel):
+    model_config = ConfigDict(extra="ignore")
+
+
 # Enums
 class CompanyTypeEnum(str, Enum):
     producer = constants.COMPANY_ANIME_PRODUCER

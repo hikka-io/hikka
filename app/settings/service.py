@@ -1,7 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.utils import hashpwd
+from .schemas import ImportAnimeListArgs
+from app.service import get_anime_watch
+from app.utils import hashpwd, chunkify
+from sqlalchemy import select
 from datetime import datetime
-from app.models import User
+from . import utils
+
+from app.models import (
+    AnimeWatch,
+    Anime,
+    User,
+)
 
 
 async def change_description(
@@ -51,3 +60,60 @@ async def set_password(session: AsyncSession, user: User, password: str):
     await session.commit()
 
     return user
+
+
+async def import_watch_list(
+    session: AsyncSession,
+    args: ImportAnimeListArgs,
+    user: User,
+):
+    """Import watch list"""
+
+    now = datetime.utcnow()
+
+    # We split list into 20k chunks here due to SQLAlchemy internal limits
+    for anime_chunk in chunkify(args.anime, 20000):
+        # Get list of mal_ids for optimized db query
+        mal_ids = [entry.series_animedb_id for entry in anime_chunk]
+
+        # Query list of anime based on mal_ids
+        cache = await session.scalars(
+            select(Anime).where(Anime.mal_id.in_(mal_ids))
+        )
+
+        # And build key/value dict
+        anime_cache = {entry.mal_id: entry for entry in cache}
+
+        for data in anime_chunk:
+            # If user passed mal_id we don't know about just skip it
+            if data.series_animedb_id not in anime_cache:
+                continue
+
+            anime = anime_cache[data.series_animedb_id]
+
+            import_status = utils.get_anime_import_status(data.my_status)
+            import_note = (
+                data.my_comments if isinstance(data.my_comments, str) else None
+            )
+
+            if watch := await get_anime_watch(session, anime, user):
+                # If anime already in list and usrer don't want to overwrite it
+                # Just skipt it
+                if not args.overwrite:
+                    continue
+
+            else:
+                watch = AnimeWatch()
+                watch.created = now
+                watch.anime = anime
+                watch.user = user
+
+            watch.episodes = data.my_watched_episodes
+            watch.status = import_status
+            watch.score = data.my_score
+            watch.note = import_note
+            watch.updated = now
+
+            session.add(watch)
+
+        await session.commit()

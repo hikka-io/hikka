@@ -59,6 +59,7 @@ from .edit import request_deny_edit
 from .edit import request_edit_list
 from .edit import request_edit
 
+from .settings import request_settings_import_watch
 from .settings import request_settings_description
 from .settings import request_settings_username
 from .settings import request_settings_password
@@ -115,6 +116,7 @@ __all__ = [
     "request_deny_edit",
     "request_edit_list",
     "request_edit",
+    "request_settings_import_watch",
     "request_settings_description",
     "request_settings_username",
     "request_settings_password",
