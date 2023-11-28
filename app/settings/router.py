@@ -1,11 +1,18 @@
+from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.schemas import PasswordArgs
 from app.models import User
 from app import constants
 from . import service
+
+from app.schemas import (
+    SuccessResponse,
+    UserResponse,
+    PasswordArgs,
+    UsernameArgs,
+    EmailArgs,
+)
 
 from app.service import (
     create_activation_token,
@@ -20,12 +27,6 @@ from .schemas import (
 from .dependencies import (
     validate_set_username,
     validate_set_email,
-)
-
-from app.schemas import (
-    UserResponse,
-    UsernameArgs,
-    EmailArgs,
 )
 
 
@@ -95,11 +96,25 @@ async def change_email(
     return user
 
 
-@router.post("/import/watch")
+@router.post(
+    "/import/watch",
+    response_model=SuccessResponse,
+    summary="Import watch list",
+)
 async def import_watch(
+    background_tasks: BackgroundTasks,
     args: ImportAnimeListArgs,
     user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
-    await service.import_watch_list(session, args, user)
-    return args
+    # Run watch list import in background
+    # This task may block event loop so we should keep it in mind
+    # https://stackoverflow.com/a/67601373
+    background_tasks.add_task(
+        service.import_watch_list,
+        session,
+        args,
+        user,
+    )
+
+    return {"success": True}
