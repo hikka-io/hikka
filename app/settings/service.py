@@ -93,7 +93,9 @@ async def import_watch_list(
 
             import_status = utils.get_anime_import_status(data.my_status)
             import_note = (
-                data.my_comments if isinstance(data.my_comments, str) else None
+                data.my_comments[:140]  # Note max lenght is 140 characters
+                if isinstance(data.my_comments, str)
+                else None
             )
 
             # Make sure episodes count is within our internal limit
