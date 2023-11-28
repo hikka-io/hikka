@@ -28,7 +28,7 @@ WATCH = [
 ]
 
 # Watch list orders
-WATCH_ORDER_MEDIA_TYPE = "episodes"
+WATCH_ORDER_MEDIA_TYPE = "media_type"
 WATCH_ORDER_EPISODES = "episodes"
 WATCH_ORDER_SCORE = "score"
 
