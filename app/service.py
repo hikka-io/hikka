@@ -1,9 +1,25 @@
-from app.models import User, AuthToken, Anime, EmailMessage
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from app.utils import new_token
 from sqlalchemy import select
+
+from app.models import (
+    EmailMessage,
+    AnimeWatch,
+    AuthToken,
+    Anime,
+    User,
+)
+
+
+async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
+    return await session.scalar(
+        select(AnimeWatch).filter(
+            AnimeWatch.anime == anime,
+            AnimeWatch.user == user,
+        )
+    )
 
 
 async def get_user_by_username(

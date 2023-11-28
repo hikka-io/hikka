@@ -2,18 +2,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import selectinload
-from app.service import anime_loadonly
 from .schemas import WatchArgs
 from datetime import datetime
 
-
-async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
-    return await session.scalar(
-        select(AnimeWatch).filter(
-            AnimeWatch.anime == anime,
-            AnimeWatch.user == user,
-        )
-    )
+from app.service import (
+    get_anime_watch,
+    anime_loadonly,
+)
 
 
 # ToDo: rewrite this function?

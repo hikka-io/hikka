@@ -3,7 +3,6 @@ from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.schemas import PasswordArgs
-from .schemas import DescriptionArgs
 from app.models import User
 from app import constants
 from . import service
@@ -11,6 +10,11 @@ from . import service
 from app.service import (
     create_activation_token,
     create_email,
+)
+
+from .schemas import (
+    ImportAnimeListArgs,
+    DescriptionArgs,
 )
 
 from .dependencies import (
@@ -89,3 +93,13 @@ async def change_email(
     )
 
     return user
+
+
+@router.post("/import/watch")
+async def import_watch(
+    args: ImportAnimeListArgs,
+    user: User = Depends(auth_required()),
+    session: AsyncSession = Depends(get_session),
+):
+    await service.import_watch_list(session, args, user)
+    return args
