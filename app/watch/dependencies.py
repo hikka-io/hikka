@@ -29,9 +29,6 @@ async def verify_add_watch(
     # ToDo: Ideally we need to check anime status
     # if we don't know how many episodes has been released so far
 
-    if not anime.episodes_total and args.episodes > 10000:
-        raise Abort("watch", "bad-episodes")
-
     # Make sure user provided episodes within constraints
     if anime.episodes_total and args.episodes > anime.episodes_total:
         raise Abort("watch", "bad-episodes")
