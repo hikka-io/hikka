@@ -87,7 +87,7 @@ def test_pagination():
     page = 3
     total = 50
 
-    limit, offset = utils.pagination(page, constants.SEARCH_RESULT_LIMIT)
+    limit, offset = utils.pagination(page, constants.SEARCH_RESULT_SIZE)
 
     assert limit == 15
     assert offset == 30

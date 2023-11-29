@@ -12,7 +12,7 @@ async def search(
     sort=None,
     page=None,
     filter=None,
-    hits_per_page=constants.SEARCH_RESULT_LIMIT,
+    hits_per_page=constants.SEARCH_RESULT_SIZE,
 ):
     settings = get_settings()
 
