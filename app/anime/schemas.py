@@ -69,7 +69,6 @@ class SourceEnum(str, Enum):
 class AnimeSearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
-    page: int = Field(default=1, gt=0, examples=[1])
 
     years: list[PositiveInt | None] = Field(
         default=[None, None],

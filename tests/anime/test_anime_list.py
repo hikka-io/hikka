@@ -36,7 +36,7 @@ async def test_anime_no_meilisearch(client):
 
 async def test_anime_pagination(client, aggregator_anime):
     # Check second page of anime list
-    response = await request_anime_search(client, {"page": 2})
+    response = await request_anime_search(client, page=2)
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -46,3 +46,13 @@ async def test_anime_pagination(client, aggregator_anime):
 
     # Check first anime on second page
     assert response.json()["list"][0]["slug"] == "euphoria-167704"
+
+
+async def test_anime_pagination_size(client, aggregator_anime):
+    # Check second page of anime list
+    response = await request_anime_search(client, page=1, size=2)
+    assert response.status_code == status.HTTP_200_OK
+
+    assert response.json()["pagination"]["total"] == 17
+    assert response.json()["pagination"]["pages"] == 9
+    assert response.json()["pagination"]["page"] == 1

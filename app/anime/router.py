@@ -41,13 +41,15 @@ router = APIRouter(prefix="/anime", tags=["Anime"])
 async def search_anime(
     session: AsyncSession = Depends(get_session),
     search: AnimeSearchArgs = Depends(validate_search_anime),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     if not search.query:
-        limit, offset = pagination(search.page)
+        limit, offset = pagination(page, size)
         total = await service.anime_search_total(session, search)
         result = await service.anime_search(session, search, limit, offset)
         return {
-            "pagination": pagination_dict(total, search.page, limit),
+            "pagination": pagination_dict(total, page, limit),
             "list": [anime for anime in result],
         }
 
@@ -55,8 +57,9 @@ async def search_anime(
         constants.SEARCH_INDEX_ANIME,
         filter=build_anime_filters(search),
         query=search.query,
-        page=search.page,
         sort=search.sort,
+        page=page,
+        size=size,
     )
 
 
