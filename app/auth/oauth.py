@@ -37,7 +37,7 @@ async def get_url(provider: str) -> dict[str, str]:
         **{
             "redirect_uri": oauth_provider["redirect_uri"],
             **oauth_client_args[provider]["args"],
-            # "state": "hikka",  # ToDo: generate state server side
+            # "state": "hikka",  # ToDo: CSFR protection can be implemented here
         }
     )
 
