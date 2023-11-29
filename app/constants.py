@@ -80,7 +80,7 @@ SOURCE_RADIO = "radio"
 SOURCE_GAME = "game"
 SOURCE_BOOK = "book"
 
-SEARCH_RESULT_LIMIT = 15
+SEARCH_RESULT_SIZE = 15
 
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"

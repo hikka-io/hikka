@@ -9,6 +9,7 @@ from app.dependencies import (
     auth_required,
     check_captcha,
     get_page,
+    get_size,
 )
 
 from app.utils import (
@@ -42,8 +43,9 @@ async def get_content_edit_list(
     content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.count_edits_by_content_id(session, content_id)
     edits = await service.get_edits_by_content_id(
         session, content_id, limit, offset
@@ -59,8 +61,9 @@ async def get_content_edit_list(
 async def get_edit_list(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.count_edits(session)
     edits = await service.get_edits(session, limit, offset)
 

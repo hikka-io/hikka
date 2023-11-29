@@ -156,10 +156,10 @@ def to_timestamp(date: datetime | None) -> int | None:
 
 
 # Helper function for pagination
-def pagination(page, limit=constants.SEARCH_RESULT_LIMIT):
-    offset = (limit * (page)) - limit
+def pagination(page, size=constants.SEARCH_RESULT_SIZE):
+    offset = (size * (page)) - size
 
-    return limit, offset
+    return size, offset
 
 
 # Helper function to make pagication dict for api

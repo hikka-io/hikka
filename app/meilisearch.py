@@ -12,7 +12,7 @@ async def search(
     sort=None,
     page=None,
     filter=None,
-    hits_per_page=constants.SEARCH_RESULT_LIMIT,
+    size=constants.SEARCH_RESULT_SIZE,
 ):
     settings = get_settings()
 
@@ -21,7 +21,7 @@ async def search(
             index = client.index(content_index)
 
             result = await index.search(
-                hits_per_page=hits_per_page,
+                hits_per_page=size,
                 filter=filter,
                 query=query,
                 sort=sort,

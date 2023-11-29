@@ -1,4 +1,3 @@
-from app.dependencies import get_user, get_page
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
 from app.schemas import SuccessResponse
@@ -7,6 +6,12 @@ from app.database import get_session
 from app import constants
 from typing import Tuple
 from . import service
+
+from app.dependencies import (
+    get_user,
+    get_page,
+    get_size,
+)
 
 from app.utils import (
     pagination_dict,
@@ -58,8 +63,9 @@ async def user_watch_list(
     args: WatchFilterArgs = Depends(),
     user: User = Depends(get_user),
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.get_user_watch_list_count(session, user, args.status)
     anime = await service.get_user_watch_list(
         session, user, args.status, args.order, args.sort, limit, offset

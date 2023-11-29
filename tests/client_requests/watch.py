@@ -20,11 +20,21 @@ def request_watch_delete(client, slug, token):
     )
 
 
-def request_watch_list(client, username, status=None):
+def request_watch_list(client, username, status=None, order=None, sort=None):
     endpoint = f"/watch/{username}/list"
+    extra = []
 
     if status:
-        endpoint += f"?status={status}"
+        extra.append(f"status={status}")
+
+    if order:
+        extra.append(f"order={order}")
+
+    if sort:
+        extra.append(f"sort={sort}")
+
+    if len(extra) > 0:
+        endpoint += "?" + "&".join(extra)
 
     return client.get(endpoint)
 

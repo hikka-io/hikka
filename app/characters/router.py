@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import get_page, get_size
 from .dependencies import get_character
 from fastapi import APIRouter, Depends
-from app.dependencies import get_page
 from app.database import get_session
 from app.models import Character
 from app import meilisearch
@@ -57,10 +57,11 @@ async def search_characters(
 @router.get("/{slug}/anime", response_model=CharacterAnimePaginationResponse)
 async def character_anime(
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
     character: Character = Depends(get_character),
     session: AsyncSession = Depends(get_session),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.character_anime_total(session, character)
     anime = await service.character_anime(session, character, limit, offset)
     return {
