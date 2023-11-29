@@ -53,18 +53,10 @@ async def get_anime(
     return anime
 
 
-# Get auth token either from header or cookies
-async def get_request_auth_token(
-    header_auth: Annotated[str | None, Header(alias="auth")] = None,
-    cookie_auth: Annotated[str | None, Cookie(alias="auth")] = None,
-) -> str | None:
-    return header_auth if header_auth else cookie_auth
-
-
 # Check user auth token
 def auth_required(permissions: list = []):
     async def auth(
-        auth_token: str = Depends(get_request_auth_token),
+        auth_token: Annotated[str, Header(alias="auth")],
         session: AsyncSession = Depends(get_session),
     ) -> User:
         if not auth_token:
