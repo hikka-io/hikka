@@ -2,6 +2,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import Field, EmailStr, constr
 from pydantic import BaseModel, ConfigDict
 from pydantic import model_serializer
+from pydantic import field_validator
 from datetime import datetime
 from typing import Callable
 from . import constants
@@ -65,6 +66,14 @@ class UsernameArgs(CustomModel):
 
 class EmailArgs(CustomModel):
     email: EmailStr = Field(examples=["hikka@email.com"])
+
+    @field_validator("email")
+    @classmethod
+    def check_email(cls, value: EmailStr) -> EmailStr:
+        if "+" in value:
+            raise ValueError("Email contains uacceptable characters")
+
+        return value
 
 
 class TokenArgs(CustomModel):

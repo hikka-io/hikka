@@ -21,14 +21,24 @@ async def test_signup(client, test_session):
     assert user is not None
 
 
+async def test_signup_bad_email(client):
+    # Create new account with duplicate email
+    response = await request_signup(
+        client, "user+email@mail.com", "testuser", "password"
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "system:validation_error"
+
+
 async def test_signup_duplicate_email(client, create_test_user):
     # Create new account with duplicate email
     response = await request_signup(
         client, "user@mail.com", "testuser2", "password"
     )
 
-    assert response.json()["code"] == "auth:email_exists"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "auth:email_exists"
 
 
 async def test_signup_duplicate_username(client, create_test_user):
@@ -37,5 +47,5 @@ async def test_signup_duplicate_username(client, create_test_user):
         client, "user2@mail.com", "testuser", "password"
     )
 
-    assert response.json()["code"] == "auth:username_taken"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "auth:username_taken"
