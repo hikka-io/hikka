@@ -1,7 +1,7 @@
 from app.utils import pagination_dict, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import get_page, get_size
 from fastapi import APIRouter, Depends
-from app.dependencies import get_page
 from app.database import get_session
 from app.models import User
 from typing import Tuple
@@ -84,8 +84,9 @@ async def following_list(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.count_following(session, user)
     result = await service.list_following(session, user, limit, offset)
     return {
@@ -103,8 +104,9 @@ async def followers_list(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page)
+    limit, offset = pagination(page, size)
     total = await service.count_followers(session, user)
     result = await service.list_followers(session, user, limit, offset)
     return {

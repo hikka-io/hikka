@@ -32,6 +32,17 @@ async def get_page(page: int = Query(gt=0, default=1)):
     return page
 
 
+# Get current pagination size
+async def get_size(
+    size: int = Query(
+        ge=1,
+        le=100,
+        default=constants.SEARCH_RESULT_SIZE,
+    )
+):
+    return size
+
+
 # Get anime by slug
 async def get_anime(
     slug: str, session: AsyncSession = Depends(get_session)
