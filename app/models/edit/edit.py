@@ -67,10 +67,6 @@ class AnimeEdit(Edit):
         lazy="immediate",  # ToDo: check if it is good idea
     )
 
-    # @hybrid_property
-    # def slug(self):
-    #     return self.content.slug
-
 
 class PersonEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "person"}
@@ -86,7 +82,3 @@ class PersonEdit(Edit):
         foreign_keys=[content_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )
-
-    # @hybrid_property
-    # def slug(self):
-    #     return self.content.slug

@@ -148,7 +148,6 @@ async def anime_recommendations(
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
 ):
-    # ToDo: fix this awful piece of code
     limit, offset = pagination(page)
     total = await service.anime_recommendations_count(session, anime)
     result = await service.anime_recommendations(session, anime, limit, offset)
