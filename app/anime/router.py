@@ -47,10 +47,10 @@ async def search_anime(
     if not search.query:
         limit, offset = pagination(page, size)
         total = await service.anime_search_total(session, search)
-        result = await service.anime_search(session, search, limit, offset)
+        anime = await service.anime_search(session, search, limit, offset)
         return {
             "pagination": pagination_dict(total, page, limit),
-            "list": [anime for anime in result],
+            "list": anime.all(),
         }
 
     return await meilisearch.search(
@@ -158,6 +158,7 @@ async def anime_recommendations(
     limit, offset = pagination(page, size)
     total = await service.anime_recommendations_count(session, anime)
     result = await service.anime_recommendations(session, anime, limit, offset)
+
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": [anime.recommendation for anime in result],
@@ -177,8 +178,8 @@ async def anime_franchise(
 ):
     limit, offset = pagination(page, size)
     total = await service.franchise_count(session, anime)
-    result = await service.franchise(session, anime, limit, offset)
+    franchise = await service.franchise(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [anime for anime in result],
+        "list": franchise.all(),
     }

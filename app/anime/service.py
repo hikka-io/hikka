@@ -77,7 +77,7 @@ async def anime_episodes(
 
 async def anime_recommendations(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[Anime]:
+) -> list[AnimeRecommendation]:
     return await session.scalars(
         select(AnimeRecommendation)
         .filter(AnimeRecommendation.anime == anime)

@@ -88,10 +88,10 @@ async def following_list(
 ):
     limit, offset = pagination(page, size)
     total = await service.count_following(session, user)
-    result = await service.list_following(session, user, limit, offset)
+    following = await service.list_following(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [follow_user for follow_user in result],
+        "list": following.all(),
     }
 
 
@@ -108,8 +108,8 @@ async def followers_list(
 ):
     limit, offset = pagination(page, size)
     total = await service.count_followers(session, user)
-    result = await service.list_followers(session, user, limit, offset)
+    followers = await service.list_followers(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [follow_user for follow_user in result],
+        "list": followers.all(),
     }
