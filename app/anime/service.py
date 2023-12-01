@@ -268,3 +268,32 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
 
 async def anime_genres(session: AsyncSession):
     return await session.scalars(select(AnimeGenre).order_by(AnimeGenre.slug))
+
+
+# I hate this function so much
+# But we need it for having watch satatuses in Meilisearch results
+async def anime_meilisearch_watch(
+    session: AsyncSession,
+    search: AnimeSearchArgs,
+    request_user: User | None,
+    meilisearch_result: dict,
+):
+    slugs = [anime["slug"] for anime in meilisearch_result["list"]]
+
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Anime).where(Anime.slug.in_(slugs)).options(*load_options)
+
+    if len(search.sort) > 0:
+        query = query.order_by(*utils.build_order_by(search.sort))
+
+    meilisearch_result["list"] = (await session.scalars(query)).unique().all()
+
+    return meilisearch_result

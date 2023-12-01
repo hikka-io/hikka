@@ -62,13 +62,17 @@ async def search_anime(
             "list": anime.unique().all(),
         }
 
-    return await meilisearch.search(
+    meilisearch_result = await meilisearch.search(
         constants.SEARCH_INDEX_ANIME,
         filter=build_anime_filters(search),
         query=search.query,
         sort=search.sort,
         page=page,
         size=size,
+    )
+
+    return await service.anime_meilisearch_watch(
+        session, search, request_user, meilisearch_result
     )
 
 
