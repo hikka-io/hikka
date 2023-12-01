@@ -56,9 +56,9 @@ async def search_companies(
 
 @router.get("/{slug}/anime", response_model=CompanyAnimePaginationResponse)
 async def company_anime(
-    args: CompanyAnimeArgs = Depends(),
-    company: Company = Depends(get_company),
     session: AsyncSession = Depends(get_session),
+    company: Company = Depends(get_company),
+    args: CompanyAnimeArgs = Depends(),
 ):
     limit, offset = pagination(args.page)
     total = await service.company_anime_total(session, company, args.type)

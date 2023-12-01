@@ -30,8 +30,8 @@ router = APIRouter(prefix="/follow", tags=["Follow"])
     summary="Check follow",
 )
 async def check(
-    users: Tuple[User, User] = Depends(validate_self),
     session: AsyncSession = Depends(get_session),
+    users: Tuple[User, User] = Depends(validate_self),
 ):
     return {"follow": await service.is_following(session, *users)}
 
@@ -42,8 +42,8 @@ async def check(
     summary="Follow",
 )
 async def follow(
-    users: Tuple[User, User] = Depends(validate_follow),
     session: AsyncSession = Depends(get_session),
+    users: Tuple[User, User] = Depends(validate_follow),
 ):
     return {"follow": await service.follow(session, *users)}
 
@@ -54,8 +54,8 @@ async def follow(
     summary="Unfollow",
 )
 async def unfollow(
-    users: Tuple[User, User] = Depends(validate_unfollow),
     session: AsyncSession = Depends(get_session),
+    users: Tuple[User, User] = Depends(validate_unfollow),
 ):
     return {"follow": await service.unfollow(session, *users)}
 
@@ -66,8 +66,8 @@ async def unfollow(
     summary="Follow stats",
 )
 async def follow_stats(
-    user: User = Depends(validate_username),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_username),
 ):
     return {
         "followers": await service.count_followers(session, user),

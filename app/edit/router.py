@@ -40,8 +40,8 @@ router = APIRouter(prefix="/edit", tags=["Edit"])
 
 @router.get("/{content_type}/{slug}/list", response_model=EditListResponse)
 async def get_content_edit_list(
-    content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
+    content_id: str = Depends(validate_content_slug),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -81,9 +81,9 @@ async def get_edit(edit: Edit = Depends(validate_edit_id)):
 @router.put("/{content_type}/{slug}", response_model=EditResponse)
 async def create_edit(
     content_type: ContentTypeEnum,
+    session: AsyncSession = Depends(get_session),
     args: EditArgs = Depends(validate_edit_create_args),
     content_id: str = Depends(validate_content_slug),
-    session: AsyncSession = Depends(get_session),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),
@@ -96,9 +96,9 @@ async def create_edit(
 
 @router.post("/{edit_id}/update", response_model=EditResponse)
 async def update_edit(
+    session: AsyncSession = Depends(get_session),
     args: EditArgs = Depends(validate_edit_update_args),
     edit: Edit = Depends(validate_edit_modify),
-    session: AsyncSession = Depends(get_session),
     _: bool = Depends(check_captcha),
 ):
     return await service.update_pending_edit(session, edit, args)
@@ -106,16 +106,16 @@ async def update_edit(
 
 @router.post("/{edit_id}/close", response_model=EditResponse)
 async def close_edit(
-    edit: Edit = Depends(validate_edit_modify),
     session: AsyncSession = Depends(get_session),
+    edit: Edit = Depends(validate_edit_modify),
 ):
     return await service.close_pending_edit(session, edit)
 
 
 @router.post("/{edit_id}/accept", response_model=EditResponse)
 async def accept_edit(
-    edit: Edit = Depends(validate_edit_accept),
     session: AsyncSession = Depends(get_session),
+    edit: Edit = Depends(validate_edit_accept),
     moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
     ),
@@ -125,8 +125,8 @@ async def accept_edit(
 
 @router.post("/{edit_id}/deny", response_model=EditResponse)
 async def deny_edit(
-    edit: Edit = Depends(validate_edit_id_pending),
     session: AsyncSession = Depends(get_session),
+    edit: Edit = Depends(validate_edit_id_pending),
     moderator: User = Depends(
         auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
     ),

@@ -42,8 +42,8 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
     summary="Signup",
 )
 async def signup(
-    signup: SignupArgs = Depends(validate_signup),
     session: AsyncSession = Depends(get_session),
+    signup: SignupArgs = Depends(validate_signup),
     _: bool = Depends(check_captcha),
 ):
     # Create new user
@@ -66,8 +66,8 @@ async def signup(
     summary="Login",
 )
 async def login(
-    user: User = Depends(validate_login),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_login),
     _: bool = Depends(check_captcha),
 ):
     return await service.create_auth_token(session, user)
@@ -79,8 +79,8 @@ async def login(
     summary="Activate account",
 )
 async def activation(
-    user: User = Depends(validate_activation),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_activation),
 ):
     await service.activate_user(session, user)
     return await service.create_auth_token(session, user)
@@ -92,8 +92,8 @@ async def activation(
     summary="Resend activation link",
 )
 async def activation_resend(
-    user: User = Depends(validate_activation_resend),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_activation_resend),
 ):
     user = await create_activation_token(session, user)
 
@@ -114,8 +114,8 @@ async def activation_resend(
     summary="Password reset request",
 )
 async def reset_password(
-    user: User = Depends(validate_password_reset),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(validate_password_reset),
 ):
     user = await service.create_password_token(session, user)
 
@@ -136,8 +136,8 @@ async def reset_password(
     summary="Confirm password reset",
 )
 async def password_reset(
-    confirm: Tuple[User, str] = Depends(validate_password_confirm),
     session: AsyncSession = Depends(get_session),
+    confirm: Tuple[User, str] = Depends(validate_password_confirm),
 ):
     user = await service.change_password(session, *confirm)
     return await service.create_auth_token(session, user)
@@ -158,9 +158,9 @@ async def provider_url(provider: str = Depends(validate_provider)):
     summary="Get auth token using OAuth",
 )
 async def oauth_token(
+    session: AsyncSession = Depends(get_session),
     oauth_user: UserOAuth | None = Depends(get_user_oauth),
     data: dict[str, str] = Depends(get_oauth_info),
-    session: AsyncSession = Depends(get_session),
     provider: str = Depends(validate_provider),
 ):
     if not oauth_user:
