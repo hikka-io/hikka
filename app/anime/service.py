@@ -232,14 +232,28 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
 
 
 async def anime_search(
-    session: AsyncSession, search: AnimeSearchArgs, limit: int, offset: int
+    session: AsyncSession,
+    search: AnimeSearchArgs,
+    request_user: User | None,
+    limit: int,
+    offset: int,
 ):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     query = select(Anime)
     query = anime_search_where(search, query)
 
     if len(search.sort) > 0:
         query = query.order_by(*utils.build_order_by(search.sort))
 
+    query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)
