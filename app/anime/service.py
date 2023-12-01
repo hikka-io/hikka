@@ -79,11 +79,12 @@ async def anime_recommendations(
     session: AsyncSession, anime: Anime, limit: int, offset: int
 ) -> list[AnimeRecommendation]:
     return await session.scalars(
-        select(AnimeRecommendation)
-        .filter(AnimeRecommendation.anime == anime)
-        .options(
-            anime_loadonly(selectinload(AnimeRecommendation.recommendation))
+        select(Anime)
+        .join(
+            AnimeRecommendation,
+            AnimeRecommendation.recommendation_id == Anime.id,
         )
+        .filter(AnimeRecommendation.anime == anime)
         .order_by(desc(AnimeRecommendation.weight))
         .limit(limit)
         .offset(offset)
