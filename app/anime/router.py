@@ -1,13 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_page, get_size
 from .schemas import AnimeInfoResponse
 from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import Anime
+from app.models import Anime, User
 from app import meilisearch
 from app import constants
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    get_page,
+    get_size,
+)
 
 from .dependencies import (
     validate_search_anime,
@@ -172,15 +177,19 @@ async def anime_recommendations(
     summary="Franchise entries",
 )
 async def anime_franchise(
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    anime: Anime = Depends(validate_franchise),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    session: AsyncSession = Depends(get_session),
-    anime: Anime = Depends(validate_franchise),
 ):
     limit, offset = pagination(page, size)
     total = await service.franchise_count(session, anime)
-    franchise = await service.franchise(session, anime, limit, offset)
+    franchise = await service.franchise(
+        session, anime, request_user, limit, offset
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": franchise.all(),
+        "list": franchise.unique().all(),
     }

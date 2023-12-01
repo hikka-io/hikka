@@ -1,11 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
+from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from . import utils
+
 
 from app.models import (
     AnimeRecommendation,
@@ -14,8 +17,10 @@ from app.models import (
     AnimeEpisode,
     AnimeGenre,
     AnimeStaff,
+    AnimeWatch,
     Company,
     Anime,
+    User,
 )
 
 
@@ -106,12 +111,27 @@ async def franchise_count(session: AsyncSession, anime: Anime) -> int:
 
 
 async def franchise(
-    session: AsyncSession, anime: Anime, limit: int, offset: int
+    session: AsyncSession,
+    anime: Anime,
+    request_user: User | None,
+    limit: int,
+    offset: int,
 ):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     return await session.scalars(
+        # select(anime_loadonly(Anime))
         select(Anime)
         .filter(Anime.franchise_id == anime.franchise_id)
         .order_by(desc(Anime.start_date))
+        .options(*load_options)
         .limit(limit)
         .offset(offset)
     )
