@@ -3,7 +3,6 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
-from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
@@ -80,22 +79,6 @@ async def anime_episodes(
     )
 
 
-async def anime_recommendations(
-    session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeRecommendation]:
-    return await session.scalars(
-        select(Anime)
-        .join(
-            AnimeRecommendation,
-            AnimeRecommendation.recommendation_id == Anime.id,
-        )
-        .filter(AnimeRecommendation.anime == anime)
-        .order_by(desc(AnimeRecommendation.weight))
-        .limit(limit)
-        .offset(offset)
-    )
-
-
 async def anime_staff_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
         select(func.count(AnimeStaff.id)).filter(AnimeStaff.anime == anime)
@@ -127,10 +110,39 @@ async def franchise(
     ]
 
     return await session.scalars(
-        # select(anime_loadonly(Anime))
         select(Anime)
         .filter(Anime.franchise_id == anime.franchise_id)
         .order_by(desc(Anime.start_date))
+        .options(*load_options)
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def anime_recommendations(
+    session: AsyncSession,
+    anime: Anime,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+) -> list[AnimeRecommendation]:
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    return await session.scalars(
+        select(Anime)
+        .join(
+            AnimeRecommendation,
+            AnimeRecommendation.recommendation_id == Anime.id,
+        )
+        .filter(AnimeRecommendation.anime == anime)
+        .order_by(desc(AnimeRecommendation.weight))
         .options(*load_options)
         .limit(limit)
         .offset(offset)

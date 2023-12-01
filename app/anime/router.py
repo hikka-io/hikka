@@ -156,6 +156,7 @@ async def anime_episodes(
 )
 async def anime_recommendations(
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
     anime: Anime = Depends(get_anime_info),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -163,11 +164,12 @@ async def anime_recommendations(
     limit, offset = pagination(page, size)
     total = await service.anime_recommendations_count(session, anime)
     recommendations = await service.anime_recommendations(
-        session, anime, limit, offset
+        session, anime, request_user, limit, offset
     )
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": recommendations.all(),
+        "list": recommendations.unique().all(),
     }
 
 
