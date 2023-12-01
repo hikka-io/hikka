@@ -5,12 +5,12 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
+    AnimeResponseWithWatch,
     PaginationResponse,
     CharacterResponse,
     CompanyTypeEnum,
     CompanyResponse,
     PersonResponse,
-    AnimeResponse,
     CustomModel,
 )
 
@@ -205,8 +205,8 @@ class AnimeStaffPaginationResponse(CustomModel):
 
 
 class AnimeSearchPaginationResponse(CustomModel):
+    list: list[AnimeResponseWithWatch]
     pagination: PaginationResponse
-    list: list[AnimeResponse]
 
 
 class AnimeStatsResponse(CustomModel):

@@ -1,13 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_page, get_size
 from .schemas import AnimeInfoResponse
 from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import Anime
+from app.models import Anime, User
 from app import meilisearch
 from app import constants
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    get_page,
+    get_size,
+)
 
 from .dependencies import (
     validate_search_anime,
@@ -40,6 +45,7 @@ router = APIRouter(prefix="/anime", tags=["Anime"])
 )
 async def search_anime(
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
     search: AnimeSearchArgs = Depends(validate_search_anime),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -47,19 +53,26 @@ async def search_anime(
     if not search.query:
         limit, offset = pagination(page, size)
         total = await service.anime_search_total(session, search)
-        result = await service.anime_search(session, search, limit, offset)
+        anime = await service.anime_search(
+            session, search, request_user, limit, offset
+        )
+
         return {
             "pagination": pagination_dict(total, page, limit),
-            "list": [anime for anime in result],
+            "list": anime.unique().all(),
         }
 
-    return await meilisearch.search(
+    meilisearch_result = await meilisearch.search(
         constants.SEARCH_INDEX_ANIME,
         filter=build_anime_filters(search),
         query=search.query,
         sort=search.sort,
         page=page,
         size=size,
+    )
+
+    return await service.anime_meilisearch_watch(
+        session, search, request_user, meilisearch_result
     )
 
 
@@ -150,17 +163,21 @@ async def anime_episodes(
     summary="Anime recommendations",
 )
 async def anime_recommendations(
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    anime: Anime = Depends(get_anime_info),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    session: AsyncSession = Depends(get_session),
-    anime: Anime = Depends(get_anime_info),
 ):
     limit, offset = pagination(page, size)
     total = await service.anime_recommendations_count(session, anime)
-    result = await service.anime_recommendations(session, anime, limit, offset)
+    recommendations = await service.anime_recommendations(
+        session, anime, request_user, limit, offset
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [anime.recommendation for anime in result],
+        "list": recommendations.unique().all(),
     }
 
 
@@ -170,15 +187,19 @@ async def anime_recommendations(
     summary="Franchise entries",
 )
 async def anime_franchise(
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    anime: Anime = Depends(validate_franchise),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    session: AsyncSession = Depends(get_session),
-    anime: Anime = Depends(validate_franchise),
 ):
     limit, offset = pagination(page, size)
     total = await service.franchise_count(session, anime)
-    result = await service.franchise(session, anime, limit, offset)
+    franchise = await service.franchise(
+        session, anime, request_user, limit, offset
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": [anime for anime in result],
+        "list": franchise.unique().all(),
     }

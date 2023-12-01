@@ -2,6 +2,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import Field, EmailStr, constr
 from pydantic import BaseModel, ConfigDict
 from pydantic import model_serializer
+from pydantic import field_validator
 from datetime import datetime
 from typing import Callable
 from . import constants
@@ -66,6 +67,14 @@ class UsernameArgs(CustomModel):
 class EmailArgs(CustomModel):
     email: EmailStr = Field(examples=["hikka@email.com"])
 
+    @field_validator("email")
+    @classmethod
+    def check_email(cls, value: EmailStr) -> EmailStr:
+        if "+" in value:
+            raise ValueError("Email contains uacceptable characters")
+
+        return value
+
 
 class TokenArgs(CustomModel):
     token: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
@@ -80,6 +89,16 @@ class PaginationResponse(CustomModel):
     total: int = Field(examples=[20])
     pages: int = Field(examples=[2])
     page: int = Field(examples=[1])
+
+
+class WatchResponseBase(CustomModel):
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    note: str | None = Field(max_length=140, examples=["🤯"])
+    updated: datetime = Field(examples=[1686088809])
+    created: datetime = Field(examples=[1686088809])
+    status: str = Field(examples=["watching"])
+    episodes: int = Field(examples=[3])
+    score: int = Field(examples=[8])
 
 
 class AnimeResponse(CustomModel):
@@ -106,6 +125,10 @@ class AnimeResponse(CustomModel):
     year: int | None
 
 
+class AnimeResponseWithWatch(AnimeResponse):
+    watch: list[WatchResponseBase]
+
+
 class CharacterResponse(CustomModel):
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
@@ -126,6 +149,12 @@ class AnimeFavouriteResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     created: datetime = Field(examples=[1686088809])
     anime: AnimeResponse
+
+
+class AnimeFavouriteResponseWithWatch(CustomModel):
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    created: datetime = Field(examples=[1686088809])
+    anime: AnimeResponseWithWatch
 
 
 class SuccessResponse(CustomModel):

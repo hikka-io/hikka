@@ -1,11 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
-from app.service import anime_loadonly
+from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from . import utils
+
 
 from app.models import (
     AnimeRecommendation,
@@ -14,8 +16,10 @@ from app.models import (
     AnimeEpisode,
     AnimeGenre,
     AnimeStaff,
+    AnimeWatch,
     Company,
     Anime,
+    User,
 )
 
 
@@ -75,21 +79,6 @@ async def anime_episodes(
     )
 
 
-async def anime_recommendations(
-    session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[Anime]:
-    return await session.scalars(
-        select(AnimeRecommendation)
-        .filter(AnimeRecommendation.anime == anime)
-        .options(
-            anime_loadonly(selectinload(AnimeRecommendation.recommendation))
-        )
-        .order_by(desc(AnimeRecommendation.weight))
-        .limit(limit)
-        .offset(offset)
-    )
-
-
 async def anime_staff_count(session: AsyncSession, anime: Anime) -> int:
     return await session.scalar(
         select(func.count(AnimeStaff.id)).filter(AnimeStaff.anime == anime)
@@ -105,12 +94,56 @@ async def franchise_count(session: AsyncSession, anime: Anime) -> int:
 
 
 async def franchise(
-    session: AsyncSession, anime: Anime, limit: int, offset: int
+    session: AsyncSession,
+    anime: Anime,
+    request_user: User | None,
+    limit: int,
+    offset: int,
 ):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     return await session.scalars(
         select(Anime)
         .filter(Anime.franchise_id == anime.franchise_id)
         .order_by(desc(Anime.start_date))
+        .options(*load_options)
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def anime_recommendations(
+    session: AsyncSession,
+    anime: Anime,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+) -> list[AnimeRecommendation]:
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    return await session.scalars(
+        select(Anime)
+        .join(
+            AnimeRecommendation,
+            AnimeRecommendation.recommendation_id == Anime.id,
+        )
+        .filter(AnimeRecommendation.anime == anime)
+        .order_by(desc(AnimeRecommendation.weight))
+        .options(*load_options)
         .limit(limit)
         .offset(offset)
     )
@@ -199,14 +232,28 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
 
 
 async def anime_search(
-    session: AsyncSession, search: AnimeSearchArgs, limit: int, offset: int
+    session: AsyncSession,
+    search: AnimeSearchArgs,
+    request_user: User | None,
+    limit: int,
+    offset: int,
 ):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     query = select(Anime)
     query = anime_search_where(search, query)
 
     if len(search.sort) > 0:
         query = query.order_by(*utils.build_order_by(search.sort))
 
+    query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)
@@ -221,3 +268,32 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
 
 async def anime_genres(session: AsyncSession):
     return await session.scalars(select(AnimeGenre).order_by(AnimeGenre.slug))
+
+
+# I hate this function so much
+# But we need it for having watch satatuses in Meilisearch results
+async def anime_meilisearch_watch(
+    session: AsyncSession,
+    search: AnimeSearchArgs,
+    request_user: User | None,
+    meilisearch_result: dict,
+):
+    slugs = [anime["slug"] for anime in meilisearch_result["list"]]
+
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Anime).where(Anime.slug.in_(slugs)).options(*load_options)
+
+    if len(search.sort) > 0:
+        query = query.order_by(*utils.build_order_by(search.sort))
+
+    meilisearch_result["list"] = (await session.scalars(query)).unique().all()
+
+    return meilisearch_result

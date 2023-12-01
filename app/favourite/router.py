@@ -8,6 +8,7 @@ from typing import Tuple
 from . import service
 
 from app.dependencies import (
+    auth_required,
     get_user,
     get_page,
     get_size,
@@ -57,6 +58,7 @@ async def anime_favourite_delete(
 )
 async def anime_favourite_list(
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(get_user),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -64,10 +66,10 @@ async def anime_favourite_list(
     limit, offset = pagination(page, size)
     total = await service.get_user_anime_favourite_list_count(session, user)
     anime = await service.get_user_anime_favourite_list(
-        session, user, limit, offset
+        session, user, request_user, limit, offset
     )
 
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": anime.all(),
+        "list": anime.unique().all(),
     }
