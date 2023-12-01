@@ -1,9 +1,16 @@
-from app.models import AnimeFavourite, Anime, User
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, desc, func
-from sqlalchemy.orm import selectinload
 from app.service import anime_loadonly
+from sqlalchemy.orm import joinedload
 from datetime import datetime
+
+from app.models import (
+    AnimeFavourite,
+    AnimeWatch,
+    Anime,
+    User,
+)
 
 
 async def get_anime_favourite(
@@ -44,14 +51,26 @@ async def delete_anime_favourite(
 async def get_user_anime_favourite_list(
     session: AsyncSession,
     user: User,
+    request_user: User | None,
     limit: int,
     offset: int,
 ) -> list[AnimeFavourite]:
+    # Load request user watch statuses here
+    load_options = [
+        anime_loadonly(joinedload(AnimeFavourite.anime)).joinedload(
+            Anime.watch
+        ),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     return await session.scalars(
         select(AnimeFavourite)
         .filter(AnimeFavourite.user == user)
         .order_by(desc(AnimeFavourite.created))
-        .options(anime_loadonly(selectinload(AnimeFavourite.anime)))
+        .options(*load_options)
         .limit(limit)
         .offset(offset)
     )

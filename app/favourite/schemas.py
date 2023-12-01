@@ -1,5 +1,5 @@
 from app.schemas import (
-    AnimeFavouriteResponse,
+    AnimeFavouriteResponseWithWatch,
     PaginationResponse,
     CustomModel,
 )
@@ -7,5 +7,5 @@ from app.schemas import (
 
 # Responses
 class AnimeFavouritePaginationResponse(CustomModel):
+    list: list[AnimeFavouriteResponseWithWatch]
     pagination: PaginationResponse
-    list: list[AnimeFavouriteResponse]

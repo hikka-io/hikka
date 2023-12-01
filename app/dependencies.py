@@ -1,10 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Header, Query, Depends
 from datetime import datetime, timedelta
-from app.utils import get_settings
 from app.database import get_session
-from fastapi import Depends, Cookie
+from app.utils import get_settings
 from app.models import User, Anime
-from fastapi import Header, Query
 from typing import Annotated
 from app.errors import Abort
 from app import constants
@@ -54,22 +53,35 @@ async def get_anime(
 
 
 # Check user auth token
-def auth_required(permissions: list = []):
+def auth_required(permissions: list = [], optional: bool = False):
     async def auth(
-        auth_token: Annotated[str, Header(alias="auth")],
+        auth_token: Annotated[str | None, Header(alias="auth")] = None,
         session: AsyncSession = Depends(get_session),
-    ) -> User:
+    ) -> User | None:
+        error = None
+
         if not auth_token:
-            raise Abort("auth", "missing-token")
+            error = Abort("auth", "missing-token")
 
-        if not (token := await get_auth_token(session, auth_token)):
-            raise Abort("auth", "invalid-token")
+        if not error and not (
+            token := await get_auth_token(session, auth_token)
+        ):
+            error = Abort("auth", "invalid-token")
 
-        if not token.user:
-            raise Abort("auth", "user-not-found")
+        if not error and not token.user:
+            error = Abort("auth", "user-not-found")
 
-        if token.user.banned:
-            raise Abort("auth", "banned")
+        if not error and token.user.banned:
+            error = Abort("auth", "banned")
+
+        # If optional set to true folowing checks would fail silently by returning None
+        # I really hate this if statement but idea of creating separade dependency
+        # for optional auth I hate even more
+        if error:
+            if optional:
+                return None
+            else:
+                raise error
 
         now = datetime.utcnow()
 
