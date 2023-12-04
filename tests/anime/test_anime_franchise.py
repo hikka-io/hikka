@@ -15,6 +15,7 @@ async def test_anime_franchise(
     assert response.status_code == status.HTTP_200_OK
 
     # One day they will finish it
+    # Update: they did
     assert len(response.json()["list"]) == 7
 
     # Check slugs and relase dates
