@@ -1,5 +1,10 @@
-def request_anime_search(client, filters={}, page=1, size=15):
-    return client.post(f"/anime?page={page}&size={size}", json=filters)
+def request_anime_search(client, filters={}, page=1, size=15, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.post(
+        f"/anime?page={page}&size={size}",
+        json=filters,
+        headers=headers,
+    )
 
 
 def request_anime_genres(client):
