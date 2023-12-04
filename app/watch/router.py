@@ -42,16 +42,16 @@ async def watch_get(watch: AnimeWatch = Depends(verify_watch)):
 
 @router.put("/{slug}", response_model=WatchResponse)
 async def watch_add(
-    data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
     session: AsyncSession = Depends(get_session),
+    data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
 ):
     return await service.save_watch(session, *data)
 
 
 @router.delete("/{slug}", response_model=SuccessResponse)
 async def delete_watch(
-    watch: AnimeWatch = Depends(verify_watch),
     session: AsyncSession = Depends(get_session),
+    watch: AnimeWatch = Depends(verify_watch),
 ):
     await service.delete_watch(session, watch)
     return {"success": True}

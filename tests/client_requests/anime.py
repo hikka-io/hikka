@@ -1,5 +1,10 @@
-def request_anime_search(client, filters={}, page=1, size=15):
-    return client.post(f"/anime?page={page}&size={size}", json=filters)
+def request_anime_search(client, filters={}, page=1, size=15, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.post(
+        f"/anime?page={page}&size={size}",
+        json=filters,
+        headers=headers,
+    )
 
 
 def request_anime_genres(client):
@@ -22,9 +27,11 @@ def request_anime_episodes(client, slug, page=1):
     return client.get(f"/anime/{slug}/episodes?page={page}")
 
 
-def request_anime_recommendations(client, slug):
-    return client.get(f"/anime/{slug}/recommendations")
+def request_anime_recommendations(client, slug, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(f"/anime/{slug}/recommendations", headers=headers)
 
 
-def request_anime_franchise(client, slug):
-    return client.get(f"/anime/{slug}/franchise")
+def request_anime_franchise(client, slug, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(f"/anime/{slug}/franchise", headers=headers)

@@ -16,8 +16,8 @@ async def get_anime_and_user(
 
 
 async def get_anime_favourite(
-    data: Tuple[Anime, User] = Depends(get_anime_and_user),
     session: AsyncSession = Depends(get_session),
+    data: Tuple[Anime, User] = Depends(get_anime_and_user),
 ) -> AnimeFavourite:
     if not (favourite := await service.get_anime_favourite(session, *data)):
         raise Abort("favourite", "not-found")
@@ -26,8 +26,8 @@ async def get_anime_favourite(
 
 
 async def add_anime_favourite(
-    data: Tuple[Anime, User] = Depends(get_anime_and_user),
     session: AsyncSession = Depends(get_session),
+    data: Tuple[Anime, User] = Depends(get_anime_and_user),
 ) -> Tuple[Anime, User]:
     if await service.get_anime_favourite(session, *data):
         raise Abort("favourite", "exists")

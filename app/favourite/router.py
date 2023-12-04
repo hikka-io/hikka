@@ -37,16 +37,16 @@ async def anime_favourite(
 
 @router.put("/anime/{slug}", response_model=AnimeFavouriteResponse)
 async def anime_favourite_add(
-    data: Tuple[Anime, User] = Depends(add_anime_favourite),
     session: AsyncSession = Depends(get_session),
+    data: Tuple[Anime, User] = Depends(add_anime_favourite),
 ):
     return await service.create_anime_favourite(session, *data)
 
 
 @router.delete("/anime/{slug}", response_model=SuccessResponse)
 async def anime_favourite_delete(
-    favourite: AnimeFavourite = Depends(get_anime_favourite),
     session: AsyncSession = Depends(get_session),
+    favourite: AnimeFavourite = Depends(get_anime_favourite),
 ):
     await service.delete_anime_favourite(session, favourite)
     return {"success": True}

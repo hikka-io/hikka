@@ -6,6 +6,12 @@ from sqlalchemy import make_url
 from app.models import Anime
 import asyncio
 
+from app.sync import email
+
+
+async def test_email_template():
+    await email.send_emails()
+
 
 async def test_check():
     settings = get_settings()
@@ -31,5 +37,6 @@ async def test():
 
 
 if __name__ == "__main__":
+    # asyncio.run(test_email_template())
     asyncio.run(test_check())
     # asyncio.run(test())

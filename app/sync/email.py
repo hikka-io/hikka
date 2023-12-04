@@ -3,42 +3,60 @@ from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from app.models import EmailMessage
 from app.utils import get_settings
+from functools import lru_cache
 from sqlalchemy import select
 from datetime import datetime
+from app import constants
 import aiohttp
 
-# ToDo: move website endpoint to settings
-email_from = "Hikka <noreply@mail.hikka.io>"
 
-templates = {
-    "activation": {
-        "subject": "Підтвердження пошти",
-        "template": "https://hikka.io/activation/CONTENT",
-    },
-    "password_reset": {
-        "subject": "Скидання паролю",
-        "template": "https://hikka.io/reset/CONTENT",
-    },
+subjects = {
+    constants.EMAIL_ACTIVATION: "Підтвердження пошти",
+    constants.EMAIL_PASSWORD_RESET: "Скидання паролю",
 }
+
+
+@lru_cache()
+def read_file(path: str):
+    with open(path, mode="r") as file:
+        return file.read()
+
+
+# Note: I really hate hardcoded paths here
+# Is there another way to do that (?)
+async def get_template(email_type: str):
+    if email_type == constants.EMAIL_ACTIVATION:
+        return read_file("app/sync/data/confirm-email.markup")
+
+    if email_type == constants.EMAIL_PASSWORD_RESET:
+        return read_file("app/sync/data/confirm-email.markup")
+
+    return None
 
 
 async def send_email(session: AsyncSession, email: EmailMessage):
     settings = get_settings()
 
-    subject = templates[email.type]["subject"]
-    template = templates[email.type]["template"].replace(
-        "CONTENT", email.content
-    )
+    # In case something terrible happens to our templates
+    if not (template := await get_template(email.type)):
+        return
+
+    # Replace token and username in template
+    # Note: This code would work only if template has username and token
+    # We need better way to handle that
+    template = template.replace("{username}", email.user.username)
+    template = template.replace("{token}", email.content)
+    subject = subjects[email.type]
 
     async with aiohttp.ClientSession() as aiohttp_session:
         async with aiohttp_session.post(
             settings.mailgun.endpoint,
             auth=aiohttp.BasicAuth("api", settings.mailgun.token),
             data={
-                "from": email_from,
+                "from": settings.mailgun.email_from,
                 "to": [email.user.email],
                 "subject": subject,
-                "text": template,
+                "html": template,
             },
         ) as response:
             if response.status == 200:
@@ -50,8 +68,9 @@ async def send_email(session: AsyncSession, email: EmailMessage):
                 print(f"Sent email: {email.type}")
 
 
-# This task responsible for sending emails via Mailgun api
 async def send_emails():
+    """Send pending emails via Mailgun api"""
+
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)

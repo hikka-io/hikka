@@ -40,8 +40,8 @@ router = APIRouter(prefix="/settings", tags=["Settings"])
 )
 async def change_description(
     args: DescriptionArgs,
-    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
 ):
     return await service.change_description(session, user, args.description)
 
@@ -53,8 +53,8 @@ async def change_description(
 )
 async def change_password(
     args: PasswordArgs,
-    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
 ):
     return await service.set_password(session, user, args.password)
 
@@ -65,9 +65,9 @@ async def change_password(
     summary="Change username",
 )
 async def change_username(
+    session: AsyncSession = Depends(get_session),
     args: UsernameArgs = Depends(validate_set_username),
     user: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
 ):
     return await service.set_username(session, user, args.username)
 
@@ -78,9 +78,9 @@ async def change_username(
     summary="Set a email",
 )
 async def change_email(
+    session: AsyncSession = Depends(get_session),
     args: EmailArgs = Depends(validate_set_email),
     user: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
 ):
     user = await service.set_email(session, user, args.email)
     user = await create_activation_token(session, user)
@@ -104,8 +104,8 @@ async def change_email(
 async def import_watch(
     args: ImportAnimeListArgs,
     background_tasks: BackgroundTasks,
-    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
 ):
     # Run watch list import in background
     # This task may block event loop so we should keep that in mind

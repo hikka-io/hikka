@@ -56,10 +56,10 @@ async def search_characters(
 
 @router.get("/{slug}/anime", response_model=CharacterAnimePaginationResponse)
 async def character_anime(
+    session: AsyncSession = Depends(get_session),
+    character: Character = Depends(get_character),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    character: Character = Depends(get_character),
-    session: AsyncSession = Depends(get_session),
 ):
     limit, offset = pagination(page, size)
     total = await service.character_anime_total(session, character)

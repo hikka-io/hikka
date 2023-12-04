@@ -19,5 +19,10 @@ def request_favourite_delete(client, slug, token):
     )
 
 
-def request_favourite_list(client, username):
-    return client.get(f"/favourite/anime/{username}/list")
+def request_favourite_list(client, username, token=None):
+    headers = {"Auth": token} if token else {}
+
+    return client.get(
+        f"/favourite/anime/{username}/list",
+        headers=headers,
+    )

@@ -103,10 +103,10 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
     summary="Anime characters",
 )
 async def anime_characters(
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.anime_characters_count(session, anime)
@@ -123,10 +123,10 @@ async def anime_characters(
     summary="Anime staff",
 )
 async def anime_staff(
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.anime_staff_count(session, anime)
@@ -143,10 +143,10 @@ async def anime_staff(
     summary="Anime episodes",
 )
 async def anime_episodes(
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
     session: AsyncSession = Depends(get_session),
     anime: Anime = Depends(get_anime_info),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.anime_episodes_count(session, anime)
