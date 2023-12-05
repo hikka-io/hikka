@@ -8,9 +8,13 @@ from app.schemas import (
 
 
 # Responses
-class UserPaginationResponse(CustomModel):
+class FollowUserResponse(UserResponse):
+    is_followed: bool
+
+
+class FollowUserPaginationResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[UserResponse]
+    list: list[FollowUserResponse]
 
 
 class FollowStatsResponse(CustomModel):

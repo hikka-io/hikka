@@ -1,4 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import query_expression
 from datetime import datetime, timedelta
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -30,6 +31,8 @@ class User(Base):
     last_active: Mapped[datetime]
     created: Mapped[datetime]
     login: Mapped[datetime]
+
+    is_followed: Mapped[int] = query_expression()
 
     email_messages: Mapped[list["EmailMessage"]] = relationship(
         back_populates="user",
