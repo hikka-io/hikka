@@ -29,7 +29,7 @@ async def get_template(email_type: str):
         return read_file("app/sync/data/confirm-email.markup")
 
     if email_type == constants.EMAIL_PASSWORD_RESET:
-        return read_file("app/sync/data/confirm-email.markup")
+        return read_file("app/sync/data/password-reset.markup")
 
     return None
 
