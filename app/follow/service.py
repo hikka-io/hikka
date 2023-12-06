@@ -74,11 +74,9 @@ async def list_following(
                     (
                         and_(
                             Follow.user == request_user,
-                            Follow.followed_user_id == User.id,
                         )
                         if request_user == user
                         else and_(
-                            Follow.user_id == User.id,
                             Follow.followed_user == request_user,
                         ),
                         True,
@@ -110,13 +108,11 @@ async def list_followers(
                 case(
                     (
                         and_(
-                            Follow.user_id == User.id,
                             Follow.followed_user == request_user,
                         )
                         if request_user == user
                         else and_(
                             Follow.user == request_user,
-                            Follow.followed_user_id == User.id,
                         ),
                         True,
                     ),
