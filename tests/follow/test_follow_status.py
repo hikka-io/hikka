@@ -28,6 +28,6 @@ async def test_follow_status(
     response = await request_followers(client, "testuser")
     assert response.json()["list"][0]["is_followed"] is False
 
-    # Check followed without auth
+    # Check followed with auth by testuser
     response = await request_followers(client, "testuser", get_test_token)
     assert response.json()["list"][0]["is_followed"] is True

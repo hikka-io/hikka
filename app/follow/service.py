@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, and_, func
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from app.models import User, Follow
 from datetime import datetime
 from sqlalchemy import case
@@ -71,7 +71,13 @@ async def list_following(
             with_expression(
                 User.is_followed,
                 case(
-                    (Follow.user == request_user, True),
+                    (
+                        and_(
+                            Follow.user == request_user,
+                            Follow.followed_user_id == User.id,
+                        ),
+                        True,
+                    ),
                     else_=False,
                 ),
             )
@@ -97,10 +103,23 @@ async def list_followers(
             with_expression(
                 User.is_followed,
                 case(
-                    (Follow.followed_user == request_user, True),
+                    (
+                        and_(
+                            Follow.user_id == User.id,
+                            Follow.followed_user == request_user,
+                        ),
+                        True,
+                    ),
                     else_=False,
                 ),
             )
+            # with_expression(
+            #     User.is_followed,
+            #     case(
+            #         (Follow.followed_user == request_user, True),
+            #         else_=False,
+            #     ),
+            # )
         )
         .limit(limit)
         .offset(offset)
