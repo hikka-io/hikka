@@ -1,11 +1,16 @@
 from app.utils import pagination_dict, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_page, get_size
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
 from typing import Tuple
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    get_page,
+    get_size,
+)
 
 from .dependencies import (
     validate_username,
@@ -15,7 +20,7 @@ from .dependencies import (
 )
 
 from .schemas import (
-    UserPaginationResponse,
+    FollowUserPaginationResponse,
     FollowStatsResponse,
     FollowResponse,
 )
@@ -77,18 +82,22 @@ async def follow_stats(
 
 @router.get(
     "/{username}/following",
-    response_model=UserPaginationResponse,
+    response_model=FollowUserPaginationResponse,
     summary="Followed users",
 )
 async def following_list(
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.count_following(session, user)
-    following = await service.list_following(session, user, limit, offset)
+    following = await service.list_following(
+        session, request_user, user, limit, offset
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": following.all(),
@@ -97,18 +106,22 @@ async def following_list(
 
 @router.get(
     "/{username}/followers",
-    response_model=UserPaginationResponse,
+    response_model=FollowUserPaginationResponse,
     summary="Followers",
 )
 async def followers_list(
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.count_followers(session, user)
-    followers = await service.list_followers(session, user, limit, offset)
+    followers = await service.list_followers(
+        session, request_user, user, limit, offset
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": followers.all(),

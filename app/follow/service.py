@@ -1,7 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from app.models import User, Follow
 from datetime import datetime
+from sqlalchemy import case
+
+
+def follow_status_expression(request_user: User | None):
+    # Thank you Federico Caselli
+    return with_expression(
+        User.is_followed,
+        case(
+            (
+                Follow.user_id == (request_user.id if request_user else None),
+                True,
+            ),
+            else_=False,
+        ),
+    )
 
 
 async def count_followers(session: AsyncSession, user: User):
@@ -54,28 +70,36 @@ async def unfollow(session: AsyncSession, followed_user: User, user: User):
 
 
 async def list_following(
-    session: AsyncSession, user: User, limit: int, offset: int
+    session: AsyncSession,
+    request_user: User | None,
+    user: User,
+    limit: int,
+    offset: int,
 ):
     return await session.scalars(
         select(User)
-        .select_from(Follow)
+        .join(Follow, Follow.followed_user_id == User.id)
         .filter(Follow.user_id == user.id)
-        .join(User, Follow.followed_user_id == User.id)
         .order_by(desc(Follow.created))
+        .options(follow_status_expression(request_user))
         .limit(limit)
         .offset(offset)
     )
 
 
 async def list_followers(
-    session: AsyncSession, user: User, limit: int, offset: int
+    session: AsyncSession,
+    request_user: User | None,
+    user: User,
+    limit: int,
+    offset: int,
 ):
     return await session.scalars(
         select(User)
-        .select_from(Follow)
+        .join(Follow, Follow.user_id == User.id)
         .filter(Follow.followed_user_id == user.id)
-        .join(User, Follow.user_id == User.id)
         .order_by(desc(Follow.created))
+        .options(follow_status_expression(request_user))
         .limit(limit)
         .offset(offset)
     )
