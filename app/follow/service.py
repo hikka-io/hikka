@@ -6,20 +6,6 @@ from datetime import datetime
 from sqlalchemy import case
 
 
-def follow_status_expression(request_user: User | None):
-    # Thank you Federico Caselli
-    return with_expression(
-        User.is_followed,
-        case(
-            (
-                Follow.user_id == (request_user.id if request_user else None),
-                True,
-            ),
-            else_=False,
-        ),
-    )
-
-
 async def count_followers(session: AsyncSession, user: User):
     return await session.scalar(
         select(func.count(Follow.id)).where(Follow.followed_user == user)
@@ -81,7 +67,15 @@ async def list_following(
         .join(Follow, Follow.followed_user_id == User.id)
         .filter(Follow.user_id == user.id)
         .order_by(desc(Follow.created))
-        .options(follow_status_expression(request_user))
+        .options(
+            with_expression(
+                User.is_followed,
+                case(
+                    (Follow.user == request_user, True),
+                    else_=False,
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -99,7 +93,15 @@ async def list_followers(
         .join(Follow, Follow.user_id == User.id)
         .filter(Follow.followed_user_id == user.id)
         .order_by(desc(Follow.created))
-        .options(follow_status_expression(request_user))
+        .options(
+            with_expression(
+                User.is_followed,
+                case(
+                    (Follow.followed_user == request_user, True),
+                    else_=False,
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
