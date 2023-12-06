@@ -23,9 +23,11 @@ def request_follow_stats(client, username):
     return client.get(f"/follow/{username}/stats")
 
 
-def request_following(client, username):
-    return client.get(f"/follow/{username}/following")
+def request_following(client, username, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(f"/follow/{username}/following", headers=headers)
 
 
-def request_followers(client, username):
-    return client.get(f"/follow/{username}/followers")
+def request_followers(client, username, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(f"/follow/{username}/followers", headers=headers)
