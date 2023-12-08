@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, and_, func, or_
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from app.models import User, Follow
 from datetime import datetime
 from sqlalchemy import case
@@ -62,6 +62,15 @@ async def list_following(
     limit: int,
     offset: int,
 ):
+    followed_user_ids = []
+
+    if request_user:
+        followed_user_ids = await session.scalars(
+            select(Follow.followed_user_id).filter(
+                Follow.user_id == request_user.id
+            )
+        )
+
     return await session.scalars(
         select(User)
         .join(Follow, Follow.followed_user_id == User.id)
@@ -70,10 +79,7 @@ async def list_following(
         .options(
             with_expression(
                 User.is_followed,
-                case(
-                    (Follow.user == request_user, True),
-                    else_=False,
-                ),
+                case((User.id.in_(followed_user_ids), True), else_=False),
             )
         )
         .limit(limit)
@@ -88,6 +94,15 @@ async def list_followers(
     limit: int,
     offset: int,
 ):
+    followed_user_ids = []
+
+    if request_user:
+        followed_user_ids = await session.scalars(
+            select(Follow.followed_user_id).filter(
+                Follow.user_id == request_user.id
+            )
+        )
+
     return await session.scalars(
         select(User)
         .join(Follow, Follow.user_id == User.id)
@@ -96,10 +111,7 @@ async def list_followers(
         .options(
             with_expression(
                 User.is_followed,
-                case(
-                    (Follow.followed_user == request_user, True),
-                    else_=False,
-                ),
+                case((User.id.in_(followed_user_ids), True), else_=False),
             )
         )
         .limit(limit)
