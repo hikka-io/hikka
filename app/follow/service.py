@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, and_, func
+from sqlalchemy import select, desc, and_, func, or_
 from sqlalchemy.orm import with_expression
 from app.models import User, Follow
 from datetime import datetime
@@ -62,6 +62,15 @@ async def list_following(
     limit: int,
     offset: int,
 ):
+    followed_user_ids = []
+
+    if request_user:
+        followed_user_ids = await session.scalars(
+            select(Follow.followed_user_id).filter(
+                Follow.user_id == request_user.id
+            )
+        )
+
     return await session.scalars(
         select(User)
         .join(Follow, Follow.followed_user_id == User.id)
@@ -70,19 +79,7 @@ async def list_following(
         .options(
             with_expression(
                 User.is_followed,
-                case(
-                    (
-                        and_(
-                            Follow.user == request_user,
-                        )
-                        if request_user == user
-                        else and_(
-                            Follow.followed_user == request_user,
-                        ),
-                        True,
-                    ),
-                    else_=False,
-                ),
+                case((User.id.in_(followed_user_ids), True), else_=False),
             )
         )
         .limit(limit)
@@ -97,6 +94,15 @@ async def list_followers(
     limit: int,
     offset: int,
 ):
+    followed_user_ids = []
+
+    if request_user:
+        followed_user_ids = await session.scalars(
+            select(Follow.followed_user_id).filter(
+                Follow.user_id == request_user.id
+            )
+        )
+
     return await session.scalars(
         select(User)
         .join(Follow, Follow.user_id == User.id)
@@ -105,27 +111,8 @@ async def list_followers(
         .options(
             with_expression(
                 User.is_followed,
-                case(
-                    (
-                        and_(
-                            Follow.followed_user == request_user,
-                        )
-                        if request_user == user
-                        else and_(
-                            Follow.user == request_user,
-                        ),
-                        True,
-                    ),
-                    else_=False,
-                ),
+                case((User.id.in_(followed_user_ids), True), else_=False),
             )
-            # with_expression(
-            #     User.is_followed,
-            #     case(
-            #         (Follow.followed_user == request_user, True),
-            #         else_=False,
-            #     ),
-            # )
         )
         .limit(limit)
         .offset(offset)
