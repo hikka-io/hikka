@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, and_, func, or_
 from sqlalchemy.orm import with_expression
+from sqlalchemy import select, desc, func
 from app.models import User, Follow
 from datetime import datetime
 from sqlalchemy import case
