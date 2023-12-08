@@ -7,9 +7,11 @@ from .aggregator.info import aggregator_anime_info
 from .aggregator.people import aggregator_people
 from .aggregator.anime import aggregator_anime
 
-from .email import send_emails
+from .sitemap import update_sitemap
 
 from .search import update_search
+
+from .email import send_emails
 
 __all__ = [
     "aggregator_anime_franchises",
@@ -20,6 +22,7 @@ __all__ = [
     "aggregator_anime_info",
     "aggregator_people",
     "aggregator_anime",
-    "send_emails",
+    "update_sitemap",
     "update_search",
+    "send_emails",
 ]

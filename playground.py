@@ -4,9 +4,13 @@ from app.utils import get_settings
 from sqlalchemy import select, desc
 from sqlalchemy import make_url
 from app.models import Anime
+from app.sync import sitemap
+from app.sync import email
 import asyncio
 
-from app.sync import email
+
+async def test_sitemap():
+    await sitemap.update_sitemap()
 
 
 async def test_email_template():
@@ -38,5 +42,6 @@ async def test():
 
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
-    asyncio.run(test_check())
+    asyncio.run(test_sitemap())
+    # asyncio.run(test_check())
     # asyncio.run(test())

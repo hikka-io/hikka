@@ -11,8 +11,8 @@ import aiohttp
 
 
 subjects = {
-    constants.EMAIL_ACTIVATION: "Підтвердження пошти",
     constants.EMAIL_PASSWORD_RESET: "Скидання паролю",
+    constants.EMAIL_ACTIVATION: "Підтвердження пошти",
 }
 
 
