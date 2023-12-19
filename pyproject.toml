@@ -24,6 +24,10 @@ apscheduler = "^3.10.4"
 alembic = "^1.11.3"
 typer = "^0.9.0"
 greenlet = "^3.0.1"
+aioboto3 = "^12.1.0"
+python-multipart = "^0.0.6"
+puremagic = "^1.15"
+imagesize = "^1.4.1"
 
 [build-system]
 requires = ["poetry-core"]
