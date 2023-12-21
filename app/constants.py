@@ -140,3 +140,6 @@ ROLES = {
     ROLE_BANNED: [],
     ROLE_NOT_ACTIVATED: [],
 }
+
+# Upload types
+UPLOAD_AVATAR = "avatar"

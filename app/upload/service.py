@@ -1,6 +1,54 @@
+from datetime import datetime, timedelta
 from app.utils import get_settings
+from app.utils import new_token
 from fastapi import UploadFile
+from uuid import uuid4
+from . import utils
 import aioboto3
+
+
+# async def create_upload_request(
+#     user: User, args: UploadRequestArgs
+# ) -> UploadFile:
+#     # user = User(
+#     #     **{
+#     #         "role": constants.ROLE_NOT_ACTIVATED,
+#     #         "activation_expire": now + timedelta(hours=3),
+#     #         "activation_token": activation_token,
+#     #         "password_hash": password_hash,
+#     #         "username": signup.username,
+#     #         "email": signup.email,
+#     #         "last_active": now,
+#     #         "created": now,
+#     #         "login": now,
+#     #     }
+#     # )
+
+#     # session.add(user)
+#     # await session.commit()
+
+#     now = datetime.utcnow()
+
+#     extension = utils.get_mime_extension(args.mime_type)
+
+#     file_path = (
+#         f"uploads/{user.username}/{args.type}/{str(uuid4())}.{extension}"
+#     )
+
+#     request = UploadRequest(
+#         **{
+#             "expiration": now + timedelta(minutes=3),
+#             "mime_type": args.mime_type,
+#             "secret": new_token(),
+#             "type": args.type,
+#             "path": file_path,
+#             "size": args.size,
+#             "created": now,
+#             "user": user,
+#         }
+#     )
+
+#     return request
 
 
 async def upload_image(file: UploadFile):

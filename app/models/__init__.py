@@ -29,8 +29,6 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
-from .upload.request import UploadRequest
-
 from .image import Image
 
 from .base import Base
@@ -59,7 +57,6 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
-    "UploadRequest",
     "Image",
     "Base",
 ]
