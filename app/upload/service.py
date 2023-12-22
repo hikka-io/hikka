@@ -1,68 +1,77 @@
-from datetime import datetime, timedelta
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import User, Image, Upload
+from .schemas import UploadMetadata
 from app.utils import get_settings
-from app.utils import new_token
 from fastapi import UploadFile
+from datetime import datetime
+from app import constants
 from uuid import uuid4
 from . import utils
 import aioboto3
 
 
-# async def create_upload_request(
-#     user: User, args: UploadRequestArgs
-# ) -> UploadFile:
-#     # user = User(
-#     #     **{
-#     #         "role": constants.ROLE_NOT_ACTIVATED,
-#     #         "activation_expire": now + timedelta(hours=3),
-#     #         "activation_token": activation_token,
-#     #         "password_hash": password_hash,
-#     #         "username": signup.username,
-#     #         "email": signup.email,
-#     #         "last_active": now,
-#     #         "created": now,
-#     #         "login": now,
-#     #     }
-#     # )
-
-#     # session.add(user)
-#     # await session.commit()
-
-#     now = datetime.utcnow()
-
-#     extension = utils.get_mime_extension(args.mime_type)
-
-#     file_path = (
-#         f"uploads/{user.username}/{args.type}/{str(uuid4())}.{extension}"
-#     )
-
-#     request = UploadRequest(
-#         **{
-#             "expiration": now + timedelta(minutes=3),
-#             "mime_type": args.mime_type,
-#             "secret": new_token(),
-#             "type": args.type,
-#             "path": file_path,
-#             "size": args.size,
-#             "created": now,
-#             "user": user,
-#         }
-#     )
-
-#     return request
-
-
-async def upload_image(file: UploadFile):
+async def s3_upload_file(file: UploadFile, file_path: str):
     settings = get_settings()
     boto_session = aioboto3.Session()
 
-    async with boto_session.resource(
+    async with boto_session.client(
         "s3",
         endpoint_url=settings.s3.endpoint,
         aws_access_key_id=settings.s3.key,
         aws_secret_access_key=settings.s3.secret,
     ) as s3:
-        bucket = await s3.Bucket(settings.s3.bucket)
+        try:
+            path = file_path.lstrip("/")
 
-        await bucket.upload_fileobj(file.file, "test/test_5.jpg")
+            await s3.upload_fileobj(
+                file.file,
+                settings.s3.bucket,
+                path,
+            )
 
-    return {}
+        except Exception:
+            return False
+
+    return True
+
+
+async def process_upload(
+    session: AsyncSession,
+    upload_metadata: UploadMetadata,
+    user: User,
+) -> Image:
+    extension = utils.get_mime_extension(upload_metadata.mime_type)
+
+    path = f"/uploads/{user.username}/{upload_metadata.upload_type}"
+    file_name = f"{str(uuid4())}.{extension}"
+    file_path = f"{path}/{file_name}"
+
+    image = Image(
+        **{
+            "path": file_path,
+            "uploaded": False,
+            "ignore": False,
+        }
+    )
+
+    upload = Upload(
+        **{
+            "mime_type": upload_metadata.mime_type,
+            "type": upload_metadata.upload_type,
+            "size": upload_metadata.size,
+            "created": datetime.utcnow(),
+            "path": file_path,
+            "image": image,
+            "user": user,
+        }
+    )
+
+    # image.uploaded = await s3_upload_file(upload_metadata.file, file_path)
+
+    # if upload_metadata.upload_type == constants.UPLOAD_AVATAR:
+    #     user.avatar = image
+
+    session.add_all([image, upload])
+    # await session.commit()
+
+    return image
