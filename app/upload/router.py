@@ -4,6 +4,7 @@ from app.dependencies import auth_required
 from app.dependencies import get_session
 from fastapi import APIRouter, Depends
 from app.models import User
+from app import constants
 from . import service
 
 from .schemas import (
@@ -19,7 +20,9 @@ router = APIRouter(prefix="/upload", tags=["Upload"])
 async def upload_image(
     session: AsyncSession = Depends(get_session),
     upload_metadata: UploadMetadata = Depends(validate_avatar_file),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_UPLOAD_AVATAR])
+    ),
 ):
     return await service.process_avatar_upload(
         session,
