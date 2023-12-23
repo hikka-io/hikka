@@ -12,6 +12,7 @@ class AnimeStaffRole(Base, SlugMixin):
 
     name_en: Mapped[str] = mapped_column(nullable=True)
     name_ua: Mapped[str] = mapped_column(nullable=True)
+    weight: Mapped[int] = mapped_column(nullable=True)
 
     staff: Mapped[list["AnimeStaff"]] = relationship(
         secondary=anime_staff_roles_association_table, back_populates="roles"

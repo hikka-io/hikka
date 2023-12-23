@@ -97,6 +97,12 @@ errors = {
     "person": {
         "not-found": ["Person not found", 404],
     },
+    "upload": {
+        "not-square": ["Image shoudld be square", 400],
+        "bad-resolution": ["Bad resolution", 400],
+        "bad-mime": ["Don't be bad mime", 400],
+        "bad-size": ["Bad file size", 400],
+    },
 }
 
 
