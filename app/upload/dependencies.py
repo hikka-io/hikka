@@ -10,14 +10,14 @@ import imagesize
 async def validate_file(
     upload_type: str, file: UploadFile = File()
 ) -> UploadMetadata:
-    mime_type = get_mime_type(file)
+    if file.size > 2 * 1024 * 1024:  # 2mb
+        raise Abort("upload", "bad-size")
 
     if upload_type == constants.UPLOAD_AVATAR:
-        if mime_type not in ["image/jpeg", "image/png"]:
-            raise Abort("upload", "bad-mime")
+        mime_type = get_mime_type(file)
 
-        if file.size > 2 * 1024 * 1024:  # 2mb
-            raise Abort("upload", "bad-size")
+        if mime_type not in ["image/jpeg"]:
+            raise Abort("upload", "bad-mime")
 
         width, height = imagesize.get(BytesIO(file.file.read()))
 

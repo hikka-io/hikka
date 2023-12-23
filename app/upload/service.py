@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Image, Upload
 from .schemas import UploadMetadata
 from app.utils import get_settings
-from fastapi import UploadFile
 from datetime import datetime
 from app import constants
 from uuid import uuid4
@@ -10,7 +9,7 @@ from . import utils
 import aioboto3
 
 
-async def s3_upload_file(file: UploadFile, file_path: str):
+async def s3_upload_file(upload_metadata: UploadMetadata, file_path: str):
     settings = get_settings()
     boto_session = aioboto3.Session()
 
@@ -24,9 +23,12 @@ async def s3_upload_file(file: UploadFile, file_path: str):
             path = file_path.lstrip("/")
 
             await s3.upload_fileobj(
-                file.file,
+                upload_metadata.file.file,
                 settings.s3.bucket,
                 path,
+                ExtraArgs={
+                    "ContentType": upload_metadata.mime_type,
+                },
             )
 
         except Exception:
@@ -69,7 +71,7 @@ async def process_upload(
         }
     )
 
-    image.uploaded = await s3_upload_file(upload_metadata.file, file_path)
+    image.uploaded = await s3_upload_file(upload_metadata, file_path)
 
     if upload_metadata.upload_type == constants.UPLOAD_AVATAR:
         user.avatar_image_relation = image
