@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from ..base import Base
 
@@ -77,9 +78,26 @@ class User(Base):
         back_populates="moderator",
     )
 
+    avatar_image_id = mapped_column(
+        ForeignKey("service_images.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    avatar_image_relation: Mapped["Image"] = relationship(lazy="selectin")
+
     @hybrid_property
     def avatar(self):
-        return "https://cdn.hikka.io/avatar.jpg"
+        if not self.avatar_image_relation:
+            return "https://cdn.hikka.io/avatar.jpg"
+
+        if (
+            self.avatar_image_relation.ignore
+            or not self.avatar_image_relation.uploaded
+        ):
+            return "https://cdn.hikka.io/avatar.jpg"
+
+        return self.avatar_image_relation.url
 
     @hybrid_property
     def active(self):

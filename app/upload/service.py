@@ -46,11 +46,14 @@ async def process_upload(
     file_name = f"{str(uuid4())}.{extension}"
     file_path = f"{path}/{file_name}"
 
+    now = datetime.utcnow()
+
     image = Image(
         **{
             "path": file_path,
             "uploaded": False,
             "ignore": False,
+            "created": now,
         }
     )
 
@@ -59,19 +62,19 @@ async def process_upload(
             "mime_type": upload_metadata.mime_type,
             "type": upload_metadata.upload_type,
             "size": upload_metadata.size,
-            "created": datetime.utcnow(),
             "path": file_path,
+            "created": now,
             "image": image,
             "user": user,
         }
     )
 
-    # image.uploaded = await s3_upload_file(upload_metadata.file, file_path)
+    image.uploaded = await s3_upload_file(upload_metadata.file, file_path)
 
-    # if upload_metadata.upload_type == constants.UPLOAD_AVATAR:
-    #     user.avatar = image
+    if upload_metadata.upload_type == constants.UPLOAD_AVATAR:
+        user.avatar_image_relation = image
 
     session.add_all([image, upload])
-    # await session.commit()
+    await session.commit()
 
     return image
