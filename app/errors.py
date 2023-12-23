@@ -101,7 +101,6 @@ errors = {
         "not-square": ["Image shoudld be square", 400],
         "bad-resolution": ["Bad resolution", 400],
         "bad-mime": ["Don't be bad mime", 400],
-        "unknown-type": ["Unknown type", 404],
         "bad-size": ["Bad file size", 400],
     },
 }

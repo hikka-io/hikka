@@ -10,6 +10,5 @@ class ImageResponse(CustomModel):
 # Misc
 class UploadMetadata(CustomModel):
     file: UploadFile
-    upload_type: str
     mime_type: str
     size: int

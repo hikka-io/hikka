@@ -37,16 +37,14 @@ async def s3_upload_file(upload_metadata: UploadMetadata, file_path: str):
     return True
 
 
-async def process_upload(
+async def process_avatar_upload(
     session: AsyncSession,
     upload_metadata: UploadMetadata,
     user: User,
 ) -> Image:
     extension = utils.get_mime_extension(upload_metadata.mime_type)
 
-    path = f"/uploads/{user.username}/{upload_metadata.upload_type}"
-    file_name = f"{str(uuid4())}.{extension}"
-    file_path = f"{path}/{file_name}"
+    file_path = f"/uploads/{user.username}/avatar/{str(uuid4())}.{extension}"
 
     now = datetime.utcnow()
 
@@ -62,7 +60,7 @@ async def process_upload(
     upload = Upload(
         **{
             "mime_type": upload_metadata.mime_type,
-            "type": upload_metadata.upload_type,
+            "type": constants.UPLOAD_AVATAR,
             "size": upload_metadata.size,
             "path": file_path,
             "created": now,
@@ -73,8 +71,7 @@ async def process_upload(
 
     image.uploaded = await s3_upload_file(upload_metadata, file_path)
 
-    if upload_metadata.upload_type == constants.UPLOAD_AVATAR:
-        user.avatar_image_relation = image
+    user.avatar_image_relation = image
 
     session.add_all([image, upload])
     await session.commit()
