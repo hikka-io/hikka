@@ -1,12 +1,39 @@
 from app.sync.aggregator.info import update_anime_info
+from app.models import Anime, AnimeStaffRole
 from app.database import sessionmanager
 from sqlalchemy import select, desc
 from app.utils import get_settings
 from sqlalchemy import make_url
-from app.models import Anime
 from app.sync import sitemap
 from app.sync import email
 import asyncio
+import json
+
+
+async def import_role_weights():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        with open("docs/roles.json", "r") as file:
+            data = json.load(file)
+
+            for entry in data["service_content_anime_staff_roles"]:
+                role = await session.scalar(
+                    select(AnimeStaffRole).filter(
+                        AnimeStaffRole.slug == entry["slug"]
+                    )
+                )
+
+                role.name_ua = entry["name_ua"]
+                role.weight = entry["weight"]
+
+                session.add(role)
+
+            await session.commit()
+
+    await sessionmanager.close()
 
 
 async def test_sitemap():
@@ -42,6 +69,7 @@ async def test():
 
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
-    asyncio.run(test_sitemap())
+    # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
+    asyncio.run(import_role_weights())
     # asyncio.run(test())
