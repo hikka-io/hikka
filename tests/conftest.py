@@ -184,6 +184,13 @@ def oauth_fail_http(oauth_response):
         yield mocked
 
 
+@pytest.fixture(autouse=False)
+def mock_s3_upload_file():
+    with mock.patch("app.upload.service.s3_upload_file") as mocked:
+        mocked.return_value = True
+        yield mocked
+
+
 # Aggregator fixtures
 @pytest.fixture
 async def aggregator_anime_genres(test_session):

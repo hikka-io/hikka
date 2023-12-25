@@ -65,6 +65,8 @@ from .settings import request_settings_username
 from .settings import request_settings_password
 from .settings import request_settings_email
 
+from .upload import request_upload_avatar
+
 __all__ = [
     "request_activation_resend",
     "request_password_confirm",
@@ -121,4 +123,5 @@ __all__ = [
     "request_settings_username",
     "request_settings_password",
     "request_settings_email",
+    "request_upload_avatar",
 ]
