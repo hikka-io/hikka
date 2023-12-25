@@ -5,8 +5,6 @@ from client_requests import (
     request_me,
 )
 
-# ToDo: rate limit
-
 
 async def test_upload(
     client,
@@ -84,3 +82,35 @@ async def test_upload_not_square(
         response = await request_upload_avatar(client, get_test_token, file)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["code"] == "upload:not_square"
+
+
+async def test_upload_rate_limit(
+    client,
+    create_test_user,
+    get_test_token,
+    mock_s3_upload_file,
+):
+    for index in range(0, 11):
+        with open("tests/data/upload/test.jpg", mode="rb") as file:
+            response = await request_upload_avatar(client, get_test_token, file)
+
+            if index != 11:
+                continue
+
+            assert response.json()["code"] == "upload:rate_limit"
+
+
+async def test_upload_rate_limit_admin(
+    client,
+    create_test_user_moderator,
+    get_test_token,
+    mock_s3_upload_file,
+):
+    for index in range(0, 11):
+        with open("tests/data/upload/test.jpg", mode="rb") as file:
+            response = await request_upload_avatar(client, get_test_token, file)
+
+            if index != 11:
+                continue
+
+            assert "code" not in response.json()

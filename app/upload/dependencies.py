@@ -27,7 +27,7 @@ async def validate_rate_limit(
             constants.ROLE_ADMIN,
             constants.ROLE_MODERATOR,
         ]
-        and count > 10
+        and count >= 10
     ):
         raise Abort("upload", "rate-limit")
 
@@ -55,6 +55,8 @@ async def validate_avatar_file(file: UploadFile = File()) -> UploadMetadata:
 
     if width > 1500 or height > 1500:
         raise Abort("upload", "bad-resolution")
+
+    # ToDo: add file hash check
 
     await file.seek(0)
 
