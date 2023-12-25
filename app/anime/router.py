@@ -133,7 +133,7 @@ async def anime_staff(
     staff = await service.anime_staff(session, anime, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": staff.all(),
+        "list": staff.unique().all(),
     }
 
 

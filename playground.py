@@ -1,4 +1,4 @@
-from app.models import Anime, AnimeStaffRole, AnimeStaff
+from app.models import Anime, AnimeStaff
 from app.sync.aggregator.info import update_anime_info
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
@@ -8,33 +8,6 @@ from app.utils import get_settings
 from app.sync import sitemap
 from app.sync import email
 import asyncio
-import json
-
-
-async def import_role_weights():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        with open("docs/roles.json", "r") as file:
-            data = json.load(file)
-
-            for entry in data["service_content_anime_staff_roles"]:
-                role = await session.scalar(
-                    select(AnimeStaffRole).filter(
-                        AnimeStaffRole.slug == entry["slug"]
-                    )
-                )
-
-                role.name_ua = entry["name_ua"]
-                role.weight = entry["weight"]
-
-                session.add(role)
-
-            await session.commit()
-
-    await sessionmanager.close()
 
 
 async def recalculate_anime_staff_weights():

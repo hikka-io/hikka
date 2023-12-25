@@ -18,6 +18,7 @@ from app.models import (
     AnimeStaff,
     AnimeWatch,
     Company,
+    Person,
     Anime,
     User,
 )
@@ -53,10 +54,11 @@ async def anime_staff(
 ) -> list[AnimeStaff]:
     return await session.scalars(
         select(AnimeStaff)
+        .join(Person, AnimeStaff.person)
         .filter(AnimeStaff.anime == anime)
-        .options(selectinload(AnimeStaff.person))
-        .options(selectinload(AnimeStaff.roles))
-        .order_by(asc(AnimeStaff.weight), asc(AnimeStaff.id))
+        .options(joinedload(AnimeStaff.person))
+        .options(joinedload(AnimeStaff.roles))
+        .order_by(asc(AnimeStaff.weight), asc(Person.name_en))
         .limit(limit)
         .offset(offset)
     )

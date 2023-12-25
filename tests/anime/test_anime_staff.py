@@ -18,21 +18,19 @@ async def test_anime_staff(
     # Check first staff member
     assert response.json()["list"][0]["roles"] == [
         {
-            "name_en": "Producer",
-            "name_ua": None,
-            "slug": "producer",
+            "name_en": "Original Creator",
+            "name_ua": "Автор оригіналу",
+            "slug": "original-creator",
         },
     ]
 
-    assert (
-        response.json()["list"][0]["person"]["slug"] == "shouta-umehara-fc94cf"
-    )
+    assert response.json()["list"][0]["person"]["slug"] == "aki-hamaji-dc0d68"
 
     # Check last staff member (on first page)
     assert response.json()["list"][11]["roles"] == [
         {
             "name_en": "Theme Song Performance",
-            "name_ua": None,
+            "name_ua": "Виконання головної музичної теми",
             "slug": "theme-song-performance",
         }
     ]

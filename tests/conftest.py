@@ -205,6 +205,8 @@ async def aggregator_anime_roles(test_session):
 
     await aggregator.update_anime_roles(test_session, data)
 
+    await aggregator.update_anime_role_weights(test_session)
+
 
 @pytest.fixture
 async def aggregator_characters(test_session):
@@ -271,6 +273,8 @@ async def aggregator_anime_info(test_session):
                 anime,
                 data,
             )
+
+    await aggregator.update_anime_staff_weights(test_session)
 
 
 @pytest.fixture
