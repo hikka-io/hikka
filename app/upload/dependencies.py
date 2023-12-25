@@ -1,9 +1,37 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import auth_required
+from app.database import get_session
 from fastapi import UploadFile, File
 from .schemas import UploadMetadata
 from .utils import get_mime_type
 from app.errors import Abort
+from app.models import User
+from fastapi import Depends
+from app import constants
 from io import BytesIO
+from . import service
 import imagesize
+
+
+async def validate_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_UPLOAD_AVATAR])
+    ),
+):
+    count = await service.count_uploads_last_day(session, user)
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count > 10
+    ):
+        raise Abort("upload", "rate-limit")
+
+    return user
 
 
 async def validate_avatar_file(file: UploadFile = File()) -> UploadMetadata:

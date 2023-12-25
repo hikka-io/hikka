@@ -98,6 +98,7 @@ errors = {
         "not-found": ["Person not found", 404],
     },
     "upload": {
+        "rate-limit": ["You have reached upload rate limit, try later", 400],
         "not-square": ["Image shoudld be square", 400],
         "bad-resolution": ["Bad resolution", 400],
         "bad-mime": ["Don't be bad mime", 400],
