@@ -35,6 +35,7 @@ async def validate_rate_limit(
 
 
 async def validate_avatar_file(file: UploadFile = File()) -> UploadMetadata:
+    # ToDo: we probably need to reduce file size here
     if file.size > 2 * 1024 * 1024:  # 2mb
         raise Abort("upload", "bad-size")
 
