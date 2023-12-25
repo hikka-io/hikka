@@ -6,7 +6,7 @@ from client_requests import (
 )
 
 
-async def test_upload(
+async def test_upload_avatar(
     client,
     create_test_user,
     get_test_token,
@@ -23,7 +23,7 @@ async def test_upload(
         assert response.json()["avatar"] == avatar_url
 
 
-async def test_upload_bad_mime(
+async def test_upload_avatar_bad_mime(
     client,
     create_test_user,
     get_test_token,
@@ -42,7 +42,7 @@ async def test_upload_bad_mime(
             assert response.json()["code"] == "upload:bad_mime"
 
 
-async def test_upload_bad_resolution(
+async def test_upload_avatar_bad_resolution(
     client,
     create_test_user,
     get_test_token,
@@ -60,7 +60,7 @@ async def test_upload_bad_resolution(
             assert response.json()["code"] == "upload:bad_resolution"
 
 
-async def test_upload_bad_size(
+async def test_upload_avatar_bad_size(
     client,
     create_test_user,
     get_test_token,
@@ -72,7 +72,7 @@ async def test_upload_bad_size(
         assert response.json()["code"] == "upload:bad_size"
 
 
-async def test_upload_not_square(
+async def test_upload_avatar_not_square(
     client,
     create_test_user,
     get_test_token,
@@ -84,7 +84,7 @@ async def test_upload_not_square(
         assert response.json()["code"] == "upload:not_square"
 
 
-async def test_upload_rate_limit(
+async def test_upload_avatar_rate_limit(
     client,
     create_test_user,
     get_test_token,
@@ -100,7 +100,7 @@ async def test_upload_rate_limit(
             assert response.json()["code"] == "upload:rate_limit"
 
 
-async def test_upload_rate_limit_admin(
+async def test_upload_avatar_rate_limit_admin(
     client,
     create_test_user_moderator,
     get_test_token,
