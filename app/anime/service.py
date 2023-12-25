@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from sqlalchemy import select, desc, asc, and_
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy import select, desc, and_
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
@@ -18,6 +18,7 @@ from app.models import (
     AnimeStaff,
     AnimeWatch,
     Company,
+    Person,
     Anime,
     User,
 )
@@ -53,9 +54,11 @@ async def anime_staff(
 ) -> list[AnimeStaff]:
     return await session.scalars(
         select(AnimeStaff)
+        .join(Person, AnimeStaff.person)
         .filter(AnimeStaff.anime == anime)
-        .options(selectinload(AnimeStaff.person))
-        .options(selectinload(AnimeStaff.roles))
+        .options(joinedload(AnimeStaff.person))
+        .options(joinedload(AnimeStaff.roles))
+        .order_by(asc(AnimeStaff.weight), asc(Person.name_en))
         .limit(limit)
         .offset(offset)
     )

@@ -184,6 +184,13 @@ def oauth_fail_http(oauth_response):
         yield mocked
 
 
+@pytest.fixture(autouse=False)
+def mock_s3_upload_file():
+    with mock.patch("app.upload.service.s3_upload_file") as mocked:
+        mocked.return_value = True
+        yield mocked
+
+
 # Aggregator fixtures
 @pytest.fixture
 async def aggregator_anime_genres(test_session):
@@ -197,6 +204,8 @@ async def aggregator_anime_roles(test_session):
     data = await helpers.load_json("tests/data/anime_roles.json")
 
     await aggregator.update_anime_roles(test_session, data)
+
+    await aggregator.update_anime_role_weights(test_session)
 
 
 @pytest.fixture
@@ -264,6 +273,8 @@ async def aggregator_anime_info(test_session):
                 anime,
                 data,
             )
+
+    await aggregator.update_anime_staff_weights(test_session)
 
 
 @pytest.fixture

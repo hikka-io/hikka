@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Image, Upload
 from .schemas import UploadMetadata
+from sqlalchemy import select, func
 from app.utils import get_settings
 from datetime import datetime
 from app import constants
@@ -37,6 +38,15 @@ async def s3_upload_file(upload_metadata: UploadMetadata, file_path: str):
     return True
 
 
+async def count_uploads_last_day(session: AsyncSession, user: User):
+    today = utils.round_day(datetime.now())
+    return await session.scalar(
+        select(func.count(Upload.id)).filter(
+            Upload.user == user, Upload.created > today
+        )
+    )
+
+
 async def process_avatar_upload(
     session: AsyncSession,
     upload_metadata: UploadMetadata,
@@ -71,7 +81,13 @@ async def process_avatar_upload(
 
     image.uploaded = await s3_upload_file(upload_metadata, file_path)
 
-    user.avatar_image_relation = image
+    if image.uploaded:
+        # Mark old image to be deleted
+        if user.avatar_image_relation:
+            user.avatar_image_relation.deletion_request = True
+
+        # Only update image relation if file has been uploaded
+        user.avatar_image_relation = image
 
     session.add_all([image, upload])
     await session.commit()

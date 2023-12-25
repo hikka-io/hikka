@@ -1,0 +1,399 @@
+{
+"service_content_anime_staff_roles": [
+	{
+		"name_en" : "Assistant Producer",
+		"name_ua" : null,
+		"id" : "4ed75192-b8bc-4a87-966d-ed262a077005",
+		"slug" : "assistant-producer"
+	},
+	{
+		"name_en" : "Art Director",
+		"name_ua" : null,
+		"id" : "771e1724-e625-4cd1-bd27-110a53c50647",
+		"slug" : "art-director"
+	},
+	{
+		"name_en" : "Producer",
+		"name_ua" : null,
+		"id" : "fa15bd03-04b4-454d-9c2b-45f101044624",
+		"slug" : "producer"
+	},
+	{
+		"name_en" : "Layout",
+		"name_ua" : null,
+		"id" : "4ac67afb-ce20-43e2-96b2-29decc842324",
+		"slug" : "layout"
+	},
+	{
+		"name_en" : "Associate Producer",
+		"name_ua" : null,
+		"id" : "603828f7-d241-4338-9c88-c73bd9a5d6a3",
+		"slug" : "associate-producer"
+	},
+	{
+		"name_en" : "Production Assistant",
+		"name_ua" : null,
+		"id" : "15a9e315-ceb7-43e5-8cd4-97b2b843ff86",
+		"slug" : "production-assistant"
+	},
+	{
+		"name_en" : "Chief Producer",
+		"name_ua" : null,
+		"id" : "ff2d86c8-3353-4a76-884f-8a00447257f2",
+		"slug" : "chief-producer"
+	},
+	{
+		"name_en" : "Principle Drawing",
+		"name_ua" : null,
+		"id" : "fc3d3d7f-8753-4009-b1b3-2c842e64d592",
+		"slug" : "principle-drawing"
+	},
+	{
+		"name_en" : "Recording Engineer",
+		"name_ua" : null,
+		"id" : "664ea410-0f6e-4150-9baa-0d7de72b6411",
+		"slug" : "recording-engineer"
+	},
+	{
+		"name_en" : "Planning",
+		"name_ua" : null,
+		"id" : "a69bf9ad-e22d-49a8-b2da-a68029f3043e",
+		"slug" : "planning"
+	},
+	{
+		"name_en" : "Co-Director",
+		"name_ua" : null,
+		"id" : "88b1401d-67bc-4528-ab54-883298084133",
+		"slug" : "co-director"
+	},
+	{
+		"name_en" : "Theme Song Lyrics",
+		"name_ua" : null,
+		"id" : "93d213dd-c145-424c-8a05-b7b26ca5163b",
+		"slug" : "theme-song-lyrics"
+	},
+	{
+		"name_en" : "Original Character Design",
+		"name_ua" : null,
+		"id" : "5692ff5e-7fa4-48c5-942e-c8727a532802",
+		"slug" : "original-character-design"
+	},
+	{
+		"name_en" : "In-Between Animation",
+		"name_ua" : null,
+		"id" : "dc1ee1b9-768d-4a1e-b91e-dc6cf66381a8",
+		"slug" : "in-between-animation"
+	},
+	{
+		"name_en" : "Original Creator",
+		"name_ua" : null,
+		"id" : "37071392-c28f-42e3-8927-60be1167abbf",
+		"slug" : "original-creator"
+	},
+	{
+		"name_en" : "Mechanical Design",
+		"name_ua" : null,
+		"id" : "d30adacf-2c91-4c32-b83e-7be5395dea45",
+		"slug" : "mechanical-design"
+	},
+	{
+		"name_en" : "Setting",
+		"name_ua" : null,
+		"id" : "8c321487-d524-4d93-8180-c9d2211da1a1",
+		"slug" : "setting"
+	},
+	{
+		"name_en" : "Inserted Song Performance",
+		"name_ua" : null,
+		"id" : "b6eb096a-b571-40a0-b2c4-c49fc87750f4",
+		"slug" : "inserted-song-performance"
+	},
+	{
+		"name_en" : "Color Setting",
+		"name_ua" : null,
+		"id" : "a1b684ac-16d3-4e21-9960-46fd63cac69c",
+		"slug" : "color-setting"
+	},
+	{
+		"name_en" : "Publicity",
+		"name_ua" : null,
+		"id" : "12b559f6-e1b1-4812-8cae-6774256be6f3",
+		"slug" : "publicity"
+	},
+	{
+		"name_en" : "Director of Photography",
+		"name_ua" : null,
+		"id" : "fdb64a09-9228-4d6a-909d-a1887289534b",
+		"slug" : "director-of-photography"
+	},
+	{
+		"name_en" : "Sound Manager",
+		"name_ua" : null,
+		"id" : "cf1dcb00-0d56-44fb-94dc-87e3b01db4c2",
+		"slug" : "sound-manager"
+	},
+	{
+		"name_en" : "Re-Recording Mixing",
+		"name_ua" : null,
+		"id" : "e41d5035-68f6-439f-b031-6b8dc6dcab07",
+		"slug" : "re-recording-mixing"
+	},
+	{
+		"name_en" : "Script",
+		"name_ua" : null,
+		"id" : "91601d94-80af-45c4-9ea2-53e9544226d5",
+		"slug" : "script"
+	},
+	{
+		"name_en" : "Dialogue Editing",
+		"name_ua" : null,
+		"id" : "69c805cf-a3e5-494a-9a9a-579e55286d52",
+		"slug" : "dialogue-editing"
+	},
+	{
+		"name_en" : "Casting Director",
+		"name_ua" : null,
+		"id" : "ba3286a2-192f-4aea-a4cb-7440519093b0",
+		"slug" : "casting-director"
+	},
+	{
+		"name_en" : "Assistant Animation Director",
+		"name_ua" : null,
+		"id" : "b6795c8b-fb33-44cb-99c3-b89852c16bdd",
+		"slug" : "assistant-animation-director"
+	},
+	{
+		"name_en" : "Assistant Director",
+		"name_ua" : null,
+		"id" : "73239d5f-b3b3-46fa-8f58-91712c49589c",
+		"slug" : "assistant-director"
+	},
+	{
+		"name_en" : "Recording",
+		"name_ua" : null,
+		"id" : "ddd629d1-f66b-4667-95e9-98863edf1381",
+		"slug" : "recording"
+	},
+	{
+		"name_en" : "Series Production Director",
+		"name_ua" : null,
+		"id" : "d2f31d9a-f5ff-46a8-baef-2348ac5054c2",
+		"slug" : "series-production-director"
+	},
+	{
+		"name_en" : "Sound Director",
+		"name_ua" : null,
+		"id" : "b2accaa1-b740-4c36-be49-be4af2ef6467",
+		"slug" : "sound-director"
+	},
+	{
+		"name_en" : "Background Art",
+		"name_ua" : null,
+		"id" : "dafe3ca8-d97b-49b5-b747-38c62dac7436",
+		"slug" : "background-art"
+	},
+	{
+		"name_en" : "Music",
+		"name_ua" : null,
+		"id" : "5d93a501-7646-4872-9a33-b72102ac08d4",
+		"slug" : "music"
+	},
+	{
+		"name_en" : "Spotting",
+		"name_ua" : null,
+		"id" : "ef4a2b65-3b7c-42ba-a13f-7cb3fc450c77",
+		"slug" : "spotting"
+	},
+	{
+		"name_en" : "Episode Director",
+		"name_ua" : null,
+		"id" : "563431d3-d7be-49db-be72-66903dcab3ab",
+		"slug" : "episode-director"
+	},
+	{
+		"name_en" : "Sound Effects",
+		"name_ua" : null,
+		"id" : "4e61acd1-db15-4ef3-933c-b33aa556db6c",
+		"slug" : "sound-effects"
+	},
+	{
+		"name_en" : "Sound Supervisor",
+		"name_ua" : null,
+		"id" : "2102fdf8-bc9b-468d-ab2c-ab73e327a532",
+		"slug" : "sound-supervisor"
+	},
+	{
+		"name_en" : "Assistant Production Coordinat",
+		"name_ua" : null,
+		"id" : "5b114e9a-95e5-4d5a-9d95-a798ba43759a",
+		"slug" : "assistant-production-coordinat"
+	},
+	{
+		"name_en" : "Post-Production Assistant",
+		"name_ua" : null,
+		"id" : "2c640dcd-5997-4d23-889e-9ed44677129e",
+		"slug" : "post-production-assistant"
+	},
+	{
+		"name_en" : "Digital Paint",
+		"name_ua" : null,
+		"id" : "582fc830-1440-4c67-82e9-f041b30ef0cb",
+		"slug" : "digital-paint"
+	},
+	{
+		"name_en" : "Recording Assistant",
+		"name_ua" : null,
+		"id" : "7d388c3b-4bb2-4657-9d12-3e60cb57fb32",
+		"slug" : "recording-assistant"
+	},
+	{
+		"name_en" : "Color Design",
+		"name_ua" : null,
+		"id" : "d0d7ee3c-65d5-40ff-b3a8-7ea6092fc9f2",
+		"slug" : "color-design"
+	},
+	{
+		"name_en" : "Executive Producer",
+		"name_ua" : null,
+		"id" : "606aa4f7-c007-44bd-9ef6-fcce7e1635bc",
+		"slug" : "executive-producer"
+	},
+	{
+		"name_en" : "Co-Producer",
+		"name_ua" : null,
+		"id" : "de22fcb4-7b82-4699-982d-d1087c7dbab5",
+		"slug" : "co-producer"
+	},
+	{
+		"name_en" : "Screenplay",
+		"name_ua" : null,
+		"id" : "842f4a0e-8847-4637-bc87-c2db33a09bf4",
+		"slug" : "screenplay"
+	},
+	{
+		"name_en" : "Setting Manager",
+		"name_ua" : null,
+		"id" : "3dcac451-9fe4-4b60-b318-07ca75fd528c",
+		"slug" : "setting-manager"
+	},
+	{
+		"name_en" : "Theme Song Composition",
+		"name_ua" : null,
+		"id" : "b5bb2b65-fc18-430e-a278-a1553d9cb9fe",
+		"slug" : "theme-song-composition"
+	},
+	{
+		"name_en" : "Planning Producer",
+		"name_ua" : null,
+		"id" : "b51cf6c4-f5aa-4b12-b359-840afaf1a1be",
+		"slug" : "planning-producer"
+	},
+	{
+		"name_en" : "Production Manager",
+		"name_ua" : null,
+		"id" : "f67c0856-8e17-4a8f-9b5f-05113cdad31c",
+		"slug" : "production-manager"
+	},
+	{
+		"name_en" : "Series Composition",
+		"name_ua" : null,
+		"id" : "1aa024c7-b6cb-4cc3-b009-f409ad35c179",
+		"slug" : "series-composition"
+	},
+	{
+		"name_en" : "Special Effects",
+		"name_ua" : null,
+		"id" : "46b9c32a-fa89-4a99-ae1f-b93bca0ea015",
+		"slug" : "special-effects"
+	},
+	{
+		"name_en" : "Theme Song Arrangement",
+		"name_ua" : null,
+		"id" : "b290a8db-eda5-4827-976c-32228a4e011b",
+		"slug" : "theme-song-arrangement"
+	},
+	{
+		"name_en" : "Key Animation",
+		"name_ua" : null,
+		"id" : "9fd16c9d-ad25-4676-b81a-4faed2670968",
+		"slug" : "key-animation"
+	},
+	{
+		"name_en" : "Editing",
+		"name_ua" : null,
+		"id" : "d96a9207-cd47-4f89-bd0d-2bed66fd46f7",
+		"slug" : "editing"
+	},
+	{
+		"name_en" : "Production Coordination",
+		"name_ua" : null,
+		"id" : "1d1fd416-9b72-4e80-8e88-56bcb8a7e336",
+		"slug" : "production-coordination"
+	},
+	{
+		"name_en" : "Chief Animation Director",
+		"name_ua" : null,
+		"id" : "820db769-5a46-4868-999a-31db60b8188d",
+		"slug" : "chief-animation-director"
+	},
+	{
+		"name_en" : "ADR Director",
+		"name_ua" : null,
+		"id" : "e002daa4-5e90-4f17-bfb2-42c8c76fa9fa",
+		"slug" : "adr-director"
+	},
+	{
+		"name_en" : "Creator",
+		"name_ua" : null,
+		"id" : "1c7e617e-db8c-47b6-8d6a-ea09d4920ff0",
+		"slug" : "creator"
+	},
+	{
+		"name_en" : "Online Editor",
+		"name_ua" : null,
+		"id" : "7cee280b-602c-4eff-9811-e2661eb00e88",
+		"slug" : "online-editor"
+	},
+	{
+		"name_en" : "Character Design",
+		"name_ua" : null,
+		"id" : "19f79876-4e6e-4bd9-91c9-822f86117f62",
+		"slug" : "character-design"
+	},
+	{
+		"name_en" : "2nd Key Animation",
+		"name_ua" : null,
+		"id" : "a15f7a93-53a5-49c0-ab09-85475287ce4d",
+		"slug" : "2nd-key-animation"
+	},
+	{
+		"name_en" : "Animation Director",
+		"name_ua" : null,
+		"id" : "7eb1b010-cdf0-4e8a-9206-790469525805",
+		"slug" : "animation-director"
+	},
+	{
+		"name_en" : "Director",
+		"name_ua" : null,
+		"id" : "979fabaa-a075-486c-bdeb-0fdfbfc6fb73",
+		"slug" : "director"
+	},
+	{
+		"name_en" : "Theme Song Performance",
+		"name_ua" : null,
+		"id" : "95718ae1-58c3-48a8-84a6-9b9d797077ea",
+		"slug" : "theme-song-performance"
+	},
+	{
+		"name_en" : "Animation Check",
+		"name_ua" : null,
+		"id" : "4ae9e137-24bf-4f44-a404-f64e9ca87517",
+		"slug" : "animation-check"
+	},
+	{
+		"name_en" : "Storyboard",
+		"name_ua" : null,
+		"id" : "cc861a2b-edb1-4f95-b3a7-27b34dcdce11",
+		"slug" : "storyboard"
+	}
+]}

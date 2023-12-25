@@ -22,6 +22,8 @@ class AnimeStaffRole(Base, SlugMixin):
 class AnimeStaff(Base):
     __tablename__ = "service_content_anime_staff"
 
+    weight: Mapped[int] = mapped_column(nullable=True)
+
     roles: Mapped[list["AnimeStaffRole"]] = relationship(
         secondary=anime_staff_roles_association_table,
         back_populates="staff",
