@@ -49,6 +49,7 @@ async def validate_avatar_file(file: UploadFile = File()) -> UploadMetadata:
     if width != height:
         raise Abort("upload", "not-square")
 
+    # ToDo: set specific image resolution here (?)
     if width < 160 or height < 160:
         raise Abort("upload", "bad-resolution")
 
