@@ -176,6 +176,7 @@ class RoleResponse(CustomModel):
 class AnimeStaffResponse(CustomModel):
     person: PersonResponse | None
     roles: list[RoleResponse]
+    weight: int | None
 
 
 class GenreResponse(CustomModel):
