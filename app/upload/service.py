@@ -69,13 +69,15 @@ async def process_avatar_upload(
         }
     )
 
-    # Mark old avatar as to be deleted
-    if user.avatar_image_relation:
-        user.avatar_image_relation.deletion_request = True
-
     image.uploaded = await s3_upload_file(upload_metadata, file_path)
 
-    user.avatar_image_relation = image
+    if image.uploaded:
+        # Mark old image to be deleted
+        if user.avatar_image_relation:
+            user.avatar_image_relation.deletion_request = True
+
+        # Only update image relation if file has been uploaded
+        user.avatar_image_relation = image
 
     session.add_all([image, upload])
     await session.commit()
