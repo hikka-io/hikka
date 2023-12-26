@@ -58,7 +58,7 @@ async def anime_staff(
         .filter(AnimeStaff.anime == anime)
         .options(joinedload(AnimeStaff.person))
         .options(joinedload(AnimeStaff.roles))
-        .order_by(asc(AnimeStaff.weight), asc(Person.name_en))
+        .order_by(desc(AnimeStaff.weight), asc(Person.name_en))
         .limit(limit)
         .offset(offset)
     )
