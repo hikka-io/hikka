@@ -16,10 +16,12 @@ from app.service import (
 async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
+    now = datetime.utcnow()
+
     # Create watch record if missing
     if not (watch := await get_anime_watch(session, anime, user)):
         watch = AnimeWatch()
-        watch.created = datetime.utcnow()
+        watch.created = now
         watch.anime = anime
         watch.user = user
 
@@ -28,16 +30,24 @@ async def save_watch(
         setattr(watch, key, value)
 
     # Save watch record
-    watch.updated = datetime.utcnow()
+    watch.updated = now
 
-    session.add(watch)
+    # Update user last list update
+    user.last_list_update = now
+    session.add_all([watch, user])
+
     await session.commit()
 
     return watch
 
 
-async def delete_watch(session: AsyncSession, watch: AnimeWatch):
+async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
     await session.delete(watch)
+
+    # Update user last list update
+    user.last_list_update = datetime.utcnow()
+    session.add(user)
+
     await session.commit()
 
 

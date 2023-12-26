@@ -29,6 +29,7 @@ class User(Base):
     last_username_change: Mapped[datetime] = mapped_column(nullable=True)
     last_email_change: Mapped[datetime] = mapped_column(nullable=True)
 
+    last_list_update: Mapped[datetime] = mapped_column(nullable=True)
     last_active: Mapped[datetime]
     created: Mapped[datetime]
     login: Mapped[datetime]
