@@ -169,7 +169,7 @@ class CompanyResponse(CustomModel):
 
 class UserResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
-    last_list_update: datetime | None = Field(examples=[1686088809])
+    updated: datetime | None = Field(examples=[1686088809])
     description: str | None = Field(examples=["Hikka"])
     username: str | None = Field(examples=["hikka"])
     created: datetime = Field(examples=[1686088809])

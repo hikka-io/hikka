@@ -33,7 +33,7 @@ async def save_watch(
     watch.updated = now
 
     # Update user last list update
-    user.last_list_update = now
+    user.updated = now
     session.add_all([watch, user])
 
     await session.commit()
@@ -45,7 +45,7 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
     await session.delete(watch)
 
     # Update user last list update
-    user.last_list_update = datetime.utcnow()
+    user.updated = datetime.utcnow()
     session.add(user)
 
     await session.commit()

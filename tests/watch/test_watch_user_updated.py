@@ -10,9 +10,9 @@ async def test_watch_delete(
     aggregator_anime,
     get_test_token,
 ):
-    # For new user last_list_update field is empty
+    # For new user updated field is empty
     response = await request_me(client, get_test_token)
-    assert response.json()["last_list_update"] is None
+    assert response.json()["updated"] is None
 
     # Add anime to watch list
     await request_watch_add(
@@ -29,9 +29,9 @@ async def test_watch_delete(
 
     # After adding something to list this field should be updated
     response = await request_me(client, get_test_token)
-    assert isinstance(response.json()["last_list_update"], int)
+    assert isinstance(response.json()["updated"], int)
 
-    old_last_list_update = response.json()["last_list_update"]
+    old_updated = response.json()["updated"]
 
     # Now remove anime from watch list
     response = await request_watch_delete(
@@ -40,5 +40,5 @@ async def test_watch_delete(
 
     # After deleting entry from list it should be updated again
     response = await request_me(client, get_test_token)
-    assert isinstance(response.json()["last_list_update"], int)
-    assert response.json()["last_list_update"] >= old_last_list_update
+    assert isinstance(response.json()["updated"], int)
+    assert response.json()["updated"] >= old_updated
