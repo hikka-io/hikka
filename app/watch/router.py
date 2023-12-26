@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
+from app.dependencies import auth_required
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -52,8 +53,9 @@ async def watch_add(
 async def delete_watch(
     session: AsyncSession = Depends(get_session),
     watch: AnimeWatch = Depends(verify_watch),
+    user: User = Depends(auth_required()),
 ):
-    await service.delete_watch(session, watch)
+    await service.delete_watch(session, watch, user)
     return {"success": True}
 
 
