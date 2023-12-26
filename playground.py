@@ -8,6 +8,7 @@ from app.utils import get_settings
 from app.sync import sitemap
 from app.sync import email
 import asyncio
+import math
 import json
 
 
@@ -43,17 +44,21 @@ async def recalculate_anime_staff_weights():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        count = await session.scalar(
-            select(func.count(AnimeStaff.id)).filter(
-                AnimeStaff.weight == None  # noqa: E711
-            )
-        )
+        limit = 10000
+        total = await session.scalar(select(func.count(AnimeStaff.id)))
+        pages = math.ceil(total / limit) + 1
 
-        while count > 0:
+        for page in range(1, pages):
+            print(page)
+
+            offset = (limit * (page)) - limit
+
             staff_roles = await session.scalars(
                 select(AnimeStaff)
                 .options(selectinload(AnimeStaff.roles))
-                .limit(20000)
+                .order_by(desc(AnimeStaff.id))
+                .limit(limit)
+                .offset(offset)
             )
 
             for staff in staff_roles:
@@ -61,12 +66,6 @@ async def recalculate_anime_staff_weights():
                 session.add(staff)
 
             await session.commit()
-
-            count = await session.scalar(
-                select(func.count(AnimeStaff.id)).filter(
-                    AnimeStaff.weight == None  # noqa: E711
-                )
-            )
 
     await sessionmanager.close()
 
@@ -106,6 +105,6 @@ if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
-    asyncio.run(import_role_weights())
-    # asyncio.run(recalculate_anime_staff_weights())
+    # asyncio.run(import_role_weights())
+    asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(test())
