@@ -170,6 +170,7 @@ class AnimeCharacterResponse(CustomModel):
 class RoleResponse(CustomModel):
     name_ua: str | None
     name_en: str | None
+    weight: int | None
     slug: str
 
 
