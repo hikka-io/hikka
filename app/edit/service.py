@@ -171,6 +171,9 @@ async def accept_pending_edit(
         before[key] = getattr(content, key)
         setattr(content, key, value)
 
+        if key not in content.ignored_fields:
+            content.ignored_fields.append(key)
+
     edit.status = constants.EDIT_ACCEPTED
     edit.updated = datetime.now()
     edit.moderator = moderator
