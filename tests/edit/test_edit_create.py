@@ -42,7 +42,7 @@ async def test_edit_create(
     assert response.json()["status"] == "pending"
     assert response.json()["moderator"] is None
     assert response.json()["before"] is None
-    assert response.json()["edit_id"] == 1
+    assert response.json()["edit_id"] == 18
 
     # Now create one more edit for person
     response = await request_create_edit(
@@ -59,7 +59,11 @@ async def test_edit_create(
     assert response.status_code == status.HTTP_200_OK
 
     # And now check if SQLAlchemy's polymorphic identity works
-    edits = (await test_session.scalars(select(Edit))).all()
+    edits = (
+        await test_session.scalars(
+            select(Edit).filter(Edit.system_edit == False)  # noqa: E712
+        )
+    ).all()
 
     assert isinstance(edits[0], AnimeEdit)
     assert edits[0].content_type == constants.CONTENT_ANIME

@@ -31,7 +31,7 @@ async def test_edit_update(
     response = await request_update_edit(
         client,
         get_test_token,
-        1,
+        18,
         {
             "description": "Brief description 2",
             "after": {"title_en": "Bocchi The Rock!"},

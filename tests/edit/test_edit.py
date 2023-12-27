@@ -12,7 +12,7 @@ async def test_edit(
     test_session,
 ):
     # Try to fetch unknown edit
-    response = await request_edit(client, 1)
+    response = await request_edit(client, 18)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["code"] == "edit:not_found"
@@ -33,7 +33,7 @@ async def test_edit(
     assert response.status_code == status.HTTP_200_OK
 
     # Let's check if we can get edit by numeric id
-    response = await request_edit(client, 1)
+    response = await request_edit(client, 18)
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.json()["created"], int)
@@ -46,4 +46,4 @@ async def test_edit(
     assert response.json()["status"] == "pending"
     assert response.json()["moderator"] is None
     assert response.json()["before"] is None
-    assert response.json()["edit_id"] == 1
+    assert response.json()["edit_id"] == 18

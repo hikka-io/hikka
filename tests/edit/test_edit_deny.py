@@ -30,7 +30,7 @@ async def test_edit_deny(
     assert response.status_code == status.HTTP_200_OK
 
     # Deny edit
-    response = await request_deny_edit(client, get_test_token, 1)
+    response = await request_deny_edit(client, get_test_token, 18)
 
     # Make sure edit status and status code is correct
     assert response.status_code == status.HTTP_200_OK
@@ -61,7 +61,7 @@ async def test_edit_deny_bad_permission(
     assert response.status_code == status.HTTP_200_OK
 
     # Try to deny edit
-    response = await request_deny_edit(client, get_test_token, 1)
+    response = await request_deny_edit(client, get_test_token, 18)
 
     # It should fail with permission denied
     assert response.status_code == status.HTTP_403_FORBIDDEN
