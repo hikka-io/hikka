@@ -19,6 +19,7 @@ class Edit(
         "polymorphic_on": "content_type",
     }
 
+    system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)
     hidden: Mapped[bool] = mapped_column(default=False)
     content_type: Mapped[str]

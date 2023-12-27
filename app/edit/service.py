@@ -85,7 +85,11 @@ async def get_edits(
     """Return all edits"""
 
     return await session.scalars(
-        select(Edit).order_by(desc(Edit.edit_id)).limit(limit).offset(offset)
+        select(Edit)
+        .filter(Edit.system_edit == False)  # noqa: E712
+        .order_by(desc(Edit.edit_id))
+        .limit(limit)
+        .offset(offset)
     )
 
 

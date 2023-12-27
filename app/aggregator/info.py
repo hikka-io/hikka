@@ -503,6 +503,7 @@ async def update_anime_info(session, anime, data):
             "content_type": constants.CONTENT_ANIME,
             "status": constants.EDIT_ACCEPTED,
             "content_id": anime.reference,
+            "system_edit": True,
             "before": before,
             "after": after,
             "created": now,
