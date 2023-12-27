@@ -8,7 +8,6 @@ from app import constants
 from . import service
 from . import utils
 
-
 from .schemas import (
     ContentTypeEnum,
     EditArgs,

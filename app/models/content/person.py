@@ -27,7 +27,7 @@ class Person(
     name_ua: Mapped[str] = mapped_column(nullable=True)
 
     staff_roles: Mapped[list["AnimeStaff"]] = relationship(
-        back_populates="person"
+        back_populates="person", viewonly=True
     )
 
     voice_roles: Mapped[list["AnimeVoice"]] = relationship(

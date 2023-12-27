@@ -64,7 +64,10 @@ class Anime(
     voices: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="anime", viewonly=True
     )
-    staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
+
+    staff: Mapped[list["AnimeStaff"]] = relationship(
+        back_populates="anime", viewonly=True
+    )
 
     episodes_list: Mapped[list["AnimeEpisode"]] = relationship(
         back_populates="anime", viewonly=True

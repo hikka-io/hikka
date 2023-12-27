@@ -1,13 +1,12 @@
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from app.dependencies import auth_required
+from app.database import get_session
 from app.errors import Abort
 from app.models import User
 from fastapi import Depends
 from typing import Tuple
 from . import service
-
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import get_session
 
 
 async def validate_username(

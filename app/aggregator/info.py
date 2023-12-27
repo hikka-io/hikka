@@ -3,7 +3,6 @@ from sqlalchemy import select
 from datetime import datetime
 from app import utils
 
-
 from app.models import (
     AnimeRecommendation,
     AnimeStaffRole,
@@ -19,17 +18,6 @@ from app.models import (
     Anime,
     Image,
 )
-
-
-def update_if_not_ignored(model, data, field):
-    if not data[field]:
-        return
-
-    if field in model.ignored_fields:
-        return
-
-    # Basically model.field = data[field] except the field is dynamic
-    setattr(model, field, data[field])
 
 
 def process_translations(data):
@@ -408,50 +396,83 @@ async def process_poster(session, anime, data):
 
 
 async def update_anime_info(session, anime, data):
-    anime.year = anime.start_date.year if anime.start_date else None
-    anime.season = utils.get_season(anime.start_date)
-
-    anime.start_date = utils.from_timestamp(data["start_date"])
-    anime.end_date = utils.from_timestamp(data["end_date"])
-    anime.updated = utils.from_timestamp(data["updated"])
-    anime.episodes_released = data["episodes_released"]
-    anime.episodes_total = data["episodes_total"]
-    anime.media_type = data["media_type"]
-    anime.scored_by = data["scored_by"]
-    anime.duration = data["duration"]
-    anime.source = data["source"]
-    anime.rating = data["rating"]
-    anime.status = data["status"]
-    anime.mal_id = data["mal_id"]
-    anime.score = data["score"]
-    anime.nsfw = data["nsfw"]
+    before = {}
+    after = {}
 
     for field in [
+        "episodes_released",
+        "episodes_total",
         "synopsis_ua",
         "synopsis_en",
+        "media_type",
+        "scored_by",
+        "duration",
         "title_en",
         "title_ja",
         "title_ua",
         "synonyms",
         "external",
+        "source",
+        "rating",
+        "status",
         "videos",
+        "score",
+        "nsfw",
         "ost",
     ]:
-        update_if_not_ignored(anime, data, field)
+        if field not in data:
+            continue
+
+        if field in anime.ignored_fields:
+            continue
+
+        if data[field] == getattr(anime, field):
+            continue
+
+        # If field going to be changed first we need add it to before dict
+        before[field] = getattr(anime, field)
+
+        # Update value here
+        setattr(anime, field, data[field])
+
+        # And add it to after dict
+        after[field] = getattr(anime, field)
+
+    # Extract and convert date fields
+    date_fields = ["start_date", "end_date"]
+    for field in date_fields:
+        new_date = utils.from_timestamp(data[field])
+        anime_date = getattr(anime, field)
+
+        if anime_date != new_date and field not in anime.ignored_fields:
+            before[field] = int(anime_date.timestamp()) if anime_date else None
+            after[field] = int(new_date.timestamp()) if new_date else None
+            setattr(anime, field, new_date)
+
+    # Update year and season fields
+    if anime.start_date:
+        year = anime.start_date.year
+        season = utils.get_season(anime.start_date)
+    else:
+        year = None
+        season = None
+
+    fields_to_update = [("year", year), ("season", season)]
+    for field, value in fields_to_update:
+        if getattr(anime, field) != value and field not in anime.ignored_fields:
+            before[field] = getattr(anime, field)
+            after[field] = value
+            setattr(anime, field, value)
 
     anime.stats = data["stats"]
+    anime.updated = datetime.utcnow()
+    anime.needs_update = False
 
     await process_poster(session, anime, data)
-
-    anime.needs_update = False
 
     genres_add = await process_genres(session, anime, data)
 
     companies_anime = await process_companies_anime(session, anime, data)
-
-    characters_and_voices = await process_characters_and_voices(
-        session, anime, data
-    )
 
     recommendations = await process_recommendations(session, anime, data)
 
@@ -459,24 +480,19 @@ async def update_anime_info(session, anime, data):
 
     update_staff = await process_staff(session, anime, data)
 
-    session.add_all(companies_anime)
+    characters_and_voices = await process_characters_and_voices(
+        session, anime, data
+    )
+
     session.add_all(characters_and_voices)
+    session.add_all(recommendations)
+    session.add_all(companies_anime)
     session.add_all(update_staff)
     session.add_all(episodes)
-    session.add_all(recommendations)
 
     for genre in genres_add:
         anime.genres.append(genre)
 
     session.add(anime)
 
-    # print(f"companies_anime: {len(companies_anime)}")
-    # print(f"characters_and_voices: {len(characters_and_voices)}")
-    # print(f"update_staff: {len(update_staff)}")
-    # print(f"episodes: {len(episodes)}")
-    # print(f"recommendations: {len(recommendations)}")
-    # print(f"genres_add: {len(genres_add)}")
-
     await session.commit()
-
-    # print(f"Synced anime {anime.title_ja} ({anime.mal_id})")
