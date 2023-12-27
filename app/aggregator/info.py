@@ -1,6 +1,7 @@
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 from datetime import datetime
+from app import constants
 from app import utils
 
 from app.models import (
@@ -17,6 +18,7 @@ from app.models import (
     Person,
     Anime,
     Image,
+    Edit,
 )
 
 
@@ -396,6 +398,12 @@ async def process_poster(session, anime, data):
 
 
 async def update_anime_info(session, anime, data):
+    # Note: this code has a lot of moving parts, hardcoded values and generaly
+    # things I don't like. Let's just hope tests do cover all edge cases
+    # and we will rewrite this abomination one day.
+
+    now = datetime.utcnow()
+
     before = {}
     after = {}
 
@@ -465,21 +473,16 @@ async def update_anime_info(session, anime, data):
             setattr(anime, field, value)
 
     anime.stats = data["stats"]
-    anime.updated = datetime.utcnow()
     anime.needs_update = False
+    anime.updated = now
 
     await process_poster(session, anime, data)
 
     genres_add = await process_genres(session, anime, data)
-
     companies_anime = await process_companies_anime(session, anime, data)
-
     recommendations = await process_recommendations(session, anime, data)
-
     episodes = await process_episodes(session, anime, data)
-
     update_staff = await process_staff(session, anime, data)
-
     characters_and_voices = await process_characters_and_voices(
         session, anime, data
     )
@@ -494,5 +497,19 @@ async def update_anime_info(session, anime, data):
         anime.genres.append(genre)
 
     session.add(anime)
+
+    edit = Edit(
+        **{
+            "content_type": constants.CONTENT_ANIME,
+            "status": constants.EDIT_ACCEPTED,
+            "content_id": anime.reference,
+            "before": before,
+            "after": after,
+            "created": now,
+            "updated": now,
+        }
+    )
+
+    session.add(edit)
 
     await session.commit()
