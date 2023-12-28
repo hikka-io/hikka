@@ -35,6 +35,7 @@ class Anime(
     # Service fields
     aggregator_updated: Mapped[datetime] = mapped_column(nullable=True)
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
+    translated_ua: Mapped[bool] = mapped_column(default=False)
     needs_update: Mapped[bool] = mapped_column(default=False)
 
     # Metadata
