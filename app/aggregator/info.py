@@ -472,6 +472,7 @@ async def update_anime_info(session, anime, data):
             after[field] = value
             setattr(anime, field, value)
 
+    anime.aggregator_updated = utils.from_timestamp(data["updated"])
     anime.stats = data["stats"]
     anime.needs_update = False
     anime.updated = now

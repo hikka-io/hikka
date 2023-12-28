@@ -33,9 +33,9 @@ class Anime(
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)
 
     # Service fields
+    aggregator_updated: Mapped[datetime] = mapped_column(nullable=True)
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     needs_update: Mapped[bool] = mapped_column(default=False)
-    updated: Mapped[datetime]
 
     # Metadata
     rating: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
