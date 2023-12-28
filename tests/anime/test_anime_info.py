@@ -26,7 +26,7 @@ async def test_anime_info(
     assert response.json()["score"] == 8.84
 
     assert len(response.json()["companies"]) == 3
-    assert len(response.json()["external"]) == 11
+    assert len(response.json()["external"]) == 13
     assert len(response.json()["videos"]) == 10
     assert len(response.json()["genres"]) == 2
     assert len(response.json()["ost"]) == 5

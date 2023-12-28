@@ -232,6 +232,7 @@ class AnimeStatsResponse(CustomModel):
 class AnimeExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
+    type: str
 
 
 class AnimeVideoResponse(CustomModel):

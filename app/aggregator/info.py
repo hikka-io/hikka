@@ -22,30 +22,6 @@ from app.models import (
 )
 
 
-def process_translations(data):
-    translations = []
-
-    for entry in data["services"]["anitube"]:
-        translations.append(
-            {
-                "synopsis": entry["description"],
-                "title": entry["title"],
-                "source": entry["url"],
-            }
-        )
-
-    for entry in data["services"]["toloka"]:
-        translations.append(
-            {
-                "synopsis": entry["description"],
-                "title": entry["title"],
-                "source": entry["url"],
-            }
-        )
-
-    return translations
-
-
 async def process_genres(session, anime, data):
     genres = await session.scalars(
         select(AnimeGenre).where(AnimeGenre.content_id.in_(data["genre_ids"]))
@@ -397,6 +373,31 @@ async def process_poster(session, anime, data):
     anime.poster_relation = image
 
 
+def process_external(data):
+    result = [
+        {
+            "type": constants.EXTERNAL_GENERAL,
+            "text": entry["text"],
+            "url": entry["url"],
+        }
+        for entry in data["external"]
+    ]
+
+    for source in ["anitube", "toloka"]:
+        result.extend(
+            [
+                {
+                    "type": constants.EXTERNAL_WATCH,
+                    "text": source.capitalize(),
+                    "url": entry["url"],
+                }
+                for entry in data.get(source, [])
+            ]
+        )
+
+    return result
+
+
 async def update_anime_info(session, anime, data):
     # Note: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
@@ -418,7 +419,6 @@ async def update_anime_info(session, anime, data):
         "title_ja",
         "title_ua",
         "synonyms",
-        "external",
         "source",
         "rating",
         "status",
@@ -469,6 +469,12 @@ async def update_anime_info(session, anime, data):
             before[field] = getattr(anime, field)
             after[field] = value
             setattr(anime, field, value)
+
+    external = process_external(data)
+    if anime.external != external and "external" not in anime.ignored_fields:
+        before["external"] = anime.external
+        after["external"] = external
+        setattr(anime, "external", external)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
     anime.stats = data["scored_by"]
