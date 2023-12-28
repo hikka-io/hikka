@@ -413,7 +413,6 @@ async def update_anime_info(session, anime, data):
         "synopsis_ua",
         "synopsis_en",
         "media_type",
-        "scored_by",
         "duration",
         "title_en",
         "title_ja",
@@ -424,7 +423,6 @@ async def update_anime_info(session, anime, data):
         "rating",
         "status",
         "videos",
-        "score",
         "nsfw",
         "ost",
     ]:
@@ -473,6 +471,8 @@ async def update_anime_info(session, anime, data):
             setattr(anime, field, value)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
+    anime.stats = data["scored_by"]
+    anime.stats = data["score"]
     anime.stats = data["stats"]
     anime.needs_update = False
     anime.updated = now
