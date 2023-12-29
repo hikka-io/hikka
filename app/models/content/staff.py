@@ -4,7 +4,6 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from ..mixins import SlugMixin
-from sqlalchemy import desc
 from ..base import Base
 
 
