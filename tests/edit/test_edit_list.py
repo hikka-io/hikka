@@ -35,7 +35,7 @@ async def test_edit_create(
     assert response.json()["status"] == "pending"
     assert response.json()["moderator"] is None
     assert response.json()["before"] is None
-    assert response.json()["edit_id"] == 1
+    assert response.json()["edit_id"] == 18
 
     # Now create one more edit for person
     response = await request_create_edit(
@@ -58,8 +58,8 @@ async def test_edit_create(
     assert response.status_code == status.HTTP_200_OK
 
     # Some checks to verify order and content
-    assert response.json()["list"][0]["edit_id"] == 2
-    assert response.json()["list"][1]["edit_id"] == 1
+    assert response.json()["list"][0]["edit_id"] == 19
+    assert response.json()["list"][1]["edit_id"] == 18
 
     assert response.json()["list"][0]["content"]["slug"] == "justin-cook-77f1b3"
     assert (

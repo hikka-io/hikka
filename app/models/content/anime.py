@@ -33,9 +33,10 @@ class Anime(
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)
 
     # Service fields
+    aggregator_updated: Mapped[datetime] = mapped_column(nullable=True)
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
+    translated_ua: Mapped[bool] = mapped_column(default=False)
     needs_update: Mapped[bool] = mapped_column(default=False)
-    updated: Mapped[datetime]
 
     # Metadata
     rating: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
@@ -64,7 +65,10 @@ class Anime(
     voices: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="anime", viewonly=True
     )
-    staff: Mapped[list["AnimeStaff"]] = relationship(back_populates="anime")
+
+    staff: Mapped[list["AnimeStaff"]] = relationship(
+        back_populates="anime", viewonly=True
+    )
 
     episodes_list: Mapped[list["AnimeEpisode"]] = relationship(
         back_populates="anime", viewonly=True

@@ -85,7 +85,11 @@ async def get_edits(
     """Return all edits"""
 
     return await session.scalars(
-        select(Edit).order_by(desc(Edit.edit_id)).limit(limit).offset(offset)
+        select(Edit)
+        .filter(Edit.system_edit == False)  # noqa: E712
+        .order_by(desc(Edit.edit_id))
+        .limit(limit)
+        .offset(offset)
     )
 
 
@@ -170,6 +174,9 @@ async def accept_pending_edit(
     for key, value in edit.after.items():
         before[key] = getattr(content, key)
         setattr(content, key, value)
+
+        if key not in content.ignored_fields:
+            content.ignored_fields.append(key)
 
     edit.status = constants.EDIT_ACCEPTED
     edit.updated = datetime.now()

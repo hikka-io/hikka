@@ -30,14 +30,14 @@ async def test_edit_close(
     assert response.status_code == status.HTTP_200_OK
 
     # Close edit
-    response = await request_close_edit(client, get_test_token, 1)
+    response = await request_close_edit(client, get_test_token, 18)
 
     # Make sure edit status and status code is correct
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["status"] == constants.EDIT_CLOSED
 
     # Get edit record from database
-    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 18))
 
     # Status should be closed
     assert edit.status == constants.EDIT_CLOSED
@@ -69,7 +69,7 @@ async def test_edit_close_bad_author(
     assert response.status_code == status.HTTP_200_OK
 
     # Close edit with bad author
-    response = await request_close_edit(client, get_dummy_token, 1)
+    response = await request_close_edit(client, get_dummy_token, 18)
 
     # Make sure edit status and status code is correct
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -102,7 +102,7 @@ async def test_edit_close_bad_permission(
     assert response.status_code == status.HTTP_200_OK
 
     # Close edit with account with no permissions
-    response = await request_close_edit(client, get_dummy_token, 1)
+    response = await request_close_edit(client, get_dummy_token, 18)
 
     # And it fails :D
     assert response.status_code == status.HTTP_403_FORBIDDEN

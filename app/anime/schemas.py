@@ -69,6 +69,7 @@ class SourceEnum(str, Enum):
 class AnimeSearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
     sort: list[str] = ["score:desc", "scored_by:desc"]
+    only_translated: bool = False
 
     years: list[PositiveInt | None] = Field(
         default=[None, None],
@@ -232,6 +233,7 @@ class AnimeStatsResponse(CustomModel):
 class AnimeExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
+    type: str
 
 
 class AnimeVideoResponse(CustomModel):
@@ -288,3 +290,4 @@ class AnimeInfoResponse(CustomModel):
     videos: list[AnimeVideoResponse]
     ost: list[AnimeOSTResponse]
     stats: AnimeStatsResponse
+    translated_ua: bool

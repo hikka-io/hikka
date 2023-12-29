@@ -10,8 +10,6 @@ async def update_anime_staff_weights(session):
     pages = math.ceil(total / limit) + 1
 
     for page in range(1, pages):
-        print(page)
-
         offset = (limit * (page)) - limit
 
         staff_roles = await session.scalars(

@@ -27,7 +27,7 @@ async def save_anime_list(session, data):
         if anime_data["content_id"] in anime_cache:
             anime = anime_cache[anime_data["content_id"]]
 
-            if updated == anime.updated:
+            if updated == anime.aggregator_updated:
                 continue
 
             if anime.needs_update:

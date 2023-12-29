@@ -89,8 +89,9 @@ class EditResponse(CustomModel):
     updated: datetime = Field(examples=[1693850684])
     edit_id: int = Field(examples=[3])
     moderator: UserResponse | None
-    author: UserResponse
+    author: UserResponse | None
     before: dict | None
+    system_edit: bool
     after: dict
 
     # ToDo: maybe we should use Pydantic's discriminator here?

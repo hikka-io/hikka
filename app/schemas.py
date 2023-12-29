@@ -119,6 +119,7 @@ class AnimeResponse(CustomModel):
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    translated_ua: bool
     season: str | None
     source: str | None
     rating: str | None

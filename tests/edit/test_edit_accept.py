@@ -30,7 +30,7 @@ async def test_edit_accept(
     assert response.status_code == status.HTTP_200_OK
 
     # Accept edit
-    response = await request_accept_edit(client, get_test_token, 1)
+    response = await request_accept_edit(client, get_test_token, 18)
 
     # Make sure edit status and status code is correct
     assert response.status_code == status.HTTP_200_OK
@@ -43,6 +43,7 @@ async def test_edit_accept(
 
     # And make sure title has been updated
     assert anime.title_en == "Bocchi The Rock!"
+    assert "title_en" in anime.ignored_fields
 
 
 async def test_edit_accept_bad_permission(
@@ -69,7 +70,7 @@ async def test_edit_accept_bad_permission(
     assert response.status_code == status.HTTP_200_OK
 
     # Try to accept edit
-    response = await request_accept_edit(client, get_test_token, 1)
+    response = await request_accept_edit(client, get_test_token, 18)
 
     # It should fail with permission denied
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -100,7 +101,7 @@ async def test_edit_accept_bad_empty_edit(
     assert response.status_code == status.HTTP_200_OK
 
     # Get edit record from database
-    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 18))
 
     # Set old title before accepting it
     edit.after = {"title_en": "Bocchi the Rock!"}
@@ -109,7 +110,7 @@ async def test_edit_accept_bad_empty_edit(
     await test_session.commit()
 
     # Try to accept edit
-    response = await request_accept_edit(client, get_test_token, 1)
+    response = await request_accept_edit(client, get_test_token, 18)
 
     # It should fail with permission denied
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -140,7 +141,7 @@ async def test_edit_accept_bad_invalid_field(
     assert response.status_code == status.HTTP_200_OK
 
     # Get edit record from database
-    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 1))
+    edit = await test_session.scalar(select(Edit).filter(Edit.edit_id == 18))
 
     # Set old title before accepting it
     edit.after = {"title_bad": "Bocchi the Rock!"}
@@ -149,7 +150,7 @@ async def test_edit_accept_bad_invalid_field(
     await test_session.commit()
 
     # Try to accept edit
-    response = await request_accept_edit(client, get_test_token, 1)
+    response = await request_accept_edit(client, get_test_token, 18)
 
     # It should fail with permission denied
     assert response.status_code == status.HTTP_400_BAD_REQUEST
