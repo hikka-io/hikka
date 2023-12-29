@@ -8,7 +8,6 @@ from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from . import utils
 
-
 from app.models import (
     AnimeRecommendation,
     AnimeCharacter,
@@ -209,6 +208,9 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
 
     if len(search.media_type) > 0:
         query = query.where(Anime.media_type.in_(search.media_type))
+
+    if search.only_translated:
+        query = query.filter(Anime.translated_ua == True)  # noqa: E712
 
     if len(search.producers) > 0:
         query = query.join(Anime.producers).filter(

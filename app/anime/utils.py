@@ -16,8 +16,9 @@ def build_anime_filters(search: AnimeSearchArgs):
     studios = [f"studios = {studio}" for studio in search.studios]
     genres = [f"genres = {genre}" for genre in search.genres]
 
-    year = []
+    translated = []
     score = []
+    year = []
 
     if search.years[0]:
         year.append([f"year>={search.years[0]}"])
@@ -31,7 +32,11 @@ def build_anime_filters(search: AnimeSearchArgs):
     if search.score[1]:
         score.append([f"score<={search.score[1]}"])
 
+    if search.only_translated:
+        translated = ["translated_ua = true"]
+
     return [
+        translated,
         rating,
         status,
         source,

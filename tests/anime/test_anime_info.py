@@ -11,7 +11,6 @@ async def test_anime_info(
 ):
     # Test for anime info endpoint
     response = await request_anime_info(client, "bocchi-the-rock-9e172d")
-
     assert response.status_code == status.HTTP_200_OK
 
     # Make sure data is more or less what we expect to see
@@ -31,6 +30,7 @@ async def test_anime_info(
     assert len(response.json()["genres"]) == 2
     assert len(response.json()["ost"]) == 5
 
+    assert response.json()["translated_ua"] is True
     assert response.json()["stats"] == {
         "completed": 284747,
         "dropped": 4858,

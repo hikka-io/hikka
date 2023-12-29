@@ -17,6 +17,7 @@ async def update_anime_settings(index):
             filterable_attributes=[
                 "episodes_released",
                 "episodes_total",
+                "translated_ua",
                 "media_type",
                 "producers",
                 "studios",
@@ -37,6 +38,7 @@ async def update_anime_settings(index):
             displayed_attributes=[
                 "episodes_released",
                 "episodes_total",
+                "translated_ua",
                 "media_type",
                 "scored_by",
                 "title_ua",
@@ -90,6 +92,7 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
                 "episodes_released": anime.episodes_released,
                 "episodes_total": anime.episodes_total,
                 "season": get_season(anime.start_date),
+                "translated_ua": anime.translated_ua,
                 "media_type": anime.media_type,
                 "scored_by": anime.scored_by,
                 "synonyms": anime.synonyms,
