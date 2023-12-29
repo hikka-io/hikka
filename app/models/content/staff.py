@@ -4,6 +4,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from ..mixins import SlugMixin
+from sqlalchemy import desc
 from ..base import Base
 
 
@@ -28,6 +29,7 @@ class AnimeStaff(Base):
 
     roles: Mapped[list["AnimeStaffRole"]] = relationship(
         secondary=anime_staff_roles_association_table,
+        order_by="AnimeStaffRole.weight.desc()",
         back_populates="staff",
         lazy="selectin",
     )
