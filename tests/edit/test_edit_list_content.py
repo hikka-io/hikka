@@ -43,3 +43,5 @@ async def test_edit_list_content(
     assert response.json()["list"][0]["moderator"] is None
     assert response.json()["list"][0]["before"] is None
     assert response.json()["list"][0]["edit_id"] == 18
+
+    assert response.json()["list"][1]["system_edit"] is True

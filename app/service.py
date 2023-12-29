@@ -83,6 +83,7 @@ def anime_loadonly(statement):
     return statement.load_only(
         Anime.episodes_released,
         Anime.episodes_total,
+        Anime.translated_ua,
         Anime.content_id,
         Anime.media_type,
         Anime.scored_by,

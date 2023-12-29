@@ -91,6 +91,7 @@ class EditResponse(CustomModel):
     moderator: UserResponse | None
     author: UserResponse | None
     before: dict | None
+    system_edit: bool
     after: dict
 
     # ToDo: maybe we should use Pydantic's discriminator here?

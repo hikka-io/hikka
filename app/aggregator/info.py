@@ -399,7 +399,7 @@ def process_external(data):
 
 
 def process_translated_ua(data):
-    return len(data["anitube"]) or len(data["toloka"])
+    return len(data["anitube"]) > 0 or len(data["toloka"]) > 0
 
 
 async def update_anime_info(session, anime, data):
