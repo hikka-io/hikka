@@ -511,19 +511,21 @@ async def update_anime_info(session, anime, data):
 
     session.add(anime)
 
-    edit = Edit(
-        **{
-            "content_type": constants.CONTENT_ANIME,
-            "status": constants.EDIT_ACCEPTED,
-            "content_id": anime.reference,
-            "system_edit": True,
-            "before": before,
-            "after": after,
-            "created": now,
-            "updated": now,
-        }
-    )
+    # Only create new edit if we need to
+    if before != {} and after != {}:
+        edit = Edit(
+            **{
+                "content_type": constants.CONTENT_ANIME,
+                "status": constants.EDIT_ACCEPTED,
+                "content_id": anime.reference,
+                "system_edit": True,
+                "before": before,
+                "after": after,
+                "created": now,
+                "updated": now,
+            }
+        )
 
-    session.add(edit)
+        session.add(edit)
 
     await session.commit()
