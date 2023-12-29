@@ -11,18 +11,32 @@
     [default.mailgun]
     endpoint = "https://api.eu.mailgun.net/v3/mail.hikka.io/messages"
     token = "token"
+    email_from = "Hikka <noreply@mail.hikka.io>"
 
     [default.meilisearch]
     url = "http://127.0.0.1:8800"
     api_key = "xyz"
 
     [default.backend]
+    sitemap_path = "/Users/user/Work/Hikka/sitemap"
+    auth_emails = []
     origins = [
         "http://localhost:8000",
         "http://localhost:3000",
         "http://localhost:5173",
         "https://hikka.io",
     ]
+
+    [default.captcha]
+    secret_key = "captcha_secret"
+    site_key = "captcha_key"
+    test = "fake_captcha"
+
+    [default.s3]
+    key = "s3_key"
+    secret = "s3_secret"
+    endpoint = "https://endpoint.r2.cloudflarestorage.com"
+    bucket = "hikka"
 
 [testing]
     [testing.database]
@@ -33,3 +47,22 @@
     client_secret = "secret"
     redirect_uri = "http://example.com/oauth/google"
     enabled = true
+
+    [testing.meilisearch]
+    url = "http://127.0.0.1:9900"
+    api_key = "zyx"
+
+    [testing.backend]
+    auth_emails = ["user@mail.com"]
+    origins = []
+
+    [testing.captcha]
+    secret_key = "test_secter_key"
+    site_key = "test_site_key"
+    test = "fake_captcha"
+
+    [testing.s3]
+    key = "FAKE_KEY"
+    secret = "FAKE_SECRET"
+    endpoint = "https://fake.s3.example.com"
+    bucket = "hikka-test"
