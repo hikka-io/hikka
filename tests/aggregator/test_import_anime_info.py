@@ -49,6 +49,7 @@ async def test_import_anime_info(
 
     # I'm not particullarly fan of this approach but this will do for now
     assert edit.before == {
+        "translated_ua": False,
         "duration": None,
         "external": [],
         "ost": [],
@@ -61,6 +62,7 @@ async def test_import_anime_info(
     }
 
     assert edit.after == {
+        "translated_ua": True,
         "duration": 24,
         "external": [
             {

@@ -398,6 +398,10 @@ def process_external(data):
     return result
 
 
+def process_translated_ua(data):
+    return len(data["anitube"]) or len(data["toloka"])
+
+
 async def update_anime_info(session, anime, data):
     # Note: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
@@ -463,18 +467,20 @@ async def update_anime_info(session, anime, data):
         year = None
         season = None
 
-    fields_to_update = [("year", year), ("season", season)]
-    for field, value in fields_to_update:
+    # Get external list and translated_ua status
+    translated_ua = process_translated_ua(data)
+    external = process_external(data)
+
+    for field, value in [
+        ("year", year),
+        ("season", season),
+        ("translated_ua", translated_ua),
+        ("external", external),
+    ]:
         if getattr(anime, field) != value and field not in anime.ignored_fields:
             before[field] = getattr(anime, field)
             after[field] = value
             setattr(anime, field, value)
-
-    external = process_external(data)
-    if anime.external != external and "external" not in anime.ignored_fields:
-        before["external"] = anime.external
-        after["external"] = external
-        setattr(anime, "external", external)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
     anime.stats = data["scored_by"]
