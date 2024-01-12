@@ -1393,95 +1393,15 @@
     "scored_by": 459909,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Третій сезон однойменного тайтлу.",
-            "sub": false,
-            "created": 1687706435,
-            "title_ja": "Kaguya-sama wa Kokurasetai: Ultra Romantic",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2022-04/1649517159_screenshot1.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-04/1649517162_screenshot2.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-04/1649517130_screenshot3.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-04/1649517105_screenshot4.jpg"
-            ],
-            "updated": 1689360510,
-            "title_ua": "Каґуя хоче, щоб їй зізналися ~Ультра-романтика~ (Cезон 3)",
-            "length": 25,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3946-kaguya-sama-wa-kokurasetai-ultra-romantic",
-            "episodes_raw": "12 з 12 (25 хв.)",
-            "scored_by": 270,
-            "voices": [
-                "Surgeon",
-                "Eternal Rage"
-            ],
-            "url": "https://anitube.in.ua/3946-kaguya-sama-wa-kokurasetai-ultra-romantic.html",
-            "director": "Омата Шінічі",
-            "year": 2022,
-            "genres": [
-                {
-                    "name": "Комедія",
-                    "slug": "comedy"
-                },
-                {
-                    "name": "Психологія",
-                    "slug": "psiho"
-                },
-                {
-                    "name": "Романтика",
-                    "slug": "romance"
-                },
-                {
-                    "name": "Школа",
-                    "slug": "school-life"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=aKrSHjN26n0",
-            "score": 9.5,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/9/475d9ff8722cb9a415f9fdfccda0c5.jpg",
-            "nsfw": false,
-            "id": "cbe55f40-2b64-4f31-ba06-5aa524160e44"
+            "url": "https://anitube.in.ua/3946-kaguya-sama-wa-kokurasetai-ultra-romantic.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Каґуя хоче, щоб їй зізналися ~Ультра-романтика~ (Сезон 3) / Kaguya-sama wa Kokurasetai: Ultra Romantic (Season 3) (2022) WEBDL 1080p",
-            "year": 2022,
-            "title_ja": "Kaguya-sama wa Kokurasetai: Ultra Romantic",
-            "leech": 0,
-            "title_ua": "Каґуя хоче, щоб їй зізналися ~Ультра-романтика~",
-            "seed": 17,
-            "quality": "1080p",
-            "size": 6942,
-            "slug": "655885",
-            "url": "http://toloka.to/t655885",
-            "image": "https://thumb.hurtom.com/image/i.ibb.co/6thStYY/kaguya3-poster.jpg",
-            "id": "8963658a-4c94-4d6b-86b6-193f24f7a972",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1656104400,
-            "screenshots": [
-                "https://thumb.hurtom.com/image/i.ibb.co/vQCGHHz/3-01-mkv-snapshot-07-27-2022-04-09-15-57-04.png",
-                "https://thumb.hurtom.com/image/i.ibb.co/bXZQgW5/3-01-mkv-snapshot-12-44-2022-04-09-15-57-17.png",
-                "https://thumb.hurtom.com/image/i.ibb.co/2W64wvk/3-01-mkv-snapshot-17-30-2022-04-09-15-57-29.png",
-                "https://thumb.hurtom.com/image/i.ibb.co/5YdynyN/3-01-mkv-snapshot-20-23-2022-04-09-15-57-57.png",
-                "https://thumb.hurtom.com/image/i.ibb.co/hLCRrqj/02-mkv-snapshot-18-44-2022-04-09-12-16-28.png"
-            ],
-            "description": "Третій сезон однойменного тайтлу.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t655885"
         }
     ],
+    "watari": [],
     "score": 9.05,
     "stats": {
         "dropped": 7803,

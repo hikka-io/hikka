@@ -1374,199 +1374,27 @@
     "scored_by": 1817186,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 1,
-            "dub": true,
-            "hidden": false,
-            "description": "Події відбуваються в Японії, коли вперше за тисячоліття близько біля Землі пролітає комета. Міцуха, учениця старшої школи, живе в селі і мріє жити в місті, бо втомилася від сільського життя. У той же час, є Такі, також учень старшої школи, який живе у Токіо з друзями і підробляє в італійському ресторані. До того ж, він захоплюється архітектурою та малюванням. Одного дня, Міцуха прокидається в тілі хлопця з Токіо, а Такі – в тілі дівчини з села. В чому ж секрет такого перевтілення?",
-            "sub": true,
-            "created": 1687706769,
-            "title_ja": "Kimi no Na wa",
-            "episodes": 1,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2016-09/1474654962_01.png",
-                "https://anitube.in.ua/uploads/posts/2016-09/1474654917_02.png",
-                "https://anitube.in.ua/uploads/posts/2016-09/1474654993_03.png",
-                "https://anitube.in.ua/uploads/posts/2016-09/1474654965_04.png"
-            ],
-            "updated": 1689360232,
-            "title_ua": "Твоє ім'я",
-            "length": 106,
-            "translators": [
-                "MadGuy",
-                "Gedet",
-                "Yeskind"
-            ],
-            "slug": "2591-tvoye-mya-kimi-no-na-wa",
-            "episodes_raw": "1 з 1 (1 год. 46 хв.)",
-            "scored_by": 387,
-            "voices": [
-                "Gwean",
-                "Maslinka",
-                "Ейдж",
-                "Милуся",
-                "Бостон",
-                "Владислава Чернова",
-                "Міла Сідляр",
-                "Yeskind",
-                "Balayansha"
-            ],
-            "url": "https://anitube.in.ua/2591-tvoye-mya-kimi-no-na-wa.html",
-            "director": "Макото Шінкай",
-            "year": 2016,
-            "genres": [
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Надприродне",
-                    "slug": "supernatural"
-                },
-                {
-                    "name": "Романтика",
-                    "slug": "romance"
-                },
-                {
-                    "name": "Школа",
-                    "slug": "school-life"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=xU47nhruN-Q",
-            "score": 9.6,
-            "teams": [
-                "GweanMaslinka",
-                "AniUa",
-                "Робота Голосом",
-                "Didko Studio"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/20438f53dd8412b68dc0a1ef795e52.jpg",
-            "nsfw": false,
-            "id": "dd5ebaf2-3554-47dc-9da3-b94f6587a471"
+            "url": "https://anitube.in.ua/2591-tvoye-mya-kimi-no-na-wa.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRip 1080p H.265 4xUkr/Jpn | Sub 2xUkr/Eng/Jpn",
-            "year": 2016,
-            "title_ja": "Kimi no Na wa",
-            "leech": 1,
-            "title_ua": "Твоє ім’я",
-            "seed": 16,
-            "quality": "1080p",
-            "size": 9472,
-            "slug": "110797",
-            "url": "http://toloka.to/t110797",
-            "image": "https://posters.hurtom.com/cache/anime/tvoye_im_ya-2_550.jpg",
-            "id": "11928e71-0541-4c1b-a5bb-0b7db31c0b67",
-            "next_update_info": null,
-            "author": "Anonymous",
-            "created": 1678658400,
-            "screenshots": [],
-            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t110797"
         },
         {
-            "title_raw": "Твоє ім'я / 君の名は。/ Your Name (2016) WEBDLRip Ukr",
-            "year": 2016,
-            "title_ja": "Your Name",
-            "leech": 0,
-            "title_ua": "Твоє ім'я",
-            "seed": 4,
-            "quality": null,
-            "size": 1771,
-            "slug": "665816",
-            "url": "http://toloka.to/t665816",
-            "image": "https://toloka.to/photos/2302270038381185537_f0_0.jpg",
-            "id": "1cecd8cb-9288-4404-aef7-65b013dbc39f",
-            "next_update_info": null,
-            "author": "Didko_Studio",
-            "created": 1677448800,
-            "screenshots": [
-                "https://img.hurtom.com/i/2023/02/1e605806dbe01df63.png",
-                "https://img.hurtom.com/i/2023/02/13d69b87246d30793.png",
-                "https://img.hurtom.com/i/2023/02/1ee1c6cde12ababac.png"
-            ],
-            "description": "Старшокласниця Міцуха навчається у звичайній провінційній школі у невеличкому містечку в центральній Японії та мріє про життя в Токіо. Одного дня відбувається щось по-справжньому дивне і Міцуха міняється тілом з токійським старшокласником Такі. Ці дивовижні трансформації стають регулярними та сході на сон. Коли ж Міцуха і Такі переконуються, що все відбувається насправді, то починають намагатись трошки підправити життя один одного. Міцуха організовує для Такі побачення з дівчиною, до якої він боявся навіть підступитись, а Такі робить Міцуху більш популярною серед однокласників. Але це тільки початок пригод...",
-            "updated": 1687705591,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t665816"
         },
         {
-            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRip 1080p 4xUkr/Jpn | Sub 2xUkr/Eng/Jpn",
-            "year": 2016,
-            "title_ja": "Kimi no Na wa",
-            "leech": 0,
-            "title_ua": "Твоє ім’я",
-            "seed": 1,
-            "quality": "1080p",
-            "size": 11796,
-            "slug": "664546",
-            "url": "http://toloka.to/t664546",
-            "image": "https://img.hurtom.com/i/2023/01/Covere5ed7639d84d5d06.md.jpg",
-            "id": "34517433-1456-4c17-8352-518341b689f0",
-            "next_update_info": null,
-            "author": "Anonymous",
-            "created": 1678658400,
-            "screenshots": [],
-            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t664546"
         },
         {
-            "title_raw": "Макото Шінкай. Колекція / Makoto Shinkai. Collection (1999-2019) BDRip 1080p H.265 Ukr/Jpn | Sub Ukr/Jpn",
-            "year": 1999,
-            "title_ja": "Makoto Shinkai. Collection",
-            "leech": 3,
-            "title_ua": "Макото Шінкай. Колекція",
-            "seed": 8,
-            "quality": "1080p",
-            "size": 26183,
-            "slug": "653811",
-            "url": "http://toloka.to/t653811",
-            "image": "https://img.hurtom.com/i/2022/02/Cover20f293c609f48964.md.jpg",
-            "id": "650c5494-0b6c-43a3-a201-8a12b9631254",
-            "next_update_info": null,
-            "author": "Anonymous",
-            "created": 1679176800,
-            "screenshots": [],
-            "description": "Альтернативна історія, після поразки у другій світовій війні Японію було поділено між союзниками: північний острів, Хоккайдо, відійшов Радянському Союзу, а Хоншю та іншими південними островами оволоділи американці. Влітку 1996 року на острові Хоккайдо почали будувати башту таких велетенських розмірів, що троє друзів-старшокласників з американського Хоншю, які гуляли разом під час літніх канікул, могли чітко бачити її контури. Друзі дали один одному обіцянку, що одного разу вони побудують літак і розкриють секрет гігантської башти…\n\nЦе аніме – про теперішнє і майбутнє, про вірність і обов’язок, про дружбу і невиконані обіцянки, а також про кохання та мрії.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t653811"
         },
         {
-            "title_raw": "Твоє ім’я / Kimi no Na wa (2016) BDRemux 4K 2160p H.265 HDR 2xUkr/Jap | Sub 2xUkr/Eng/Multilang",
-            "year": 2016,
-            "title_ja": "Kimi no Na wa",
-            "leech": 0,
-            "title_ua": "Твоє ім’я",
-            "seed": 1,
-            "quality": "4k",
-            "size": 58613,
-            "slug": "589771",
-            "url": "http://toloka.to/t589771",
-            "image": "https://toloka.to/photos/2304140308042760_f0_0.jpg",
-            "id": "81f430f3-1895-4435-af1c-d68d8db65ac4",
-            "next_update_info": null,
-            "author": "seasky",
-            "created": 1641765600,
-            "screenshots": [
-                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-1.md.png",
-                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-2.md.png",
-                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-3.md.png",
-                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-4.md.png",
-                "https://img.hurtom.com/i/2022/01/Your-Name-2016-UHD-5.md.png"
-            ],
-            "description": "Історія розповідає про двох підлітків, яких доля поєднала незвичним чином. Вночі, з незрозумілих причин, вони обмінюються свідомістю і проводять цілий день у тілі іншого. Класична історія від Макото Шінкая, яка не залишить вас байдужими.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t589771"
         }
     ],
+    "watari": [],
     "score": 8.85,
     "stats": {
         "dropped": 3676,

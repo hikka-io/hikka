@@ -3932,127 +3932,18 @@
     "scored_by": 2673779,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 25,
-            "dub": true,
-            "hidden": false,
-            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметровою стіною.Перенесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
-            "sub": false,
-            "created": 1687706395,
-            "title_ja": "Attack on Titan / Shingeki no Kyojin (TV-1)",
-            "episodes": 25,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2013-04/1366473368_1.png",
-                "https://anitube.in.ua/uploads/posts/2013-04/1366473441_2.png",
-                "https://anitube.in.ua/uploads/posts/2013-04/1366473404_4.png",
-                "https://anitube.in.ua/uploads/posts/2013-04/1366473369_5.png"
-            ],
-            "updated": 1689360337,
-            "title_ua": "Атака титанів (1 сезон)",
-            "length": 24,
-            "translators": [
-                "MetalFreak"
-            ],
-            "slug": "1759-na-by-proti-titanv",
-            "episodes_raw": "25 з 25 (24 хв.)",
-            "scored_by": 785,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Snovyda",
-                "Maslinka",
-                "Schmetterling",
-                "Crupt"
-            ],
-            "url": "https://anitube.in.ua/1759-na-by-proti-titanv.html",
-            "director": "Аракі Тецуро",
-            "year": 2013,
-            "genres": [
-                {
-                    "name": "Бойовик",
-                    "slug": "action"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Пригоди",
-                    "slug": "prigodi"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=LHtdKWJdif4",
-            "score": 9.4,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/e/3cfc43e6dc04dee0a04753ba20864e.jpg",
-            "nsfw": true,
-            "id": "1060267b-f921-45ea-b82f-308ca35c36ef"
+            "url": "https://anitube.in.ua/1759-na-by-proti-titanv.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів (Сезон 1) / Shingeki no Kyojin (Season 1) (2013) HDTVRip 1080p Ukr/Jap | sub Ukr",
-            "year": 2013,
-            "title_ja": "Shingeki no Kyojin",
-            "leech": 8,
-            "title_ua": "Атака титанів",
-            "seed": 24,
-            "quality": "1080p",
-            "size": 15400,
-            "slug": "45934",
-            "url": "http://toloka.to/t45934",
-            "image": "https://thumb.hurtom.com/image/fanvoxua.org/images/upload/2015-10-18/small5001822062207.jpg",
-            "id": "6523a3c7-58ba-43fd-afff-0243a507e844",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1380488400,
-            "screenshots": [
-                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/1.png",
-                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/2.png",
-                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/3.png",
-                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/4.png",
-                "https://thumb.hurtom.com/image/www.fanvoxua.org/uploads/screenshots/shingeki_no_kyojin-1080/6.png"
-            ],
-            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t45934"
         },
         {
-            "title_raw": "Атака титанів (Attack on Titan) (Сезон 1) / Shingeki no Kyojin (Season 1) (2013) BDRip 720р",
-            "year": 2013,
-            "title_ja": "Shingeki no Kyojin",
-            "leech": 4,
-            "title_ua": "Атака титанів",
-            "seed": 27,
-            "quality": "720p",
-            "size": 22077,
-            "slug": "45740",
-            "url": "http://toloka.to/t45740",
-            "image": "https://posters.hurtom.com/cache/anime/na-b-i-z-titanami_1447010731_550.jpg",
-            "id": "c08d5aa2-1553-4001-9ca4-27f26b4e5d71",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1640728800,
-            "screenshots": [
-                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_00.12_2019.07.11_12.57.10.md.png",
-                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_08.37_2019.07.11_12.57.20.md.png",
-                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_13.56_2019.07.11_12.57.31.md.png",
-                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_19.37_2019.07.11_12.57.42.md.png",
-                "https://img.hurtom.com/i/2019/07/FanVoxUA_Shingeki_no_Kyojin_01_720p.mkv_snapshot_21.33_2019.07.11_12.57.47.md.png"
-            ],
-            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t45740"
         }
     ],
+    "watari": [],
     "score": 8.54,
     "stats": {
         "dropped": 57896,

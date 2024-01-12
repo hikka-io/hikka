@@ -2827,106 +2827,15 @@
     "scored_by": 1229333,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 16,
-            "dub": true,
-            "hidden": false,
-            "description": "Фінальний сезон \"Атаки титанів\", який завершить франшизу, дасть відповіді на всі питання і розкриє всі таємниці сетингу.",
-            "sub": false,
-            "created": 1687706638,
-            "title_ja": "Shingeki no Kyojin: The Final Season",
-            "episodes": 16,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2020-12/1607351679_screenshot1.jpg",
-                "https://anitube.in.ua/uploads/posts/2020-12/1607351694_screenshot2.jpg",
-                "https://anitube.in.ua/uploads/posts/2020-12/1607351701_screenshot3.jpg",
-                "https://anitube.in.ua/uploads/posts/2020-12/1607351667_screenshot4.jpg"
-            ],
-            "updated": 1689360457,
-            "title_ua": "Атака титанів: Фінальний сезон",
-            "length": 24,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3700-shingeki-no-kyojin-the-final-season",
-            "episodes_raw": "16 з 16 (24 хв.)",
-            "scored_by": 388,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Crupt",
-                "Snovyda",
-                "Schmetterling"
-            ],
-            "url": "https://anitube.in.ua/3700-shingeki-no-kyojin-the-final-season.html",
-            "director": "Хаяші Юічіро",
-            "year": 2020,
-            "genres": [
-                {
-                    "name": "Бойовик",
-                    "slug": "action"
-                },
-                {
-                    "name": "Війна",
-                    "slug": "war"
-                },
-                {
-                    "name": "Детектив",
-                    "slug": "detective"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Фентезі",
-                    "slug": "fantasy"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=evfavSM67Ms",
-            "score": 9.4,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/2ef96f9f361944feb2443f7d00d0c4.jpg",
-            "nsfw": true,
-            "id": "0d9fbc48-8575-434a-9f8c-3de06c962097"
+            "url": "https://anitube.in.ua/3700-shingeki-no-kyojin-the-final-season.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів: Фінальний сезон / Shingeki no Kyojin: The Final Season (сезон 4, частина 1) (2020) WEBDL 720р",
-            "year": 2020,
-            "title_ja": "Shingeki no Kyojin: The Final Season",
-            "leech": 1,
-            "title_ua": "Атака титанів: Фінальний сезон",
-            "seed": 36,
-            "quality": "720p",
-            "size": 11530,
-            "slug": "117168",
-            "url": "http://toloka.to/t117168",
-            "image": "https://img.hurtom.com/i/2020/12/snk_fin_poster.jpg",
-            "id": "b6bc7bca-2be5-4905-85b9-073c1a16ce2d",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1616965200,
-            "screenshots": [
-                "https://img.hurtom.com/i/2020/12/ATAKA-TITANV-FNAL---01.mkv_snapshot_09.35_2020.12.07_16.28.07.png",
-                "https://img.hurtom.com/i/2020/12/ATAKA-TITANV-FNAL---01.mkv_snapshot_13.07_2020.12.07_16.29.16.png",
-                "https://img.hurtom.com/i/2020/12/ATAKA-TITANV-FNAL---01.mkv_snapshot_17.02_2020.12.07_16.29.54.png",
-                "https://img.hurtom.com/i/2020/12/ATAKA-TITANV-FNAL---01.mkv_snapshot_18.35_2020.12.07_16.30.11.png",
-                "https://img.hurtom.com/i/2020/12/ATAKA-TITANV-FNAL---01.mkv_snapshot_20.56_2020.12.07_16.22.17.png"
-            ],
-            "description": "Фінальний сезон \"Атаки титанів\", який завершить франшизу, дасть відповіді на всі питання і розкриє всі таємниці сетингу.",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t117168"
         }
     ],
+    "watari": [],
     "score": 8.8,
     "stats": {
         "dropped": 14274,

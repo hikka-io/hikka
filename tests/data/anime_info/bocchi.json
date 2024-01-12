@@ -935,95 +935,17 @@
     "scored_by": 258904,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Старшокласниця Ґото Хіторі почала вчитися гри на гітарі, щоб створити власний гурт, але вона настільки сором'язлива, що не має жодного друга. Проте все змінилося після зустрічі з барабанщицею Іджічі Ніджікою, яка якраз шукала гітариста.",
-            "sub": true,
-            "created": 1687706600,
-            "title_ja": "Bocchi the Rock!",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2022-10/1665670918_screenshot1.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-10/1665670913_screenshot2.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-10/1665670841_screenshot3.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-10/1665670870_screenshot4.jpg"
-            ],
-            "updated": 1689360423,
-            "title_ua": "Самітниця-рокер!",
-            "length": 23,
-            "translators": [
-                "Aishin"
-            ],
-            "slug": "4112-bocchi-the-rock",
-            "episodes_raw": "12 з 12 (23 хв.)",
-            "scored_by": 449,
-            "voices": [
-                "Reniko",
-                "Lovka_Miko",
-                "RedMind",
-                "Eredelka"
-            ],
-            "url": "https://anitube.in.ua/4112-bocchi-the-rock.html",
-            "director": "Сайто Кейічіро",
-            "year": 2022,
-            "genres": [
-                {
-                    "name": "Буденність",
-                    "slug": "routine"
-                },
-                {
-                    "name": "Комедія",
-                    "slug": "comedy"
-                },
-                {
-                    "name": "Музичний",
-                    "slug": "music"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=XAPeKrKqNK0",
-            "score": 9.3,
-            "teams": [
-                "Kaizoku"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/2/16337666ae1c9d842347296c9ed42e.jpg",
-            "nsfw": false,
-            "id": "e28efc23-3286-4f1b-a350-8c08eb132b09"
+            "url": "https://anitube.in.ua/4112-bocchi-the-rock.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Самітниця-рокер! (Сезон 1) / Bocchi the Rock! (Season 1) (2022) WEBDL 1080p H.265 Ukr/Jap | sub Ukr",
-            "year": 2022,
-            "title_ja": "Bocchi the Rock!",
-            "leech": 1,
-            "title_ua": "Самітниця-рокер!",
-            "seed": 25,
-            "quality": "1080p",
-            "size": 3430,
-            "slug": "662061",
-            "url": "http://toloka.to/t662061",
-            "image": "https://toloka.to/photos/2212271918412760_f0_0.jpg",
-            "id": "c3b52967-bbdd-4534-a75e-6c95636f3e51",
-            "next_update_info": null,
-            "author": "fanat22012",
-            "created": 1672092000,
-            "screenshots": [
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_21.46.972.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_00.39.873.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_04.42.908.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_20.45.786.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_16.06.716.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_02.49.461.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--09-1080pClan-Kaizoku.mkv_snapshot_08.14.806.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_18.35.614.th.png",
-                "https://img.hurtom.com/i/2022/12/SAMTNITY-ROKER--03-1080pClan-Kaizoku.mkv_snapshot_13.56.586.th.png"
-            ],
-            "description": "Старшокласниця Ґото Хіторі почала вчитися гри на гітарі, щоб створити власний гурт, але вона настільки сором'язлива, що не має жодного друга. Проте все змінилося після зустрічі з барабанщицею Іджічі Ніджікою, яка якраз шукала гітариста.",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t662061"
+        }
+    ],
+    "watari": [
+        {
+            "url": "https://watari-anime.com/watch?wid=df716c8e-e73d-4aa8-baad-2696aa311250&status=%D0%92%D0%B8%D0%B9%D1%88%D0%BB%D0%BE"
         }
     ],
     "score": 8.84,

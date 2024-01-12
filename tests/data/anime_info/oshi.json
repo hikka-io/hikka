@@ -1206,167 +1206,21 @@
     "scored_by": 301198,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 11,
-            "dub": true,
-            "hidden": false,
-            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
-            "sub": true,
-            "created": 1687706455,
-            "title_ja": "",
-            "episodes": 11,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2023-04/1681668595_screenshot1.jpg",
-                "https://anitube.in.ua/uploads/posts/2023-04/1681668566_screenshot2.jpg",
-                "https://anitube.in.ua/uploads/posts/2023-04/1681668617_screenshot3.jpg",
-                "https://anitube.in.ua/uploads/posts/2023-04/1681668643_screenshot4.jpg"
-            ],
-            "updated": 1689360323,
-            "title_ua": "Дитина улюбленця / Моя зірка",
-            "length": 24,
-            "translators": [
-                "Mashiro",
-                "Foxy",
-                "mileena"
-            ],
-            "slug": "4306-oshi-no-ko",
-            "episodes_raw": "11 з 11 (24 хв.)",
-            "scored_by": 659,
-            "voices": [
-                "sovenya",
-                "RedMind",
-                "Reniko",
-                "Regis",
-                "Eredelka",
-                "Anatas",
-                "Lem0nka",
-                "MeloRin",
-                "Edmon",
-                "Jules",
-                "Slobozhanec",
-                "bulletproof",
-                "TORGVALD",
-                "SERIK",
-                "mileena"
-            ],
-            "url": "https://anitube.in.ua/4306-oshi-no-ko.html",
-            "director": "Кобаяші Рьо",
-            "year": 2023,
-            "genres": [
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Надприродне",
-                    "slug": "supernatural"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=E8vF26E44Po",
-            "score": 9.6,
-            "teams": [
-                "Kaizoku",
-                "InariDuB"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/f730ab28a56695329dbe5dd2f1c772.jpg",
-            "nsfw": false,
-            "id": "809cc694-a058-4076-a693-e3a6ec9c64cd"
+            "url": "https://anitube.in.ua/4306-oshi-no-ko.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Моя зірка (Сезон 1, серії 1-9) / Oshi no Ko (Season 1) (2023) WEB-DL 4K 2160p Ukr/Jap | Sub Ukr",
-            "year": 2023,
-            "title_ja": "Oshi no Ko",
-            "leech": 1,
-            "title_ua": "Моя зірка",
-            "seed": 10,
-            "quality": "4k",
-            "size": 12666,
-            "slug": "667830",
-            "url": "http://toloka.to/t667830",
-            "image": "https://toloka.to/photos/2304250023392760_f0_0.jpg",
-            "id": "2cc925c6-dac3-47a4-9ff5-93242cf22154",
-            "next_update_info": null,
-            "author": "InariDuB",
-            "created": 1687294800,
-            "screenshots": [
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_001.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_002.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_003.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_004.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_005.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_006.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_007.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_008.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_009.png",
-                "https://img.hurtom.com/i/2023/04/InariDub-Oshi-no-Ko---01-UA-2160p_010.png"
-            ],
-            "description": "Історія починається з Ґоро, лікаря, який за збігом обставин готує до полог свого улюбленого айдола Ай Хошіно, яка взяла перерву в індустрії розваг, аби народити своїх дітей-близнюків. Однак незадовго до пологів Ґоро помирає від нещасного випадку, але відроджується дитиною Ай із повністю збереженими спогадами.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t667830"
         },
         {
-            "title_raw": "Дитина Улюбленця / Oshi no Ko (серії 10 з 11) (2023) WEBRip 1080p H.265 Ukr/Jap | Ukr Sub",
-            "year": 2023,
-            "title_ja": "Oshi no Ko",
-            "leech": 5,
-            "title_ua": "Дитина Улюбленця",
-            "seed": 32,
-            "quality": "1080p",
-            "size": 4556,
-            "slug": "667721",
-            "url": "http://toloka.to/t667721",
-            "image": "https://toloka.to/photos/2304171710512760_f0_0.jpg",
-            "id": "c3c19284-787f-4a4b-a02c-3f09d4b80293",
-            "next_update_info": null,
-            "author": "fanat22012",
-            "created": 1687467600,
-            "screenshots": [
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.00.25_2023.04.16_18.52.23.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.01.44_2023.04.16_18.52.38.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.02.23_2023.04.16_18.52.45.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.28.51_2023.04.16_18.53.04.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_00.50.27_2023.04.16_18.53.10.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_01.00.26_2023.04.16_18.53.35.md.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-1080pClan-Kaizoku.mkv_snapshot_01.00.40_2023.04.16_18.53.41.md.png"
-            ],
-            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": 11
+            "url": "http://toloka.to/t667721"
         },
         {
-            "title_raw": "Дитина Улюбленця / Oshi no Ko (серії 10 з 11) (2023) WEBRip 4K 2160p Ukr/Jap | Ukr Sub",
-            "year": 2023,
-            "title_ja": "Oshi no Ko",
-            "leech": 0,
-            "title_ua": "Дитина Улюбленця",
-            "seed": 2,
-            "quality": "4k",
-            "size": 14018,
-            "slug": "668128",
-            "url": "http://toloka.to/t668128",
-            "image": "https://toloka.to/photos/2304171710512760_f0_0.jpg",
-            "id": "dcea4990-3ed9-4429-92b7-45699ff1dc41",
-            "next_update_info": null,
-            "author": "fanat22012",
-            "created": 1687467600,
-            "screenshots": [
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_01.04.03.552.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.47.53.498.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.38.04.708.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.24.36.311.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.02.25.145.png",
-                "https://img.hurtom.com/i/2023/04/DITINA-ULYBLENTY--01-2160pClan-Kaizoku.mkv_snapshot_00.35.02.965.png"
-            ],
-            "description": "Шістнадцятирічна Хошіно Ай — талановитий і красивий айдол, якого обожнюють шанувальники. Вона є уособленням чистої, юної діви. Але не все те золото, що блищить. У цьому світі брехня — це зброя.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": 11
+            "url": "http://toloka.to/t668128"
         }
     ],
+    "watari": [],
     "score": 8.86,
     "stats": {
         "dropped": 8196,

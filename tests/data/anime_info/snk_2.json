@@ -1921,124 +1921,18 @@
     "scored_by": 1771366,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Стіни забезпечили людям сторіччя мирного та безпечного життя. Страх опинитись оточеними, відчувати приниження, від того, що люди немов у клітціі, залишився далеко позаду. Поки... не розпочалася битва за виживання людства, після того, як титани прорвалися крізь стіну. Зазнавши численних втрат як серед солдатів, так і серед мирного населення, люди з'ясували, що деякі титани ховаються серед них. Нарешті, через п'ять років після падіння першої стіни, людям вдалося схопити одного з замаскованих титанів: Енні Леонхарт. Однак... наступна загроза була зовсім близько.",
-            "sub": false,
-            "created": 1687706396,
-            "title_ja": "Shingeki no Kyojin Season 2",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2017-04/1491320705_b4a369242054f71555d50fa3c9c7f8d9.jpg",
-                "https://anitube.in.ua/uploads/posts/2017-04/1491320771_f0deb5b7432d1d66248e647c69980055.jpg",
-                "https://anitube.in.ua/uploads/posts/2017-04/1491320770_68ea691bf5ce91ac3919a7714e69f9b6.jpg",
-                "https://anitube.in.ua/uploads/posts/2017-04/1491320742_3f715a3f1a4765b8df34e420a6f58832.jpg"
-            ],
-            "updated": 1689360401,
-            "title_ua": "Атака титанів (2 сезон)",
-            "length": 24,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "2822-ataka-titanv-2",
-            "episodes_raw": "12 з 12 (24 хв.)",
-            "scored_by": 392,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Snovyda",
-                "Crupt",
-                "Schmetterling"
-            ],
-            "url": "https://anitube.in.ua/2822-ataka-titanv-2.html",
-            "director": "Аракі Тецуро",
-            "year": 2017,
-            "genres": [
-                {
-                    "name": "Бойовик",
-                    "slug": "action"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Пригоди",
-                    "slug": "prigodi"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=AUnAEGUJgUY",
-            "score": 9.3,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/265377115a93826e4cb2049a3e1a23.jpg",
-            "nsfw": false,
-            "id": "81c8ad3e-3963-4147-9f18-6bb65caaf15d"
+            "url": "https://anitube.in.ua/2822-ataka-titanv-2.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів / Shingeki no Kyojin (сезон 2) (2017) WEBDL 720р",
-            "year": 2017,
-            "title_ja": "Shingeki no Kyojin",
-            "leech": 1,
-            "title_ua": "Атака титанів",
-            "seed": 28,
-            "quality": "720p",
-            "size": 4106,
-            "slug": "81257",
-            "url": "http://toloka.to/t81257",
-            "image": "https://img.hurtom.com/i/2017/04/snk2.jpg",
-            "id": "7708a346-414b-41c4-bba3-ee747c1278ad",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1497906000,
-            "screenshots": [
-                "https://img.hurtom.com/i/2017/04/1a5cef.png",
-                "https://img.hurtom.com/i/2017/04/4d3e4a.png",
-                "https://img.hurtom.com/i/2017/04/5e9a0b.png",
-                "https://img.hurtom.com/i/2017/04/29b2a6.png",
-                "https://img.hurtom.com/i/2017/04/3144b7.png"
-            ],
-            "description": "Кількасот років тому людство було майже винищене титанами. Титани не володіли інтелектом, вони пожирали людей просто заради розваги, а не як їжу. Невеликий відсоток людства пережив страшні часи в місті, захищеному п'ятдесятиметовою стіною.\n\n\n\nПеренесемося в наш час, де місто не бачило титанів останні 100 років. Двоє дітей стали свідками жахливого: міська стіна була пробита величезним титаном, який з'явився нізвідки, і трохи менші титани проникають до міста. Мати Ерена та Мікаси була з'їдена заживо. Ерен присягається, що знищить кожного титана та помститься за все людство.",
-            "updated": 1689357009,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t81257"
         },
         {
-            "title_raw": "Атака Титанів 2 / 進撃の巨人2 / Shingeki no Kyojin 2 (Сезон 2 Серії 1-4 з 12) (2017) WEBDLRip 1080р",
-            "year": 2017,
-            "title_ja": "Shingeki no Kyojin 2",
-            "leech": 0,
-            "title_ua": "Атака Титанів 2",
-            "seed": 0,
-            "quality": "1080p",
-            "size": 2283,
-            "slug": "98628",
-            "url": "http://toloka.to/t98628",
-            "image": "https://toloka.to/photos/190128202408843832_f0_0.jpg",
-            "id": "ebcd8f1b-1896-47a1-a4d4-8fe4dda68095",
-            "next_update_info": null,
-            "author": "teelmaster1",
-            "created": 1550700000,
-            "screenshots": [
-                "https://img.hurtom.com/i/2017/04/HorribleSubsShingekinoKyojin-261080p_001_16972e7d00.png",
-                "https://img.hurtom.com/i/2017/04/HorribleSubsShingekinoKyojin-261080p_001_2590443969.png",
-                "https://img.hurtom.com/i/2017/04/HorribleSubsShingekinoKyojin-261080p_001_2536bbbb3.png"
-            ],
-            "description": "Людство продовжує боротьбу з Титанами. Сили нерівні, та й останнім відкриттям стало те, що Титани бродять серед мешканців міст. Хто вони і звідки, чому нападають і поїдають людей? На ці питання мають знайти відповідь рекрути з 104-ого корпусу на чолі з Мікасою й Ереном.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": 12
+            "url": "http://toloka.to/t98628"
         }
     ],
+    "watari": [],
     "score": 8.51,
     "stats": {
         "dropped": 15652,

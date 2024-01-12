@@ -1237,99 +1237,15 @@
     "scored_by": 810975,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Герої продовжують свій неймовірно повільний рух до визнання своїх почуттів одне до одного, але ж саме це ми і любимо - саме ті ситуації, в які вони потрапляють, стоячи між власним его та почуттями до партнера! Також на нас чекають іще кілька нових персонажів, явно кожний зі своєю родзинкою!",
-            "sub": false,
-            "created": 1687706809,
-            "title_ja": "Kaguya-sama wa Kokurasetai?: Tensai-tachi no Renai Zunousen",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2020-04/1586730698_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_23_21_2020_04_12_16_17_46-min.png",
-                "https://anitube.in.ua/uploads/posts/2020-04/1586730668_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_02_29_2020_04_12_16_16_36-min.png",
-                "https://anitube.in.ua/uploads/posts/2020-04/1586730686_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_07_58_2020_04_12_16_16_53-min.png",
-                "https://anitube.in.ua/uploads/posts/2020-04/1586730729_kauy-koce-sob-i-zznalisy-2-01_mkv_snapshot_13_56_2020_04_12_16_17_06-min.png"
-            ],
-            "updated": 1689360382,
-            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (Сезон 2)",
-            "length": 25,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3583-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen",
-            "episodes_raw": "12 з 12 (25 хв.)",
-            "scored_by": 181,
-            "voices": [
-                "Surgeon",
-                "Eternal Rage"
-            ],
-            "url": "https://anitube.in.ua/3583-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen.html",
-            "director": "Омата Шінічі",
-            "year": 2020,
-            "genres": [
-                {
-                    "name": "Комедія",
-                    "slug": "comedy"
-                },
-                {
-                    "name": "Психологія",
-                    "slug": "psiho"
-                },
-                {
-                    "name": "Романтика",
-                    "slug": "romance"
-                },
-                {
-                    "name": "Сейнен",
-                    "slug": "seinen"
-                },
-                {
-                    "name": "Школа",
-                    "slug": "school-life"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=Wv3i6Z6vCzk",
-            "score": 9.3,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/e/f0f86dd2954adca635dd56ed977248.jpg",
-            "nsfw": false,
-            "id": "2357b6a9-159c-44c9-9beb-f5d709ded2e3"
+            "url": "https://anitube.in.ua/3583-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ (сезон 2) / Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen (2020) WEBDL 720p",
-            "year": 2020,
-            "title_ja": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
-            "leech": 1,
-            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~",
-            "seed": 13,
-            "quality": "720p",
-            "size": 6942,
-            "slug": "109671",
-            "url": "http://toloka.to/t109671",
-            "image": "https://img.hurtom.com/i/2020/04/kaguya2_poster.jpg",
-            "id": "e0fa1c3d-cbf0-49d7-844d-57a653bab819",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1593291600,
-            "screenshots": [
-                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_02.29_2020.04.12_16.16.36.png",
-                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_07.58_2020.04.12_16.16.53.png",
-                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_13.56_2020.04.12_16.17.06.png",
-                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_18.40_2020.04.12_16.17.25.png",
-                "https://img.hurtom.com/i/2020/04/KAUY-KOCE-SOB-I-ZZNALISY-2---01.mkv_snapshot_23.21_2020.04.12_16.17.46.png"
-            ],
-            "description": "Іскрометна ситуаційна романтична комедія продовжується! Наші герої продовжують свій неймовірно повільний рух до визнання своїх почуттів одне до одного, але ж саме це ми і любимо - саме ті ситуації, в які вони потрапляють, стоячи між власним его та почуттями до партнера! Також на нас чекають іще кілька нових персонажів, явно кожний зі своєю родзинкою!",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t109671"
         }
     ],
+    "watari": [],
     "score": 8.64,
     "stats": {
         "dropped": 9916,

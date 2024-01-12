@@ -1805,100 +1805,15 @@
     "scored_by": 638807,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Фінальний сезон \"Атаки титанів\", який завершить франшизу, дасть відповіді на всі питання і розкриє всі таємниці сетингу.Фінальна частина фінального сезону «Shingeki no Kyojin» (Атака титанів) вийде 2023 р.",
-            "sub": false,
-            "created": 1687706455,
-            "title_ja": "Shingeki no Kyojin: The Final Season Part 2",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2022-01/1641841858_screenshot1.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-01/1641841882_screenshot2.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-01/1641841845_screenshot3.jpg",
-                "https://anitube.in.ua/uploads/posts/2022-01/1641841857_screenshot4.jpg"
-            ],
-            "updated": 1689360254,
-            "title_ua": "Атака титанів: Фінальний сезон (сезон 4, частина 2)",
-            "length": 23,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3911-shingeki-no-kyojin-the-final-season-part-2",
-            "episodes_raw": "12 з 12 (23 хв.)",
-            "scored_by": 333,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Crupt",
-                "Snovyda",
-                "Schmetterling"
-            ],
-            "url": "https://anitube.in.ua/3911-shingeki-no-kyojin-the-final-season-part-2.html",
-            "director": "Хаяші Юічіро",
-            "year": 2022,
-            "genres": [
-                {
-                    "name": "Бойовик",
-                    "slug": "action"
-                },
-                {
-                    "name": "Війна",
-                    "slug": "war"
-                },
-                {
-                    "name": "Детектив",
-                    "slug": "detective"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Фентезі",
-                    "slug": "fantasy"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=EIVVnLlhzr0",
-            "score": 9.4,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/5/e2b51f3d5aa0d235f44fb55e23d282.jpg",
-            "nsfw": false,
-            "id": "9d7a3066-5bd5-41c8-a9ad-a1afa70b74ee"
+            "url": "https://anitube.in.ua/3911-shingeki-no-kyojin-the-final-season-part-2.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів: Фінальний сезон (Сезон 4, частина 2) / Shingeki no Kyojin: The Final Season (Season 4, part 2) (2022) WEB-DL 720р Ukr/Jpn",
-            "year": 2022,
-            "title_ja": "Shingeki no Kyojin: The Final Season",
-            "leech": 1,
-            "title_ua": "Атака титанів: Фінальний сезон",
-            "seed": 9,
-            "quality": "720p",
-            "size": 8663,
-            "slug": "667642",
-            "url": "http://toloka.to/t667642",
-            "image": "https://toloka.to/photos/230414154241872977_f0_0.jpg",
-            "id": "baba43a2-855b-4636-a255-b6f3d07ef808",
-            "next_update_info": null,
-            "author": "jevghen",
-            "created": 1681419600,
-            "screenshots": [],
-            "description": "Фінальний сезон \"Атаки титанів\", який завершить франшизу, дасть відповіді на всі питання і розкриє всі таємниці сетингу.",
-            "updated": 1689357008,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t667642"
         }
     ],
+    "watari": [],
     "score": 8.77,
     "stats": {
         "dropped": 9234,

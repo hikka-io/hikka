@@ -1678,106 +1678,15 @@
     "scored_by": 1482063,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 10,
-            "dub": true,
-            "hidden": false,
-            "description": "Чим більше правди про світ відкривається нашим героям, тим більше вони розуміють, що знають про світ неймовірно мало. Тож, фінальна операція з повернення стіни Марія починається, але попереду наших героїв чекає ще чимало таємниць, які приховує підвал під старим будинком Єґерів у Шіґаншіні. Втім, головний ворог іще не переможений, а нашим героям тільки доведеться дізнатися, що світ насправді значно більший, ніж клаптик землі, обмежений трьома стінами.",
-            "sub": false,
-            "created": 1687706765,
-            "title_ja": "Shingeki no Kyojin Season 3 Part 2",
-            "episodes": 10,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2019-04/1556555560__titanv_3_chastina_2_01_mkv_snapshot_05-min.png",
-                "https://anitube.in.ua/uploads/posts/2019-04/1556555574__titanv_3_chastina_2_01_mkv_snapshot_11-min.png",
-                "https://anitube.in.ua/uploads/posts/2019-04/1556555562__titanv_3_chastina_2_01_mkv_snapshot_17-min.png",
-                "https://anitube.in.ua/uploads/posts/2019-04/1556555551__titanv_3_chastina_2_01_mkv_snapshot_23-min.png"
-            ],
-            "updated": 1689360529,
-            "title_ua": "Атака титанів (сезон 3, частина 2)",
-            "length": null,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3386-shingeki-no-kyojin-season-3-part-2",
-            "episodes_raw": "10 з 10",
-            "scored_by": 298,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Snovyda",
-                "Schmetterling",
-                "Crupt"
-            ],
-            "url": "https://anitube.in.ua/3386-shingeki-no-kyojin-season-3-part-2.html",
-            "director": "Аракі Тецуро",
-            "year": 2019,
-            "genres": [
-                {
-                    "name": "Бойовик",
-                    "slug": "action"
-                },
-                {
-                    "name": "Війна",
-                    "slug": "war"
-                },
-                {
-                    "name": "Детектив",
-                    "slug": "detective"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Фентезі",
-                    "slug": "fantasy"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": null,
-            "score": 9.5,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/8/5133174cda6a5d82f601ae299e6c65.jpg",
-            "nsfw": true,
-            "id": "1478461d-43aa-4e0d-b0df-24ec4910a9b4"
+            "url": "https://anitube.in.ua/3386-shingeki-no-kyojin-season-3-part-2.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів / Shingeki no Kyojin (сезон 3, частина 2) (2019) HDTVRip 720р",
-            "year": 2019,
-            "title_ja": "Shingeki no Kyojin",
-            "leech": 0,
-            "title_ua": "Атака титанів",
-            "seed": 28,
-            "quality": "720p",
-            "size": 4915,
-            "slug": "99631",
-            "url": "http://toloka.to/t99631",
-            "image": "https://img.hurtom.com/i/2019/03/snk3-2_poster.jpg",
-            "id": "80c9fb10-98b5-4d9d-ab89-9ab32a463c9e",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1561928400,
-            "screenshots": [
-                "https://img.hurtom.com/i/2019/04/ATAKA-TITANV-3-CASTINA-2---01.mkv_snapshot_09.15_2019.04.29_19.24.01.png",
-                "https://img.hurtom.com/i/2019/04/ATAKA-TITANV-3-CASTINA-2---01.mkv_snapshot_05.46_2019.04.29_19.27.56.png",
-                "https://img.hurtom.com/i/2019/04/ATAKA-TITANV-3-CASTINA-2---01.mkv_snapshot_11.43_2019.04.29_19.28.06.png",
-                "https://img.hurtom.com/i/2019/04/ATAKA-TITANV-3-CASTINA-2---01.mkv_snapshot_17.10_2019.04.29_19.28.14.png",
-                "https://img.hurtom.com/i/2019/04/ATAKA-TITANV-3-CASTINA-2---01.mkv_snapshot_23.42_2019.04.29_19.28.36.png"
-            ],
-            "description": "Чим більше правди про світ відкривається нашим героям, тим більше вони розуміють, що знають про світ неймовірно мало. Тож, фінальна операція з повернення стіни Марія починається, але попереду наших героїв чекає ще чимало таємниць, які приховує підвал під старим будинком Єґерів у Шіґаншіні. Втім, головний ворог іще не переможений, а нашим героям тільки доведеться дізнатися, що світ насправді значно більший, ніж клаптик землі, обмежений трьома стінами",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t99631"
         }
     ],
+    "watari": [],
     "score": 9.05,
     "stats": {
         "dropped": 6550,

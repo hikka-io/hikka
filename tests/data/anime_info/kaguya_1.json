@@ -1587,103 +1587,15 @@
     "scored_by": 1037865,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв.Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття.Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!",
-            "sub": true,
-            "created": 1687706856,
-            "title_ja": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2019-02/1550407699_1.jpg",
-                "https://anitube.in.ua/uploads/posts/2019-02/1550407694_2.jpg",
-                "https://anitube.in.ua/uploads/posts/2019-02/1550407742_3.jpg",
-                "https://anitube.in.ua/uploads/posts/2019-02/1550407752_4.jpg"
-            ],
-            "updated": 1689360379,
-            "title_ua": "Каґуя-сама, Кохання як війна / Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~",
-            "length": 25,
-            "translators": [
-                "k0wbassa",
-                "Surgeon"
-            ],
-            "slug": "3351-kauya-sama-kohannya-yak-vyna-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen",
-            "episodes_raw": "12 з 12 (25 хв.)",
-            "scored_by": 249,
-            "voices": [
-                "Artymko",
-                "Anatoly136UA",
-                "Surgeon",
-                "Eternal Rage"
-            ],
-            "url": "https://anitube.in.ua/3351-kauya-sama-kohannya-yak-vyna-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen.html",
-            "director": "Шін’ічі Омата",
-            "year": 2019,
-            "genres": [
-                {
-                    "name": "Комедія",
-                    "slug": "comedy"
-                },
-                {
-                    "name": "Психологія",
-                    "slug": "psiho"
-                },
-                {
-                    "name": "Романтика",
-                    "slug": "romance"
-                },
-                {
-                    "name": "Сейнен",
-                    "slug": "seinen"
-                },
-                {
-                    "name": "Школа",
-                    "slug": "school-life"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=X0A5hFLAPak",
-            "score": 9.1,
-            "teams": [
-                "FanVoxUA",
-                "UkraineFastDUB"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/c/0bc35f06254357d374722d538be147.jpg",
-            "nsfw": false,
-            "id": "5e16c904-09ea-4d84-af73-68b50e27bd60"
+            "url": "https://anitube.in.ua/3351-kauya-sama-kohannya-yak-vyna-kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~ / Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen (сезон 1) (2019) WEBDL 720p",
-            "year": 2019,
-            "title_ja": "Kaguya-sama wa Kokurasetai: Tensai-tachi no Renai Zunousen",
-            "leech": 1,
-            "title_ua": "Каґуя хоче, щоб їй зізналися ~Війна любові та розуму геніїв~",
-            "seed": 11,
-            "quality": "720p",
-            "size": 4546,
-            "slug": "100243",
-            "url": "http://toloka.to/t100243",
-            "image": "https://img.hurtom.com/i/2019/03/kaguya_poster.jpg",
-            "id": "c4b005ed-9cd6-4f41-bc1f-18c3fb3ef2ad",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1553983200,
-            "screenshots": [
-                "https://img.hurtom.com/i/2019/03/KAUY-KOCE-SOB-I-ZZNALISY---01.mkv_snapshot_01.48_2019.03.31_20.14.09.png",
-                "https://img.hurtom.com/i/2019/03/KAUY-KOCE-SOB-I-ZZNALISY---01.mkv_snapshot_06.59_2019.03.31_20.14.35.png",
-                "https://img.hurtom.com/i/2019/03/KAUY-KOCE-SOB-I-ZZNALISY---01.mkv_snapshot_11.27_2019.03.31_20.14.40.png",
-                "https://img.hurtom.com/i/2019/03/KAUY-KOCE-SOB-I-ZZNALISY---01.mkv_snapshot_17.13_2019.03.31_20.14.54.png",
-                "https://img.hurtom.com/i/2019/03/KAUY-KOCE-SOB-I-ZZNALISY---01.mkv_snapshot_23.02_2019.03.31_20.15.12.png"
-            ],
-            "description": "Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючін, генії з геніїв.\n\nПісля проведеного разом часу, у них зародилися почуття одне до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному в своїх почуттях, адже кохання — це війна, безжальна битва, метою якої є змусити супротивника зізнатися!",
-            "updated": 1689357007,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t100243"
         }
     ],
+    "watari": [],
     "score": 8.41,
     "stats": {
         "dropped": 28818,

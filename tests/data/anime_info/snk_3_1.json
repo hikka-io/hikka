@@ -2079,100 +2079,15 @@
     "scored_by": 1515984,
     "anitube": [
         {
-            "next_update_info": null,
-            "max_episodes": 12,
-            "dub": true,
-            "hidden": false,
-            "description": "Головні герої все глибше занурюються в безодню таємниць королівства і вже близькі до істини, але цього разу їх чекає вже боротьба не з титанами, а з людьми, які вкрай зацікавлені в тому, щоб зберегти таємниці, які можуть змінити весь світ. Нас чекають нові герої, ще більше розкриття улюблених персонажів, а також іще більше сюжетних інтриг і таємниць.Додано торрент",
-            "sub": false,
-            "created": 1687706397,
-            "title_ja": "Shingeki no Kyojin Season 3",
-            "episodes": 12,
-            "screenshots": [
-                "https://anitube.in.ua/uploads/posts/2018-07/1532425402_01.jpg",
-                "https://anitube.in.ua/uploads/posts/2018-07/1532425408_02.jpg",
-                "https://anitube.in.ua/uploads/posts/2018-07/1532425530_03.jpg",
-                "https://anitube.in.ua/uploads/posts/2018-07/1532425490_04.jpg"
-            ],
-            "updated": 1689360383,
-            "title_ua": "Атака титанів (сезон 3)",
-            "length": 24,
-            "translators": [
-                "Surgeon"
-            ],
-            "slug": "3229-ataka-titanv-sezon-3-shingeki-no-kyojin-tv-3",
-            "episodes_raw": "12 з 12 (24 хв.)",
-            "scored_by": 322,
-            "voices": [
-                "Surgeon",
-                "Helga Victim",
-                "Snovyda",
-                "Crupt",
-                "Schmetterling"
-            ],
-            "url": "https://anitube.in.ua/3229-ataka-titanv-sezon-3-shingeki-no-kyojin-tv-3.html",
-            "director": "Аракі Тецуро, Койдзука Масаші, Хаджіме Ісаяма",
-            "year": 2018,
-            "genres": [
-                {
-                    "name": "Детектив",
-                    "slug": "detective"
-                },
-                {
-                    "name": "Драма",
-                    "slug": "drama"
-                },
-                {
-                    "name": "Містика",
-                    "slug": "mystic"
-                },
-                {
-                    "name": "Пригоди",
-                    "slug": "prigodi"
-                },
-                {
-                    "name": "Фентезі",
-                    "slug": "fantasy"
-                },
-                {
-                    "name": "Шьонен",
-                    "slug": "shounen"
-                }
-            ],
-            "trailer": "https://www.youtube.com/watch?v=EHzBhrncmac",
-            "score": 9.3,
-            "teams": [
-                "FanVoxUA"
-            ],
-            "image": "https://anitube.in.ua/uploads/mini/full-news-poster/a/d2d826cb26fdd21776090aab8a9ebc.jpg",
-            "nsfw": true,
-            "id": "548ce242-fc6d-4561-9c62-af91936ad088"
+            "url": "https://anitube.in.ua/3229-ataka-titanv-sezon-3-shingeki-no-kyojin-tv-3.html"
         }
     ],
     "toloka": [
         {
-            "title_raw": "Атака титанів / Shingeki no Kyojin (сезон 3, частина 1) (2018) HDTVRip 720р",
-            "year": 2018,
-            "title_ja": "Shingeki no Kyojin",
-            "leech": 0,
-            "title_ua": "Атака титанів",
-            "seed": 30,
-            "quality": "720p",
-            "size": 5806,
-            "slug": "94058",
-            "url": "http://toloka.to/t94058",
-            "image": "https://img.hurtom.com/i/2018/08/snk3_poster.jpg",
-            "id": "74ae9edf-bc74-46a8-aa22-b4e25d60b80d",
-            "next_update_info": null,
-            "author": "FanVoxUA",
-            "created": 1539637200,
-            "screenshots": [],
-            "description": "Чим більше правди про світ відкривається нашим героям, тим більше вони розуміють, що знають про світ неймовірно мало. Тож, фінальна операція з повернення стіни Марія починається, але попереду наших героїв чекає ще чимало таємниць, які приховує підвал під старим будинком Єґерів у Шіґаншіні. Втім, головний ворог іще не переможений, а нашим героям тільки доведеться дізнатися, що світ насправді значно більший, ніж клаптик землі, обмежений трьома стінами.",
-            "updated": 1689357006,
-            "hidden": false,
-            "episodes": null
+            "url": "http://toloka.to/t94058"
         }
     ],
+    "watari": [],
     "score": 8.62,
     "stats": {
         "dropped": 9243,
