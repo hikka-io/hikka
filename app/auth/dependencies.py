@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.utils import get_settings, checkpwd
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
 from app.database import get_session
@@ -9,6 +8,12 @@ from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
 from . import oauth
+
+from app.utils import (
+    is_protected_username,
+    get_settings,
+    checkpwd,
+)
 
 from app.service import (
     get_user_by_username,
@@ -45,6 +50,10 @@ async def validate_signup(
     signup: SignupArgs, session: AsyncSession = Depends(get_session)
 ) -> SignupArgs:
     settings = get_settings()
+
+    # Prevent using reserved usernames
+    if is_protected_username(signup.username):
+        raise Abort("auth", "invalid-username")
 
     # Check if username is availaible
     if await get_user_by_username(session, signup.username):

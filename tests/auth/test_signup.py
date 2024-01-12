@@ -49,3 +49,13 @@ async def test_signup_duplicate_username(client, create_test_user):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "auth:username_taken"
+
+
+async def test_signup_protected_username(client):
+    # Create new account with duplicate username
+    response = await request_signup(
+        client, "user@mail.com", "hikka", "password"
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "auth:invalid_username"

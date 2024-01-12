@@ -42,3 +42,14 @@ async def test_settings_username_bad(client, create_test_user, get_test_token):
     # And it fails
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
+
+
+async def test_settings_username_protected(
+    client, create_test_user, get_test_token
+):
+    # Now let's try setting up protected username
+    response = await request_settings_username(client, get_test_token, "hikka")
+
+    # And it fails
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "settings:invalid_username"
