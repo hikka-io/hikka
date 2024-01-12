@@ -493,8 +493,8 @@ async def update_anime_info(session, anime, data):
             setattr(anime, field, value)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
-    anime.stats = data["scored_by"]
-    anime.stats = data["score"]
+    anime.scored_by = data["scored_by"]
+    anime.score = data["score"]
     anime.stats = data["stats"]
     anime.needs_update = False
     anime.updated = now

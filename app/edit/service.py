@@ -72,9 +72,13 @@ async def get_edits_by_content_id(
 
 
 async def count_edits(session: AsyncSession) -> int:
-    """Count all edits"""
+    """Count all (non system) edits"""
 
-    return await session.scalar(select(func.count(Edit.id)))
+    return await session.scalar(
+        select(func.count(Edit.id)).filter(
+            Edit.system_edit == False, Edit.hidden == False  # noqa: E712
+        )
+    )
 
 
 async def get_edits(
@@ -86,7 +90,7 @@ async def get_edits(
 
     return await session.scalars(
         select(Edit)
-        .filter(Edit.system_edit == False)  # noqa: E712
+        .filter(Edit.system_edit == False, Edit.hidden == False)  # noqa: E712
         .order_by(desc(Edit.edit_id))
         .limit(limit)
         .offset(offset)

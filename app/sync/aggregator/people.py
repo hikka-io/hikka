@@ -20,7 +20,7 @@ async def aggregator_people():
     data = await requests.get_people(1)
     pages = data["pagination"]["pages"]
 
-    semaphore = asyncio.Semaphore(20)
+    semaphore = asyncio.Semaphore(5)
     tasks = [make_request(semaphore, page) for page in range(1, pages + 1)]
 
     result = await asyncio.gather(*tasks)
