@@ -81,7 +81,7 @@ class TokenArgs(CustomModel):
 
 
 class PasswordArgs(CustomModel):
-    password: str = Field(min_length=8, max_length=64, examples=["password"])
+    password: str = Field(min_length=8, max_length=256, examples=["password"])
 
 
 # Responses
