@@ -22,7 +22,7 @@ class DescriptionArgs(CustomModel):
 class ImportAnimeArgs(CustomModelExtraIgnore):
     series_animedb_id: int = Field(ge=0, le=1000000)
     my_watched_episodes: int = Field(ge=0, le=10000)
-    my_comments: str | dict = Field(max_length=140)
+    my_comments: str | dict = Field(max_length=1024)
     my_score: int = Field(default=0, ge=0, le=10)
     my_status: ImportWatchStatusEnum
 
