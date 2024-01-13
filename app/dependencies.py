@@ -120,7 +120,7 @@ async def check_captcha(
     if not captcha:
         raise Abort("captcha", "invalid")
 
-    if settings.captcha["test"] and captcha == settings.captcha["test"]:
+    if settings.captcha.get("test") and captcha == settings.captcha["test"]:
         return True
 
     if not await utils.check_cloudflare_captcha(
