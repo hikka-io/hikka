@@ -213,21 +213,21 @@ class AnimeSearchPaginationResponse(CustomModel):
 
 
 class AnimeStatsResponse(CustomModel):
-    completed: int = Field(examples=[1502335])
-    watching: int = Field(examples=[83106])
-    planned: int = Field(examples=[206073])
-    dropped: int = Field(examples=[33676])
-    on_hold: int = Field(examples=[30222])
-    score_1: int = Field(examples=[3087])
-    score_2: int = Field(examples=[2633])
-    score_3: int = Field(examples=[4583])
-    score_4: int = Field(examples=[11343])
-    score_5: int = Field(examples=[26509])
-    score_6: int = Field(examples=[68501])
-    score_7: int = Field(examples=[211113])
-    score_8: int = Field(examples=[398095])
-    score_9: int = Field(examples=[298198])
-    score_10: int = Field(examples=[184038])
+    completed: int = Field(examples=[1502335], default=0)
+    watching: int = Field(examples=[83106], default=0)
+    planned: int = Field(examples=[206073], default=0)
+    dropped: int = Field(examples=[33676], default=0)
+    on_hold: int = Field(examples=[30222], default=0)
+    score_1: int = Field(examples=[3087], default=0)
+    score_2: int = Field(examples=[2633], default=0)
+    score_3: int = Field(examples=[4583], default=0)
+    score_4: int = Field(examples=[11343], default=0)
+    score_5: int = Field(examples=[26509], default=0)
+    score_6: int = Field(examples=[68501], default=0)
+    score_7: int = Field(examples=[211113], default=0)
+    score_8: int = Field(examples=[398095], default=0)
+    score_9: int = Field(examples=[298198], default=0)
+    score_10: int = Field(examples=[184038], default=0)
 
 
 class AnimeExternalResponse(CustomModel):
