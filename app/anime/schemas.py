@@ -291,3 +291,24 @@ class AnimeInfoResponse(CustomModel):
     ost: list[AnimeOSTResponse]
     stats: AnimeStatsResponse
     translated_ua: bool
+
+    @field_validator("external")
+    def external_ordering(cls, value):
+        def watch_sort(item):
+            order = {"Watari Anime": 0, "Anitube": 1}
+            return order.get(item.text, 2)
+
+        def reorder_watch(input_list):
+            return sorted(input_list, key=watch_sort)
+
+        general = []
+        watch = []
+
+        for entry in value:
+            if entry.type == constants.EXTERNAL_GENERAL:
+                general.append(entry)
+
+            if entry.type == constants.EXTERNAL_WATCH:
+                watch.append(entry)
+
+        return general + reorder_watch(watch)
