@@ -91,17 +91,24 @@ class AnimeSearchArgs(CustomModel):
     season: list[SeasonEnum] = []
 
     # No hentai (RX) by default
-    rating: list[AnimeAgeRatingEnum] = [
-        constants.AGE_RATING_R_PLUS,
-        constants.AGE_RATING_PG_13,
-        constants.AGE_RATING_PG,
-        constants.AGE_RATING_G,
-        constants.AGE_RATING_R,
-    ]
+    rating: list[AnimeAgeRatingEnum] = []
 
     producers: list[str] = []
     studios: list[str] = []
     genres: list[str] = []
+
+    @field_validator("rating")
+    def validate_rating(cls, rating):
+        if len(rating) == 0:
+            rating = [
+                constants.AGE_RATING_R_PLUS,
+                constants.AGE_RATING_PG_13,
+                constants.AGE_RATING_PG,
+                constants.AGE_RATING_G,
+                constants.AGE_RATING_R,
+            ]
+
+        return rating
 
     @field_validator("years")
     def validate_years(cls, years):
