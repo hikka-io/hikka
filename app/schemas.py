@@ -93,7 +93,7 @@ class PaginationResponse(CustomModel):
 
 class WatchResponseBase(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
-    note: str | None = Field(max_length=140, examples=["🤯"])
+    note: str | None = Field(max_length=1024, examples=["🤯"])
     updated: datetime = Field(examples=[1686088809])
     created: datetime = Field(examples=[1686088809])
     status: str = Field(examples=["watching"])
