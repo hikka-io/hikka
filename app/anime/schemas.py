@@ -86,10 +86,18 @@ class AnimeSearchArgs(CustomModel):
     )
 
     media_type: list[AnimeMediaEnum] = []
-    rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
     source: list[SourceEnum] = []
     season: list[SeasonEnum] = []
+
+    # No hentai (RX) by default
+    rating: list[AnimeAgeRatingEnum] = [
+        constants.AGE_RATING_R_PLUS,
+        constants.AGE_RATING_PG_13,
+        constants.AGE_RATING_PG,
+        constants.AGE_RATING_G,
+        constants.AGE_RATING_R,
+    ]
 
     producers: list[str] = []
     studios: list[str] = []
