@@ -5,6 +5,7 @@ from sqlalchemy.orm import selectinload
 from .schemas import WatchArgs
 from datetime import datetime
 from app import constants
+import random
 
 from app.service import (
     get_anime_watch,
@@ -110,3 +111,15 @@ async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
             AnimeWatch.user == user,
         )
     )
+
+
+async def random_watch(session: AsyncSession, user: User, status: str | None):
+    anime_ids = await session.scalars(
+        select(AnimeWatch.anime_id).filter(AnimeWatch.user == user)
+    )
+
+    anime = await session.scalar(
+        select(Anime).filter(Anime.id == random.choice(anime_ids.all()))
+    )
+
+    return anime

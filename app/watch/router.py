@@ -1,7 +1,7 @@
+from app.schemas import SuccessResponse, AnimeResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AnimeWatch
 from app.dependencies import auth_required
-from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import constants
@@ -22,12 +22,14 @@ from app.utils import (
 from .schemas import (
     WatchPaginationResponse,
     WatchStatsResponse,
+    WatchStatusEnum,
     WatchFilterArgs,
     WatchResponse,
     WatchArgs,
 )
 
 from .dependencies import (
+    verify_user_random,
     verify_add_watch,
     verify_watch,
 )
@@ -116,3 +118,13 @@ async def user_watch_stats(
         "on_hold": on_hold,
         "dropped": dropped,
     }
+
+
+@router.get("/random/{username}/{status}", response_model=AnimeResponse)
+async def random_watch_entry(
+    status: WatchStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(verify_user_random),
+):
+    result = await service.random_watch(session, user, status)
+    return result

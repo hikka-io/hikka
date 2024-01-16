@@ -68,6 +68,7 @@ errors = {
         "not-found": ["Genre not found", 404],
     },
     "watch": {
+        "empty-random": ["You don't have any watch entries", 400],
         "bad-episodes": ["Bad episodes number provided", 400],
         "not-found": ["Watch record not found", 404],
     },

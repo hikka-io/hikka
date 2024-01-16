@@ -1,12 +1,13 @@
-from app.dependencies import get_anime, auth_required
+from app.dependencies import get_anime, auth_required, get_user
+from .schemas import WatchArgs, WatchStatusEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
 from app.service import get_anime_watch
 from app.database import get_session
-from .schemas import WatchArgs
 from app.errors import Abort
 from fastapi import Depends
 from typing import Tuple
+from . import service
 
 
 async def verify_watch(
@@ -34,3 +35,16 @@ async def verify_add_watch(
         raise Abort("watch", "bad-episodes")
 
     return anime, user, args
+
+
+async def verify_user_random(
+    status: WatchStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    watch_count = await service.get_user_watch_stats(session, user, status)
+
+    if watch_count == 0:
+        raise Abort("watch", "empty-random")
+
+    return user
