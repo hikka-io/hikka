@@ -1,4 +1,4 @@
-from app.dependencies import get_anime, auth_required
+from app.dependencies import get_anime, auth_required, get_user
 from .schemas import WatchArgs, WatchStatusEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
@@ -40,7 +40,7 @@ async def verify_add_watch(
 async def verify_user_random(
     status: WatchStatusEnum,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(get_user),
 ):
     watch_count = await service.get_user_watch_stats(session, user, status)
 

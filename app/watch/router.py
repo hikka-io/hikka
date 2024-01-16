@@ -120,7 +120,7 @@ async def user_watch_stats(
     }
 
 
-@router.get("/random/{status}", response_model=AnimeResponse)
+@router.get("/random/{username}/{status}", response_model=AnimeResponse)
 async def random_watch_entry(
     status: WatchStatusEnum,
     session: AsyncSession = Depends(get_session),
