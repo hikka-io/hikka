@@ -115,7 +115,9 @@ async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
 
 async def random_watch(session: AsyncSession, user: User, status: str | None):
     anime_ids = await session.scalars(
-        select(AnimeWatch.anime_id).filter(AnimeWatch.user == user)
+        select(AnimeWatch.anime_id).filter(
+            AnimeWatch.user == user, AnimeWatch.status == status
+        )
     )
 
     anime = await session.scalar(
