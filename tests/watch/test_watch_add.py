@@ -25,6 +25,7 @@ async def test_watch_add(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["status"] == "watching"
+    assert response.json()["rewatches"] == 0
     assert response.json()["episodes"] == 10
     assert response.json()["note"] == "Test"
     assert response.json()["score"] == 8
@@ -37,6 +38,7 @@ async def test_watch_add(
         {
             "status": "completed",
             "note": "Good anime!",
+            "rewatches": 2,
             "episodes": 12,
             "score": 10,
         },
@@ -46,6 +48,7 @@ async def test_watch_add(
     assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["status"] == "completed"
     assert response.json()["note"] == "Good anime!"
+    assert response.json()["rewatches"] == 2
     assert response.json()["episodes"] == 12
     assert response.json()["score"] == 10
 

@@ -34,6 +34,7 @@ class WatchSortEnum(str, Enum):
 class WatchArgs(CustomModel):
     note: str | None = Field(default=None, max_length=1024, examples=["🤯"])
     episodes: int = Field(default=0, ge=0, le=10000, examples=[3])
+    rewatches: int = Field(default=0, ge=0, le=100, examples=[2])
     score: int = Field(default=0, ge=0, le=10, examples=[8])
     status: WatchStatusEnum
 
