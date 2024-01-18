@@ -7,6 +7,7 @@ from ..base import Base
 class AnimeWatch(Base):
     __tablename__ = "service_watch"
 
+    rewatches: Mapped[int] = mapped_column(default=0)
     note: Mapped[str] = mapped_column(nullable=True)
     episodes: Mapped[int] = mapped_column(default=0)
     status: Mapped[str] = mapped_column(String(16))
