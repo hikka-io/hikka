@@ -104,6 +104,11 @@ async def import_watch_list(
             if import_episodes > 10000:
                 import_episodes = 10000
 
+            import_rewatches = data.my_times_watched
+
+            if import_rewatches > 100:
+                import_rewatches = 100
+
             if anime.episodes_total and import_episodes > anime.episodes_total:
                 import_episodes = anime.episodes_total
 
@@ -119,6 +124,7 @@ async def import_watch_list(
                 watch.anime = anime
                 watch.user = user
 
+            watch.rewatches = import_rewatches
             watch.episodes = import_episodes
             watch.status = import_status
             watch.score = data.my_score
