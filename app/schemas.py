@@ -97,6 +97,7 @@ class WatchResponseBase(CustomModel):
     updated: datetime = Field(examples=[1686088809])
     created: datetime = Field(examples=[1686088809])
     status: str = Field(examples=["watching"])
+    rewatches: int = Field(examples=[2])
     episodes: int = Field(examples=[3])
     score: int = Field(examples=[8])
 

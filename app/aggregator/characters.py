@@ -60,6 +60,7 @@ async def save_characters(session, data):
 
             character = Character(
                 **{
+                    "needs_search_update": True,
                     "content_id": character_data["content_id"],
                     "favorites": character_data["favorites"],
                     "name_ja": character_data["name_ja"],

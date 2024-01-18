@@ -59,10 +59,47 @@ async def update_anime_settings(index):
     )
 
 
+def anime_to_document(anime: Anime):
+    producers = []
+    studios = []
+
+    for company_anime in anime.companies:
+        if company_anime.type == constants.COMPANY_ANIME_PRODUCER:
+            producers.append(company_anime.company.slug)
+
+        if company_anime.type == constants.COMPANY_ANIME_STUDIO:
+            studios.append(company_anime.company.slug)
+
+    return {
+        "year": anime.start_date.year if anime.start_date else None,
+        "genres": [genre.slug for genre in anime.genres],
+        "episodes_released": anime.episodes_released,
+        "episodes_total": anime.episodes_total,
+        "season": get_season(anime.start_date),
+        "translated_ua": anime.translated_ua,
+        "media_type": anime.media_type,
+        "scored_by": anime.scored_by,
+        "synonyms": anime.synonyms,
+        "title_ua": anime.title_ua,
+        "title_en": anime.title_en,
+        "title_ja": anime.title_ja,
+        "poster": anime.poster,
+        "status": anime.status,
+        "source": anime.source,
+        "rating": anime.rating,
+        "id": anime.content_id,
+        "producers": producers,
+        "score": anime.score,
+        "studios": studios,
+        "slug": anime.slug,
+    }
+
+
 async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
         .where(Anime.media_type is not None)
+        .filter(Anime.needs_search_update == True)  # noqa: E712
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
@@ -75,47 +112,21 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
     documents = []
 
     for anime in anime_list:
-        producers = []
-        studios = []
+        documents.append(anime_to_document(anime))
 
-        for company_anime in anime.companies:
-            if company_anime.type == constants.COMPANY_ANIME_PRODUCER:
-                producers.append(company_anime.company.slug)
-
-            if company_anime.type == constants.COMPANY_ANIME_STUDIO:
-                studios.append(company_anime.company.slug)
-
-        documents.append(
-            {
-                "year": anime.start_date.year if anime.start_date else None,
-                "genres": [genre.slug for genre in anime.genres],
-                "episodes_released": anime.episodes_released,
-                "episodes_total": anime.episodes_total,
-                "season": get_season(anime.start_date),
-                "translated_ua": anime.translated_ua,
-                "media_type": anime.media_type,
-                "scored_by": anime.scored_by,
-                "synonyms": anime.synonyms,
-                "title_ua": anime.title_ua,
-                "title_en": anime.title_en,
-                "title_ja": anime.title_ja,
-                "poster": anime.poster,
-                "status": anime.status,
-                "source": anime.source,
-                "rating": anime.rating,
-                "id": anime.content_id,
-                "producers": producers,
-                "score": anime.score,
-                "studios": studios,
-                "slug": anime.slug,
-            }
-        )
+        # I'm not sure if this would behave correctly if Meilisearch is down
+        anime.needs_search_update = False
+        session.add(anime)
 
     return documents
 
 
 async def anime_documents_total(session: AsyncSession):
-    return await session.scalar(select(func.count(Anime.id)))
+    return await session.scalar(
+        select(func.count(Anime.id))
+        .where(Anime.media_type is not None)
+        .filter(Anime.needs_search_update == True)  # noqa: E712
+    )
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -133,12 +144,15 @@ async def meilisearch_populate(session: AsyncSession):
         pages = math.ceil(total / size)
 
         for page in range(1, pages + 1):
-            print(f"Meilisearch: Processing anime page {page}")
+            print(f"Meilisearch: Processing anime page {page} of {pages}")
 
             limit, offset = pagination(page, size)
             documents = await anime_documents(session, limit, offset)
 
             await index.add_documents(documents)
+
+            # Let's just hope if Meilisearch is down this fails ;)
+            await session.commit()
 
 
 async def update_search_anime():

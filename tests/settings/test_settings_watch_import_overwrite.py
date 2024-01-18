@@ -48,6 +48,7 @@ async def test_settings_import_watch_overwrite(
                     "my_status": "Completed",
                     "series_animedb_id": 47917,
                     "my_watched_episodes": 12,
+                    "my_times_watched": 2,
                     "my_comments": {},
                     "my_score": 10,
                 },
@@ -95,4 +96,5 @@ async def test_settings_import_watch_overwrite(
     assert watch is not None
     assert watch.status == constants.WATCH_COMPLETED
     assert watch.episodes == 12
+    assert watch.rewatches == 2
     assert watch.score == 10

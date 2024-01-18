@@ -14,4 +14,5 @@ async def test_import_people(test_session, aggregator_people):
 
     assert person is not None
     assert person.name_en == "Shinichi Omata"
+    assert person.needs_search_update is True
     assert person.favorites == 235

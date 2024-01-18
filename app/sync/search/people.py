@@ -32,29 +32,43 @@ async def update_people_settings(index):
     )
 
 
+def person_to_document(person: Person):
+    return {
+        "name_native": person.name_native,
+        "favorites": person.favorites,
+        "name_ua": person.name_ua,
+        "name_en": person.name_en,
+        "id": person.content_id,
+        "image": person.image,
+        "slug": person.slug,
+    }
+
+
 async def people_documents(session: AsyncSession, limit: int, offset: int):
     people_list = await session.scalars(
-        select(Person).order_by("content_id").limit(limit).offset(offset)
+        select(Person)
+        .filter(Person.needs_search_update == True)  # noqa: E712
+        .order_by("content_id")
+        .limit(limit)
+        .offset(offset)
     )
 
-    documents = [
-        {
-            "name_native": person.name_native,
-            "favorites": person.favorites,
-            "name_ua": person.name_ua,
-            "name_en": person.name_en,
-            "id": person.content_id,
-            "image": person.image,
-            "slug": person.slug,
-        }
-        for person in people_list
-    ]
+    documents = []
+
+    for person in people_list:
+        documents.append(person_to_document(person))
+        person.needs_search_update = False
+        session.add(person)
 
     return documents
 
 
 async def people_documents_total(session: AsyncSession):
-    return await session.scalar(select(func.count(Person.id)))
+    return await session.scalar(
+        select(func.count(Person.id)).filter(
+            Person.needs_search_update == True  # noqa: E712
+        )
+    )
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -72,12 +86,14 @@ async def meilisearch_populate(session: AsyncSession):
         pages = math.ceil(total / size)
 
         for page in range(1, pages + 1):
-            print(f"Meilisearch: Processing people page {page}")
+            print(f"Meilisearch: Processing people page {page} of {pages}")
 
             limit, offset = pagination(page, size)
             documents = await people_documents(session, limit, offset)
 
             await index.add_documents(documents)
+
+            await session.commit()
 
 
 async def update_search_people():

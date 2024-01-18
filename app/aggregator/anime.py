@@ -58,6 +58,7 @@ async def save_anime_list(session, data):
 
             anime = Anime(
                 **{
+                    "needs_search_update": True,
                     "episodes_released": anime_data["episodes_released"],
                     "year": start_date.year if start_date else None,
                     "episodes_total": anime_data["episodes_total"],

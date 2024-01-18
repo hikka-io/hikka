@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped
 from ..base import Base
 
 from ..mixins import (
+    NeedsSearchUpdateMixin,
     FavoritesMixin,
     ContentMixin,
     UpdatedMixin,
@@ -21,6 +22,7 @@ class Character(
     UpdatedMixin,
     NamesMixin,
     SlugMixin,
+    NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_characters"
 

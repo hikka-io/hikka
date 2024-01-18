@@ -6,6 +6,10 @@ from sqlalchemy import String
 from datetime import datetime
 
 
+class NeedsSearchUpdateMixin:
+    needs_search_update: Mapped[bool] = mapped_column(default=False)
+
+
 class ContentMixin:
     content_id: Mapped[str] = mapped_column(String(36), unique=True, index=True)
 

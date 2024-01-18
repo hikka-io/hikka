@@ -26,27 +26,41 @@ async def update_companies_settings(index):
     )
 
 
+def company_to_document(company: Company):
+    return {
+        "favorites": company.favorites,
+        "id": company.content_id,
+        "image": company.image,
+        "name": company.name,
+        "slug": company.slug,
+    }
+
+
 async def companies_documents(session: AsyncSession, limit: int, offset: int):
     companies_list = await session.scalars(
-        select(Company).order_by("content_id").limit(limit).offset(offset)
+        select(Company)
+        .filter(Company.needs_search_update == True)  # noqa: E712
+        .order_by("content_id")
+        .limit(limit)
+        .offset(offset)
     )
 
-    documents = [
-        {
-            "favorites": company.favorites,
-            "id": company.content_id,
-            "image": company.image,
-            "name": company.name,
-            "slug": company.slug,
-        }
-        for company in companies_list
-    ]
+    documents = []
+
+    for company in companies_list:
+        documents.append(company_to_document(company))
+        company.needs_search_update = False
+        session.add(company)
 
     return documents
 
 
 async def companies_documents_total(session: AsyncSession):
-    return await session.scalar(select(func.count(Company.id)))
+    return await session.scalar(
+        select(func.count(Company.id)).filter(
+            Company.needs_search_update == True  # noqa: E712
+        )
+    )
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -64,12 +78,14 @@ async def meilisearch_populate(session: AsyncSession):
         pages = math.ceil(total / size)
 
         for page in range(1, pages + 1):
-            print(f"Meilisearch: Processing companies page {page}")
+            print(f"Meilisearch: Processing companies page {page} of {pages}")
 
             limit, offset = pagination(page, size)
             documents = await companies_documents(session, limit, offset)
 
             await index.add_documents(documents)
+
+            await session.commit()
 
 
 async def update_search_companies():

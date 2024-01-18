@@ -519,8 +519,6 @@ async def update_anime_info(session, anime, data):
     for genre in genres_add:
         anime.genres.append(genre)
 
-    session.add(anime)
-
     # Only create new edit if we need to
     if before != {} and after != {}:
         edit = Edit(
@@ -536,6 +534,10 @@ async def update_anime_info(session, anime, data):
             }
         )
 
+        anime.needs_search_update = True
+
         session.add(edit)
+
+    session.add(anime)
 
     await session.commit()

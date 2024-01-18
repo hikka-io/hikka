@@ -14,4 +14,5 @@ async def test_import_companies(test_session, aggregator_companies):
 
     assert company is not None
     assert company.name == "MAPPA"
+    assert company.needs_search_update is True
     assert company.favorites == 25846
