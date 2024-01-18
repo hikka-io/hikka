@@ -44,6 +44,7 @@ async def test_edit_accept(
     # And make sure title has been updated
     assert anime.title_en == "Bocchi The Rock!"
     assert "title_en" in anime.ignored_fields
+    assert anime.needs_search_update is True
 
 
 async def test_edit_accept_bad_permission(
