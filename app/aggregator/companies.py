@@ -58,6 +58,7 @@ async def save_companies(session, data):
 
             company = Company(
                 **{
+                    "needs_search_update": True,
                     "content_id": company_data["content_id"],
                     "favorites": company_data["favorites"],
                     "name": company_data["name_en"],

@@ -9,6 +9,7 @@ from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
+    NeedsSearchUpdateMixin,
     IgnoredFieldsMixin,
     ContentMixin,
     UpdatedMixin,
@@ -22,6 +23,7 @@ class Anime(
     ContentMixin,
     UpdatedMixin,
     IgnoredFieldsMixin,
+    NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_anime"
 

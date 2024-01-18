@@ -6,6 +6,7 @@ from sqlalchemy import ForeignKey
 from ..base import Base
 
 from ..mixins import (
+    NeedsSearchUpdateMixin,
     FavoritesMixin,
     ContentMixin,
     UpdatedMixin,
@@ -19,6 +20,7 @@ class Person(
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
+    NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_people"
 

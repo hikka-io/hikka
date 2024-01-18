@@ -25,6 +25,8 @@ async def test_import_anime_info(
 
     assert anime is not None
     assert anime.synopsis_ua is not None
+    assert anime.needs_search_update is True
+    assert anime.needs_update is False
 
     assert len(anime.genres) == 5
     assert len(anime.episodes_list) == 64

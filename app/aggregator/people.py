@@ -56,6 +56,7 @@ async def save_people(session, data):
 
             person = Person(
                 **{
+                    "needs_search_update": True,
                     "content_id": person_data["content_id"],
                     "name_native": person_data["name_ja"],
                     "favorites": person_data["favorites"],
