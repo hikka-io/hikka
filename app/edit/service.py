@@ -183,6 +183,10 @@ async def accept_pending_edit(
             if key not in content.ignored_fields:
                 content.ignored_fields.append(key)
 
+    # Make sure content is marked to be updated in Meilisearch
+    if hasattr(content, "needs_search_update"):
+        content.needs_search_update = True
+
     edit.status = constants.EDIT_ACCEPTED
     edit.updated = datetime.now()
     edit.moderator = moderator
