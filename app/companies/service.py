@@ -9,7 +9,9 @@ from sqlalchemy import func
 async def get_company_by_slug(
     session: AsyncSession, slug: str
 ) -> Company | None:
-    return await session.scalar(select(Company).filter(Company.slug == slug))
+    return await session.scalar(
+        select(Company).filter(func.lower(Company.slug) == slug.lower())
+    )
 
 
 async def search_total(session: AsyncSession):

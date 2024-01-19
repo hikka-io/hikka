@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, func
 from app.utils import new_token
-from sqlalchemy import select
 
 from app.models import (
     EmailMessage,
@@ -25,15 +25,21 @@ async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
 async def get_user_by_username(
     session: AsyncSession, username: str
 ) -> User | None:
-    return await session.scalar(select(User).filter(User.username == username))
+    return await session.scalar(
+        select(User).filter(func.lower(User.username) == username.lower())
+    )
 
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
-    return await session.scalar(select(User).filter(User.email == email))
+    return await session.scalar(
+        select(User).filter(func.lower(User.email) == email.lower())
+    )
 
 
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
-    return await session.scalar(select(Anime).filter(Anime.slug == slug))
+    return await session.scalar(
+        select(Anime).filter(func.lower(Anime.slug) == slug.lower())
+    )
 
 
 async def get_anime_by_id(session: AsyncSession, id: str) -> Anime | None:

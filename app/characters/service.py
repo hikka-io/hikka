@@ -10,7 +10,7 @@ async def get_character_by_slug(
     session: AsyncSession, slug: str
 ) -> Character | None:
     return await session.scalar(
-        select(Character).filter(Character.slug == slug)
+        select(Character).filter(func.lower(Character.slug) == slug.lower())
     )
 
 
