@@ -6,6 +6,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
+from app import constants
 from . import utils
 
 from app.models import (
@@ -199,6 +200,19 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
 
     if len(search.rating) > 0:
         query = query.where(Anime.rating.in_(search.rating))
+    else:
+        # Do not display nsfw on front page
+        query = query.where(
+            Anime.rating.in_(
+                [
+                    constants.AGE_RATING_R_PLUS,
+                    constants.AGE_RATING_PG_13,
+                    constants.AGE_RATING_PG,
+                    constants.AGE_RATING_G,
+                    constants.AGE_RATING_R,
+                ]
+            )
+        )
 
     if len(search.status) > 0:
         query = query.where(Anime.status.in_(search.status))
