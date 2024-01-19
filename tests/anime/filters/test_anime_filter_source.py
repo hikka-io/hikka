@@ -18,7 +18,7 @@ async def test_anime_filter_source(
     response = await request_anime_search(client, {"source": ["visual_novel"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 3
+    assert len(response.json()["list"]) == 2
     assert response.json()["list"][0]["source"] == "visual_novel"
 
     # Get anime with both visual_novel and original sources
@@ -27,7 +27,7 @@ async def test_anime_filter_source(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 4
+    assert len(response.json()["list"]) == 3
     assert response.json()["list"][0]["source"] == "visual_novel"
     assert response.json()["list"][1]["source"] == "original"
 

@@ -2,7 +2,9 @@ from client_requests import request_anime_search
 from fastapi import status
 
 
-async def test_anime_filter_media_type(client, aggregator_anime):
+async def test_anime_filter_media_type(
+    client, aggregator_anime, aggregator_anime_info
+):
     # Get anime with media type special
     response = await request_anime_search(client, {"media_type": ["special"]})
 

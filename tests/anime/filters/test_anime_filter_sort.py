@@ -2,7 +2,9 @@ from client_requests import request_anime_search
 from fastapi import status
 
 
-async def test_anime_filter_sort(client, aggregator_anime):
+async def test_anime_filter_sort(
+    client, aggregator_anime, aggregator_anime_info
+):
     # Check for desc sort
     response = await request_anime_search(client, {"sort": ["score:desc"]})
 

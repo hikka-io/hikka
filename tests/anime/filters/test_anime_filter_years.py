@@ -2,7 +2,9 @@ from client_requests import request_anime_search
 from fastapi import status
 
 
-async def test_anime_filter_years(client, aggregator_anime):
+async def test_anime_filter_years(
+    client, aggregator_anime, aggregator_anime_info
+):
     # Check year range between 2010 and 2018
     response = await request_anime_search(client, {"years": [2010, 2018]})
 

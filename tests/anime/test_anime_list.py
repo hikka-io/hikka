@@ -2,14 +2,14 @@ from client_requests import request_anime_search
 from fastapi import status
 
 
-async def test_anime_list(client, aggregator_anime):
+async def test_anime_list(client, aggregator_anime, aggregator_anime_info):
     # Make request to anime list
     response = await request_anime_search(client)
 
     assert response.status_code == status.HTTP_200_OK
 
     # Check pagination data
-    assert response.json()["pagination"]["total"] == 17
+    assert response.json()["pagination"]["total"] == 16
     assert response.json()["pagination"]["pages"] == 2
     assert response.json()["pagination"]["page"] == 1
 
@@ -34,25 +34,32 @@ async def test_anime_no_meilisearch(client):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-async def test_anime_pagination(client, aggregator_anime):
+async def test_anime_pagination(
+    client, aggregator_anime, aggregator_anime_info
+):
     # Check second page of anime list
     response = await request_anime_search(client, page=2)
 
     assert response.status_code == status.HTTP_200_OK
 
-    assert response.json()["pagination"]["total"] == 17
+    assert response.json()["pagination"]["total"] == 16
     assert response.json()["pagination"]["pages"] == 2
     assert response.json()["pagination"]["page"] == 2
 
     # Check first anime on second page
-    assert response.json()["list"][0]["slug"] == "euphoria-167704"
+    assert (
+        response.json()["list"][0]["slug"]
+        == "pia-carrot-e-youkoso-sayaka-no-koi-monogatari-227414"
+    )
 
 
-async def test_anime_pagination_size(client, aggregator_anime):
+async def test_anime_pagination_size(
+    client, aggregator_anime, aggregator_anime_info
+):
     # Check second page of anime list
     response = await request_anime_search(client, page=1, size=2)
     assert response.status_code == status.HTTP_200_OK
 
-    assert response.json()["pagination"]["total"] == 17
-    assert response.json()["pagination"]["pages"] == 9
+    assert response.json()["pagination"]["total"] == 16
+    assert response.json()["pagination"]["pages"] == 8
     assert response.json()["pagination"]["page"] == 1
