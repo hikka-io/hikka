@@ -29,7 +29,7 @@ async def get_anime_info_by_slug(
 ) -> Anime | None:
     return await session.scalar(
         select(Anime)
-        .filter(Anime.slug == slug)
+        .filter(func.lower(Anime.slug) == slug.lower())
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),

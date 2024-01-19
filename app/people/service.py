@@ -7,7 +7,9 @@ from sqlalchemy import func
 
 
 async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
-    return await session.scalar(select(Person).filter(Person.slug == slug))
+    return await session.scalar(
+        select(Person).filter(func.lower(Person.slug) == slug.lower())
+    )
 
 
 async def search_total(session: AsyncSession):

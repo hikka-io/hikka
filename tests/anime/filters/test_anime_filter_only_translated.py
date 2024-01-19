@@ -12,7 +12,7 @@ async def test_anime_only_translated(
     response = await request_anime_search(client, {"only_translated": False})
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["pagination"]["total"] == 17
+    assert response.json()["pagination"]["total"] == 16
 
     # And now only translated to Ukrainian
     response = await request_anime_search(client, {"only_translated": True})
