@@ -145,13 +145,16 @@ async def validation_handler(
     error = exception.errors()[0]
 
     field_location = error["loc"][0]
-    field_name = error["loc"][1]
-    error_message = f"Field {field_name} in request {field_location} is invalid"
+    error_message = f"request {field_location} is invalid"
+
+    if len(error["loc"]) > 1:
+        field_name = error["loc"][1]
+        error_message = f"Field {field_name} in "
 
     return JSONResponse(
         status_code=400,
         content={
             "code": "system:validation_error",
-            "message": error_message,
+            "message": error_message.capitalize(),
         },
     )
