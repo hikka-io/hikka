@@ -64,7 +64,7 @@ async def companies_documents_total(session: AsyncSession):
 
 
 async def meilisearch_populate(session: AsyncSession):
-    print("Meilisearch: Populating companies")
+    # print("Meilisearch: Populating companies")
 
     settings = get_settings()
 
