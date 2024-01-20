@@ -72,7 +72,7 @@ async def characters_documents_total(session: AsyncSession):
 
 
 async def meilisearch_populate(session: AsyncSession):
-    print("Meilisearch: Populating characters")
+    # print("Meilisearch: Populating characters")
 
     settings = get_settings()
 
@@ -86,7 +86,7 @@ async def meilisearch_populate(session: AsyncSession):
         pages = math.ceil(total / size)
 
         for page in range(1, pages + 1):
-            print(f"Meilisearch: Processing characters page {page} of {pages}")
+            # print(f"Meilisearch: Processing characters page {page} of {pages}")
 
             limit, offset = pagination(page, size)
             documents = await characters_documents(session, limit, offset)
