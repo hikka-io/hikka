@@ -78,7 +78,7 @@ async def meilisearch_populate(session: AsyncSession):
         pages = math.ceil(total / size)
 
         for page in range(1, pages + 1):
-            print(f"Meilisearch: Processing companies page {page} of {pages}")
+            # print(f"Meilisearch: Processing companies page {page} of {pages}")
 
             limit, offset = pagination(page, size)
             documents = await companies_documents(session, limit, offset)
