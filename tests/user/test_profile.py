@@ -12,6 +12,11 @@ async def test_profile(client, create_test_user):
     assert response.json()["username"] == "testuser"
     assert response.status_code == status.HTTP_200_OK
 
+    # User profile with different case
+    response = await request_profile(client, "TestUser")
+    assert response.json()["username"] == "testuser"
+    assert response.status_code == status.HTTP_200_OK
+
 
 async def test_bad_profile(client):
     # Unknown user profile
