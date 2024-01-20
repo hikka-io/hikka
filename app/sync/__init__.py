@@ -9,7 +9,6 @@ from .aggregator.anime import aggregator_anime
 
 from .sitemap import update_sitemap
 
-from .search import update_search_task
 from .search import update_search
 
 from .email import send_emails
@@ -24,7 +23,6 @@ __all__ = [
     "aggregator_people",
     "aggregator_anime",
     "update_sitemap",
-    "update_search_task",
     "update_search",
     "send_emails",
 ]

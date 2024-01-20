@@ -71,10 +71,6 @@ async def send_email(session: AsyncSession, email: EmailMessage):
 async def send_emails():
     """Send pending emails via Mailgun api"""
 
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
     async with sessionmanager.session() as session:
         emails = await session.scalars(
             select(EmailMessage)
@@ -87,5 +83,3 @@ async def send_emails():
             await send_email(session, email)
 
         await session.commit()
-
-    await sessionmanager.close()

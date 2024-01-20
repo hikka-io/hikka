@@ -1,5 +1,4 @@
 from app.database import sessionmanager
-from app.utils import get_settings
 from app.utils import to_timestamp
 from sqlalchemy import desc, func
 from sqlalchemy import select
@@ -43,15 +42,9 @@ async def generate_sitemap(session):
 async def update_sitemap():
     """Generate sitemap file"""
 
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
     async with sessionmanager.session() as session:
         with open(
             f"{settings.backend.sitemap_path}/sitemap_anime.json", "w"
         ) as file:
             result = await generate_sitemap(session)
             file.write(json.dumps(result))
-
-    await sessionmanager.close()
