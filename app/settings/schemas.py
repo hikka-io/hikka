@@ -25,7 +25,7 @@ class ImportAnimeArgs(CustomModelExtraIgnore):
     my_times_watched: int = Field(default=0, ge=0)
     my_score: int = Field(default=0, ge=0, le=10)
     my_status: ImportWatchStatusEnum
-    my_comments: str
+    my_comments: str | dict
 
 
 class ImportAnimeListArgs(CustomModelExtraIgnore):
