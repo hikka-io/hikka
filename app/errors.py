@@ -142,7 +142,12 @@ async def abort_handler(request: Request, exception: Abort):
 async def validation_handler(
     request: Request, exception: RequestValidationError
 ):
-    error_message = str(exception).replace("\n", " ").replace("   ", " ")
+    error = exception.errors()[0]
+
+    field_location = error["loc"][0]
+    field_name = error["loc"][1]
+    error_message = f"Field {field_name} in request {field_location} is invalid"
+
     return JSONResponse(
         status_code=400,
         content={
