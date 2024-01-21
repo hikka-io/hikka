@@ -18,10 +18,10 @@ async def analytics_event(request: Request, args: EventArgs):
                 "url": args.u,
             },
             headers={
-                "Content-Type": "application/json",
                 "User-Agent": request.headers.get("User-Agent", "unknown"),
                 "X-Forwarded-For": request.headers.get(
-                    "X-Forwarded-For", "127.0.0.1"
+                    "cf-connecting-ip",
+                    request.headers.get("x-forwarded-for", "127.0.0.1"),
                 ),
             },
         ):
