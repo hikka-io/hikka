@@ -32,7 +32,8 @@ async def analytics_event(request: Request, args: EventArgs):
                     "x-forwarded-proto", "https"
                 ),
                 "X-Forwarded-For": request.headers.get(
-                    "x-forwarded-for", "127.0.0.1"
+                    "cf-connecting-ip",
+                    request.headers.get("x-forwarded-for", "127.0.0.1"),
                 ),
             },
         ):
