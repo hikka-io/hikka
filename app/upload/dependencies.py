@@ -34,7 +34,11 @@ async def validate_upload_rate_limit(
     # Becaue we need extra logic to decide what is being uploaded
     utils.check_user_permissions(user, upload_permissions)
 
-    count = await service.count_uploads_last_day(session, user)
+    # Count uploads by given upload type
+    count = await service.count_uploads_last_day(session, user, upload_type)
+
+    # ToDo: make this dynamic based on upload type (?)
+    max_daily_uploads = 10
 
     if (
         user.role
@@ -42,7 +46,7 @@ async def validate_upload_rate_limit(
             constants.ROLE_ADMIN,
             constants.ROLE_MODERATOR,
         ]
-        and count >= 10
+        and count >= max_daily_uploads
     ):
         raise Abort("upload", "rate-limit")
 

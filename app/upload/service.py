@@ -38,11 +38,15 @@ async def s3_upload_file(upload_metadata: UploadMetadata, file_path: str):
     return True
 
 
-async def count_uploads_last_day(session: AsyncSession, user: User):
+async def count_uploads_last_day(
+    session: AsyncSession, user: User, upload_type: UploadTypeEnum
+):
     today = utils.round_day(datetime.now())
     return await session.scalar(
         select(func.count(Upload.id)).filter(
-            Upload.user == user, Upload.created > today
+            Upload.user == user,
+            Upload.created > today,
+            Upload.type == upload_type,
         )
     )
 
