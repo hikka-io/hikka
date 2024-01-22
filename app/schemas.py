@@ -175,6 +175,7 @@ class UserResponse(CustomModel):
     description: str | None = Field(examples=["Hikka"])
     username: str | None = Field(examples=["hikka"])
     created: datetime = Field(examples=[1686088809])
+    cover: str | None
     active: bool
     avatar: str
     role: str

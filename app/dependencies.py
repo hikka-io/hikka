@@ -88,16 +88,8 @@ def auth_required(permissions: list = [], optional: bool = False):
         if now > token.expiration:
             raise Abort("auth", "token-expired")
 
-        # Simple check for permissions
-        if len(permissions) > 0:
-            role_permissions = constants.ROLES.get(token.user.role, [])
-
-            has_permission = all(
-                permission in role_permissions for permission in permissions
-            )
-
-            if not has_permission:
-                raise Abort("permission", "denied")
+        # Check requested permissions here
+        utils.check_user_permissions(token.user, permissions)
 
         # After each authenticated request token expiration will be reset
         token.expiration = now + timedelta(days=7)

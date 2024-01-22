@@ -23,6 +23,20 @@ async def test_upload_avatar(
         assert response.json()["avatar"] == avatar_url
 
 
+async def test_upload_avatar_bad_permission(
+    client,
+    create_dummy_user_banned,
+    get_dummy_token,
+    mock_s3_upload_file,
+):
+    with open("tests/data/upload/test.jpg", mode="rb") as file:
+        response = await request_upload_avatar(client, get_dummy_token, file)
+
+        # It should fail with permission denied
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.json()["code"] == "permission:denied"
+
+
 async def test_upload_avatar_bad_mime(
     client,
     create_test_user,

@@ -1,6 +1,6 @@
+from .schemas import UploadMetadata, UploadTypeEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Image, Upload
-from .schemas import UploadMetadata
 from sqlalchemy import select, func
 from app.utils import get_settings
 from datetime import datetime
@@ -47,14 +47,17 @@ async def count_uploads_last_day(session: AsyncSession, user: User):
     )
 
 
-async def process_avatar_upload(
+async def process_upload_file(
     session: AsyncSession,
+    upload_type: UploadTypeEnum,
     upload_metadata: UploadMetadata,
     user: User,
 ) -> Image:
     extension = utils.get_mime_extension(upload_metadata.mime_type)
 
-    file_path = f"/uploads/{user.username}/avatar/{str(uuid4())}.{extension}"
+    file_path = (
+        f"/uploads/{user.username}/{upload_type}/{str(uuid4())}.{extension}"
+    )
 
     now = datetime.utcnow()
 
@@ -70,8 +73,8 @@ async def process_avatar_upload(
     upload = Upload(
         **{
             "mime_type": upload_metadata.mime_type,
-            "type": constants.UPLOAD_AVATAR,
             "size": upload_metadata.size,
+            "type": upload_type,
             "path": file_path,
             "created": now,
             "image": image,
@@ -82,12 +85,21 @@ async def process_avatar_upload(
     image.uploaded = await s3_upload_file(upload_metadata, file_path)
 
     if image.uploaded:
-        # Mark old image to be deleted
-        if user.avatar_image_relation:
-            user.avatar_image_relation.deletion_request = True
+        if upload_type == constants.UPLOAD_AVATAR:
+            # Mark old image to be deleted
+            if user.avatar_image_relation:
+                user.avatar_image_relation.deletion_request = True
 
-        # Only update image relation if file has been uploaded
-        user.avatar_image_relation = image
+            # Only update image relation if file has been uploaded
+            user.avatar_image_relation = image
+
+        if upload_type == constants.UPLOAD_COVER:
+            # Mark old image to be deleted
+            if user.cover_image_relation:
+                user.cover_image_relation.deletion_request = True
+
+            # Only update image relation if file has been uploaded
+            user.cover_image_relation = image
 
     session.add_all([image, upload])
     await session.commit()

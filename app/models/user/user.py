@@ -78,19 +78,24 @@ class User(Base):
         foreign_keys="[Edit.moderator_id]",
         back_populates="moderator",
     )
-
-    avatar_image_relation: Mapped["Image"] = relationship(lazy="selectin")
     avatar_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )
 
-    cover_image_relation: Mapped["Image"] = relationship(lazy="selectin")
     cover_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
+    )
+
+    avatar_image_relation: Mapped["Image"] = relationship(
+        foreign_keys=[avatar_image_id], lazy="selectin"
+    )
+
+    cover_image_relation: Mapped["Image"] = relationship(
+        foreign_keys=[cover_image_id], lazy="selectin"
     )
 
     @hybrid_property
