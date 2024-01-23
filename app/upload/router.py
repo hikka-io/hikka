@@ -5,12 +5,13 @@ from app.models import User
 from . import service
 
 from .dependencies import (
-    validate_avatar_file,
-    validate_rate_limit,
+    validate_upload_rate_limit,
+    validate_upload_file,
 )
 
 from .schemas import (
     UploadMetadata,
+    UploadTypeEnum,
     ImageResponse,
 )
 
@@ -18,14 +19,16 @@ from .schemas import (
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
 
-@router.put("/avatar", response_model=ImageResponse)
+@router.put(
+    "/{upload_type}",
+    response_model=ImageResponse,
+)
 async def upload_image(
-    user: User = Depends(validate_rate_limit),
+    upload_type: UploadTypeEnum,
     session: AsyncSession = Depends(get_session),
-    upload_metadata: UploadMetadata = Depends(validate_avatar_file),
+    user: User = Depends(validate_upload_rate_limit),
+    upload_metadata: UploadMetadata = Depends(validate_upload_file),
 ):
-    return await service.process_avatar_upload(
-        session,
-        upload_metadata,
-        user,
+    return await service.process_upload_file(
+        session, upload_type, upload_metadata, user
     )

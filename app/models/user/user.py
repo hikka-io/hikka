@@ -78,14 +78,25 @@ class User(Base):
         foreign_keys="[Edit.moderator_id]",
         back_populates="moderator",
     )
-
     avatar_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )
 
-    avatar_image_relation: Mapped["Image"] = relationship(lazy="selectin")
+    cover_image_id = mapped_column(
+        ForeignKey("service_images.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    avatar_image_relation: Mapped["Image"] = relationship(
+        foreign_keys=[avatar_image_id], lazy="selectin"
+    )
+
+    cover_image_relation: Mapped["Image"] = relationship(
+        foreign_keys=[cover_image_id], lazy="selectin"
+    )
 
     @hybrid_property
     def avatar(self):
@@ -99,6 +110,19 @@ class User(Base):
             return "https://cdn.hikka.io/avatar.jpg"
 
         return self.avatar_image_relation.url
+
+    @hybrid_property
+    def cover(self):
+        if not self.cover_image_relation:
+            return None
+
+        if (
+            self.cover_image_relation.ignore
+            or not self.cover_image_relation.uploaded
+        ):
+            return None
+
+        return self.cover_image_relation.url
 
     @hybrid_property
     def active(self):

@@ -202,6 +202,7 @@ def anime_search_where(search: AnimeSearchArgs, query: Select):
         query = query.where(Anime.rating.in_(search.rating))
     else:
         # Do not display nsfw on front page
+        # No hentai (RX) by default
         query = query.where(
             Anime.rating.in_(
                 [

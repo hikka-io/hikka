@@ -86,12 +86,10 @@ class AnimeSearchArgs(CustomModel):
     )
 
     media_type: list[AnimeMediaEnum] = []
+    rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
     source: list[SourceEnum] = []
     season: list[SeasonEnum] = []
-
-    # No hentai (RX) by default
-    rating: list[AnimeAgeRatingEnum] = []
 
     producers: list[str] = []
     studios: list[str] = []
@@ -293,6 +291,7 @@ class AnimeInfoResponse(CustomModel):
     ost: list[AnimeOSTResponse]
     stats: AnimeStatsResponse
     translated_ua: bool
+    updated: datetime
 
     @field_validator("external")
     def external_ordering(cls, value):

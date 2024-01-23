@@ -106,6 +106,10 @@ errors = {
         "bad-resolution": ["Bad resolution", 400],
         "bad-mime": ["Don't be bad mime", 400],
         "bad-size": ["Bad file size", 400],
+        "missconfigured-permission": [
+            "If you see this, check upload permissions in rate limit",
+            400,
+        ],
     },
 }
 
@@ -145,11 +149,13 @@ async def validation_handler(
     error = exception.errors()[0]
 
     field_location = error["loc"][0]
-    error_message = f"request {field_location} is invalid"
+    error_message = f"in request {field_location}"
 
     if len(error["loc"]) > 1:
         field_name = error["loc"][1]
-        error_message = f"Field {field_name} in "
+        error_message = f"{field_name} {error_message}"
+
+    error_message = f"Invalid field {error_message}"
 
     return JSONResponse(
         status_code=400,

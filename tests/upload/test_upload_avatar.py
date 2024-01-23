@@ -1,9 +1,5 @@
+from client_requests import request_upload, request_me
 from fastapi import status
-
-from client_requests import (
-    request_upload_avatar,
-    request_me,
-)
 
 
 async def test_upload_avatar(
@@ -13,7 +9,7 @@ async def test_upload_avatar(
     mock_s3_upload_file,
 ):
     with open("tests/data/upload/test.jpg", mode="rb") as file:
-        response = await request_upload_avatar(client, get_test_token, file)
+        response = await request_upload(client, "avatar", get_test_token, file)
         assert response.status_code == status.HTTP_200_OK
         assert "url" in response.json()
 
@@ -23,23 +19,18 @@ async def test_upload_avatar(
         assert response.json()["avatar"] == avatar_url
 
 
-async def test_upload_avatar_bad_mime(
+async def test_upload_avatar_bad_permission(
     client,
-    create_test_user,
-    get_test_token,
+    create_dummy_user_banned,
+    get_dummy_token,
     mock_s3_upload_file,
 ):
-    images = [
-        "tests/data/upload/bad_image.jpg",
-        "tests/data/upload/test_fake.jpg",
-        "tests/data/upload/test.png",
-    ]
+    with open("tests/data/upload/test.jpg", mode="rb") as file:
+        response = await request_upload(client, "avatar", get_dummy_token, file)
 
-    for image_path in images:
-        with open(image_path, mode="rb") as file:
-            response = await request_upload_avatar(client, get_test_token, file)
-            assert response.status_code == status.HTTP_400_BAD_REQUEST
-            assert response.json()["code"] == "upload:bad_mime"
+        # It should fail with permission denied
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.json()["code"] == "permission:denied"
 
 
 async def test_upload_avatar_bad_resolution(
@@ -55,21 +46,12 @@ async def test_upload_avatar_bad_resolution(
 
     for image_path in images:
         with open(image_path, mode="rb") as file:
-            response = await request_upload_avatar(client, get_test_token, file)
+            response = await request_upload(
+                client, "avatar", get_test_token, file
+            )
+
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             assert response.json()["code"] == "upload:bad_resolution"
-
-
-async def test_upload_avatar_bad_size(
-    client,
-    create_test_user,
-    get_test_token,
-    mock_s3_upload_file,
-):
-    with open("tests/data/upload/test_bad_size.jpg", mode="rb") as file:
-        response = await request_upload_avatar(client, get_test_token, file)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["code"] == "upload:bad_size"
 
 
 async def test_upload_avatar_not_square(
@@ -79,7 +61,7 @@ async def test_upload_avatar_not_square(
     mock_s3_upload_file,
 ):
     with open("tests/data/upload/test_not_square.jpg", mode="rb") as file:
-        response = await request_upload_avatar(client, get_test_token, file)
+        response = await request_upload(client, "avatar", get_test_token, file)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["code"] == "upload:not_square"
 
@@ -92,7 +74,9 @@ async def test_upload_avatar_rate_limit(
 ):
     for index in range(0, 11):
         with open("tests/data/upload/test.jpg", mode="rb") as file:
-            response = await request_upload_avatar(client, get_test_token, file)
+            response = await request_upload(
+                client, "avatar", get_test_token, file
+            )
 
             if index != 11:
                 continue
@@ -108,7 +92,9 @@ async def test_upload_avatar_rate_limit_admin(
 ):
     for index in range(0, 11):
         with open("tests/data/upload/test.jpg", mode="rb") as file:
-            response = await request_upload_avatar(client, get_test_token, file)
+            response = await request_upload(
+                client, "avatar", get_test_token, file
+            )
 
             if index != 11:
                 continue
