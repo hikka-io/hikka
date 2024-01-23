@@ -1,6 +1,6 @@
-def request_upload_avatar(client, token, file):
+def request_upload(client, upload_type, token, file):
     return client.put(
-        "/upload/avatar",
+        f"/upload/{upload_type}",
         headers={"Auth": token},
         files={"file": ("upload.jpg", file, "image/jpeg")},
     )
