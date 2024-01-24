@@ -2,7 +2,12 @@ from client_requests import request_companies_search
 from fastapi import status
 
 
-async def test_companies_list(client, aggregator_companies):
+async def test_companies_list(
+    client,
+    aggregator_companies,
+    aggregator_anime,
+    aggregator_anime_info,
+):
     # Get companies list
     response = await request_companies_search(client)
 
@@ -17,10 +22,24 @@ async def test_companies_list(client, aggregator_companies):
     assert response.json()["list"][0]["slug"] == "mappa-360033"
     assert response.json()["list"][11]["slug"] == "square-enix-e62cc9"
 
+    # Now check studios only
+    response = await request_companies_search(client, 1, {"type": "studio"})
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 10
+    assert response.json()["pagination"]["pages"] == 1
+
+    # And now producers only
+    response = await request_companies_search(client, 1, {"type": "producer"})
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 30
+    assert response.json()["pagination"]["pages"] == 2
+
 
 async def test_companies_pagination(client, aggregator_companies):
     # Get companies list
-    response = await request_companies_search(client, {"page": 2})
+    response = await request_companies_search(client, 2)
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -37,7 +56,7 @@ async def test_companies_pagination(client, aggregator_companies):
 
 async def test_companies_no_meilisearch(client, aggregator_companies):
     # When Meilisearch is down search should throw query down error
-    response = await request_companies_search(client, {"query": "test"})
+    response = await request_companies_search(client, 1, {"query": "test"})
 
     assert response.json()["code"] == "search:query_down"
     assert response.status_code == status.HTTP_400_BAD_REQUEST

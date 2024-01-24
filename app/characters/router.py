@@ -36,13 +36,15 @@ async def character_info(character: Character = Depends(get_character)):
 async def search_characters(
     search: QuerySearchArgs,
     session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     if not search.query:
-        limit, offset = pagination(search.page)
+        limit, offset = pagination(page, size)
         total = await service.search_total(session)
         characters = await service.characters_search(session, limit, offset)
         return {
-            "pagination": pagination_dict(total, search.page, limit),
+            "pagination": pagination_dict(total, page, limit),
             "list": characters.all(),
         }
 
@@ -50,7 +52,8 @@ async def search_characters(
         constants.SEARCH_INDEX_CHARACTERS,
         sort=["favorites:desc"],
         query=search.query,
-        page=search.page,
+        page=page,
+        size=size,
     )
 
 

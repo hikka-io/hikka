@@ -36,13 +36,15 @@ async def person_info(person: Person = Depends(get_person)):
 async def search_people(
     search: QuerySearchArgs,
     session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     if not search.query:
-        limit, offset = pagination(search.page)
+        limit, offset = pagination(page, size)
         total = await service.search_total(session)
         people = await service.people_search(session, limit, offset)
         return {
-            "pagination": pagination_dict(total, search.page, limit),
+            "pagination": pagination_dict(total, page, limit),
             "list": people.all(),
         }
 
@@ -50,7 +52,8 @@ async def search_people(
         constants.SEARCH_INDEX_PEOPLE,
         sort=["favorites:desc"],
         query=search.query,
-        page=search.page,
+        page=page,
+        size=size,
     )
 
 
