@@ -7,6 +7,11 @@ from app import meilisearch
 from app import constants
 from . import service
 
+from app.dependencies import (
+    get_page,
+    get_size,
+)
+
 from app.schemas import (
     QuerySearchArgs,
     CompanyResponse,
@@ -36,13 +41,15 @@ async def company_info(company: Company = Depends(get_company)):
 async def search_companies(
     search: QuerySearchArgs,
     session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
     if not search.query:
-        limit, offset = pagination(search.page)
+        limit, offset = pagination(page, size)
         total = await service.search_total(session)
         companies = await service.companies_search(session, limit, offset)
         return {
-            "pagination": pagination_dict(total, search.page, limit),
+            "pagination": pagination_dict(total, page, limit),
             "list": companies.all(),
         }
 
@@ -50,7 +57,8 @@ async def search_companies(
         constants.SEARCH_INDEX_COMPANIES,
         sort=["favorites:desc"],
         query=search.query,
-        page=search.page,
+        page=page,
+        size=size,
     )
 
 
@@ -59,14 +67,16 @@ async def company_anime(
     session: AsyncSession = Depends(get_session),
     company: Company = Depends(get_company),
     args: CompanyAnimeArgs = Depends(),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
 ):
-    limit, offset = pagination(args.page)
+    limit, offset = pagination(page, size)
     total = await service.company_anime_total(session, company, args.type)
     anime = await service.company_anime(
         session, company, args.type, limit, offset
     )
 
     return {
-        "pagination": pagination_dict(total, args.page, limit),
+        "pagination": pagination_dict(total, page, limit),
         "list": anime.all(),
     }

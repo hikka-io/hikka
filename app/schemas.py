@@ -55,7 +55,6 @@ class PaginationArgs(CustomModel):
 
 class QuerySearchArgs(CustomModel):
     query: constr(min_length=3, max_length=255) | None = None
-    page: int = Field(default=1, gt=0, examples=[1])
 
 
 class UsernameArgs(CustomModel):

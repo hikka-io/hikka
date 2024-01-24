@@ -1,5 +1,5 @@
-def request_companies_search(client, filters={}):
-    return client.post("/companies", json=filters)
+def request_companies_search(client, page=1, filters={}):
+    return client.post(f"/companies?page={page}", json=filters)
 
 
 def request_companies_info(client, slug):

@@ -20,7 +20,7 @@ async def test_people_list(client, aggregator_people):
 
 async def test_people_pagination(client, aggregator_people):
     # Get people list
-    response = await request_people_search(client, {"page": 2})
+    response = await request_people_search(client, 2)
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -37,7 +37,7 @@ async def test_people_pagination(client, aggregator_people):
 
 async def test_people_no_meilisearch(client):
     # When Meilisearch is down search should throw query down error
-    response = await request_people_search(client, {"query": "test"})
+    response = await request_people_search(client, 1, {"query": "test"})
 
     assert response.json()["code"] == "search:query_down"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
