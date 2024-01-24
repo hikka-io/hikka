@@ -1,5 +1,6 @@
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -57,6 +58,9 @@ class Company(
         ),
         viewonly=True,
     )
+
+    is_producer: Mapped[bool] = query_expression()
+    is_studio: Mapped[bool] = query_expression()
 
     @hybrid_property
     def image(self):

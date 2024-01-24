@@ -56,9 +56,18 @@ async def search_companies(
             "list": companies.all(),
         }
 
+    search_filter = []
+
+    if search.type == constants.COMPANY_ANIME_STUDIO:
+        search_filter.append("is_studio = true")
+
+    if search.type == constants.COMPANY_ANIME_PRODUCER:
+        search_filter.append("is_producer = true")
+
     return await meilisearch.search(
         constants.SEARCH_INDEX_COMPANIES,
         sort=["favorites:desc"],
+        filter=search_filter,
         query=search.query,
         page=page,
         size=size,
