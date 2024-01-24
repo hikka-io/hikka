@@ -13,13 +13,13 @@ from app.dependencies import (
 )
 
 from app.schemas import (
-    QuerySearchArgs,
     CompanyResponse,
 )
 
 from .schemas import (
     CompaniesSearchPaginationResponse,
     CompanyAnimePaginationResponse,
+    CompaniesListArgs,
     CompanyAnimeArgs,
 )
 
@@ -39,15 +39,18 @@ async def company_info(company: Company = Depends(get_company)):
 
 @router.post("", response_model=CompaniesSearchPaginationResponse)
 async def search_companies(
-    search: QuerySearchArgs,
+    search: CompaniesListArgs,
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     if not search.query:
         limit, offset = pagination(page, size)
-        total = await service.search_total(session)
-        companies = await service.companies_search(session, limit, offset)
+        total = await service.search_total(session, search.type)
+        companies = await service.companies_search(
+            session, search.type, limit, offset
+        )
+
         return {
             "pagination": pagination_dict(total, page, limit),
             "list": companies.all(),

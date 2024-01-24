@@ -38,7 +38,23 @@ class Company(
 
     produced_anime: Mapped[list["Anime"]] = relationship(
         secondary="service_content_companies_anime",
-        back_populates="producers",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'producer')"
+        ),
+        viewonly=True,
+    )
+
+    studio_anime: Mapped[list["Anime"]] = relationship(
+        secondary="service_content_companies_anime",
+        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        secondaryjoin=(
+            "and_("
+            "CompanyAnime.company_id == Company.id,"
+            "CompanyAnime.type == 'studio')"
+        ),
         viewonly=True,
     )
 

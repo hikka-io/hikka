@@ -4,6 +4,7 @@ from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, desc
 from sqlalchemy import func
+from app import constants
 
 
 async def get_company_by_slug(
@@ -14,18 +15,34 @@ async def get_company_by_slug(
     )
 
 
-async def search_total(session: AsyncSession):
-    return await session.scalar(select(func.count(Company.id)))
+async def search_total(session: AsyncSession, company_type: str | None):
+    query = select(func.count(Company.id))
+
+    if company_type == constants.COMPANY_ANIME_STUDIO:
+        query = query.filter(Company.studio_anime.any())
+
+    if company_type == constants.COMPANY_ANIME_PRODUCER:
+        query = query.filter(Company.produced_anime.any())
+
+    return await session.scalar(query)
 
 
 async def companies_search(
     session: AsyncSession,
+    company_type: str | None,
     limit: int,
     offset: int,
 ):
+    query = select(Company)
+
+    if company_type == constants.COMPANY_ANIME_STUDIO:
+        query = query.filter(Company.studio_anime.any())
+
+    if company_type == constants.COMPANY_ANIME_PRODUCER:
+        query = query.filter(Company.produced_anime.any())
+
     return await session.scalars(
-        select(Company)
-        .order_by(
+        query.order_by(
             desc(Company.favorites),
             desc(Company.content_id),
         )

@@ -1,4 +1,3 @@
-from pydantic import Field
 from app import constants
 from enum import Enum
 
@@ -6,6 +5,7 @@ from app.schemas import (
     PaginationResponse,
     CompanyResponse,
     CompanyTypeEnum,
+    QuerySearchArgs,
     AnimeResponse,
     CustomModel,
 )
@@ -19,8 +19,11 @@ class CompanyAnimeTypeEnum(str, Enum):
 
 # Args
 class CompanyAnimeArgs(CustomModel):
-    page: int = Field(default=1, gt=0, examples=[1])
     type: CompanyAnimeTypeEnum | None = None
+
+
+class CompaniesListArgs(CompanyAnimeArgs, QuerySearchArgs):
+    pass
 
 
 # Responses
