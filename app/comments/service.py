@@ -1,12 +1,18 @@
-from app.models import Edit, EditComment, User, Comment
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, func
 from .utils import is_int, uuid_to_path
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
-from sqlalchemy import select
 from datetime import datetime
 from app import constants
 from uuid import uuid4
+
+from app.models import (
+    EditComment,
+    Comment,
+    User,
+    Edit,
+)
 
 
 # This part inspited by edit logic
@@ -71,3 +77,45 @@ async def create_comment(
     # await session.refresh
 
     return comment
+
+
+async def count_comments_by_content_id(
+    session: AsyncSession, content_id: str
+) -> int:
+    """Count comments for given content"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.content_id == content_id,
+        )
+    )
+
+
+async def get_comments_by_content_id(
+    session: AsyncSession,
+    content_id: str,
+    limit: int,
+    offset: int,
+) -> list[Edit]:
+    """Return comemnts for given content"""
+
+    return await session.scalars(
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.content_id == content_id,
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def get_sub_comments(session: AsyncSession, base_comment: Comment):
+    return await session.scalars(
+        select(Comment).filter(
+            Comment.path.descendant_of(base_comment.path),
+            Comment.id != base_comment.id,
+        )
+    )

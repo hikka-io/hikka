@@ -1,8 +1,12 @@
-from app.schemas import UserResponse
-from app.schemas import CustomModel
 from pydantic import Field
 from app import constants
 from enum import Enum
+
+from app.schemas import (
+    PaginationResponse,
+    UserResponse,
+    CustomModel,
+)
 
 
 # Enums
@@ -22,6 +26,11 @@ class CommentResponse(CustomModel):
     total_replies: int
     reference: str
     text: str
+
+
+class CommentListResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CommentResponse]
 
 
 # Misc

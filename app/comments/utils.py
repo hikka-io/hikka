@@ -12,7 +12,10 @@ def path_to_uuid(obj_uuid):
 
 
 def build_comments(root_node, sub_comments):
-    tree = CommentNode(path_to_uuid(root_node.path), root_node.text)
+    tree = CommentNode(
+        path_to_uuid(root_node.path), root_node.text, root_node.author
+    )
+
     tree_dict = {tree.reference: tree}
 
     for sub_comment in sub_comments:
@@ -37,6 +40,7 @@ def build_comments(root_node, sub_comments):
 
             tree_node = reply
 
+        tree_node.author = sub_comment.author
         tree_node.text = sub_comment.text
 
     return tree

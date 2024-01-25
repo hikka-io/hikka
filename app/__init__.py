@@ -42,6 +42,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Edit"},
             {"name": "Settings"},
             {"name": "Upload"},
+            {"name": "Comments"},
         ],
         lifespan=lifespan,
         # redoc_url=None,

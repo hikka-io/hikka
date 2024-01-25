@@ -2,11 +2,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import validate_content_slug
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import Comment, User
-from sqlalchemy import select, func
 from .utils import build_comments
+from app.models import User
 from app import constants
 from . import service
+
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
 
 from app.dependencies import (
     auth_required,
@@ -16,13 +20,15 @@ from app.dependencies import (
 )
 
 from .schemas import (
+    CommentListResponse,
     CommentResponse,
     ContentTypeEnum,
     CommentNode,
     CommentArgs,
 )
 
-router = APIRouter(prefix="/comments")
+
+router = APIRouter(prefix="/comment", tags=["Comments"])
 
 
 @router.put(
@@ -50,22 +56,26 @@ async def write_comment(
     )
 
 
-# @router.get("/test", response_model=list[CommentResponse])
-# async def test_comments(session: AsyncSession = Depends(get_session)):
-#     result = []
+@router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
+async def get_content_edit_list(
+    session: AsyncSession = Depends(get_session),
+    content_id: str = Depends(validate_content_slug),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.count_comments_by_content_id(session, content_id)
+    base_comments = await service.get_comments_by_content_id(
+        session, content_id, limit, offset
+    )
 
-#     base_comments = await session.scalars(
-#         select(Comment).filter(func.nlevel(Comment.path) == 1)
-#     )
+    result = []
 
-#     for base_comment in base_comments:
-#         sub_comments = await session.scalars(
-#             select(Comment).filter(
-#                 Comment.path.descendant_of(base_comment.path),
-#                 Comment.id != base_comment.id,
-#             )
-#         )
+    for base_comment in base_comments:
+        sub_comments = await service.get_sub_comments(session, base_comment)
+        result.append(build_comments(base_comment, sub_comments))
 
-#         result.append(build_comments(base_comment, sub_comments))
-
-#     return result
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": result,
+    }
