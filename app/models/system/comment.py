@@ -1,17 +1,12 @@
 from ..mixins import CreatedMixin, UpdatedMixin
-from sqlalchemy_utils import LtreeType, Ltree
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import LtreeType
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
-from uuid import UUID, uuid4
 from ..base import Base
-
-
-# Convert uuid reference to comment path
-def uuid_to_path(obj_uuid):
-    return str(obj_uuid).replace("-", "_")
+from uuid import UUID
 
 
 class Comment(Base, CreatedMixin, UpdatedMixin):
@@ -40,11 +35,6 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
             postgresql_using="gist",
         ),
     )
-
-    def __init__(self, parent=None):
-        self.id = uuid4()
-        ltree_id = Ltree(uuid_to_path(self.id))
-        self.path = ltree_id if parent is None else parent.path + ltree_id
 
 
 class EditComment(Comment):

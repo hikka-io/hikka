@@ -1,9 +1,13 @@
+from app.models import Edit, EditComment, User, Comment
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Edit, EditComment
+from .utils import is_int, uuid_to_path
 from .schemas import ContentTypeEnum
+from sqlalchemy_utils import Ltree
 from sqlalchemy import select
+from datetime import datetime
 from app import constants
-from .utils import is_int
+from uuid import uuid4
+
 
 # This part inspited by edit logic
 # If we change edit logic we probably change this as well
@@ -34,3 +38,36 @@ async def get_content_by_slug(
         query = query.filter(content_model.slug == slug)
 
     return await session.scalar(query)
+
+
+async def create_comment(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content_id: str,
+    author: User,
+    text: str,
+    parent: Comment | None = None,
+):
+    comment_model = content_type_to_comment_class[content_type]
+    now = datetime.utcnow()
+
+    comment = comment_model(
+        **{
+            "content_type": content_type,
+            "content_id": content_id,
+            "author": author,
+            "created": now,
+            "updated": now,
+            "id": uuid4(),
+            "text": text,
+        }
+    )
+
+    ltree_id = Ltree(uuid_to_path(comment.id))
+    comment.path = ltree_id if parent is None else parent.path + ltree_id
+
+    session.add(comment)
+    await session.commit()
+    # await session.refresh
+
+    return comment

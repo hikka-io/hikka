@@ -6,6 +6,7 @@ from app.models import Comment, User
 from sqlalchemy import select, func
 from .utils import build_comments
 from app import constants
+from . import service
 
 from app.dependencies import (
     auth_required,
@@ -17,6 +18,7 @@ from app.dependencies import (
 from .schemas import (
     CommentResponse,
     ContentTypeEnum,
+    CommentNode,
     CommentArgs,
 )
 
@@ -25,7 +27,7 @@ router = APIRouter(prefix="/comments")
 
 @router.put(
     "/{content_type}/{slug}",
-    # response_model=CommentResponse,
+    response_model=CommentResponse,
 )
 async def write_comment(
     args: CommentArgs,
@@ -37,10 +39,15 @@ async def write_comment(
     ),
     _: bool = Depends(check_captcha),
 ):
-    return args
-    # return await service.create_pending_edit(
-    #     session, content_type, content_id, args, author
-    # )
+    comment = await service.create_comment(
+        session, content_type, content_id, author, args.text
+    )
+
+    return CommentNode(
+        comment.reference,
+        comment.text,
+        comment.author,
+    )
 
 
 # @router.get("/test", response_model=list[CommentResponse])

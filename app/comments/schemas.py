@@ -1,3 +1,4 @@
+from app.schemas import UserResponse
 from app.schemas import CustomModel
 from pydantic import Field
 from app import constants
@@ -17,6 +18,7 @@ class CommentArgs(CustomModel):
 # Responses
 class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
+    author: UserResponse
     total_replies: int
     reference: str
     text: str
@@ -24,8 +26,9 @@ class CommentResponse(CustomModel):
 
 # Misc
 class CommentNode:
-    def __init__(self, reference, text=None):
+    def __init__(self, reference, text=None, author=None):
         self.reference = reference
         self.total_replies = 0
+        self.author = author
         self.replies = []
         self.text = text
