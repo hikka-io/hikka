@@ -61,6 +61,9 @@ errors = {
         "invalid-field": ["Invalid field", 400],
         "not-found": ["Edit not found", 404],
     },
+    "comment": {
+        "content-not-found": ["Content not found", 404],
+    },
     "studio": {
         "not-found": ["Studio not found", 404],
     },
