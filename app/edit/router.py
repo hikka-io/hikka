@@ -18,10 +18,10 @@ from app.utils import (
 )
 
 from .dependencies import (
-    validate_edit_create_args,
     validate_edit_update_args,
     validate_edit_id_pending,
     validate_content_slug,
+    validate_edit_create,
     validate_edit_accept,
     validate_edit_modify,
     validate_edit_id,
@@ -82,8 +82,8 @@ async def get_edit(edit: Edit = Depends(validate_edit_id)):
 async def create_edit(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    args: EditArgs = Depends(validate_edit_create_args),
     content_id: str = Depends(validate_content_slug),
+    args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
     ),

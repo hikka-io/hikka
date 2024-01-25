@@ -43,16 +43,17 @@ def check_invalid_fields(edit: Edit):
     return False
 
 
-def check_edits(edit: Edit):
+def check_after(after, content):
     """Check if Edit has differences from content"""
 
     pop_list = []
 
-    for key, value in edit.after.items():
-        if getattr(edit.content, key) == value:
+    for key, value in after.items():
+        if getattr(content, key) == value:
             pop_list.append(key)
 
     for pop_key in pop_list:
-        edit.after.pop(pop_key)
+        after.pop(pop_key)
 
-    return len(edit.after) > 0
+    # return len(after) > 0
+    return after

@@ -60,6 +60,7 @@ errors = {
         "bad-edit": ["This edit is invalid", 400],
         "invalid-field": ["Invalid field", 400],
         "not-found": ["Edit not found", 404],
+        "empty-edit": ["Empty edit", 400],
     },
     "comment": {
         "parent-not-found": ["Parent comment not found", 404],

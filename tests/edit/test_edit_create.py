@@ -27,13 +27,19 @@ async def test_edit_create(
         "bocchi-the-rock-9e172d",
         {
             "description": "Brief description",
-            "after": {"title_en": "Bocchi The Rock!"},
+            "after": {
+                "title_en": "Bocchi The Rock!",
+                "synonyms": ["bochchi"],  # This shoud be filtered out
+            },
         },
     )
 
     # Check status and data
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.json()["created"], int)
+
+    # Synonyms should not be in after since we did not change them
+    assert "synonyms" not in response.json()["after"]
 
     assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["description"] == "Brief description"
@@ -70,6 +76,31 @@ async def test_edit_create(
 
     assert isinstance(edits[1], PersonEdit)
     assert edits[1].content_type == constants.CONTENT_PERSON
+
+
+async def test_edit_create_bad_after(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_dummy_user,
+    get_dummy_token,
+    test_session,
+):
+    # Create empty edit for anime
+    response = await request_create_edit(
+        client,
+        get_dummy_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Empty edit",
+            "after": {"title_en": "Bocchi the Rock!"},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "edit:empty_edit"
 
 
 async def test_edit_create_bad_permission(
