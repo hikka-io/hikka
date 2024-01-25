@@ -1,12 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
-from app.models import Edit, User
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
 from . import utils
+
+from app.models import (
+    Person,
+    Anime,
+    Edit,
+    User,
+)
 
 from .schemas import (
     ContentTypeEnum,
@@ -62,19 +68,17 @@ async def validate_edit_accept(
     if utils.check_invalid_fields(edit):
         raise Abort("edit", "invalid-field")
 
-    if not utils.check_edits(edit):
+    if not utils.check_edits(edit.after, edit.content):
         raise Abort("edit", "empty-edit")
 
     return edit
 
 
-async def validate_content_slug(
+async def validate_content(
     slug: str,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-) -> str:
-    """Return content reference by content_type and slug"""
-
+):
     if not (
         content := await service.get_content_by_slug(
             session, content_type, slug
@@ -82,6 +86,13 @@ async def validate_content_slug(
     ):
         raise Abort("edit", "content-not-found")
 
+    return content
+
+
+async def validate_content_slug(
+    content: Person | Anime | None = Depends(validate_content),
+) -> str:
+    """Return content reference by content_type and slug"""
     return content.reference
 
 
@@ -105,5 +116,18 @@ async def validate_edit_update_args(
 
     if not utils.check_edit_schema(edit.content_type, args):
         raise Abort("edit", "bad-edit")
+
+    if not utils.check_edits(args.after, edit.content):
+        raise Abort("edit", "empty-edit")
+
+    return args
+
+
+async def validate_edit_create(
+    content: Person | Anime | None = Depends(validate_content),
+    args: EditArgs = Depends(validate_edit_create_args),
+):
+    if not utils.check_edits(args.after, content):
+        raise Abort("edit", "empty-edit")
 
     return args

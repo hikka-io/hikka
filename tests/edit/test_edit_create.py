@@ -72,6 +72,31 @@ async def test_edit_create(
     assert edits[1].content_type == constants.CONTENT_PERSON
 
 
+async def test_edit_create_bad_after(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_dummy_user,
+    get_dummy_token,
+    test_session,
+):
+    # Create empty edit for anime
+    response = await request_create_edit(
+        client,
+        get_dummy_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Empty edit",
+            "after": {"title_en": "Bocchi the Rock!"},
+        },
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "edit:empty_edit"
+
+
 async def test_edit_create_bad_permission(
     client,
     aggregator_anime,
