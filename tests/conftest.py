@@ -7,11 +7,11 @@ from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, text
 from app.utils import get_settings
 from app.models import Anime, Base
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from sqlalchemy import select
 from httpx import Response
 from app import create_app
 from app import aggregator
@@ -70,6 +70,7 @@ async def connection_test(test_db, event_loop):
 @pytest.fixture(scope="function", autouse=True)
 async def create_tables(connection_test):
     async with sessionmanager.connect() as connection:
+        await connection.execute(text("CREATE EXTENSION IF NOT EXISTS ltree;"))
         await connection.run_sync(Base.metadata.drop_all)
         await connection.run_sync(Base.metadata.create_all)
 

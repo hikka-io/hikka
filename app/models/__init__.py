@@ -9,6 +9,9 @@ from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
 from .edit.edit import Edit
 
+from .system.comment import EditComment
+from .system.comment import Comment
+
 from .list.favourite import AnimeFavourite
 from .list.watch import AnimeWatch
 
@@ -44,6 +47,8 @@ __all__ = [
     "PersonEdit",
     "AnimeEdit",
     "Edit",
+    "EditComment",
+    "Comment",
     "AnimeFavourite",
     "AnimeWatch",
     "AnimeRecommendation",

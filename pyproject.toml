@@ -28,6 +28,7 @@ aioboto3 = "^12.1.0"
 python-multipart = "^0.0.6"
 puremagic = "^1.15"
 imagesize = "^1.4.1"
+sqlalchemy-utils = "^0.41.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -38,3 +38,10 @@ UPDATE service_content_anime SET needs_update = true;
 ```bash
 ruff check app/
 ```
+
+## PostgreSQL
+
+Enable Ltree:
+```sql
+CREATE EXTENSION IF NOT EXISTS ltree;
+```

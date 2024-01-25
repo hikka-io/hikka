@@ -104,6 +104,7 @@ CONTENT_EPISODE = "episode"
 CONTENT_GENRE = "genre"
 CONTENT_PERSON = "person"
 CONTENT_STAFF = "staff"
+CONTENT_SYSTEM_EDIT = "edit"
 
 # Roles
 # ToDo: move to separate file (?)
@@ -120,6 +121,7 @@ PERMISSION_REJECT_EDIT = "content:reject_edit"
 PERMISSION_MODIFY_EDIT = "content:modify_edit"
 PERMISSION_UPLOAD_AVATAR = "upload:avatar"
 PERMISSION_UPLOAD_COVER = "upload:cover"
+PERMISSION_WRITE_COMMENT = "comment:write"
 
 # Role permissions
 ROLES = {
@@ -136,6 +138,7 @@ ROLES = {
         PERMISSION_MODIFY_EDIT,
         PERMISSION_UPLOAD_AVATAR,
         PERMISSION_UPLOAD_COVER,
+        PERMISSION_WRITE_COMMENT,
     ],
     ROLE_ADMIN: [
         PERMISSION_CREATE_EDIT,
@@ -144,6 +147,7 @@ ROLES = {
         PERMISSION_MODIFY_EDIT,
         PERMISSION_UPLOAD_AVATAR,
         PERMISSION_UPLOAD_COVER,
+        PERMISSION_WRITE_COMMENT,
     ],
     ROLE_BANNED: [],
     ROLE_NOT_ACTIVATED: [],

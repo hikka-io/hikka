@@ -61,6 +61,11 @@ errors = {
         "invalid-field": ["Invalid field", 400],
         "not-found": ["Edit not found", 404],
     },
+    "comment": {
+        "parent-not-found": ["Parent comment not found", 404],
+        "content-not-found": ["Content not found", 404],
+        "max-depth": ["Max reply depth reached", 400],
+    },
     "studio": {
         "not-found": ["Studio not found", 404],
     },
