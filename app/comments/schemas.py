@@ -18,7 +18,7 @@ class ContentTypeEnum(str, Enum):
 
 # Args
 class CommentArgs(CustomModel):
-    text: str = Field(max_length=140)
+    text: str = Field(max_length=2048)
     parent: UUID | None = None
 
 
