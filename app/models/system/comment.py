@@ -16,6 +16,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
         "polymorphic_on": "content_type",
     }
 
+    hidden: Mapped[bool] = mapped_column(default=False)
     path: Mapped[str] = mapped_column(LtreeType)
     content_type: Mapped[str]
     content_id: Mapped[UUID]
