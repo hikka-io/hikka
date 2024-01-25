@@ -74,9 +74,23 @@ async def create_comment(
 
     session.add(comment)
     await session.commit()
-    # await session.refresh
 
     return comment
+
+
+async def get_comment(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content_id: str,
+    reference: str,
+) -> Comment | None:
+    return await session.scalar(
+        select(Comment).filter(
+            Comment.content_type == content_type,
+            Comment.content_id == content_id,
+            Comment.id == reference,
+        )
+    )
 
 
 async def count_comments_by_content_id(

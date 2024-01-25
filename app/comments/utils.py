@@ -11,9 +11,12 @@ def path_to_uuid(obj_uuid):
     return str(obj_uuid).replace("_", "-")
 
 
-def build_comments(root_node, sub_comments):
+def build_comments(base_comment, sub_comments):
     tree = CommentNode(
-        path_to_uuid(root_node.path), root_node.text, root_node.author
+        path_to_uuid(base_comment.path),
+        base_comment.text,
+        base_comment.author,
+        base_comment.created,
     )
 
     tree_dict = {tree.reference: tree}
@@ -40,6 +43,7 @@ def build_comments(root_node, sub_comments):
 
             tree_node = reply
 
+        tree_node.created = sub_comment.created
         tree_node.author = sub_comment.author
         tree_node.text = sub_comment.text
 
