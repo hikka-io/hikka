@@ -27,13 +27,19 @@ async def test_edit_create(
         "bocchi-the-rock-9e172d",
         {
             "description": "Brief description",
-            "after": {"title_en": "Bocchi The Rock!"},
+            "after": {
+                "title_en": "Bocchi The Rock!",
+                "synonyms": ["bochchi"],  # This shoud be filtered out
+            },
         },
     )
 
     # Check status and data
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.json()["created"], int)
+
+    # Synonyms should not be in after since we did not change them
+    assert "synonyms" not in response.json()["after"]
 
     assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["description"] == "Brief description"

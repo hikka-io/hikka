@@ -61,14 +61,14 @@ async def validate_edit_modify(
 # are actually different compared to the current version
 async def validate_edit_accept(
     edit: Edit = Depends(validate_edit_id_pending),
-    session: AsyncSession = Depends(get_session),
 ) -> Edit:
     """Validate edit right before accepting it"""
 
     if utils.check_invalid_fields(edit):
         raise Abort("edit", "invalid-field")
 
-    if not utils.check_edits(edit.after, edit.content):
+    new_after = utils.check_after(edit.after, edit.content)
+    if len(new_after) == 0:
         raise Abort("edit", "empty-edit")
 
     return edit
@@ -117,7 +117,8 @@ async def validate_edit_update_args(
     if not utils.check_edit_schema(edit.content_type, args):
         raise Abort("edit", "bad-edit")
 
-    if not utils.check_edits(args.after, edit.content):
+    args.after = utils.check_after(args.after, edit.content)
+    if len(args.after) == 0:
         raise Abort("edit", "empty-edit")
 
     return args
@@ -127,7 +128,8 @@ async def validate_edit_create(
     content: Person | Anime | None = Depends(validate_content),
     args: EditArgs = Depends(validate_edit_create_args),
 ):
-    if not utils.check_edits(args.after, content):
+    args.after = utils.check_after(args.after, content)
+    if len(args.after) == 0:
         raise Abort("edit", "empty-edit")
 
     return args

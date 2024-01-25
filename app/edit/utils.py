@@ -43,7 +43,7 @@ def check_invalid_fields(edit: Edit):
     return False
 
 
-def check_edits(after, content):
+def check_after(after, content):
     """Check if Edit has differences from content"""
 
     pop_list = []
@@ -55,4 +55,5 @@ def check_edits(after, content):
     for pop_key in pop_list:
         after.pop(pop_key)
 
-    return len(after) > 0
+    # return len(after) > 0
+    return after
