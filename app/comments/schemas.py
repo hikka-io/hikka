@@ -29,6 +29,8 @@ class CommentResponse(CustomModel):
     total_replies: int
     created: datetime
     reference: str
+    score: int
+    depth: int
     text: str
 
 
@@ -39,10 +41,20 @@ class CommentListResponse(CustomModel):
 
 # Misc
 class CommentNode:
-    def __init__(self, reference, text=None, author=None, created=None):
+    def __init__(
+        self,
+        reference,
+        text=None,
+        author=None,
+        created=None,
+        score=None,
+        depth=None,
+    ):
         self.reference = reference
         self.created = created
         self.total_replies = 0
         self.author = author
         self.replies = []
         self.text = text
+        self.score = score
+        self.depth = depth
