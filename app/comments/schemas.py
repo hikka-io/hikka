@@ -28,10 +28,11 @@ class CommentResponse(CustomModel):
     author: UserResponse
     total_replies: int
     created: datetime
+    text: str | None
     reference: str
+    hidden: bool
     score: int
     depth: int
-    text: str
 
 
 class CommentListResponse(CustomModel):
@@ -49,6 +50,7 @@ class CommentNode:
         created=None,
         score=None,
         depth=None,
+        hidden=False,
     ):
         self.reference = reference
         self.created = created
@@ -58,3 +60,4 @@ class CommentNode:
         self.text = text
         self.score = score
         self.depth = depth
+        self.hidden = hidden

@@ -14,11 +14,12 @@ def path_to_uuid(obj_uuid):
 def build_comments(base_comment, sub_comments):
     tree = CommentNode(
         path_to_uuid(base_comment.path),
-        base_comment.text,
+        base_comment.text if not base_comment.hidden else None,
         base_comment.author,
         base_comment.created,
         0,  # Score
         len(base_comment.path),  # Depth
+        base_comment.hidden,
     )
 
     tree_dict = {tree.reference: tree}
@@ -45,11 +46,12 @@ def build_comments(base_comment, sub_comments):
 
             tree_node = reply
 
-        tree_node.score = 0  # Score
-        tree_node.depth = len(sub_comment.path)  # Depth
+        tree_node.text = sub_comment.text if not sub_comment.hidden else None
+        tree_node.depth = len(sub_comment.path)
         tree_node.created = sub_comment.created
         tree_node.author = sub_comment.author
-        tree_node.text = sub_comment.text
+        tree_node.hidden = sub_comment.hidden
+        tree_node.score = 0  # Score
 
     return tree
 
