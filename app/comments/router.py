@@ -56,6 +56,9 @@ async def write_comment(
         comment.text,
         comment.author,
         comment.created,
+        0,
+        len(comment.path),
+        comment.hidden,
     )
 
 
