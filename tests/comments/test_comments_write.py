@@ -70,3 +70,23 @@ async def test_comments_write_bad_parent(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["code"] == "comment:parent_not_found"
+
+
+async def test_comments_rate_limit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user_moderator,
+    get_test_token,
+    test_session,
+):
+    comments_limit = 100
+
+    for index, _ in enumerate(range(0, comments_limit)):
+        response = await request_comments_write(
+            client, get_test_token, "edit", "17", f"{index} comment, yay!"
+        )
+
+        if index == comments_limit:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            assert response.json()["code"] == "comment:rate-limit"

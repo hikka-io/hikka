@@ -1,11 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
-from .utils import is_int, uuid_to_path
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from datetime import datetime
 from app import constants
 from uuid import uuid4
+
+from .utils import (
+    uuid_to_path,
+    round_hour,
+    is_int,
+)
 
 from app.models import (
     EditComment,
@@ -131,5 +136,14 @@ async def get_sub_comments(session: AsyncSession, base_comment: Comment):
         select(Comment).filter(
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
+        )
+    )
+
+
+async def count_comments_limit(session: AsyncSession, author: User) -> int:
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            Comment.author == author,
+            Comment.created > round_hour(datetime.utcnow()),
         )
     )

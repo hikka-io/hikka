@@ -1,8 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import auth_required
+from app.models import Comment, Edit, User
 from app.database import get_session
-from app.models import Comment, Edit
 from app.errors import Abort
 from fastapi import Depends
+from app import constants
 from . import service
 
 from .schemas import (
@@ -53,3 +55,18 @@ async def validate_parent(
         raise Abort("comment", "max-depth")
 
     return parent_comment
+
+
+async def validate_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    author: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_WRITE_COMMENT])
+    ),
+):
+    comments_limit = 100
+    comments_total = await service.count_comments_limit(session, author)
+
+    if comments_total >= comments_limit:
+        raise Abort("comment", "rate-limit")
+
+    return author

@@ -3,11 +3,11 @@ from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Comment, User
 from .utils import build_comments
-from app import constants
 from . import service
 
 from .dependencies import (
     validate_content_slug,
+    validate_rate_limit,
     validate_parent,
 )
 
@@ -17,7 +17,6 @@ from app.utils import (
 )
 
 from app.dependencies import (
-    auth_required,
     get_page,
     get_size,
 )
@@ -41,9 +40,7 @@ async def write_comment(
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
     parent: Comment | None = Depends(validate_parent),
-    author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_WRITE_COMMENT])
-    ),
+    author: User = Depends(validate_rate_limit),
 ):
     comment = await service.create_comment(
         session, content_type, content_id, author, args.text, parent

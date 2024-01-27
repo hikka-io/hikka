@@ -63,6 +63,7 @@ errors = {
         "empty-edit": ["Empty edit", 400],
     },
     "comment": {
+        "rate-limit": ["You have reached comment rate limit, try later", 400],
         "parent-not-found": ["Parent comment not found", 404],
         "content-not-found": ["Content not found", 404],
         "max-depth": ["Max reply depth reached", 400],
