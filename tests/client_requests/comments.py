@@ -1,18 +1,9 @@
 def request_comments_write(
-    client,
-    token,
-    content_type,
-    slug,
-    text,
-    parent=None,
-    captcha="fake_captcha",
+    client, token, content_type, slug, text, parent=None
 ):
     return client.put(
         f"/comments/{content_type}/{slug}",
-        headers={
-            "Auth": token,
-            "Captcha": captcha,
-        },
+        headers={"Auth": token},
         json={
             "parent": parent,
             "text": text,

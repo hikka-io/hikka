@@ -18,7 +18,6 @@ from app.utils import (
 
 from app.dependencies import (
     auth_required,
-    check_captcha,
     get_page,
     get_size,
 )
@@ -45,7 +44,6 @@ async def write_comment(
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_WRITE_COMMENT])
     ),
-    _: bool = Depends(check_captcha),
 ):
     comment = await service.create_comment(
         session, content_type, content_id, author, args.text, parent
