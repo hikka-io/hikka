@@ -90,3 +90,19 @@ async def test_comments_rate_limit(
         if index == comments_limit:
             assert response.status_code == status.HTTP_400_BAD_REQUEST
             assert response.json()["code"] == "comment:rate-limit"
+
+
+async def test_comments_empty_markdown(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user_moderator,
+    get_test_token,
+    test_session,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "[empty]()"
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:empty_markdown"

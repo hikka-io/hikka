@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.models import Comment, Edit, User
 from app.database import get_session
+from .utils import is_empty_markdown
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
@@ -70,3 +71,10 @@ async def validate_rate_limit(
         raise Abort("comment", "rate-limit")
 
     return author
+
+
+async def validate_comment_args(args: CommentArgs):
+    if is_empty_markdown(args.text):
+        raise Abort("comment", "empty-markdown")
+
+    return args

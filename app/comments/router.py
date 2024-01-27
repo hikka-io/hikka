@@ -6,6 +6,7 @@ from .utils import build_comments
 from . import service
 
 from .dependencies import (
+    validate_comment_args,
     validate_content_slug,
     validate_rate_limit,
     validate_parent,
@@ -35,8 +36,8 @@ router = APIRouter(prefix="/comments", tags=["Comments"])
 
 @router.put("/{content_type}/{slug}", response_model=CommentResponse)
 async def write_comment(
-    args: CommentArgs,
     content_type: ContentTypeEnum,
+    args: CommentArgs = Depends(validate_comment_args),
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
     parent: Comment | None = Depends(validate_parent),
