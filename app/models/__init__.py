@@ -9,8 +9,8 @@ from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
 from .edit.edit import Edit
 
-from .system.comment import EditComment
-from .system.comment import Comment
+from .comments.comment import EditComment
+from .comments.comment import Comment
 
 from .list.favourite import AnimeFavourite
 from .list.watch import AnimeWatch

@@ -82,7 +82,7 @@ def is_empty_markdown(text):
     text = re.sub(r"\*(.*?)\*", r"\1", text)  # *text*
     text = re.sub(r"__(.*?)__", r"\1", text)  # __text__
     text = re.sub(r"\[.*?\]\((.*?)\)", r"\1", text)  # [text](link)
-    text = re.sub(r":::spoiler (.*?):::", r"\1", text)  # :::spoiler content :::
+    text = re.sub(r":::spoiler(.*?):::", r"\1", text)  # :::spoiler content :::
 
     # Then remove spaces
     text = text.replace(" ", "")

@@ -16,6 +16,7 @@ async def test_empty_markdown():
 
     assert utils.is_empty_markdown(":::spoiler text :::") is False
     assert utils.is_empty_markdown(":::spoiler  :::") is True
+    assert utils.is_empty_markdown(":::spoiler:::") is True
 
     assert utils.is_empty_markdown("__**text**__") is False
     assert utils.is_empty_markdown("***text***") is False
