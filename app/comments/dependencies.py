@@ -52,8 +52,8 @@ async def validate_parent(
     ):
         raise Abort("comment", "parent-not-found")
 
-    max_reply_depth = 3
-    if len(parent_comment.path) > max_reply_depth:
+    max_reply_depth = 5
+    if len(parent_comment.path) >= max_reply_depth:
         raise Abort("comment", "max-depth")
 
     return parent_comment

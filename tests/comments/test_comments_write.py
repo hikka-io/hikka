@@ -6,7 +6,7 @@ async def test_comments_write(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -38,7 +38,7 @@ async def test_comments_write(
 
 async def test_comments_write_bad_content(
     client,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -53,7 +53,7 @@ async def test_comments_write_bad_parent(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -73,7 +73,7 @@ async def test_comments_write_rate_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     comments_limit = 100
@@ -92,7 +92,7 @@ async def test_comments_write_empty_markdown(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
