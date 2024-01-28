@@ -67,11 +67,13 @@ errors = {
         "max-edits": ["You have reached comment edit limit, congrats!", 400],
         "edit-time-limit": ["This comment can't be edited anymore", 400],
         "parent-not-found": ["Parent comment not found", 404],
+        "already-hidden": ["Comment is already hidden", 400],
         "not-owner": ["You can't edit this comment", 400],
         "content-not-found": ["Content not found", 404],
         "max-depth": ["Max reply depth reached", 400],
         "empty-markdown": ["Empty markdown", 400],
         "not-found": ["Comment not found", 404],
+        "hidden": ["Comment is hidden", 400],
     },
     "studio": {
         "not-found": ["Studio not found", 404],

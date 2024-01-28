@@ -3,7 +3,6 @@ from urllib.parse import quote
 from dynaconf import Dynaconf
 from datetime import timezone
 from datetime import datetime
-from app.errors import Abort
 from app.models import User
 from app import constants
 import unicodedata
@@ -16,16 +15,14 @@ import re
 
 # Simple check for permissions
 # ToDo: move to separate file with role logic
-def check_user_permissions(user: User, permissions=[]):
-    if len(permissions) > 0:
-        role_permissions = constants.ROLES.get(user.role, [])
+def check_user_permissions(user: User, permissions: list):
+    role_permissions = constants.ROLES.get(user.role, [])
 
-        has_permission = all(
-            permission in role_permissions for permission in permissions
-        )
+    has_permission = all(
+        permission in role_permissions for permission in permissions
+    )
 
-        if not has_permission:
-            raise Abort("permission", "denied")
+    return has_permission
 
 
 # Get bcrypt hash of password

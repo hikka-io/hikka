@@ -6,7 +6,7 @@ async def test_comments_write(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -22,23 +22,25 @@ async def test_comments_write(
 
     parent_comment = response.json()["reference"]
 
-    for index, text in enumerate(["First", "Second", "Third", "Fourth"]):
+    max_depth = 5
+
+    for index, text in enumerate(range(1, max_depth)):
         response = await request_comments_write(
-            client, get_test_token, "edit", "17", text, parent_comment
+            client, get_test_token, "edit", "17", f"Test {text}", parent_comment
         )
 
-        if index < 3:
+        if index <= max_depth:
             assert response.status_code == status.HTTP_200_OK
             parent_comment = response.json()["reference"]
+            continue
 
-        else:
-            assert response.status_code == status.HTTP_400_BAD_REQUEST
-            assert response.json()["code"] == "comment:max_depth"
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["code"] == "comment:max_depth"
 
 
 async def test_comments_write_bad_content(
     client,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -53,7 +55,7 @@ async def test_comments_write_bad_parent(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -73,7 +75,7 @@ async def test_comments_write_rate_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     comments_limit = 100
@@ -92,7 +94,7 @@ async def test_comments_write_empty_markdown(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(

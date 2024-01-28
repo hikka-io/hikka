@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Comment, User
@@ -10,7 +11,9 @@ from .dependencies import (
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
+    validate_comment,
     validate_parent,
+    validate_hide,
 )
 
 from app.utils import (
@@ -85,3 +88,13 @@ async def update_comment(
 ):
     comment = await service.update_comment(session, comment, args.text)
     return CommentNode.create(path_to_uuid(comment.reference), comment)
+
+
+@router.delete("/{comment_reference}", response_model=SuccessResponse)
+async def hide_comment(
+    session: AsyncSession = Depends(get_session),
+    comment: Comment = Depends(validate_comment),
+    user: User = Depends(validate_hide),
+):
+    comment = await service.hide_comment(session, comment, user)
+    return {"success": True}

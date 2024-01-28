@@ -1,5 +1,6 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_edit
+from client_requests import request_comments_hide
 from app.models import Comment
 from datetime import timedelta
 from sqlalchemy import select
@@ -10,7 +11,7 @@ async def test_comments_edit(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -26,11 +27,35 @@ async def test_comments_edit(
     assert response.json()["text"] == "New text"
 
 
+async def test_comments_edit_hidden(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Old text"
+    )
+
+    comment_reference = response.json()["reference"]
+
+    await request_comments_hide(client, get_test_token, comment_reference)
+
+    response = await request_comments_edit(
+        client, get_test_token, comment_reference, "New text"
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:hidden"
+
+
 async def test_comments_edit_empty_markdown(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -49,7 +74,7 @@ async def test_comments_edit_rate_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
 ):
     response = await request_comments_write(
@@ -72,7 +97,7 @@ async def test_comments_edit_time_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user,
     get_test_token,
     test_session,
 ):
@@ -95,3 +120,25 @@ async def test_comments_edit_time_limit(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "comment:edit_time_limit"
+
+
+async def test_comments_edit_bad_author(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    create_dummy_user,
+    get_dummy_token,
+    get_test_token,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Old text"
+    )
+
+    response = await request_comments_edit(
+        client, get_dummy_token, response.json()["reference"], "New text"
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:not_owner"
