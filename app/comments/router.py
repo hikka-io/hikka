@@ -7,9 +7,9 @@ from .utils import path_to_uuid
 from . import service
 
 from .dependencies import (
+    validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
-    validate_comment,
     validate_parent,
 )
 
@@ -81,7 +81,7 @@ async def get_content_edit_list(
 async def update_comment(
     args: CommentTextArgs,
     session: AsyncSession = Depends(get_session),
-    comment: Comment = Depends(validate_comment),
+    comment: Comment = Depends(validate_comment_edit),
 ):
     comment = await service.update_comment(session, comment, args.text)
     return CommentNode.create(path_to_uuid(comment.reference), comment)

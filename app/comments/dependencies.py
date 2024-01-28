@@ -61,7 +61,7 @@ async def validate_parent(
 async def validate_rate_limit(
     session: AsyncSession = Depends(get_session),
     author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_WRITE_COMMENT])
+        auth_required(permissions=[constants.PERMISSION_COMMENT_WRITE])
     ),
 ):
     comments_limit = 100
@@ -76,8 +76,22 @@ async def validate_rate_limit(
 async def validate_comment(
     comment_reference: UUID,
     session: AsyncSession = Depends(get_session),
-):
+) -> Comment:
     if not (comment := await service.get_comment(session, comment_reference)):
         raise Abort("comment", "not-found")
+
+    return comment
+
+
+async def validate_comment_edit(
+    comment: Comment = Depends(validate_comment),
+    author: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_COMMENT_EDIT])
+    ),
+):
+    if comment.author != author:
+        raise Abort("comment", "not-owner")
+
+    # ToDo: rate limit here
 
     return comment

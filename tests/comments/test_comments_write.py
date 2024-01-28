@@ -72,7 +72,7 @@ async def test_comments_write_bad_parent(
     assert response.json()["code"] == "comment:parent_not_found"
 
 
-async def test_comments_rate_limit(
+async def test_comments_write_rate_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -92,7 +92,7 @@ async def test_comments_rate_limit(
             assert response.json()["code"] == "comment:rate-limit"
 
 
-async def test_comments_empty_markdown(
+async def test_comments_write_empty_markdown(
     client,
     aggregator_anime,
     aggregator_anime_info,

@@ -61,6 +61,7 @@ from .edit import request_edit
 
 from .comments import request_comments_write
 from .comments import request_companies_list
+from .comments import request_comments_edit
 
 from .settings import request_settings_import_watch
 from .settings import request_settings_description
@@ -123,6 +124,7 @@ __all__ = [
     "request_edit",
     "request_comments_write",
     "request_companies_list",
+    "request_comments_edit",
     "request_settings_import_watch",
     "request_settings_description",
     "request_settings_username",
