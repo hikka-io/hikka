@@ -5,6 +5,8 @@ from sqlalchemy_utils import Ltree
 from datetime import datetime
 from uuid import UUID, uuid4
 from app import constants
+from app import utils
+import copy
 
 from .utils import (
     uuid_to_path,
@@ -166,8 +168,20 @@ async def update_comment(
     comment: Comment,
     text: str,
 ) -> Comment:
-    comment.updated = datetime.utcnow()
+    old_text = comment.text
+    now = datetime.utcnow()
+
+    comment.updated = now
     comment.text = text
+
+    # SQLAlchemy quirks
+    comment.history = copy.deepcopy(comment.history)
+    comment.history.append(
+        {
+            "updated": utils.to_timestamp(now),
+            "text": old_text,
+        }
+    )
 
     session.add(comment)
     await session.commit()

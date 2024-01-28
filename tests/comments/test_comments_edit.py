@@ -1,5 +1,8 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_edit
+from app.models import Comment
+from datetime import timedelta
+from sqlalchemy import select
 from fastapi import status
 
 
@@ -9,7 +12,6 @@ async def test_comments_edit(
     aggregator_anime_info,
     create_test_user_moderator,
     get_test_token,
-    test_session,
 ):
     response = await request_comments_write(
         client, get_test_token, "edit", "17", "Old text"
@@ -30,7 +32,6 @@ async def test_comments_edit_empty_markdown(
     aggregator_anime_info,
     create_test_user_moderator,
     get_test_token,
-    test_session,
 ):
     response = await request_comments_write(
         client, get_test_token, "edit", "17", "Old text"
@@ -42,3 +43,55 @@ async def test_comments_edit_empty_markdown(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
+
+
+async def test_comments_edit_rate_limit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user_moderator,
+    get_test_token,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Old text"
+    )
+
+    for index, _ in enumerate(range(0, 5)):
+        await request_comments_edit(
+            client, get_test_token, response.json()["reference"], "New text"
+        )
+
+        if index != 5:
+            continue
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json()["code"] == "comment:max_edits"
+
+
+async def test_comments_edit_time_limit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user_moderator,
+    get_test_token,
+    test_session,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Old text"
+    )
+
+    comment = await test_session.scalar(
+        select(Comment).filter(Comment.id == response.json()["reference"])
+    )
+
+    # Send comment back in time to test time limit
+    comment.created = comment.created - timedelta(hours=1)
+    test_session.add(comment)
+    await test_session.commit()
+
+    response = await request_comments_edit(
+        client, get_test_token, response.json()["reference"], "New text"
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:edit_time_limit"

@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.models import Comment, Edit, User
+from datetime import datetime, timedelta
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
@@ -89,9 +90,16 @@ async def validate_comment_edit(
         auth_required(permissions=[constants.PERMISSION_COMMENT_EDIT])
     ),
 ):
+    time_limit = timedelta(hours=1)
+    max_edits = 5
+
     if comment.author != author:
         raise Abort("comment", "not-owner")
 
-    # ToDo: rate limit here
+    if len(comment.history) >= max_edits:
+        raise Abort("comment", "max-edits")
+
+    if datetime.utcnow() > comment.created + time_limit:
+        raise Abort("comment", "edit-time-limit")
 
     return comment
