@@ -187,3 +187,10 @@ async def update_comment(
     await session.commit()
 
     return comment
+
+
+async def hide_comment(session: AsyncSession, comment: Comment, user: User):
+    comment.updated = datetime.utcnow()
+    comment.hidden_by = user
+    comment.hidden = True
+    return True

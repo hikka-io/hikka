@@ -32,7 +32,8 @@ async def validate_upload_rate_limit(
 
     # We check upload permissions here and not in dependency
     # Becaue we need extra logic to decide what is being uploaded
-    utils.check_user_permissions(user, upload_permissions)
+    if not utils.check_user_permissions(user, upload_permissions):
+        raise Abort("permission", "denied")
 
     # Count uploads by given upload type
     count = await service.count_uploads_last_day(session, user, upload_type)

@@ -72,6 +72,7 @@ errors = {
         "max-depth": ["Max reply depth reached", 400],
         "empty-markdown": ["Empty markdown", 400],
         "not-found": ["Comment not found", 404],
+        "hidden": ["Comment is hidden", 400],
     },
     "studio": {
         "not-found": ["Studio not found", 404],

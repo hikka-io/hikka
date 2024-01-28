@@ -7,6 +7,7 @@ from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from uuid import UUID
+from app import utils
 from . import service
 
 from .schemas import (
@@ -96,6 +97,9 @@ async def validate_comment_edit(
     if comment.author != author:
         raise Abort("comment", "not-owner")
 
+    if comment.hidden:
+        raise Abort("comment", "hidden")
+
     if len(comment.history) >= max_edits:
         raise Abort("comment", "max-edits")
 
@@ -103,3 +107,20 @@ async def validate_comment_edit(
         raise Abort("comment", "edit-time-limit")
 
     return comment
+
+
+async def validate_hide_permission(
+    user: User = Depends(auth_required()),
+):
+    # User either trying to hide own comment (PERMISSION_COMMENT_HIDE)
+    # Or it is admin hiding somebody's else comment (PERMISSION_COMMENT_HIDE_ADMIN)
+    permission = (
+        constants.PERMISSION_COMMENT_HIDE
+        if comment.author == user
+        else constants.PERMISSION_COMMENT_HIDE_ADMIN
+    )
+
+    if not utils.check_user_permissions(user, [permission]):
+        raise Abort("permission", "denied")
+
+    return user
