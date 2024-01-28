@@ -16,6 +16,7 @@ from .utils import (
 
 from app.models import (
     AnimeComment,
+    CommentVote,
     EditComment,
     Comment,
     Anime,
@@ -198,3 +199,39 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     await session.commit()
 
     return True
+
+
+async def get_vote(session: AsyncSession, comment: Comment, user: User):
+    return await session.scalar(
+        select(CommentVote).filter(
+            CommentVote.comment == comment,
+            CommentVote.user == user,
+        )
+    )
+
+
+async def set_comment_vote(
+    session: AsyncSession,
+    comment: Comment,
+    user: User,
+    score: int,
+) -> CommentVote:
+    now = datetime.utcnow()
+
+    # Create watch record if missing
+    if not (vote := await get_vote(session, comment, user)):
+        vote = CommentVote(
+            **{
+                "comment": comment,
+                "created": now,
+                "user": user,
+            }
+        )
+
+    vote.updated = now
+    vote.score = score
+
+    session.add(vote)
+    await session.commit()
+
+    return vote
