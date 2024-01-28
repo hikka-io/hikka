@@ -20,6 +20,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
     hidden: Mapped[bool] = mapped_column(default=False)
+    score: Mapped[int] = mapped_column(nullable=False)
     path: Mapped[str] = mapped_column(LtreeType)
     content_type: Mapped[str]
     content_id: Mapped[UUID]
@@ -48,10 +49,6 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
     @hybrid_property
     def depth(self):
         return len(self.path)
-
-    @hybrid_property
-    def score(self):
-        return 0
 
 
 class EditComment(Comment):
