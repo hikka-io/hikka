@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
+from sqlalchemy import select, desc, asc, func
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from datetime import datetime
@@ -16,6 +16,7 @@ from .utils import (
 
 from app.models import (
     AnimeComment,
+    CommentVote,
     EditComment,
     Comment,
     Anime,
@@ -85,6 +86,7 @@ async def create_comment(
             "updated": now,
             "id": uuid4(),
             "text": text,
+            "score": 0,
         }
     )
 
@@ -147,10 +149,12 @@ async def get_comments_by_content_id(
 
 async def get_sub_comments(session: AsyncSession, base_comment: Comment):
     return await session.scalars(
-        select(Comment).filter(
+        select(Comment)
+        .filter(
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
         )
+        .order_by(asc(Comment.created))
     )
 
 
@@ -198,3 +202,47 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     await session.commit()
 
     return True
+
+
+async def get_vote(session: AsyncSession, comment: Comment, user: User):
+    return await session.scalar(
+        select(CommentVote).filter(
+            CommentVote.comment == comment,
+            CommentVote.user == user,
+        )
+    )
+
+
+async def set_comment_vote(
+    session: AsyncSession,
+    comment: Comment,
+    user: User,
+    score: int,
+) -> CommentVote:
+    now = datetime.utcnow()
+
+    # Create watch record if missing
+    if not (vote := await get_vote(session, comment, user)):
+        vote = CommentVote(
+            **{
+                "comment": comment,
+                "created": now,
+                "user": user,
+            }
+        )
+
+    vote.updated = now
+    vote.score = score
+
+    session.add(vote)
+
+    comment.score = await session.scalar(
+        select(func.sum(CommentVote.score)).filter(
+            CommentVote.comment == comment
+        )
+    )
+
+    session.add(comment)
+    await session.commit()
+
+    return vote

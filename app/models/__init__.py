@@ -11,6 +11,7 @@ from .edit.edit import Edit
 
 from .comments.comment import AnimeComment
 from .comments.comment import EditComment
+from .comments.vote import CommentVote
 from .comments.comment import Comment
 
 from .list.favourite import AnimeFavourite
@@ -50,6 +51,7 @@ __all__ = [
     "Edit",
     "AnimeComment",
     "EditComment",
+    "CommentVote",
     "Comment",
     "AnimeFavourite",
     "AnimeWatch",
