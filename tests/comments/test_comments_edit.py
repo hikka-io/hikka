@@ -1,5 +1,6 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_edit
+from client_requests import request_comments_hide
 from app.models import Comment
 from datetime import timedelta
 from sqlalchemy import select
@@ -24,6 +25,30 @@ async def test_comments_edit(
     # Check status
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["text"] == "New text"
+
+
+async def test_comments_edit_hidden(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Old text"
+    )
+
+    comment_reference = response.json()["reference"]
+
+    await request_comments_hide(client, get_test_token, comment_reference)
+
+    response = await request_comments_edit(
+        client, get_test_token, comment_reference, "New text"
+    )
+
+    # Check status
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:hidden"
 
 
 async def test_comments_edit_empty_markdown(

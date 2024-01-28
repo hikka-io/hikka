@@ -19,5 +19,12 @@ def request_comments_edit(client, token, comment_reference, text):
     )
 
 
+def request_comments_hide(client, token, comment_reference):
+    return client.delete(
+        f"/comments/{comment_reference}",
+        headers={"Auth": token},
+    )
+
+
 def request_companies_list(client, content_type, slug, page=1):
     return client.get(f"/comments/{content_type}/{slug}/list?page={page}")

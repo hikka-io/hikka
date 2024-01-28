@@ -62,6 +62,7 @@ from .edit import request_edit
 from .comments import request_comments_write
 from .comments import request_companies_list
 from .comments import request_comments_edit
+from .comments import request_comments_hide
 
 from .settings import request_settings_import_watch
 from .settings import request_settings_description

@@ -8,12 +8,12 @@ from .utils import path_to_uuid
 from . import service
 
 from .dependencies import (
-    validate_hide_permission,
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
     validate_comment,
     validate_parent,
+    validate_hide,
 )
 
 from app.utils import (
@@ -94,7 +94,7 @@ async def update_comment(
 async def hide_comment(
     session: AsyncSession = Depends(get_session),
     comment: Comment = Depends(validate_comment),
-    user: User = Depends(validate_hide_permission),
+    user: User = Depends(validate_hide),
 ):
     comment = await service.hide_comment(session, comment, user)
     return {"success": True}

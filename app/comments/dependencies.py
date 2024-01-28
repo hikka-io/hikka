@@ -109,9 +109,13 @@ async def validate_comment_edit(
     return comment
 
 
-async def validate_hide_permission(
+async def validate_hide(
+    comment: Comment = Depends(validate_comment),
     user: User = Depends(auth_required()),
 ):
+    if comment.hidden:
+        raise Abort("comment", "already-hidden")
+
     # User either trying to hide own comment (PERMISSION_COMMENT_HIDE)
     # Or it is admin hiding somebody's else comment (PERMISSION_COMMENT_HIDE_ADMIN)
     permission = (
