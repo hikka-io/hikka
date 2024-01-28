@@ -1,7 +1,8 @@
+from pydantic import Field, field_validator
 from dataclasses import dataclass, field
+from app.utils import is_empty_markdown
 from app.models import Comment
 from datetime import datetime
-from pydantic import Field
 from app import constants
 from uuid import UUID
 from enum import Enum
@@ -21,6 +22,13 @@ class ContentTypeEnum(str, Enum):
 # Args
 class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
+
+    @field_validator("text")
+    def validate_text(cls, text):
+        if is_empty_markdown(text):
+            raise ValueError("Field text consists of empty markdown")
+
+        return text
 
 
 class CommentArgs(CommentTextArgs):
@@ -63,7 +71,7 @@ class CommentNode:
 
     def from_comment(self, comment: Comment):
         self.text = comment.text if not comment.hidden else None
-        self.updated = comment.created
+        self.updated = comment.updated
         self.created = comment.created
         self.author = comment.author
         self.hidden = comment.hidden

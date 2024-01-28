@@ -68,6 +68,7 @@ errors = {
         "content-not-found": ["Content not found", 404],
         "max-depth": ["Max reply depth reached", 400],
         "empty-markdown": ["Empty markdown", 400],
+        "not-found": ["Comment not found", 404],
     },
     "studio": {
         "not-found": ["Studio not found", 404],

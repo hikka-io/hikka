@@ -105,4 +105,4 @@ async def test_comments_empty_markdown(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "comment:empty_markdown"
+    assert response.json()["code"] == "system:validation_error"

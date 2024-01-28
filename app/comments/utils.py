@@ -1,6 +1,5 @@
 from .schemas import CommentNode
 from datetime import timedelta
-import re
 
 
 # Convert uuid reference to comment path
@@ -60,18 +59,3 @@ def round_hour(date):
         seconds=date.second,
         microseconds=date.microsecond,
     )
-
-
-def is_empty_markdown(text):
-    # First we remove markdown tags
-    text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)  # **text**
-    text = re.sub(r"\*(.*?)\*", r"\1", text)  # *text*
-    text = re.sub(r"__(.*?)__", r"\1", text)  # __text__
-    text = re.sub(r"\[.*?\]\((.*?)\)", r"\1", text)  # [text](link)
-    text = re.sub(r":::spoiler(.*?):::", r"\1", text)  # :::spoiler content :::
-
-    # Then remove spaces
-    text = text.replace(" ", "")
-
-    # And now check if string is empty
-    return len(text) == 0
