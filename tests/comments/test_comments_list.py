@@ -9,7 +9,6 @@ async def test_comments_list(
     aggregator_anime_info,
     create_test_user_moderator,
     get_test_token,
-    test_session,
 ):
     parent_comment = None
 
