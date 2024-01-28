@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -16,12 +17,17 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
         "polymorphic_on": "content_type",
     }
 
-    deleted: Mapped[bool] = mapped_column(default=False)
+    history: Mapped[list] = mapped_column(JSONB, default=[])
     hidden: Mapped[bool] = mapped_column(default=False)
     path: Mapped[str] = mapped_column(LtreeType)
     content_type: Mapped[str]
     content_id: Mapped[UUID]
     text: Mapped[str]
+
+    hidden_by_id = mapped_column(ForeignKey("service_users.id"))
+    hidden_by: Mapped["User"] = relationship(
+        foreign_keys=[hidden_by_id],
+    )
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
