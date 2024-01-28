@@ -9,6 +9,7 @@ from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
 from .edit.edit import Edit
 
+from .comments.comment import AnimeComment
 from .comments.comment import EditComment
 from .comments.comment import Comment
 
@@ -47,6 +48,7 @@ __all__ = [
     "PersonEdit",
     "AnimeEdit",
     "Edit",
+    "AnimeComment",
     "EditComment",
     "Comment",
     "AnimeFavourite",

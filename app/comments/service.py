@@ -13,8 +13,10 @@ from .utils import (
 )
 
 from app.models import (
+    AnimeComment,
     EditComment,
     Comment,
+    Anime,
     User,
     Edit,
 )
@@ -24,10 +26,12 @@ from app.models import (
 # If we change edit logic we probably change this as well
 content_type_to_content_class = {
     constants.CONTENT_SYSTEM_EDIT: Edit,
+    constants.CONTENT_ANIME: Anime,
 }
 
 content_type_to_comment_class = {
     constants.CONTENT_SYSTEM_EDIT: EditComment,
+    constants.CONTENT_ANIME: AnimeComment,
 }
 
 
