@@ -3,8 +3,8 @@ from sqlalchemy import select, desc, func
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from datetime import datetime
+from uuid import UUID, uuid4
 from app import constants
-from uuid import uuid4
 
 from .utils import (
     uuid_to_path,
@@ -13,8 +13,10 @@ from .utils import (
 )
 
 from app.models import (
+    AnimeComment,
     EditComment,
     Comment,
+    Anime,
     User,
     Edit,
 )
@@ -24,11 +26,21 @@ from app.models import (
 # If we change edit logic we probably change this as well
 content_type_to_content_class = {
     constants.CONTENT_SYSTEM_EDIT: Edit,
+    constants.CONTENT_ANIME: Anime,
 }
 
 content_type_to_comment_class = {
     constants.CONTENT_SYSTEM_EDIT: EditComment,
+    constants.CONTENT_ANIME: AnimeComment,
 }
+
+
+async def get_comment(
+    session: AsyncSession, comment_reference: UUID
+) -> Comment:
+    return await session.scalar(
+        select(Comment).filter(Comment.id == comment_reference)
+    )
 
 
 async def get_content_by_slug(
@@ -83,7 +95,7 @@ async def create_comment(
     return comment
 
 
-async def get_comment(
+async def get_comment_by_content(
     session: AsyncSession,
     content_type: ContentTypeEnum,
     content_id: str,
@@ -147,3 +159,17 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
             Comment.created > round_hour(datetime.utcnow()),
         )
     )
+
+
+async def update_comment(
+    session: AsyncSession,
+    comment: Comment,
+    text: str,
+) -> Comment:
+    comment.updated = datetime.utcnow()
+    comment.text = text
+
+    session.add(comment)
+    await session.commit()
+
+    return comment

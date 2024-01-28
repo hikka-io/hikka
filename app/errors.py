@@ -65,9 +65,11 @@ errors = {
     "comment": {
         "rate-limit": ["You have reached comment rate limit, try later", 400],
         "parent-not-found": ["Parent comment not found", 404],
+        "not-owner": ["You can't edit this comment", 400],
         "content-not-found": ["Content not found", 404],
         "max-depth": ["Max reply depth reached", 400],
         "empty-markdown": ["Empty markdown", 400],
+        "not-found": ["Comment not found", 404],
     },
     "studio": {
         "not-found": ["Studio not found", 404],

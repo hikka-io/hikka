@@ -3,10 +3,11 @@ from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Comment, User
 from .utils import build_comments
+from .utils import path_to_uuid
 from . import service
 
 from .dependencies import (
-    validate_comment_args,
+    validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
     validate_parent,
@@ -26,6 +27,7 @@ from .schemas import (
     CommentListResponse,
     CommentResponse,
     ContentTypeEnum,
+    CommentTextArgs,
     CommentNode,
     CommentArgs,
 )
@@ -36,8 +38,8 @@ router = APIRouter(prefix="/comments", tags=["Comments"])
 
 @router.put("/{content_type}/{slug}", response_model=CommentResponse)
 async def write_comment(
+    args: CommentArgs,
     content_type: ContentTypeEnum,
-    args: CommentArgs = Depends(validate_comment_args),
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
     parent: Comment | None = Depends(validate_parent),
@@ -47,15 +49,7 @@ async def write_comment(
         session, content_type, content_id, author, args.text, parent
     )
 
-    return CommentNode(
-        comment.reference,
-        comment.text,
-        comment.author,
-        comment.created,
-        0,
-        len(comment.path),
-        comment.hidden,
-    )
+    return CommentNode.create(path_to_uuid(comment.reference), comment)
 
 
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
@@ -81,3 +75,13 @@ async def get_content_edit_list(
         "pagination": pagination_dict(total, page, limit),
         "list": result,
     }
+
+
+@router.put("/{comment_reference}", response_model=CommentResponse)
+async def update_comment(
+    args: CommentTextArgs,
+    session: AsyncSession = Depends(get_session),
+    comment: Comment = Depends(validate_comment_edit),
+):
+    comment = await service.update_comment(session, comment, args.text)
+    return CommentNode.create(path_to_uuid(comment.reference), comment)

@@ -1,5 +1,8 @@
+from pydantic import Field, field_validator
+from dataclasses import dataclass, field
+from app.utils import is_empty_markdown
+from app.models import Comment
 from datetime import datetime
-from pydantic import Field
 from app import constants
 from uuid import UUID
 from enum import Enum
@@ -14,19 +17,31 @@ from app.schemas import (
 # Enums
 class ContentTypeEnum(str, Enum):
     content_edit = constants.CONTENT_SYSTEM_EDIT
+    content_anime = constants.CONTENT_ANIME
 
 
 # Args
-class CommentArgs(CustomModel):
+class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
+
+    @field_validator("text")
+    def validate_text(cls, text):
+        if is_empty_markdown(text):
+            raise ValueError("Field text consists of empty markdown")
+
+        return text
+
+
+class CommentArgs(CommentTextArgs):
     parent: UUID | None = None
 
 
 # Responses
 class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
+    total_replies: int = 0
     author: UserResponse
-    total_replies: int
+    updated: datetime
     created: datetime
     text: str | None
     reference: str
@@ -41,23 +56,36 @@ class CommentListResponse(CustomModel):
 
 
 # Misc
+@dataclass
 class CommentNode:
-    def __init__(
-        self,
-        reference,
-        text=None,
-        author=None,
-        created=None,
-        score=None,
-        depth=None,
-        hidden=False,
-    ):
-        self.reference = reference
-        self.created = created
-        self.total_replies = 0
-        self.author = author
-        self.replies = []
-        self.text = text
-        self.score = score
-        self.depth = depth
-        self.hidden = hidden
+    # Reference is default field of data class, do not move it
+    reference: str
+
+    replies: list["CommentNode"] = field(default_factory=list)
+    total_replies: int = 0
+    hidden: bool = False
+    created: str = None
+    author: str = None
+    score: int = None
+    depth: int = None
+    text: str = None
+
+    def from_comment(self, comment: Comment):
+        self.text = comment.text if not comment.hidden else None
+        self.updated = comment.updated
+        self.created = comment.created
+        self.author = comment.author
+        self.hidden = comment.hidden
+        self.score = comment.score
+        self.depth = comment.depth
+        return self
+
+    @classmethod
+    def create(cls, reference: str, comment: Comment = None):
+        node_instance = cls(reference)
+        node_instance.reference = reference
+
+        if comment:
+            node_instance = node_instance.from_comment(comment)
+
+        return node_instance
