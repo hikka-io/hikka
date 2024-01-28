@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
@@ -43,6 +44,14 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
             postgresql_using="gist",
         ),
     )
+
+    @hybrid_property
+    def depth(self):
+        return len(self.path)
+
+    @hybrid_property
+    def score(self):
+        return 0
 
 
 class EditComment(Comment):
