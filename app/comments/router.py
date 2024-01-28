@@ -42,7 +42,7 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-@router.put("/vote/{comment_reference}")
+@router.put("/vote/{comment_reference}", response_model=SuccessResponse)
 async def vote_comment(
     args: CommentVoteArgs,
     session: AsyncSession = Depends(get_session),
@@ -51,9 +51,8 @@ async def vote_comment(
         auth_required(permissions=[constants.PERMISSION_COMMENT_VOTE])
     ),
 ):
-    vote = await service.set_comment_vote(session, comment, user, args.score)
-    # return CommentNode.create(path_to_uuid(comment.reference), comment)
-    return args
+    await service.set_comment_vote(session, comment, user, args.score)
+    return {"success": True}
 
 
 @router.put("/{content_type}/{slug}", response_model=CommentResponse)
