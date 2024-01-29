@@ -228,7 +228,9 @@ async def anime_todo_total(
     session: AsyncSession,
     todo_type: AnimeToDoEnum,
 ):
-    query = select(func.count(Anime.id))
+    query = select(func.count(Anime.id)).filter(
+        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC])
+    )
 
     if todo_type == constants.TODO_ANIME_TITLE_UA:
         query = query.filter(Anime.title_ua == None)  # noqa: E711
@@ -255,7 +257,9 @@ async def anime_todo(
         ),
     ]
 
-    query = select(Anime)
+    query = select(Anime).filter(
+        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC])
+    )
 
     if todo_type == constants.TODO_ANIME_TITLE_UA:
         query = query.filter(Anime.title_ua == None)  # noqa: E711
