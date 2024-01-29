@@ -1,9 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Edit, User
 from app import constants
 from . import service
+
 
 from app.dependencies import (
     auth_required,
@@ -30,6 +32,7 @@ from .dependencies import (
 from .schemas import (
     EditListResponse,
     ContentTypeEnum,
+    AnimeToDoEnum,
     EditResponse,
     EditArgs,
 )
@@ -132,3 +135,23 @@ async def deny_edit(
     ),
 ):
     return await service.deny_pending_edit(session, edit, moderator)
+
+
+@router.get("/todo/anime/{todo_type}", response_model=AnimePaginationResponse)
+async def get_edit_todo(
+    todo_type: AnimeToDoEnum,
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.anime_todo_total(session, todo_type)
+    anime = await service.anime_todo(
+        session, todo_type, request_user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": anime.unique().all(),
+    }

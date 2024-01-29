@@ -207,11 +207,6 @@ class AnimeStaffPaginationResponse(CustomModel):
     list: list[AnimeStaffResponse]
 
 
-class AnimeSearchPaginationResponse(CustomModel):
-    list: list[AnimeResponseWithWatch]
-    pagination: PaginationResponse
-
-
 class AnimeStatsResponse(CustomModel):
     completed: int = Field(examples=[1502335], default=0)
     watching: int = Field(examples=[83106], default=0)

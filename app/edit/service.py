@@ -1,15 +1,23 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import EditArgs, ContentTypeEnum
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, desc, func
+from sqlalchemy.orm import joinedload
 from datetime import datetime
 from app import constants
 
+from .schemas import (
+    ContentTypeEnum,
+    AnimeToDoEnum,
+    EditArgs,
+)
+
 from app.models import (
+    AnimeWatch,
     PersonEdit,
     AnimeEdit,
-    Edit,
     Person,
     Anime,
+    Edit,
     User,
 )
 
@@ -214,3 +222,52 @@ async def deny_pending_edit(
     await session.commit()
 
     return edit
+
+
+async def anime_todo_total(
+    session: AsyncSession,
+    todo_type: AnimeToDoEnum,
+):
+    query = select(func.count(Anime.id))
+
+    if todo_type == constants.TODO_ANIME_TITLE_UA:
+        query = query.filter(Anime.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
+        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalar(query)
+
+
+async def anime_todo(
+    session: AsyncSession,
+    todo_type: AnimeToDoEnum,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Anime)
+
+    if todo_type == constants.TODO_ANIME_TITLE_UA:
+        query = query.filter(Anime.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
+        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalars(
+        query.order_by(
+            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+        )
+        .options(*load_options)
+        .limit(limit)
+        .offset(offset)
+    )
