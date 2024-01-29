@@ -60,7 +60,7 @@ from .edit import request_edit_list
 from .edit import request_edit
 
 from .comments import request_comments_write
-from .comments import request_companies_list
+from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
 from .comments import request_comments_vote
@@ -125,7 +125,7 @@ __all__ = [
     "request_edit_list",
     "request_edit",
     "request_comments_write",
-    "request_companies_list",
+    "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
     "request_comments_vote",

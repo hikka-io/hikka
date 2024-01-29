@@ -1,5 +1,6 @@
+from sqlalchemy import select, desc, asc, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc, func
+from sqlalchemy.orm import with_expression
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from datetime import datetime
@@ -36,6 +37,17 @@ content_type_to_comment_class = {
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ANIME: AnimeComment,
 }
+
+
+def get_my_score_subquery(request_user: User | None):
+    return (
+        select(CommentVote.score)
+        .filter(
+            CommentVote.user == request_user,
+            CommentVote.comment_id == Comment.id,
+        )
+        .scalar_subquery()
+    )
 
 
 async def get_comment(
@@ -130,6 +142,7 @@ async def count_comments_by_content_id(
 async def get_comments_by_content_id(
     session: AsyncSession,
     content_id: str,
+    request_user: User | None,
     limit: int,
     offset: int,
 ) -> list[Edit]:
@@ -141,18 +154,32 @@ async def get_comments_by_content_id(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
         )
+        .options(
+            with_expression(
+                Comment.my_score, get_my_score_subquery(request_user)
+            )
+        )
         .order_by(desc(Comment.created))
         .limit(limit)
         .offset(offset)
     )
 
 
-async def get_sub_comments(session: AsyncSession, base_comment: Comment):
+async def get_sub_comments(
+    session: AsyncSession,
+    base_comment: Comment,
+    request_user: User | None,
+):
     return await session.scalars(
         select(Comment)
         .filter(
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
+        )
+        .options(
+            with_expression(
+                Comment.my_score, get_my_score_subquery(request_user)
+            )
         )
         .order_by(asc(Comment.created))
     )
