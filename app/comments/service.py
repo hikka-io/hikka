@@ -156,8 +156,7 @@ async def get_comments_by_content_id(
         )
         .options(
             with_expression(
-                Comment.my_score,
-                func.coalesce(get_my_score_subquery(request_user), 0),
+                Comment.my_score, get_my_score_subquery(request_user)
             )
         )
         .order_by(desc(Comment.created))
@@ -179,8 +178,7 @@ async def get_sub_comments(
         )
         .options(
             with_expression(
-                Comment.my_score,
-                func.coalesce(get_my_score_subquery(request_user), 0),
+                Comment.my_score, get_my_score_subquery(request_user)
             )
         )
         .order_by(asc(Comment.created))
