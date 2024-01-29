@@ -46,7 +46,7 @@ async def validate_edit_id_pending(
 async def validate_edit_modify(
     edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_MODIFY_EDIT])
+        auth_required(permissions=[constants.PERMISSION_EDIT_MODIFY])
     ),
 ):
     """Check if user which is trying to modify edit it the author"""

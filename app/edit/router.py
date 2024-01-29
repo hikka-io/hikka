@@ -85,7 +85,7 @@ async def create_edit(
     content_id: str = Depends(validate_content_slug),
     args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_CREATE_EDIT])
+        auth_required(permissions=[constants.PERMISSION_EDIT_CREATE])
     ),
     _: bool = Depends(check_captcha),
 ):
@@ -117,7 +117,7 @@ async def accept_edit(
     session: AsyncSession = Depends(get_session),
     edit: Edit = Depends(validate_edit_accept),
     moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
+        auth_required(permissions=[constants.PERMISSION_EDIT_ACCEPT])
     ),
 ):
     return await service.accept_pending_edit(session, edit, moderator)
@@ -128,7 +128,7 @@ async def deny_edit(
     session: AsyncSession = Depends(get_session),
     edit: Edit = Depends(validate_edit_id_pending),
     moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_ACCEPT_EDIT])
+        auth_required(permissions=[constants.PERMISSION_EDIT_ACCEPT])
     ),
 ):
     return await service.deny_pending_edit(session, edit, moderator)
