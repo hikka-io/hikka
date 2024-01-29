@@ -75,19 +75,23 @@ async def write_comment(
 async def get_content_edit_list(
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
+    request_user: User = Depends(auth_required(optional=True)),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.count_comments_by_content_id(session, content_id)
     base_comments = await service.get_comments_by_content_id(
-        session, content_id, limit, offset
+        session, content_id, request_user, limit, offset
     )
 
     result = []
 
     for base_comment in base_comments:
-        sub_comments = await service.get_sub_comments(session, base_comment)
+        sub_comments = await service.get_sub_comments(
+            session, base_comment, request_user
+        )
+
         result.append(build_comments(base_comment, sub_comments))
 
     return {

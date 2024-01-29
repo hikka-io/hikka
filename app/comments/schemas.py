@@ -49,6 +49,7 @@ class CommentResponse(CustomModel):
     created: datetime
     text: str | None
     reference: str
+    my_score: int
     hidden: bool
     score: int
     depth: int
@@ -76,6 +77,7 @@ class CommentNode:
 
     def from_comment(self, comment: Comment):
         self.text = comment.text if not comment.hidden else None
+        self.my_score = comment.my_score
         self.updated = comment.updated
         self.created = comment.created
         self.author = comment.author

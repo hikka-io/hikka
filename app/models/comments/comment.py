@@ -1,6 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import LtreeType
@@ -17,6 +18,8 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
     }
+
+    my_score: Mapped[int] = query_expression()
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
     hidden: Mapped[bool] = mapped_column(default=False)
