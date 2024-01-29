@@ -130,6 +130,11 @@ class AnimeResponseWithWatch(AnimeResponse):
     watch: list[WatchResponseBase]
 
 
+class AnimePaginationResponse(CustomModel):
+    list: list[AnimeResponseWithWatch]
+    pagination: PaginationResponse
+
+
 class CharacterResponse(CustomModel):
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
