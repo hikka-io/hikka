@@ -2,9 +2,9 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
-from .mixins import CreatedMixin
+from ..mixins import CreatedMixin
 from sqlalchemy import String
-from .base import Base
+from ..base import Base
 
 
 class Upload(Base, CreatedMixin):

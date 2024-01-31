@@ -1,9 +1,9 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column
-from .mixins import CreatedMixin
+from ..mixins import CreatedMixin
 from datetime import datetime
 from app import constants
-from .base import Base
+from ..base import Base
 
 
 class Image(Base, CreatedMixin):
