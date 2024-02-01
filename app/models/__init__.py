@@ -5,6 +5,7 @@ from .user.oauth import UserOAuth
 from .user.follow import Follow
 from .user.user import User
 
+from .edit.edit import CharacterEdit
 from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
 from .edit.edit import Edit
@@ -46,6 +47,7 @@ __all__ = [
     "UserOAuth",
     "Follow",
     "User",
+    "CharacterEdit",
     "PersonEdit",
     "AnimeEdit",
     "Edit",

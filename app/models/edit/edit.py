@@ -83,3 +83,19 @@ class PersonEdit(Edit):
         foreign_keys=[content_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )
+
+
+class CharacterEdit(Edit):
+    __mapper_args__ = {"polymorphic_identity": "character"}
+
+    content_id = mapped_column(
+        ForeignKey("service_content_characters.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Character"] = relationship(
+        primaryjoin="Character.id == CharacterEdit.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+    )
