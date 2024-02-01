@@ -5,6 +5,7 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    CharacterResponse,
     PersonResponse,
     AnimeResponse,
     UserResponse,
@@ -108,7 +109,7 @@ class EditResponse(CustomModel):
     after: dict
 
     # ToDo: maybe we should use Pydantic's discriminator here?
-    content: AnimeResponse | PersonResponse
+    content: AnimeResponse | PersonResponse | CharacterResponse
 
 
 class EditListResponse(CustomModel):
