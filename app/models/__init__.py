@@ -34,9 +34,9 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
-from .upload import Upload
-
-from .image import Image
+from .system.activity import Activity
+from .system.upload import Upload
+from .system.image import Image
 
 from .base import Base
 
@@ -68,6 +68,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "Activity",
     "Upload",
     "Image",
     "Base",
