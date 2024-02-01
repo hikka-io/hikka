@@ -4,6 +4,7 @@ from fastapi import status
 from app import constants
 
 from app.models import (
+    CharacterEdit,
     PersonEdit,
     AnimeEdit,
     Edit,
@@ -12,6 +13,7 @@ from app.models import (
 
 async def test_edit_create(
     client,
+    aggregator_characters,
     aggregator_people,
     aggregator_anime,
     aggregator_anime_info,
@@ -64,6 +66,23 @@ async def test_edit_create(
     # Make sure we got correct response code
     assert response.status_code == status.HTTP_200_OK
 
+    # Now create one more edit for character
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "character",
+        "hitori-gotou-cadd70",
+        {
+            "after": {
+                "description": "Головна героїна аніме Самітниця рокер",
+                "name_ua": "Ґото Хіторі",
+            },
+        },
+    )
+
+    # Make sure we got correct response code
+    assert response.status_code == status.HTTP_200_OK
+
     # And now check if SQLAlchemy's polymorphic identity works
     edits = (
         await test_session.scalars(
@@ -76,6 +95,9 @@ async def test_edit_create(
 
     assert isinstance(edits[1], PersonEdit)
     assert edits[1].content_type == constants.CONTENT_PERSON
+
+    assert isinstance(edits[2], CharacterEdit)
+    assert edits[2].content_type == constants.CONTENT_CHARACTER
 
 
 async def test_edit_create_bad_after(

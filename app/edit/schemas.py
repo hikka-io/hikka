@@ -5,6 +5,7 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    CharacterResponse,
     PersonResponse,
     AnimeResponse,
     UserResponse,
@@ -19,6 +20,7 @@ class AnimeToDoEnum(str, Enum):
 
 
 class ContentTypeEnum(str, Enum):
+    content_character = constants.CONTENT_CHARACTER
     content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
 
@@ -85,6 +87,13 @@ class PersonEditArgs(CustomModel):
     )
 
 
+class CharacterEditArgs(CustomModel):
+    name_ja: str | None = Field(None, examples=["ガッツ"], max_length=255)
+    name_ua: str | None = Field(None, examples=["Ґатс"], max_length=255)
+    name_en: str | None = Field(None, examples=["Guts"], max_length=255)
+    description: str | None = Field(None, examples=["..."])
+
+
 # Response
 class EditResponse(CustomModel):
     content_type: ContentTypeEnum = Field(examples=["anime"])
@@ -100,7 +109,7 @@ class EditResponse(CustomModel):
     after: dict
 
     # ToDo: maybe we should use Pydantic's discriminator here?
-    content: AnimeResponse | PersonResponse
+    content: AnimeResponse | PersonResponse | CharacterResponse
 
 
 class EditListResponse(CustomModel):

@@ -8,6 +8,7 @@ from app.models import (
     EmailMessage,
     AnimeWatch,
     AuthToken,
+    Activity,
     Anime,
     User,
 )
@@ -83,6 +84,10 @@ async def create_email(
     await session.commit()
 
     return message
+
+
+async def create_activity(session: AsyncSession) -> Activity:
+    pass
 
 
 def anime_loadonly(statement):

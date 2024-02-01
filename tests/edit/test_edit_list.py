@@ -5,6 +5,7 @@ from fastapi import status
 
 async def test_edit_create(
     client,
+    aggregator_characters,
     aggregator_people,
     aggregator_anime,
     aggregator_anime_info,
@@ -51,6 +52,22 @@ async def test_edit_create(
     # Make sure we got correct response code
     assert response.status_code == status.HTTP_200_OK
 
+    # And one more edit for character
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "character",
+        "hitori-gotou-cadd70",
+        {
+            "after": {
+                "description": "Головна героїна аніме Самітниця рокер",
+                "name_ua": "Ґото Хіторі",
+            },
+        },
+    )
+
+    # Make sure we got correct response code
+    assert response.status_code == status.HTTP_200_OK
     # Fetch list of edits
     response = await request_edit_list(client)
 
@@ -58,11 +75,16 @@ async def test_edit_create(
     assert response.status_code == status.HTTP_200_OK
 
     # Some checks to verify order and content
-    assert response.json()["list"][0]["edit_id"] == 19
-    assert response.json()["list"][1]["edit_id"] == 18
+    assert response.json()["list"][0]["edit_id"] == 20
+    assert response.json()["list"][1]["edit_id"] == 19
+    assert response.json()["list"][2]["edit_id"] == 18
 
-    assert response.json()["list"][0]["content"]["slug"] == "justin-cook-77f1b3"
     assert (
-        response.json()["list"][1]["content"]["slug"]
+        response.json()["list"][0]["content"]["slug"] == "hitori-gotou-cadd70"
+    )
+
+    assert response.json()["list"][1]["content"]["slug"] == "justin-cook-77f1b3"
+    assert (
+        response.json()["list"][2]["content"]["slug"]
         == "bocchi-the-rock-9e172d"
     )

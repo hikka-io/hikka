@@ -3,6 +3,7 @@ from app.models import Edit
 from app import constants
 
 from .schemas import (
+    CharacterEditArgs,
     ContentTypeEnum,
     PersonEditArgs,
     AnimeEditArgs,
@@ -16,6 +17,7 @@ def check_edit_schema(
 ):
     # Make sure we know how to validate proposed content changes
     schemas = {
+        constants.CONTENT_CHARACTER: CharacterEditArgs,
         constants.CONTENT_PERSON: PersonEditArgs,
         constants.CONTENT_ANIME: AnimeEditArgs,
     }

@@ -5,6 +5,7 @@ from .user.oauth import UserOAuth
 from .user.follow import Follow
 from .user.user import User
 
+from .edit.edit import CharacterEdit
 from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
 from .edit.edit import Edit
@@ -34,9 +35,9 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
-from .upload import Upload
-
-from .image import Image
+from .system.activity import Activity
+from .system.upload import Upload
+from .system.image import Image
 
 from .base import Base
 
@@ -46,6 +47,7 @@ __all__ = [
     "UserOAuth",
     "Follow",
     "User",
+    "CharacterEdit",
     "PersonEdit",
     "AnimeEdit",
     "Edit",
@@ -68,6 +70,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "Activity",
     "Upload",
     "Image",
     "Base",

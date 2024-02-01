@@ -12,9 +12,11 @@ from .schemas import (
 )
 
 from app.models import (
+    CharacterEdit,
     AnimeWatch,
     PersonEdit,
     AnimeEdit,
+    Character,
     Person,
     Anime,
     Edit,
@@ -24,11 +26,13 @@ from app.models import (
 # This is hack-ish way to have single function for different types of content
 # As long as it does the job we can keep it (why not)
 content_type_to_content_class = {
+    constants.CONTENT_CHARACTER: Character,
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
 }
 
 content_type_to_edit_class = {
+    constants.CONTENT_CHARACTER: CharacterEdit,
     constants.CONTENT_PERSON: PersonEdit,
     constants.CONTENT_ANIME: AnimeEdit,
 }
