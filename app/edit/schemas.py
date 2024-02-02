@@ -91,7 +91,7 @@ class CharacterEditArgs(CustomModel):
     name_ja: str | None = Field(None, examples=["ガッツ"], max_length=255)
     name_ua: str | None = Field(None, examples=["Ґатс"], max_length=255)
     name_en: str | None = Field(None, examples=["Guts"], max_length=255)
-    description: str | None = Field(None, examples=["..."])
+    description_ua: str | None = Field(None, examples=["..."])
 
 
 # Response

@@ -60,7 +60,7 @@ async def test_edit_create(
         "hitori-gotou-cadd70",
         {
             "after": {
-                "description": "Головна героїна аніме Самітниця рокер",
+                "description_ua": "Головна героїня аніме Самітниця рокер",
                 "name_ua": "Ґото Хіторі",
             },
         },

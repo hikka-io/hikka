@@ -26,7 +26,7 @@ class Character(
 ):
     __tablename__ = "service_content_characters"
 
-    description: Mapped[str] = mapped_column(nullable=True)
+    description_ua: Mapped[str] = mapped_column(nullable=True)
 
     image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
