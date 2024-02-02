@@ -136,7 +136,7 @@ class AnimePaginationResponse(CustomModel):
 
 
 class CharacterResponse(CustomModel):
-    description: str | None = Field(examples=["..."])
+    description_ua: str | None = Field(examples=["..."])
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
