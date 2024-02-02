@@ -7,7 +7,7 @@ from .anime import update_search_anime
 async def update_search():
     """Update Meilisearch with new data"""
 
-    # await update_search_characters()
+    await update_search_characters()
     await update_search_companies()
-    # await update_search_people()
-    # await update_search_anime()
+    await update_search_people()
+    await update_search_anime()
