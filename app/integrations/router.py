@@ -39,7 +39,7 @@ async def watari_videos(anime: Anime = Depends(validate_watari_anime)):
 
 
 @router.get(
-    "/watari/{slug}/extenral",
+    "/watari/{slug}/external",
     response_model=list[AnimeExternalResponse],
 )
 async def watari_external(anime: Anime = Depends(validate_watari_anime)):
