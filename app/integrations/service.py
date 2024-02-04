@@ -1,7 +1,15 @@
-from app.models import Anime, AnimeCharacter, Character
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, asc
+from sqlalchemy.orm import joinedload
 from uuid import UUID
+
+from app.models import (
+    AnimeCharacter,
+    AnimeStaff,
+    Character,
+    Person,
+    Anime,
+)
 
 
 async def get_anime_by_watari(session: AsyncSession, slug: UUID):
@@ -29,4 +37,18 @@ async def get_main_characters(
             AnimeCharacter.main == True,  # noqa: E712
         )
         .order_by(desc(Character.favorites), desc(Character.id))
+    )
+
+
+async def get_anime_main_staff(
+    session: AsyncSession, anime: Anime
+) -> list[AnimeStaff]:
+    return await session.scalars(
+        select(AnimeStaff)
+        .join(Person, AnimeStaff.person)
+        .filter(AnimeStaff.anime == anime)
+        .options(joinedload(AnimeStaff.person))
+        .options(joinedload(AnimeStaff.roles))
+        .order_by(desc(AnimeStaff.weight), asc(Person.name_en))
+        .limit(12)
     )
