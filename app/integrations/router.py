@@ -6,6 +6,8 @@ from app.models import Anime
 from . import service
 
 from app.schemas import (
+    AnimeExternalResponse,
+    AnimeVideoResponse,
     AnimeStaffResponse,
     CharacterResponse,
 )
@@ -29,3 +31,16 @@ async def watari_staff(
 ):
     staff = await service.get_anime_main_staff(session, anime)
     return staff.unique().all()
+
+
+@router.get("/watari/{slug}/videos", response_model=list[AnimeVideoResponse])
+async def watari_videos(anime: Anime = Depends(validate_watari_anime)):
+    return anime.videos[:8]
+
+
+@router.get(
+    "/watari/{slug}/extenral",
+    response_model=list[AnimeExternalResponse],
+)
+async def watari_external(anime: Anime = Depends(validate_watari_anime)):
+    return anime.external[:8]
