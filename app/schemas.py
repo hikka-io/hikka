@@ -196,3 +196,16 @@ class UserResponse(CustomModel):
     active: bool
     avatar: str
     role: str
+
+
+class AnimeExternalResponse(CustomModel):
+    url: str = Field(examples=["https://www.konosuba.com/"])
+    text: str = Field(examples=["Official Site"])
+    type: str
+
+
+class AnimeVideoResponse(CustomModel):
+    url: str = Field(examples=["https://youtu.be/_4W1OQoDEDg"])
+    title: str | None = Field(examples=["ED 2 (Artist ver.)"])
+    description: str | None = Field(examples=["..."])
+    video_type: str = Field(examples=["video_music"])

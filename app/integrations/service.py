@@ -50,5 +50,5 @@ async def get_anime_main_staff(
         .options(joinedload(AnimeStaff.person))
         .options(joinedload(AnimeStaff.roles))
         .order_by(desc(AnimeStaff.weight), asc(Person.name_en))
-        .limit(12)
+        .limit(8)
     )

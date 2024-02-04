@@ -5,6 +5,8 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
+    AnimeExternalResponse,
+    AnimeVideoResponse,
     AnimeStaffResponse,
     PaginationResponse,
     CharacterResponse,
@@ -209,19 +211,6 @@ class AnimeStatsResponse(CustomModel):
     score_8: int = Field(examples=[398095], default=0)
     score_9: int = Field(examples=[298198], default=0)
     score_10: int = Field(examples=[184038], default=0)
-
-
-class AnimeExternalResponse(CustomModel):
-    url: str = Field(examples=["https://www.konosuba.com/"])
-    text: str = Field(examples=["Official Site"])
-    type: str
-
-
-class AnimeVideoResponse(CustomModel):
-    url: str = Field(examples=["https://youtu.be/_4W1OQoDEDg"])
-    title: str | None = Field(examples=["ED 2 (Artist ver.)"])
-    description: str | None = Field(examples=["..."])
-    video_type: str = Field(examples=["video_music"])
 
 
 class AnimeOSTResponse(CustomModel):
