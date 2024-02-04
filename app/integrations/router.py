@@ -10,6 +10,7 @@ from app.schemas import (
     AnimeVideoResponse,
     AnimeStaffResponse,
     CharacterResponse,
+    AnimeResponse,
 )
 
 
@@ -44,3 +45,8 @@ async def watari_videos(anime: Anime = Depends(validate_watari_anime)):
 )
 async def watari_external(anime: Anime = Depends(validate_watari_anime)):
     return anime.external[:8]
+
+
+@router.get("/watari/{slug}", response_model=AnimeResponse)
+async def watari_anime(anime: Anime = Depends(validate_watari_anime)):
+    return anime
