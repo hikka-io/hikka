@@ -7,6 +7,8 @@ from .aggregator.info import aggregator_anime_info
 from .aggregator.people import aggregator_people
 from .aggregator.anime import aggregator_anime
 
+from .weights import update_weights
+
 from .sitemap import update_sitemap
 
 from .search import update_search
@@ -22,6 +24,7 @@ __all__ = [
     "aggregator_anime_info",
     "aggregator_people",
     "aggregator_anime",
+    "update_weights",
     "update_sitemap",
     "update_search",
     "send_emails",
