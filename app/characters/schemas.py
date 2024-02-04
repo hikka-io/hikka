@@ -14,6 +14,10 @@ class CharacterAnimeResponse(CustomModel):
     anime: AnimeResponse
 
 
+class CharacterFullResponse(CharacterResponse):
+    description_ua: str | None = Field(examples=["..."])
+
+
 class CharactersSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CharacterResponse]
