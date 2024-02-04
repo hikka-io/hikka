@@ -1,6 +1,5 @@
 from app.models import Anime, AnimeStaffRole, AnimeStaff
 from app.sync.aggregator.info import update_anime_info
-from app.comments.utils import is_empty_markdown
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
@@ -11,6 +10,57 @@ from app.sync import email
 import asyncio
 import math
 import json
+
+
+async def query_watari():
+    from app.models import Anime
+    from sqlalchemy import select
+    from sqlalchemy import lateral
+    from sqlalchemy.orm import aliased
+
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        # subquery = (
+        #     select(Anime.id)
+        #     .filter(
+        #         func.jsonb_array_elements_text(Anime.external).contains(
+        #             {
+        #                 "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
+        #             }
+        #         )
+        #     )
+        #     .limit(1)
+        #     .subquery()
+        # )
+
+        test_anime = await session.scalar(
+            select(Anime).filter(
+                Anime.external.op("@>")(
+                    [
+                        {
+                            # "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
+                        }
+                    ]
+                )
+            )
+        )
+
+        # test_anime = await session.scalar(
+        #     select(Anime).filter(
+        #         func.jsonb_array_elements_text(Anime.external).contains(
+        #             {
+        #                 "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
+        #             }
+        #         )
+        #     )
+        # )
+
+        print(test_anime.title_ja)
+
+    await sessionmanager.close()
 
 
 async def import_role_weights():
@@ -102,17 +152,11 @@ async def test():
     await sessionmanager.close()
 
 
-async def test_markdown():
-    text = "**** ____ ** [test]() :::spoiler  :::"
-    result = is_empty_markdown(text)
-    print(result)
-
-
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
-    asyncio.run(test_markdown())
+    asyncio.run(query_watari())
     # asyncio.run(test())

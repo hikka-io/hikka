@@ -35,6 +35,7 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
+from .system.activity import FavouriteAnimeActivity
 from .system.activity import Activity
 from .system.upload import Upload
 from .system.image import Image
@@ -70,6 +71,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "FavouriteAnimeActivity",
     "Activity",
     "Upload",
     "Image",

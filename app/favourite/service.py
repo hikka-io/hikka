@@ -1,9 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, desc, func
+from app.activity import handle_activity
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from datetime import datetime
+from app import constants
 
 from app.models import (
     AnimeFavourite,
@@ -38,6 +40,10 @@ async def create_anime_favourite(
     session.add(favourite)
     await session.commit()
 
+    # await handle_activity(
+    #     session, constants.ACTIVITY_FAVOURITE_ANIME_ADD, user, anime
+    # )
+
     return favourite
 
 
@@ -46,6 +52,13 @@ async def delete_anime_favourite(
 ):
     await session.delete(favourite)
     await session.commit()
+
+    # await handle_activity(
+    #     session,
+    #     constants.ACTIVITY_FAVOURITE_ANIME_REMOVE,
+    #     favourite.user,
+    #     favourite.anime,
+    # )
 
 
 async def get_user_anime_favourite_list(

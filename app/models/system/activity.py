@@ -24,9 +24,9 @@ class Activity(Base, CreatedMixin, UpdatedMixin):
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
 
 
-class FavouriteActivity(Activity):
+class FavouriteAnimeActivity(Activity):
     __mapper_args__ = {
-        "polymorphic_identity": "favourite",
+        "polymorphic_identity": "favourite_anime",
         "eager_defaults": True,
     }
 
@@ -37,7 +37,7 @@ class FavouriteActivity(Activity):
     )
 
     target: Mapped["Anime"] = relationship(
-        primaryjoin="Anime.id == FavouriteActivity.target_id",
+        primaryjoin="Anime.id == FavouriteAnimeActivity.target_id",
         foreign_keys=[target_id],
         # lazy="immediate",  # ToDo: check if it is good idea
     )
