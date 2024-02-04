@@ -40,15 +40,15 @@ async def save_people(session, data):
         if person_data["content_id"] in people_cache:
             person = people_cache[person_data["content_id"]]
 
-            # if person.updated == updated:
-            #     continue
+            if person.updated == updated:
+                continue
 
-            # if person.favorites == person_data["favorites"]:
-            #     continue
+            if person.favorites == person_data["favorites"]:
+                continue
 
             person.favorites = person_data["favorites"]
+            person.image_relation = image
             person.updated = updated
-            person.image = image
 
             add_people.append(person)
 
