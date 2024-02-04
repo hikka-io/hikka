@@ -176,3 +176,7 @@ UPLOAD_COVER = "cover"
 # Todo types
 TODO_ANIME_SYNOPSIS_UA = "synopsis_ua"
 TODO_ANIME_TITLE_UA = "title_ua"
+
+# Activity actions
+ACTIVITY_FAVOURITE_ANIME_ADD = "favourite_anime_add"
+ACTIVITY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
