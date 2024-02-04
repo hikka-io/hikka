@@ -5,12 +5,11 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
-    AnimeResponseWithWatch,
+    AnimeStaffResponse,
     PaginationResponse,
     CharacterResponse,
     CompanyTypeEnum,
     CompanyResponse,
-    PersonResponse,
     CustomModel,
 )
 
@@ -166,19 +165,6 @@ class AnimeEpisodesListResponse(CustomModel):
 class AnimeCharacterResponse(CustomModel):
     main: bool = Field(examples=[True])
     character: CharacterResponse
-
-
-class RoleResponse(CustomModel):
-    name_ua: str | None
-    name_en: str | None
-    weight: int | None
-    slug: str
-
-
-class AnimeStaffResponse(CustomModel):
-    person: PersonResponse | None
-    roles: list[RoleResponse]
-    weight: int | None
 
 
 class GenreResponse(CustomModel):
