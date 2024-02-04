@@ -157,6 +157,6 @@ if __name__ == "__main__":
     # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
     # asyncio.run(import_role_weights())
-    # asyncio.run(recalculate_anime_staff_weights())
-    asyncio.run(query_watari())
+    asyncio.run(recalculate_anime_staff_weights())
+    # asyncio.run(query_watari())
     # asyncio.run(test())
