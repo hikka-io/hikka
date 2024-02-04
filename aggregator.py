@@ -2,8 +2,6 @@ from app.database import sessionmanager
 from app.utils import get_settings
 import asyncio
 
-from app.aggregator import update_anime_staff_weights
-
 from app.sync import (
     aggregator_anime_franchises,
     aggregator_anime_genres,
@@ -13,6 +11,7 @@ from app.sync import (
     aggregator_companies,
     aggregator_people,
     aggregator_anime,
+    update_weights,
     update_search,
 )
 
@@ -22,16 +21,16 @@ async def import_aggregator():
 
     sessionmanager.init(settings.database.endpoint)
 
-    await aggregator_anime_genres()
-    await aggregator_anime_roles()
-    await aggregator_characters()
-    await aggregator_companies()
+    # await aggregator_anime_genres()
+    # await aggregator_anime_roles()
+    # await aggregator_characters()
+    # await aggregator_companies()
     await aggregator_people()
-    await aggregator_anime()
-    await aggregator_anime_info()
-    await aggregator_anime_franchises()
-    await update_search()
-    await update_anime_staff_weights()
+    # await aggregator_anime()
+    # await aggregator_anime_info()
+    # await aggregator_anime_franchises()
+    # await update_weights()
+    # await update_search()
 
     await sessionmanager.close()
 

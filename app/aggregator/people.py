@@ -21,39 +21,40 @@ async def save_people(session, data):
     add_people = []
 
     for person_data in data:
+        if not (image := image_cache.get(person_data["image"])):
+            if person_data["image"]:
+                image = Image(
+                    **{
+                        "path": person_data["image"],
+                        "created": datetime.utcnow(),
+                        "uploaded": True,
+                        "ignore": False,
+                    }
+                )
+
+                image_cache[person_data["image"]] = image
+
         updated = utils.from_timestamp(person_data["updated"])
         slug = utils.slugify(person_data["name_en"], person_data["content_id"])
 
         if person_data["content_id"] in people_cache:
             person = people_cache[person_data["content_id"]]
 
-            if person.updated == updated:
-                continue
+            # if person.updated == updated:
+            #     continue
 
-            if person.favorites == person_data["favorites"]:
-                continue
+            # if person.favorites == person_data["favorites"]:
+            #     continue
 
             person.favorites = person_data["favorites"]
             person.updated = updated
+            person.image = image
 
             add_people.append(person)
 
             # print(f"Updated person: {person.name_en} ({person.favorites})")
 
         else:
-            if not (image := image_cache.get(person_data["image"])):
-                if person_data["image"]:
-                    image = Image(
-                        **{
-                            "path": person_data["image"],
-                            "created": datetime.utcnow(),
-                            "uploaded": True,
-                            "ignore": False,
-                        }
-                    )
-
-                    image_cache[person_data["image"]] = image
-
             person = Person(
                 **{
                     "needs_search_update": True,
