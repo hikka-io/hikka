@@ -1,72 +1,61 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
-from sqlalchemy.orm import selectinload
-from sqlalchemy import select, func
-from app import constants
+from sqlalchemy import select
 from uuid import UUID
 
 from app.models import (
-    AnimeFavourite,
     Activity,
+    Anime,
     User,
 )
 
 
-async def favourite_anime_add(
+async def create_activity(
     session: AsyncSession,
-    action: str,
-    user: User,
+    activity_type: str,
     target_id: UUID,
-    data: dict,
+    user: User,
+    data: dict = {},
 ):
-    # threshold = datetime.utcnow()
-    # if activity := await session.scalar(
-    #     select(Activity).filter(
-    #         Activity.activity_type == activity_type,
-    #         Activity.target_id == target_id,
-    #         Activity.user == user,
-    #     )
-    # ):
-    #     pass
+    now = datetime.utcnow()
 
-    # now = datetime.utcnow()
-    # activity = Activity(
-    #     **{
-    #         "target_id": target_id,
-    #         "activity_type": "favourite_anime",
-    #         "updated": now,
-    #         "created": now,
-    #         "user": user,
-    #         "data": data,
-    #     }
-    # )
+    activity = Activity(
+        **{
+            "activity_type": activity_type,
+            "target_id": target_id,
+            "updated": now,
+            "created": now,
+            "user": user,
+            "data": data,
+        }
+    )
 
-    # session.add(activity)
-    # await session.commit()
-
-    print(activity.activity_type)
+    session.add(activity)
+    await session.commit()
 
     return activity
 
 
-async def handle_activity(
+async def favourite_anime_add(
     session: AsyncSession,
-    action: str,
+    target: Anime,
     user: User,
-    target: None | AnimeFavourite = None,
-    data: dict = {},
-) -> Activity | None:
-    """This function creates Activity record for user action"""
+):
+    threshold = datetime.utcnow() - timedelta(days=1)
+    activity_type = "favourite_anime"
 
-    target_id = target.id if target else None
-
-    if action == constants.ACTIVITY_FAVOURITE_ANIME_ADD:
-        return await favourite_anime_add(
-            session,
-            action,
-            user,
-            target_id,
-            data,
+    if not (
+        activity := await session.scalar(
+            select(Activity).filter(
+                Activity.created > threshold,
+                Activity.activity_type == activity_type,
+                Activity.target_id == target.id,
+                Activity.user == user,
+            )
+        )
+    ):
+        activity = await create_activity(
+            session, activity_type, target.id, user
         )
 
-    return None
+    return activity
