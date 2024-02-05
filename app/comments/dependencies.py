@@ -85,8 +85,17 @@ async def validate_comment(
     return comment
 
 
-async def validate_comment_edit(
+async def validate_comment_not_hidden(
     comment: Comment = Depends(validate_comment),
+):
+    if comment.hidden:
+        raise Abort("comment", "hidden")
+
+    return comment
+
+
+async def validate_comment_edit(
+    comment: Comment = Depends(validate_comment_not_hidden),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_COMMENT_EDIT])
     ),
@@ -96,9 +105,6 @@ async def validate_comment_edit(
 
     if comment.author != author:
         raise Abort("comment", "not-owner")
-
-    if comment.hidden:
-        raise Abort("comment", "hidden")
 
     if len(comment.history) >= max_edits:
         raise Abort("comment", "max-edits")
