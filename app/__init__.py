@@ -52,6 +52,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
+        # allow_origin_regex=settings.backend.origins_regex,
         allow_origins=settings.backend.origins,
         allow_credentials=True,
         allow_methods=["*"],

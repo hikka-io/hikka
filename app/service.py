@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, func
 from app.utils import new_token
+from uuid import UUID
 
 from app.models import (
     EmailMessage,
@@ -10,6 +11,7 @@ from app.models import (
     AuthToken,
     Anime,
     User,
+    Log,
 )
 
 
@@ -104,3 +106,28 @@ def anime_loadonly(statement):
         Anime.slug,
         Anime.year,
     )
+
+
+async def create_log(
+    session: AsyncSession,
+    log_type: str,
+    user: User,
+    target_id: UUID | None = None,
+    data: dict = {},
+):
+    now = datetime.utcnow()
+
+    log = Log(
+        **{
+            "created": now,
+            "target_id": target_id,
+            "log_type": log_type,
+            "user": user,
+            "data": data,
+        }
+    )
+
+    session.add(log)
+    await session.commit()
+
+    return log
