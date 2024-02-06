@@ -2,6 +2,7 @@ from .schemas import UploadMetadata, UploadTypeEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Image, Upload
 from sqlalchemy import select, func
+from app.service import create_log
 from app.utils import get_settings
 from datetime import datetime
 from app import constants
@@ -107,5 +108,12 @@ async def process_upload_file(
 
     session.add_all([image, upload])
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_UPLOAD,
+        user,
+        upload.id,
+    )
 
     return image
