@@ -10,6 +10,7 @@ import random
 from app.service import (
     get_anime_watch,
     anime_loadonly,
+    create_log,
 )
 
 
@@ -18,17 +19,27 @@ async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
     now = datetime.utcnow()
+    log_type = constants.LOG_WATCH_UPDATE
 
     # Create watch record if missing
     if not (watch := await get_anime_watch(session, anime, user)):
+        log_type = constants.LOG_WATCH_CREATE
         watch = AnimeWatch()
         watch.created = now
         watch.anime = anime
         watch.user = user
 
+    log_before = {}
+    log_after = {}
+
     # Set attributes from args to watch record
-    for key, value in args.model_dump().items():
-        setattr(watch, key, value)
+    for key, new_value in args.model_dump().items():
+        # Here we add changes to log's before/after dicts only if there are changes
+        old_value = getattr(watch, key)
+        if old_value != new_value:
+            log_before[key] = old_value
+            setattr(watch, key, new_value)
+            log_after[key] = new_value
 
     # Save watch record
     watch.updated = now
@@ -39,6 +50,18 @@ async def save_watch(
 
     await session.commit()
 
+    if log_before != {} and log_after != {}:
+        await create_log(
+            session,
+            log_type,
+            user,
+            anime.id,
+            {
+                "before": log_before,
+                "after": log_after,
+            },
+        )
+
     return watch
 
 
@@ -48,6 +71,13 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
     # Update user last list update
     user.updated = datetime.utcnow()
     session.add(user)
+
+    await create_log(
+        session,
+        constants.LOG_WATCH_DELETE,
+        user,
+        watch.anime.id,
+    )
 
     await session.commit()
 
