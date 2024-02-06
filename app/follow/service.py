@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, func, case
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from app.models import User, Follow
+from app.service import create_log
 from datetime import datetime
-from sqlalchemy import case
+from app import constants
 
 
 async def count_followers(session: AsyncSession, user: User):
@@ -43,6 +44,13 @@ async def follow(session: AsyncSession, followed_user: User, user: User):
     session.add(follow)
     await session.commit()
 
+    await create_log(
+        session,
+        constants.LOG_FOLLOW,
+        user,
+        followed_user.id,
+    )
+
     return True
 
 
@@ -51,6 +59,13 @@ async def unfollow(session: AsyncSession, followed_user: User, user: User):
 
     await session.delete(follow)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_UNFOLLOW,
+        user,
+        followed_user.id,
+    )
 
     return False
 
