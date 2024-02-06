@@ -1,6 +1,5 @@
 from app.models import User, AuthToken, UserOAuth
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import get_user_by_username
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
@@ -9,6 +8,11 @@ from sqlalchemy import select
 from app.utils import hashpwd
 from app import constants
 import secrets
+
+from app.service import (
+    get_user_by_username,
+    create_log,
+)
 
 
 async def get_user_by_activation(
@@ -130,6 +134,8 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
     session.add(user)
     await session.commit()
 
+    await create_log(session, constants.LOG_SIGNUP, user)
+
     return user
 
 
@@ -152,6 +158,8 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
 
     session.add_all([user, token])
     await session.commit()
+
+    await create_log(session, constants.LOG_LOGIN, user)
 
     return token
 
