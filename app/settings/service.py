@@ -1,10 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ImportAnimeListArgs
-from app.service import get_anime_watch
 from app.utils import hashpwd, chunkify
 from sqlalchemy import select
 from datetime import datetime
+from app import constants
 from . import utils
+
+from app.service import (
+    get_anime_watch,
+    create_log,
+)
 
 from app.models import (
     AnimeWatch,
@@ -18,10 +23,20 @@ async def change_description(
 ) -> User:
     """Change description"""
 
+    log_before = user.description
     user.description = description if description else None
+    log_after = user.description
 
     session.add(user)
     await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_DESCRIPTION,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
 
     return user
 
@@ -29,11 +44,21 @@ async def change_description(
 async def set_username(session: AsyncSession, user: User, username: str):
     """Changed username"""
 
+    log_before = user.username
     user.last_username_change = datetime.utcnow()
     user.username = username
+    log_after = user.username
 
     session.add(user)
     await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_USERNAME,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
 
     return user
 
@@ -41,12 +66,22 @@ async def set_username(session: AsyncSession, user: User, username: str):
 async def set_email(session: AsyncSession, user: User, email: str):
     """Changed email"""
 
+    log_before = user.email
     user.last_email_change = datetime.utcnow()
     user.email_confirmed = False
     user.email = email
+    log_after = user.email
 
     session.add(user)
     await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_EMAIL,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
 
     return user
 
@@ -59,6 +94,8 @@ async def set_password(session: AsyncSession, user: User, password: str):
     session.add(user)
     await session.commit()
 
+    await create_log(session, constants.LOG_SETTINGS_PASSWORD, user)
+
     return user
 
 
@@ -70,6 +107,7 @@ async def import_watch_list(
     """Import watch list"""
 
     now = datetime.utcnow()
+    imported = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits
     for anime_chunk in chunkify(args.anime, 20000):
@@ -131,6 +169,16 @@ async def import_watch_list(
             watch.note = import_note
             watch.updated = now
 
+            imported += 1
+
             session.add(watch)
 
         await session.commit()
+
+    if imported > 0:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_IMPORT,
+            user,
+            data={"imported": imported},
+        )
