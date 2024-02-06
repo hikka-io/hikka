@@ -32,6 +32,8 @@ async def test_comments_edit(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_EDIT
     assert log.user == create_test_user
+    assert log.data["old_text"] == "Old text"
+    assert log.data["new_text"] == "New text"
 
 
 async def test_comments_edit_hidden(

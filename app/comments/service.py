@@ -207,11 +207,12 @@ async def edit_comment(
     comment: Comment,
     text: str,
 ) -> Comment:
-    old_text = comment.text
     now = datetime.utcnow()
 
+    old_text = comment.text
     comment.updated = now
     comment.text = text
+    new_text = comment.text
 
     # SQLAlchemy quirks
     comment.history = copy.deepcopy(comment.history)
@@ -230,6 +231,10 @@ async def edit_comment(
         constants.LOG_COMMENT_EDIT,
         comment.author,
         comment.id,
+        data={
+            "old_text": old_text,
+            "new_text": new_text,
+        },
     )
 
     return comment
