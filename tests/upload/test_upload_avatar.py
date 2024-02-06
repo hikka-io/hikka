@@ -1,5 +1,8 @@
 from client_requests import request_upload, request_me
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_upload_avatar(
@@ -7,6 +10,7 @@ async def test_upload_avatar(
     create_test_user,
     get_test_token,
     mock_s3_upload_file,
+    test_session,
 ):
     with open("tests/data/upload/test.jpg", mode="rb") as file:
         response = await request_upload(client, "avatar", get_test_token, file)
@@ -17,6 +21,12 @@ async def test_upload_avatar(
 
         response = await request_me(client, get_test_token)
         assert response.json()["avatar"] == avatar_url
+
+        # Check avatar upload log
+        log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+        assert log.log_type == constants.LOG_UPLOAD
+        assert log.user == create_test_user
+        assert log.data["upload_type"] == "avatar"
 
 
 async def test_upload_avatar_bad_permission(

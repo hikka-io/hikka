@@ -99,7 +99,7 @@ async def test_unfollow(
     assert response.json()["code"] == "follow:not_following"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    # Check follow log
+    # Check unfollow log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_UNFOLLOW
     assert log.user == create_test_user

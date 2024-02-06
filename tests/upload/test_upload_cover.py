@@ -1,5 +1,8 @@
 from client_requests import request_upload, request_me
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_upload_cover(
@@ -7,6 +10,7 @@ async def test_upload_cover(
     create_test_user,
     get_test_token,
     mock_s3_upload_file,
+    test_session,
 ):
     response = await request_me(client, get_test_token)
     assert response.json()["cover"] is None
@@ -20,6 +24,12 @@ async def test_upload_cover(
 
         response = await request_me(client, get_test_token)
         assert response.json()["cover"] == cover_url
+
+        # Check cover upload log
+        log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+        assert log.log_type == constants.LOG_UPLOAD
+        assert log.user == create_test_user
+        assert log.data["upload_type"] == "cover"
 
 
 async def test_upload_cover_bad_permission(

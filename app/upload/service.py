@@ -114,6 +114,7 @@ async def process_upload_file(
         constants.LOG_UPLOAD,
         user,
         upload.id,
+        data={"upload_type": upload_type},
     )
 
     return image
