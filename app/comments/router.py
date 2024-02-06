@@ -102,12 +102,12 @@ async def get_content_edit_list(
 
 
 @router.put("/{comment_reference}", response_model=CommentResponse)
-async def update_comment(
+async def edit_comment(
     args: CommentTextArgs,
     session: AsyncSession = Depends(get_session),
     comment: Comment = Depends(validate_comment_edit),
 ):
-    comment = await service.update_comment(session, comment, args.text)
+    comment = await service.edit_comment(session, comment, args.text)
     return CommentNode.create(path_to_uuid(comment.reference), comment)
 
 

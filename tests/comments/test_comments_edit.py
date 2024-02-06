@@ -1,10 +1,11 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_edit
 from client_requests import request_comments_hide
-from app.models import Comment
+from sqlalchemy import select, desc
+from app.models import Comment, Log
 from datetime import timedelta
-from sqlalchemy import select
 from fastapi import status
+from app import constants
 
 
 async def test_comments_edit(
@@ -13,6 +14,7 @@ async def test_comments_edit(
     aggregator_anime_info,
     create_test_user,
     get_test_token,
+    test_session,
 ):
     response = await request_comments_write(
         client, get_test_token, "edit", "17", "Old text"
@@ -25,6 +27,11 @@ async def test_comments_edit(
     # Check status
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["text"] == "New text"
+
+    # Check comment update log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_COMMENT_EDIT
+    assert log.user == create_test_user
 
 
 async def test_comments_edit_hidden(

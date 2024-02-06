@@ -202,7 +202,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     )
 
 
-async def update_comment(
+async def edit_comment(
     session: AsyncSession,
     comment: Comment,
     text: str,
@@ -227,7 +227,7 @@ async def update_comment(
 
     await create_log(
         session,
-        constants.LOG_COMMENT_UPDATE,
+        constants.LOG_COMMENT_EDIT,
         comment.author,
         comment.id,
     )
