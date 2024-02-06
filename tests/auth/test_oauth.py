@@ -1,4 +1,7 @@
+from sqlalchemy import select, desc
+from app.models import Log, User
 from fastapi import status
+from app import constants
 
 from client_requests import (
     request_oauth_post,
@@ -21,11 +24,17 @@ async def test_invalid_provider(client):
     assert response.json()["code"] == "auth:invalid_provider"
 
 
-async def test_valid_oauth_signup(client, oauth_http):
+async def test_valid_oauth_signup(client, oauth_http, test_session):
     response = await request_oauth_post(client, "google", "code")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json().get("secret") is not None
+
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    user = await test_session.scalar(select(User))
+    assert log.log_type == constants.LOG_LOGIN_OAUTH
+    assert log.data["provider"] == "google"
+    assert log.user == user
 
 
 async def test_signup_invalid_provider(client, oauth_fail_http):
@@ -50,12 +59,17 @@ async def test_signup_absent_code(client, oauth_fail_http):
 
 
 async def test_valid_oauth_login(
-    client, create_test_user_with_oauth, oauth_http
+    client, create_test_user_with_oauth, oauth_http, test_session
 ):
     response = await request_oauth_post(client, "google", "code")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json().get("secret") is not None
+
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_LOGIN_OAUTH
+    assert log.user_id == create_test_user_with_oauth.user_id
+    assert log.data["provider"] == "google"
 
 
 async def test_oauth_login_email_exists(

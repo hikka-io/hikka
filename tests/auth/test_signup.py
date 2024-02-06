@@ -1,7 +1,8 @@
 from client_requests import request_signup
-from sqlalchemy import select
-from app.models import User
+from sqlalchemy import select, desc
+from app.models import User, Log
 from fastapi import status
+from app import constants
 
 
 async def test_signup(client, test_session):
@@ -19,6 +20,10 @@ async def test_signup(client, test_session):
     )
 
     assert user is not None
+
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_SIGNUP
+    assert log.user == user
 
 
 async def test_signup_bad_email(client):

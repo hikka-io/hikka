@@ -1,7 +1,8 @@
-from sqlalchemy import select
+from sqlalchemy import select, desc
+from app.models import User, Log
 from datetime import datetime
-from app.models import User
 from fastapi import status
+from app import constants
 
 from client_requests import (
     request_password_confirm,
@@ -25,6 +26,10 @@ async def test_password_reset(client, test_session, create_test_user):
     # Make sure reset token has been set
     await test_session.refresh(user)
     assert user.password_reset_token is not None
+
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_PASSWORD_RESET
+    assert log.user == user
 
 
 async def test_password_reset_rate_limit(
@@ -88,3 +93,7 @@ async def test_password_reset_confirm(client, test_session, create_test_user):
     assert old_password_hash != user.password_hash
     assert user.password_reset_expire is None
     assert user.password_reset_token is None
+
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_PASSWORD_RESET_CONFIRM
+    assert log.user == user
