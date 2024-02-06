@@ -1,7 +1,10 @@
 from client_requests import request_favourite_delete
 from client_requests import request_favourite_add
 from client_requests import request_favourite
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_favourite_delete(
@@ -9,6 +12,7 @@ async def test_favourite_delete(
     create_test_user,
     aggregator_anime,
     get_test_token,
+    test_session,
 ):
     # Add anime to favourite
     response = await request_favourite_add(
@@ -38,3 +42,8 @@ async def test_favourite_delete(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["code"] == "favourite:not_found"
+
+    # Check anime favourite remove log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE
+    assert log.user == create_test_user

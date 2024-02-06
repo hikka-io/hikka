@@ -28,7 +28,7 @@ async def test_comments_edit(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["text"] == "New text"
 
-    # Check comment update log
+    # Check comment edit log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_EDIT
     assert log.user == create_test_user
