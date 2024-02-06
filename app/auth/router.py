@@ -12,6 +12,7 @@ from . import oauth
 from app.service import (
     create_activation_token,
     create_email,
+    create_log,
 )
 
 from .dependencies import (
@@ -57,6 +58,8 @@ async def signup(
         user,
     )
 
+    await create_log(session, constants.LOG_SIGNUP, user)
+
     return await service.create_auth_token(session, user)
 
 
@@ -70,6 +73,7 @@ async def login(
     user: User = Depends(validate_login),
     _: bool = Depends(check_captcha),
 ):
+    await create_log(session, constants.LOG_LOGIN, user)
     return await service.create_auth_token(session, user)
 
 
@@ -83,6 +87,7 @@ async def activation(
     user: User = Depends(validate_activation),
 ):
     await service.activate_user(session, user)
+    await create_log(session, constants.LOG_ACTIVATION, user)
     return await service.create_auth_token(session, user)
 
 
@@ -104,6 +109,8 @@ async def activation_resend(
         user.activation_token,
         user,
     )
+
+    await create_log(session, constants.LOG_ACTIVATION_RESEND, user)
 
     return user
 
@@ -127,6 +134,8 @@ async def reset_password(
         user,
     )
 
+    await create_log(session, constants.LOG_PASSWORD_RESET, user)
+
     return user
 
 
@@ -140,6 +149,7 @@ async def password_reset(
     confirm: Tuple[User, str] = Depends(validate_password_confirm),
 ):
     user = await service.change_password(session, *confirm)
+    await create_log(session, constants.LOG_PASSWORD_RESET_CONFIRM, user)
     return await service.create_auth_token(session, user)
 
 
@@ -167,5 +177,12 @@ async def oauth_token(
         oauth_user = await service.create_oauth_user(session, provider, data)
 
     await service.update_oauth_timestamp(session, oauth_user)
+
+    await create_log(
+        session,
+        constants.LOG_LOGIN_OAUTH,
+        oauth_user.user,
+        data={"provider": provider},
+    )
 
     return await service.create_auth_token(session, oauth_user.user)
