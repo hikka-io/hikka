@@ -1,7 +1,10 @@
 from client_requests import request_watch_delete
 from client_requests import request_watch_add
 from client_requests import request_watch
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_watch_delete(
@@ -9,6 +12,7 @@ async def test_watch_delete(
     create_test_user,
     aggregator_anime,
     get_test_token,
+    test_session,
 ):
     # Add anime to watch list
     response = await request_watch_add(
@@ -46,3 +50,9 @@ async def test_watch_delete(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["code"] == "watch:not_found"
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_WATCH_DELETE
+    assert log.user == create_test_user
+    assert log.data == {}

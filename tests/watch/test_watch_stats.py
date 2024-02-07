@@ -47,11 +47,6 @@ async def test_watch_stats(
 
     # Now let's check again
     response = await request_watch_stats(client, "testuser")
-
-    from pprint import pprint
-
-    pprint(response.json())
-
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "completed": 0,

@@ -92,17 +92,17 @@ async def test_session():
 
 @pytest.fixture
 async def create_test_user(test_session):
-    await helpers.create_user(test_session)
+    return await helpers.create_user(test_session)
 
 
 @pytest.fixture
 async def create_test_user_oauth(test_session):
-    await helpers.create_user(test_session, email="testuser@mail.com")
+    return await helpers.create_user(test_session, email="testuser@mail.com")
 
 
 @pytest.fixture
 async def create_test_user_moderator(test_session):
-    await helpers.create_user(
+    return await helpers.create_user(
         test_session,
         role=constants.ROLE_MODERATOR,
     )
@@ -110,14 +110,14 @@ async def create_test_user_moderator(test_session):
 
 @pytest.fixture
 async def create_dummy_user(test_session):
-    await helpers.create_user(
+    return await helpers.create_user(
         test_session, username="dummy", email="dummy@mail.com"
     )
 
 
 @pytest.fixture
 async def create_dummy_user_banned(test_session):
-    await helpers.create_user(
+    return await helpers.create_user(
         test_session,
         username="dummy",
         email="dummy@mail.com",
@@ -127,13 +127,13 @@ async def create_dummy_user_banned(test_session):
 
 @pytest.fixture
 async def create_test_user_not_activated(test_session):
-    await helpers.create_user(test_session, activated=False)
+    return await helpers.create_user(test_session, activated=False)
 
 
 @pytest.fixture
 async def create_test_user_with_oauth(test_session):
     user = await helpers.create_user(test_session)
-    await helpers.create_oauth(test_session, user.id)
+    return await helpers.create_oauth(test_session, user.id)
 
 
 @pytest.fixture

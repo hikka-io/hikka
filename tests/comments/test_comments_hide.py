@@ -1,9 +1,10 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_hide
 from sqlalchemy.orm import selectinload
-from app.models import Comment
-from sqlalchemy import select
+from app.models import Comment, Log
+from sqlalchemy import select, desc
 from fastapi import status
+from app import constants
 
 
 async def test_comments_hide(
@@ -44,6 +45,13 @@ async def test_comments_hide(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "comment:already_hidden"
 
+    # Check comment hide log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_COMMENT_HIDE
+    assert log.user == create_test_user
+    assert log.user == comment.author
+    assert log.data == {}
+
 
 async def test_comments_hide_admin(
     client,
@@ -76,6 +84,13 @@ async def test_comments_hide_admin(
 
     assert comment.hidden is True
     assert comment.hidden_by.username == "testuser"
+
+    # Check comment hide log by moderator
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_COMMENT_HIDE
+    assert log.user == create_test_user_moderator
+    assert log.user != comment.author
+    assert log.data == {}
 
 
 async def test_comments_hide_bad_admin(

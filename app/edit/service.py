@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
+from app.service import create_log
 from datetime import datetime
 from app import constants
 
@@ -138,6 +139,13 @@ async def create_pending_edit(
     session.add(edit)
     await session.commit()
 
+    await create_log(
+        session,
+        constants.LOG_EDIT_CREATE,
+        author,
+        edit.id,
+    )
+
     # This step is needed to load content relation for slug
     await session.refresh(edit)
 
@@ -151,12 +159,33 @@ async def update_pending_edit(
 ) -> Edit:
     """Update pending edit"""
 
+    old_edit = {
+        "description": edit.description,
+        "after": edit.after,
+    }
+
     edit.updated = datetime.now()
     edit.description = args.description
     edit.after = args.after
 
+    updared_edit = {
+        "description": edit.description,
+        "after": edit.after,
+    }
+
     session.add(edit)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_EDIT_UPDATE,
+        edit.author,
+        edit.id,
+        {
+            "updated_edit": updared_edit,
+            "old_edit": old_edit,
+        },
+    )
 
     return edit
 
@@ -172,6 +201,13 @@ async def close_pending_edit(
 
     session.add(edit)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_EDIT_CLOSE,
+        edit.author,
+        edit.id,
+    )
 
     return edit
 
@@ -208,6 +244,13 @@ async def accept_pending_edit(
     session.add(content)
     await session.commit()
 
+    await create_log(
+        session,
+        constants.LOG_EDIT_ACCEPT,
+        moderator,
+        edit.id,
+    )
+
     return edit
 
 
@@ -224,6 +267,13 @@ async def deny_pending_edit(
 
     session.add(edit)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_EDIT_DENY,
+        moderator,
+        edit.id,
+    )
 
     return edit
 

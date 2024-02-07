@@ -1,8 +1,9 @@
-from sqlalchemy import select, desc, asc, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, asc, func
 from sqlalchemy.orm import with_expression
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
+from app.service import create_log
 from datetime import datetime
 from uuid import UUID, uuid4
 from app import constants
@@ -108,6 +109,13 @@ async def create_comment(
     session.add(comment)
     await session.commit()
 
+    await create_log(
+        session,
+        constants.LOG_COMMENT_WRITE,
+        author,
+        comment.id,
+    )
+
     return comment
 
 
@@ -194,16 +202,17 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     )
 
 
-async def update_comment(
+async def edit_comment(
     session: AsyncSession,
     comment: Comment,
     text: str,
 ) -> Comment:
-    old_text = comment.text
     now = datetime.utcnow()
 
+    old_text = comment.text
     comment.updated = now
     comment.text = text
+    new_text = comment.text
 
     # SQLAlchemy quirks
     comment.history = copy.deepcopy(comment.history)
@@ -217,6 +226,17 @@ async def update_comment(
     session.add(comment)
     await session.commit()
 
+    await create_log(
+        session,
+        constants.LOG_COMMENT_EDIT,
+        comment.author,
+        comment.id,
+        data={
+            "old_text": old_text,
+            "new_text": new_text,
+        },
+    )
+
     return comment
 
 
@@ -227,6 +247,13 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
 
     session.add(comment)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_COMMENT_HIDE,
+        user,
+        comment.id,
+    )
 
     return True
 
@@ -244,7 +271,7 @@ async def set_comment_vote(
     session: AsyncSession,
     comment: Comment,
     user: User,
-    score: int,
+    user_score: int,
 ) -> CommentVote:
     now = datetime.utcnow()
 
@@ -259,17 +286,31 @@ async def set_comment_vote(
         )
 
     vote.updated = now
-    vote.score = score
+    vote.score = user_score
 
     session.add(vote)
 
+    old_score = comment.score
     comment.score = await session.scalar(
         select(func.sum(CommentVote.score)).filter(
             CommentVote.comment == comment
         )
     )
+    new_score = comment.score
 
     session.add(comment)
     await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_COMMENT_VOTE,
+        user,
+        comment.id,
+        {
+            "user_score": user_score,
+            "old_score": old_score,
+            "new_score": new_score,
+        },
+    )
 
     return vote

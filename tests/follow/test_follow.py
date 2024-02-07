@@ -4,7 +4,10 @@ from client_requests import request_following
 from client_requests import request_followers
 from client_requests import request_unfollow
 from client_requests import request_follow
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_not_followed(
@@ -46,6 +49,7 @@ async def test_follow(
     create_test_user,
     create_dummy_user,
     get_test_token,
+    test_session,
 ):
     # Follow dummy user
     response = await request_follow(client, get_test_token, "dummy")
@@ -62,12 +66,19 @@ async def test_follow(
     assert response.json()["code"] == "follow:already_following"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+    # Check follow log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_FOLLOW
+    assert log.user == create_test_user
+    assert log.data == {}
+
 
 async def test_unfollow(
     client,
     create_test_user,
     create_dummy_user,
     get_test_token,
+    test_session,
 ):
     # Follow dummy user
     response = await request_follow(client, get_test_token, "dummy")
@@ -88,6 +99,12 @@ async def test_unfollow(
     response = await request_unfollow(client, get_test_token, "dummy")
     assert response.json()["code"] == "follow:not_following"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    # Check unfollow log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_UNFOLLOW
+    assert log.user == create_test_user
+    assert log.data == {}
 
 
 async def test_stats(

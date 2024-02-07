@@ -1,7 +1,7 @@
 from client_requests import request_create_edit
 from client_requests import request_close_edit
-from app.models import Edit
-from sqlalchemy import select
+from sqlalchemy import select, desc
+from app.models import Edit, Log
 from fastapi import status
 from app import constants
 
@@ -41,6 +41,12 @@ async def test_edit_close(
 
     # Status should be closed
     assert edit.status == constants.EDIT_CLOSED
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_EDIT_CLOSE
+    assert log.user == create_test_user
+    assert log.data == {}
 
 
 async def test_edit_close_bad_author(

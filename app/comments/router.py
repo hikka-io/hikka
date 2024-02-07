@@ -9,6 +9,7 @@ from app import constants
 from . import service
 
 from .dependencies import (
+    validate_comment_not_hidden,
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
@@ -45,8 +46,8 @@ router = APIRouter(prefix="/comments", tags=["Comments"])
 @router.put("/vote/{comment_reference}", response_model=SuccessResponse)
 async def vote_comment(
     args: CommentVoteArgs,
+    comment: Comment = Depends(validate_comment_not_hidden),
     session: AsyncSession = Depends(get_session),
-    comment: Comment = Depends(validate_comment),
     user: User = Depends(
         auth_required(permissions=[constants.PERMISSION_COMMENT_VOTE])
     ),
@@ -101,12 +102,12 @@ async def get_content_edit_list(
 
 
 @router.put("/{comment_reference}", response_model=CommentResponse)
-async def update_comment(
+async def edit_comment(
     args: CommentTextArgs,
     session: AsyncSession = Depends(get_session),
     comment: Comment = Depends(validate_comment_edit),
 ):
-    comment = await service.update_comment(session, comment, args.text)
+    comment = await service.edit_comment(session, comment, args.text)
     return CommentNode.create(path_to_uuid(comment.reference), comment)
 
 

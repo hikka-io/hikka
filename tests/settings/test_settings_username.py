@@ -1,8 +1,13 @@
 from client_requests import request_settings_username
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
-async def test_settings_username(client, create_test_user, get_test_token):
+async def test_settings_username(
+    client, create_test_user, get_test_token, test_session
+):
     # Change username for user
     response = await request_settings_username(
         client, get_test_token, "new_username"
@@ -20,6 +25,13 @@ async def test_settings_username(client, create_test_user, get_test_token):
     # It should hit rate limit
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "settings:username_cooldown"
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_SETTINGS_USERNAME
+    assert log.user == create_test_user
+    assert log.data["before"] == "testuser"
+    assert log.data["after"] == "new_username"
 
 
 async def test_settings_username_taken(

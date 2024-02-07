@@ -12,53 +12,22 @@ import math
 import json
 
 
-async def query_watari():
-    from app.models import Anime
-    from sqlalchemy import select
-    from sqlalchemy import lateral
-    from sqlalchemy.orm import aliased
+async def query_activity():
+    from datetime import datetime, timedelta
+    from app.models import Activity
 
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        # subquery = (
-        #     select(Anime.id)
-        #     .filter(
-        #         func.jsonb_array_elements_text(Anime.external).contains(
-        #             {
-        #                 "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
-        #             }
-        #         )
-        #     )
-        #     .limit(1)
-        #     .subquery()
-        # )
+        threshold = datetime.utcnow() - timedelta(days=1)
 
-        test_anime = await session.scalar(
-            select(Anime).filter(
-                Anime.external.op("@>")(
-                    [
-                        {
-                            # "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
-                        }
-                    ]
-                )
-            )
+        test = await session.scalar(
+            select(Activity).filter(Activity.created > threshold)
         )
 
-        # test_anime = await session.scalar(
-        #     select(Anime).filter(
-        #         func.jsonb_array_elements_text(Anime.external).contains(
-        #             {
-        #                 "url": "https://watari-anime.com/watch?wid=f547da6a-7dd3-43cd-95d3-05a9f9bcd70d"
-        #             }
-        #         )
-        #     )
-        # )
-
-        print(test_anime.title_ja)
+        print(test)
 
     await sessionmanager.close()
 
@@ -157,6 +126,6 @@ if __name__ == "__main__":
     # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
     # asyncio.run(import_role_weights())
-    asyncio.run(recalculate_anime_staff_weights())
-    # asyncio.run(query_watari())
+    # asyncio.run(recalculate_anime_staff_weights())
+    asyncio.run(query_activity())
     # asyncio.run(test())

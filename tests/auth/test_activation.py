@@ -1,7 +1,8 @@
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from datetime import datetime
-from app.models import User
+from app.models import Log
 from fastapi import status
+from app import constants
 
 from client_requests import (
     request_activation_resend,
@@ -28,11 +29,10 @@ async def test_activation_rate_limit(
 async def test_activation_expired(
     client, test_session, create_test_user_not_activated
 ):
-    # Force expire activation token
-    user = await test_session.scalar(
-        select(User).filter(User.email == "user@mail.com")
-    )
+    # Get test user
+    user = create_test_user_not_activated
 
+    # Force expire activation token
     user.activation_expire = datetime.utcnow()
     test_session.add(user)
     await test_session.commit()
@@ -46,10 +46,8 @@ async def test_activation_expired(
 async def test_activation_resend(
     client, test_session, create_test_user_not_activated, get_test_token
 ):
-    # Force expire activation token
-    user = await test_session.scalar(
-        select(User).filter(User.email == "user@mail.com")
-    )
+    # Get test user
+    user = create_test_user_not_activated
 
     old_activation_token = user.activation_token
 
@@ -65,12 +63,16 @@ async def test_activation_resend(
     await test_session.refresh(user)
     assert old_activation_token != user.activation_token
 
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_ACTIVATION_RESEND
+    assert log.user == create_test_user_not_activated
+    assert log.data == {}
+
 
 async def test_activation(client, test_session, create_test_user_not_activated):
     # Get test user
-    user = await test_session.scalar(
-        select(User).filter(User.email == "user@mail.com")
-    )
+    user = create_test_user_not_activated
 
     # Activate account
     response = await request_activation(client, user.activation_token)
@@ -84,3 +86,9 @@ async def test_activation(client, test_session, create_test_user_not_activated):
     assert user.activation_expire is None
     assert user.activation_token is None
     assert user.email_confirmed is True
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_ACTIVATION
+    assert log.user == create_test_user_not_activated
+    assert log.data == {}

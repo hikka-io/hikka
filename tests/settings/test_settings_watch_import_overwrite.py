@@ -1,7 +1,7 @@
 from client_requests import request_settings_import_watch
-from app.models import AnimeWatch, User, Anime
+from app.models import AnimeWatch, User, Anime, Log
 from client_requests import request_watch_add
-from sqlalchemy import select, func
+from sqlalchemy import select, desc, func
 from fastapi import status
 from app import constants
 
@@ -98,3 +98,10 @@ async def test_settings_import_watch_overwrite(
     assert watch.episodes == 12
     assert watch.rewatches == 2
     assert watch.score == 10
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_SETTINGS_IMPORT
+    assert log.user == create_test_user
+    assert log.data["imported"] == 2
+    assert log.data["overwrite"] is True

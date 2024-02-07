@@ -1,6 +1,9 @@
 from client_requests import request_create_edit
 from client_requests import request_update_edit
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
+from app import constants
 
 
 async def test_edit_update(
@@ -55,3 +58,18 @@ async def test_edit_update(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "edit:empty_edit"
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_EDIT_UPDATE
+    assert log.user == create_test_user
+
+    assert log.data["old_edit"] == {
+        "description": "Brief description",
+        "after": {"title_en": "Bocchi The Rock!"},
+    }
+
+    assert log.data["updated_edit"] == {
+        "description": "Brief description 2",
+        "after": {"title_en": "Bocchi The Rock!"},
+    }

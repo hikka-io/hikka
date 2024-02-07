@@ -1,5 +1,6 @@
 from client_requests import request_create_edit
-from sqlalchemy import select
+from sqlalchemy import select, desc, func
+from app.models import Log
 from fastapi import status
 from app import constants
 
@@ -98,6 +99,21 @@ async def test_edit_create(
 
     assert isinstance(edits[2], CharacterEdit)
     assert edits[2].content_type == constants.CONTENT_CHARACTER
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_EDIT_CREATE
+    assert log.user == create_test_user
+    assert log.data == {}
+
+    # Now let's count edit logs
+    vote_logs_count = await test_session.scalar(
+        select(func.count(Log.id)).filter(
+            Log.log_type == constants.LOG_EDIT_CREATE
+        )
+    )
+
+    assert vote_logs_count == 3
 
 
 async def test_edit_create_bad_after(
