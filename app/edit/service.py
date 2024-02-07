@@ -159,9 +159,19 @@ async def update_pending_edit(
 ) -> Edit:
     """Update pending edit"""
 
+    old_edit = {
+        "description": edit.description,
+        "after": edit.after,
+    }
+
     edit.updated = datetime.now()
     edit.description = args.description
     edit.after = args.after
+
+    updared_edit = {
+        "description": edit.description,
+        "after": edit.after,
+    }
 
     session.add(edit)
     await session.commit()
@@ -171,6 +181,10 @@ async def update_pending_edit(
         constants.LOG_EDIT_UPDATE,
         edit.author,
         edit.id,
+        {
+            "updated_edit": updared_edit,
+            "old_edit": old_edit,
+        },
     )
 
     return edit

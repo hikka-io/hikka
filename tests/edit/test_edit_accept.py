@@ -1,7 +1,7 @@
 from client_requests import request_accept_edit
 from client_requests import request_create_edit
-from app.models import Edit, Anime
-from sqlalchemy import select
+from app.models import Edit, Anime, Log
+from sqlalchemy import select, desc
 from fastapi import status
 from app import constants
 
@@ -45,6 +45,11 @@ async def test_edit_accept(
     assert anime.title_en == "Bocchi The Rock!"
     assert "title_en" in anime.ignored_fields
     assert anime.needs_search_update is True
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_EDIT_ACCEPT
+    assert log.user == create_test_user_moderator
 
 
 async def test_edit_accept_bad_permission(

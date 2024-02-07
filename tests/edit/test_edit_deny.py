@@ -1,5 +1,7 @@
 from client_requests import request_create_edit
 from client_requests import request_deny_edit
+from sqlalchemy import select, desc
+from app.models import Log
 from fastapi import status
 from app import constants
 
@@ -35,6 +37,11 @@ async def test_edit_deny(
     # Make sure edit status and status code is correct
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["status"] == constants.EDIT_DENIED
+
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_EDIT_DENY
+    assert log.user == create_test_user_moderator
 
 
 async def test_edit_deny_bad_permission(
