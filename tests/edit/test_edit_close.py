@@ -46,6 +46,7 @@ async def test_edit_close(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_EDIT_CLOSE
     assert log.user == create_test_user
+    assert log.data == {}
 
 
 async def test_edit_close_bad_author(

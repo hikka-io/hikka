@@ -50,6 +50,7 @@ async def test_edit_accept(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_EDIT_ACCEPT
     assert log.user == create_test_user_moderator
+    assert log.data == {}
 
 
 async def test_edit_accept_bad_permission(

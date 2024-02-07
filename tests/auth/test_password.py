@@ -30,6 +30,7 @@ async def test_password_reset(client, test_session, create_test_user):
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_PASSWORD_RESET
     assert log.user == user
+    assert log.data == {}
 
 
 async def test_password_reset_rate_limit(
@@ -97,3 +98,4 @@ async def test_password_reset_confirm(client, test_session, create_test_user):
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_PASSWORD_RESET_CONFIRM
     assert log.user == user
+    assert log.data == {}

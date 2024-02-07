@@ -50,6 +50,7 @@ async def test_comments_hide(
     assert log.log_type == constants.LOG_COMMENT_HIDE
     assert log.user == create_test_user
     assert log.user == comment.author
+    assert log.data == {}
 
 
 async def test_comments_hide_admin(
@@ -89,6 +90,7 @@ async def test_comments_hide_admin(
     assert log.log_type == constants.LOG_COMMENT_HIDE
     assert log.user == create_test_user_moderator
     assert log.user != comment.author
+    assert log.data == {}
 
 
 async def test_comments_hide_bad_admin(

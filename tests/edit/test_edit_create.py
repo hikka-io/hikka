@@ -104,6 +104,7 @@ async def test_edit_create(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_EDIT_CREATE
     assert log.user == create_test_user
+    assert log.data == {}
 
     # Now let's count edit logs
     vote_logs_count = await test_session.scalar(

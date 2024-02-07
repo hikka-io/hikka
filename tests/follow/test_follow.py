@@ -70,6 +70,7 @@ async def test_follow(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_FOLLOW
     assert log.user == create_test_user
+    assert log.data == {}
 
 
 async def test_unfollow(
@@ -103,6 +104,7 @@ async def test_unfollow(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_UNFOLLOW
     assert log.user == create_test_user
+    assert log.data == {}
 
 
 async def test_stats(

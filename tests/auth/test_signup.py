@@ -24,6 +24,7 @@ async def test_signup(client, test_session):
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_SIGNUP
     assert log.user == user
+    assert log.data == {}
 
 
 async def test_signup_bad_email(client):

@@ -67,6 +67,7 @@ async def test_activation_resend(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_ACTIVATION_RESEND
     assert log.user == create_test_user_not_activated
+    assert log.data == {}
 
 
 async def test_activation(client, test_session, create_test_user_not_activated):
@@ -90,3 +91,4 @@ async def test_activation(client, test_session, create_test_user_not_activated):
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_ACTIVATION
     assert log.user == create_test_user_not_activated
+    assert log.data == {}

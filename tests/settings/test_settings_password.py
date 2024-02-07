@@ -21,10 +21,6 @@ async def test_settings_password(
         client, get_test_token, "new_password"
     )
 
-    from pprint import pprint
-
-    pprint(response.json())
-
     # Check response status
     assert response.status_code == status.HTTP_200_OK
 
@@ -38,3 +34,4 @@ async def test_settings_password(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_SETTINGS_PASSWORD
     assert log.user == create_test_user
+    assert log.data == {}

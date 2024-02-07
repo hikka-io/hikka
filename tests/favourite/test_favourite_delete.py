@@ -47,3 +47,4 @@ async def test_favourite_delete(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE
     assert log.user == create_test_user
+    assert log.data == {}
