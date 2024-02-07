@@ -140,6 +140,7 @@ def get_comments_count_subquery(content_id, content_type):
         .filter(
             Comment.content_id == content_id,
             Comment.content_type == content_type,
+            Comment.hidden == False,  # noqa: E712
         )
         .scalar_subquery()
     )
