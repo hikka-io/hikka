@@ -42,8 +42,17 @@ async def validate_search_anime(
     return search
 
 
-async def validate_franchise(anime: Anime = Depends(get_anime_info)):
+async def validate_franchise(
+    anime: Anime = Depends(get_anime_info),
+    session: AsyncSession = Depends(get_session),
+):
     if not anime.franchise_id:
+        raise Abort("anime", "no-franchise")
+
+    # Dirty fix for empty franchises
+    # ToDo: fix me (please)
+    total = await service.franchise_count(session, anime)
+    if total <= 1:
         raise Abort("anime", "no-franchise")
 
     return anime
