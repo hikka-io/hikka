@@ -1,6 +1,7 @@
 from ..association import anime_genres_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import query_expression
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -26,6 +27,8 @@ class Anime(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_anime"
+
+    comments_count: Mapped[bool] = query_expression()
 
     # Multilang fields
     title_ja: Mapped[str] = mapped_column(String(255), nullable=True)

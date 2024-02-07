@@ -9,6 +9,7 @@ from app.models import (
     EmailMessage,
     AnimeWatch,
     AuthToken,
+    Comment,
     Anime,
     User,
     Log,
@@ -131,3 +132,14 @@ async def create_log(
     await session.commit()
 
     return log
+
+
+def get_comments_count_subquery(content_id, content_type):
+    return (
+        select(func.count(Comment.id))
+        .filter(
+            Comment.content_id == content_id,
+            Comment.content_type == content_type,
+        )
+        .scalar_subquery()
+    )
