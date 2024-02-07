@@ -227,6 +227,8 @@ class AnimeInfoResponse(CustomModel):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
+    comments_count: int
+
     start_date: datetime | None = Field(examples=[1686088809])
     end_date: datetime | None = Field(examples=[1686088809])
 

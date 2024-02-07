@@ -80,7 +80,9 @@ class AnimeEditArgs(CustomModel):
 
 
 class PersonEditArgs(CustomModel):
-    name_native: str | None = Field(None, examples=["丸山 博雄"], max_length=255)
+    name_native: str | None = Field(
+        None, examples=["丸山 博雄"], max_length=255
+    )
     name_ua: str | None = Field(None, examples=["Хіро Маруяма"], max_length=255)
     name_en: str | None = Field(
         None, examples=["Hiroo Maruyama"], max_length=255
@@ -110,6 +112,15 @@ class EditResponse(CustomModel):
 
     # ToDo: maybe we should use Pydantic's discriminator here?
     content: AnimeResponse | PersonResponse | CharacterResponse
+
+    comments_count: int | None
+
+    @field_validator("comments_count")
+    def validate_after(cls, comments_count):
+        if not comments_count:
+            comments_count = 0
+
+        return comments_count
 
 
 class EditListResponse(CustomModel):

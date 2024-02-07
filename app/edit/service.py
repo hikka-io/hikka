@@ -1,10 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
-from app.service import create_log
 from datetime import datetime
 from app import constants
+
+from app.service import (
+    get_comments_count_subquery,
+    create_log,
+)
 
 from .schemas import (
     ContentTypeEnum,
@@ -42,7 +47,18 @@ content_type_to_edit_class = {
 async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
     """Return Edit by edit_id"""
 
-    return await session.scalar(select(Edit).filter(Edit.edit_id == edit_id))
+    return await session.scalar(
+        select(Edit)
+        .filter(Edit.edit_id == edit_id)
+        .options(
+            with_expression(
+                Edit.comments_count,
+                get_comments_count_subquery(
+                    Edit.id, constants.CONTENT_SYSTEM_EDIT
+                ),
+            )
+        )
+    )
 
 
 # ToDo: figure out what to do with anime episodes that do not have a slug
@@ -79,6 +95,14 @@ async def get_edits_by_content_id(
         select(Edit)
         .filter(Edit.content_id == content_id)
         .order_by(desc(Edit.edit_id))
+        .options(
+            with_expression(
+                Edit.comments_count,
+                get_comments_count_subquery(
+                    Edit.id, constants.CONTENT_SYSTEM_EDIT
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -105,6 +129,14 @@ async def get_edits(
         select(Edit)
         .filter(Edit.system_edit == False, Edit.hidden == False)  # noqa: E712
         .order_by(desc(Edit.edit_id))
+        .options(
+            with_expression(
+                Edit.comments_count,
+                get_comments_count_subquery(
+                    Edit.id, constants.CONTENT_SYSTEM_EDIT
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )

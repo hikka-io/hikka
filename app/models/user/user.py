@@ -34,7 +34,7 @@ class User(Base):
     created: Mapped[datetime]
     login: Mapped[datetime]
 
-    is_followed: Mapped[int] = query_expression()
+    is_followed: Mapped[bool] = query_expression()
 
     email_messages: Mapped[list["EmailMessage"]] = relationship(
         back_populates="user",
