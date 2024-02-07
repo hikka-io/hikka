@@ -180,5 +180,5 @@ async def import_watch_list(
             session,
             constants.LOG_SETTINGS_IMPORT,
             user,
-            data={"imported": imported},
+            data={"imported": imported, "overwrite": args.overwrite},
         )
