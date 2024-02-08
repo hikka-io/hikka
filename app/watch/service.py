@@ -50,7 +50,7 @@ async def save_watch(
 
     await session.commit()
 
-    if log_before != {} and log_after != {}:
+    if log_before != {} and log_after != {} and log_before != log_after:
         await create_log(
             session,
             log_type,
