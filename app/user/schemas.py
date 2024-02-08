@@ -9,7 +9,7 @@ from app.schemas import (
 
 # Responses
 class HistoryResponse(CustomModel):
-    content: AnimeResponse
+    content: AnimeResponse | None = None
     history_type: str
     created: datetime
     updated: datetime
