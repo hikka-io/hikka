@@ -1,6 +1,11 @@
 from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
 
+from .user.history import FavouriteRemoveHistory
+from .user.history import WatchDeleteHistory
+from .user.history import FavouriteHistory
+from .user.history import WatchHistory
+from .user.history import History
 from .user.oauth import UserOAuth
 from .user.follow import Follow
 from .user.user import User
@@ -35,6 +40,7 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
+from .system.timestamp import SystemTimestamp
 from .system.upload import Upload
 from .system.image import Image
 from .system.log import Log
@@ -44,6 +50,11 @@ from .base import Base
 __all__ = [
     "EmailMessage",
     "AuthToken",
+    "FavouriteRemoveHistory",
+    "WatchDeleteHistory",
+    "FavouriteHistory",
+    "WatchHistory",
+    "History",
     "UserOAuth",
     "Follow",
     "User",
@@ -70,6 +81,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "SystemTimestamp",
     "Upload",
     "Image",
     "Log",

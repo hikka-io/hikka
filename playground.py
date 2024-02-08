@@ -1,5 +1,6 @@
 from app.models import Anime, AnimeStaffRole, AnimeStaff
 from app.sync.aggregator.info import update_anime_info
+from app.sync.history import generate_history
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
@@ -121,11 +122,23 @@ async def test():
     await sessionmanager.close()
 
 
+async def test_history():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        await generate_history(session)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
     # asyncio.run(test_check())
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
-    asyncio.run(query_activity())
+    # asyncio.run(query_activity())
+    asyncio.run(test_history())
     # asyncio.run(test())

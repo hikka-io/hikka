@@ -207,3 +207,9 @@ LOG_SETTINGS_USERNAME = "settings_username"
 LOG_SETTINGS_EMAIL = "settings_email"
 LOG_SETTINGS_PASSWORD = "settings_password"
 LOG_SETTINGS_IMPORT = "settings_import"
+
+# History types
+HISTORY_WATCH = "watch"
+HISTORY_WATCH_DELETE = "watch_delete"
+HISTORY_FAVOURITE_ANIME = "favourite_anime_add"
+HISTORY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
