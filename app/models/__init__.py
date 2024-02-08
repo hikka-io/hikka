@@ -2,6 +2,7 @@ from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
 
 from .user.history import FavouriteRemoveHistory
+from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
 from .user.history import FavouriteHistory
 from .user.history import WatchHistory
@@ -51,6 +52,7 @@ __all__ = [
     "EmailMessage",
     "AuthToken",
     "FavouriteRemoveHistory",
+    "WatchImportHistory",
     "WatchDeleteHistory",
     "FavouriteHistory",
     "WatchHistory",

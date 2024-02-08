@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, desc, asc
 from datetime import datetime, timedelta
 from app.database import sessionmanager
-from sqlalchemy import select, asc
 from app import constants
 from uuid import UUID
 import copy
@@ -21,12 +21,14 @@ async def get_history(
     threshold: datetime,
 ):
     return await session.scalar(
-        select(History).filter(
+        select(History)
+        .filter(
             History.history_type == history_type,
             History.target_id == target_id,
             History.user_id == user_id,
             History.created > threshold,
         )
+        .order_by(desc(History.updated), desc(History.created))
     )
 
 
@@ -55,6 +57,7 @@ async def generate_history(session: AsyncSession):
                     constants.LOG_WATCH_DELETE,
                     constants.LOG_FAVOURITE_ANIME,
                     constants.LOG_FAVOURITE_ANIME_REMOVE,
+                    constants.LOG_SETTINGS_IMPORT,
                 ]
             )
         )
@@ -63,8 +66,6 @@ async def generate_history(session: AsyncSession):
     )
 
     for log in logs:
-        now = datetime.utcnow()
-
         if log.log_type in [
             constants.LOG_WATCH_UPDATE,
             constants.LOG_WATCH_CREATE,
@@ -86,8 +87,8 @@ async def generate_history(session: AsyncSession):
                         "history_type": constants.HISTORY_WATCH,
                         "target_id": log.target_id,
                         "user_id": log.user_id,
+                        "created": log.created,
                         "used_logs": [],
-                        "created": now,
                         "data": {
                             "new_watch": new_watch,
                             "before": {},
@@ -113,7 +114,7 @@ async def generate_history(session: AsyncSession):
                 history.data["after"][key] = log.data["after"][key]
 
             history.used_logs.append(str(log.id))
-            history.updated = now
+            history.updated = log.created
 
             session.add(history)
             await session.commit()
@@ -140,8 +141,8 @@ async def generate_history(session: AsyncSession):
                         "used_logs": [str(log.id)],
                         "target_id": log.target_id,
                         "user_id": log.user_id,
-                        "created": now,
-                        "updated": now,
+                        "created": log.created,
+                        "updated": log.created,
                     }
                 )
 
@@ -166,8 +167,8 @@ async def generate_history(session: AsyncSession):
                         "used_logs": [str(log.id)],
                         "target_id": log.target_id,
                         "user_id": log.user_id,
-                        "created": now,
-                        "updated": now,
+                        "created": log.created,
+                        "updated": log.created,
                     }
                 )
 
@@ -198,13 +199,29 @@ async def generate_history(session: AsyncSession):
                         "used_logs": [str(log.id)],
                         "target_id": log.target_id,
                         "user_id": log.user_id,
-                        "created": now,
-                        "updated": now,
+                        "created": log.created,
+                        "updated": log.created,
                     }
                 )
 
                 session.add(history)
                 await session.commit()
+
+        if log.log_type == constants.LOG_SETTINGS_IMPORT:
+            history = History(
+                **{
+                    "history_type": constants.HISTORY_WATCH_IMPORT,
+                    "used_logs": [str(log.id)],
+                    "user_id": log.user_id,
+                    "created": log.created,
+                    "updated": log.created,
+                    "target_id": None,
+                    "data": log.data,
+                }
+            )
+
+            session.add(history)
+            await session.commit()
 
         system_timestamp.timestamp = log.created
 

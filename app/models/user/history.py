@@ -102,3 +102,10 @@ class WatchDeleteHistory(History):
         foreign_keys=[target_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )
+
+
+class WatchImportHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_WATCH_IMPORT,
+        "eager_defaults": True,
+    }

@@ -24,7 +24,7 @@ async def test_history_watch_delete(test_session, create_test_user):
         },
         {
             # Then delete it :D
-            "created": datetime(2024, 2, 2, 0, 0, 0),
+            "created": datetime(2024, 2, 1, 2, 0, 0),
             "log_type": constants.LOG_WATCH_DELETE,
             "target_id": fake_anime_id,
             "user_id": user_id,
@@ -32,7 +32,7 @@ async def test_history_watch_delete(test_session, create_test_user):
         },
         {
             # Now add again
-            "created": datetime(2024, 2, 4, 0, 0, 0),
+            "created": datetime(2024, 2, 1, 4, 0, 0),
             "log_type": constants.LOG_WATCH_CREATE,
             "target_id": fake_anime_id,
             "user_id": user_id,
@@ -43,7 +43,7 @@ async def test_history_watch_delete(test_session, create_test_user):
         },
         {
             # And now delete after threshold
-            "created": datetime(2024, 2, 10, 1, 0, 0),
+            "created": datetime(2024, 2, 1, 10, 1, 0),
             "log_type": constants.LOG_WATCH_DELETE,
             "target_id": fake_anime_id,
             "user_id": user_id,

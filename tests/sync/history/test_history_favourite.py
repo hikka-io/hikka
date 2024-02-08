@@ -21,7 +21,7 @@ async def test_history_favourite(test_session, create_test_user):
         },
         {
             # Then removes in couple hours
-            "created": datetime(2024, 2, 3, 0, 0, 0),
+            "created": datetime(2024, 2, 1, 3, 0, 0),
             "log_type": constants.LOG_FAVOURITE_ANIME_REMOVE,
             "target_id": fake_anime_id,
             "user_id": user_id,
@@ -29,7 +29,7 @@ async def test_history_favourite(test_session, create_test_user):
         },
         {
             # Then adds again
-            "created": datetime(2024, 2, 4, 0, 0, 0),
+            "created": datetime(2024, 2, 1, 4, 0, 0),
             "log_type": constants.LOG_FAVOURITE_ANIME,
             "target_id": fake_anime_id,
             "user_id": user_id,
@@ -37,7 +37,7 @@ async def test_history_favourite(test_session, create_test_user):
         },
         {
             # And removes in more than 6 hours
-            "created": datetime(2024, 2, 10, 1, 0, 0),
+            "created": datetime(2024, 2, 1, 10, 1, 0),
             "log_type": constants.LOG_FAVOURITE_ANIME_REMOVE,
             "target_id": fake_anime_id,
             "user_id": user_id,
