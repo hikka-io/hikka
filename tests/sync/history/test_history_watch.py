@@ -1,5 +1,5 @@
 from app.sync.history import generate_history
-from sqlalchemy import select, func
+from sqlalchemy import select, desc, func
 from app.models import Log, History
 from datetime import datetime
 from app import constants
@@ -98,22 +98,24 @@ async def test_history_watch(test_session, create_test_user):
 
     # Count history
     history_count = await test_session.scalar(select(func.count(History.id)))
-    assert history_count == 1
+    assert history_count == 2
 
     # And how get history entry
-    history = await test_session.scalar(select(History))
+    history = await test_session.scalars(
+        select(History).order_by(desc(History.created))
+    )
+    history = history.all()
 
-    assert len(history.used_logs) == 5
-    assert history.data == {
-        "after": {
-            "episodes": 12,
-            "score": 7,
-            "status": "completed",
-        },
-        "before": {
-            "episodes": 0,
-            "score": 0,
-            "status": None,
-        },
+    assert len(history[0].used_logs) == 4
+    assert history[0].data == {
+        "after": {"episodes": 12, "score": 7, "status": "completed"},
+        "before": {"episodes": 0, "score": 0, "status": "planned"},
+        "new_watch": False,
+    }
+
+    assert len(history[1].used_logs) == 1
+    assert history[1].data == {
+        "after": {"status": "planned"},
+        "before": {"status": None},
         "new_watch": True,
     }
