@@ -13,6 +13,7 @@ class HistoryResponse(CustomModel):
     history_type: str
     created: datetime
     updated: datetime
+    reference: str
     data: dict
 
 
