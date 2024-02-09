@@ -33,6 +33,9 @@ async def get_history(
 
 
 async def generate_history(session: AsyncSession):
+    favourite_delta = timedelta(hours=6)
+    watch_delta = timedelta(hours=3)
+
     # Get system timestamp for latest history update
     if not (
         system_timestamp := await session.scalar(
@@ -70,7 +73,7 @@ async def generate_history(session: AsyncSession):
             constants.LOG_WATCH_UPDATE,
             constants.LOG_WATCH_CREATE,
         ]:
-            threshold = log.created - timedelta(hours=6)
+            threshold = log.created - watch_delta
 
             history = await get_history(
                 session,
@@ -120,7 +123,7 @@ async def generate_history(session: AsyncSession):
             await session.commit()
 
         if log.log_type == constants.LOG_WATCH_DELETE:
-            threshold = log.created - timedelta(hours=6)
+            threshold = log.created - watch_delta
 
             history = await get_history(
                 session,
@@ -150,7 +153,7 @@ async def generate_history(session: AsyncSession):
                 await session.commit()
 
         if log.log_type == constants.LOG_FAVOURITE_ANIME:
-            threshold = log.created - timedelta(hours=6)
+            threshold = log.created - favourite_delta
 
             history = await get_history(
                 session,
@@ -176,7 +179,7 @@ async def generate_history(session: AsyncSession):
                 await session.commit()
 
         if log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE:
-            threshold = log.created - timedelta(hours=6)
+            threshold = log.created - favourite_delta
 
             history = await get_history(
                 session,
