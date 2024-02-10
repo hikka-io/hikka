@@ -65,6 +65,7 @@ def create_app(init_db: bool = True) -> FastAPI:
         errors.validation_handler,
     )
 
+    from .notifications import router as notifications_router
     from .integrations import router as integrations_router
     from .characters import router as characters_router
     from .companies import router as companies_router
@@ -81,6 +82,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .auth import router as auth_router
     from .edit import router as edit_router
 
+    app.include_router(notifications_router)
     app.include_router(integrations_router)
     app.include_router(characters_router)
     app.include_router(companies_router)

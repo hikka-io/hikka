@@ -98,6 +98,46 @@ async def generate_notifications(session: AsyncSession):
             if not (comment := await get_comment(session, log.target_id)):
                 continue
 
+            # Get tagged usernames here
+            usernames = re.findall(r"@([a-zA-Z0-9_]+)", comment.text)
+            usernames = list(set(usernames))[:10]
+
+            users = await session.scalars(
+                select(User).filter(User.username.in_(usernames))
+            )
+
+            notification_type = constants.NOTIFICATION_COMMENT_TAG
+
+            for user in users:
+                if user == comment.author:
+                    continue
+
+                # Do not create notification if we already did that
+                if await get_notification(
+                    session,
+                    comment.id,
+                    user.id,
+                    log.id,
+                    notification_type,
+                ):
+                    continue
+
+                notification = Notification(
+                    **{
+                        "notification_type": notification_type,
+                        "target_id": comment.id,
+                        "created": log.created,
+                        "updated": log.created,
+                        "user_id": user.id,
+                        "log_id": log.id,
+                        "seen": False,
+                    }
+                )
+
+                session.add(notification)
+
+            await session.commit()
+
             # Create notification for author of the edit
             if (
                 comment.depth == 1
@@ -105,6 +145,9 @@ async def generate_notifications(session: AsyncSession):
             ):
                 # If edit is gone for some reason, just continue on
                 if not (edit := await get_edit(session, comment.content_id)):
+                    continue
+
+                if not edit.author:
                     continue
 
                 if edit.author == comment.author:
@@ -128,6 +171,7 @@ async def generate_notifications(session: AsyncSession):
                         "user_id": edit.author_id,
                         "target_id": comment.id,
                         "created": log.created,
+                        "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
                     }
@@ -168,6 +212,7 @@ async def generate_notifications(session: AsyncSession):
                         "user_id": parent_comment.author.id,
                         "target_id": parent_comment.id,
                         "created": log.created,
+                        "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
                     }
@@ -176,52 +221,13 @@ async def generate_notifications(session: AsyncSession):
                 session.add(notification)
                 await session.commit()
 
-            # Get tagged usernames here
-            usernames = re.findall(r"@([a-zA-Z0-9_]+)", comment.text)
-            usernames = list(set(usernames))[:10]
-
-            if len(usernames) == 0:
-                continue
-
-            users = await session.scalars(
-                select(User).filter(User.username.in_(usernames))
-            )
-
-            notification_type = constants.NOTIFICATION_COMMENT_TAG
-
-            for user in users:
-                if user == comment.author:
-                    continue
-
-                # Do not create notification if we already did that
-                if await get_notification(
-                    session,
-                    comment.id,
-                    user.id,
-                    log.id,
-                    notification_type,
-                ):
-                    continue
-
-                notification = Notification(
-                    **{
-                        "notification_type": notification_type,
-                        "user_id": user.id,
-                        "target_id": comment.id,
-                        "created": log.created,
-                        "log_id": log.id,
-                        "seen": False,
-                    }
-                )
-
-                session.add(notification)
-
-            await session.commit()
-
         # Create notification for edit author if edit was accepted
         if log.log_type == constants.LOG_EDIT_ACCEPT:
             # If edit is gone for some reason, just continue on
             if not (edit := await get_edit(session, log.target_id)):
+                continue
+
+            if not edit.author:
                 continue
 
             if edit.author_id == edit.moderator_id:
@@ -243,8 +249,9 @@ async def generate_notifications(session: AsyncSession):
                 **{
                     "notification_type": notification_type,
                     "user_id": edit.author_id,
-                    "target_id": edit.id,
                     "created": log.created,
+                    "updated": log.created,
+                    "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
                 }
@@ -257,6 +264,9 @@ async def generate_notifications(session: AsyncSession):
         if log.log_type == constants.LOG_EDIT_DENY:
             # If edit is gone for some reason, just continue on
             if not (edit := await get_edit(session, log.target_id)):
+                continue
+
+            if not edit.author:
                 continue
 
             if edit.author_id == edit.moderator_id:
@@ -278,8 +288,9 @@ async def generate_notifications(session: AsyncSession):
                 **{
                     "notification_type": notification_type,
                     "user_id": edit.author_id,
-                    "target_id": edit.id,
                     "created": log.created,
+                    "updated": log.created,
+                    "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
                 }

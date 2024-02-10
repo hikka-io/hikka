@@ -10,13 +10,27 @@ async def test_notification_edit_comment(
     client,
     aggregator_anime,
     aggregator_anime_info,
+    create_dummy_user,
     create_test_user,
+    get_dummy_token,
     get_test_token,
     test_session,
 ):
+    # Create edit for anime
+    await request_create_edit(
+        client,
+        get_dummy_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
+
     # Write comment for edit
     await request_comments_write(
-        client, get_test_token, "edit", "17", "Nice edit"
+        client, get_test_token, "edit", "18", "Nice edit"
     )
 
     # Generate notifications

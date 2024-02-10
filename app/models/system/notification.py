@@ -1,19 +1,18 @@
+from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
-from datetime import datetime
 from ..base import Base
 from uuid import UUID
 
 
-class Notification(Base):
+class Notification(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_notifications"
 
     notification_type: Mapped[str] = mapped_column(String(64), index=True)
     target_id: Mapped[UUID] = mapped_column(nullable=True)
-    created: Mapped[datetime] = mapped_column(index=True)
     log_id: Mapped[UUID] = mapped_column(nullable=True)
     seen: Mapped[bool] = mapped_column(default=False)
 

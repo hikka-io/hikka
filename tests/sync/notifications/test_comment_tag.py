@@ -1,5 +1,6 @@
 from app.sync.notifications import generate_notifications
 from client_requests import request_comments_write
+from client_requests import request_create_edit
 from app.models import Notification
 from sqlalchemy import select, func
 from app import constants
@@ -15,9 +16,21 @@ async def test_notification_tagged_user(
     get_test_token,
     test_session,
 ):
+    # Create edit for anime
+    await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
+
     # Write comment with tagged users
     await request_comments_write(
-        client, get_dummy_token, "edit", "17", "@dummy and @testuser"
+        client, get_dummy_token, "edit", "18", "@dummy and @testuser"
     )
 
     # Generate notifications

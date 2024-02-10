@@ -29,9 +29,14 @@ async def test_notification_comment_reply(
     # Generate notifications
     await generate_notifications(test_session)
 
-    # Make sure there are 2 notifications
-    count = await test_session.scalar(select(func.count(Notification.id)))
-    assert count == 2
+    # Make sure there is only one notification
+    notificaitons_count = await test_session.scalar(
+        select(func.count(Notification.id)).filter(
+            Notification.notification_type
+            == constants.NOTIFICATION_COMMENT_REPLY
+        )
+    )
+    assert notificaitons_count == 1
 
     # Get comment reply notification
     notificaiton = await test_session.scalar(
