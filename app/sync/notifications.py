@@ -21,16 +21,20 @@ async def get_notification(
     target_id: UUID,
     user_id: UUID,
     log_id: UUID,
+    notification_type: str | None = None,
 ):
-    return await session.scalar(
-        select(Notification)
-        .filter(
-            Notification.target_id == target_id,
-            Notification.user_id == user_id,
-            Notification.log_id == log_id,
-        )
-        .order_by(desc(Notification.created))
+    query = select(Notification).filter(
+        Notification.target_id == target_id,
+        Notification.user_id == user_id,
+        Notification.log_id == log_id,
     )
+
+    if notification_type:
+        query = query.filter(
+            Notification.notification_type == notification_type,
+        )
+
+    return await session.scalar(query.order_by(desc(Notification.created)))
 
 
 async def get_comment(session, comment_id, hidden=False):
@@ -111,6 +115,7 @@ async def generate_notifications(session: AsyncSession):
                     comment.id,
                     edit.author.id,
                     log.id,
+                    notification_type,
                 ):
                     continue
 
@@ -150,6 +155,7 @@ async def generate_notifications(session: AsyncSession):
                     parent_comment.id,
                     parent_comment.author.id,
                     log.id,
+                    notification_type,
                 ):
                     continue
 
@@ -190,6 +196,7 @@ async def generate_notifications(session: AsyncSession):
                     comment.id,
                     user.id,
                     log.id,
+                    notification_type,
                 ):
                     continue
 
@@ -222,6 +229,7 @@ async def generate_notifications(session: AsyncSession):
                 edit.id,
                 edit.author.id,
                 log.id,
+                notification_type,
             ):
                 continue
 
@@ -253,6 +261,7 @@ async def generate_notifications(session: AsyncSession):
                 edit.id,
                 edit.author.id,
                 log.id,
+                notification_type,
             ):
                 continue
 
