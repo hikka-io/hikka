@@ -158,7 +158,7 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    comment.id,
+                    edit.id,
                     edit.author_id,
                     log.id,
                     notification_type,
@@ -169,9 +169,9 @@ async def generate_notifications(session: AsyncSession):
                     **{
                         "notification_type": notification_type,
                         "user_id": edit.author_id,
-                        "target_id": comment.id,
                         "created": log.created,
                         "updated": log.created,
+                        "target_id": edit.id,
                         "log_id": log.id,
                         "seen": False,
                     }
