@@ -180,7 +180,7 @@ async def generate_notifications(session: AsyncSession):
             usernames = re.findall(r"@([a-zA-Z0-9_]+)", comment.text)
             usernames = list(set(usernames))[:10]
 
-            if len(usernames) > 0:
+            if len(usernames) == 0:
                 continue
 
             users = await session.scalars(

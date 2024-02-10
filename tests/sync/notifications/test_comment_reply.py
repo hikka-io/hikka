@@ -69,11 +69,11 @@ async def test_notification_comment_reply_same_author(
     await generate_notifications(test_session)
 
     # Make sure there are not reply notification
-    notification_count = await test_session.scalar(
+    notifications_count = await test_session.scalar(
         select(func.count(Notification.id)).filter(
             Notification.notification_type
             == constants.NOTIFICATION_COMMENT_REPLY
         )
     )
 
-    assert notification_count == 0
+    assert notifications_count == 0
