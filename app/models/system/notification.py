@@ -14,10 +14,8 @@ class Notification(Base):
     notification_type: Mapped[str] = mapped_column(String(64), index=True)
     target_id: Mapped[UUID] = mapped_column(nullable=True)
     created: Mapped[datetime] = mapped_column(index=True)
+    log_id: Mapped[UUID] = mapped_column(nullable=True)
     seen: Mapped[bool] = mapped_column(default=False)
-
-    log_id = mapped_column(ForeignKey("service_logs.id"))
-    log: Mapped["Log"] = relationship(foreign_keys=[log_id])
 
     user_id = mapped_column(ForeignKey("service_users.id"))
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
