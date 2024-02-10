@@ -104,7 +104,7 @@ async def generate_notifications(session: AsyncSession):
                 and comment.content_type == constants.CONTENT_SYSTEM_EDIT
             ):
                 # If edit is gone for some reason, just continue on
-                if not (edit := await get_edit(comment.content_id)):
+                if not (edit := await get_edit(session, comment.content_id)):
                     continue
 
                 notification_type = constants.NOTIFICATION_EDIT_COMMENT
@@ -113,7 +113,7 @@ async def generate_notifications(session: AsyncSession):
                 if await get_notification(
                     session,
                     comment.id,
-                    edit.author.id,
+                    edit.author_id,
                     log.id,
                     notification_type,
                 ):
@@ -122,7 +122,7 @@ async def generate_notifications(session: AsyncSession):
                 notification = Notification(
                     **{
                         "notification_type": notification_type,
-                        "user_id": edit.author.id,
+                        "user_id": edit.author_id,
                         "target_id": comment.id,
                         "created": log.created,
                         "log_id": log.id,
@@ -227,7 +227,7 @@ async def generate_notifications(session: AsyncSession):
             if await get_notification(
                 session,
                 edit.id,
-                edit.author.id,
+                edit.author_id,
                 log.id,
                 notification_type,
             ):
@@ -236,7 +236,7 @@ async def generate_notifications(session: AsyncSession):
             notification = Notification(
                 **{
                     "notification_type": notification_type,
-                    "user_id": edit.author.id,
+                    "user_id": edit.author_id,
                     "target_id": edit.id,
                     "created": log.created,
                     "log_id": log.id,
@@ -259,7 +259,7 @@ async def generate_notifications(session: AsyncSession):
             if await get_notification(
                 session,
                 edit.id,
-                edit.author.id,
+                edit.author_id,
                 log.id,
                 notification_type,
             ):
@@ -268,7 +268,7 @@ async def generate_notifications(session: AsyncSession):
             notification = Notification(
                 **{
                     "notification_type": notification_type,
-                    "user_id": edit.author.id,
+                    "user_id": edit.author_id,
                     "target_id": edit.id,
                     "created": log.created,
                     "log_id": log.id,
