@@ -221,7 +221,10 @@ async def generate_notifications(session: AsyncSession):
         # Create notification for edit author if edit was accepted
         if log.log_type == constants.LOG_EDIT_ACCEPT:
             # If edit is gone for some reason, just continue on
-            if not (edit := await get_edit(log.target_id)):
+            if not (edit := await get_edit(session, log.target_id)):
+                continue
+
+            if edit.author_id == edit.moderator_id:
                 continue
 
             notification_type = constants.NOTIFICATION_EDIT_ACCEPTED
@@ -253,7 +256,10 @@ async def generate_notifications(session: AsyncSession):
         # Create notification for edit author if edit was denied
         if log.log_type == constants.LOG_EDIT_DENY:
             # If edit is gone for some reason, just continue on
-            if not (edit := await get_edit(log.target_id)):
+            if not (edit := await get_edit(session, log.target_id)):
+                continue
+
+            if edit.author_id == edit.moderator_id:
                 continue
 
             notification_type = constants.NOTIFICATION_EDIT_DENIED
