@@ -4,19 +4,20 @@ from app.database import sessionmanager
 from datetime import datetime
 from app import constants
 from uuid import UUID
+import re
 
 from app.models import (
     SystemTimestamp,
     Notification,
     Comment,
     Edit,
+    User,
     Log,
 )
 
 
 async def get_notification(
     session: AsyncSession,
-    notification_type: str,
     target_id: UUID,
     user_id: UUID,
     log_id: UUID,
@@ -24,7 +25,6 @@ async def get_notification(
     return await session.scalar(
         select(Notification)
         .filter(
-            Notification.notification_type == notification_type,
             Notification.target_id == target_id,
             Notification.user_id == user_id,
             Notification.log_id == log_id,
@@ -108,7 +108,6 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    notification_type,
                     comment.id,
                     edit.author.id,
                     log.id,
@@ -148,7 +147,6 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    notification_type,
                     parent_comment.id,
                     parent_comment.author.id,
                     log.id,
@@ -169,6 +167,47 @@ async def generate_notifications(session: AsyncSession):
                 session.add(notification)
                 await session.commit()
 
+            # Get tagged usernames here
+            usernames = re.findall(r"@([a-zA-Z0-9_]+)", comment.text)
+            usernames = list(set(usernames))[:10]
+
+            if len(usernames) > 0:
+                continue
+
+            users = await session.scalars(
+                select(User).filter(User.username.in_(usernames))
+            )
+
+            notification_type = constants.NOTIFICATION_COMMENT_TAG
+
+            for user in users:
+                if user == comment.author:
+                    continue
+
+                # Do not create notification if we already did that
+                if await get_notification(
+                    session,
+                    comment.id,
+                    user.id,
+                    log.id,
+                ):
+                    continue
+
+                notification = Notification(
+                    **{
+                        "notification_type": notification_type,
+                        "user_id": user.id,
+                        "target_id": comment.id,
+                        "created": log.created,
+                        "log_id": log.id,
+                        "seen": False,
+                    }
+                )
+
+                session.add(notification)
+
+            await session.commit()
+
         # Create notification for edit author if edit was accepted
         if log.log_type == constants.LOG_EDIT_ACCEPT:
             # If edit is gone for some reason, just continue on
@@ -180,7 +219,6 @@ async def generate_notifications(session: AsyncSession):
             # Do not create notification if we already did that
             if await get_notification(
                 session,
-                notification_type,
                 edit.id,
                 edit.author.id,
                 log.id,
@@ -212,7 +250,6 @@ async def generate_notifications(session: AsyncSession):
             # Do not create notification if we already did that
             if await get_notification(
                 session,
-                notification_type,
                 edit.id,
                 edit.author.id,
                 log.id,
