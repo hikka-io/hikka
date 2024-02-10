@@ -41,6 +41,7 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
+from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.upload import Upload
 from .system.image import Image
@@ -83,6 +84,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "Notification",
     "SystemTimestamp",
     "Upload",
     "Image",
