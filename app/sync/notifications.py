@@ -107,6 +107,9 @@ async def generate_notifications(session: AsyncSession):
                 if not (edit := await get_edit(session, comment.content_id)):
                     continue
 
+                if edit.author == comment.author:
+                    continue
+
                 notification_type = constants.NOTIFICATION_EDIT_COMMENT
 
                 # Do not create notification if we already did that
