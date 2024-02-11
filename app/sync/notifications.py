@@ -82,6 +82,7 @@ async def generate_notifications(session: AsyncSession):
             Log.log_type.in_(
                 [
                     constants.LOG_COMMENT_WRITE,
+                    constants.LOG_COMMENT_VOTE,
                     constants.LOG_EDIT_ACCEPT,
                     constants.LOG_EDIT_DENY,
                 ]
@@ -94,6 +95,8 @@ async def generate_notifications(session: AsyncSession):
     for log in logs:
         if log.log_type == constants.LOG_COMMENT_VOTE:
             notification_type = constants.NOTIFICATION_COMMENT_VOTE
+
+            print(log.log_type)
 
             # If there for some reason no comment - we should fail gracefully
             if not (comment := await get_comment(session, log.target_id)):
@@ -118,9 +121,9 @@ async def generate_notifications(session: AsyncSession):
             notification = Notification(
                 **{
                     "notification_type": notification_type,
+                    "user_id": comment.author_id,
                     "created": log.created,
                     "updated": log.created,
-                    "user_id": user.id,
                     "log_id": log.id,
                     "seen": False,
                     "data": {
