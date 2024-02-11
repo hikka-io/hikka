@@ -131,6 +131,10 @@ async def generate_notifications(session: AsyncSession):
                         "user_id": user.id,
                         "log_id": log.id,
                         "seen": False,
+                        "data": {
+                            # "content_type": comment.content_type,
+                            # "slug": comment.content.slug,
+                        },
                     }
                 )
 
@@ -174,6 +178,10 @@ async def generate_notifications(session: AsyncSession):
                         "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
+                        "data": {
+                            # "content_type": comment.content_type,
+                            # "slug": comment.content.slug,
+                        },
                     }
                 )
 
@@ -215,6 +223,10 @@ async def generate_notifications(session: AsyncSession):
                         "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
+                        "data": {
+                            # "content_type": parent_comment.content_type,
+                            # "slug": parent_comment.content.slug,
+                        },
                     }
                 )
 
@@ -254,6 +266,7 @@ async def generate_notifications(session: AsyncSession):
                     "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
+                    "data": {},
                 }
             )
 
@@ -293,6 +306,7 @@ async def generate_notifications(session: AsyncSession):
                     "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
+                    "data": {},
                 }
             )
 

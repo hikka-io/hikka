@@ -1,8 +1,10 @@
+from .schemas import NotificationPaginationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
 from . import service
+
 
 from app.utils import (
     pagination_dict,
@@ -21,7 +23,7 @@ router = APIRouter(prefix="/notifications", tags=["Notifications"])
 
 @router.get(
     "",
-    # response_model=HistoryPaginationResponse,
+    response_model=NotificationPaginationResponse,
     summary="Notifications",
 )
 async def notifications(

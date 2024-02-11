@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import query_expression
@@ -51,6 +52,10 @@ class Edit(
     )
 
     content_id: Mapped[UUID]
+
+    @hybrid_property
+    def slug(self):
+        return str(self.edit_id)
 
 
 class AnimeEdit(Edit):
