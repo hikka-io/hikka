@@ -58,8 +58,7 @@ async def unseen_notifications_count(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(auth_required()),
 ):
-    unseen_count = await service.get_unseen_count(session, user)
-    return {"unseen_count": unseen_count}
+    return {"unseen": await service.get_unseen_count(session, user)}
 
 
 @router.post(
