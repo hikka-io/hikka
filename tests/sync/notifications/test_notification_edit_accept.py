@@ -31,7 +31,7 @@ async def test_notification_edit_accept(
     # Accept edit
     await request_accept_edit(client, get_test_token, 18)
 
-    # # Generate notifications
+    # Generate notifications
     await generate_notifications(test_session)
 
     # Make sure there is only one notification
@@ -68,7 +68,7 @@ async def test_notification_edit_accept_same_author(
     # Accept edit
     await request_accept_edit(client, get_test_token, 18)
 
-    # # Generate notifications
+    # Generate notifications
     await generate_notifications(test_session)
 
     # Make sure there is only one notification

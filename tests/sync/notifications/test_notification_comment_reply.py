@@ -49,6 +49,8 @@ async def test_notification_comment_reply(
     notification_type = constants.NOTIFICATION_COMMENT_REPLY
     assert notificaiton.notification_type == notification_type
     assert notificaiton.user_id == create_dummy_user.id
+    assert notificaiton.data["content_type"] == "edit"
+    assert notificaiton.data["slug"] == "17"
 
 
 async def test_notification_comment_reply_same_author(
