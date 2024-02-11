@@ -7,6 +7,7 @@ from . import service
 
 from .schemas import (
     NotificationPaginationResponse,
+    NotificationUnseenResponse,
     NotificationResponse,
 )
 
@@ -46,6 +47,19 @@ async def notifications(
         "pagination": pagination_dict(total, page, limit),
         "list": notifications.all(),
     }
+
+
+@router.get(
+    "/count",
+    response_model=NotificationUnseenResponse,
+    summary="Unseen notifications count",
+)
+async def unseen_notifications_count(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    unseen_count = await service.get_unseen_count(session, user)
+    return {"unseen_count": unseen_count}
 
 
 @router.post(

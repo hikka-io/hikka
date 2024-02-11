@@ -14,3 +14,7 @@ class NotificationResponse(CustomModel):
 class NotificationPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[NotificationResponse]
+
+
+class NotificationUnseenResponse(CustomModel):
+    unseen_count: int
