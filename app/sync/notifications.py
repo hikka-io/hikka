@@ -275,16 +275,14 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    parent_comment.author.id,
+                    comment.author_id,
                     log.id,
                     notification_type,
                 ):
                     continue
 
                 # Fetch content in order to get slug
-                await session.refresh(
-                    parent_comment, attribute_names=["content"]
-                )
+                await session.refresh(comment, attribute_names=["content"])
 
                 notification = Notification(
                     **{
@@ -295,14 +293,14 @@ async def generate_notifications(session: AsyncSession):
                         "log_id": log.id,
                         "seen": False,
                         "data": {
-                            "slug": parent_comment.content.slug,
-                            "content_type": parent_comment.content_type,
-                            "comment_author": parent_comment.author.username,
-                            "comment_reference": parent_comment.reference,
-                            "comment_depth": parent_comment.depth,
-                            "comment_text": parent_comment.text,
+                            "slug": comment.content.slug,
+                            "content_type": comment.content_type,
+                            "comment_author": comment.author.username,
+                            "comment_reference": comment.reference,
+                            "comment_depth": comment.depth,
+                            "comment_text": comment.text,
                             "base_comment_reference": path_to_uuid(
-                                parent_comment.path[0]
+                                comment.path[0]
                             ),
                         },
                     }
