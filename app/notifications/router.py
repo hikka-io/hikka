@@ -1,10 +1,14 @@
-from .schemas import NotificationPaginationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from .dependencies import validate_notification
+from app.models import Notification, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import User
 from . import service
 
+from .schemas import (
+    NotificationPaginationResponse,
+    NotificationResponse,
+)
 
 from app.utils import (
     pagination_dict,
@@ -42,3 +46,16 @@ async def notifications(
         "pagination": pagination_dict(total, page, limit),
         "list": notifications.all(),
     }
+
+
+@router.post(
+    "/{notification_reference}/seen",
+    response_model=NotificationResponse,
+    summary="Mark notification as seen",
+)
+async def notification_seen(
+    notification: Notification = Depends(validate_notification),
+    session: AsyncSession = Depends(get_session),
+):
+    await service.notification_seen(session, notification)
+    return notification

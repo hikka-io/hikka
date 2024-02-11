@@ -125,6 +125,10 @@ errors = {
             400,
         ],
     },
+    "notification": {
+        "not-found": ["Notification not found", 404],
+        "seen": ["Notification already seen", 400],
+    },
 }
 
 

@@ -185,6 +185,7 @@ async def generate_notifications(session: AsyncSession):
                         "data": {
                             "slug": comment.content.slug,
                             "content_type": comment.content_type,
+                            "comment_author": comment.author.username,
                             "comment_reference": comment.reference,
                             "comment_depth": comment.depth,
                             "comment_text": comment.text,
@@ -239,6 +240,7 @@ async def generate_notifications(session: AsyncSession):
                         "data": {
                             "slug": comment.content.slug,
                             "content_type": comment.content_type,
+                            "comment_author": comment.author.username,
                             "comment_reference": comment.reference,
                             "comment_depth": comment.depth,
                             "comment_text": comment.text,
@@ -293,6 +295,7 @@ async def generate_notifications(session: AsyncSession):
                         "data": {
                             "slug": parent_comment.content.slug,
                             "content_type": parent_comment.content_type,
+                            "comment_author": parent_comment.author.username,
                             "comment_reference": parent_comment.reference,
                             "comment_depth": parent_comment.depth,
                             "comment_text": parent_comment.text,
