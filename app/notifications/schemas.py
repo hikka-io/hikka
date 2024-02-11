@@ -17,4 +17,4 @@ class NotificationPaginationResponse(CustomModel):
 
 
 class NotificationUnseenResponse(CustomModel):
-    unseen_count: int
+    unseen: int
