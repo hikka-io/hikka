@@ -1,11 +1,15 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.database import sessionmanager
-from app.sync import update_history
-from app.sync import update_sitemap
-from app.sync import update_search
 from app.utils import get_settings
-from app.sync import send_emails
 import asyncio
+
+from app.sync import (
+    update_notifications,
+    update_history,
+    update_sitemap,
+    update_search,
+    send_emails,
+)
 
 
 def init_scheduler():
@@ -13,6 +17,7 @@ def init_scheduler():
     settings = get_settings()
     sessionmanager.init(settings.database.endpoint)
 
+    scheduler.add_job(update_notifications, "interval", seconds=10)
     scheduler.add_job(update_history, "interval", seconds=10)
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)

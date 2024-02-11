@@ -1,3 +1,4 @@
+from app.sync.notifications import generate_notifications
 from app.models import Anime, AnimeStaffRole, AnimeStaff
 from app.sync.aggregator.info import update_anime_info
 from app.sync.history import generate_history
@@ -122,13 +123,14 @@ async def test():
     await sessionmanager.close()
 
 
-async def test_history():
+async def test_sync_stuff():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await generate_history(session)
+        await generate_notifications(session)
+        # await generate_history(session)
 
     await sessionmanager.close()
 
@@ -140,5 +142,5 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    asyncio.run(test_history())
+    asyncio.run(test_sync_stuff())
     # asyncio.run(test())

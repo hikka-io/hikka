@@ -214,3 +214,11 @@ HISTORY_WATCH_DELETE = "watch_delete"
 HISTORY_FAVOURITE_ANIME = "favourite_anime_add"
 HISTORY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
 HISTORY_WATCH_IMPORT = "watch_import"
+
+# Notification types
+NOTIFICATION_COMMENT_REPLY = "comment_reply"
+NOTIFICATION_COMMENT_VOTE = "comment_vote"
+NOTIFICATION_COMMENT_TAG = "comment_tag"
+NOTIFICATION_EDIT_COMMENT = "edit_comment"
+NOTIFICATION_EDIT_ACCEPTED = "edit_accepted"
+NOTIFICATION_EDIT_DENIED = "edit_denied"
