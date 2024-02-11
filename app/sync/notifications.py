@@ -92,6 +92,54 @@ async def generate_notifications(session: AsyncSession):
     )
 
     for log in logs:
+        if log.log_type == constants.LOG_COMMENT_VOTE:
+            notification_type = constants.NOTIFICATION_COMMENT_VOTE
+
+            # If there for some reason no comment - we should fail gracefully
+            if not (comment := await get_comment(session, log.target_id)):
+                continue
+
+            # Skip if user voted for own comment
+            if log.user_id == comment.author_id:
+                continue
+
+            # Do not create notification if we already did that
+            if await get_notification(
+                session,
+                comment.author_id,
+                log.id,
+                notification_type,
+            ):
+                continue
+
+            # Fetch content in order to get slug
+            await session.refresh(comment, attribute_names=["content"])
+
+            notification = Notification(
+                **{
+                    "notification_type": notification_type,
+                    "created": log.created,
+                    "updated": log.created,
+                    "user_id": user.id,
+                    "log_id": log.id,
+                    "seen": False,
+                    "data": {
+                        "slug": comment.content.slug,
+                        "content_type": comment.content_type,
+                        "comment_reference": comment.reference,
+                        "comment_depth": comment.depth,
+                        "comment_text": comment.text,
+                        "base_comment_reference": path_to_uuid(comment.path[0]),
+                        "user_score": log.data["user_score"],
+                        "old_score": log.data["old_score"],
+                        "new_score": log.data["new_score"],
+                    },
+                }
+            )
+
+            session.add(notification)
+            await session.commit()
+
         if log.log_type == constants.LOG_COMMENT_WRITE:
             # If there for some reason no comment - we should fail gracefully
             if not (comment := await get_comment(session, log.target_id)):

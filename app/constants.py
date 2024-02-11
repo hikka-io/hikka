@@ -217,6 +217,7 @@ HISTORY_WATCH_IMPORT = "watch_import"
 
 # Notification types
 NOTIFICATION_COMMENT_REPLY = "comment_reply"
+NOTIFICATION_COMMENT_VOTE = "comment_vote"
 NOTIFICATION_COMMENT_TAG = "comment_tag"
 NOTIFICATION_EDIT_COMMENT = "edit_comment"
 NOTIFICATION_EDIT_ACCEPTED = "edit_accepted"
