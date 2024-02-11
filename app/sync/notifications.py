@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.comments.utils import path_to_uuid
 from sqlalchemy import select, desc, asc
 from app.database import sessionmanager
 from datetime import datetime
@@ -18,13 +19,11 @@ from app.models import (
 
 async def get_notification(
     session: AsyncSession,
-    target_id: UUID,
     user_id: UUID,
     log_id: UUID,
     notification_type: str | None = None,
 ):
     query = select(Notification).filter(
-        Notification.target_id == target_id,
         Notification.user_id == user_id,
         Notification.log_id == log_id,
     )
@@ -115,25 +114,32 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    comment.id,
                     user.id,
                     log.id,
                     notification_type,
                 ):
                     continue
 
+                # Fetch content in order to get slug
+                await session.refresh(comment, attribute_names=["content"])
+
                 notification = Notification(
                     **{
                         "notification_type": notification_type,
-                        "target_id": comment.id,
                         "created": log.created,
                         "updated": log.created,
                         "user_id": user.id,
                         "log_id": log.id,
                         "seen": False,
                         "data": {
-                            # "content_type": comment.content_type,
-                            # "slug": comment.content.slug,
+                            "slug": comment.content.slug,
+                            "content_type": comment.content_type,
+                            "comment_reference": comment.reference,
+                            "comment_depth": comment.depth,
+                            "comment_text": comment.text,
+                            "base_comment_reference": path_to_uuid(
+                                comment.path[0]
+                            ),
                         },
                     }
                 )
@@ -162,25 +168,32 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    comment.id,
                     edit.author_id,
                     log.id,
                     notification_type,
                 ):
                     continue
 
+                # Fetch content in order to get slug
+                await session.refresh(comment, attribute_names=["content"])
+
                 notification = Notification(
                     **{
                         "notification_type": notification_type,
                         "user_id": edit.author_id,
-                        "target_id": comment.id,
                         "created": log.created,
                         "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
                         "data": {
-                            # "content_type": comment.content_type,
-                            # "slug": comment.content.slug,
+                            "slug": comment.content.slug,
+                            "content_type": comment.content_type,
+                            "comment_reference": comment.reference,
+                            "comment_depth": comment.depth,
+                            "comment_text": comment.text,
+                            "base_comment_reference": path_to_uuid(
+                                comment.path[0]
+                            ),
                         },
                     }
                 )
@@ -207,25 +220,34 @@ async def generate_notifications(session: AsyncSession):
                 # Do not create notification if we already did that
                 if await get_notification(
                     session,
-                    parent_comment.id,
                     parent_comment.author.id,
                     log.id,
                     notification_type,
                 ):
                     continue
 
+                # Fetch content in order to get slug
+                await session.refresh(
+                    parent_comment, attribute_names=["content"]
+                )
+
                 notification = Notification(
                     **{
                         "notification_type": notification_type,
                         "user_id": parent_comment.author.id,
-                        "target_id": parent_comment.id,
                         "created": log.created,
                         "updated": log.created,
                         "log_id": log.id,
                         "seen": False,
                         "data": {
-                            # "content_type": parent_comment.content_type,
-                            # "slug": parent_comment.content.slug,
+                            "slug": parent_comment.content.slug,
+                            "content_type": parent_comment.content_type,
+                            "comment_reference": parent_comment.reference,
+                            "comment_depth": parent_comment.depth,
+                            "comment_text": parent_comment.text,
+                            "base_comment_reference": path_to_uuid(
+                                parent_comment.path[0]
+                            ),
                         },
                     }
                 )
@@ -250,7 +272,6 @@ async def generate_notifications(session: AsyncSession):
             # Do not create notification if we already did that
             if await get_notification(
                 session,
-                edit.id,
                 edit.author_id,
                 log.id,
                 notification_type,
@@ -263,10 +284,12 @@ async def generate_notifications(session: AsyncSession):
                     "user_id": edit.author_id,
                     "created": log.created,
                     "updated": log.created,
-                    "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
-                    "data": {},
+                    "data": {
+                        "description": edit.description,
+                        "edit_id": edit.edit_id,
+                    },
                 }
             )
 
@@ -290,7 +313,6 @@ async def generate_notifications(session: AsyncSession):
             # Do not create notification if we already did that
             if await get_notification(
                 session,
-                edit.id,
                 edit.author_id,
                 log.id,
                 notification_type,
@@ -303,10 +325,12 @@ async def generate_notifications(session: AsyncSession):
                     "user_id": edit.author_id,
                     "created": log.created,
                     "updated": log.created,
-                    "target_id": edit.id,
                     "log_id": log.id,
                     "seen": False,
-                    "data": {},
+                    "data": {
+                        "description": edit.description,
+                        "edit_id": edit.edit_id,
+                    },
                 }
             )
 
