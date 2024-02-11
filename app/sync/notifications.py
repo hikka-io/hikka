@@ -96,14 +96,16 @@ async def generate_notifications(session: AsyncSession):
         if log.log_type == constants.LOG_COMMENT_VOTE:
             notification_type = constants.NOTIFICATION_COMMENT_VOTE
 
-            print(log.log_type)
-
             # If there for some reason no comment - we should fail gracefully
             if not (comment := await get_comment(session, log.target_id)):
                 continue
 
             # Skip if user voted for own comment
             if log.user_id == comment.author_id:
+                continue
+
+            # Skip removal of score
+            if log.data["user_score"] == 0:
                 continue
 
             # Do not create notification if we already did that

@@ -54,3 +54,12 @@ async def notification_seen(session: AsyncSession, notification: Notification):
     await session.commit()
 
     return True
+
+
+async def get_unseen_count(session: AsyncSession, user: User):
+    return await session.scalar(
+        select(func.count(Notification.id)).filter(
+            Notification.seen == False,  # noqa: E712
+            Notification.user == user,
+        )
+    )
