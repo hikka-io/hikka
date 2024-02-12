@@ -29,8 +29,10 @@ async def import_aggregator():
     await aggregator_anime()
     await aggregator_anime_info()
     await aggregator_anime_franchises()
-    await update_weights()
     await update_search()
+
+    # ToDo: reenable weights recalculation
+    # await update_weights()
 
     await sessionmanager.close()
 

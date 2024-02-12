@@ -347,17 +347,7 @@ async def process_poster(session, anime, data):
     if "poster" in anime.ignored_fields:
         return
 
-    if not (poster_id := anime.poster_id):
-        return
-
-    if not (
-        image := await session.scalar(
-            select(Image).where(Image.id == poster_id)
-        )
-    ):
-        return
-
-    if image.path == path:
+    if anime.poster_id:
         return
 
     image = Image(
