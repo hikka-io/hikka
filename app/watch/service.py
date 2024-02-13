@@ -157,3 +157,11 @@ async def random_watch(session: AsyncSession, user: User, status: str | None):
     )
 
     return anime
+
+
+async def get_user_watch_duration(session: AsyncSession, user: User):
+    duration = await session.scalar(
+        select(func.sum(AnimeWatch.duration)).filter(AnimeWatch.user == user)
+    )
+
+    return duration if duration else 0

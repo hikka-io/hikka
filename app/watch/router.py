@@ -111,7 +111,10 @@ async def user_watch_stats(
         session, user, constants.WATCH_DROPPED
     )
 
+    duration = await service.get_user_watch_duration(session, user)
+
     return {
+        "duration": duration,
         "completed": completed,
         "watching": watching,
         "planned": planned,

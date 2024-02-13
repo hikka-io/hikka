@@ -56,6 +56,7 @@ class WatchPaginationResponse(CustomModel):
 
 
 class WatchStatsResponse(CustomModel):
+    duration: int = Field(examples=[24])
     completed: int = Field(examples=[20])
     watching: int = Field(examples=[3])
     planned: int = Field(examples=[7])

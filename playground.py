@@ -1,17 +1,24 @@
 from app.sync.notifications import generate_notifications
-from app.models import Anime, AnimeStaffRole, AnimeStaff
 from app.sync.aggregator.info import update_anime_info
 from app.sync.history import generate_history
+from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
-from sqlalchemy import select, desc
 from app.utils import get_settings
 from app.sync import sitemap
 from app.sync import email
 import asyncio
 import math
 import json
+
+from app.service import calculate_watch_duration
+from app.models import (
+    AnimeStaffRole,
+    AnimeStaff,
+    AnimeWatch,
+    Anime,
+)
 
 
 async def query_activity():
@@ -136,7 +143,24 @@ async def test_sync_stuff():
 
 
 async def watch_stats():
-    pass
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        watch_entries = await session.scalars(
+            select(AnimeWatch)
+            .options(selectinload(AnimeWatch.anime))
+            .filter(AnimeWatch.duration == 0)
+            .limit(20000)
+        )
+
+        for watch in watch_entries:
+            watch.duration = calculate_watch_duration(watch)
+            session.add(watch)
+            await session.commit()
+
+    await sessionmanager.close()
 
 
 if __name__ == "__main__":
@@ -146,5 +170,6 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    asyncio.run(test_sync_stuff())
+    # asyncio.run(test_sync_stuff())
+    asyncio.run(watch_stats())
     # asyncio.run(test())
