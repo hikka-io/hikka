@@ -10,6 +10,7 @@ async def test_settings_import_watch(
     client,
     create_test_user,
     aggregator_anime,
+    aggregator_anime_info,
     get_test_token,
     test_session,
 ):
@@ -87,6 +88,7 @@ async def test_settings_import_watch(
 
     assert watch is not None
     assert watch.status == constants.WATCH_WATCHING
+    assert watch.duration == 230
     assert watch.episodes == 10
     assert watch.score == 8
 

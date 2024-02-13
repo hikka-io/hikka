@@ -135,6 +135,10 @@ async def test_sync_stuff():
     await sessionmanager.close()
 
 
+async def watch_stats():
+    pass
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())

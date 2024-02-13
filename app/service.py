@@ -88,27 +88,6 @@ async def create_email(
     return message
 
 
-def anime_loadonly(statement):
-    return statement.load_only(
-        Anime.episodes_released,
-        Anime.episodes_total,
-        Anime.translated_ua,
-        Anime.content_id,
-        Anime.media_type,
-        Anime.scored_by,
-        Anime.title_ja,
-        Anime.title_en,
-        Anime.title_ua,
-        Anime.season,
-        Anime.source,
-        Anime.status,
-        Anime.rating,
-        Anime.score,
-        Anime.slug,
-        Anime.year,
-    )
-
-
 async def create_log(
     session: AsyncSession,
     log_type: str,
@@ -134,6 +113,27 @@ async def create_log(
     return log
 
 
+def anime_loadonly(statement):
+    return statement.load_only(
+        Anime.episodes_released,
+        Anime.episodes_total,
+        Anime.translated_ua,
+        Anime.content_id,
+        Anime.media_type,
+        Anime.scored_by,
+        Anime.title_ja,
+        Anime.title_en,
+        Anime.title_ua,
+        Anime.season,
+        Anime.source,
+        Anime.status,
+        Anime.rating,
+        Anime.score,
+        Anime.slug,
+        Anime.year,
+    )
+
+
 def get_comments_count_subquery(content_id, content_type):
     return (
         select(func.count(Comment.id))
@@ -144,3 +144,23 @@ def get_comments_count_subquery(content_id, content_type):
         )
         .scalar_subquery()
     )
+
+
+def calculate_watch_duration(watch: AnimeWatch) -> int:
+    # If anime don't have duration set we just return zero
+    if not watch.anime.duration:
+        return 0
+
+    # Rewatches duration is calculated from anime episodes_total field
+    rewatches_duration = (
+        watch.anime.episodes_total * watch.anime.duration * watch.rewatches
+        if watch.anime.episodes_total and watch.rewatches
+        else 0
+    )
+
+    # Current watch duration is just episodes * duration
+    episodes_duration = (
+        watch.episodes * watch.anime.duration if watch.episodes else 0
+    )
+
+    return rewatches_duration + episodes_duration

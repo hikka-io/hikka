@@ -10,6 +10,7 @@ async def test_settings_import_watch_overwrite(
     client,
     create_test_user,
     aggregator_anime,
+    aggregator_anime_info,
     get_test_token,
     test_session,
 ):
@@ -95,6 +96,7 @@ async def test_settings_import_watch_overwrite(
 
     assert watch is not None
     assert watch.status == constants.WATCH_COMPLETED
+    assert watch.duration == 828
     assert watch.episodes == 12
     assert watch.rewatches == 2
     assert watch.score == 10

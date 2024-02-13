@@ -7,6 +7,7 @@ from app import constants
 from . import utils
 
 from app.service import (
+    calculate_watch_duration,
     get_anime_watch,
     create_log,
 )
@@ -167,6 +168,8 @@ async def import_watch_list(
             watch.status = import_status
             watch.score = data.my_score
             watch.note = import_note
+
+            watch.duration = calculate_watch_duration(watch)
             watch.updated = now
 
             imported += 1
