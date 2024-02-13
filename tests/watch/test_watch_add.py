@@ -10,6 +10,7 @@ async def test_watch_add(
     client,
     create_test_user,
     aggregator_anime,
+    aggregator_anime_info,
     get_test_token,
     test_session,
 ):
@@ -29,6 +30,7 @@ async def test_watch_add(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["status"] == "watching"
+    assert response.json()["duration"] == 230  # 10 episodes * 23 minutes
     assert response.json()["rewatches"] == 0
     assert response.json()["episodes"] == 10
     assert response.json()["note"] == "Test"

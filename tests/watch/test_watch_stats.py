@@ -7,6 +7,7 @@ async def test_watch_stats(
     client,
     create_test_user,
     aggregator_anime,
+    aggregator_anime_info,
     get_test_token,
 ):
     # User watch stats should be zero when we start
@@ -14,6 +15,7 @@ async def test_watch_stats(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
+        "duration": 0,
         "completed": 0,
         "watching": 0,
         "planned": 0,
@@ -49,6 +51,7 @@ async def test_watch_stats(
     response = await request_watch_stats(client, "testuser")
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
+        "duration": 23,
         "completed": 0,
         "watching": 1,
         "planned": 1,

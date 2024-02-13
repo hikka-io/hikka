@@ -8,6 +8,7 @@ from app import constants
 import random
 
 from app.service import (
+    calculate_watch_duration,
     get_anime_watch,
     anime_loadonly,
     create_log,
@@ -41,7 +42,8 @@ async def save_watch(
             setattr(watch, key, new_value)
             log_after[key] = new_value
 
-    # Save watch record
+    # Calculate duration and update updated field
+    watch.duration = calculate_watch_duration(watch)
     watch.updated = now
 
     # Update user last list update
@@ -155,3 +157,11 @@ async def random_watch(session: AsyncSession, user: User, status: str | None):
     )
 
     return anime
+
+
+async def get_user_watch_duration(session: AsyncSession, user: User):
+    duration = await session.scalar(
+        select(func.sum(AnimeWatch.duration)).filter(AnimeWatch.user == user)
+    )
+
+    return duration if duration else 0
