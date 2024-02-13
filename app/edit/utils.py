@@ -57,5 +57,13 @@ def check_after(after, content):
     for pop_key in pop_list:
         after.pop(pop_key)
 
-    # return len(after) > 0
     return after
+
+
+def calculate_before(content, after):
+    before = {}
+
+    for key, _ in after.items():
+        before[key] = getattr(content, key)
+
+    return before

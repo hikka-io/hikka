@@ -39,11 +39,11 @@ async def test_edit(
     assert isinstance(response.json()["created"], int)
 
     assert response.json()["content"]["slug"] == "bocchi-the-rock-9e172d"
+    assert response.json()["before"]["title_en"] == "Bocchi the Rock!"
     assert response.json()["after"]["title_en"] == "Bocchi The Rock!"
     assert response.json()["description"] == "Brief description"
     assert response.json()["author"]["username"] == "testuser"
     assert response.json()["content_type"] == "anime"
     assert response.json()["status"] == "pending"
     assert response.json()["moderator"] is None
-    assert response.json()["before"] is None
     assert response.json()["edit_id"] == 18
