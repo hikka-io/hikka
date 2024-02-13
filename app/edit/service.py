@@ -3,6 +3,7 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
+from .utils import calculate_before
 from datetime import datetime
 from app import constants
 
@@ -70,6 +71,17 @@ async def get_content_by_slug(
     content_model = content_type_to_content_class[content_type]
     return await session.scalar(
         select(content_model).filter(content_model.slug == slug)
+    )
+
+
+async def get_content_by_content_id(
+    session: AsyncSession, content_type: ContentTypeEnum, content_id: str
+) -> Person | Anime | None:
+    """Return editable content by content_type and content_id"""
+
+    content_model = content_type_to_content_class[content_type]
+    return await session.scalar(
+        select(content_model).filter(content_model.id == content_id)
     )
 
 
@@ -153,6 +165,9 @@ async def create_pending_edit(
 
     edit_model = content_type_to_edit_class[content_type]
 
+    content = await get_content_by_content_id(session, content_type, content_id)
+    before = calculate_before(content, args.after)
+
     now = datetime.utcnow()
 
     edit = edit_model(
@@ -163,6 +178,7 @@ async def create_pending_edit(
             "content_id": content_id,
             "after": args.after,
             "author": author,
+            "before": before,
             "created": now,
             "updated": now,
         }
@@ -196,8 +212,9 @@ async def update_pending_edit(
         "after": edit.after,
     }
 
-    edit.updated = datetime.now()
+    edit.before = calculate_before(edit.content, args.after)
     edit.description = args.description
+    edit.updated = datetime.now()
     edit.after = args.after
 
     updared_edit = {
@@ -253,6 +270,9 @@ async def accept_pending_edit(
 
     content = edit.content
 
+    # We recalculate before here because field may have changed
+    # Just in case, let's hope it won't happen on production
+    # ToDo: find better way to handle this behaviour
     before = {}
 
     for key, value in edit.after.items():

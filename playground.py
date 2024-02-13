@@ -1,6 +1,6 @@
 from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
-from app.sync.history import generate_history
+from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
@@ -8,6 +8,7 @@ from sqlalchemy import make_url, func
 from app.utils import get_settings
 from app.sync import sitemap
 from app.sync import email
+from app import constants
 import asyncio
 import math
 import json
@@ -18,6 +19,7 @@ from app.models import (
     AnimeStaff,
     AnimeWatch,
     Anime,
+    Edit,
 )
 
 
@@ -163,6 +165,25 @@ async def watch_stats():
     await sessionmanager.close()
 
 
+async def fix_closed_edits():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        edits = await session.scalars(
+            select(Edit).filter(Edit.before == None)  # noqa: E711
+        )
+
+        for edit in edits:
+            edit.before = calculate_before(edit.content, edit.after)
+            session.add(edit)
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -171,5 +192,6 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    asyncio.run(watch_stats())
+    # asyncio.run(watch_stats())
+    asyncio.run(fix_closed_edits())
     # asyncio.run(test())
