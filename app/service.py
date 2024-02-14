@@ -1,14 +1,19 @@
+from sqlalchemy import select, asc, desc, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.selectable import Select
+from .schemas import AnimeSearchArgsBase
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select, func
 from app.utils import new_token
+from app import constants
 from uuid import UUID
 
 from app.models import (
     EmailMessage,
+    AnimeGenre,
     AnimeWatch,
     AuthToken,
+    Company,
     Comment,
     Anime,
     User,
@@ -164,3 +169,76 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
     )
 
     return rewatches_duration + episodes_duration
+
+
+# Search stuff
+def anime_search_filter(
+    search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
+):
+    if search.years[0]:
+        query = query.filter(Anime.year >= search.years[0])
+
+    if search.years[1]:
+        query = query.filter(Anime.year <= search.years[1])
+
+    if search.score[0] and search.score[0] > 0:
+        query = query.filter(Anime.score >= search.score[0])
+
+    if search.score[1]:
+        query = query.filter(Anime.score <= search.score[1])
+
+    if len(search.season) > 0:
+        query = query.filter(Anime.season.in_(search.season))
+
+    if len(search.rating) > 0:
+        query = query.filter(Anime.rating.in_(search.rating))
+
+    # In some cases, like on front page, we would want to hide NSFW content
+    if len(search.rating) == 0 and hide_nsfw:
+        # No hentai (RX) by default
+        query = query.filter(
+            Anime.rating.in_(
+                [
+                    constants.AGE_RATING_R_PLUS,
+                    constants.AGE_RATING_PG_13,
+                    constants.AGE_RATING_PG,
+                    constants.AGE_RATING_G,
+                    constants.AGE_RATING_R,
+                ]
+            )
+        )
+
+    if len(search.status) > 0:
+        query = query.filter(Anime.status.in_(search.status))
+
+    if len(search.source) > 0:
+        query = query.filter(Anime.source.in_(search.source))
+
+    if len(search.media_type) > 0:
+        query = query.filter(Anime.media_type.in_(search.media_type))
+
+    if search.only_translated:
+        query = query.filter(Anime.translated_ua == True)  # noqa: E712
+
+    if len(search.producers) > 0:
+        query = query.join(Anime.producers).filter(
+            Company.slug.in_(search.producers)
+        )
+
+    if len(search.studios) > 0:
+        query = query.join(Anime.studios).filter(
+            Company.slug.in_(search.studios)
+        )
+
+    # All genres must be present in query result
+    if len(search.genres) > 0:
+        query = query.filter(
+            and_(
+                *[
+                    Anime.genres.any(AnimeGenre.slug == slug)
+                    for slug in search.genres
+                ]
+            )
+        )
+
+    return query

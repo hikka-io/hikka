@@ -1,9 +1,7 @@
-from app.service import get_comments_count_subquery
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy import select, desc, asc, and_
-from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
@@ -11,6 +9,10 @@ from sqlalchemy import func
 from app import constants
 from . import utils
 
+from app.service import (
+    get_comments_count_subquery,
+    anime_search_filter,
+)
 
 from app.models import (
     AnimeRecommendation,
@@ -181,83 +183,14 @@ async def anime_characters_count(session: AsyncSession, anime: Anime) -> int:
 
 async def company_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
-        select(func.count(Company.id)).where(Company.slug.in_(slugs))
+        select(func.count(Company.id)).filter(Company.slug.in_(slugs))
     )
 
 
 async def anime_genre_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
-        select(func.count(AnimeGenre.id)).where(AnimeGenre.slug.in_(slugs))
+        select(func.count(AnimeGenre.id)).filter(AnimeGenre.slug.in_(slugs))
     )
-
-
-def anime_search_where(search: AnimeSearchArgs, query: Select):
-    if search.years[0]:
-        query = query.where(Anime.year >= search.years[0])
-
-    if search.years[1]:
-        query = query.where(Anime.year <= search.years[1])
-
-    if search.score[0] and search.score[0] > 0:
-        query = query.where(Anime.score >= search.score[0])
-
-    if search.score[1]:
-        query = query.where(Anime.score <= search.score[1])
-
-    if len(search.season) > 0:
-        query = query.where(Anime.season.in_(search.season))
-
-    if len(search.rating) > 0:
-        query = query.where(Anime.rating.in_(search.rating))
-    else:
-        # Do not display nsfw on front page
-        # No hentai (RX) by default
-        query = query.where(
-            Anime.rating.in_(
-                [
-                    constants.AGE_RATING_R_PLUS,
-                    constants.AGE_RATING_PG_13,
-                    constants.AGE_RATING_PG,
-                    constants.AGE_RATING_G,
-                    constants.AGE_RATING_R,
-                ]
-            )
-        )
-
-    if len(search.status) > 0:
-        query = query.where(Anime.status.in_(search.status))
-
-    if len(search.source) > 0:
-        query = query.where(Anime.source.in_(search.source))
-
-    if len(search.media_type) > 0:
-        query = query.where(Anime.media_type.in_(search.media_type))
-
-    if search.only_translated:
-        query = query.filter(Anime.translated_ua == True)  # noqa: E712
-
-    if len(search.producers) > 0:
-        query = query.join(Anime.producers).filter(
-            Company.slug.in_(search.producers)
-        )
-
-    if len(search.studios) > 0:
-        query = query.join(Anime.studios).filter(
-            Company.slug.in_(search.studios)
-        )
-
-    # All genres must be present in query result
-    if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Anime.genres.any(AnimeGenre.slug == slug)
-                    for slug in search.genres
-                ]
-            )
-        )
-
-    return query
 
 
 async def anime_search(
@@ -277,10 +210,9 @@ async def anime_search(
     ]
 
     query = select(Anime)
-    query = anime_search_where(search, query)
+    query = anime_search_filter(search, query)
 
-    if len(search.sort) > 0:
-        query = query.order_by(*utils.build_order_by(search.sort))
+    query = query.order_by(*utils.build_order_by(search.sort))
 
     query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
@@ -290,7 +222,7 @@ async def anime_search(
 
 async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = select(func.count(Anime.id))
-    query = anime_search_where(search, query)
+    query = anime_search_filter(search, query)
 
     return await session.scalar(query)
 
@@ -318,7 +250,7 @@ async def anime_meilisearch_watch(
         ),
     ]
 
-    query = select(Anime).where(Anime.slug.in_(slugs)).options(*load_options)
+    query = select(Anime).filter(Anime.slug.in_(slugs)).options(*load_options)
 
     if len(search.sort) > 0:
         query = query.order_by(*utils.build_order_by(search.sort))
