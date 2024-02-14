@@ -22,8 +22,13 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_fields = ["score", "scored_by"]
         valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "media_type",
+            "start_date",
+            "scored_by",
+            "score",
+        ]
 
         if len(sort_list) != len(set(sort_list)):
             raise ValueError("Invalid sort: duplicates")

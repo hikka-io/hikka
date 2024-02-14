@@ -242,3 +242,26 @@ def anime_search_filter(
         )
 
     return query
+
+
+def build_order_by(sort: list[str]):
+    order_mapping = {
+        "watch_episodes": AnimeWatch.episodes,
+        "watch_created": AnimeWatch.created,
+        "watch_score": AnimeWatch.score,
+        "media_type": Anime.media_type,
+        "start_date": Anime.start_date,
+        "scored_by": Anime.scored_by,
+        "score": Anime.score,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ] + [desc(Anime.content_id)]
+
+    return order_by
