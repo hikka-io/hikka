@@ -104,7 +104,7 @@ class PaginationArgs(CustomModel):
 
 
 class QuerySearchArgs(CustomModel):
-    query: str = Field(default=None, min_length=3, max_length=255)
+    query: str | None = Field(default=None, min_length=3, max_length=255)
 
 
 class UsernameArgs(CustomModel):
@@ -137,10 +137,8 @@ class AnimeSearchArgsBase(CustomModel):
     # sort: list[str] = ["score:desc", "scored_by:desc"]
     only_translated: bool = False
 
-    years: list[PositiveInt | None] = Field(
+    years: list[PositiveInt | None] | None = Field(
         default=[None, None],
-        min_length=2,
-        max_length=2,
         examples=[[2000, 2020]],
     )
 
@@ -163,6 +161,15 @@ class AnimeSearchArgsBase(CustomModel):
 
     @field_validator("years")
     def validate_years(cls, years):
+        if not years:
+            return [None, None]
+
+        if len(years) == 0:
+            return [None, None]
+
+        if len(years) != 2:
+            raise ValueError("Lenght of years list must be 2.")
+
         if all(year is not None for year in years) and years[0] > years[1]:
             raise ValueError(
                 "The first year must be less than the second year."
