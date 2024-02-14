@@ -1,7 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
 from sqlalchemy import select, desc, asc, func
-from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import selectinload
 from datetime import datetime
 from app import constants
@@ -17,6 +16,7 @@ from app.service import (
     anime_search_filter,
     get_anime_watch,
     anime_loadonly,
+    build_order_by,
     create_log,
 )
 
@@ -180,25 +180,6 @@ async def get_user_watch_list(
     limit: int,
     offset: int,
 ) -> list[AnimeWatch]:
-    order_mapping = {
-        "watch_episodes": AnimeWatch.episodes,
-        "watch_created": AnimeWatch.created,
-        "watch_score": AnimeWatch.score,
-        "media_type": Anime.media_type,
-        "start_date": Anime.start_date,
-        "scored_by": Anime.scored_by,
-        "score": Anime.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in search.sort)
-    ] + [desc(Anime.content_id)]
-
     query = select(AnimeWatch).filter(AnimeWatch.user == user)
 
     if search.watch_status:
@@ -206,7 +187,7 @@ async def get_user_watch_list(
 
     return await session.scalars(
         anime_search_filter(search, query.join(Anime), False)
-        .order_by(*order_by)
+        .order_by(*build_order_by(search.sort))
         .options(anime_loadonly(selectinload(AnimeWatch.anime)))
         .limit(limit)
         .offset(offset)

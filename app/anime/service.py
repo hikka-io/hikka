@@ -7,11 +7,11 @@ from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from app import constants
-from . import utils
 
 from app.service import (
     get_comments_count_subquery,
     anime_search_filter,
+    build_order_by,
 )
 
 from app.models import (
@@ -212,7 +212,7 @@ async def anime_search(
     query = select(Anime)
     query = anime_search_filter(search, query)
 
-    query = query.order_by(*utils.build_order_by(search.sort))
+    query = query.order_by(*build_order_by(search.sort))
 
     query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
@@ -253,7 +253,7 @@ async def anime_meilisearch_watch(
     query = select(Anime).filter(Anime.slug.in_(slugs)).options(*load_options)
 
     if len(search.sort) > 0:
-        query = query.order_by(*utils.build_order_by(search.sort))
+        query = query.order_by(*build_order_by(search.sort))
 
     meilisearch_result["list"] = (await session.scalars(query)).unique().all()
 
