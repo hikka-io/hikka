@@ -21,6 +21,7 @@ from app.utils import (
 
 from .schemas import (
     WatchPaginationResponse,
+    AnimeWatchSearchArgs,
     WatchStatsResponse,
     WatchStatusEnum,
     WatchFilterArgs,
@@ -62,7 +63,7 @@ async def delete_watch(
 
 
 @router.get("/{username}/list", response_model=WatchPaginationResponse)
-async def user_watch_list(
+async def user_watch_list_legacy(
     session: AsyncSession = Depends(get_session),
     args: WatchFilterArgs = Depends(),
     user: User = Depends(get_user),
@@ -70,8 +71,10 @@ async def user_watch_list(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_watch_list_count(session, user, args.status)
-    anime = await service.get_user_watch_list(
+    total = await service.get_user_watch_list_count_legacy(
+        session, user, args.status
+    )
+    anime = await service.get_user_watch_list_legacy(
         session, user, args.status, args.order, args.sort, limit, offset
     )
 
@@ -131,3 +134,26 @@ async def random_watch_entry(
 ):
     result = await service.random_watch(session, user, status)
     return result
+
+
+@router.post(
+    "/{username}/list",
+    response_model=WatchPaginationResponse,
+)
+async def user_watch_list(
+    search: AnimeWatchSearchArgs,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_user_watch_list_count(session, search, user)
+    anime = await service.get_user_watch_list(
+        session, search, user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": anime.all(),
+    }

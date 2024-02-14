@@ -1,8 +1,10 @@
+from pydantic import field_validator
 from pydantic import Field
 from app import constants
 from enum import Enum
 
 from app.schemas import (
+    AnimeSearchArgsBase,
     PaginationResponse,
     WatchResponseBase,
     AnimeResponse,
@@ -43,6 +45,41 @@ class WatchFilterArgs(CustomModel):
     status: WatchStatusEnum | None = None
     order: WatchOrderEnum = Field(default=constants.WATCH_ORDER_SCORE)
     sort: WatchSortEnum = Field(default=constants.SORT_DESC)
+
+
+# Args
+class AnimeWatchSearchArgs(AnimeSearchArgsBase):
+    sort: list[str] = ["watch_score:desc", "watch_created:desc"]
+    watch_status: WatchStatusEnum | None = None
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "watch_episodes",
+            "watch_created",
+            "watch_score",
+            "media_type",
+            "start_date",
+            "scored_by",
+            "score",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
 
 
 # Responses

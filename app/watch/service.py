@@ -1,14 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
 from sqlalchemy import select, desc, asc, func
+from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import selectinload
-from .schemas import WatchArgs
 from datetime import datetime
 from app import constants
 import random
 
+from .schemas import (
+    AnimeWatchSearchArgs,
+    WatchArgs,
+)
+
 from app.service import (
     calculate_watch_duration,
+    anime_search_filter,
     get_anime_watch,
     anime_loadonly,
     create_log,
@@ -84,7 +90,7 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
     await session.commit()
 
 
-async def get_user_watch_list(
+async def get_user_watch_list_legacy(
     session: AsyncSession,
     user: User,
     status: str | None,
@@ -126,7 +132,7 @@ async def get_user_watch_list(
     )
 
 
-async def get_user_watch_list_count(
+async def get_user_watch_list_count_legacy(
     session: AsyncSession,
     user: User,
     status: str | None,
@@ -165,3 +171,56 @@ async def get_user_watch_duration(session: AsyncSession, user: User):
     )
 
     return duration if duration else 0
+
+
+async def get_user_watch_list(
+    session: AsyncSession,
+    search: AnimeWatchSearchArgs,
+    user: User,
+    limit: int,
+    offset: int,
+) -> list[AnimeWatch]:
+    order_mapping = {
+        "watch_episodes": AnimeWatch.episodes,
+        "watch_created": AnimeWatch.created,
+        "watch_score": AnimeWatch.score,
+        "media_type": Anime.media_type,
+        "start_date": Anime.start_date,
+        "scored_by": Anime.scored_by,
+        "score": Anime.score,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in search.sort)
+    ] + [desc(Anime.content_id)]
+
+    query = select(AnimeWatch).filter(AnimeWatch.user == user)
+
+    if search.watch_status:
+        query = query.filter(AnimeWatch.status == search.watch_status)
+
+    return await session.scalars(
+        anime_search_filter(search, query.join(Anime), False)
+        .order_by(*order_by)
+        .options(anime_loadonly(selectinload(AnimeWatch.anime)))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def get_user_watch_list_count(
+    session: AsyncSession, search: AnimeWatchSearchArgs, user: User
+) -> int:
+    query = select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+
+    if search.watch_status:
+        query = query.filter(AnimeWatch.status == search.watch_status)
+
+    query = anime_search_filter(search, query.join(Anime), False)
+
+    return await session.scalar(query)
