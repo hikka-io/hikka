@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
+from datetime import datetime, timedelta
 
 from app.models import (
+    Activity,
     History,
     User,
 )
@@ -24,4 +26,21 @@ async def get_user_history(
         .order_by(desc(History.updated), desc(History.created))
         .limit(limit)
         .offset(offset)
+    )
+
+
+async def get_user_activity(session: AsyncSession, user: User) -> User:
+    """Get user activity"""
+
+    end = datetime.utcnow()
+    start = end - timedelta(weeks=16)
+
+    return await session.scalars(
+        select(Activity)
+        .filter(
+            Activity.user == user,
+            Activity.timestamp >= start,
+            Activity.timestamp <= end,
+        )
+        .order_by(desc(Activity.timestamp))
     )

@@ -20,3 +20,8 @@ class HistoryResponse(CustomModel):
 class HistoryPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[HistoryResponse]
+
+
+class ActivityResponse(CustomModel):
+    timestamp: datetime
+    actions: int

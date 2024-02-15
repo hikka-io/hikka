@@ -9,6 +9,8 @@ from .aggregator.anime import aggregator_anime
 
 from .notifications import update_notifications
 
+from .activity import update_activity
+
 from .history import update_history
 
 from .weights import update_weights
