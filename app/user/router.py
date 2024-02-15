@@ -74,4 +74,4 @@ async def service_user_activity(
     user: User = Depends(get_user),
 ):
     activity = await service.get_user_activity(session, user)
-    return activity.all()
+    return activity.all()[::-1]
