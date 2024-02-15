@@ -43,6 +43,14 @@ async def test_notification_edit_deny(
 
     assert notifications_count == 1
 
+    notification = await test_session.scalar(
+        select(Notification).filter(
+            Notification.notification_type == constants.NOTIFICATION_EDIT_DENIED
+        )
+    )
+
+    assert notification.data["username"] == create_test_user_moderator.username
+
 
 async def test_notification_edit_deny_same_author(
     client,

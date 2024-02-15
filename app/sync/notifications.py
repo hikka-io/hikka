@@ -333,6 +333,8 @@ async def generate_notifications(session: AsyncSession):
             ):
                 continue
 
+            await session.refresh(log, attribute_names=["user"])
+
             notification = Notification(
                 **{
                     "notification_type": notification_type,
@@ -343,6 +345,7 @@ async def generate_notifications(session: AsyncSession):
                     "seen": False,
                     "data": {
                         "description": edit.description,
+                        "username": log.user.username,
                         "edit_id": edit.edit_id,
                     },
                 }
@@ -374,6 +377,8 @@ async def generate_notifications(session: AsyncSession):
             ):
                 continue
 
+            await session.refresh(log, attribute_names=["user"])
+
             notification = Notification(
                 **{
                     "notification_type": notification_type,
@@ -384,6 +389,7 @@ async def generate_notifications(session: AsyncSession):
                     "seen": False,
                     "data": {
                         "description": edit.description,
+                        "username": log.user.username,
                         "edit_id": edit.edit_id,
                     },
                 }
@@ -416,6 +422,8 @@ async def generate_notifications(session: AsyncSession):
             ):
                 continue
 
+            await session.refresh(log, attribute_names=["user"])
+
             notification = Notification(
                 **{
                     "notification_type": notification_type,
@@ -427,6 +435,7 @@ async def generate_notifications(session: AsyncSession):
                     "data": {
                         "updated_edit": log.data["updated_edit"],
                         "old_edit": log.data["old_edit"],
+                        "username": log.user.username,
                     },
                 }
             )
