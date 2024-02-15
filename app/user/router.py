@@ -1,10 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import HistoryPaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.schemas import UserResponse
 from app.models import User
 from . import service
+
+from .schemas import (
+    HistoryPaginationResponse,
+    ActivityResponse,
+)
 
 from app.utils import (
     pagination_dict,
@@ -58,3 +62,16 @@ async def service_user_history(
         "pagination": pagination_dict(total, page, limit),
         "list": history.all(),
     }
+
+
+@router.get(
+    "/{username}/activity",
+    response_model=list[ActivityResponse],
+    summary="User activity",
+)
+async def service_user_activity(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    activity = await service.get_user_activity(session, user)
+    return activity.all()
