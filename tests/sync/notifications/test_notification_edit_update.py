@@ -1,12 +1,12 @@
 from app.sync.notifications import generate_notifications
 from client_requests import request_create_edit
-from client_requests import request_deny_edit
+from client_requests import request_update_edit
 from app.models import Notification
 from sqlalchemy import select, func
 from app import constants
 
 
-async def test_notification_edit_deny(
+async def test_notification_edit_update(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -28,8 +28,16 @@ async def test_notification_edit_deny(
         },
     )
 
-    # Deny edit
-    await request_deny_edit(client, get_test_token, 18)
+    # Update edit by moderator
+    await request_update_edit(
+        client,
+        get_test_token,
+        18,
+        {
+            "description": "Brief description 2",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
 
     # Generate notifications
     await generate_notifications(test_session)
@@ -37,7 +45,8 @@ async def test_notification_edit_deny(
     # Make sure there is only one notification
     notifications_count = await test_session.scalar(
         select(func.count(Notification.id)).filter(
-            Notification.notification_type == constants.NOTIFICATION_EDIT_DENIED
+            Notification.notification_type
+            == constants.NOTIFICATION_EDIT_UPDATED
         )
     )
 
@@ -45,14 +54,15 @@ async def test_notification_edit_deny(
 
     notification = await test_session.scalar(
         select(Notification).filter(
-            Notification.notification_type == constants.NOTIFICATION_EDIT_DENIED
+            Notification.notification_type
+            == constants.NOTIFICATION_EDIT_UPDATED
         )
     )
 
     assert notification.data["username"] == create_test_user_moderator.username
 
 
-async def test_notification_edit_deny_same_author(
+async def test_notification_edit_update_same_author(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -72,8 +82,16 @@ async def test_notification_edit_deny_same_author(
         },
     )
 
-    # Deny edit
-    await request_deny_edit(client, get_test_token, 18)
+    # Update edit by same user
+    await request_update_edit(
+        client,
+        get_test_token,
+        18,
+        {
+            "description": "Brief description 2",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
 
     # Generate notifications
     await generate_notifications(test_session)
@@ -81,7 +99,8 @@ async def test_notification_edit_deny_same_author(
     # Make sure there is only one notification
     notifications_count = await test_session.scalar(
         select(func.count(Notification.id)).filter(
-            Notification.notification_type == constants.NOTIFICATION_EDIT_DENIED
+            Notification.notification_type
+            == constants.NOTIFICATION_EDIT_UPDATED
         )
     )
 

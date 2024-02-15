@@ -25,7 +25,8 @@ from .dependencies import (
     validate_content_slug,
     validate_edit_create,
     validate_edit_accept,
-    validate_edit_modify,
+    validate_edit_update,
+    validate_edit_close,
     validate_edit_id,
 )
 
@@ -101,16 +102,19 @@ async def create_edit(
 async def update_edit(
     session: AsyncSession = Depends(get_session),
     args: EditArgs = Depends(validate_edit_update_args),
-    edit: Edit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_update),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_EDIT_UPDATE])
+    ),
     _: bool = Depends(check_captcha),
 ):
-    return await service.update_pending_edit(session, edit, args)
+    return await service.update_pending_edit(session, edit, user, args)
 
 
 @router.post("/{edit_id}/close", response_model=EditResponse)
 async def close_edit(
     session: AsyncSession = Depends(get_session),
-    edit: Edit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_close),
 ):
     return await service.close_pending_edit(session, edit)
 
