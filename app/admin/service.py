@@ -59,6 +59,8 @@ async def delete_hikka_update_notification(
         )
     )
 
+    await session.commit()
+
 
 async def count_hikka_update_notifications(
     session: AsyncSession, update_name: str

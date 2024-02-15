@@ -199,15 +199,15 @@ async def test_system_notification():
     async with sessionmanager.session() as session:
         update_name = "hikka_test_notification"
 
-        await create_hikka_update_notification(
-            session,
-            update_name,
-            "Сьогодні ми тестуємо нашу глобальну систему сповіщень...",
-            "Глобальна система сповішень",
-            "https://hikka.io",
-        )
+        # await create_hikka_update_notification(
+        #     session,
+        #     update_name,
+        #     "Сьогодні ми тестуємо нашу глобальну систему сповіщень...",
+        #     "Глобальна система сповішень",
+        #     "https://hikka.io",
+        # )
 
-        # await delete_hikka_update_notification(session, update_name)
+        await delete_hikka_update_notification(session, update_name)
 
     await sessionmanager.close()
 
