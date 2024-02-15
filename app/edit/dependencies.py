@@ -44,13 +44,28 @@ async def validate_edit_id_pending(
     return edit
 
 
-async def validate_edit_modify(
+async def validate_edit_update(
+    edit: Edit = Depends(validate_edit_id_pending),
+    user: User = Depends(auth_required()),
+):
+    """Check if user which is trying to update edit it the author
+    or moderator"""
+
+    if user != edit.author and not check_user_permissions(
+        user, [constants.PERMISSION_EDIT_UPDATE_MODERATOR]
+    ):
+        raise Abort("permission", "denied")
+
+    return edit
+
+
+async def validate_edit_close(
     edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_MODIFY])
+        auth_required(permissions=[constants.PERMISSION_EDIT_CLOSE])
     ),
 ):
-    """Check if user which is trying to modify edit it the author"""
+    """Check if user which is trying to close edit it the author"""
 
     if user != edit.author:
         raise Abort("edit", "not-author")
@@ -111,7 +126,7 @@ async def validate_edit_create_args(
 
 async def validate_edit_update_args(
     args: EditArgs,
-    edit: Edit = Depends(validate_edit_modify),
+    edit: Edit = Depends(validate_edit_update),
 ) -> EditArgs:
     """Validate update edit args"""
 

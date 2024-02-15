@@ -157,6 +157,7 @@ async def get_edits(
 async def update_pending_edit(
     session: AsyncSession,
     edit: Edit,
+    user: User,
     args: EditArgs,
 ) -> Edit:
     """Update pending edit"""
@@ -182,7 +183,7 @@ async def update_pending_edit(
     await create_log(
         session,
         constants.LOG_EDIT_UPDATE,
-        edit.author,
+        user,
         edit.id,
         {
             "updated_edit": updared_edit,
