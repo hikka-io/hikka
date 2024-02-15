@@ -154,52 +154,6 @@ async def get_edits(
     )
 
 
-async def create_pending_edit(
-    session: AsyncSession,
-    content_type: ContentTypeEnum,
-    content_id: str,
-    args: EditArgs,
-    author: User,
-) -> AnimeEdit:
-    """Create edit for given content_id with pending status"""
-
-    edit_model = content_type_to_edit_class[content_type]
-
-    content = await get_content_by_content_id(session, content_type, content_id)
-    before = calculate_before(content, args.after)
-
-    now = datetime.utcnow()
-
-    edit = edit_model(
-        **{
-            "status": constants.EDIT_PENDING,
-            "description": args.description,
-            "content_type": content_type,
-            "content_id": content_id,
-            "after": args.after,
-            "author": author,
-            "before": before,
-            "created": now,
-            "updated": now,
-        }
-    )
-
-    session.add(edit)
-    await session.commit()
-
-    await create_log(
-        session,
-        constants.LOG_EDIT_CREATE,
-        author,
-        edit.id,
-    )
-
-    # This step is needed to load content relation for slug
-    await session.refresh(edit)
-
-    return edit
-
-
 async def update_pending_edit(
     session: AsyncSession,
     edit: Edit,
@@ -265,6 +219,7 @@ async def accept_pending_edit(
     session: AsyncSession,
     edit: Edit,
     moderator: User,
+    auto: bool = False,
 ) -> Edit:
     """Accept pending edit"""
 
@@ -298,10 +253,62 @@ async def accept_pending_edit(
 
     await create_log(
         session,
-        constants.LOG_EDIT_ACCEPT,
+        constants.LOG_EDIT_ACCEPT_AUTO if auto else constants.LOG_EDIT_ACCEPT,
         moderator,
         edit.id,
     )
+
+    return edit
+
+
+async def create_pending_edit(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content_id: str,
+    args: EditArgs,
+    author: User,
+) -> AnimeEdit:
+    """Create edit for given content_id with pending status"""
+
+    edit_model = content_type_to_edit_class[content_type]
+
+    content = await get_content_by_content_id(session, content_type, content_id)
+    before = calculate_before(content, args.after)
+
+    now = datetime.utcnow()
+
+    edit = edit_model(
+        **{
+            "status": constants.EDIT_PENDING,
+            "description": args.description,
+            "content_type": content_type,
+            "content_id": content_id,
+            "after": args.after,
+            "author": author,
+            "before": before,
+            "created": now,
+            "updated": now,
+        }
+    )
+
+    session.add(edit)
+    await session.commit()
+
+    # If user marked edit as auto accept we should do that
+    if args.auto:
+        await session.refresh(edit)
+        await accept_pending_edit(session, edit, author, True)
+
+    else:
+        await create_log(
+            session,
+            constants.LOG_EDIT_CREATE,
+            author,
+            edit.id,
+        )
+
+    # This step is needed to load content relation for slug
+    await session.refresh(edit)
 
     return edit
 

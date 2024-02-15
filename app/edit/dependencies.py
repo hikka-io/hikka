@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import check_user_permissions
 from app.dependencies import auth_required
 from app.database import get_session
 from app.errors import Abort
@@ -127,9 +128,15 @@ async def validate_edit_update_args(
 async def validate_edit_create(
     content: Person | Anime | None = Depends(validate_content),
     args: EditArgs = Depends(validate_edit_create_args),
+    author: User = Depends(auth_required()),
 ):
     args.after = utils.check_after(args.after, content)
     if len(args.after) == 0:
         raise Abort("edit", "empty-edit")
+
+    if args.auto and not check_user_permissions(
+        author, [constants.PERMISSION_EDIT_AUTO]
+    ):
+        raise Abort("permission", "denied")
 
     return args
