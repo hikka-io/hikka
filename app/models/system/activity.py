@@ -11,7 +11,7 @@ from ..base import Base
 class Activity(Base):
     __tablename__ = "service_user_activity"
 
-    period: Mapped[str] = mapped_column(String(64), index=True)
+    interval: Mapped[str] = mapped_column(String(64), index=True)
     used_logs: Mapped[list[str]] = mapped_column(ARRAY(String))
     timestamp: Mapped[datetime] = mapped_column(index=True)
     actions: Mapped[int]

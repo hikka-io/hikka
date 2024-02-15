@@ -222,3 +222,6 @@ NOTIFICATION_COMMENT_TAG = "comment_tag"
 NOTIFICATION_EDIT_COMMENT = "edit_comment"
 NOTIFICATION_EDIT_ACCEPTED = "edit_accepted"
 NOTIFICATION_EDIT_DENIED = "edit_denied"
+
+# Activity intervals
+INTERVAL_DAY = "day"
