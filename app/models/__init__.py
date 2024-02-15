@@ -43,6 +43,7 @@ from .content.staff import AnimeVoice
 
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
+from .system.activity import Activity
 from .system.upload import Upload
 from .system.image import Image
 from .system.log import Log
@@ -86,6 +87,7 @@ __all__ = [
     "AnimeVoice",
     "Notification",
     "SystemTimestamp",
+    "Activity",
     "Upload",
     "Image",
     "Log",
