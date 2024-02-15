@@ -172,7 +172,7 @@ async def update_pending_edit(
     edit.updated = datetime.now()
     edit.after = args.after
 
-    updared_edit = {
+    updated_edit = {
         "description": edit.description,
         "after": edit.after,
     }
@@ -186,7 +186,7 @@ async def update_pending_edit(
         user,
         edit.id,
         {
-            "updated_edit": updared_edit,
+            "updated_edit": updated_edit,
             "old_edit": old_edit,
         },
     )
