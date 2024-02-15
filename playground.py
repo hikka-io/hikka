@@ -1,5 +1,6 @@
 from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
+from app.service import calculate_watch_duration
 from app.sync.activity import generate_activity
 from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
@@ -14,7 +15,11 @@ import asyncio
 import math
 import json
 
-from app.service import calculate_watch_duration
+from app.admin.service import (
+    create_hikka_update_notification,
+    delete_hikka_update_notification,
+)
+
 from app.models import (
     AnimeStaffRole,
     AnimeStaff,
@@ -186,6 +191,27 @@ async def test_sync_stuff():
     await sessionmanager.close()
 
 
+async def test_system_notification():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        update_name = "hikka_test_notification"
+
+        await create_hikka_update_notification(
+            session,
+            update_name,
+            "Сьогодні ми тестуємо нашу глобальну систему сповіщень...",
+            "Глобальна система сповішень",
+            "https://hikka.io",
+        )
+
+        # await delete_hikka_update_notification(session, update_name)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -193,7 +219,8 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    asyncio.run(test_sync_stuff())
+    # asyncio.run(test_sync_stuff())
+    asyncio.run(test_system_notification())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
