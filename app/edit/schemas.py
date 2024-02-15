@@ -45,6 +45,7 @@ class EditStatusEnum(str, Enum):
 # Args
 class EditArgs(CustomModel):
     description: str | None = Field(None, examples=["..."], max_length=420)
+    auto: bool = Field(default=False)
     after: dict
 
     @field_validator("after")
