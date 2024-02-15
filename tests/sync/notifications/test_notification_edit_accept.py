@@ -52,6 +52,7 @@ async def test_notification_edit_accept(
     )
 
     assert notification.data["username"] == create_test_user_moderator.username
+    assert notification.data["edit_id"] == 18
 
 
 async def test_notification_edit_accept_same_author(

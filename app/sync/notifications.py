@@ -436,6 +436,7 @@ async def generate_notifications(session: AsyncSession):
                         "updated_edit": log.data["updated_edit"],
                         "old_edit": log.data["old_edit"],
                         "username": log.user.username,
+                        "edit_id": edit.edit_id,
                     },
                 }
             )
