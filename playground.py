@@ -8,6 +8,7 @@ from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
 from app.utils import get_settings
+from app.sync import update_search
 from app.sync import sitemap
 from app.sync import email
 from app import constants
@@ -207,7 +208,17 @@ async def test_system_notification():
             "https://t.me/hikka_io/10",
         )
 
-        await delete_hikka_update_notification(session, update_name)
+        # await delete_hikka_update_notification(session, update_name)
+
+    await sessionmanager.close()
+
+
+async def run_search():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    await update_search()
 
     await sessionmanager.close()
 
@@ -220,7 +231,8 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    asyncio.run(test_system_notification())
+    # asyncio.run(test_system_notification())
+    asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
