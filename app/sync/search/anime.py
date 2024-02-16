@@ -1,11 +1,11 @@
 from meilisearch_python_sdk.models.settings import MeilisearchSettings
+from app.utils import get_settings, to_timestamp
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.utils import get_season, pagination
 from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from app.utils import get_settings
 from sqlalchemy import select, func
 from app import constants
 import math
@@ -53,7 +53,13 @@ async def update_anime_settings(index):
                 "slug",
                 "year",
             ],
-            sortable_attributes=["scored_by", "score", "year"],
+            sortable_attributes=[
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+                "year",
+            ],
             distinct_attribute="slug",
         )
     )
@@ -73,6 +79,7 @@ def anime_to_document(anime: Anime):
     return {
         "year": anime.start_date.year if anime.start_date else None,
         "genres": [genre.slug for genre in anime.genres],
+        "start_date": to_timestamp(anime.start_date),
         "episodes_released": anime.episodes_released,
         "episodes_total": anime.episodes_total,
         "season": get_season(anime.start_date),
@@ -99,7 +106,7 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
         .where(Anime.media_type is not None)
-        .filter(Anime.needs_search_update == True)  # noqa: E712
+        # .filter(Anime.needs_search_update == True)  # noqa: E712
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
@@ -123,9 +130,8 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
 
 async def anime_documents_total(session: AsyncSession):
     return await session.scalar(
-        select(func.count(Anime.id))
-        .where(Anime.media_type is not None)
-        .filter(Anime.needs_search_update == True)  # noqa: E712
+        select(func.count(Anime.id)).where(Anime.media_type is not None)
+        # .filter(Anime.needs_search_update == True)  # noqa: E712
     )
 
 
