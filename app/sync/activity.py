@@ -46,6 +46,9 @@ async def generate_activity(session: AsyncSession):
     )
 
     for log in logs:
+        # We set timestamp here because after thay it won't be set due to continue
+        system_timestamp.timestamp = log.created
+
         timestamp = round_day(log.created)
 
         if not (
@@ -78,6 +81,9 @@ async def generate_activity(session: AsyncSession):
 
         session.add(activity)
         await session.commit()
+
+    session.add(system_timestamp)
+    await session.commit()
 
 
 async def update_activity():

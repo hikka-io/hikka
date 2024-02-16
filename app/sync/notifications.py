@@ -94,6 +94,9 @@ async def generate_notifications(session: AsyncSession):
     )
 
     for log in logs:
+        # We set timestamp here because after thay it won't be set due to continue
+        system_timestamp.timestamp = log.created
+
         if log.log_type == constants.LOG_COMMENT_VOTE:
             notification_type = constants.NOTIFICATION_COMMENT_VOTE
 
@@ -443,8 +446,6 @@ async def generate_notifications(session: AsyncSession):
 
             session.add(notification)
             await session.commit()
-
-        system_timestamp.timestamp = log.created
 
     session.add(system_timestamp)
     await session.commit()

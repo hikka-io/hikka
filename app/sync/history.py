@@ -69,6 +69,9 @@ async def generate_history(session: AsyncSession):
     )
 
     for log in logs:
+        # We set timestamp here because after thay it won't be set due to continue
+        system_timestamp.timestamp = log.created
+
         if log.log_type in [
             constants.LOG_WATCH_UPDATE,
             constants.LOG_WATCH_CREATE,
@@ -225,8 +228,6 @@ async def generate_history(session: AsyncSession):
 
             session.add(history)
             await session.commit()
-
-        system_timestamp.timestamp = log.created
 
     session.add(system_timestamp)
     await session.commit()
