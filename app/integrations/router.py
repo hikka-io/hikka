@@ -25,6 +25,21 @@ async def watari_characters(
     return await service.get_main_characters(session, anime)
 
 
+@router.get("/watari/{slug}/related", response_model=list[str])
+async def watari_related(
+    anime: Anime = Depends(validate_watari_anime),
+    session: AsyncSession = Depends(get_session),
+):
+    related = await service.get_watari_related(session, anime)
+
+    return [
+        url["url"][-36:]
+        for external in related
+        for url in external
+        if url["text"] == "Watari Anime"
+    ]
+
+
 @router.get("/watari/{slug}/staff", response_model=list[AnimeStaffResponse])
 async def watari_staff(
     anime: Anime = Depends(validate_watari_anime),

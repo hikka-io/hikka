@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, asc, cast, String
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
 from uuid import UUID
 
@@ -20,6 +20,17 @@ async def get_anime_by_watari(session: AsyncSession, slug: UUID):
         .order_by(
             desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
         )
+    )
+
+
+async def get_watari_related(
+    session: AsyncSession, anime: Anime
+) -> list[Character]:
+    return await session.scalars(
+        select(Anime.external)
+        .filter(Anime.franchise_id == anime.franchise_id, Anime.id != anime.id)
+        .filter(Anime.external.op("@>")([{"text": "Watari Anime"}]))
+        .order_by(desc(Anime.start_date))
     )
 
 
