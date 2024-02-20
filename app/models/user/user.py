@@ -79,6 +79,11 @@ class User(Base):
         back_populates="author",
     )
 
+    collections: Mapped[list["Collectiom"]] = relationship(
+        foreign_keys="[Collectiom.author_id]",
+        back_populates="author",
+    )
+
     decisions: Mapped[list["Edit"]] = relationship(
         foreign_keys="[Edit.moderator_id]",
         back_populates="moderator",
