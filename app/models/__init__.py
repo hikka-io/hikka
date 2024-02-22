@@ -48,8 +48,7 @@ from .system.upload import Upload
 from .system.image import Image
 from .system.log import Log
 
-from .collection.content import CollectionGroupContent
-from .collection.group import CollectionGroup
+from .collection.content import CollectionContent
 from .collection.collection import Collection
 
 from .base import Base
@@ -95,8 +94,7 @@ __all__ = [
     "Upload",
     "Image",
     "Log",
-    "CollectionGroupContent",
-    "CollectionGroup",
+    "CollectionContent",
     "Collection",
     "Base",
 ]

@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import ARRAY
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -10,11 +11,12 @@ from ..base import Base
 class Collection(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_collections"
 
+    labels: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)
     title: Mapped[str] = mapped_column(String(255))
 
-    groups: Mapped[list["CollectionGroup"]] = relationship(
-        foreign_keys="[CollectionGroup.collection_id]",
+    content: Mapped[list["CollectionContent"]] = relationship(
+        foreign_keys="[CollectionContent.collection_id]",
         back_populates="collection",
     )
 
