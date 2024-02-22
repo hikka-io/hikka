@@ -43,6 +43,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Settings"},
             {"name": "Upload"},
             {"name": "Comments"},
+            {"name": "Notifications"},
             {"name": "Integrations"},
         ],
         lifespan=lifespan,
@@ -67,6 +68,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     from .notifications import router as notifications_router
     from .integrations import router as integrations_router
+    from .collections import router as collections_router
     from .characters import router as characters_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
@@ -84,6 +86,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app.include_router(notifications_router)
     app.include_router(integrations_router)
+    app.include_router(collections_router)
     app.include_router(characters_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
