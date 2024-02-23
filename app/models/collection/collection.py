@@ -11,14 +11,13 @@ from ..base import Base
 class Collection(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_collections"
 
-    labels: Mapped[list[str]] = mapped_column(ARRAY(String))
+    labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)
+    content_type: Mapped[str] = mapped_column(index=True)
+    spoiler: Mapped[bool] = mapped_column(default=False)
+    nsfw: Mapped[bool] = mapped_column(default=False)
     title: Mapped[str] = mapped_column(String(255))
-
-    content: Mapped[list["CollectionContent"]] = relationship(
-        foreign_keys="[CollectionContent.collection_id]",
-        back_populates="collection",
-    )
+    entries: Mapped[int]
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(

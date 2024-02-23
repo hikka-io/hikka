@@ -1,4 +1,3 @@
-from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -7,7 +6,7 @@ from ..base import Base
 from uuid import UUID
 
 
-class CollectionContent(Base, CreatedMixin, UpdatedMixin):
+class CollectionContent(Base):
     __tablename__ = "service_collection_content"
     __mapper_args__ = {
         "polymorphic_identity": "default",
@@ -22,15 +21,14 @@ class CollectionContent(Base, CreatedMixin, UpdatedMixin):
 
     collection_id = mapped_column(ForeignKey("service_collections.id"))
     collection: Mapped["Collection"] = relationship(
-        foreign_keys=[collection_id],
-        back_populates="content",
+        foreign_keys=[collection_id]
     )
 
 
 class AnimeCollectionContent(CollectionContent):
     __mapper_args__ = {
         "polymorphic_identity": "anime",
-        # "eager_defaults": True,
+        "eager_defaults": True,
     }
 
     content_id = mapped_column(
@@ -42,14 +40,14 @@ class AnimeCollectionContent(CollectionContent):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeCollectionContent.content_id",
         foreign_keys=[content_id],
-        # lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # ToDo: check if it is good idea
     )
 
 
 class CharacterCollectionContent(CollectionContent):
     __mapper_args__ = {
         "polymorphic_identity": "character",
-        # "eager_defaults": True,
+        "eager_defaults": True,
     }
 
     content_id = mapped_column(
@@ -61,14 +59,14 @@ class CharacterCollectionContent(CollectionContent):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterCollectionContent.content_id",
         foreign_keys=[content_id],
-        # lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # ToDo: check if it is good idea
     )
 
 
 class PersonCollectionContent(CollectionContent):
     __mapper_args__ = {
         "polymorphic_identity": "person",
-        # "eager_defaults": True,
+        "eager_defaults": True,
     }
 
     content_id = mapped_column(
@@ -80,5 +78,5 @@ class PersonCollectionContent(CollectionContent):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonCollectionContent.content_id",
         foreign_keys=[content_id],
-        # lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # ToDo: check if it is good idea
     )

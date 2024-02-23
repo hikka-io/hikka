@@ -85,7 +85,7 @@ SEARCH_RESULT_SIZE = 15
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"
-SEARCH_INDEX_PEOPLE = "content_people"
+SEARCH_INDEX_PEOPLE = "content_people"  # Note: rename it to person (?)
 SEARCH_INDEX_ANIME = "content_anime"
 
 COMPANY_ANIME_PRODUCER = "producer"
@@ -129,6 +129,7 @@ PERMISSION_COMMENT_EDIT = "comment:edit"
 PERMISSION_COMMENT_HIDE = "comment:hide"
 PERMISSION_COMMENT_HIDE_ADMIN = "comment:hide_admin"
 PERMISSION_COMMENT_VOTE = "comment:vote"
+PERMISSION_COLLECTION_CREATE = "collection:create"
 
 # Role permissions
 ROLES = {
@@ -142,6 +143,7 @@ ROLES = {
         PERMISSION_COMMENT_EDIT,
         PERMISSION_COMMENT_HIDE,
         PERMISSION_COMMENT_VOTE,
+        PERMISSION_COLLECTION_CREATE,
     ],
     ROLE_MODERATOR: [
         PERMISSION_EDIT_CREATE,
@@ -158,6 +160,7 @@ ROLES = {
         PERMISSION_COMMENT_HIDE,
         PERMISSION_COMMENT_HIDE_ADMIN,
         PERMISSION_COMMENT_VOTE,
+        PERMISSION_COLLECTION_CREATE,
     ],
     ROLE_ADMIN: [
         PERMISSION_EDIT_CREATE,
@@ -174,6 +177,7 @@ ROLES = {
         PERMISSION_COMMENT_HIDE,
         PERMISSION_COMMENT_HIDE_ADMIN,
         PERMISSION_COMMENT_VOTE,
+        PERMISSION_COLLECTION_CREATE,
     ],
     ROLE_BANNED: [],
     ROLE_NOT_ACTIVATED: [],

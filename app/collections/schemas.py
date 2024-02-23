@@ -1,7 +1,17 @@
-from app.schemas import CustomModel
-from pydantic import Field
+from pydantic import Field, field_validator
+from app.utils import is_empty_markdown
+from datetime import datetime
 from app import constants
 from enum import Enum
+
+from app.schemas import (
+    PaginationResponse,
+    CharacterResponse,
+    PersonResponse,
+    AnimeResponse,
+    UserResponse,
+    CustomModel,
+)
 
 
 # Enums
@@ -20,8 +30,52 @@ class CollectionContentArgs(CustomModel):
 
 
 class CollectionArgs(CustomModel):
-    content: list[CollectionContentArgs] = Field(max_length=500)
+    content: list[CollectionContentArgs] = Field(min_length=1, max_length=500)
     title: str = Field(min_length=3, max_length=255)
     content_type: ContentTypeEnum
     description: str | None
-    labels: list[str]
+    labels_order: list[str]
+    spoiler: bool
+    nsfw: bool
+
+    @field_validator("labels_order")
+    def validate_labels_order(cls, labels_order):
+        if len(list(set(labels_order))) != len(labels_order):
+            raise ValueError("Label order duplicates")
+
+        return labels_order
+
+    @field_validator("description")
+    def validate_description(cls, description):
+        if is_empty_markdown(description):
+            raise ValueError("Field description consists of empty markdown")
+
+        return description
+
+
+# Responses
+class CollectionResponse(CustomModel):
+    author: UserResponse
+    created: datetime
+    updated: datetime
+    description: str
+    reference: str
+    spoiler: bool
+    entries: int
+    title: str
+    nsfw: bool
+
+
+class CollectionsListResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CollectionResponse]
+
+
+class CollectionContentResponse(CustomModel):
+    content: AnimeResponse | CharacterResponse | PersonResponse
+    order: int
+
+
+class CollectionInfoResponse(CollectionResponse):
+    content: list[CollectionContentResponse]
+    pass
