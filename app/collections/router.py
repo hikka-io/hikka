@@ -29,10 +29,8 @@ from app.dependencies import (
     get_size,
 )
 
-# ToDo: private collections
 # ToDo: collection delete
 # ToDo: logs for collection actions (create/update/delete)
-# ToDo: collection tags
 # ToDo: collection content preview
 # ToDo: tests
 router = APIRouter(prefix="/collections", tags=["Collections"])
@@ -95,9 +93,7 @@ async def update_collection(
     ),
 ):
     collection = await service.update_collection(session, collection, args)
-    return await service.get_collection_display(
-        session, collection.reference, user
-    )
+    return await service.get_collection_display(session, collection, user)
 
 
 @router.get("/{reference}", response_model=CollectionInfoResponse)

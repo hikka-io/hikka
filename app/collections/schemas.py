@@ -37,6 +37,7 @@ class CollectionArgs(CustomModel):
     content_type: ContentTypeEnum
     description: str | None
     labels_order: list[str]
+    private: bool
     spoiler: bool
     nsfw: bool
 

@@ -48,7 +48,11 @@ async def count_content(
 
 
 async def get_collections_count(session: AsyncSession) -> int:
-    return await session.scalar(select(func.count(Collection.id)))
+    return await session.scalar(
+        select(func.count(Collection.id)).filter(
+            Collection.private == False,  # noqa: E712
+        )
+    )
 
 
 async def get_collections(
@@ -56,6 +60,9 @@ async def get_collections(
 ) -> list[Collection]:
     return await session.scalars(
         select(Collection)
+        .filter(
+            Collection.private == False,  # noqa: E712
+        )
         .order_by(desc(Collection.created))
         .limit(limit)
         .offset(offset)
@@ -121,6 +128,7 @@ async def create_collection(
             "labels_order": args.labels_order,
             "description": args.description,
             "entries": len(args.content),
+            "private": args.private,
             "spoiler": args.spoiler,
             "title": args.title,
             "nsfw": args.nsfw,
@@ -151,11 +159,11 @@ async def update_collection(
     collection.labels_order = args.labels_order
     collection.description = args.description
     collection.entries = len(args.content)
+    collection.private = args.private
     collection.spoiler = args.spoiler
     collection.title = args.title
     collection.nsfw = args.nsfw
     collection.tags = args.tags
-    collection.author = user
 
     session.add(collection)
 

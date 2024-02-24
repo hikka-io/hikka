@@ -20,6 +20,7 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
     spoiler: Mapped[bool] = mapped_column(default=False)
     nsfw: Mapped[bool] = mapped_column(default=False)
     title: Mapped[str] = mapped_column(String(255))
+    private: Mapped[bool]
     entries: Mapped[int]
 
     author_id = mapped_column(ForeignKey("service_users.id"))
