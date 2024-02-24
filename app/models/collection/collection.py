@@ -11,8 +11,11 @@ from ..base import Base
 class Collection(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_collections"
 
+    # ToDo: moderated
+
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)
+    tags: Mapped[list[str]] = mapped_column(ARRAY(String))
     content_type: Mapped[str] = mapped_column(index=True)
     spoiler: Mapped[bool] = mapped_column(default=False)
     nsfw: Mapped[bool] = mapped_column(default=False)
@@ -21,7 +24,6 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
-        back_populates="collections",
         foreign_keys=[author_id],
         lazy="selectin",
     )

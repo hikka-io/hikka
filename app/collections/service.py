@@ -124,6 +124,7 @@ async def create_collection(
             "spoiler": args.spoiler,
             "title": args.title,
             "nsfw": args.nsfw,
+            "tags": args.tags,
             "author": user,
             "created": now,
             "updated": now,
@@ -144,6 +145,20 @@ async def create_collection(
 async def update_collection(
     session: AsyncSession, collection: Collection, args: CollectionArgs
 ):
+    # Update collection here
+    collection.updated = datetime.utcnow()
+    collection.content_type = args.content_type
+    collection.labels_order = args.labels_order
+    collection.description = args.description
+    collection.entries = len(args.content)
+    collection.spoiler = args.spoiler
+    collection.title = args.title
+    collection.nsfw = args.nsfw
+    collection.tags = args.tags
+    collection.author = user
+
+    session.add(collection)
+
     # First we delete old content
     await session.execute(
         delete(CollectionContent).filter(
@@ -213,5 +228,6 @@ async def get_collection_display(
         "author": collection.author,
         "title": collection.title,
         "nsfw": collection.nsfw,
+        "tags": collection.tags,
         "content": content.unique().all(),
     }

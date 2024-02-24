@@ -79,11 +79,6 @@ class User(Base):
         back_populates="author",
     )
 
-    collections: Mapped[list["Collection"]] = relationship(
-        foreign_keys="[Collection.author_id]",
-        back_populates="author",
-    )
-
     decisions: Mapped[list["Edit"]] = relationship(
         foreign_keys="[Edit.moderator_id]",
         back_populates="moderator",
