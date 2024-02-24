@@ -1,4 +1,4 @@
-from sqlalchemy import select, asc, delete, func
+from sqlalchemy import select, asc, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import anime_loadonly
@@ -47,6 +47,21 @@ async def count_content(
     )
 
 
+async def get_collections_count(session: AsyncSession) -> int:
+    return await session.scalar(select(func.count(Collection.id)))
+
+
+async def get_collections(
+    session: AsyncSession, limit: int, offset: int
+) -> list[Collection]:
+    return await session.scalars(
+        select(Collection)
+        .order_by(desc(Collection.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
 async def get_user_collections_count(session: AsyncSession, user: User) -> int:
     return await session.scalar(
         select(func.count(Collection.id)).filter(Collection.author == user)
@@ -59,6 +74,7 @@ async def get_user_collections(
     return await session.scalars(
         select(Collection)
         .filter(Collection.author == user)
+        .order_by(desc(Collection.created))
         .limit(limit)
         .offset(offset)
     )

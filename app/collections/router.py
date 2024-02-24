@@ -33,6 +33,22 @@ from app.dependencies import (
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
+@router.get("", response_model=CollectionsListResponse)
+async def get_collections(
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_collections_count(session)
+    collections = await service.get_collections(session, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": collections.all(),
+    }
+
+
 @router.get("/user/{username}", response_model=CollectionsListResponse)
 async def get_user_collections(
     session: AsyncSession = Depends(get_session),
