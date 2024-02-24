@@ -12,6 +12,7 @@ from .schemas import (
 )
 
 from .dependencies import (
+    validate_collection_update,
     validate_collection_create,
     validate_collection,
 )
@@ -30,26 +31,6 @@ from app.dependencies import (
 
 
 router = APIRouter(prefix="/collections", tags=["Collections"])
-
-
-@router.post("/create", response_model=CollectionInfoResponse)
-async def create_collection(
-    session: AsyncSession = Depends(get_session),
-    args: CollectionArgs = Depends(validate_collection_create),
-    user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COLLECTION_CREATE])
-    ),
-):
-    collection = await service.create_collection(session, args, user)
-    collection_reference = collection.reference
-
-    # We expire newly created collection object in order to fetch new one
-    # I hate this hack but it works
-    session.expire(collection)
-
-    return await service.get_collection_display(
-        session, collection_reference, user
-    )
 
 
 @router.get("/user/{username}", response_model=CollectionsListResponse)
@@ -71,6 +52,35 @@ async def get_user_collections(
     }
 
 
+@router.post("/create", response_model=CollectionInfoResponse)
+async def create_collection(
+    session: AsyncSession = Depends(get_session),
+    args: CollectionArgs = Depends(validate_collection_create),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_COLLECTION_CREATE])
+    ),
+):
+    collection = await service.create_collection(session, args, user)
+    return await service.get_collection_display(
+        session, collection.reference, user
+    )
+
+
+@router.put("/{reference}", response_model=CollectionInfoResponse)
+async def update_collection(
+    args: CollectionArgs = Depends(validate_collection_update),
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_COLLECTION_UPDATE])
+    ),
+):
+    collection = await service.update_collection(session, collection, args)
+    return await service.get_collection_display(
+        session, collection.reference, user
+    )
+
+
 @router.get("/{reference}", response_model=CollectionInfoResponse)
 async def get_collection(
     request_user: User | None = Depends(auth_required(optional=True)),
@@ -78,5 +88,5 @@ async def get_collection(
     session: AsyncSession = Depends(get_session),
 ):
     return await service.get_collection_display(
-        session, collection.reference, request_user
+        session, collection, request_user
     )

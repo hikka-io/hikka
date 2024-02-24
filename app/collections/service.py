@@ -1,6 +1,6 @@
+from sqlalchemy import select, asc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy import select, asc, func
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from .schemas import CollectionArgs
@@ -64,12 +64,9 @@ async def get_user_collections(
     )
 
 
-async def create_collection(
-    session: AsyncSession,
-    args: CollectionArgs,
-    user: User,
+async def build_collection_content(
+    session: AsyncSession, collection: Collection, args: CollectionArgs
 ):
-    now = datetime.utcnow()
     content_model = content_type_to_content_class[args.content_type]
 
     cache = await session.scalars(
@@ -79,6 +76,28 @@ async def create_collection(
     )
 
     content_cache = {content.slug: content.id for content in cache}
+
+    return [
+        CollectionContent(
+            **{
+                "content_id": content_cache[content.slug],
+                "content_type": args.content_type,
+                "comment": content.comment,
+                "collection": collection,
+                "label": content.label,
+                "order": content.order,
+            }
+        )
+        for content in args.content
+    ]
+
+
+async def create_collection(
+    session: AsyncSession,
+    args: CollectionArgs,
+    user: User,
+):
+    now = datetime.utcnow()
 
     collection = Collection(
         **{
@@ -95,23 +114,35 @@ async def create_collection(
         }
     )
 
-    session.add(collection)
+    collection_content = await build_collection_content(
+        session, collection, args
+    )
 
-    for content in args.content:
-        collection_content = CollectionContent(
-            **{
-                "content_id": content_cache[content.slug],
-                "content_type": args.content_type,
-                "comment": content.comment,
-                "collection": collection,
-                "label": content.label,
-                "order": content.order,
-            }
-        )
-
-        session.add(collection_content)
+    session.add_all(collection_content)
 
     await session.commit()
+
+    return collection
+
+
+async def update_collection(
+    session: AsyncSession, collection: Collection, args: CollectionArgs
+):
+    # First we delete old content
+    await session.execute(
+        delete(CollectionContent).filter(
+            CollectionContent.collection == collection
+        )
+    )
+
+    collection_content = await build_collection_content(
+        session, collection, args
+    )
+
+    session.add_all(collection_content)
+
+    await session.commit()
+    await session.refresh(collection)
 
     return collection
 
@@ -122,13 +153,10 @@ async def get_collection(session: AsyncSession, reference: UUID):
     )
 
 
+# ToDo: refactor this function if possible
 async def get_collection_display(
-    session: AsyncSession, reference: UUID, request_user: User
+    session: AsyncSession, collection: Collection, request_user: User
 ):
-    # ToDo: refactor this function (I hate this abomination)
-    # Note: Ideally this should be single request to database
-    collection = await get_collection(session, reference)
-
     # I hate long variable names
     content_model = content_type_to_collection_content_class[
         collection.content_type
@@ -138,9 +166,8 @@ async def get_collection_display(
     load_options = [joinedload(content_model.content)]
 
     # Special case for anime
-    # Only reason to have this attrocity is because
-    # we must return user watch status.
     if collection.content_type == constants.CONTENT_ANIME:
+        # We load user watch status here
         load_options = [
             anime_loadonly(joinedload(content_model.content)).joinedload(
                 Anime.watch

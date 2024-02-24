@@ -130,9 +130,10 @@ errors = {
         "seen": ["Notification already seen", 400],
     },
     "collections": {
-        "limit": ["You have reached collections limit", 400],
         "bad-order-not-consecutive": ["Order must be consecutive", 400],
         "bad-order-duplicated": ["You can't set duplicated order", 400],
+        "not-author": ["Only author can update collection", 400],
+        "limit": ["You have reached collections limit", 400],
         "bad-order-start": ["Order must start from 1", 400],
         "unlabled-content": ["Unlabled content", 400],
         "bad-labels-order": ["Bad labels order", 400],

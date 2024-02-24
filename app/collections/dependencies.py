@@ -1,12 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from app.models import Comment, Edit, User
-from datetime import datetime, timedelta
+from app.models import Collection, User
 from app.database import get_session
 from .utils import check_consecutive
 from .schemas import CollectionArgs
 from app.errors import Abort
 from fastapi import Depends
+from app import constants
 from uuid import UUID
 from . import service
 
@@ -68,16 +68,30 @@ async def validate_collection_create(
 ):
     collections_count = await service.get_user_collections_count(session, user)
 
-    # if collections_count >= 10:
-    #     raise Abort("collections", "limit")
+    if collections_count >= 10:
+        raise Abort("collections", "limit")
 
     return args
 
 
 async def validate_collection(
     reference: UUID, session: AsyncSession = Depends(get_session)
-):
+) -> Collection:
     if not (collection := await service.get_collection(session, reference)):
         raise Abort("collections", "not-found")
 
     return collection
+
+
+async def validate_collection_update(
+    args: CollectionArgs = Depends(validate_collection_args),
+    collection: Collection = Depends(validate_collection),
+    user: User = Depends(auth_required()),
+):
+    if collection.author != user:
+        raise Abort("collections", "not-author")
+
+    # ToDo: add checks for hidden/deleted (?)
+    # ToDo: log based rate limit
+
+    return args

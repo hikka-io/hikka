@@ -78,6 +78,7 @@ async def validate_login(
         raise Abort("auth", "user-not-found")
 
     # Check password hash
+    # ToDo: add failed login attempts here
     if not checkpwd(login.password, user.password_hash):
         raise Abort("auth", "invalid-password")
 
@@ -87,7 +88,11 @@ async def validate_login(
 async def validate_provider(provider: str) -> str:
     settings = get_settings()
 
-    enabled_providers = [p for p in settings.oauth if settings.oauth[p].enabled]
+    enabled_providers = [
+        provider
+        for provider in settings.oauth
+        if settings.oauth[provider].enabled
+    ]
 
     if provider not in enabled_providers:
         raise Abort("auth", "invalid-provider")
