@@ -37,23 +37,32 @@ content_type_to_collection_content_class = {
 }
 
 
-async def count_content(
-    session: AsyncSession, content_type: str, slugs: list[str]
-) -> int:
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(func.count(content_model.id)).filter(
-            content_model.slug.in_(slugs)
+async def build_collection_content(
+    session: AsyncSession, collection: Collection, args: CollectionArgs
+):
+    content_model = content_type_to_content_class[args.content_type]
+
+    cache = await session.scalars(
+        select(content_model).filter(
+            content_model.slug.in_([content.slug for content in args.content])
         )
     )
 
+    content_cache = {content.slug: content.id for content in cache}
 
-async def get_collections_count(session: AsyncSession) -> int:
-    return await session.scalar(
-        select(func.count(Collection.id)).filter(
-            Collection.private == False,  # noqa: E712
+    return [
+        CollectionContent(
+            **{
+                "content_id": content_cache[content.slug],
+                "content_type": args.content_type,
+                "comment": content.comment,
+                "collection": collection,
+                "label": content.label,
+                "order": content.order,
+            }
         )
-    )
+        for content in args.content
+    ]
 
 
 def collections_load_options(query: Select, request_user: User | None):
@@ -74,6 +83,25 @@ def collections_load_options(query: Select, request_user: User | None):
             )
         )
         .order_by(desc(Collection.created))
+    )
+
+
+async def count_content(
+    session: AsyncSession, content_type: str, slugs: list[str]
+) -> int:
+    content_model = content_type_to_content_class[content_type]
+    return await session.scalar(
+        select(func.count(content_model.id)).filter(
+            content_model.slug.in_(slugs)
+        )
+    )
+
+
+async def get_collections_count(session: AsyncSession) -> int:
+    return await session.scalar(
+        select(func.count(Collection.id)).filter(
+            Collection.private == False,  # noqa: E712
+        )
     )
 
 
@@ -113,34 +141,6 @@ async def get_user_collections(
         .limit(limit)
         .offset(offset)
     )
-
-
-async def build_collection_content(
-    session: AsyncSession, collection: Collection, args: CollectionArgs
-):
-    content_model = content_type_to_content_class[args.content_type]
-
-    cache = await session.scalars(
-        select(content_model).filter(
-            content_model.slug.in_([content.slug for content in args.content])
-        )
-    )
-
-    content_cache = {content.slug: content.id for content in cache}
-
-    return [
-        CollectionContent(
-            **{
-                "content_id": content_cache[content.slug],
-                "content_type": args.content_type,
-                "comment": content.comment,
-                "collection": collection,
-                "label": content.label,
-                "order": content.order,
-            }
-        )
-        for content in args.content
-    ]
 
 
 async def create_collection(
@@ -220,52 +220,12 @@ async def get_collection(session: AsyncSession, reference: UUID):
     )
 
 
-# ToDo: refactor this function if possible
 async def get_collection_display(
     session: AsyncSession, collection: Collection, request_user: User
 ):
-    # I hate long variable names
-    content_model = content_type_to_collection_content_class[
-        collection.content_type
-    ]
-
-    # By default we only load collection content
-    load_options = [joinedload(content_model.content)]
-
-    # Special case for anime
-    if collection.content_type == constants.CONTENT_ANIME:
-        # We load user watch status here
-        load_options = [
-            anime_loadonly(joinedload(content_model.content)).joinedload(
-                Anime.watch
-            ),
-            with_loader_criteria(
-                AnimeWatch,
-                AnimeWatch.user_id == request_user.id if request_user else None,
-            ),
-        ]
-
-    # Load content
-    content = await session.scalars(
-        select(content_model)
-        .filter(collection == collection)
-        .options(*load_options)
-        .order_by(asc(content_model.order))
+    return await session.scalar(
+        collections_load_options(
+            select(Collection).filter(Collection.id == collection.id),
+            request_user,
+        )
     )
-
-    # The lengths we go for better user experience...
-    return {
-        "content_type": collection.content_type,
-        "description": collection.description,
-        "reference": collection.reference,
-        "spoiler": collection.spoiler,
-        "entries": collection.entries,
-        "created": collection.created,
-        "updated": collection.updated,
-        "private": collection.private,
-        "author": collection.author,
-        "title": collection.title,
-        "nsfw": collection.nsfw,
-        "tags": collection.tags,
-        "content": content.unique().all(),
-    }

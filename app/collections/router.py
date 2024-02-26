@@ -7,7 +7,7 @@ from . import service
 
 from .schemas import (
     CollectionsListResponse,
-    CollectionInfoResponse,
+    CollectionResponse,
     CollectionArgs,
 )
 
@@ -77,7 +77,7 @@ async def get_user_collections(
     }
 
 
-@router.post("/create", response_model=CollectionInfoResponse)
+@router.post("/create", response_model=CollectionResponse)
 async def create_collection(
     session: AsyncSession = Depends(get_session),
     args: CollectionArgs = Depends(validate_collection_create),
@@ -89,7 +89,7 @@ async def create_collection(
     return await service.get_collection_display(session, collection, user)
 
 
-@router.put("/{reference}", response_model=CollectionInfoResponse)
+@router.put("/{reference}", response_model=CollectionResponse)
 async def update_collection(
     args: CollectionArgs = Depends(validate_collection_update),
     collection: Collection = Depends(validate_collection),
@@ -102,7 +102,7 @@ async def update_collection(
     return await service.get_collection_display(session, collection, user)
 
 
-@router.get("/{reference}", response_model=CollectionInfoResponse)
+@router.get("/{reference}", response_model=CollectionResponse)
 async def get_collection(
     request_user: User | None = Depends(auth_required(optional=True)),
     collection: Collection = Depends(validate_collection),

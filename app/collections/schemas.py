@@ -93,8 +93,3 @@ class CollectionResponse(CustomModel):
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CollectionResponse]
-
-
-class CollectionInfoResponse(CollectionResponse):
-    content: list[CollectionContentResponse]
-    pass
