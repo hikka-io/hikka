@@ -28,3 +28,8 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
         foreign_keys=[author_id],
         lazy="selectin",
     )
+
+    collection: Mapped[list["CollectionContent"]] = relationship(
+        foreign_keys="[CollectionContent.collection_id]",
+        back_populates="collection",
+    )

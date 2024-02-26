@@ -91,6 +91,9 @@ async def validate_collection_update(
     if collection.author != user:
         raise Abort("collections", "not-author")
 
+    if collection.content_type != args.content_type:
+        raise Abort("collections", "bad-content-type")
+
     # ToDo: add checks for hidden/deleted (?)
     # ToDo: log based rate limit
 

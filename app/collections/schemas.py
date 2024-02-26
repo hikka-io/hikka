@@ -6,6 +6,7 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
+    AnimeResponseWithWatch,
     PaginationResponse,
     CharacterResponse,
     PersonResponse,
@@ -64,27 +65,34 @@ class CollectionArgs(CustomModel):
 
 
 # Responses
+class CollectionContentResponse(CustomModel):
+    content: AnimeResponseWithWatch | CharacterResponse | PersonResponse
+    comment: str | None
+    label: str | None
+    content_type: str
+    order: int
+
+
 class CollectionResponse(CustomModel):
     author: UserResponse
     created: datetime
     updated: datetime
+    content_type: str
     description: str
     tags: list[str]
     reference: str
+    private: bool
     spoiler: bool
     entries: int
     title: str
     nsfw: bool
 
+    collection: list[CollectionContentResponse]
+
 
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CollectionResponse]
-
-
-class CollectionContentResponse(CustomModel):
-    content: AnimeResponse | CharacterResponse | PersonResponse
-    order: int
 
 
 class CollectionInfoResponse(CollectionResponse):

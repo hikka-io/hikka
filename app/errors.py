@@ -130,6 +130,7 @@ errors = {
         "seen": ["Notification already seen", 400],
     },
     "collections": {
+        "bad-content-type": ["You can't change collection content type", 400],
         "bad-order-not-consecutive": ["Order must be consecutive", 400],
         "bad-order-duplicated": ["You can't set duplicated order", 400],
         "not-author": ["Only author can update collection", 400],

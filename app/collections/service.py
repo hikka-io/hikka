@@ -1,6 +1,7 @@
 from sqlalchemy import select, asc, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from sqlalchemy.sql.selectable import Select
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from .schemas import CollectionArgs
@@ -55,15 +56,37 @@ async def get_collections_count(session: AsyncSession) -> int:
     )
 
 
-async def get_collections(
-    session: AsyncSession, limit: int, offset: int
-) -> list[Collection]:
-    return await session.scalars(
-        select(Collection)
-        .filter(
-            Collection.private == False,  # noqa: E712
+def collections_load_options(query: Select, request_user: User | None):
+    # Yeah, I like it but not sure about performance
+    return (
+        query.options(
+            joinedload(Collection.collection.of_type(AnimeCollectionContent))
+            .joinedload(AnimeCollectionContent.content)
+            .joinedload(Anime.watch),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        )
+        .options(
+            with_loader_criteria(
+                CollectionContent, CollectionContent.order <= 5
+            )
         )
         .order_by(desc(Collection.created))
+    )
+
+
+async def get_collections(
+    session: AsyncSession, request_user: User | None, limit: int, offset: int
+) -> list[Collection]:
+    return await session.scalars(
+        collections_load_options(
+            select(Collection).filter(
+                Collection.private == False,  # noqa: E712
+            ),
+            request_user,
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -76,12 +99,17 @@ async def get_user_collections_count(session: AsyncSession, user: User) -> int:
 
 
 async def get_user_collections(
-    session: AsyncSession, user: User, limit: int, offset: int
+    session: AsyncSession,
+    user: User,
+    request_user: User,
+    limit: int,
+    offset: int,
 ) -> list[Collection]:
     return await session.scalars(
-        select(Collection)
-        .filter(Collection.author == user)
-        .order_by(desc(Collection.created))
+        collections_load_options(
+            select(Collection).filter(Collection.author == user),
+            request_user,
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -227,12 +255,14 @@ async def get_collection_display(
 
     # The lengths we go for better user experience...
     return {
+        "content_type": collection.content_type,
         "description": collection.description,
         "reference": collection.reference,
         "spoiler": collection.spoiler,
         "entries": collection.entries,
         "created": collection.created,
         "updated": collection.updated,
+        "private": collection.private,
         "author": collection.author,
         "title": collection.title,
         "nsfw": collection.nsfw,
