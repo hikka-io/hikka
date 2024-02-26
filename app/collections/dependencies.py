@@ -83,14 +83,20 @@ async def validate_collection(
     return collection
 
 
-async def validate_collection_update(
-    args: CollectionArgs = Depends(validate_collection_args),
+async def validate_collection_author(
     collection: Collection = Depends(validate_collection),
     user: User = Depends(auth_required()),
 ):
     if collection.author != user:
         raise Abort("collections", "not-author")
 
+    return collection
+
+
+async def validate_collection_update(
+    args: CollectionArgs = Depends(validate_collection_args),
+    collection: Collection = Depends(validate_collection_author),
+):
     if collection.content_type != args.content_type:
         raise Abort("collections", "bad-content-type")
 
@@ -98,3 +104,12 @@ async def validate_collection_update(
     # ToDo: log based rate limit
 
     return args
+
+
+async def validate_collection_delete(
+    collection: Collection = Depends(validate_collection_author),
+    _: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_COLLECTION_DELETE])
+    ),
+):
+    return collection

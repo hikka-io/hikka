@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import SuccessResponse
 from app.models import Collection, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -12,6 +13,7 @@ from .schemas import (
 )
 
 from .dependencies import (
+    validate_collection_delete,
     validate_collection_update,
     validate_collection_create,
     validate_collection,
@@ -29,7 +31,6 @@ from app.dependencies import (
     get_size,
 )
 
-# ToDo: collection delete
 # ToDo: logs for collection actions (create/update/delete)
 # ToDo: tests
 router = APIRouter(prefix="/collections", tags=["Collections"])
@@ -89,6 +90,17 @@ async def create_collection(
     return await service.get_collection_display(session, collection, user)
 
 
+@router.get("/{reference}", response_model=CollectionResponse)
+async def get_collection(
+    request_user: User | None = Depends(auth_required(optional=True)),
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.get_collection_display(
+        session, collection, request_user
+    )
+
+
 @router.put("/{reference}", response_model=CollectionResponse)
 async def update_collection(
     args: CollectionArgs = Depends(validate_collection_update),
@@ -102,12 +114,10 @@ async def update_collection(
     return await service.get_collection_display(session, collection, user)
 
 
-@router.get("/{reference}", response_model=CollectionResponse)
-async def get_collection(
-    request_user: User | None = Depends(auth_required(optional=True)),
-    collection: Collection = Depends(validate_collection),
+@router.delete("/{reference}", response_model=SuccessResponse)
+async def delete_collection(
+    collection: Collection = Depends(validate_collection_delete),
     session: AsyncSession = Depends(get_session),
 ):
-    return await service.get_collection_display(
-        session, collection, request_user
-    )
+    await service.delete_collection(session, collection)
+    return {"success": True}
