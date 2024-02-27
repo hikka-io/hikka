@@ -107,7 +107,10 @@ async def update_collection(
         auth_required(permissions=[constants.PERMISSION_COLLECTION_UPDATE])
     ),
 ):
-    collection = await service.update_collection(session, collection, args)
+    collection = await service.update_collection(
+        session, collection, args, user
+    )
+
     return await service.get_collection_display(session, collection, user)
 
 

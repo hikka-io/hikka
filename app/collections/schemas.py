@@ -10,7 +10,6 @@ from app.schemas import (
     PaginationResponse,
     CharacterResponse,
     PersonResponse,
-    AnimeResponse,
     UserResponse,
     CustomModel,
 )
@@ -32,9 +31,9 @@ class CollectionContentArgs(CustomModel):
 
 
 class CollectionArgs(CustomModel):
-    content: list[CollectionContentArgs] = Field(min_length=1, max_length=500)
     title: str = Field(min_length=3, max_length=255)
     tags: list[str] = Field(max_length=8)
+    content: list[CollectionContentArgs]
     content_type: ContentTypeEnum
     description: str | None
     labels_order: list[str]

@@ -20,6 +20,7 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
     spoiler: Mapped[bool] = mapped_column(default=False)
     nsfw: Mapped[bool] = mapped_column(default=False)
     title: Mapped[str] = mapped_column(String(255))
+    deleted: Mapped[bool]
     private: Mapped[bool]
     entries: Mapped[int]
 

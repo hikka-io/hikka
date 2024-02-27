@@ -170,6 +170,7 @@ ROLES = {
         PERMISSION_COLLECTION_UPDATE,
         PERMISSION_COLLECTION_DELETE,
         PERMISSION_COLLECTION_UPDATE_MODERATOR,
+        PERMISSION_COLLECTION_DELETE_MODERATOR,
     ],
     ROLE_ADMIN: [
         PERMISSION_EDIT_CREATE,
@@ -235,6 +236,9 @@ LOG_SETTINGS_USERNAME = "settings_username"
 LOG_SETTINGS_EMAIL = "settings_email"
 LOG_SETTINGS_PASSWORD = "settings_password"
 LOG_SETTINGS_IMPORT = "settings_import"
+LOG_COLLECTION_CREATE = "collection_create"
+LOG_COLLECTION_UPDATE = "collection_update"
+LOG_COLLECTION_DELETE = "collection_delete"
 
 # History types
 HISTORY_WATCH = "watch"

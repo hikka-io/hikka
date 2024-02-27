@@ -72,6 +72,9 @@ async def validate_collection_create(
     if collections_count >= 10:
         raise Abort("collections", "limit")
 
+    if len(args.content) < 1 or len(args.content) > 500:
+        raise Abort("collections", "content-limit")
+
     return args
 
 
@@ -92,10 +95,17 @@ async def validate_collection_update(
     if collection.content_type != args.content_type:
         raise Abort("collections", "bad-content-type")
 
-    if user != collection.author and not check_user_permissions(
-        user, [constants.PERMISSION_COLLECTION_UPDATE_MODERATOR]
-    ):
-        raise Abort("permission", "denied")
+    if len(args.content) > 500:
+        raise Abort("collections", "content-limit")
+
+    if user != collection.author:
+        if not check_user_permissions(
+            user, [constants.PERMISSION_COLLECTION_UPDATE_MODERATOR]
+        ):
+            raise Abort("permission", "denied")
+
+        if len(args.content) > 0:
+            raise Abort("collections", "moderator-content-update")
 
     # ToDo: log based rate limit
 
