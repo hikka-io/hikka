@@ -231,7 +231,9 @@ async def get_collection_display(
     )
 
 
-async def delete_collection(session: AsyncSession, collection: Collection):
+async def delete_collection(
+    session: AsyncSession, collection: Collection, user: User
+):
     await session.delete(collection)
     await session.commit()
     return True

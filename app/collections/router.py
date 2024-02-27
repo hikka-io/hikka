@@ -36,10 +36,7 @@ from app.dependencies import (
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
-@router.get(
-    "",
-    response_model=CollectionsListResponse,
-)
+@router.get("", response_model=CollectionsListResponse)
 async def get_collections(
     request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
@@ -118,6 +115,9 @@ async def update_collection(
 async def delete_collection(
     collection: Collection = Depends(validate_collection_delete),
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_COLLECTION_DELETE])
+    ),
 ):
-    await service.delete_collection(session, collection)
+    await service.delete_collection(session, collection, user)
     return {"success": True}

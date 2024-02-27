@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import check_user_permissions
 from app.dependencies import auth_required
 from app.models import Collection, User
 from app.database import get_session
@@ -83,33 +84,34 @@ async def validate_collection(
     return collection
 
 
-async def validate_collection_author(
-    collection: Collection = Depends(validate_collection),
-    user: User = Depends(auth_required()),
-):
-    if collection.author != user:
-        raise Abort("collections", "not-author")
-
-    return collection
-
-
 async def validate_collection_update(
     args: CollectionArgs = Depends(validate_collection_args),
-    collection: Collection = Depends(validate_collection_author),
+    collection: Collection = Depends(validate_collection),
+    user: User = Depends(auth_required()),
 ):
     if collection.content_type != args.content_type:
         raise Abort("collections", "bad-content-type")
 
-    # ToDo: add checks for hidden/deleted (?)
+    if user != collection.author and not check_user_permissions(
+        user, [constants.PERMISSION_COLLECTION_UPDATE_MODERATOR]
+    ):
+        raise Abort("permission", "denied")
+
     # ToDo: log based rate limit
 
     return args
 
 
 async def validate_collection_delete(
-    collection: Collection = Depends(validate_collection_author),
-    _: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COLLECTION_DELETE])
-    ),
+    collection: Collection = Depends(validate_collection),
+    user: User = Depends(auth_required()),
 ):
+    if collection.author != user:
+        raise Abort("collections", "not-author")
+
+    if user != collection.author and not check_user_permissions(
+        user, [constants.PERMISSION_COLLECTION_DELETE_MODERATOR]
+    ):
+        raise Abort("permission", "denied")
+
     return collection
