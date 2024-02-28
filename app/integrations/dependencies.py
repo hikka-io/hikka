@@ -14,3 +14,12 @@ async def validate_watari_anime(
         raise Abort("anime", "not-found")
 
     return anime
+
+
+async def validate_mal_anime(
+    mal_id: int, session: AsyncSession = Depends(get_session)
+) -> Anime:
+    if not (anime := await service.get_anime_by_mal_id(session, mal_id)):
+        raise Abort("anime", "not-found")
+
+    return anime

@@ -12,6 +12,12 @@ from app.models import (
 )
 
 
+async def get_anime_by_mal_id(
+    session: AsyncSession, mal_id: int
+) -> Anime | None:
+    return await session.scalar(select(Anime).filter(Anime.mal_id == mal_id))
+
+
 async def get_anime_by_watari(session: AsyncSession, slug: UUID):
     watari_url = f"https://www.watari-anime.com/watch?wid={slug}"
     return await session.scalar(

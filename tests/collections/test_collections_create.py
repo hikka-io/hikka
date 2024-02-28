@@ -1,8 +1,10 @@
 from client_requests import request_create_collection
-from sqlalchemy import select, desc, func
-from app.models import Log
+
+# from sqlalchemy import select, desc, func
+# from app.models import Log
 from fastapi import status
-from app import constants
+
+# from app import constants
 
 
 async def test_collections_create(
