@@ -129,6 +129,24 @@ errors = {
         "not-found": ["Notification not found", 404],
         "seen": ["Notification already seen", 400],
     },
+    "collections": {
+        "bad-content-type": ["You can't change collection content type", 400],
+        "bad-order-not-consecutive": ["Order must be consecutive", 400],
+        "bad-order-duplicated": ["You can't set duplicated order", 400],
+        "content-limit": ["Collectio content limit violation", 400],
+        "not-author": ["Only author can update collection", 400],
+        "limit": ["You have reached collections limit", 400],
+        "bad-order-start": ["Order must start from 1", 400],
+        "unlabled-content": ["Unlabled content", 400],
+        "bad-labels-order": ["Bad labels order", 400],
+        "not-found": ["Collection not found", 404],
+        "bad-label": ["Unknown label", 400],
+        "bad-content": ["Bad content", 400],
+        "moderator-content-update": [
+            "Moderator can't update content in collection",
+            400,
+        ],
+    },
 }
 
 

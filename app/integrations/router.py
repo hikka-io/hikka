@@ -1,9 +1,13 @@
-from .dependencies import validate_watari_anime
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Anime
 from . import service
+
+from .dependencies import (
+    validate_watari_anime,
+    validate_mal_anime,
+)
 
 from app.schemas import (
     AnimeExternalResponse,
@@ -64,4 +68,9 @@ async def watari_external(anime: Anime = Depends(validate_watari_anime)):
 
 @router.get("/watari/{slug}", response_model=AnimeResponse)
 async def watari_anime(anime: Anime = Depends(validate_watari_anime)):
+    return anime
+
+
+@router.get("/mal/{mal_id}", response_model=AnimeResponse)
+async def mal_anime(anime: Anime = Depends(validate_mal_anime)):
     return anime
