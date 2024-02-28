@@ -31,8 +31,8 @@ from app.dependencies import (
     get_size,
 )
 
-# ToDo: logs for collection actions (create/update/delete)
 # ToDo: tests
+# ToDo: comments
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 

@@ -71,6 +71,8 @@ from .settings import request_settings_username
 from .settings import request_settings_password
 from .settings import request_settings_email
 
+from .collections import request_create_collection
+
 from .upload import request_upload
 
 __all__ = [
@@ -134,5 +136,6 @@ __all__ = [
     "request_settings_username",
     "request_settings_password",
     "request_settings_email",
+    "request_create_collection",
     "request_upload",
 ]

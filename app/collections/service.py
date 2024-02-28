@@ -220,7 +220,14 @@ async def create_collection(
             "nsfw": args.nsfw,
             "tags": args.tags,
             "content": [
-                str(content.content_id) for content in collection_content
+                {
+                    "content_id": str(content.content_id),
+                    "content_type": content.content_type,
+                    "comment": content.comment,
+                    "label": content.label,
+                    "order": content.order,
+                }
+                for content in collection_content
             ],
         },
     )
@@ -258,8 +265,8 @@ async def update_collection(
     session.add(collection)
 
     if len(args.content) > 0:
-        old_content_ids = await session.scalars(
-            select(CollectionContent.content_id).filter(
+        collection_content_old = await session.scalars(
+            select(CollectionContent).filter(
                 CollectionContent.collection == collection
             )
         )
@@ -268,10 +275,26 @@ async def update_collection(
             session, collection, args
         )
 
-        old_content = [str(content_id) for content_id in old_content_ids]
+        old_content = [
+            {
+                "content_id": str(content.content_id),
+                "content_type": content.content_type,
+                "comment": content.comment,
+                "label": content.label,
+                "order": content.order,
+            }
+            for content in collection_content_old
+        ]
 
         new_content = [
-            str(content.content_id) for content in collection_content
+            {
+                "content_id": str(content.content_id),
+                "content_type": content.content_type,
+                "comment": content.comment,
+                "label": content.label,
+                "order": content.order,
+            }
+            for content in collection_content
         ]
 
         # Only update collection content if it has changed
