@@ -32,7 +32,7 @@ class CollectionContentArgs(CustomModel):
 
 class CollectionArgs(CustomModel):
     title: str = Field(min_length=3, max_length=255)
-    tags: list[str] = Field(max_length=8)
+    tags: list[str] = Field(max_length=3)
     content: list[CollectionContentArgs]
     content_type: ContentTypeEnum
     labels_order: list[str]
