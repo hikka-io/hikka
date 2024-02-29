@@ -16,6 +16,7 @@ from app.schemas import (
 
 # Enums
 class ContentTypeEnum(str, Enum):
+    content_collection = constants.CONTENT_COLLECTION
     content_edit = constants.CONTENT_SYSTEM_EDIT
     content_anime = constants.CONTENT_ANIME
 
