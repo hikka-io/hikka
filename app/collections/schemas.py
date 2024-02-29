@@ -75,6 +75,7 @@ class CollectionContentResponse(CustomModel):
 class CollectionResponse(CustomModel):
     labels_order: list[str]
     author: UserResponse
+    comments_count: int
     created: datetime
     updated: datetime
     content_type: str
