@@ -108,13 +108,13 @@ async def test_edit_create(
     assert log.data == {}
 
     # Now let's count edit logs
-    vote_logs_count = await test_session.scalar(
+    edit_logs_count = await test_session.scalar(
         select(func.count(Log.id)).filter(
             Log.log_type == constants.LOG_EDIT_CREATE
         )
     )
 
-    assert vote_logs_count == 3
+    assert edit_logs_count == 3
 
 
 async def test_edit_create_bad_after(
