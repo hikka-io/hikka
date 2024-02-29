@@ -65,25 +65,28 @@ async def build_collection_content(
     ]
 
 
-def collections_load_options(query: Select, request_user: User | None):
+def collections_load_options(
+    query: Select, request_user: User | None, preview: bool = False
+):
     # Yeah, I like it but not sure about performance
-    return (
-        query.options(
-            joinedload(Collection.collection.of_type(AnimeCollectionContent))
-            .joinedload(AnimeCollectionContent.content)
-            .joinedload(Anime.watch),
-            with_loader_criteria(
-                AnimeWatch,
-                AnimeWatch.user_id == request_user.id if request_user else None,
-            ),
-        )
-        .options(
+    query = query.options(
+        joinedload(Collection.collection.of_type(AnimeCollectionContent))
+        .joinedload(AnimeCollectionContent.content)
+        .joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    )
+
+    if preview:
+        query = query.options(
             with_loader_criteria(
                 CollectionContent, CollectionContent.order <= 5
             )
         )
-        .order_by(desc(Collection.created))
-    )
+
+    return query.order_by(desc(Collection.created))
 
 
 async def count_content(
@@ -116,6 +119,7 @@ async def get_collections(
                 Collection.deleted == False,  # noqa: E712
             ),
             request_user,
+            True,
         )
         .limit(limit)
         .offset(offset)
@@ -145,6 +149,7 @@ async def get_user_collections(
                 Collection.author == user,
             ),
             request_user,
+            True,
         )
         .limit(limit)
         .offset(offset)
