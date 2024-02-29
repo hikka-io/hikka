@@ -25,10 +25,12 @@ async def validate_collection_args(
         orders.append(content.order)
         slugs.append(content.slug)
 
-        if content.label and content.label not in labels:
-            labels.append(content.label)
-        else:
+        if not content.label:
             unlabled_content = True
+
+        else:
+            if content.label not in labels:
+                labels.append(content.label)
 
     if len(labels) > 0 and unlabled_content:
         raise Abort("collections", "unlabled-content")
