@@ -77,18 +77,20 @@ async def test_collections_update(
 
     assert response.status_code == status.HTTP_200_OK
 
-    # assert response.json()["title"] == "Test collection 2"
-    # assert response.json()["tags"] == ["comedy", "romance"]
-    # assert response.json()["description"] == "Description 2"
-    # assert response.json()["labels_order"] == ["Great", "Good"]
-    # assert response.json()["private"] is True
-    # assert response.json()["spoiler"] is True
-    # assert response.json()["nsfw"] is True
+    assert response.json()["title"] == "Test collection 2"
+    assert response.json()["tags"] == ["comedy", "romance"]
+    assert response.json()["description"] == "Description 2"
+    assert response.json()["labels_order"] == ["Great", "Good"]
+    assert response.json()["private"] is True
+    assert response.json()["spoiler"] is True
+    assert response.json()["nsfw"] is True
 
-    # assert response.json()["collection"][0][con]
+    assert (
+        response.json()["collection"][0]["content"]["slug"]
+        == "bocchi-the-rock-9e172d"
+    )
 
-    from pprint import pprint
-
-    pprint(response.json())
-
-    print(collection_reference)
+    assert (
+        response.json()["collection"][1]["content"]["slug"]
+        == "fullmetal-alchemist-brotherhood-fc524a"
+    )

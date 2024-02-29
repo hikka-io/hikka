@@ -73,6 +73,7 @@ class CollectionContentResponse(CustomModel):
 
 
 class CollectionResponse(CustomModel):
+    labels_order: list[str]
     author: UserResponse
     created: datetime
     updated: datetime
