@@ -46,13 +46,15 @@ async def validate_collection_args(
     if len(list(set(orders))) != len(orders):
         raise Abort("collections", "bad-order-duplicated")
 
-    # Order should start from 1
-    if sorted(orders)[0] != 1:
-        raise Abort("collections", "bad-order-start")
+    # We skip these checks if there is no content specified
+    if len(orders) > 0:
+        # Order should start from 1
+        if sorted(orders)[0] != 1:
+            raise Abort("collections", "bad-order-start")
 
-    # Order must be consecutive
-    if not check_consecutive(orders):
-        raise Abort("collections", "bad-order-not-consecutive")
+        # Order must be consecutive
+        if not check_consecutive(orders):
+            raise Abort("collections", "bad-order-not-consecutive")
 
     content_count = await service.count_content(
         session, args.content_type, slugs

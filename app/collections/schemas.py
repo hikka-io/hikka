@@ -35,8 +35,8 @@ class CollectionArgs(CustomModel):
     tags: list[str] = Field(max_length=8)
     content: list[CollectionContentArgs]
     content_type: ContentTypeEnum
-    description: str | None
     labels_order: list[str]
+    description: str
     private: bool
     spoiler: bool
     nsfw: bool
