@@ -46,15 +46,17 @@ async def validate_collection_args(
     if len(list(set(orders))) != len(orders):
         raise Abort("collections", "bad-order-duplicated")
 
-    # We skip these checks if there is no content specified
-    if len(orders) > 0:
-        # Order should start from 1
-        if sorted(orders)[0] != 1:
-            raise Abort("collections", "bad-order-start")
+    # Limit number of content in collection
+    if len(args.content) < 1 or len(args.content) > 500:
+        raise Abort("collections", "content-limit")
 
-        # Order must be consecutive
-        if not check_consecutive(orders):
-            raise Abort("collections", "bad-order-not-consecutive")
+    # Order should start from 1
+    if sorted(orders)[0] != 1:
+        raise Abort("collections", "bad-order-start")
+
+    # Order must be consecutive
+    if not check_consecutive(orders):
+        raise Abort("collections", "bad-order-not-consecutive")
 
     content_count = await service.count_content(
         session, args.content_type, slugs
@@ -76,9 +78,6 @@ async def validate_collection_create(
     if collections_count >= 10:
         raise Abort("collections", "limit")
 
-    if len(args.content) < 1 or len(args.content) > 500:
-        raise Abort("collections", "content-limit")
-
     return args
 
 
@@ -99,16 +98,14 @@ async def validate_collection_update(
     if collection.content_type != args.content_type:
         raise Abort("collections", "bad-content-type")
 
-    if len(args.content) > 500:
-        raise Abort("collections", "content-limit")
-
     if user != collection.author:
         if not check_user_permissions(
             user, [constants.PERMISSION_COLLECTION_UPDATE_MODERATOR]
         ):
             raise Abort("permission", "denied")
 
-        if len(args.content) > 0:
+        # ToDo: make sure content and label order haven't been changed
+        if collection.labels_order != args.labels_order:
             raise Abort("collections", "moderator-content-update")
 
     # ToDo: log based rate limit

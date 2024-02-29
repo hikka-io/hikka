@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 from ..mixins import CreatedMixin, UpdatedMixin
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -12,6 +13,8 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_collections"
 
     # ToDo: moderated
+
+    comments_count: Mapped[bool] = query_expression()
 
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)

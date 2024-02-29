@@ -2,12 +2,17 @@ from sqlalchemy import select, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
 from .schemas import CollectionArgs
-from app.service import create_log
 from datetime import datetime
 from app import constants
 from uuid import UUID
+
+from app.service import (
+    get_comments_count_subquery,
+    create_log,
+)
 
 from app.models import (
     CharacterCollectionContent,
@@ -121,6 +126,14 @@ async def get_collections(
             request_user,
             True,
         )
+        .options(
+            with_expression(
+                Collection.comments_count,
+                get_comments_count_subquery(
+                    Collection.id, constants.CONTENT_COLLECTION
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -151,6 +164,14 @@ async def get_user_collections(
             request_user,
             True,
         )
+        .options(
+            with_expression(
+                Collection.comments_count,
+                get_comments_count_subquery(
+                    Collection.id, constants.CONTENT_COLLECTION
+                ),
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -158,9 +179,18 @@ async def get_user_collections(
 
 async def get_collection(session: AsyncSession, reference: UUID):
     return await session.scalar(
-        select(Collection).filter(
+        select(Collection)
+        .filter(
             Collection.deleted == False,  # noqa: E712
             Collection.id == reference,
+        )
+        .options(
+            with_expression(
+                Collection.comments_count,
+                get_comments_count_subquery(
+                    Collection.id, constants.CONTENT_COLLECTION
+                ),
+            )
         )
     )
 
@@ -172,6 +202,13 @@ async def get_collection_display(
         collections_load_options(
             select(Collection).filter(Collection.id == collection.id),
             request_user,
+        ).options(
+            with_expression(
+                Collection.comments_count,
+                get_comments_count_subquery(
+                    Collection.id, constants.CONTENT_COLLECTION
+                ),
+            )
         )
     )
 
