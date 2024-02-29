@@ -1,5 +1,6 @@
 from .schemas import CommentNode
 from datetime import timedelta
+from uuid import UUID
 
 
 # Convert uuid reference to comment path
@@ -59,6 +60,14 @@ def build_comments(base_comment, sub_comments):
 def is_int(string):
     try:
         int(string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_uuid(string):
+    try:
+        UUID(string)
         return True
     except ValueError:
         return False

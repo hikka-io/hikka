@@ -82,3 +82,18 @@ class AnimeComment(Comment):
         primaryjoin="Anime.id == AnimeComment.content_id",
         foreign_keys=[content_id],
     )
+
+
+class CollectionComment(Comment):
+    __mapper_args__ = {"polymorphic_identity": "collection"}
+
+    content_id = mapped_column(
+        ForeignKey("service_collections.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Collection"] = relationship(
+        primaryjoin="Collection.id == CollectionComment.content_id",
+        foreign_keys=[content_id],
+    )

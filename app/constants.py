@@ -105,6 +105,7 @@ CONTENT_GENRE = "genre"
 CONTENT_PERSON = "person"
 CONTENT_STAFF = "staff"
 CONTENT_SYSTEM_EDIT = "edit"
+CONTENT_COLLECTION = "collection"
 
 # Roles
 # ToDo: move to separate file (?)
