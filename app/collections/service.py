@@ -390,3 +390,21 @@ async def delete_collection(
     )
 
     return True
+
+
+async def content_compare(session: AsyncSession, collection: Collection):
+    collection_content = await session.scalars(
+        select(CollectionContent).filter(
+            CollectionContent.collection == collection
+        )
+    )
+
+    return [
+        {
+            "slug": content.content.slug,
+            "comment": content.comment,
+            "label": content.label,
+            "order": content.order,
+        }
+        for content in collection_content
+    ]

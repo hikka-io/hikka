@@ -93,6 +93,7 @@ async def validate_collection(
 async def validate_collection_update(
     args: CollectionArgs = Depends(validate_collection_args),
     collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
     user: User = Depends(auth_required()),
 ):
     if collection.content_type != args.content_type:
@@ -104,8 +105,11 @@ async def validate_collection_update(
         ):
             raise Abort("permission", "denied")
 
-        # ToDo: make sure content and label order haven't been changed
         if collection.labels_order != args.labels_order:
+            raise Abort("collections", "moderator-content-update")
+
+        content_compare = await service.content_compare(session, collection)
+        if content_compare != args.content:
             raise Abort("collections", "moderator-content-update")
 
     # ToDo: log based rate limit
