@@ -80,13 +80,9 @@ async def test_collections_update_moderator(
         },
     )
 
-    from pprint import pprint
+    assert response.status_code == status.HTTP_200_OK
 
-    pprint(response.json())
-
-    # assert response.status_code == status.HTTP_200_OK
-
-    # # Check log
-    # log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
-    # assert log.log_type == constants.LOG_COLLECTION_UPDATE
-    # assert log.user == create_test_user_moderator
+    # Check log
+    log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+    assert log.log_type == constants.LOG_COLLECTION_UPDATE
+    assert log.user == create_test_user_moderator

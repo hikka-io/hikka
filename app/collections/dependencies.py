@@ -108,8 +108,7 @@ async def validate_collection_update(
         if collection.labels_order != args.labels_order:
             raise Abort("collections", "moderator-content-update")
 
-        content_compare = await service.content_compare(session, collection)
-        if content_compare != args.content:
+        if not await service.content_compare(session, collection, args):
             raise Abort("collections", "moderator-content-update")
 
     # ToDo: log based rate limit
