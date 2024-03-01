@@ -41,4 +41,4 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
 
     @hybrid_property
     def slug(self):
-        return str(self.edit_id)
+        return str(self.reference)
