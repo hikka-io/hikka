@@ -87,7 +87,7 @@ def collections_load_options(
     if preview:
         query = query.options(
             with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 5
+                CollectionContent, CollectionContent.order <= 6
             )
         )
 
