@@ -24,19 +24,19 @@ class ContentTypeEnum(str, Enum):
 
 # Args
 class CollectionContentArgs(CustomModel):
-    comment: str | None = None
-    label: str | None = None
+    comment: str | None = Field(default=None, min_length=3)
+    label: str | None = Field(default=None, min_length=3)
     order: int
     slug: str
 
 
 class CollectionArgs(CustomModel):
+    description: str = Field(min_length=3, max_length=8192)
     title: str = Field(min_length=3, max_length=255)
     tags: list[str] = Field(max_length=3)
     content: list[CollectionContentArgs]
     content_type: ContentTypeEnum
     labels_order: list[str]
-    description: str
     private: bool
     spoiler: bool
     nsfw: bool
