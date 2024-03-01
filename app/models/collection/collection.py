@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import ARRAY
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import query_expression
@@ -37,3 +38,7 @@ class Collection(Base, CreatedMixin, UpdatedMixin):
         foreign_keys="[CollectionContent.collection_id]",
         back_populates="collection",
     )
+
+    @hybrid_property
+    def slug(self):
+        return str(self.edit_id)
