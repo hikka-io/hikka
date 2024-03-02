@@ -134,7 +134,6 @@ errors = {
         "bad-order-not-consecutive": ["Order must be consecutive", 400],
         "bad-order-duplicated": ["You can't set duplicated order", 400],
         "content-limit": ["Collectio content limit violation", 400],
-        "not-author": ["Only author can update collection", 400],
         "limit": ["You have reached collections limit", 400],
         "bad-order-start": ["Order must start from 1", 400],
         "unlabled-content": ["Unlabled content", 400],
