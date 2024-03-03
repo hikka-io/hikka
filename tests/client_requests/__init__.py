@@ -74,6 +74,7 @@ from .settings import request_settings_email
 from .collections import request_create_collection
 from .collections import request_update_collection
 from .collections import request_delete_collection
+from .collections import request_collections_list
 from .collections import request_collection_info
 
 from .upload import request_upload
@@ -142,6 +143,7 @@ __all__ = [
     "request_create_collection",
     "request_update_collection",
     "request_delete_collection",
+    "request_collections_list",
     "request_collection_info",
     "request_upload",
 ]

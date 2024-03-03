@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, delete, func
+from sqlalchemy import select, asc, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
@@ -87,7 +87,9 @@ def collections_load_options(
     if preview:
         query = query.options(
             with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 6
+                CollectionContent,
+                CollectionContent.order <= 6,
+                order_by=asc(CollectionContent.order),
             )
         )
 
