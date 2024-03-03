@@ -19,3 +19,11 @@ def request_delete_collection(client, reference, token):
         f"/collections/{reference}",
         headers={"Auth": token},
     )
+
+
+def request_collection_info(client, reference, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(
+        f"/collections/{reference}",
+        headers=headers,
+    )
