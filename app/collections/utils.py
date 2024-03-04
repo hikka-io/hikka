@@ -10,4 +10,4 @@ def is_valid_tag(tag):
     if any(bad_character in tag for bad_character in list("ёъыэ")):
         return False
 
-    return re.compile(r"^[a-zа-яії]{3,16}$").match(tag) is not None
+    return re.compile(r"^[a-zа-яіїґ]{3,16}$").match(tag) is not None
