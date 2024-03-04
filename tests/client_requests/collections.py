@@ -12,3 +12,26 @@ def request_update_collection(client, reference, token, data={}):
         headers={"Auth": token},
         json=data,
     )
+
+
+def request_delete_collection(client, reference, token):
+    return client.delete(
+        f"/collections/{reference}",
+        headers={"Auth": token},
+    )
+
+
+def request_collection_info(client, reference, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(
+        f"/collections/{reference}",
+        headers=headers,
+    )
+
+
+def request_collections_list(client, page=1, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(
+        f"/collections?page={page}",
+        headers=headers,
+    )

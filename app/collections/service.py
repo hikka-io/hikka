@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, delete, func
+from sqlalchemy import select, asc, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select

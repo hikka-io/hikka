@@ -121,11 +121,9 @@ async def validate_collection_delete(
     user: User = Depends(auth_required()),
 ):
     if collection.author != user:
-        raise Abort("collections", "not-author")
-
-    if user != collection.author and not check_user_permissions(
-        user, [constants.PERMISSION_COLLECTION_DELETE_MODERATOR]
-    ):
-        raise Abort("permission", "denied")
+        if user != collection.author and not check_user_permissions(
+            user, [constants.PERMISSION_COLLECTION_DELETE_MODERATOR]
+        ):
+            raise Abort("permission", "denied")
 
     return collection

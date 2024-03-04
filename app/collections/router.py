@@ -31,8 +31,7 @@ from app.dependencies import (
     get_size,
 )
 
-# ToDo: tests
-# ToDo: comments
+
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
@@ -75,6 +74,17 @@ async def get_user_collections(
     }
 
 
+@router.get("/{reference}", response_model=CollectionResponse)
+async def get_collection(
+    request_user: User | None = Depends(auth_required(optional=True)),
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.get_collection_display(
+        session, collection, request_user
+    )
+
+
 @router.post("/create", response_model=CollectionResponse)
 async def create_collection(
     session: AsyncSession = Depends(get_session),
@@ -85,17 +95,6 @@ async def create_collection(
 ):
     collection = await service.create_collection(session, args, user)
     return await service.get_collection_display(session, collection, user)
-
-
-@router.get("/{reference}", response_model=CollectionResponse)
-async def get_collection(
-    request_user: User | None = Depends(auth_required(optional=True)),
-    collection: Collection = Depends(validate_collection),
-    session: AsyncSession = Depends(get_session),
-):
-    return await service.get_collection_display(
-        session, collection, request_user
-    )
 
 
 @router.put("/{reference}", response_model=CollectionResponse)
