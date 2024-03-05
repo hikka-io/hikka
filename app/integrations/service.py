@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
+from .schemas import MALAnimeArgs
 from uuid import UUID
 
 from app.models import (
@@ -69,3 +70,12 @@ async def get_anime_main_staff(
         .order_by(desc(AnimeStaff.weight), asc(Person.name_en))
         .limit(8)
     )
+
+
+async def get_by_mal_ids(
+    session: AsyncSession, args: MALAnimeArgs
+) -> list[Anime | None]:
+    query = select(Anime).filter(Anime.mal_id.in_(args.mal_ids))
+    anime = await session.scalars(query)
+    anime_cache = {entry.mal_id: entry for entry in anime}
+    return [anime_cache.get(mal_id) for mal_id in args.mal_ids]
