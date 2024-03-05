@@ -41,12 +41,6 @@ class WatchArgs(CustomModel):
     status: WatchStatusEnum
 
 
-class WatchFilterArgs(CustomModel):
-    status: WatchStatusEnum | None = None
-    order: WatchOrderEnum = Field(default=constants.WATCH_ORDER_SCORE)
-    sort: WatchSortEnum = Field(default=constants.SORT_DESC)
-
-
 # Args
 class AnimeWatchSearchArgs(AnimeSearchArgsBase):
     sort: list[str] = ["watch_score:desc", "watch_created:desc"]

@@ -44,6 +44,7 @@ from .favourite import request_favourite_list
 from .favourite import request_favourite_add
 from .favourite import request_favourite
 
+from .watch import request_watch_random
 from .watch import request_watch_delete
 from .watch import request_watch_stats
 from .watch import request_watch_list
@@ -71,6 +72,7 @@ from .settings import request_settings_username
 from .settings import request_settings_password
 from .settings import request_settings_email
 
+from .collections import request_user_collections_list
 from .collections import request_create_collection
 from .collections import request_update_collection
 from .collections import request_delete_collection
@@ -117,6 +119,7 @@ __all__ = [
     "request_favourite_list",
     "request_favourite_add",
     "request_favourite",
+    "request_watch_random",
     "request_watch_delete",
     "request_watch_stats",
     "request_watch_list",
@@ -140,6 +143,7 @@ __all__ = [
     "request_settings_username",
     "request_settings_password",
     "request_settings_email",
+    "request_user_collections_list",
     "request_create_collection",
     "request_update_collection",
     "request_delete_collection",

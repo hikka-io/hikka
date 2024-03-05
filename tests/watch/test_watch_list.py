@@ -61,7 +61,9 @@ async def test_watch_list(
     assert response.json()["list"][1]["anime"]["slug"] == "oshi-no-ko-421060"
 
     # Try filtering by watch entry staus
-    response = await request_watch_list(client, "testuser", "watching")
+    response = await request_watch_list(
+        client, "testuser", {"watch_status": "watching"}
+    )
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
@@ -127,7 +129,7 @@ async def test_watch_list_order(
 
     # Check score asc order
     response = await request_watch_list(
-        client, "testuser", order="score", sort="asc"
+        client, "testuser", {"sort": ["watch_score:asc"]}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -146,7 +148,7 @@ async def test_watch_list_order(
 
     # Check episodes desc order
     response = await request_watch_list(
-        client, "testuser", order="episodes", sort="desc"
+        client, "testuser", {"sort": ["watch_episodes:desc"]}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -165,7 +167,7 @@ async def test_watch_list_order(
 
     # Check episodes asc order
     response = await request_watch_list(
-        client, "testuser", order="episodes", sort="asc"
+        client, "testuser", {"sort": ["watch_episodes:asc"]}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -184,7 +186,7 @@ async def test_watch_list_order(
 
     # Check media type desc order
     response = await request_watch_list(
-        client, "testuser", order="media_type", sort="desc"
+        client, "testuser", {"sort": ["media_type:desc"]}
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -203,7 +205,7 @@ async def test_watch_list_order(
 
     # Check media type asc order
     response = await request_watch_list(
-        client, "testuser", order="media_type", sort="asc"
+        client, "testuser", {"sort": ["media_type:asc"]}
     )
 
     assert response.status_code == status.HTTP_200_OK
