@@ -48,7 +48,11 @@ async def get_user_notifications(
 async def notification_seen(session: AsyncSession, notification: Notification):
     await session.execute(
         update(Notification)
-        .filter(Notification.created <= notification.created)
+        .filter(
+            Notification.created <= notification.created,
+            Notification.user_id == notification.user_id,
+            Notification.seen == False,
+        )
         .values(
             updated=datetime.utcnow(),
             seen=True,
