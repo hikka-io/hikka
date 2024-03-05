@@ -57,6 +57,10 @@ async def test_collections_info(
     assert response.json()["collection"][0]["content"]["watch"] == []
     assert len(response.json()["collection"]) == 8
 
+    from pprint import pprint
+
+    pprint(response.json()["collection"])
+
     for index, slug in enumerate(slugs):
         assert response.json()["collection"][index]["content"]["slug"] == slug
         assert response.json()["collection"][index]["order"] == index + 1

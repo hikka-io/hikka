@@ -98,3 +98,25 @@ async def test_collections_list(
     # Check preview length
     assert len(response.json()["list"][0]["collection"]) == 6
     assert len(response.json()["list"][1]["collection"]) == 6
+
+    # Check anime slugs just in case
+    assert (
+        response.json()["list"][1]["collection"][0]["content"]["slug"]
+        == anime_slugs[0]
+    )
+
+    assert (
+        response.json()["list"][1]["collection"][5]["content"]["slug"]
+        == anime_slugs[5]
+    )
+
+    # As well as person slugs
+    assert (
+        response.json()["list"][0]["collection"][0]["content"]["slug"]
+        == people_slugs[0]
+    )
+
+    assert (
+        response.json()["list"][0]["collection"][5]["content"]["slug"]
+        == people_slugs[5]
+    )
