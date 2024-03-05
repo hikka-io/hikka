@@ -51,7 +51,7 @@ async def notification_seen(session: AsyncSession, notification: Notification):
         .filter(
             Notification.created <= notification.created,
             Notification.user_id == notification.user_id,
-            Notification.seen == False,
+            Notification.seen == False,  # noqa: E712
         )
         .values(
             updated=datetime.utcnow(),
