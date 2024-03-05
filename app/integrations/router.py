@@ -73,16 +73,17 @@ async def watari_anime(anime: Anime = Depends(validate_watari_anime)):
 
 
 @router.get("/mal/{mal_id}", response_model=AnimeResponse)
+async def mal_anime_legacy(anime: Anime = Depends(validate_mal_anime)):
+    return anime
+
+
+@router.get("/mal/anime/{mal_id}", response_model=AnimeResponse)
 async def mal_anime(anime: Anime = Depends(validate_mal_anime)):
     return anime
 
 
-@router.post(
-    "/mal",
-    response_model=list[AnimeResponse | None],
-)
+@router.post("/mal/anime", response_model=list[AnimeResponse | None])
 async def mal_anime_list(
-    args: MALAnimeArgs,
-    session: AsyncSession = Depends(get_session),
+    args: MALAnimeArgs, session: AsyncSession = Depends(get_session)
 ):
     return await service.get_by_mal_ids(session, args)
