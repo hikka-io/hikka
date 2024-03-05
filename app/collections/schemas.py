@@ -90,6 +90,10 @@ class CollectionResponse(CustomModel):
 
     collection: list[CollectionContentResponse]
 
+    @field_validator("collection")
+    def collection_ordering(cls, collection):
+        return sorted(collection, key=lambda c: c.order)
+
 
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
