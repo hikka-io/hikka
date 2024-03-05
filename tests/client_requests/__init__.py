@@ -44,6 +44,7 @@ from .favourite import request_favourite_list
 from .favourite import request_favourite_add
 from .favourite import request_favourite
 
+from .watch import request_watch_random
 from .watch import request_watch_delete
 from .watch import request_watch_stats
 from .watch import request_watch_list
@@ -118,6 +119,7 @@ __all__ = [
     "request_favourite_list",
     "request_favourite_add",
     "request_favourite",
+    "request_watch_random",
     "request_watch_delete",
     "request_watch_stats",
     "request_watch_list",

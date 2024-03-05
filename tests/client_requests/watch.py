@@ -33,3 +33,7 @@ def request_watch_list(
 
 def request_watch_stats(client, username):
     return client.get(f"/watch/{username}/stats")
+
+
+def request_watch_random(client, username, status):
+    return client.get(f"/watch/random/{username}/{status}")

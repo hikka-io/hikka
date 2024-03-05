@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
-from sqlalchemy import select, desc, asc, func
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, func
 from datetime import datetime
 from app import constants
 import random
