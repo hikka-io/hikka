@@ -24,7 +24,6 @@ from .schemas import (
     AnimeWatchSearchArgs,
     WatchStatsResponse,
     WatchStatusEnum,
-    WatchFilterArgs,
     WatchResponse,
     WatchArgs,
 )
@@ -60,28 +59,6 @@ async def delete_watch(
 ):
     await service.delete_watch(session, watch, user)
     return {"success": True}
-
-
-@router.get("/{username}/list", response_model=WatchPaginationResponse)
-async def user_watch_list_legacy(
-    session: AsyncSession = Depends(get_session),
-    args: WatchFilterArgs = Depends(),
-    user: User = Depends(get_user),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.get_user_watch_list_count_legacy(
-        session, user, args.status
-    )
-    anime = await service.get_user_watch_list_legacy(
-        session, user, args.status, args.order, args.sort, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.all(),
-    }
 
 
 @router.get(
