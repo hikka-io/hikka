@@ -72,11 +72,6 @@ async def watari_anime(anime: Anime = Depends(validate_watari_anime)):
     return anime
 
 
-@router.get("/mal/{mal_id}", response_model=AnimeResponse)
-async def mal_anime_legacy(anime: Anime = Depends(validate_mal_anime)):
-    return anime
-
-
 @router.get("/mal/anime/{mal_id}", response_model=AnimeResponse)
 async def mal_anime(anime: Anime = Depends(validate_mal_anime)):
     return anime
