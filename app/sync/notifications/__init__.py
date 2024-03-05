@@ -38,9 +38,9 @@ async def generate_notifications(session: AsyncSession):
                 [
                     constants.LOG_COMMENT_WRITE,
                     constants.LOG_COMMENT_VOTE,
+                    constants.LOG_EDIT_UPDATE,
                     constants.LOG_EDIT_ACCEPT,
                     constants.LOG_EDIT_DENY,
-                    constants.LOG_EDIT_UPDATE,  # ToDo
                 ]
             )
         )

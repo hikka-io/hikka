@@ -4,6 +4,7 @@ from uuid import UUID
 
 from app.models import (
     Notification,
+    Collection,
     Comment,
     Edit,
 )
@@ -48,3 +49,12 @@ async def get_comment_by_path(session, path, hidden=False):
 
 async def get_edit(session, content_id):
     return await session.scalar(select(Edit).filter(Edit.id == content_id))
+
+
+async def get_collection(session, content_id):
+    return await session.scalar(
+        select(Collection).filter(
+            Collection.id == content_id,
+            Collection.deleted == False,  # noqa: E712
+        )
+    )

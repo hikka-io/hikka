@@ -111,6 +111,61 @@ async def generate_comment_write(session: AsyncSession, log: Log):
 
         session.add(notification)
 
+    # Create notification for author of the collection
+    if (
+        comment.depth == 1
+        and comment.content_type == constants.CONTENT_COLLECTION
+    ):
+        # If collection is gone for some reason, just continue on
+        if not (
+            collection := await service.get_collection(
+                session, comment.content_id
+            )
+        ):
+            return
+
+        if not collection.author:
+            return
+
+        if collection.author == comment.author:
+            return
+
+        notification_type = constants.NOTIFICATION_COLLECTION_COMMENT
+
+        # Do not create notification if we already did that
+        if await service.get_notification(
+            session,
+            collection.author_id,
+            log.id,
+            notification_type,
+        ):
+            return
+
+        # Fetch content in order to get slug
+        await session.refresh(comment, attribute_names=["content"])
+
+        notification = Notification(
+            **{
+                "notification_type": notification_type,
+                "user_id": collection.author_id,
+                "created": log.created,
+                "updated": log.created,
+                "log_id": log.id,
+                "seen": False,
+                "data": {
+                    "slug": comment.content.slug,
+                    "content_type": comment.content_type,
+                    "comment_author": comment.author.username,
+                    "comment_reference": comment.reference,
+                    "comment_depth": comment.depth,
+                    "comment_text": comment.text,
+                    "base_comment_reference": path_to_uuid(comment.path[0]),
+                },
+            }
+        )
+
+        session.add(notification)
+
     # Create notification for the author replied comment
     if comment.depth > 1:
         parent_path = comment.path[:-1]
