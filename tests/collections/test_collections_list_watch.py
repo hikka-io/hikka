@@ -1,9 +1,10 @@
 from client_requests import request_create_collection
-from client_requests import request_collection_info
+from client_requests import request_collections_list
+from client_requests import request_watch_add
 from fastapi import status
 
 
-async def test_collections_info(
+async def test_collections_list_watch(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -11,7 +12,7 @@ async def test_collections_info(
     get_test_token,
     test_session,
 ):
-    slugs = [
+    anime_slugs = [
         "fullmetal-alchemist-brotherhood-fc524a",
         "bocchi-the-rock-9e172d",
         "kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-a3ac07",
@@ -27,7 +28,7 @@ async def test_collections_info(
         get_test_token,
         {
             "tags": [],
-            "title": "Test collection",
+            "title": "Random anime collection",
             "description": "Description",
             "content_type": "anime",
             "labels_order": [],
@@ -41,7 +42,7 @@ async def test_collections_info(
                     "label": None,
                     "slug": slug,
                 }
-                for index, slug in enumerate(slugs)
+                for index, slug in enumerate(anime_slugs)
             ],
         },
     )
@@ -49,13 +50,29 @@ async def test_collections_info(
     # Make sure we got correct response code
     assert response.status_code == status.HTTP_200_OK
 
-    # Get collection info
-    response = await request_collection_info(
-        client, response.json()["reference"]
+    await request_watch_add(
+        client,
+        "fullmetal-alchemist-brotherhood-fc524a",
+        get_test_token,
+        {"status": "watching", "episodes": 1},
     )
 
-    assert len(response.json()["collection"]) == 8
+    # Now let's get list of collections
+    response = await request_collections_list(client, token=get_test_token)
 
-    for index, slug in enumerate(slugs):
-        assert response.json()["collection"][index]["content"]["slug"] == slug
-        assert response.json()["collection"][index]["order"] == index + 1
+    watch_data = response.json()["list"][0]["collection"][0]["content"]["watch"]
+
+    assert len(watch_data) == 1
+
+    assert watch_data[0]["status"] == "watching"
+    assert watch_data[0]["rewatches"] == 0
+    assert watch_data[0]["duration"] == 24
+    assert watch_data[0]["episodes"] == 1
+    assert watch_data[0]["note"] is None
+
+    # And one more time but without auth
+    response = await request_collections_list(client)
+
+    watch_data = response.json()["list"][0]["collection"][0]["content"]["watch"]
+
+    assert len(watch_data) == 0

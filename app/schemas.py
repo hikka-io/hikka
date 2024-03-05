@@ -1,7 +1,7 @@
 from fastapi.encoders import jsonable_encoder
-from pydantic import Field, EmailStr, constr
 from pydantic import BaseModel, ConfigDict
 from pydantic import model_serializer
+from pydantic import Field, EmailStr
 from pydantic import field_validator
 from pydantic import PositiveInt
 from datetime import datetime
@@ -134,7 +134,6 @@ class PasswordArgs(CustomModel):
 
 
 class AnimeSearchArgsBase(CustomModel):
-    # sort: list[str] = ["score:desc", "scored_by:desc"]
     only_translated: bool = False
 
     years: list[PositiveInt | None] | None = Field(
@@ -191,27 +190,6 @@ class AnimeSearchArgsBase(CustomModel):
             raise ValueError("Score can't be more than 10.")
 
         return scores
-
-    # @field_validator("sort")
-    # def validate_sort(cls, sort_list):
-    #     valid_fields = ["score", "scored_by"]
-    #     valid_orders = ["asc", "desc"]
-
-    #     if len(sort_list) != len(set(sort_list)):
-    #         raise ValueError("Invalid sort: duplicates")
-
-    #     for sort_item in sort_list:
-    #         parts = sort_item.split(":")
-
-    #         if len(parts) != 2:
-    #             raise ValueError(f"Invalid sort format: {sort_item}")
-
-    #         field, order = parts
-
-    #         if field not in valid_fields or order not in valid_orders:
-    #             raise ValueError(f"Invalid sort value: {sort_item}")
-
-    #     return sort_list
 
 
 # Responses
