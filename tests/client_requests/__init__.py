@@ -79,6 +79,10 @@ from .collections import request_delete_collection
 from .collections import request_collections_list
 from .collections import request_collection_info
 
+from .notifications import request_notifications_count
+from .notifications import request_notification_seen
+from .notifications import request_notifications
+
 from .upload import request_upload
 
 __all__ = [
@@ -149,5 +153,8 @@ __all__ = [
     "request_delete_collection",
     "request_collections_list",
     "request_collection_info",
+    "request_notifications_count",
+    "request_notification_seen",
+    "request_notifications",
     "request_upload",
 ]
