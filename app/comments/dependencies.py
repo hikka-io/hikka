@@ -100,17 +100,11 @@ async def validate_comment_edit(
         auth_required(permissions=[constants.PERMISSION_COMMENT_EDIT])
     ),
 ):
-    time_limit = timedelta(hours=1)
-    max_edits = 5
-
     if comment.author != author:
         raise Abort("comment", "not-owner")
 
-    if len(comment.history) >= max_edits:
-        raise Abort("comment", "max-edits")
-
-    if datetime.utcnow() > comment.created + time_limit:
-        raise Abort("comment", "edit-time-limit")
+    if not comment.is_editable:
+        raise Abort("comment", "not-editable")
 
     return comment
 

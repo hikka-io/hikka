@@ -35,6 +35,7 @@ async def test_comments_list(
     assert response.json()["list"][0]["replies"][0]["text"] == "2"
     assert response.json()["list"][0]["replies"][0]["my_score"] == 0
     assert response.json()["list"][0]["replies"][0]["replies"][0]["text"] == "3"
+    assert response.json()["list"][0]["is_editable"] is True
     assert (
         response.json()["list"][0]["replies"][0]["replies"][0]["replies"][0][
             "text"

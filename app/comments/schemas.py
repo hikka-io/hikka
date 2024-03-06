@@ -46,6 +46,7 @@ class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
     author: UserResponse
+    is_editable: bool
     updated: datetime
     created: datetime
     text: str | None
@@ -68,6 +69,7 @@ class CommentNode:
     reference: str
 
     replies: list["CommentNode"] = field(default_factory=list)
+    is_editable: bool = False
     total_replies: int = 0
     hidden: bool = False
     my_score: int = None
@@ -80,6 +82,7 @@ class CommentNode:
     def from_comment(self, comment: Comment):
         self.my_score = comment.my_score if comment.my_score else 0
         self.text = comment.text if not comment.hidden else None
+        self.is_editable = comment.is_editable
         self.updated = comment.updated
         self.created = comment.created
         self.author = comment.author
