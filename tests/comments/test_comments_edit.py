@@ -85,6 +85,7 @@ async def test_comments_edit_rate_limit(
     aggregator_anime_info,
     create_test_user,
     get_test_token,
+    test_session,
 ):
     response = await request_comments_write(
         client, get_test_token, "edit", "17", "Old text"
@@ -98,8 +99,14 @@ async def test_comments_edit_rate_limit(
         if index != 5:
             continue
 
+        comment = await test_session.scalar(
+            select(Comment).filter(Comment.id == response.json()["reference"])
+        )
+
+        assert comment.is_editable is False
+
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["code"] == "comment:max_edits"
+        assert response.json()["code"] == "comment:not_editable"
 
 
 async def test_comments_edit_time_limit(
@@ -123,12 +130,14 @@ async def test_comments_edit_time_limit(
     test_session.add(comment)
     await test_session.commit()
 
+    assert comment.is_editable is False
+
     response = await request_comments_edit(
         client, get_test_token, response.json()["reference"], "New text"
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "comment:edit_time_limit"
+    assert response.json()["code"] == "comment:not_editable"
 
 
 async def test_comments_edit_bad_author(
