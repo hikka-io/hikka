@@ -97,10 +97,10 @@ class Anime(
         back_populates="anime", viewonly=True
     )
 
-    favourite: Mapped[list["AnimeFavourite"]] = relationship(
-        foreign_keys="[AnimeFavourite.anime_id]",
-        back_populates="anime",
-    )
+    # favourite: Mapped[list["AnimeFavourite"]] = relationship(
+    #     foreign_keys="[AnimeFavourite.anime_id]",
+    #     back_populates="anime",
+    # )
 
     watch: Mapped[list["AnimeWatch"]] = relationship(
         foreign_keys="[AnimeWatch.anime_id]",
