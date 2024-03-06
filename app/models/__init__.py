@@ -22,6 +22,8 @@ from .comments.comment import EditComment
 from .comments.vote import CommentVote
 from .comments.comment import Comment
 
+# ToDo: remove legacy
+from .list.favourite import AnimeFavouriteLegacy
 from .list.favourite import AnimeFavourite
 from .list.favourite import Favourite
 from .list.watch import AnimeWatch
