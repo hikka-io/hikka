@@ -60,9 +60,7 @@ async def process_upload_file(
 ) -> Image:
     extension = utils.get_mime_extension(upload_metadata.mime_type)
 
-    file_path = (
-        f"/uploads/{user.username}/{upload_type}/{str(uuid4())}.{extension}"
-    )
+    file_path = f"/uploads/{user.username}/{upload_type.name}/{str(uuid4())}.{extension}"
 
     now = datetime.utcnow()
 
