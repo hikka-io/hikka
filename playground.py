@@ -22,6 +22,8 @@ from app.admin.service import (
 )
 
 from app.models import (
+    AnimeFavouriteLegacy,
+    AnimeFavourite,
     AnimeStaffRole,
     AnimeStaff,
     AnimeWatch,
@@ -223,6 +225,42 @@ async def run_search():
     await sessionmanager.close()
 
 
+async def run_favourite_migration():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        legacy_favourite_list = await session.scalars(
+            select(AnimeFavouriteLegacy)
+        )
+
+        for legacy_favourite in legacy_favourite_list:
+            if await session.scalar(
+                select(AnimeFavourite).filter(
+                    AnimeFavourite.content_id == legacy_favourite.anime_id,
+                    AnimeFavourite.user_id == legacy_favourite.user_id,
+                )
+            ):
+                continue
+
+            favourite = AnimeFavourite(
+                **{
+                    "content_id": legacy_favourite.anime_id,
+                    "user_id": legacy_favourite.user_id,
+                    "created": legacy_favourite.created,
+                }
+            )
+
+            session.add(favourite)
+
+            await session.commit()
+
+            print(favourite)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -232,7 +270,8 @@ if __name__ == "__main__":
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
-    asyncio.run(run_search())
+    # asyncio.run(run_search())
+    asyncio.run(run_favourite_migration())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
