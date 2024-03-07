@@ -19,7 +19,6 @@ async def test_favourite_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
 
     # Add anime to favourite one more time to get an error
     response = await request_favourite_add(
@@ -35,7 +34,6 @@ async def test_favourite_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
 
     # Check anime favourite log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))

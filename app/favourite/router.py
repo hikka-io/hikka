@@ -6,7 +6,8 @@ from app.database import get_session
 from . import service
 
 from .schemas import (
-    AnimeFavouritePaginationResponse,
+    FavouritePaginationResponse,
+    FavouriteResponse,
     ContentTypeEnum,
 )
 
@@ -18,7 +19,6 @@ from app.dependencies import (
 )
 
 from app.schemas import (
-    AnimeFavouriteResponse,
     SuccessResponse,
 )
 
@@ -31,25 +31,25 @@ from .dependencies import (
 router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 
-@router.get("/{content_type}/{slug}", response_model=AnimeFavouriteResponse)
+@router.get("/{content_type}/{slug}", response_model=FavouriteResponse)
 async def get_favourite(
     favourite: Favourite = Depends(validate_get_favourite),
 ):
     return favourite
 
 
-@router.put("/{content_type}/{slug}", response_model=AnimeFavouriteResponse)
-async def anime_favourite_add(
+@router.put("/{content_type}/{slug}", response_model=FavouriteResponse)
+async def favourite_add(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    anime: Anime = Depends(validate_add_favourite),
+    content: Anime = Depends(validate_add_favourite),
     user: User = Depends(auth_required()),
 ):
-    return await service.create_favourite(session, content_type, anime, user)
+    return await service.create_favourite(session, content_type, content, user)
 
 
 @router.delete("/{content_type}/{slug}", response_model=SuccessResponse)
-async def anime_favourite_delete(
+async def favourite_delete(
     session: AsyncSession = Depends(get_session),
     favourite: Favourite = Depends(validate_get_favourite),
 ):
@@ -59,9 +59,9 @@ async def anime_favourite_delete(
 
 @router.get(
     "/{content_type}/{username}/list",
-    response_model=AnimeFavouritePaginationResponse,
+    response_model=FavouritePaginationResponse,
 )
-async def anime_favourite_list(
+async def favourite_list(
     content_type: str,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),

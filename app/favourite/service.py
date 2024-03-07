@@ -12,6 +12,7 @@ from app.service import (
 )
 
 from app.models import (
+    CollectionFavourite,
     AnimeFavourite,
     AnimeWatch,
     Favourite,
@@ -21,6 +22,7 @@ from app.models import (
 
 
 content_type_to_favourite_class = {
+    constants.CONTENT_COLLECTION: CollectionFavourite,
     constants.CONTENT_ANIME: AnimeFavourite,
 }
 
@@ -92,12 +94,13 @@ async def get_user_favourite_list(
     offset: int,
 ) -> list[Favourite]:
     favourite_model = content_type_to_favourite_class[content_type]
+
     load_options = []
 
+    # Load request user watch statuses here
     if content_type == constants.CONTENT_ANIME:
-        # Load request user watch statuses here
         load_options = [
-            anime_loadonly(joinedload(favourite_model.anime)).joinedload(
+            anime_loadonly(joinedload(favourite_model.content)).joinedload(
                 Anime.watch
             ),
             with_loader_criteria(

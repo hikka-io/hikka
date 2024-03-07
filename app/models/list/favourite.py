@@ -31,8 +31,27 @@ class AnimeFavourite(Favourite):
         index=True,
     )
 
-    anime: Mapped["Anime"] = relationship(
+    content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
         foreign_keys=[content_id],
-        # lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # ToDo: check if it is good idea
+    )
+
+
+class CollectionFavourite(Favourite):
+    __mapper_args__ = {
+        "polymorphic_identity": "collection",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_collections.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Collection"] = relationship(
+        primaryjoin="Collection.id == CollectionFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
     )
