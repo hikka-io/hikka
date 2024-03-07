@@ -65,18 +65,6 @@ async def get_content_by_slug(
     return await session.scalar(query)
 
 
-# Same as above
-async def get_content_by_content_id(
-    session: AsyncSession, content_type: str, content_id: str
-):
-    """Return content by content_type and content_id"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.id == content_id)
-    )
-
-
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(

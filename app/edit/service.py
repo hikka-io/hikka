@@ -9,7 +9,6 @@ from app import constants
 
 from app.service import (
     get_comments_count_subquery,
-    get_content_by_content_id,
     create_log,
 )
 
@@ -24,6 +23,8 @@ from app.models import (
     AnimeWatch,
     PersonEdit,
     AnimeEdit,
+    Character,
+    Person,
     Anime,
     Edit,
     User,
@@ -234,15 +235,14 @@ async def accept_pending_edit(
 async def create_pending_edit(
     session: AsyncSession,
     content_type: ContentTypeEnum,
-    content_id: str,
+    content: Person | Anime | Character,
     args: EditArgs,
     author: User,
 ) -> AnimeEdit:
-    """Create edit for given content_id with pending status"""
+    """Create edit for given content with pending status"""
 
     edit_model = content_type_to_edit_class[content_type]
 
-    content = await get_content_by_content_id(session, content_type, content_id)
     before = calculate_before(content, args.after)
 
     now = datetime.utcnow()
@@ -252,7 +252,7 @@ async def create_pending_edit(
             "status": constants.EDIT_PENDING,
             "description": args.description,
             "content_type": content_type,
-            "content_id": content_id,
+            "content_id": content.id,
             "after": args.after,
             "author": author,
             "before": before,

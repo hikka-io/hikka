@@ -2,10 +2,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import Edit, User
 from app import constants
 from . import service
 
+from app.models import (
+    Character,
+    Person,
+    Anime,
+    User,
+    Edit,
+)
 
 from app.dependencies import (
     auth_required,
@@ -27,6 +33,7 @@ from .dependencies import (
     validate_edit_accept,
     validate_edit_update,
     validate_edit_close,
+    validate_content,
     validate_edit_id,
 )
 
@@ -86,7 +93,7 @@ async def get_edit(edit: Edit = Depends(validate_edit_id)):
 async def create_edit(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content_id: str = Depends(validate_content_slug),
+    content: Person | Anime | Character = Depends(validate_content),
     args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_EDIT_CREATE])
@@ -94,7 +101,7 @@ async def create_edit(
     _: bool = Depends(check_captcha),
 ):
     return await service.create_pending_edit(
-        session, content_type, content_id, args, author
+        session, content_type, content, args, author
     )
 
 

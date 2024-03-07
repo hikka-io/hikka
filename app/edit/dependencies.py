@@ -10,6 +10,7 @@ from . import service
 from . import utils
 
 from app.models import (
+    Character,
     Person,
     Anime,
     Edit,
@@ -103,7 +104,7 @@ async def validate_content(
 
 
 async def validate_content_slug(
-    content: Person | Anime | None = Depends(validate_content),
+    content: Person | Anime | Character = Depends(validate_content),
 ) -> str:
     """Return content reference by content_type and slug"""
     return content.reference
