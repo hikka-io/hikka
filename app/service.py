@@ -1,24 +1,80 @@
 from sqlalchemy import select, asc, desc, and_, func
+from app.utils import new_token, is_int, is_uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from .schemas import AnimeSearchArgsBase
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from app.utils import new_token
 from app import constants
 from uuid import UUID
 
 from app.models import (
     EmailMessage,
     AnimeGenre,
+    Collection,
     AnimeWatch,
     AuthToken,
+    Character,
     Company,
     Comment,
+    Person,
     Anime,
+    Edit,
     User,
     Log,
 )
+
+
+content_type_to_content_class = {
+    constants.CONTENT_COLLECTION: Collection,
+    constants.CONTENT_CHARACTER: Character,
+    constants.CONTENT_SYSTEM_EDIT: Edit,
+    constants.CONTENT_PERSON: Person,
+    constants.CONTENT_ANIME: Anime,
+}
+
+
+# We use this code mainly with system based on polymorphic identity
+async def get_content_by_slug(
+    session: AsyncSession, content_type: str, slug: str
+):
+    """Return content by content_type and slug"""
+
+    content_model = content_type_to_content_class[content_type]
+    query = select(content_model)
+
+    # Special case for edit
+    if content_type == constants.CONTENT_SYSTEM_EDIT:
+        if not is_int(slug):
+            return None
+
+        query = query.filter(content_model.edit_id == int(slug))
+
+    # Special case for collection
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COLLECTION:
+        if not is_uuid(slug):
+            return None
+
+        query = query.filter(content_model.id == UUID(slug))
+
+    # Everything else is handled here
+    else:
+        query = query.filter(content_model.slug == slug)
+
+    return await session.scalar(query)
+
+
+# Same as above
+async def get_content_by_content_id(
+    session: AsyncSession, content_type: str, content_id: str
+):
+    """Return content by content_type and content_id"""
+
+    content_model = content_type_to_content_class[content_type]
+    return await session.scalar(
+        select(content_model).filter(content_model.id == content_id)
+    )
 
 
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):

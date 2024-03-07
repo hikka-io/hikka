@@ -9,6 +9,7 @@ from app import constants
 
 from app.service import (
     get_comments_count_subquery,
+    get_content_by_content_id,
     create_log,
 )
 
@@ -23,20 +24,11 @@ from app.models import (
     AnimeWatch,
     PersonEdit,
     AnimeEdit,
-    Character,
-    Person,
     Anime,
     Edit,
     User,
 )
 
-# This is hack-ish way to have single function for different types of content
-# As long as it does the job we can keep it (why not)
-content_type_to_content_class = {
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_PERSON: Person,
-    constants.CONTENT_ANIME: Anime,
-}
 
 content_type_to_edit_class = {
     constants.CONTENT_CHARACTER: CharacterEdit,
@@ -59,29 +51,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
                 ),
             )
         )
-    )
-
-
-# ToDo: figure out what to do with anime episodes that do not have a slug
-async def get_content_by_slug(
-    session: AsyncSession, content_type: ContentTypeEnum, slug: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and slug"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.slug == slug)
-    )
-
-
-async def get_content_by_content_id(
-    session: AsyncSession, content_type: ContentTypeEnum, content_id: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and content_id"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.id == content_id)
     )
 
 

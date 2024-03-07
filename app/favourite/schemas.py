@@ -1,11 +1,18 @@
 from datetime import datetime
 from pydantic import Field
+from app import constants
+from enum import Enum
 
 from app.schemas import (
     AnimeResponseWithWatch,
     PaginationResponse,
     CustomModel,
 )
+
+
+# Enums
+class ContentTypeEnum(str, Enum):
+    content_anime = constants.CONTENT_ANIME
 
 
 # Responses

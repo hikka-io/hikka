@@ -5,6 +5,7 @@ from datetime import timezone
 from datetime import datetime
 from app.models import User
 from app import constants
+from uuid import UUID
 import unicodedata
 import aiohttp
 import secrets
@@ -110,9 +111,11 @@ def slugify(
     # Pass trough text and replace cyrillic characters according to
     # official Ukrainian transliteration
     text = "".join(
-        transliterate[letter.lower()]
-        if letter.lower() in transliterate
-        else letter
+        (
+            transliterate[letter.lower()]
+            if letter.lower() in transliterate
+            else letter
+        )
         for letter in text
     )
 
@@ -292,3 +295,20 @@ def is_empty_markdown(text):
 
     # And now check if string is empty
     return len(text) == 0
+
+
+# I really hate this
+def is_int(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_uuid(string):
+    try:
+        UUID(string)
+        return True
+    except ValueError:
+        return False
