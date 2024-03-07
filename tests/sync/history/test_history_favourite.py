@@ -14,34 +14,34 @@ async def test_history_favourite(test_session, create_test_user):
         {
             # First user adds title to his favourite
             "created": datetime(2024, 2, 1, 0, 0, 0),
-            "log_type": constants.LOG_FAVOURITE_ANIME,
+            "log_type": constants.LOG_FAVOURITE,
             "target_id": fake_anime_id,
             "user_id": user_id,
-            "data": {},
+            "data": {"content_type": "anime"},
         },
         {
             # Then removes in couple hours
             "created": datetime(2024, 2, 1, 3, 0, 0),
-            "log_type": constants.LOG_FAVOURITE_ANIME_REMOVE,
+            "log_type": constants.LOG_FAVOURITE_REMOVE,
             "target_id": fake_anime_id,
             "user_id": user_id,
-            "data": {},
+            "data": {"content_type": "anime"},
         },
         {
             # Then adds again
             "created": datetime(2024, 2, 1, 4, 0, 0),
-            "log_type": constants.LOG_FAVOURITE_ANIME,
+            "log_type": constants.LOG_FAVOURITE,
             "target_id": fake_anime_id,
             "user_id": user_id,
-            "data": {},
+            "data": {"content_type": "anime"},
         },
         {
             # And removes in more than 6 hours
             "created": datetime(2024, 2, 1, 10, 1, 0),
-            "log_type": constants.LOG_FAVOURITE_ANIME_REMOVE,
+            "log_type": constants.LOG_FAVOURITE_REMOVE,
             "target_id": fake_anime_id,
             "user_id": user_id,
-            "data": {},
+            "data": {"content_type": "anime"},
         },
     ]
 

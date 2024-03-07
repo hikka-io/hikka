@@ -59,14 +59,6 @@ async def create_favourite(
     session.add(favourite)
     await session.commit()
 
-    # ToDo: fix old logs (?)
-    # await create_log(
-    #     session,
-    #     constants.LOG_FAVOURITE_ANIME,
-    #     user,
-    #     anime.id,
-    # )
-
     await create_log(
         session,
         constants.LOG_FAVOURITE,
@@ -82,14 +74,6 @@ async def delete_favourite(session: AsyncSession, favourite: Favourite):
     await session.delete(favourite)
     await session.commit()
 
-    # ToDo: fix old logs (?)
-    # await create_log(
-    #     session,
-    #     constants.LOG_FAVOURITE_ANIME_REMOVE,
-    #     favourite.user,
-    #     favourite.anime.id,
-    # )
-
     await create_log(
         session,
         constants.LOG_FAVOURITE_REMOVE,
@@ -101,26 +85,31 @@ async def delete_favourite(session: AsyncSession, favourite: Favourite):
 
 async def get_user_favourite_list(
     session: AsyncSession,
+    content_type: ContentTypeEnum,
     user: User,
     request_user: User | None,
     limit: int,
     offset: int,
 ) -> list[Favourite]:
-    # Load request user watch statuses here
-    load_options = [
-        anime_loadonly(joinedload(AnimeFavourite.anime)).joinedload(
-            Anime.watch
-        ),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-    ]
+    favourite_model = content_type_to_favourite_class[content_type]
+    load_options = []
+
+    if content_type == constants.CONTENT_ANIME:
+        # Load request user watch statuses here
+        load_options = [
+            anime_loadonly(joinedload(favourite_model.anime)).joinedload(
+                Anime.watch
+            ),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        ]
 
     return await session.scalars(
-        select(AnimeFavourite)
-        .filter(AnimeFavourite.user == user)
-        .order_by(desc(AnimeFavourite.created))
+        select(favourite_model)
+        .filter(favourite_model.user == user)
+        .order_by(desc(favourite_model.created))
         .options(*load_options)
         .limit(limit)
         .offset(offset)
@@ -129,10 +118,12 @@ async def get_user_favourite_list(
 
 async def get_user_favourite_list_count(
     session: AsyncSession,
+    content_type: ContentTypeEnum,
     user: User,
 ) -> int:
+    favourite_model = content_type_to_favourite_class[content_type]
     return await session.scalar(
-        select(func.count(AnimeFavourite.id)).filter(
-            AnimeFavourite.user == user
+        select(func.count(favourite_model.id)).filter(
+            favourite_model.user == user
         )
     )

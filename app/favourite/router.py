@@ -70,12 +70,15 @@ async def anime_favourite_list(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_favourite_list_count(session, user)
-    anime = await service.get_user_favourite_list(
-        session, user, request_user, limit, offset
+    total = await service.get_user_favourite_list_count(
+        session, content_type, user
+    )
+
+    content = await service.get_user_favourite_list(
+        session, content_type, user, request_user, limit, offset
     )
 
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
+        "list": content.unique().all(),
     }
