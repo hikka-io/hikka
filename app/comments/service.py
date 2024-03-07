@@ -11,15 +11,12 @@ from app import constants
 from app import utils
 import copy
 
-
 from app.models import (
     CollectionComment,
     AnimeComment,
     CommentVote,
     EditComment,
-    Collection,
     Comment,
-    Anime,
     User,
     Edit,
 )

@@ -212,6 +212,8 @@ TODO_ANIME_TITLE_UA = "title_ua"
 # Log types
 LOG_FAVOURITE_ANIME = "favourite_anime_add"
 LOG_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
+LOG_FAVOURITE = "favourite_add"
+LOG_FAVOURITE_REMOVE = "favourite_remove"
 LOG_COMMENT_WRITE = "comment_write"
 LOG_COMMENT_EDIT = "comment_edit"
 LOG_COMMENT_HIDE = "comment_hide"
