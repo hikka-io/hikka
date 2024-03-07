@@ -27,6 +27,7 @@ from app.models import (
     AnimeWatch,
     Anime,
     Edit,
+    Log,
 )
 
 
@@ -223,6 +224,43 @@ async def run_search():
     await sessionmanager.close()
 
 
+async def run_migrate_logs():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        remove_logs = await session.scalars(
+            select(Log).filter(
+                Log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE
+            )
+        )
+
+        for log in remove_logs:
+            log.data = {"content_type": constants.CONTENT_ANIME}
+            log.log_type = constants.LOG_FAVOURITE_REMOVE
+
+            session.add(log)
+            await session.commit()
+
+            print(log)
+
+        add_logs = await session.scalars(
+            select(Log).filter(Log.log_type == constants.LOG_FAVOURITE_ANIME)
+        )
+
+        for log in add_logs:
+            log.data = {"content_type": constants.CONTENT_ANIME}
+            log.log_type = constants.LOG_FAVOURITE
+
+            session.add(log)
+            await session.commit()
+
+            print(log)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -236,4 +274,5 @@ if __name__ == "__main__":
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
+    asyncio.run(run_migrate_logs())
     pass
