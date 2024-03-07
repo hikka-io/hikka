@@ -280,12 +280,6 @@ class AnimeFavouriteResponse(CustomModel):
     anime: AnimeResponse
 
 
-class AnimeFavouriteResponseWithWatch(CustomModel):
-    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
-    created: datetime = Field(examples=[1686088809])
-    anime: AnimeResponseWithWatch
-
-
 class SuccessResponse(CustomModel):
     success: bool = Field(examples=[True])
 

@@ -18,7 +18,7 @@ from app.models import (
 )
 
 
-async def get_anime_favourite(
+async def get_favourite(
     session: AsyncSession, anime: AnimeFavourite, user: User
 ) -> AnimeFavourite | None:
     return await session.scalar(
@@ -29,7 +29,7 @@ async def get_anime_favourite(
     )
 
 
-async def create_anime_favourite(
+async def create_favourite(
     session: AsyncSession, anime: Anime, user: User
 ) -> AnimeFavourite:
     favourite = AnimeFavourite(
@@ -53,9 +53,7 @@ async def create_anime_favourite(
     return favourite
 
 
-async def delete_anime_favourite(
-    session: AsyncSession, favourite: AnimeFavourite
-):
+async def delete_favourite(session: AsyncSession, favourite: AnimeFavourite):
     await session.delete(favourite)
     await session.commit()
 
@@ -67,7 +65,7 @@ async def delete_anime_favourite(
     )
 
 
-async def get_user_anime_favourite_list(
+async def get_user_favourite_list(
     session: AsyncSession,
     user: User,
     request_user: User | None,
@@ -95,7 +93,7 @@ async def get_user_anime_favourite_list(
     )
 
 
-async def get_user_anime_favourite_list_count(
+async def get_user_favourite_list_count(
     session: AsyncSession,
     user: User,
 ) -> int:
