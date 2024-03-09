@@ -23,6 +23,7 @@ from .comments.vote import CommentVote
 from .comments.comment import Comment
 
 from .list.favourite import CollectionFavourite
+from .list.favourite import CharacterFavourite
 from .list.favourite import AnimeFavourite
 from .list.favourite import Favourite
 from .list.watch import AnimeWatch
@@ -81,6 +82,7 @@ __all__ = [
     "CommentVote",
     "Comment",
     "CollectionFavourite",
+    "CharacterFavourite",
     "AnimeFavourite",
     "Favourite",
     "AnimeWatch",
