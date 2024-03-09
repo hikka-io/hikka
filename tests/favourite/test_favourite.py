@@ -10,7 +10,7 @@ async def test_favourite(
 ):
     # Check whether Bocchi is favourite anime of user
     response = await request_favourite(
-        client, "bocchi-the-rock-9e172d", get_test_token
+        client, "anime", "bocchi-the-rock-9e172d", get_test_token
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
