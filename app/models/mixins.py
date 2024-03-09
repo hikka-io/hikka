@@ -6,6 +6,10 @@ from sqlalchemy import String
 from datetime import datetime
 
 
+class SynonymsMixin:
+    synonyms: Mapped[list] = mapped_column(JSONB, default=[])
+
+
 class NeedsSearchUpdateMixin:
     needs_search_update: Mapped[bool] = mapped_column(default=False)
 
