@@ -251,6 +251,7 @@ class CharacterResponse(CustomModel):
     name_ja: str | None = Field(examples=["めぐみん"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["megumin-123456"])
+    synonyms: list[str]
 
 
 class PersonResponse(CustomModel):
@@ -259,6 +260,7 @@ class PersonResponse(CustomModel):
     name_en: str | None = Field(examples=["Rie Takahashi"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["rie-takahashi-123456"])
+    synonyms: list[str]
 
 
 class RoleResponse(CustomModel):

@@ -12,6 +12,7 @@ from ..base import Base
 from ..mixins import (
     NeedsSearchUpdateMixin,
     IgnoredFieldsMixin,
+    SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
     SlugMixin,
@@ -23,6 +24,7 @@ class Anime(
     SlugMixin,
     ContentMixin,
     UpdatedMixin,
+    SynonymsMixin,
     IgnoredFieldsMixin,
     NeedsSearchUpdateMixin,
 ):
@@ -62,7 +64,6 @@ class Anime(
         String(16), index=True, nullable=True
     )
 
-    synonyms: Mapped[list] = mapped_column(JSONB, default=[])
     external: Mapped[list] = mapped_column(JSONB, default=[])
     videos: Mapped[list] = mapped_column(JSONB, default=[])
     stats: Mapped[list] = mapped_column(JSONB, default=[])

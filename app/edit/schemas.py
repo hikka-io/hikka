@@ -88,6 +88,7 @@ class PersonEditArgs(CustomModel):
     name_en: str | None = Field(
         None, examples=["Hiroo Maruyama"], max_length=255
     )
+    synonyms: list[str] | None = None
 
 
 class CharacterEditArgs(CustomModel):
@@ -95,6 +96,7 @@ class CharacterEditArgs(CustomModel):
     name_ua: str | None = Field(None, examples=["Ґатс"], max_length=255)
     name_en: str | None = Field(None, examples=["Guts"], max_length=255)
     description_ua: str | None = Field(None, examples=["..."])
+    synonyms: list[str] | None = None
 
 
 # Response
