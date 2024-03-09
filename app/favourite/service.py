@@ -2,21 +2,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
-from sqlalchemy.orm import relationship
 from sqlalchemy.orm import joinedload
 from .schemas import ContentTypeEnum
 from datetime import datetime
 from app import constants
 
-from app.collections.service import get_comments_count_subquery
-
 from app.service import (
-    anime_loadonly,
+    get_comments_count_subquery,
+    collections_load_options,
     create_log,
 )
 
 from app.models import (
-    AnimeCollectionContent,
     CollectionFavourite,
     AnimeFavourite,
     AnimeWatch,
@@ -101,41 +98,68 @@ async def get_user_favourite_list(
 ) -> list[Favourite]:
     favourite_model = content_type_to_favourite_class[content_type]
 
-    query = (
-        select(favourite_model)
-        .filter(favourite_model.user == user)
-        .order_by(desc(favourite_model.created))
-    )
-
-    # Load request user watch statuses here
     if content_type == constants.CONTENT_ANIME:
-        query = query.options(
-            anime_loadonly(joinedload(favourite_model.content)).joinedload(
-                Anime.watch
-            ),
-            with_loader_criteria(
-                AnimeWatch,
-                (
-                    AnimeWatch.user_id == request_user.id
-                    if request_user
-                    else None
+        query = (
+            select(Anime)
+            .join(
+                favourite_model,
+                favourite_model.content_id == Anime.id,
+            )
+            .filter(favourite_model.user == user)
+            .options(
+                joinedload(Anime.watch),
+                with_loader_criteria(
+                    AnimeWatch,
+                    (
+                        AnimeWatch.user_id == request_user.id
+                        if request_user
+                        else None
+                    ),
                 ),
-            ),
+            )
+            .options(
+                with_expression(
+                    Anime.favourite_created,
+                    favourite_model.created,
+                )
+            )
         )
 
-    # if content_type == constants.CONTENT_COLLECTION:
-    #     query = query.options(
-    #         joinedload(favourite_model.content)
-    #         .joinedload(Collection.collection.of_type(AnimeCollectionContent))
-    #         .joinedload(AnimeCollectionContent.content)
-    #         .joinedload(Anime.watch),
-    #         with_loader_criteria(
-    #             AnimeWatch,
-    #             AnimeWatch.user_id == request_user.id if request_user else None,
-    #         ),
-    #     )
+    if content_type == constants.CONTENT_COLLECTION:
+        query = (
+            collections_load_options(
+                select(Collection).filter(
+                    Collection.private == False,  # noqa: E712
+                    Collection.deleted == False,  # noqa: E712
+                ),
+                request_user,
+                True,
+            )
+            .join(
+                favourite_model,
+                favourite_model.content_id == Collection.id,
+            )
+            .options(
+                with_expression(
+                    Collection.comments_count,
+                    get_comments_count_subquery(
+                        Collection.id, constants.CONTENT_COLLECTION
+                    ),
+                )
+            )
+            .options(
+                with_expression(
+                    Collection.favourite_created,
+                    favourite_model.created,
+                )
+            )
+        )
 
-    return await session.scalars(query.limit(limit).offset(offset))
+    return await session.scalars(
+        query.order_by(desc(favourite_model.created))
+        .limit(limit)
+        .offset(offset)
+    )
 
 
 async def get_user_favourite_list_count(

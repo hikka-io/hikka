@@ -20,7 +20,7 @@ async def test_favourite_watch_status(
     response = await request_favourite_list(client, "testuser")
 
     # User watch status should be empty
-    assert response.json()["list"][0]["content"]["watch"] == []
+    assert response.json()["list"][0]["watch"] == []
 
     # Add Bocchi to watch list
     await request_watch_add(
@@ -38,10 +38,10 @@ async def test_favourite_watch_status(
     response = await request_favourite_list(client, "testuser")
 
     # Watch status still should be empty
-    assert response.json()["list"][0]["content"]["watch"] == []
+    assert response.json()["list"][0]["watch"] == []
 
     # Get user favourite list (with auth)
     response = await request_favourite_list(client, "testuser", get_test_token)
 
     # Watch status still should have 1 entry
-    assert len(response.json()["list"][0]["content"]["watch"]) == 1
+    assert len(response.json()["list"][0]["watch"]) == 1

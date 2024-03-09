@@ -1,9 +1,6 @@
-from sqlalchemy import select, asc, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.sql.selectable import Select
+from sqlalchemy import select, delete, func
 from sqlalchemy.orm import with_expression
-from sqlalchemy.orm import joinedload
 from .schemas import CollectionArgs
 from datetime import datetime
 from app import constants
@@ -11,6 +8,7 @@ from uuid import UUID
 
 from app.service import (
     get_comments_count_subquery,
+    collections_load_options,
     create_log,
 )
 
@@ -19,7 +17,6 @@ from app.models import (
     PersonCollectionContent,
     AnimeCollectionContent,
     CollectionContent,
-    AnimeWatch,
     Collection,
     Character,
     Person,
@@ -68,30 +65,6 @@ async def build_collection_content(
         )
         for content in args.content
     ]
-
-
-def collections_load_options(
-    query: Select, request_user: User | None, preview: bool = False
-):
-    # Yeah, I like it but not sure about performance
-    query = query.options(
-        joinedload(Collection.collection.of_type(AnimeCollectionContent))
-        .joinedload(AnimeCollectionContent.content)
-        .joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-    )
-
-    if preview:
-        query = query.options(
-            with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 6
-            )
-        )
-
-    return query.order_by(desc(Collection.created))
 
 
 async def count_content(

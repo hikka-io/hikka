@@ -1,14 +1,18 @@
 from sqlalchemy import select, asc, desc, and_, func
 from app.utils import new_token, is_int, is_uuid
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from .schemas import AnimeSearchArgsBase
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
 
 from app.models import (
+    AnimeCollectionContent,
+    CollectionContent,
     EmailMessage,
     AnimeGenre,
     Collection,
@@ -309,3 +313,27 @@ def build_order_by(sort: list[str]):
     ] + [desc(Anime.content_id)]
 
     return order_by
+
+
+def collections_load_options(
+    query: Select, request_user: User | None, preview: bool = False
+):
+    # Yeah, I like it but not sure about performance
+    query = query.options(
+        joinedload(Collection.collection.of_type(AnimeCollectionContent))
+        .joinedload(AnimeCollectionContent.content)
+        .joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+    )
+
+    if preview:
+        query = query.options(
+            with_loader_criteria(
+                CollectionContent, CollectionContent.order <= 6
+            )
+        )
+
+    return query.order_by(desc(Collection.created))

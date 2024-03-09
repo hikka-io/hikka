@@ -23,9 +23,7 @@ async def test_favourite_add(
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
-    assert (
-        response.json()["list"][0]["content"]["slug"] == "kimi-no-na-wa-945779"
-    )
+    assert response.json()["list"][0]["slug"] == "kimi-no-na-wa-945779"
 
     # Add one more anime to favourite
     await request_favourite_add(client, "oshi-no-ko-421060", get_test_token)
@@ -35,7 +33,5 @@ async def test_favourite_add(
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 2
-    assert response.json()["list"][0]["content"]["slug"] == "oshi-no-ko-421060"
-    assert (
-        response.json()["list"][1]["content"]["slug"] == "kimi-no-na-wa-945779"
-    )
+    assert response.json()["list"][0]["slug"] == "oshi-no-ko-421060"
+    assert response.json()["list"][1]["slug"] == "kimi-no-na-wa-945779"
