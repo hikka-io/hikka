@@ -10,6 +10,7 @@ from app import constants
 from app.service import (
     content_type_to_content_class,
     collections_load_options,
+    anime_loadonly,
     create_log,
 )
 
@@ -161,4 +162,36 @@ async def get_user_favourite_list_count(
         select(func.count(favourite_model.id)).filter(
             favourite_model.user == user
         )
+    )
+
+
+async def get_user_favourite_list_legacy(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    user: User,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+) -> list[Favourite]:
+    favourite_model = content_type_to_favourite_class[content_type]
+
+    return await session.scalars(
+        select(favourite_model)
+        .filter(favourite_model.user == user)
+        .order_by(desc(favourite_model.created))
+        .options(
+            anime_loadonly(joinedload(favourite_model.content)).joinedload(
+                Anime.watch
+            ),
+            with_loader_criteria(
+                AnimeWatch,
+                (
+                    AnimeWatch.user_id == request_user.id
+                    if request_user
+                    else None
+                ),
+            ),
+        )
+        .limit(limit)
+        .offset(offset)
     )

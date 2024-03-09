@@ -40,3 +40,14 @@ class FavouriteCollectionResponse(CollectionResponse, FavouriteMeta):
 class FavouritePaginationResponse(CustomModel):
     list: list[FavouriteAnimeResponse | FavouriteCollectionResponse]
     pagination: PaginationResponse
+
+
+# ToDo: remove me
+class FavouriteResponseContentLegacy(FavouriteResponse):
+    anime: AnimeResponseWithWatch
+
+
+# ToDo: remove me
+class FavouritePaginationResponseLegacy(CustomModel):
+    list: list[FavouriteResponseContentLegacy]
+    pagination: PaginationResponse

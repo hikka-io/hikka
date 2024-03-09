@@ -37,6 +37,14 @@ class AnimeFavourite(Favourite):
         lazy="immediate",  # ToDo: check if it is good idea
     )
 
+    # ToDo: remove me
+    anime: Mapped["Anime"] = relationship(
+        primaryjoin="Anime.id == AnimeFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+        viewonly=True,
+    )
+
 
 class CollectionFavourite(Favourite):
     __mapper_args__ = {
