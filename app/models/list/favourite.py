@@ -63,3 +63,22 @@ class CollectionFavourite(Favourite):
         foreign_keys=[content_id],
         lazy="immediate",  # ToDo: check if it is good idea
     )
+
+
+class CharacterFavourite(Favourite):
+    __mapper_args__ = {
+        "polymorphic_identity": "character",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_characters.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Character"] = relationship(
+        primaryjoin="Character.id == CharacterFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+    )

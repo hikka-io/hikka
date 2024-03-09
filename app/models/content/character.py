@@ -1,8 +1,10 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
@@ -25,6 +27,8 @@ class Character(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_characters"
+
+    favourite_created: Mapped[datetime] = query_expression()
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
 

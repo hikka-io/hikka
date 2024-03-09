@@ -16,6 +16,7 @@ from app.service import (
 
 from app.models import (
     CollectionFavourite,
+    CharacterFavourite,
     AnimeFavourite,
     AnimeWatch,
     Collection,
@@ -27,6 +28,7 @@ from app.models import (
 
 content_type_to_favourite_class = {
     constants.CONTENT_COLLECTION: CollectionFavourite,
+    constants.CONTENT_CHARACTER: CharacterFavourite,
     constants.CONTENT_ANIME: AnimeFavourite,
 }
 

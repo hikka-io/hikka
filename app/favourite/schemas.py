@@ -8,6 +8,7 @@ from app.collections.schemas import CollectionResponse
 from app.schemas import (
     AnimeResponseWithWatch,
     PaginationResponse,
+    CharacterResponse,
     CustomModel,
 )
 
@@ -15,6 +16,7 @@ from app.schemas import (
 # Enums
 class ContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
+    content_character = constants.CONTENT_CHARACTER
     content_anime = constants.CONTENT_ANIME
 
 
@@ -37,8 +39,16 @@ class FavouriteCollectionResponse(CollectionResponse, FavouriteMeta):
     pass
 
 
+class FavouriteCharacterResponse(CharacterResponse, FavouriteMeta):
+    pass
+
+
 class FavouritePaginationResponse(CustomModel):
-    list: list[FavouriteAnimeResponse | FavouriteCollectionResponse]
+    list: list[
+        FavouriteAnimeResponse
+        | FavouriteCollectionResponse
+        | FavouriteCharacterResponse
+    ]
     pagination: PaginationResponse
 
 
