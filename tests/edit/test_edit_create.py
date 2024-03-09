@@ -61,7 +61,7 @@ async def test_edit_create(
         "person",
         "justin-cook-77f1b3",
         {
-            "after": {"name_ua": "Джастін Кук"},
+            "after": {"name_ua": "Джастін Кук", "synonyms": ["кук"]},
         },
     )
 
@@ -78,6 +78,7 @@ async def test_edit_create(
             "after": {
                 "description_ua": "Головна героїня аніме Самітниця рокер",
                 "name_ua": "Ґото Хіторі",
+                "synonyms": ["Бочі"],
             },
         },
     )
