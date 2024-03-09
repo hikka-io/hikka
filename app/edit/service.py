@@ -30,13 +30,6 @@ from app.models import (
     User,
 )
 
-# This is hack-ish way to have single function for different types of content
-# As long as it does the job we can keep it (why not)
-content_type_to_content_class = {
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_PERSON: Person,
-    constants.CONTENT_ANIME: Anime,
-}
 
 content_type_to_edit_class = {
     constants.CONTENT_CHARACTER: CharacterEdit,
@@ -59,29 +52,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
                 ),
             )
         )
-    )
-
-
-# ToDo: figure out what to do with anime episodes that do not have a slug
-async def get_content_by_slug(
-    session: AsyncSession, content_type: ContentTypeEnum, slug: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and slug"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.slug == slug)
-    )
-
-
-async def get_content_by_content_id(
-    session: AsyncSession, content_type: ContentTypeEnum, content_id: str
-) -> Person | Anime | None:
-    """Return editable content by content_type and content_id"""
-
-    content_model = content_type_to_content_class[content_type]
-    return await session.scalar(
-        select(content_model).filter(content_model.id == content_id)
     )
 
 
@@ -265,15 +235,14 @@ async def accept_pending_edit(
 async def create_pending_edit(
     session: AsyncSession,
     content_type: ContentTypeEnum,
-    content_id: str,
+    content: Person | Anime | Character,
     args: EditArgs,
     author: User,
 ) -> AnimeEdit:
-    """Create edit for given content_id with pending status"""
+    """Create edit for given content with pending status"""
 
     edit_model = content_type_to_edit_class[content_type]
 
-    content = await get_content_by_content_id(session, content_type, content_id)
     before = calculate_before(content, args.after)
 
     now = datetime.utcnow()
@@ -283,7 +252,7 @@ async def create_pending_edit(
             "status": constants.EDIT_PENDING,
             "description": args.description,
             "content_type": content_type,
-            "content_id": content_id,
+            "content_id": content.id,
             "after": args.after,
             "author": author,
             "before": before,

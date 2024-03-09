@@ -1,35 +1,48 @@
-from app.dependencies import get_anime, auth_required
-from app.models import Anime, User, AnimeFavourite
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import Anime, User, Favourite
+from app.service import get_content_by_slug
+from app.dependencies import auth_required
 from app.database import get_session
+from .schemas import ContentTypeEnum
 from app.errors import Abort
 from fastapi import Depends
-from typing import Tuple
 from . import service
 
 
-async def get_anime_and_user(
-    anime: Anime = Depends(get_anime),
-    user: User = Depends(auth_required()),
-) -> Tuple[Anime, User]:
-    return anime, user
-
-
-async def get_anime_favourite(
+async def validate_content(
+    slug: str,
+    content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    data: Tuple[Anime, User] = Depends(get_anime_and_user),
-) -> AnimeFavourite:
-    if not (favourite := await service.get_anime_favourite(session, *data)):
+) -> Anime:
+    if not (content := await get_content_by_slug(session, content_type, slug)):
+        raise Abort("favourite", "content-not-found")
+
+    return content
+
+
+async def validate_get_favourite(
+    content_type: ContentTypeEnum,
+    content: Anime = Depends(validate_content),
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+) -> Favourite:
+    if not (
+        favourite := await service.get_favourite(
+            session, content_type, content, user
+        )
+    ):
         raise Abort("favourite", "not-found")
 
     return favourite
 
 
-async def add_anime_favourite(
+async def validate_add_favourite(
+    content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    data: Tuple[Anime, User] = Depends(get_anime_and_user),
-) -> Tuple[Anime, User]:
-    if await service.get_anime_favourite(session, *data):
+    content: Anime = Depends(validate_content),
+    user: User = Depends(auth_required()),
+) -> Anime:
+    if await service.get_favourite(session, content_type, content, user):
         raise Abort("favourite", "exists")
 
-    return data
+    return content

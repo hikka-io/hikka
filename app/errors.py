@@ -86,8 +86,9 @@ errors = {
         "not-found": ["Watch record not found", 404],
     },
     "favourite": {
-        "exists": ["Favourite record for this anime already exists", 400],
+        "exists": ["Favourite record already exists", 400],
         "not-found": ["Favourite record not found", 404],
+        "content-not-found": ["Content not found", 404],
     },
     "captcha": {
         "invalid": ["Failed to validate captcha", 401],

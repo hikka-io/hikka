@@ -1,11 +1,17 @@
-from .schemas import AnimeFavouritePaginationResponse
-from app.models import User, Anime, AnimeFavourite
 from app.utils import pagination, pagination_dict
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import User, Anime, Favourite
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from typing import Tuple
+from app import constants
 from . import service
+
+from .schemas import (
+    FavouritePaginationResponseLegacy,
+    FavouritePaginationResponse,
+    FavouriteResponse,
+    ContentTypeEnum,
+)
 
 from app.dependencies import (
     auth_required,
@@ -15,48 +21,50 @@ from app.dependencies import (
 )
 
 from app.schemas import (
-    AnimeFavouriteResponse,
     SuccessResponse,
 )
 
 from .dependencies import (
-    get_anime_favourite,
-    add_anime_favourite,
+    validate_get_favourite,
+    validate_add_favourite,
 )
 
 
 router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 
-@router.get("/anime/{slug}", response_model=AnimeFavouriteResponse)
-async def anime_favourite(
-    favourite: AnimeFavourite = Depends(get_anime_favourite),
+@router.get("/{content_type}/{slug}", response_model=FavouriteResponse)
+async def get_favourite(
+    favourite: Favourite = Depends(validate_get_favourite),
 ):
     return favourite
 
 
-@router.put("/anime/{slug}", response_model=AnimeFavouriteResponse)
-async def anime_favourite_add(
+@router.put("/{content_type}/{slug}", response_model=FavouriteResponse)
+async def favourite_add(
+    content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    data: Tuple[Anime, User] = Depends(add_anime_favourite),
+    content: Anime = Depends(validate_add_favourite),
+    user: User = Depends(auth_required()),
 ):
-    return await service.create_anime_favourite(session, *data)
+    return await service.create_favourite(session, content_type, content, user)
 
 
-@router.delete("/anime/{slug}", response_model=SuccessResponse)
-async def anime_favourite_delete(
+@router.delete("/{content_type}/{slug}", response_model=SuccessResponse)
+async def favourite_delete(
     session: AsyncSession = Depends(get_session),
-    favourite: AnimeFavourite = Depends(get_anime_favourite),
+    favourite: Favourite = Depends(validate_get_favourite),
 ):
-    await service.delete_anime_favourite(session, favourite)
+    await service.delete_favourite(session, favourite)
     return {"success": True}
 
 
-@router.get(
-    "/anime/{username}/list",
-    response_model=AnimeFavouritePaginationResponse,
+@router.post(
+    "/{content_type}/{username}/list",
+    response_model=FavouritePaginationResponse,
 )
-async def anime_favourite_list(
+async def favourite_list(
+    content_type: str,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(get_user),
@@ -64,12 +72,42 @@ async def anime_favourite_list(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_anime_favourite_list_count(session, user)
-    anime = await service.get_user_anime_favourite_list(
-        session, user, request_user, limit, offset
+    total = await service.get_user_favourite_list_count(
+        session, content_type, user
+    )
+
+    content = await service.get_user_favourite_list(
+        session, content_type, user, request_user, limit, offset
     )
 
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
+        "list": content.unique().all(),
+    }
+
+
+# ToDo: delete this as soon as possible
+@router.get(
+    "/anime/{username}/list",
+    response_model=FavouritePaginationResponseLegacy,
+)
+async def favourite_list_legacy(
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    user: User = Depends(get_user),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_user_favourite_list_count(
+        session, constants.CONTENT_ANIME, user
+    )
+
+    content = await service.get_user_favourite_list_legacy(
+        session, constants.CONTENT_ANIME, user, request_user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": content.unique().all(),
     }

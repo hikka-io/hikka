@@ -56,23 +56,6 @@ def build_comments(base_comment, sub_comments):
     return tree
 
 
-# I really hate this
-def is_int(string):
-    try:
-        int(string)
-        return True
-    except ValueError:
-        return False
-
-
-def is_uuid(string):
-    try:
-        UUID(string)
-        return True
-    except ValueError:
-        return False
-
-
 def round_hour(date):
     return date - timedelta(
         hours=date.hour % 1,

@@ -22,13 +22,12 @@ from app.admin.service import (
 )
 
 from app.models import (
-    AnimeFavouriteLegacy,
-    AnimeFavourite,
     AnimeStaffRole,
     AnimeStaff,
     AnimeWatch,
     Anime,
     Edit,
+    Log,
 )
 
 
@@ -225,38 +224,39 @@ async def run_search():
     await sessionmanager.close()
 
 
-async def run_favourite_migration():
+async def run_migrate_logs():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        legacy_favourite_list = await session.scalars(
-            select(AnimeFavouriteLegacy)
+        remove_logs = await session.scalars(
+            select(Log).filter(
+                Log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE
+            )
         )
 
-        for legacy_favourite in legacy_favourite_list:
-            if await session.scalar(
-                select(AnimeFavourite).filter(
-                    AnimeFavourite.content_id == legacy_favourite.anime_id,
-                    AnimeFavourite.user_id == legacy_favourite.user_id,
-                )
-            ):
-                continue
+        for log in remove_logs:
+            log.data = {"content_type": constants.CONTENT_ANIME}
+            log.log_type = constants.LOG_FAVOURITE_REMOVE
 
-            favourite = AnimeFavourite(
-                **{
-                    "content_id": legacy_favourite.anime_id,
-                    "user_id": legacy_favourite.user_id,
-                    "created": legacy_favourite.created,
-                }
-            )
-
-            session.add(favourite)
-
+            session.add(log)
             await session.commit()
 
-            print(favourite)
+            print(log)
+
+        add_logs = await session.scalars(
+            select(Log).filter(Log.log_type == constants.LOG_FAVOURITE_ANIME)
+        )
+
+        for log in add_logs:
+            log.data = {"content_type": constants.CONTENT_ANIME}
+            log.log_type = constants.LOG_FAVOURITE
+
+            session.add(log)
+            await session.commit()
+
+            print(log)
 
     await sessionmanager.close()
 
@@ -271,7 +271,8 @@ if __name__ == "__main__":
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
-    asyncio.run(run_favourite_migration())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
+    asyncio.run(run_migrate_logs())
+    pass

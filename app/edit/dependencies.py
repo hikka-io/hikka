@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import check_user_permissions
+from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.database import get_session
 from app.errors import Abort
@@ -9,6 +10,7 @@ from . import service
 from . import utils
 
 from app.models import (
+    Character,
     Person,
     Anime,
     Edit,
@@ -95,18 +97,14 @@ async def validate_content(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ):
-    if not (
-        content := await service.get_content_by_slug(
-            session, content_type, slug
-        )
-    ):
+    if not (content := await get_content_by_slug(session, content_type, slug)):
         raise Abort("edit", "content-not-found")
 
     return content
 
 
 async def validate_content_slug(
-    content: Person | Anime | None = Depends(validate_content),
+    content: Person | Anime | Character = Depends(validate_content),
 ) -> str:
     """Return content reference by content_type and slug"""
     return content.reference

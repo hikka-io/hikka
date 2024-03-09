@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.models import Comment, Edit, User
-from datetime import datetime, timedelta
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
@@ -21,11 +21,7 @@ async def validate_content(
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ) -> Edit:
-    if not (
-        content := await service.get_content_by_slug(
-            session, content_type, slug
-        )
-    ):
+    if not (content := await get_content_by_slug(session, content_type, slug)):
         raise Abort("comment", "content-not-found")
 
     return content

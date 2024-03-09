@@ -1,24 +1,73 @@
 from sqlalchemy import select, asc, desc, and_, func
+from app.utils import new_token, is_int, is_uuid
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import with_expression
 from .schemas import AnimeSearchArgsBase
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from app.utils import new_token
+from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
 
 from app.models import (
+    AnimeCollectionContent,
+    CollectionContent,
     EmailMessage,
     AnimeGenre,
+    Collection,
     AnimeWatch,
     AuthToken,
+    Character,
     Company,
     Comment,
+    Person,
     Anime,
+    Edit,
     User,
     Log,
 )
+
+
+content_type_to_content_class = {
+    constants.CONTENT_COLLECTION: Collection,
+    constants.CONTENT_CHARACTER: Character,
+    constants.CONTENT_SYSTEM_EDIT: Edit,
+    constants.CONTENT_PERSON: Person,
+    constants.CONTENT_ANIME: Anime,
+}
+
+
+# We use this code mainly with system based on polymorphic identity
+async def get_content_by_slug(
+    session: AsyncSession, content_type: str, slug: str
+):
+    """Return content by content_type and slug"""
+
+    content_model = content_type_to_content_class[content_type]
+    query = select(content_model)
+
+    # Special case for edit
+    if content_type == constants.CONTENT_SYSTEM_EDIT:
+        if not is_int(slug):
+            return None
+
+        query = query.filter(content_model.edit_id == int(slug))
+
+    # Special case for collection
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COLLECTION:
+        if not is_uuid(slug):
+            return None
+
+        query = query.filter(content_model.id == UUID(slug))
+
+    # Everything else is handled here
+    else:
+        query = query.filter(content_model.slug == slug)
+
+    return await session.scalar(query)
 
 
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
@@ -139,18 +188,6 @@ def anime_loadonly(statement):
     )
 
 
-def get_comments_count_subquery(content_id, content_type):
-    return (
-        select(func.count(Comment.id))
-        .filter(
-            Comment.content_id == content_id,
-            Comment.content_type == content_type,
-            Comment.hidden == False,  # noqa: E712
-        )
-        .scalar_subquery()
-    )
-
-
 def calculate_watch_duration(watch: AnimeWatch) -> int:
     # If anime don't have duration set we just return zero
     if not watch.anime.duration:
@@ -265,3 +302,53 @@ def build_order_by(sort: list[str]):
     ] + [desc(Anime.content_id)]
 
     return order_by
+
+
+# Collections stuff
+def get_comments_count_subquery(content_id, content_type):
+    return (
+        select(func.count(Comment.id))
+        .filter(
+            Comment.content_id == content_id,
+            Comment.content_type == content_type,
+            Comment.hidden == False,  # noqa: E712
+        )
+        .scalar_subquery()
+    )
+
+
+def collection_comments_load_options(query: Select):
+    return query.options(
+        with_expression(
+            Collection.comments_count,
+            get_comments_count_subquery(
+                Collection.id, constants.CONTENT_COLLECTION
+            ),
+        )
+    )
+
+
+def collections_load_options(
+    query: Select, request_user: User | None, preview: bool = False
+):
+    # Yeah, I like it but not sure about performance
+    query = collection_comments_load_options(
+        query.options(
+            joinedload(Collection.collection.of_type(AnimeCollectionContent))
+            .joinedload(AnimeCollectionContent.content)
+            .joinedload(Anime.watch),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        )
+    )
+
+    if preview:
+        query = query.options(
+            with_loader_criteria(
+                CollectionContent, CollectionContent.order <= 6
+            )
+        )
+
+    return query

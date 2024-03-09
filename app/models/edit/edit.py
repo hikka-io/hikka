@@ -1,6 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -8,6 +7,11 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from ..base import Base
 from uuid import UUID
+
+from ..mixins import (
+    CreatedMixin,
+    UpdatedMixin,
+)
 
 
 class Edit(
@@ -21,7 +25,7 @@ class Edit(
         "polymorphic_on": "content_type",
     }
 
-    comments_count: Mapped[bool] = query_expression()
+    comments_count: Mapped[int] = query_expression()
 
     system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)

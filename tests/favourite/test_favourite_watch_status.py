@@ -13,14 +13,14 @@ async def test_favourite_watch_status(
 ):
     # Add Bocchi to favourite
     await request_favourite_add(
-        client, "bocchi-the-rock-9e172d", get_test_token
+        client, "anime", "bocchi-the-rock-9e172d", get_test_token
     )
 
     # Get user favourite list
-    response = await request_favourite_list(client, "testuser")
+    response = await request_favourite_list(client, "anime", "testuser")
 
     # User watch status should be empty
-    assert response.json()["list"][0]["anime"]["watch"] == []
+    assert response.json()["list"][0]["watch"] == []
 
     # Add Bocchi to watch list
     await request_watch_add(
@@ -35,13 +35,15 @@ async def test_favourite_watch_status(
     )
 
     # Get user favourite list (without auth)
-    response = await request_favourite_list(client, "testuser")
+    response = await request_favourite_list(client, "anime", "testuser")
 
     # Watch status still should be empty
-    assert response.json()["list"][0]["anime"]["watch"] == []
+    assert response.json()["list"][0]["watch"] == []
 
     # Get user favourite list (with auth)
-    response = await request_favourite_list(client, "testuser", get_test_token)
+    response = await request_favourite_list(
+        client, "anime", "testuser", get_test_token
+    )
 
     # Watch status still should have 1 entry
-    assert len(response.json()["list"][0]["anime"]["watch"]) == 1
+    assert len(response.json()["list"][0]["watch"]) == 1

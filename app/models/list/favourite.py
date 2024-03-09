@@ -1,27 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, UniqueConstraint
+from sqlalchemy import ForeignKey
 from ..mixins import CreatedMixin
 from ..base import Base
 from uuid import UUID
-
-
-class AnimeFavouriteLegacy(Base, CreatedMixin):
-    __tablename__ = "service_favourite_anime"
-
-    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
-    user_id = mapped_column(ForeignKey("service_users.id"))
-
-    anime: Mapped["Anime"] = relationship(
-        # back_populates="favourite",
-        foreign_keys=[anime_id],
-    )
-
-    user: Mapped["User"] = relationship(
-        # back_populates="favourite",
-        foreign_keys=[user_id],
-    )
-
-    unique_constraint = UniqueConstraint(anime_id, user_id)
 
 
 class Favourite(Base, CreatedMixin):
@@ -50,8 +31,35 @@ class AnimeFavourite(Favourite):
         index=True,
     )
 
+    content: Mapped["Anime"] = relationship(
+        primaryjoin="Anime.id == AnimeFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
+    )
+
+    # ToDo: remove me
     anime: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
         foreign_keys=[content_id],
-        # lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # ToDo: check if it is good idea
+        viewonly=True,
+    )
+
+
+class CollectionFavourite(Favourite):
+    __mapper_args__ = {
+        "polymorphic_identity": "collection",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_collections.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Collection"] = relationship(
+        primaryjoin="Collection.id == CollectionFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # ToDo: check if it is good idea
     )

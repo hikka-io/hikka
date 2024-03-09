@@ -28,7 +28,8 @@ class Anime(
 ):
     __tablename__ = "service_content_anime"
 
-    comments_count: Mapped[bool] = query_expression()
+    favourite_created: Mapped[datetime] = query_expression()
+    comments_count: Mapped[int] = query_expression()
 
     # Multilang fields
     title_ja: Mapped[str] = mapped_column(String(255), nullable=True)

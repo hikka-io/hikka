@@ -1,16 +1,13 @@
-from sqlalchemy import select, asc, desc, delete, func
+from sqlalchemy import select, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.sql.selectable import Select
-from sqlalchemy.orm import with_expression
-from sqlalchemy.orm import joinedload
 from .schemas import CollectionArgs
 from datetime import datetime
 from app import constants
 from uuid import UUID
 
 from app.service import (
-    get_comments_count_subquery,
+    collection_comments_load_options,
+    collections_load_options,
     create_log,
 )
 
@@ -19,7 +16,6 @@ from app.models import (
     PersonCollectionContent,
     AnimeCollectionContent,
     CollectionContent,
-    AnimeWatch,
     Collection,
     Character,
     Person,
@@ -70,30 +66,6 @@ async def build_collection_content(
     ]
 
 
-def collections_load_options(
-    query: Select, request_user: User | None, preview: bool = False
-):
-    # Yeah, I like it but not sure about performance
-    query = query.options(
-        joinedload(Collection.collection.of_type(AnimeCollectionContent))
-        .joinedload(AnimeCollectionContent.content)
-        .joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-    )
-
-    if preview:
-        query = query.options(
-            with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 6
-            )
-        )
-
-    return query.order_by(desc(Collection.created))
-
-
 async def count_content(
     session: AsyncSession, content_type: str, slugs: list[str]
 ) -> int:
@@ -126,14 +98,7 @@ async def get_collections(
             request_user,
             True,
         )
-        .options(
-            with_expression(
-                Collection.comments_count,
-                get_comments_count_subquery(
-                    Collection.id, constants.CONTENT_COLLECTION
-                ),
-            )
-        )
+        .order_by(desc(Collection.created))
         .limit(limit)
         .offset(offset)
     )
@@ -156,20 +121,14 @@ async def get_user_collections(
     offset: int,
 ) -> list[Collection]:
     return await session.scalars(
-        collections_load_options(
-            select(Collection).filter(
-                Collection.deleted == False,  # noqa: E712
-                Collection.author == user,
-            ),
-            request_user,
-            True,
-        )
-        .options(
-            with_expression(
-                Collection.comments_count,
-                get_comments_count_subquery(
-                    Collection.id, constants.CONTENT_COLLECTION
+        collection_comments_load_options(
+            collections_load_options(
+                select(Collection).filter(
+                    Collection.deleted == False,  # noqa: E712
+                    Collection.author == user,
                 ),
+                request_user,
+                True,
             )
         )
         .limit(limit)
@@ -179,17 +138,10 @@ async def get_user_collections(
 
 async def get_collection(session: AsyncSession, reference: UUID):
     return await session.scalar(
-        select(Collection)
-        .filter(
-            Collection.deleted == False,  # noqa: E712
-            Collection.id == reference,
-        )
-        .options(
-            with_expression(
-                Collection.comments_count,
-                get_comments_count_subquery(
-                    Collection.id, constants.CONTENT_COLLECTION
-                ),
+        collection_comments_load_options(
+            select(Collection).filter(
+                Collection.deleted == False,  # noqa: E712
+                Collection.id == reference,
             )
         )
     )
@@ -202,14 +154,7 @@ async def get_collection_display(
         collections_load_options(
             select(Collection).filter(Collection.id == collection.id),
             request_user,
-        ).options(
-            with_expression(
-                Collection.comments_count,
-                get_comments_count_subquery(
-                    Collection.id, constants.CONTENT_COLLECTION
-                ),
-            )
-        )
+        ).order_by(desc(Collection.created))
     )
 
 

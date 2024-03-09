@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc, func
+from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
@@ -10,33 +11,16 @@ from app import constants
 from app import utils
 import copy
 
-from .utils import (
-    uuid_to_path,
-    round_hour,
-    is_uuid,
-    is_int,
-)
-
 from app.models import (
     CollectionComment,
     AnimeComment,
     CommentVote,
     EditComment,
-    Collection,
     Comment,
-    Anime,
     User,
     Edit,
 )
 
-
-# This part inspited by edit logic
-# If we change edit logic we probably change this as well
-content_type_to_content_class = {
-    constants.CONTENT_COLLECTION: Collection,
-    constants.CONTENT_SYSTEM_EDIT: Edit,
-    constants.CONTENT_ANIME: Anime,
-}
 
 content_type_to_comment_class = {
     constants.CONTENT_COLLECTION: CollectionComment,
@@ -62,34 +46,6 @@ async def get_comment(
     return await session.scalar(
         select(Comment).filter(Comment.id == comment_reference)
     )
-
-
-async def get_content_by_slug(
-    session: AsyncSession, content_type: ContentTypeEnum, slug: str
-):
-    content_model = content_type_to_content_class[content_type]
-    query = select(content_model)
-
-    # Special case for edit
-    if content_type == constants.CONTENT_SYSTEM_EDIT:
-        if not is_int(slug):
-            return None
-
-        query = query.filter(content_model.edit_id == int(slug))
-
-    # Special case for collection
-    # Since collections don't have slugs we use their id instead
-    elif content_type == constants.CONTENT_COLLECTION:
-        if not is_uuid(slug):
-            return None
-
-        query = query.filter(content_model.id == UUID(slug))
-
-    # Everything else is handled here
-    else:
-        query = query.filter(content_model.slug == slug)
-
-    return await session.scalar(query)
 
 
 async def create_comment(

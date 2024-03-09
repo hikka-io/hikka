@@ -58,8 +58,8 @@ async def generate_history(session: AsyncSession):
                     constants.LOG_WATCH_CREATE,
                     constants.LOG_WATCH_UPDATE,
                     constants.LOG_WATCH_DELETE,
-                    constants.LOG_FAVOURITE_ANIME,
-                    constants.LOG_FAVOURITE_ANIME_REMOVE,
+                    constants.LOG_FAVOURITE,
+                    constants.LOG_FAVOURITE_REMOVE,
                     constants.LOG_SETTINGS_IMPORT,
                 ]
             )
@@ -155,63 +155,65 @@ async def generate_history(session: AsyncSession):
                 session.add(history)
                 await session.commit()
 
-        if log.log_type == constants.LOG_FAVOURITE_ANIME:
+        if log.log_type == constants.LOG_FAVOURITE:
             threshold = log.created - favourite_delta
 
-            history = await get_history(
-                session,
-                constants.HISTORY_FAVOURITE_ANIME,
-                log.target_id,
-                log.user_id,
-                threshold,
-            )
-
-            if not history:
-                history = History(
-                    **{
-                        "history_type": constants.HISTORY_FAVOURITE_ANIME,
-                        "used_logs": [str(log.id)],
-                        "target_id": log.target_id,
-                        "user_id": log.user_id,
-                        "created": log.created,
-                        "updated": log.created,
-                    }
+            if log.data["content_type"] == constants.CONTENT_ANIME:
+                history = await get_history(
+                    session,
+                    constants.HISTORY_FAVOURITE_ANIME,
+                    log.target_id,
+                    log.user_id,
+                    threshold,
                 )
 
-                session.add(history)
-                await session.commit()
+                if not history:
+                    history = History(
+                        **{
+                            "history_type": constants.HISTORY_FAVOURITE_ANIME,
+                            "used_logs": [str(log.id)],
+                            "target_id": log.target_id,
+                            "user_id": log.user_id,
+                            "created": log.created,
+                            "updated": log.created,
+                        }
+                    )
 
-        if log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE:
+                    session.add(history)
+                    await session.commit()
+
+        if log.log_type == constants.LOG_FAVOURITE_REMOVE:
             threshold = log.created - favourite_delta
 
-            history = await get_history(
-                session,
-                constants.HISTORY_FAVOURITE_ANIME,
-                log.target_id,
-                log.user_id,
-                threshold,
-            )
-
-            if history:
-                await session.delete(history)
-                await session.commit()
-
-            else:
-                # For sake of clean code
-                history_type = constants.HISTORY_FAVOURITE_ANIME_REMOVE
-                history = History(
-                    **{
-                        "history_type": history_type,
-                        "used_logs": [str(log.id)],
-                        "target_id": log.target_id,
-                        "user_id": log.user_id,
-                        "created": log.created,
-                        "updated": log.created,
-                    }
+            if log.data["content_type"] == constants.CONTENT_ANIME:
+                history = await get_history(
+                    session,
+                    constants.HISTORY_FAVOURITE_ANIME,
+                    log.target_id,
+                    log.user_id,
+                    threshold,
                 )
 
-                session.add(history)
-                await session.commit()
+                if history:
+                    await session.delete(history)
+                    await session.commit()
+
+                else:
+                    # For sake of clean code
+                    history_type = constants.HISTORY_FAVOURITE_ANIME_REMOVE
+                    history = History(
+                        **{
+                            "history_type": history_type,
+                            "used_logs": [str(log.id)],
+                            "target_id": log.target_id,
+                            "user_id": log.user_id,
+                            "created": log.created,
+                            "updated": log.created,
+                        }
+                    )
+
+                    session.add(history)
+                    await session.commit()
 
         if log.log_type == constants.LOG_SETTINGS_IMPORT:
             history = History(
