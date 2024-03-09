@@ -3,6 +3,7 @@ from app.utils import new_token, is_int, is_uuid
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import with_expression
 from .schemas import AnimeSearchArgsBase
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
@@ -187,18 +188,6 @@ def anime_loadonly(statement):
     )
 
 
-def get_comments_count_subquery(content_id, content_type):
-    return (
-        select(func.count(Comment.id))
-        .filter(
-            Comment.content_id == content_id,
-            Comment.content_type == content_type,
-            Comment.hidden == False,  # noqa: E712
-        )
-        .scalar_subquery()
-    )
-
-
 def calculate_watch_duration(watch: AnimeWatch) -> int:
     # If anime don't have duration set we just return zero
     if not watch.anime.duration:
@@ -315,18 +304,44 @@ def build_order_by(sort: list[str]):
     return order_by
 
 
+# Collections stuff
+def get_comments_count_subquery(content_id, content_type):
+    return (
+        select(func.count(Comment.id))
+        .filter(
+            Comment.content_id == content_id,
+            Comment.content_type == content_type,
+            Comment.hidden == False,  # noqa: E712
+        )
+        .scalar_subquery()
+    )
+
+
+def collection_comments_load_options(query: Select):
+    return query.options(
+        with_expression(
+            Collection.comments_count,
+            get_comments_count_subquery(
+                Collection.id, constants.CONTENT_COLLECTION
+            ),
+        )
+    )
+
+
 def collections_load_options(
     query: Select, request_user: User | None, preview: bool = False
 ):
     # Yeah, I like it but not sure about performance
-    query = query.options(
-        joinedload(Collection.collection.of_type(AnimeCollectionContent))
-        .joinedload(AnimeCollectionContent.content)
-        .joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
+    query = collection_comments_load_options(
+        query.options(
+            joinedload(Collection.collection.of_type(AnimeCollectionContent))
+            .joinedload(AnimeCollectionContent.content)
+            .joinedload(Anime.watch),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        )
     )
 
     if preview:
@@ -336,4 +351,4 @@ def collections_load_options(
             )
         )
 
-    return query.order_by(desc(Collection.created))
+    return query

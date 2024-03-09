@@ -8,7 +8,7 @@ from datetime import datetime
 from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
+    content_type_to_content_class,
     collections_load_options,
     create_log,
 )
@@ -96,67 +96,56 @@ async def get_user_favourite_list(
     limit: int,
     offset: int,
 ) -> list[Favourite]:
+    # At some point I decided that best approach for favourite would be
+    # to return list of content with some extra metadata (created/order)
+    # instead of returning list of favourite entries with content loaded.
+    # Some parts of it way to hackish for my taste so eventually this
+    # should be rewritten into something better.
+    # (Who am I lying to? This piece of code will stay here forever xD).
+
     favourite_model = content_type_to_favourite_class[content_type]
+    content_model = content_type_to_content_class[content_type]
+
+    query = (
+        select(content_model)
+        .join(
+            favourite_model,
+            favourite_model.content_id == content_model.id,
+        )
+        .filter(favourite_model.user == user)
+    )
 
     if content_type == constants.CONTENT_ANIME:
-        query = (
-            select(Anime)
-            .join(
-                favourite_model,
-                favourite_model.content_id == Anime.id,
-            )
-            .filter(favourite_model.user == user)
-            .options(
-                joinedload(Anime.watch),
-                with_loader_criteria(
-                    AnimeWatch,
-                    (
-                        AnimeWatch.user_id == request_user.id
-                        if request_user
-                        else None
-                    ),
+        query = query.options(
+            joinedload(Anime.watch),
+            with_loader_criteria(
+                AnimeWatch,
+                (
+                    AnimeWatch.user_id == request_user.id
+                    if request_user
+                    else None
                 ),
-            )
-            .options(
-                with_expression(
-                    Anime.favourite_created,
-                    favourite_model.created,
-                )
-            )
+            ),
         )
 
     if content_type == constants.CONTENT_COLLECTION:
-        query = (
-            collections_load_options(
-                select(Collection).filter(
-                    Collection.private == False,  # noqa: E712
-                    Collection.deleted == False,  # noqa: E712
-                ),
-                request_user,
-                True,
-            )
-            .join(
-                favourite_model,
-                favourite_model.content_id == Collection.id,
-            )
-            .options(
-                with_expression(
-                    Collection.comments_count,
-                    get_comments_count_subquery(
-                        Collection.id, constants.CONTENT_COLLECTION
-                    ),
-                )
-            )
-            .options(
-                with_expression(
-                    Collection.favourite_created,
-                    favourite_model.created,
-                )
-            )
+        query = collections_load_options(
+            query.filter(
+                Collection.private == False,  # noqa: E712
+                Collection.deleted == False,  # noqa: E712
+            ),
+            request_user,
+            True,
         )
 
     return await session.scalars(
-        query.order_by(desc(favourite_model.created))
+        query.options(
+            with_expression(
+                content_model.favourite_created,
+                favourite_model.created,
+            )
+        )
+        .order_by(desc(favourite_model.created))
         .limit(limit)
         .offset(offset)
     )
