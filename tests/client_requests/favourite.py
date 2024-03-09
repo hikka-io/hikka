@@ -22,7 +22,7 @@ def request_favourite_delete(client, content_type, slug, token):
 def request_favourite_list(client, content_type, username, token=None):
     headers = {"Auth": token} if token else {}
 
-    return client.get(
+    return client.post(
         f"/favourite/{content_type}/{username}/list",
         headers=headers,
     )

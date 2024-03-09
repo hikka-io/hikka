@@ -57,7 +57,7 @@ async def favourite_delete(
     return {"success": True}
 
 
-@router.get(
+@router.post(
     "/{content_type}/{username}/list",
     response_model=FavouritePaginationResponse,
 )
