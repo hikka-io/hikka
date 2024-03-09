@@ -16,11 +16,13 @@ async def update_people_settings(index):
             filterable_attributes=["favorites"],
             searchable_attributes=[
                 "name_native",
+                "synonyms",
                 "name_ua",
                 "name_en",
             ],
             displayed_attributes=[
                 "name_native",
+                "synonyms",
                 "name_ua",
                 "name_en",
                 "image",

@@ -15,11 +15,13 @@ async def update_characters_settings(index):
         MeilisearchSettings(
             filterable_attributes=["favorites"],
             searchable_attributes=[
+                "synonyms",
                 "name_ua",
                 "name_en",
                 "name_ja",
             ],
             displayed_attributes=[
+                "synonyms",
                 "name_ua",
                 "name_en",
                 "name_ja",
