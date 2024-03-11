@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
 from datetime import datetime
@@ -125,9 +125,12 @@ async def edits_search_filter(
         moderator = await get_user_by_username(session, args.moderator)
         query = query.filter(Edit.moderator == moderator)
 
-    if args.content:
+    if args.content_type:
+        query = query.filter(Edit.content_type == args.content_type)
+
+    if args.slug:
         content = await get_content_by_slug(
-            session, args.content.content_type, args.content.slug
+            session, args.content_type, args.slug
         )
 
         query = query.filter(Edit.content_id == content.id)

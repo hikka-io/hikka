@@ -40,11 +40,14 @@ async def validate_edit_search_args(
         if not await get_user_by_username(session, args.moderator):
             raise Abort("edit", "moderator-not-found")
 
-    if args.content:
+    if args.slug:
+        if not args.content_type:
+            raise Abort("edit", "missing-content-type")
+
         if not await get_content_by_slug(
             session,
-            args.content.content_type,
-            args.content.slug,
+            args.content_type,
+            args.slug,
         ):
             raise Abort("edit", "content-not-found")
 
