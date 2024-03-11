@@ -43,17 +43,13 @@ class EditStatusEnum(str, Enum):
 
 
 # Args
-class EditContentSearchArgs(CustomModel):
-    content_type: ContentTypeEnum
-    slug: str
-
-
 class EditSearchArgs(CustomModel):
     sort: list[str] = ["edit_id:desc", "created:desc"]
-    content: EditContentSearchArgs | None = None
+    content_type: ContentTypeEnum | None = None
     status: EditStatusEnum | None = None
     moderator: str | None = None
     author: str | None = None
+    slug: str | None = None
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):

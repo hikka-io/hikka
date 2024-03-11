@@ -53,6 +53,7 @@ errors = {
         "not-found": ["Anime not found", 404],
     },
     "edit": {
+        "missing-content-type": ["You must specify content type", 400],
         "not-pending": ["Only pending edit can be changed", 400],
         "moderator-not-found": ["Moderator not found", 404],
         "not-author": ["Only author can modify edit", 400],
