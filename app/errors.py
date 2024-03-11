@@ -54,9 +54,11 @@ errors = {
     },
     "edit": {
         "not-pending": ["Only pending edit can be changed", 400],
+        "moderator-not-found": ["Moderator not found", 404],
         "not-author": ["Only author can modify edit", 400],
         "invalid-content-id": ["Invalid content id", 400],
         "content-not-found": ["Content not found", 404],
+        "author-not-found": ["Author not found", 404],
         "bad-edit": ["This edit is invalid", 400],
         "invalid-field": ["Invalid field", 400],
         "not-found": ["Edit not found", 404],

@@ -43,6 +43,43 @@ class EditStatusEnum(str, Enum):
 
 
 # Args
+class EditContentSearchArgs(CustomModel):
+    content_type: ContentTypeEnum
+    slug: str
+
+
+class EditSearchArgs(CustomModel):
+    sort: list[str] = ["edit_id:desc", "created:desc"]
+    content: EditContentSearchArgs | None = None
+    status: EditStatusEnum | None = None
+    moderator: str | None = None
+    author: str | None = None
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "edit_id",
+            "created",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+
 class EditArgs(CustomModel):
     description: str | None = Field(None, examples=["..."], max_length=420)
     auto: bool = Field(default=False)
