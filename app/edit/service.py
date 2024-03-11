@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
@@ -9,11 +10,14 @@ from app import constants
 
 from app.service import (
     get_comments_count_subquery,
+    get_user_by_username,
+    get_content_by_slug,
     create_log,
 )
 
 from .schemas import (
     ContentTypeEnum,
+    EditSearchArgs,
     AnimeToDoEnum,
     EditArgs,
 )
@@ -90,7 +94,90 @@ async def get_edits_by_content_id(
     )
 
 
-async def count_edits(session: AsyncSession) -> int:
+def build_order_by(sort: list[str]):
+    order_mapping = {
+        "edit_id": Edit.edit_id,
+        "created": Edit.created,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ]
+
+    return order_by
+
+
+async def edits_search_filter(
+    session: AsyncSession,
+    args: EditSearchArgs,
+    query: Select,
+):
+    if args.author:
+        author = await get_user_by_username(session, args.author)
+        query = query.filter(Edit.author == author)
+
+    if args.moderator:
+        moderator = await get_user_by_username(session, args.moderator)
+        query = query.filter(Edit.moderator == moderator)
+
+    if args.content:
+        content = await get_content_by_slug(
+            session, args.content.content_type, args.content.slug
+        )
+
+        query = query.filter(Edit.content_id == content.id)
+
+    if args.status:
+        query = query.filter(Edit.status == args.status)
+
+    query = query.filter(
+        Edit.system_edit == False, Edit.hidden == False  # noqa: E712
+    )
+
+    # query = query.order_by(*build_order_by(search.sort))
+
+    return query
+
+
+async def count_edits(session: AsyncSession, args: EditSearchArgs) -> int:
+    """Count edits"""
+
+    query = await edits_search_filter(
+        session, args, select(func.count(Edit.id))
+    )
+
+    return await session.scalar(query)
+
+
+async def get_edits(
+    session: AsyncSession,
+    args: EditSearchArgs,
+    limit: int,
+    offset: int,
+) -> list[Edit]:
+    """Return all edits"""
+
+    query = await edits_search_filter(session, args, select(Edit))
+
+    query = query.options(
+        with_expression(
+            Edit.comments_count,
+            get_comments_count_subquery(Edit.id, constants.CONTENT_SYSTEM_EDIT),
+        )
+    )
+
+    query = query.order_by(*build_order_by(args.sort))
+    query = query.limit(limit).offset(offset)
+
+    return await session.scalars(query)
+
+
+async def count_edits_legacy(session: AsyncSession) -> int:
     """Count all (non system) edits"""
 
     return await session.scalar(
@@ -100,7 +187,7 @@ async def count_edits(session: AsyncSession) -> int:
     )
 
 
-async def get_edits(
+async def get_edits_legacy(
     session: AsyncSession,
     limit: int,
     offset: int,

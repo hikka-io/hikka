@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import check_user_permissions
-from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.database import get_session
 from app.errors import Abort
@@ -8,6 +7,11 @@ from fastapi import Depends
 from app import constants
 from . import service
 from . import utils
+
+from app.service import (
+    get_user_by_username,
+    get_content_by_slug,
+)
 
 from app.models import (
     Character,
@@ -19,8 +23,32 @@ from app.models import (
 
 from .schemas import (
     ContentTypeEnum,
+    EditSearchArgs,
     EditArgs,
 )
+
+
+async def validate_edit_search_args(
+    args: EditSearchArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    if args.author:
+        if not await get_user_by_username(session, args.author):
+            raise Abort("edit", "author-not-found")
+
+    if args.moderator:
+        if not await get_user_by_username(session, args.moderator):
+            raise Abort("edit", "moderator-not-found")
+
+    if args.content:
+        if not await get_content_by_slug(
+            session,
+            args.content.content_type,
+            args.content.slug,
+        ):
+            raise Abort("edit", "content-not-found")
+
+    return args
 
 
 async def validate_edit_id(
