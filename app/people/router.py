@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import get_page, get_size
+from app.schemas import QuerySearchArgs
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from .dependencies import get_person
@@ -8,15 +9,11 @@ from app import meilisearch
 from app import constants
 from . import service
 
-from app.schemas import (
-    QuerySearchArgs,
-    PersonResponse,
-)
-
 from .schemas import (
     PersonCharactersPaginationResponse,
     PersonSearchPaginationResponse,
     PersonAnimePaginationResponse,
+    PersonCountResponse,
 )
 
 from app.utils import (
@@ -28,7 +25,7 @@ from app.utils import (
 router = APIRouter(prefix="/people", tags=["People"])
 
 
-@router.get("/{slug}", response_model=PersonResponse)
+@router.get("/{slug}", response_model=PersonCountResponse)
 async def person_info(person: Person = Depends(get_person)):
     return person
 
