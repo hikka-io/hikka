@@ -14,7 +14,7 @@ from app.schemas import (
 )
 
 from .schemas import (
-    PersonVoicesPaginationResponse,
+    PersonCharactersPaginationResponse,
     PersonSearchPaginationResponse,
     PersonAnimePaginationResponse,
 )
@@ -74,7 +74,9 @@ async def person_anime(
     }
 
 
-@router.get("/{slug}/voices", response_model=PersonVoicesPaginationResponse)
+@router.get(
+    "/{slug}/characters", response_model=PersonCharactersPaginationResponse
+)
 async def person_voices(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),

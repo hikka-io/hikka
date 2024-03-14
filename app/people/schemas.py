@@ -18,7 +18,7 @@ class PersonAnimeResponse(CustomModel):
     anime: AnimeResponse
 
 
-class PersonVoicesResponse(CustomModel):
+class PersonCharactersResponse(CustomModel):
     character: CharacterResponse
     anime: AnimeResponse
     language: str
@@ -34,6 +34,6 @@ class PersonAnimePaginationResponse(CustomModel):
     list: list[PersonAnimeResponse]
 
 
-class PersonVoicesPaginationResponse(CustomModel):
+class PersonCharactersPaginationResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[PersonVoicesResponse]
+    list: list[PersonCharactersResponse]
