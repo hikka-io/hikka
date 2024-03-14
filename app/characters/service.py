@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_expression
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, desc
@@ -16,7 +17,24 @@ async def get_character_by_slug(
     session: AsyncSession, slug: str
 ) -> Character | None:
     return await session.scalar(
-        select(Character).filter(func.lower(Character.slug) == slug.lower())
+        select(Character)
+        .filter(func.lower(Character.slug) == slug.lower())
+        .options(
+            with_expression(
+                Character.anime_count,
+                select(func.count(AnimeCharacter.id))
+                .filter(AnimeCharacter.character_id == Character.id)
+                .scalar_subquery(),
+            )
+        )
+        .options(
+            with_expression(
+                Character.voices_count,
+                select(func.count(AnimeVoice.id))
+                .filter(AnimeVoice.character_id == Character.id)
+                .scalar_subquery(),
+            )
+        )
     )
 
 

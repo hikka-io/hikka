@@ -10,6 +10,15 @@ from app.schemas import (
 
 
 # Responses
+class CharacterFullResponse(CharacterResponse):
+    description_ua: str | None = Field(examples=["..."])
+
+
+class CharacterCountResponse(CharacterFullResponse, CustomModel):
+    voices_count: int
+    anime_count: int
+
+
 class CharacterVoiceResponse(CustomModel):
     person: PersonResponse
     anime: AnimeResponse
@@ -19,10 +28,6 @@ class CharacterVoiceResponse(CustomModel):
 class CharacterAnimeResponse(CustomModel):
     main: bool = Field(examples=[True])
     anime: AnimeResponse
-
-
-class CharacterFullResponse(CharacterResponse):
-    description_ua: str | None = Field(examples=["..."])
 
 
 class CharactersSearchPaginationResponse(CustomModel):

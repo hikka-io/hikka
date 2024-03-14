@@ -13,6 +13,7 @@ from .schemas import (
     CharactersSearchPaginationResponse,
     CharacterVoicesPaginationResponse,
     CharacterAnimePaginationResponse,
+    CharacterCountResponse,
     CharacterFullResponse,
 )
 
@@ -25,7 +26,7 @@ from app.utils import (
 router = APIRouter(prefix="/characters", tags=["Characters"])
 
 
-@router.get("/{slug}", response_model=CharacterFullResponse)
+@router.get("/{slug}", response_model=CharacterCountResponse)
 async def character_info(character: Character = Depends(get_character)):
     return character
 
@@ -71,10 +72,7 @@ async def character_anime(
     }
 
 
-@router.get(
-    "/{slug}/voices",
-    response_model=CharacterVoicesPaginationResponse,
-)
+@router.get("/{slug}/voices", response_model=CharacterVoicesPaginationResponse)
 async def character_voices(
     session: AsyncSession = Depends(get_session),
     character: Character = Depends(get_character),

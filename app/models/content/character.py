@@ -30,6 +30,9 @@ class Character(
 ):
     __tablename__ = "service_content_characters"
 
+    voices_count: Mapped[int] = query_expression()
+    anime_count: Mapped[int] = query_expression()
+
     favourite_created: Mapped[datetime] = query_expression()
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
