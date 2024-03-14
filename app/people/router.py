@@ -14,6 +14,7 @@ from app.schemas import (
 )
 
 from .schemas import (
+    PersonVoicesPaginationResponse,
     PersonSearchPaginationResponse,
     PersonAnimePaginationResponse,
 )
@@ -58,7 +59,7 @@ async def search_people(
 
 
 @router.get("/{slug}/anime", response_model=PersonAnimePaginationResponse)
-async def character_anime(
+async def person_anime(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),
     page: int = Depends(get_page),
@@ -70,4 +71,21 @@ async def character_anime(
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": anime.all(),
+    }
+
+
+@router.get("/{slug}/voices", response_model=PersonVoicesPaginationResponse)
+async def person_voices(
+    session: AsyncSession = Depends(get_session),
+    person: Person = Depends(get_person),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.person_voices_total(session, person)
+    voices = await service.person_voices(session, person, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": voices.all(),
     }

@@ -1,5 +1,6 @@
 from app.schemas import (
     PaginationResponse,
+    CharacterResponse,
     PersonResponse,
     AnimeResponse,
     CustomModel,
@@ -17,6 +18,12 @@ class PersonAnimeResponse(CustomModel):
     anime: AnimeResponse
 
 
+class PersonVoicesResponse(CustomModel):
+    character: CharacterResponse
+    anime: AnimeResponse
+    language: str
+
+
 class PersonSearchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[PersonResponse]
@@ -25,3 +32,8 @@ class PersonSearchPaginationResponse(CustomModel):
 class PersonAnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[PersonAnimeResponse]
+
+
+class PersonVoicesPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[PersonVoicesResponse]

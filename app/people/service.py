@@ -1,4 +1,4 @@
-from app.models import AnimeStaff, Anime, Person
+from app.models import AnimeStaff, AnimeVoice, Anime, Person
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
@@ -49,6 +49,34 @@ async def person_anime(
         .filter(AnimeStaff.person == person)
         .join(Anime)
         .options(anime_loadonly(joinedload(AnimeStaff.anime)))
+        .order_by(
+            desc(Anime.score),
+            desc(Anime.scored_by),
+            desc(Anime.content_id),
+        )
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def person_voices_total(session: AsyncSession, person: Person):
+    return await session.scalar(
+        select(func.count(AnimeVoice.id)).filter(AnimeVoice.person == person)
+    )
+
+
+async def person_voices(
+    session: AsyncSession,
+    person: Person,
+    limit: int,
+    offset: int,
+):
+    return await session.scalars(
+        select(AnimeVoice)
+        .filter(AnimeVoice.person == person)
+        .options(anime_loadonly(joinedload(AnimeVoice.anime)))
+        .options(joinedload(AnimeVoice.character))
+        .join(Anime)
         .order_by(
             desc(Anime.score),
             desc(Anime.scored_by),
