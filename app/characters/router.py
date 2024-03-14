@@ -11,6 +11,7 @@ from . import service
 
 from .schemas import (
     CharactersSearchPaginationResponse,
+    CharacterVoicesPaginationResponse,
     CharacterAnimePaginationResponse,
     CharacterFullResponse,
 )
@@ -64,6 +65,25 @@ async def character_anime(
     limit, offset = pagination(page, size)
     total = await service.character_anime_total(session, character)
     anime = await service.character_anime(session, character, limit, offset)
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": anime.all(),
+    }
+
+
+@router.get(
+    "/{slug}/voices",
+    response_model=CharacterVoicesPaginationResponse,
+)
+async def character_voices(
+    session: AsyncSession = Depends(get_session),
+    character: Character = Depends(get_character),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.character_voices_total(session, character)
+    anime = await service.character_voices(session, character, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": anime.all(),
