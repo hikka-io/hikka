@@ -8,6 +8,11 @@ from app.schemas import (
 
 
 # Responses
+class PersonCountResponse(PersonResponse, CustomModel):
+    characters_count: int
+    anime_count: int
+
+
 class AnimeStaffRoleResponse(CustomModel):
     name_en: str | None
     name_ua: str | None
