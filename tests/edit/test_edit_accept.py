@@ -1,9 +1,15 @@
 from client_requests import request_accept_edit
 from client_requests import request_create_edit
-from app.models import Edit, Anime, Log
 from sqlalchemy import select, desc
 from fastapi import status
 from app import constants
+
+from app.models import (
+    UserEditStats,
+    Anime,
+    Edit,
+    Log,
+)
 
 
 async def test_edit_accept(
@@ -51,6 +57,13 @@ async def test_edit_accept(
     assert log.log_type == constants.LOG_EDIT_ACCEPT
     assert log.user == create_test_user_moderator
     assert log.data == {}
+
+    # Check top user stats
+    stats = await test_session.scalar(select(UserEditStats))
+
+    assert stats is not None
+    assert stats.user == create_test_user_moderator
+    assert stats.accepted == 1
 
 
 async def test_edit_accept_bad_permission(

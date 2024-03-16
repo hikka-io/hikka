@@ -23,6 +23,7 @@ from .schemas import (
 )
 
 from app.models import (
+    UserEditStats,
     CharacterEdit,
     AnimeWatch,
     PersonEdit,
@@ -40,6 +41,29 @@ content_type_to_edit_class = {
     constants.CONTENT_PERSON: PersonEdit,
     constants.CONTENT_ANIME: AnimeEdit,
 }
+
+
+async def update_edit_stats(session: AsyncSession, edit: Edit):
+    if not (
+        stats := await session.scalar(
+            select(UserEditStats).filter(UserEditStats.user == edit.author)
+        )
+    ):
+        stats = UserEditStats(
+            **{"user": edit.author, "accepted": 0, "closed": 0, "denied": 0}
+        )
+
+    edits_count = await session.scalar(
+        select(func.count(Edit.id)).filter(
+            Edit.author == edit.author, Edit.status == edit.status
+        )
+    )
+
+    setattr(stats, edit.status, edits_count)
+    session.add(stats)
+    await session.commit()
+
+    return stats
 
 
 async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
@@ -202,7 +226,7 @@ async def close_pending_edit(
         edit.id,
     )
 
-    # ToDo: recalculate edits here
+    await update_edit_stats(session, edit)
 
     return edit
 
@@ -250,7 +274,7 @@ async def accept_pending_edit(
         edit.id,
     )
 
-    # ToDo: recalculate edits here
+    await update_edit_stats(session, edit)
 
     return edit
 
@@ -327,7 +351,7 @@ async def deny_pending_edit(
         edit.id,
     )
 
-    # ToDo: recalculate edits here
+    await update_edit_stats(session, edit)
 
     return edit
 
