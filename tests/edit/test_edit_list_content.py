@@ -1,5 +1,5 @@
-from client_requests import request_content_edit_list
 from client_requests import request_create_edit
+from client_requests import request_edit_list
 from fastapi import status
 
 
@@ -27,13 +27,13 @@ async def test_edit_list_content(
     assert response.status_code == status.HTTP_200_OK
 
     # Get list of Bocchi edits
-    response = await request_content_edit_list(
-        client, "anime", "bocchi-the-rock-9e172d"
+    response = await request_edit_list(
+        client, {"content_type": "anime", "slug": "bocchi-the-rock-9e172d"}
     )
 
     # Check status and data
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 2
+    assert len(response.json()["list"]) == 1
 
     assert (
         response.json()["list"][0]["before"]["title_en"] == "Bocchi the Rock!"
@@ -46,5 +46,3 @@ async def test_edit_list_content(
     assert response.json()["list"][0]["status"] == "pending"
     assert response.json()["list"][0]["moderator"] is None
     assert response.json()["list"][0]["edit_id"] == 18
-
-    assert response.json()["list"][1]["system_edit"] is True

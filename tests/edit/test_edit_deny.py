@@ -1,7 +1,7 @@
 from client_requests import request_create_edit
 from client_requests import request_deny_edit
+from app.models import Log, UserEditStats
 from sqlalchemy import select, desc
-from app.models import Log
 from fastapi import status
 from app import constants
 
@@ -19,7 +19,7 @@ async def test_edit_deny(
     # Create edit for anime
     response = await request_create_edit(
         client,
-        get_test_token,
+        get_dummy_token,
         "anime",
         "bocchi-the-rock-9e172d",
         {
@@ -43,6 +43,13 @@ async def test_edit_deny(
     assert log.log_type == constants.LOG_EDIT_DENY
     assert log.user == create_test_user_moderator
     assert log.data == {}
+
+    # Check top user stats
+    stats = await test_session.scalar(select(UserEditStats))
+
+    assert stats is not None
+    assert stats.user == create_dummy_user
+    assert stats.denied == 1
 
 
 async def test_edit_deny_bad_permission(

@@ -2,12 +2,17 @@ def request_edit(client, edit_id):
     return client.get(f"/edit/{edit_id}")
 
 
-def request_content_edit_list(client, content_type, slug):
-    return client.get(f"/edit/{content_type}/{slug}/list")
+# def request_content_edit_list(client, content_type, slug):
+#     return client.get(f"/edit/{content_type}/{slug}/list")
 
 
-def request_edit_list(client):
-    return client.get("/edit/list")
+def request_edit_list(client, filters={}, page=1, size=15, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.post(
+        f"/edit/list?page={page}&size={size}",
+        json=filters,
+        headers=headers,
+    )
 
 
 def request_create_edit(

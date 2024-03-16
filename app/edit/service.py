@@ -23,6 +23,7 @@ from .schemas import (
 )
 
 from app.models import (
+    UserEditStats,
     CharacterEdit,
     AnimeWatch,
     PersonEdit,
@@ -42,6 +43,29 @@ content_type_to_edit_class = {
 }
 
 
+async def update_edit_stats(session: AsyncSession, edit: Edit):
+    if not (
+        stats := await session.scalar(
+            select(UserEditStats).filter(UserEditStats.user == edit.author)
+        )
+    ):
+        stats = UserEditStats(
+            **{"user": edit.author, "accepted": 0, "closed": 0, "denied": 0}
+        )
+
+    edits_count = await session.scalar(
+        select(func.count(Edit.id)).filter(
+            Edit.author == edit.author, Edit.status == edit.status
+        )
+    )
+
+    setattr(stats, edit.status, edits_count)
+    session.add(stats)
+    await session.commit()
+
+    return stats
+
+
 async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
     """Return Edit by edit_id"""
 
@@ -56,41 +80,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
                 ),
             )
         )
-    )
-
-
-async def count_edits_by_content_id(
-    session: AsyncSession, content_id: str
-) -> int:
-    """Count edits for given content"""
-
-    return await session.scalar(
-        select(func.count(Edit.id)).filter(Edit.content_id == content_id)
-    )
-
-
-async def get_edits_by_content_id(
-    session: AsyncSession,
-    content_id: str,
-    limit: int,
-    offset: int,
-) -> list[Edit]:
-    """Return edits for given content"""
-
-    return await session.scalars(
-        select(Edit)
-        .filter(Edit.content_id == content_id)
-        .order_by(desc(Edit.edit_id))
-        .options(
-            with_expression(
-                Edit.comments_count,
-                get_comments_count_subquery(
-                    Edit.id, constants.CONTENT_SYSTEM_EDIT
-                ),
-            )
-        )
-        .limit(limit)
-        .offset(offset)
     )
 
 
@@ -142,8 +131,6 @@ async def edits_search_filter(
         Edit.system_edit == False, Edit.hidden == False  # noqa: E712
     )
 
-    # query = query.order_by(*build_order_by(search.sort))
-
     return query
 
 
@@ -178,40 +165,6 @@ async def get_edits(
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)
-
-
-async def count_edits_legacy(session: AsyncSession) -> int:
-    """Count all (non system) edits"""
-
-    return await session.scalar(
-        select(func.count(Edit.id)).filter(
-            Edit.system_edit == False, Edit.hidden == False  # noqa: E712
-        )
-    )
-
-
-async def get_edits_legacy(
-    session: AsyncSession,
-    limit: int,
-    offset: int,
-) -> list[Edit]:
-    """Return all edits"""
-
-    return await session.scalars(
-        select(Edit)
-        .filter(Edit.system_edit == False, Edit.hidden == False)  # noqa: E712
-        .order_by(desc(Edit.edit_id))
-        .options(
-            with_expression(
-                Edit.comments_count,
-                get_comments_count_subquery(
-                    Edit.id, constants.CONTENT_SYSTEM_EDIT
-                ),
-            )
-        )
-        .limit(limit)
-        .offset(offset)
-    )
 
 
 async def update_pending_edit(
@@ -273,6 +226,8 @@ async def close_pending_edit(
         edit.id,
     )
 
+    await update_edit_stats(session, edit)
+
     return edit
 
 
@@ -318,6 +273,8 @@ async def accept_pending_edit(
         moderator,
         edit.id,
     )
+
+    await update_edit_stats(session, edit)
 
     return edit
 
@@ -393,6 +350,8 @@ async def deny_pending_edit(
         moderator,
         edit.id,
     )
+
+    await update_edit_stats(session, edit)
 
     return edit
 
