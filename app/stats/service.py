@@ -13,4 +13,6 @@ async def get_edits_top(session: AsyncSession, limit: int, offset: int):
         select(UserEditStats)
         .options(joinedload(UserEditStats.user))
         .order_by(desc(UserEditStats.accepted))
+        .limit(limit)
+        .offset(offset)
     )
