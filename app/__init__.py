@@ -80,6 +80,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .system import router as system_router
     from .anime import router as anime_router
     from .watch import router as watch_router
+    from .stats import router as stats_router
     from .user import router as user_router
     from .auth import router as auth_router
     from .edit import router as edit_router
@@ -98,6 +99,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(system_router)
     app.include_router(anime_router)
     app.include_router(watch_router)
+    app.include_router(stats_router)
     app.include_router(user_router)
     app.include_router(auth_router)
     app.include_router(edit_router)

@@ -23,9 +23,11 @@ from app.admin.service import (
 
 from app.models import (
     AnimeStaffRole,
+    UserEditStats,
     AnimeStaff,
     AnimeWatch,
     Anime,
+    User,
     Edit,
     Log,
 )
@@ -261,6 +263,57 @@ async def run_migrate_logs():
     await sessionmanager.close()
 
 
+async def calculate_stats():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        users = await session.scalars(select(User).filter(User.edits.any()))
+
+        for user in users:
+            accepted = await session.scalar(
+                select(func.count(Edit.id)).filter(
+                    Edit.author == user, Edit.status == constants.EDIT_ACCEPTED
+                )
+            )
+
+            closed = await session.scalar(
+                select(func.count(Edit.id)).filter(
+                    Edit.author == user, Edit.status == constants.EDIT_CLOSED
+                )
+            )
+
+            denied = await session.scalar(
+                select(func.count(Edit.id)).filter(
+                    Edit.author == user, Edit.status == constants.EDIT_DENIED
+                )
+            )
+
+            if not (
+                stats := await session.scalar(
+                    select(UserEditStats).filter(UserEditStats.user == user)
+                )
+            ):
+                stats = UserEditStats(
+                    **{
+                        "user": user,
+                        "accepted": 0,
+                        "closed": 0,
+                        "denied": 0,
+                    }
+                )
+
+            stats.accepted = accepted
+            stats.closed = closed
+            stats.denied = denied
+
+            session.add(stats)
+            await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -274,5 +327,6 @@ if __name__ == "__main__":
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
-    asyncio.run(run_migrate_logs())
+    # asyncio.run(run_migrate_logs())
+    asyncio.run(calculate_stats())
     pass
