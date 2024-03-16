@@ -29,7 +29,6 @@ from .dependencies import (
     validate_edit_search_args,
     validate_edit_update_args,
     validate_edit_id_pending,
-    validate_content_slug,
     validate_edit_create,
     validate_edit_accept,
     validate_edit_update,
@@ -61,41 +60,6 @@ async def get_edits(
     limit, offset = pagination(page, size)
     total = await service.count_edits(session, args)
     edits = await service.get_edits(session, args, limit, offset)
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": edits.all(),
-    }
-
-
-@router.get("/{content_type}/{slug}/list", response_model=EditListResponse)
-async def get_content_edit_list_legacy(
-    session: AsyncSession = Depends(get_session),
-    content_id: str = Depends(validate_content_slug),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.count_edits_by_content_id(session, content_id)
-    edits = await service.get_edits_by_content_id(
-        session, content_id, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": edits.all(),
-    }
-
-
-@router.get("/list", response_model=EditListResponse)
-async def get_edit_list_legacy(
-    session: AsyncSession = Depends(get_session),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.count_edits_legacy(session)
-    edits = await service.get_edits_legacy(session, limit, offset)
 
     return {
         "pagination": pagination_dict(total, page, limit),

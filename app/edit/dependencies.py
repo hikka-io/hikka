@@ -134,13 +134,6 @@ async def validate_content(
     return content
 
 
-async def validate_content_slug(
-    content: Person | Anime | Character = Depends(validate_content),
-) -> str:
-    """Return content reference by content_type and slug"""
-    return content.reference
-
-
 async def validate_edit_create_args(
     content_type: ContentTypeEnum,
     args: EditArgs,
