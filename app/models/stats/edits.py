@@ -8,14 +8,10 @@ from ..base import Base
 class UserEditStats(Base):
     __tablename__ = "service_stats_edits"
 
-    create: Mapped[int]
-    update: Mapped[int]
-    accept: Mapped[int]
-    close: Mapped[int]
-    deny: Mapped[int]
+    accepted: Mapped[int]
+    closed: Mapped[int]
+    denied: Mapped[int]
 
     user_id = mapped_column(ForeignKey("service_users.id"))
 
-    user: Mapped["User"] = relationship(
-        back_populates="following", foreign_keys=[user_id]
-    )
+    user: Mapped["User"] = relationship(foreign_keys=[user_id])
