@@ -25,7 +25,7 @@ async def test_collections_delete_moderator(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [

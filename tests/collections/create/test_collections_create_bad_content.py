@@ -1,5 +1,6 @@
 from client_requests import request_create_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_create_bad_content(
@@ -17,8 +18,8 @@ async def test_collections_create_bad_content(
             "description": "Description",
             "title": "Test collection",
             "content_type": "anime",
+            "visibility": constants.COLLECTION_PUBLIC,
             "labels_order": [],
-            "private": False,
             "spoiler": False,
             "nsfw": False,
             "tags": [],

@@ -1,5 +1,6 @@
 from client_requests import request_create_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_create_bad_label(
@@ -19,7 +20,7 @@ async def test_collections_create_bad_label(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Bad"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [

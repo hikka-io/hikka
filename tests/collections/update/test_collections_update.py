@@ -23,7 +23,7 @@ async def test_collections_update(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -58,7 +58,7 @@ async def test_collections_update(
             "content_type": "anime",
             "description": "Description 2",
             "labels_order": ["Great", "Good"],
-            "private": True,
+            "visibility": constants.COLLECTION_UNLISTED,
             "spoiler": True,
             "nsfw": True,
             "content": [
@@ -84,7 +84,7 @@ async def test_collections_update(
     assert response.json()["tags"] == ["comedy", "romance"]
     assert response.json()["description"] == "Description 2"
     assert response.json()["labels_order"] == ["Great", "Good"]
-    assert response.json()["private"] is True
+    assert response.json()["visibility"] == "unlisted"
     assert response.json()["spoiler"] is True
     assert response.json()["nsfw"] is True
 

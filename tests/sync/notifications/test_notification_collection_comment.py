@@ -26,7 +26,7 @@ async def test_notification_collection_comment(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -90,7 +90,7 @@ async def test_notification_collection_comment_same_author(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [

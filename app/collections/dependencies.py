@@ -73,7 +73,9 @@ async def validate_collection_create(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(auth_required()),
 ):
-    collections_count = await service.get_user_collections_count(session, user)
+    collections_count = await service.get_user_collections_count_all(
+        session, user
+    )
 
     if collections_count >= 10:
         raise Abort("collections", "limit")
@@ -82,9 +84,15 @@ async def validate_collection_create(
 
 
 async def validate_collection(
-    reference: UUID, session: AsyncSession = Depends(get_session)
+    reference: UUID,
+    request_user: User | None = Depends(auth_required(optional=True)),
+    session: AsyncSession = Depends(get_session),
 ) -> Collection:
-    if not (collection := await service.get_collection(session, reference)):
+    if not (
+        collection := await service.get_collection(
+            session, reference, request_user
+        )
+    ):
         raise Abort("collections", "not-found")
 
     return collection

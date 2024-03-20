@@ -80,7 +80,7 @@ async def count_content(
 async def get_collections_count(session: AsyncSession) -> int:
     return await session.scalar(
         select(func.count(Collection.id)).filter(
-            Collection.private == False,  # noqa: E712
+            Collection.visibility == constants.COLLECTION_PUBLIC,
             Collection.deleted == False,  # noqa: E712
         )
     )
@@ -92,7 +92,7 @@ async def get_collections(
     return await session.scalars(
         collections_load_options(
             select(Collection).filter(
-                Collection.private == False,  # noqa: E712
+                Collection.visibility == constants.COLLECTION_PUBLIC,
                 Collection.deleted == False,  # noqa: E712
             ),
             request_user,
@@ -104,13 +104,35 @@ async def get_collections(
     )
 
 
-async def get_user_collections_count(session: AsyncSession, user: User) -> int:
+async def get_user_collections_count_all(
+    session: AsyncSession, user: User
+) -> int:
     return await session.scalar(
         select(func.count(Collection.id)).filter(
             Collection.deleted == False,  # noqa: E712
             Collection.author == user,
         )
     )
+
+
+async def get_user_collections_count(
+    session: AsyncSession,
+    user: User,
+    request_user: User,
+) -> int:
+    query = select(func.count(Collection.id)).filter(
+        Collection.deleted == False,  # noqa: E712
+        Collection.author == user,
+    )
+
+    if request_user != user:
+        query = query.filter(
+            Collection.visibility.in_(
+                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+            )
+        )
+
+    return await session.scalar(query)
 
 
 async def get_user_collections(
@@ -120,24 +142,33 @@ async def get_user_collections(
     limit: int,
     offset: int,
 ) -> list[Collection]:
+    query = select(Collection).filter(
+        Collection.deleted == False,  # noqa: E712
+        Collection.author == user,
+    )
+
+    if request_user != user:
+        query = query.filter(
+            Collection.visibility.in_(
+                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+            )
+        )
+
     return await session.scalars(
         collection_comments_load_options(
-            collections_load_options(
-                select(Collection).filter(
-                    Collection.deleted == False,  # noqa: E712
-                    Collection.author == user,
-                ),
-                request_user,
-                True,
-            )
+            collections_load_options(query, request_user, True)
         )
         .limit(limit)
         .offset(offset)
     )
 
 
-async def get_collection(session: AsyncSession, reference: UUID):
-    return await session.scalar(
+async def get_collection(
+    session: AsyncSession,
+    reference: UUID,
+    request_user: User,
+):
+    collection = await session.scalar(
         collection_comments_load_options(
             select(Collection).filter(
                 Collection.deleted == False,  # noqa: E712
@@ -146,15 +177,23 @@ async def get_collection(session: AsyncSession, reference: UUID):
         )
     )
 
+    if (
+        collection.author != request_user
+        and collection.visibility == constants.COLLECTION_PRIVATE
+    ):
+        return None
+
+    return collection
+
 
 async def get_collection_display(
     session: AsyncSession, collection: Collection, request_user: User
 ):
+    query = select(Collection).filter(Collection.id == collection.id)
     return await session.scalar(
-        collections_load_options(
-            select(Collection).filter(Collection.id == collection.id),
-            request_user,
-        ).order_by(desc(Collection.created))
+        collections_load_options(query, request_user).order_by(
+            desc(Collection.created)
+        )
     )
 
 
@@ -167,11 +206,12 @@ async def create_collection(
 
     collection = Collection(
         **{
+            "private": False,  # ToDo: remove me
             "content_type": args.content_type,
             "labels_order": args.labels_order,
             "description": args.description,
+            "visibility": args.visibility,
             "entries": len(args.content),
-            "private": args.private,
             "spoiler": args.spoiler,
             "title": args.title,
             "nsfw": args.nsfw,
@@ -200,8 +240,8 @@ async def create_collection(
             "content_type": args.content_type,
             "labels_order": args.labels_order,
             "description": args.description,
+            "visibility": args.visibility,
             "entries": len(args.content),
-            "private": args.private,
             "spoiler": args.spoiler,
             "title": args.title,
             "nsfw": args.nsfw,
@@ -234,7 +274,7 @@ async def update_collection(
     for key in [
         "labels_order",
         "description",
-        "private",
+        "visibility",
         "spoiler",
         "title",
         "nsfw",

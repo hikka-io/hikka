@@ -266,3 +266,8 @@ NOTIFICATION_HIKKA_UPDATE = "hikka_update"
 
 # Activity intervals
 INTERVAL_DAY = "day"
+
+# Collections
+COLLECTION_PUBLIC = "public"
+COLLECTION_UNLISTED = "unlisted"
+COLLECTION_PRIVATE = "private"

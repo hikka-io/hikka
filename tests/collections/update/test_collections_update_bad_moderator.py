@@ -1,6 +1,7 @@
 from client_requests import request_create_collection
 from client_requests import request_update_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_update_bad_moderator(
@@ -22,7 +23,7 @@ async def test_collections_update_bad_moderator(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -57,7 +58,7 @@ async def test_collections_update_bad_moderator(
             "content_type": "anime",
             "description": "Description 2",
             "labels_order": ["Good", "Great"],
-            "private": True,
+            "visibility": constants.COLLECTION_UNLISTED,
             "spoiler": True,
             "nsfw": True,
             "content": [

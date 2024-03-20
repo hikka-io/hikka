@@ -132,14 +132,18 @@ async def get_user_favourite_list(
         )
 
     if content_type == constants.CONTENT_COLLECTION:
-        query = collections_load_options(
-            query.filter(
-                Collection.private == False,  # noqa: E712
-                Collection.deleted == False,  # noqa: E712
-            ),
-            request_user,
-            True,
+        query = query.filter(
+            Collection.deleted == False,  # noqa: E712
         )
+
+        if request_user != user:
+            query = query.filter(
+                Collection.visibility.in_(
+                    [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+                )
+            )
+
+        query = collections_load_options(query, request_user, True)
 
     return await session.scalars(
         query.options(
@@ -158,13 +162,28 @@ async def get_user_favourite_list_count(
     session: AsyncSession,
     content_type: ContentTypeEnum,
     user: User,
+    request_user: User,
 ) -> int:
     favourite_model = content_type_to_favourite_class[content_type]
-    return await session.scalar(
-        select(func.count(favourite_model.id)).filter(
-            favourite_model.user == user
+    content_model = content_type_to_content_class[content_type]
+
+    query = (
+        select(func.count(content_model.id))
+        .join(
+            favourite_model,
+            favourite_model.content_id == content_model.id,
         )
+        .filter(favourite_model.user == user)
     )
+
+    if content_type == constants.CONTENT_COLLECTION and request_user != user:
+        query = query.filter(
+            Collection.visibility.in_(
+                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+            )
+        )
+
+    return await session.scalar(query)
 
 
 async def get_user_favourite_list_legacy(

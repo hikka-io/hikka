@@ -22,6 +22,12 @@ class ContentTypeEnum(str, Enum):
     content_anime = constants.CONTENT_ANIME
 
 
+class CollectionVisibilityEnum(str, Enum):
+    visibility_unlisted = constants.COLLECTION_UNLISTED
+    visibility_private = constants.COLLECTION_PRIVATE
+    visibility_public = constants.COLLECTION_PUBLIC
+
+
 # Args
 class CollectionContentArgs(CustomModel):
     comment: str | None = Field(default=None, min_length=3)
@@ -34,10 +40,10 @@ class CollectionArgs(CustomModel):
     description: str = Field(min_length=3, max_length=8192)
     title: str = Field(min_length=3, max_length=255)
     tags: list[str] = Field(max_length=3)
+    visibility: CollectionVisibilityEnum
     content: list[CollectionContentArgs]
     content_type: ContentTypeEnum
     labels_order: list[str]
-    private: bool
     spoiler: bool
     nsfw: bool
 
@@ -73,6 +79,7 @@ class CollectionContentResponse(CustomModel):
 
 
 class CollectionResponse(CustomModel):
+    visibility: CollectionVisibilityEnum
     labels_order: list[str]
     author: UserResponse
     comments_count: int
@@ -82,7 +89,6 @@ class CollectionResponse(CustomModel):
     description: str
     tags: list[str]
     reference: str
-    private: bool
     spoiler: bool
     entries: int
     title: str

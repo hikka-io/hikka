@@ -25,7 +25,7 @@ async def test_collections_update_moderator(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -60,7 +60,7 @@ async def test_collections_update_moderator(
             "content_type": "anime",
             "description": "Description 2",
             "labels_order": ["Good", "Great"],
-            "private": True,
+            "visibility": constants.COLLECTION_UNLISTED,
             "spoiler": True,
             "nsfw": True,
             "content": [

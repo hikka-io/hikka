@@ -1,5 +1,6 @@
 from client_requests import request_create_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_create_bad_order_not_consecutive(
@@ -18,8 +19,8 @@ async def test_collections_create_bad_order_not_consecutive(
             "tags": ["romance", "comedy"],
             "content_type": "anime",
             "description": "Description",
+            "visibility": constants.COLLECTION_PUBLIC,
             "labels_order": [],
-            "private": False,
             "spoiler": False,
             "nsfw": False,
             "content": [

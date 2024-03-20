@@ -1,6 +1,7 @@
 from client_requests import request_create_collection
 from client_requests import request_delete_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_delete_bad_moderator(
@@ -22,7 +23,7 @@ async def test_collections_delete_bad_moderator(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
