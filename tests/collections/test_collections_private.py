@@ -1,6 +1,7 @@
 from client_requests import request_user_collections_list
 from client_requests import request_create_collection
 from client_requests import request_collections_list
+from client_requests import request_collection_info
 from fastapi import status
 from app import constants
 
@@ -51,8 +52,7 @@ async def test_collections_list_private(
         },
     )
 
-    # Make sure we got correct response code
-    assert response.status_code == status.HTTP_200_OK
+    collection_reference = response.json()["reference"]
 
     # Now let's get list of collections
     # And make sure that without auth there are none
@@ -98,3 +98,23 @@ async def test_collections_list_private(
 
     assert response.json()["pagination"]["total"] == 1
     assert len(response.json()["list"]) == 1
+
+    # Get private collection info without auth
+    # Collection should not be found
+    response = await request_collection_info(client, collection_reference)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    # Get collection info with dummy user
+    response = await request_collection_info(
+        client, collection_reference, token=get_dummy_token
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    # Get collection info with author's token
+    response = await request_collection_info(
+        client, collection_reference, token=get_test_token
+    )
+
+    assert response.status_code == status.HTTP_200_OK
