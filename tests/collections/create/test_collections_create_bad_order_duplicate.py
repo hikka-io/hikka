@@ -1,5 +1,6 @@
 from client_requests import request_create_collection
 from fastapi import status
+from app import constants
 
 
 async def test_collections_create_bad_order_duplicate(
@@ -19,7 +20,7 @@ async def test_collections_create_bad_order_duplicate(
             "content_type": "anime",
             "description": "Description",
             "labels_order": [],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [

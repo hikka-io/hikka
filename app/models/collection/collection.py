@@ -27,6 +27,7 @@ class Collection(
     favourite_created: Mapped[datetime] = query_expression()
     comments_count: Mapped[int] = query_expression()
 
+    visibility: Mapped[str] = mapped_column(String(16), index=True)
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String))

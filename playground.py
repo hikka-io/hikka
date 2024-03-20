@@ -26,6 +26,7 @@ from app.models import (
     UserEditStats,
     AnimeStaff,
     AnimeWatch,
+    Collection,
     Anime,
     User,
     Edit,
@@ -314,6 +315,25 @@ async def calculate_stats():
     await sessionmanager.close()
 
 
+async def run_migrate_collections():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        collections = await session.scalars(select(Collection))
+
+        for collection in collections:
+            if collection.private:
+                collection.visibility = constants.COLLECTION_UNLISTED
+
+            session.add(collection)
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -328,5 +348,6 @@ if __name__ == "__main__":
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
     # asyncio.run(run_migrate_logs())
-    asyncio.run(calculate_stats())
+    # asyncio.run(calculate_stats())
+    asyncio.run(run_migrate_collections())
     pass

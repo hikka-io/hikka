@@ -1,6 +1,7 @@
 from client_requests import request_create_collection
 from client_requests import request_collection_info
 from fastapi import status
+from app import constants
 
 
 async def test_collections_info(
@@ -30,8 +31,8 @@ async def test_collections_info(
             "title": "Test collection",
             "description": "Description",
             "content_type": "anime",
+            "visibility": constants.COLLECTION_PUBLIC,
             "labels_order": [],
-            "private": False,
             "spoiler": False,
             "nsfw": False,
             "content": [

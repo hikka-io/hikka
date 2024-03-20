@@ -22,7 +22,7 @@ async def test_collections_create(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -72,7 +72,7 @@ async def test_collections_create(
     assert log.data["description"] == "Description"
     assert log.data["title"] == "Test collection"
     assert log.data["content_type"] == "anime"
-    assert log.data["private"] is False
+    assert log.data["visibility"] == "public"
     assert log.data["spoiler"] is False
     assert log.data["nsfw"] is False
 

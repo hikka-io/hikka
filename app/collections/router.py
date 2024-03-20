@@ -63,7 +63,10 @@ async def get_user_collections(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_collections_count(session, user)
+    total = await service.get_user_collections_count(
+        session, user, request_user
+    )
+
     collections = await service.get_user_collections(
         session, user, request_user, limit, offset
     )
