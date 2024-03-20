@@ -73,7 +73,7 @@ async def favourite_list(
 ):
     limit, offset = pagination(page, size)
     total = await service.get_user_favourite_list_count(
-        session, content_type, user
+        session, content_type, user, request_user
     )
 
     content = await service.get_user_favourite_list(

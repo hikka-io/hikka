@@ -2,6 +2,7 @@ from client_requests import request_create_collection
 from client_requests import request_favourite_list
 from client_requests import request_favourite_add
 from fastapi import status
+from app import constants
 
 
 async def test_favourite_list_anime(
@@ -58,7 +59,7 @@ async def test_favourite_list_collections(
             "content_type": "anime",
             "description": "Description",
             "labels_order": ["Good", "Great"],
-            "private": False,
+            "visibility": constants.COLLECTION_PUBLIC,
             "spoiler": False,
             "nsfw": False,
             "content": [
@@ -86,7 +87,7 @@ async def test_favourite_list_collections(
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 0
 
-    # Add anime to favourite
+    # Add collection to favourite
     await request_favourite_add(
         client, "collection", collection_reference, get_test_token
     )
@@ -97,3 +98,71 @@ async def test_favourite_list_collections(
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 1
     assert response.json()["list"][0]["reference"] == collection_reference
+
+
+async def test_favourite_list_collections_private(
+    client,
+    create_dummy_user,
+    create_test_user,
+    aggregator_anime,
+    get_dummy_token,
+    get_test_token,
+):
+    # First we create test anime collection
+    response = await request_create_collection(
+        client,
+        get_test_token,
+        {
+            "title": "Test collection",
+            "tags": ["romance", "comedy"],
+            "content_type": "anime",
+            "description": "Description",
+            "labels_order": ["Good", "Great"],
+            "visibility": constants.COLLECTION_PRIVATE,
+            "spoiler": False,
+            "nsfw": False,
+            "content": [
+                {
+                    "slug": "fullmetal-alchemist-brotherhood-fc524a",
+                    "comment": None,
+                    "label": "Good",
+                    "order": 1,
+                },
+                {
+                    "slug": "bocchi-the-rock-9e172d",
+                    "comment": "Author comment",
+                    "label": "Great",
+                    "order": 2,
+                },
+            ],
+        },
+    )
+
+    collection_reference = response.json()["reference"]
+
+    # Add collection to favourite
+    await request_favourite_add(
+        client, "collection", collection_reference, get_test_token
+    )
+
+    # Now let's check user collections without auth
+    response = await request_favourite_list(client, "collection", "testuser")
+
+    assert response.json()["pagination"]["total"] == 0
+    assert len(response.json()["list"]) == 0
+
+    # Now let's check user collections with dummy user
+    response = await request_favourite_list(
+        client, "collection", "testuser", token=get_dummy_token
+    )
+
+    assert response.json()["pagination"]["total"] == 0
+    assert len(response.json()["list"]) == 0
+
+    # Now let's check user collections with author's token
+    response = await request_favourite_list(
+        client, "collection", "testuser", token=get_test_token
+    )
+
+    assert response.json()["pagination"]["total"] == 1
+    assert len(response.json()["list"]) == 1
