@@ -31,7 +31,7 @@ class CollectionVisibilityEnum(str, Enum):
 # Args
 class CollectionContentArgs(CustomModel):
     comment: str | None = Field(default=None, min_length=3)
-    label: str | None = Field(default=None, min_length=3)
+    label: str | None = Field(default=None, min_length=1)
     order: int
     slug: str
 
