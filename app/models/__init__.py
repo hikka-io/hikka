@@ -48,11 +48,13 @@ from .content.staff import AnimeVoice
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
-from .system.vote import CommentVote
 from .system.upload import Upload
 from .system.image import Image
-from .system.vote import Vote
 from .system.log import Log
+
+from .vote.vote import CollectionVote
+from .vote.vote import CommentVote
+from .vote.vote import Vote
 
 from .collection.content import CharacterCollectionContent
 from .collection.content import PersonCollectionContent
@@ -105,12 +107,13 @@ __all__ = [
     "AnimeVoice",
     "Notification",
     "SystemTimestamp",
-    "CommentVote",
     "Activity",
     "Upload",
     "Image",
-    "Vote",
     "Log",
+    "CollectionVote",
+    "CommentVote",
+    "Vote",
     "CharacterCollectionContent",
     "PersonCollectionContent",
     "AnimeCollectionContent",

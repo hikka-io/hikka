@@ -49,7 +49,7 @@ async def vote_comment(
     comment: Comment = Depends(validate_comment_not_hidden),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COMMENT_VOTE])
+        auth_required(permissions=[constants.PERMISSION_VOTE_SET])
     ),
 ):
     await service.set_comment_vote(session, comment, user, args.score)

@@ -51,6 +51,10 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
     )
 
     @hybrid_property
+    def slug(self):
+        return str(self.reference)
+
+    @hybrid_property
     def depth(self):
         return len(self.path)
 

@@ -10,7 +10,6 @@ from app import constants
 from app.service import (
     content_type_to_content_class,
     collections_load_options,
-    anime_loadonly,
     create_log,
 )
 

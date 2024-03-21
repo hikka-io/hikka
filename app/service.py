@@ -34,6 +34,7 @@ content_type_to_content_class = {
     constants.CONTENT_COLLECTION: Collection,
     constants.CONTENT_CHARACTER: Character,
     constants.CONTENT_SYSTEM_EDIT: Edit,
+    constants.CONTENT_COMMENT: Comment,
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
 }
@@ -62,6 +63,15 @@ async def get_content_by_slug(
             return None
 
         query = query.filter(content_model.id == UUID(slug))
+
+    # Special case for comment
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COMMENT:
+        if not is_uuid(slug):
+            return None
+
+        query = query.filter(content_model.id == UUID(slug))
+        query = query.filter(content_model.hidden == False)  # noqa: E712
 
     # Everything else is handled here
     else:
