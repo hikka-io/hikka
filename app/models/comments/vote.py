@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey
 from ..base import Base
 
 
-class CommentVote(Base, CreatedMixin, UpdatedMixin):
+class CommentVoteLegacy(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_comment_votes"
 
     score: Mapped[int]  # Shoule be -1 / 0 / 1

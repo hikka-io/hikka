@@ -34,7 +34,7 @@ def get_my_score_subquery(request_user: User | None):
         select(CommentVote.score)
         .filter(
             CommentVote.user == request_user,
-            CommentVote.comment_id == Comment.id,
+            CommentVote.content_id == Comment.id,
         )
         .scalar_subquery()
     )
@@ -230,7 +230,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
 async def get_vote(session: AsyncSession, comment: Comment, user: User):
     return await session.scalar(
         select(CommentVote).filter(
-            CommentVote.comment == comment,
+            CommentVote.content == comment,
             CommentVote.user == user,
         )
     )
@@ -248,7 +248,7 @@ async def set_comment_vote(
     if not (vote := await get_vote(session, comment, user)):
         vote = CommentVote(
             **{
-                "comment": comment,
+                "content": comment,
                 "created": now,
                 "user": user,
             }
@@ -262,7 +262,7 @@ async def set_comment_vote(
     old_score = comment.score
     comment.score = await session.scalar(
         select(func.sum(CommentVote.score)).filter(
-            CommentVote.comment == comment
+            CommentVote.content == comment
         )
     )
     new_score = comment.score

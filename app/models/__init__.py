@@ -17,9 +17,9 @@ from .edit.edit import AnimeEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
+from .comments.vote import CommentVoteLegacy
 from .comments.comment import AnimeComment
 from .comments.comment import EditComment
-from .comments.vote import CommentVote
 from .comments.comment import Comment
 
 from .list.favourite import CollectionFavourite
@@ -48,8 +48,10 @@ from .content.staff import AnimeVoice
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
+from .system.vote import CommentVote
 from .system.upload import Upload
 from .system.image import Image
+from .system.vote import Vote
 from .system.log import Log
 
 from .collection.content import CharacterCollectionContent
@@ -81,7 +83,7 @@ __all__ = [
     "CollectionComment",
     "AnimeComment",
     "EditComment",
-    "CommentVote",
+    "CommentVoteLegacy",
     "Comment",
     "CollectionFavourite",
     "CharacterFavourite",
@@ -103,9 +105,11 @@ __all__ = [
     "AnimeVoice",
     "Notification",
     "SystemTimestamp",
+    "CommentVote",
     "Activity",
     "Upload",
     "Image",
+    "Vote",
     "Log",
     "CharacterCollectionContent",
     "PersonCollectionContent",
