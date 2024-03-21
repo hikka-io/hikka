@@ -3,11 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, Favourite
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app import constants
 from . import service
 
 from .schemas import (
-    FavouritePaginationResponseLegacy,
     FavouritePaginationResponse,
     FavouriteResponse,
     ContentTypeEnum,
@@ -78,33 +76,6 @@ async def favourite_list(
 
     content = await service.get_user_favourite_list(
         session, content_type, user, request_user, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": content.unique().all(),
-    }
-
-
-# ToDo: delete this as soon as possible
-@router.get(
-    "/anime/{username}/list",
-    response_model=FavouritePaginationResponseLegacy,
-)
-async def favourite_list_legacy(
-    session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
-    user: User = Depends(get_user),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.get_user_favourite_list_count(
-        session, constants.CONTENT_ANIME, user
-    )
-
-    content = await service.get_user_favourite_list_legacy(
-        session, constants.CONTENT_ANIME, user, request_user, limit, offset
     )
 
     return {

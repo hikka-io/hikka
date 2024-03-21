@@ -1,16 +1,13 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
 from .utils import is_valid_tag
-from datetime import datetime
 from app import constants
 from enum import Enum
 
 from app.schemas import (
-    AnimeResponseWithWatch,
+    CollectionVisibilityEnum,
+    CollectionResponse,
     PaginationResponse,
-    CharacterResponse,
-    PersonResponse,
-    UserResponse,
     CustomModel,
 )
 
@@ -20,12 +17,6 @@ class ContentTypeEnum(str, Enum):
     content_character = constants.CONTENT_CHARACTER
     content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
-
-
-class CollectionVisibilityEnum(str, Enum):
-    visibility_unlisted = constants.COLLECTION_UNLISTED
-    visibility_private = constants.COLLECTION_PRIVATE
-    visibility_public = constants.COLLECTION_PUBLIC
 
 
 # Args
@@ -70,37 +61,6 @@ class CollectionArgs(CustomModel):
 
 
 # Responses
-class CollectionContentResponse(CustomModel):
-    content: AnimeResponseWithWatch | CharacterResponse | PersonResponse
-    comment: str | None
-    label: str | None
-    content_type: str
-    order: int
-
-
-class CollectionResponse(CustomModel):
-    visibility: CollectionVisibilityEnum
-    labels_order: list[str]
-    author: UserResponse
-    comments_count: int
-    created: datetime
-    updated: datetime
-    content_type: str
-    description: str
-    tags: list[str]
-    reference: str
-    spoiler: bool
-    entries: int
-    title: str
-    nsfw: bool
-
-    collection: list[CollectionContentResponse]
-
-    @field_validator("collection")
-    def collection_ordering(cls, collection):
-        return sorted(collection, key=lambda c: c.order)
-
-
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CollectionResponse]
