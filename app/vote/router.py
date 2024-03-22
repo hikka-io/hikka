@@ -27,7 +27,7 @@ async def get_vote(vote: Vote = Depends(validate_get_vote)):
     return vote
 
 
-@router.put("/{content_type}/{reference}", response_model=VoteResponse)
+@router.put("/{content_type}/{slug}", response_model=VoteResponse)
 async def set_vote(
     args: VoteArgs,
     content_type: str,

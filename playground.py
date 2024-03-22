@@ -344,6 +344,10 @@ async def run_migrate_votes():
     async with sessionmanager.session() as session:
         legacy_votes = await session.scalars(select(CommentVoteLegacy))
 
+        # ToDo: recalculate vote_score
+        # ToDo: fix old comment vote logs
+        # ToDo: fix old comment vote notifications
+
         for legacy_vote in legacy_votes:
             if await session.scalar(
                 select(CommentVote).filter(

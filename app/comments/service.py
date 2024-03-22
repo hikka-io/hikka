@@ -64,6 +64,7 @@ async def create_comment(
             "content_type": content_type,
             "content_id": content_id,
             "author": author,
+            "vote_score": 0,
             "created": now,
             "updated": now,
             "id": uuid4(),

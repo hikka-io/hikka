@@ -46,7 +46,7 @@ async def set_vote(
     vote_model = content_type_to_favourite_class[content_type]
     now = datetime.utcnow()
 
-    # Create watch record if missing
+    # Create vote record if missing
     if not (vote := await get_vote(session, content_type, content, user)):
         vote = vote_model(
             **{
@@ -61,14 +61,15 @@ async def set_vote(
 
     session.add(vote)
 
-    if hasattr(content, "score"):
-        old_score = content.score
-        content.score = await session.scalar(
+    # Calculate and update vote score if content supports it
+    if hasattr(content, "vote_score"):
+        old_score = content.vote_score
+        content.vote_score = await session.scalar(
             select(func.sum(vote_model.score)).filter(
                 vote_model.content == content
             )
         )
-        new_score = content.score
+        new_score = content.vote_score
 
         session.add(content)
         await session.commit()
