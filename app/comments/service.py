@@ -113,6 +113,7 @@ async def count_comments_by_content_id(
         select(func.count(Comment.id)).filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.hidden == False,  # noqa: E712
         )
     )
 
@@ -131,6 +132,7 @@ async def get_comments_by_content_id(
         .filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.hidden == False,  # noqa: E712
         )
         .options(
             with_expression(

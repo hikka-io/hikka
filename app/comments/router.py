@@ -57,7 +57,7 @@ async def write_comment(
 
 
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
-async def get_content_edit_list(
+async def get_contents_list(
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
     request_user: User = Depends(auth_required(optional=True)),
