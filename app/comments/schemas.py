@@ -22,10 +22,6 @@ class ContentTypeEnum(str, Enum):
 
 
 # Args
-class CommentVoteArgs(CustomModel):
-    score: int = Field(ge=-1, le=1)
-
-
 class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
 
@@ -50,10 +46,10 @@ class CommentResponse(CustomModel):
     updated: datetime
     created: datetime
     text: str | None
+    vote_score: int
     reference: str
     my_score: int
     hidden: bool
-    score: int
     depth: int
 
 
@@ -71,6 +67,7 @@ class CommentNode:
     replies: list["CommentNode"] = field(default_factory=list)
     is_editable: bool = False
     total_replies: int = 0
+    vote_score: int = None
     hidden: bool = False
     my_score: int = None
     created: str = None
@@ -83,11 +80,11 @@ class CommentNode:
         self.my_score = comment.my_score if comment.my_score else 0
         self.text = comment.text if not comment.hidden else None
         self.is_editable = comment.is_editable
+        self.vote_score = comment.vote_score
         self.updated = comment.updated
         self.created = comment.created
         self.author = comment.author
         self.hidden = comment.hidden
-        self.score = comment.score
         self.depth = comment.depth
         return self
 

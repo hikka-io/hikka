@@ -32,11 +32,3 @@ def request_comments_list(client, content_type, slug, token=None, page=1):
         f"/comments/{content_type}/{slug}/list?page={page}",
         headers=headers,
     )
-
-
-def request_comments_vote(client, token, comment_reference, score):
-    return client.put(
-        f"/comments/vote/{comment_reference}",
-        headers={"Auth": token},
-        json={"score": score},
-    )

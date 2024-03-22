@@ -98,6 +98,12 @@ class SourceEnum(str, Enum):
     book = constants.SOURCE_BOOK
 
 
+class CollectionVisibilityEnum(str, Enum):
+    visibility_unlisted = constants.COLLECTION_UNLISTED
+    visibility_private = constants.COLLECTION_PRIVATE
+    visibility_public = constants.COLLECTION_PUBLIC
+
+
 # Args
 class PaginationArgs(CustomModel):
     page: int = Field(default=1, gt=0, examples=[1])
@@ -323,3 +329,35 @@ class CommentResponse(CustomModel):
     hidden: bool
     score: int
     depth: int
+
+
+# Collections
+class CollectionContentResponse(CustomModel):
+    content: AnimeResponseWithWatch | CharacterResponse | PersonResponse
+    comment: str | None
+    label: str | None
+    content_type: str
+    order: int
+
+
+class CollectionResponse(CustomModel):
+    visibility: CollectionVisibilityEnum
+    labels_order: list[str]
+    author: UserResponse
+    comments_count: int
+    created: datetime
+    updated: datetime
+    content_type: str
+    description: str
+    tags: list[str]
+    reference: str
+    spoiler: bool
+    entries: int
+    title: str
+    nsfw: bool
+
+    collection: list[CollectionContentResponse]
+
+    @field_validator("collection")
+    def collection_ordering(cls, collection):
+        return sorted(collection, key=lambda c: c.order)

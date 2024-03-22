@@ -3,11 +3,10 @@ from pydantic import Field
 from app import constants
 from enum import Enum
 
-from app.collections.schemas import CollectionResponse
-
 from app.schemas import (
     AnimeResponseWithWatch,
     PaginationResponse,
+    CollectionResponse,
     CharacterResponse,
     CustomModel,
 )
@@ -49,15 +48,4 @@ class FavouritePaginationResponse(CustomModel):
         | FavouriteCollectionResponse
         | FavouriteCharacterResponse
     ]
-    pagination: PaginationResponse
-
-
-# ToDo: remove me
-class FavouriteResponseContentLegacy(FavouriteResponse):
-    anime: AnimeResponseWithWatch
-
-
-# ToDo: remove me
-class FavouritePaginationResponseLegacy(CustomModel):
-    list: list[FavouriteResponseContentLegacy]
     pagination: PaginationResponse

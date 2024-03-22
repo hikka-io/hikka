@@ -1,6 +1,6 @@
 from app.sync.notifications import generate_notifications
 from client_requests import request_comments_write
-from client_requests import request_comments_vote
+from client_requests import request_vote
 from app.models import Notification
 from sqlalchemy import select, func
 from app import constants
@@ -21,8 +21,12 @@ async def test_notification_edit_comment(
         client, get_dummy_token, "edit", "17", "Nice edit"
     )
 
-    await request_comments_vote(
-        client, get_test_token, response.json()["reference"], 1
+    await request_vote(
+        client,
+        get_test_token,
+        constants.CONTENT_COMMENT,
+        response.json()["reference"],
+        1,
     )
 
     # Generate notifications

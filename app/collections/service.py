@@ -217,6 +217,7 @@ async def create_collection(
             "nsfw": args.nsfw,
             "tags": args.tags,
             "deleted": False,
+            "vote_score": 0,
             "author": user,
             "created": now,
             "updated": now,

@@ -1,7 +1,8 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_list
-from client_requests import request_comments_vote
+from client_requests import request_vote
 from fastapi import status
+from app import constants
 
 
 async def test_comments_list(
@@ -19,8 +20,12 @@ async def test_comments_list(
         )
 
         if index == 0:
-            await request_comments_vote(
-                client, get_test_token, parent_comment, 1
+            await request_vote(
+                client,
+                get_test_token,
+                constants.CONTENT_COMMENT,
+                parent_comment,
+                1,
             )
 
         parent_comment = response.json()["reference"]
@@ -59,13 +64,21 @@ async def test_comments_list_authorized(
         )
 
         if index == 1:
-            await request_comments_vote(
-                client, get_test_token, response.json()["reference"], 1
+            await request_vote(
+                client,
+                get_test_token,
+                constants.CONTENT_COMMENT,
+                response.json()["reference"],
+                1,
             )
 
         if index == 2:
-            await request_comments_vote(
-                client, get_test_token, response.json()["reference"], -1
+            await request_vote(
+                client,
+                get_test_token,
+                constants.CONTENT_COMMENT,
+                response.json()["reference"],
+                -1,
             )
 
         parent_comment = response.json()["reference"]

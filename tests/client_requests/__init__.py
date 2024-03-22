@@ -63,7 +63,6 @@ from .comments import request_comments_write
 from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
-from .comments import request_comments_vote
 
 from .settings import request_settings_import_watch
 from .settings import request_settings_description
@@ -81,6 +80,9 @@ from .collections import request_collection_info
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
+
+from .vote import request_vote_status
+from .vote import request_vote
 
 from .upload import request_upload
 
@@ -139,7 +141,6 @@ __all__ = [
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
-    "request_comments_vote",
     "request_settings_import_watch",
     "request_settings_description",
     "request_settings_username",
@@ -154,5 +155,7 @@ __all__ = [
     "request_notifications_count",
     "request_notification_seen",
     "request_notifications",
+    "request_vote_status",
+    "request_vote",
     "request_upload",
 ]

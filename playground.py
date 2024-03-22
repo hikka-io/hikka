@@ -22,11 +22,14 @@ from app.admin.service import (
 )
 
 from app.models import (
+    CommentVoteLegacy,
     AnimeStaffRole,
     UserEditStats,
+    CommentVote,
     AnimeStaff,
     AnimeWatch,
     Collection,
+    Comment,
     Anime,
     User,
     Edit,
@@ -334,6 +337,75 @@ async def run_migrate_collections():
     await sessionmanager.close()
 
 
+async def run_migrate_votes():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        legacy_votes = await session.scalars(select(CommentVoteLegacy))
+
+        for legacy_vote in legacy_votes:
+            if await session.scalar(
+                select(CommentVote).filter(
+                    CommentVote.content_id == legacy_vote.comment_id,
+                    CommentVote.user_id == legacy_vote.user_id,
+                )
+            ):
+                print(
+                    f"Found CommentVote record for {legacy_vote.comment_id}:{legacy_vote.user_id}"
+                )
+
+                continue
+
+            vote = CommentVote(
+                **{
+                    "content_id": legacy_vote.comment_id,
+                    "user_id": legacy_vote.user_id,
+                    "created": legacy_vote.created,
+                    "updated": legacy_vote.updated,
+                    "score": legacy_vote.score,
+                }
+            )
+
+            session.add(vote)
+
+        await session.commit()
+
+        comment_vote_logs = await session.scalars(
+            select(Log).filter(Log.log_type == constants.LOG_COMMENT_VOTE)
+        )
+
+        for log in comment_vote_logs:
+            log.log_type = constants.LOG_VOTE_SET
+            log.data["content_type"] = constants.CONTENT_COMMENT
+
+            session.add(log)
+
+            print(f"Updated log {log.id}")
+
+        await session.commit()
+
+        comments = await session.scalars(select(Comment))
+
+        for comment in comments:
+            if vote_score := await session.scalar(
+                select(func.sum(CommentVote.score)).filter(
+                    CommentVote.content == comment
+                )
+            ):
+                comment.vote_score = vote_score
+                session.add(comment)
+
+                print(
+                    f"Updated vote score to {vote_score} for comment {comment.id}"
+                )
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -349,5 +421,6 @@ if __name__ == "__main__":
     # asyncio.run(test())
     # asyncio.run(run_migrate_logs())
     # asyncio.run(calculate_stats())
-    asyncio.run(run_migrate_collections())
+    # asyncio.run(run_migrate_collections())
+    asyncio.run(run_migrate_votes())
     pass

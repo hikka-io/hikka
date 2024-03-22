@@ -28,6 +28,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
     path: Mapped[str] = mapped_column(LtreeType)
     content_type: Mapped[str]
     content_id: Mapped[UUID]
+    vote_score: Mapped[int]
     text: Mapped[str]
 
     hidden_by_id = mapped_column(ForeignKey("service_users.id"))
@@ -49,6 +50,10 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
             postgresql_using="gist",
         ),
     )
+
+    @hybrid_property
+    def slug(self):
+        return str(self.reference)
 
     @hybrid_property
     def depth(self):

@@ -17,9 +17,9 @@ from .edit.edit import AnimeEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
+from .comments.vote import CommentVoteLegacy
 from .comments.comment import AnimeComment
 from .comments.comment import EditComment
-from .comments.vote import CommentVote
 from .comments.comment import Comment
 
 from .list.favourite import CollectionFavourite
@@ -52,6 +52,10 @@ from .system.upload import Upload
 from .system.image import Image
 from .system.log import Log
 
+from .vote.vote import CollectionVote
+from .vote.vote import CommentVote
+from .vote.vote import Vote
+
 from .collection.content import CharacterCollectionContent
 from .collection.content import PersonCollectionContent
 from .collection.content import AnimeCollectionContent
@@ -81,7 +85,7 @@ __all__ = [
     "CollectionComment",
     "AnimeComment",
     "EditComment",
-    "CommentVote",
+    "CommentVoteLegacy",
     "Comment",
     "CollectionFavourite",
     "CharacterFavourite",
@@ -107,6 +111,9 @@ __all__ = [
     "Upload",
     "Image",
     "Log",
+    "CollectionVote",
+    "CommentVote",
+    "Vote",
     "CharacterCollectionContent",
     "PersonCollectionContent",
     "AnimeCollectionContent",

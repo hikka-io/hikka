@@ -149,6 +149,10 @@ errors = {
             400,
         ],
     },
+    "vote": {
+        "content-not-found": ["Content not found", 404],
+        "not-found": ["Vote record not found", 404],
+    },
 }
 
 

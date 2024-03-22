@@ -34,7 +34,7 @@ def get_my_score_subquery(request_user: User | None):
         select(CommentVote.score)
         .filter(
             CommentVote.user == request_user,
-            CommentVote.comment_id == Comment.id,
+            CommentVote.content_id == Comment.id,
         )
         .scalar_subquery()
     )
@@ -64,6 +64,7 @@ async def create_comment(
             "content_type": content_type,
             "content_id": content_id,
             "author": author,
+            "vote_score": 0,
             "created": now,
             "updated": now,
             "id": uuid4(),
@@ -112,6 +113,7 @@ async def count_comments_by_content_id(
         select(func.count(Comment.id)).filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.hidden == False,  # noqa: E712
         )
     )
 
@@ -130,6 +132,7 @@ async def get_comments_by_content_id(
         .filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.hidden == False,  # noqa: E712
         )
         .options(
             with_expression(
@@ -225,61 +228,3 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     )
 
     return True
-
-
-async def get_vote(session: AsyncSession, comment: Comment, user: User):
-    return await session.scalar(
-        select(CommentVote).filter(
-            CommentVote.comment == comment,
-            CommentVote.user == user,
-        )
-    )
-
-
-async def set_comment_vote(
-    session: AsyncSession,
-    comment: Comment,
-    user: User,
-    user_score: int,
-) -> CommentVote:
-    now = datetime.utcnow()
-
-    # Create watch record if missing
-    if not (vote := await get_vote(session, comment, user)):
-        vote = CommentVote(
-            **{
-                "comment": comment,
-                "created": now,
-                "user": user,
-            }
-        )
-
-    vote.updated = now
-    vote.score = user_score
-
-    session.add(vote)
-
-    old_score = comment.score
-    comment.score = await session.scalar(
-        select(func.sum(CommentVote.score)).filter(
-            CommentVote.comment == comment
-        )
-    )
-    new_score = comment.score
-
-    session.add(comment)
-    await session.commit()
-
-    await create_log(
-        session,
-        constants.LOG_COMMENT_VOTE,
-        user,
-        comment.id,
-        {
-            "user_score": user_score,
-            "old_score": old_score,
-            "new_score": new_score,
-        },
-    )
-
-    return vote
