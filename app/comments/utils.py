@@ -1,6 +1,5 @@
 from .schemas import CommentNode
 from datetime import timedelta
-from uuid import UUID
 
 
 # Convert uuid reference to comment path

@@ -42,6 +42,7 @@ class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
     author: UserResponse
+    parent: str | None
     is_editable: bool
     updated: datetime
     created: datetime
@@ -66,6 +67,7 @@ class CommentNode:
 
     replies: list["CommentNode"] = field(default_factory=list)
     is_editable: bool = False
+    parent: str | None = None
     total_replies: int = 0
     vote_score: int = None
     hidden: bool = False
@@ -86,6 +88,8 @@ class CommentNode:
         self.author = comment.author
         self.hidden = comment.hidden
         self.depth = comment.depth
+        if len(comment.path) > 1:
+            self.parent = str(comment.path[-2])
         return self
 
     @classmethod
