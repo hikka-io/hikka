@@ -4,17 +4,20 @@ from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
-from app.service import create_log
 from datetime import datetime
 from uuid import UUID, uuid4
 from app import constants
 from app import utils
 import copy
 
+from app.service import (
+    get_my_score_subquery,
+    create_log,
+)
+
 from app.models import (
     CollectionComment,
     AnimeComment,
-    CommentVote,
     EditComment,
     Comment,
     User,
@@ -27,17 +30,6 @@ content_type_to_comment_class = {
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ANIME: AnimeComment,
 }
-
-
-def get_my_score_subquery(request_user: User | None):
-    return (
-        select(CommentVote.score)
-        .filter(
-            CommentVote.user == request_user,
-            CommentVote.content_id == Comment.id,
-        )
-        .scalar_subquery()
-    )
 
 
 async def get_comment(
@@ -136,7 +128,10 @@ async def get_comments_by_content_id(
         )
         .options(
             with_expression(
-                Comment.my_score, get_my_score_subquery(request_user)
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
             )
         )
         .order_by(desc(Comment.created))
@@ -158,7 +153,10 @@ async def get_sub_comments(
         )
         .options(
             with_expression(
-                Comment.my_score, get_my_score_subquery(request_user)
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
             )
         )
         .order_by(asc(Comment.created))

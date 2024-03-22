@@ -23,9 +23,9 @@ class Collection(
     __tablename__ = "service_collections"
 
     # ToDo: moderated
-
     favourite_created: Mapped[datetime] = query_expression()
     comments_count: Mapped[int] = query_expression()
+    my_score: Mapped[int] = query_expression()
 
     visibility: Mapped[str] = mapped_column(String(16), index=True)
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
