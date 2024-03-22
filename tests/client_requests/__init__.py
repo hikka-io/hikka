@@ -81,6 +81,7 @@ from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
 
+from .vote import request_vote_status
 from .vote import request_vote
 
 from .upload import request_upload
@@ -154,6 +155,7 @@ __all__ = [
     "request_notifications_count",
     "request_notification_seen",
     "request_notifications",
+    "request_vote_status",
     "request_vote",
     "request_upload",
 ]

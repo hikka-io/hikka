@@ -1,7 +1,9 @@
 from client_requests import request_comments_write
+from client_requests import request_vote_status
 from sqlalchemy import select, desc, func
 from client_requests import request_vote
 from app.models import Comment, Log
+from fastapi import status
 from app import constants
 
 
@@ -73,3 +75,12 @@ async def test_vote_comment(
 
     # Should be four (right?)
     assert vote_logs_count == 4
+
+    # And finally let's check vote status
+    response = await request_vote_status(
+        client, get_test_token, constants.CONTENT_COMMENT, comment_reference
+    )
+
+    # Check status and score
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["score"] == -1

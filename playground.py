@@ -346,7 +346,6 @@ async def run_migrate_votes():
 
         # ToDo: recalculate vote_score
         # ToDo: fix old comment vote logs
-        # ToDo: fix old comment vote notifications
 
         for legacy_vote in legacy_votes:
             if await session.scalar(
