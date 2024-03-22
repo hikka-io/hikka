@@ -40,6 +40,8 @@ async def test_vote_comment(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_VOTE_SET
     assert log.user == create_test_user
+
+    assert log.data["content_type"] == "comment"
     assert log.data["user_score"] == 1
     assert log.data["old_score"] == 0
     assert log.data["new_score"] == 1
