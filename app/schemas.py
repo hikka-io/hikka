@@ -349,6 +349,7 @@ class CollectionResponse(CustomModel):
     updated: datetime
     content_type: str
     description: str
+    vote_score: int
     tags: list[str]
     reference: str
     spoiler: bool
