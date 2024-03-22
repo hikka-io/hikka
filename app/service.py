@@ -355,6 +355,16 @@ def collections_load_options(
         )
     )
 
+    # Here we load user vote score for collection
+    query = query.options(
+        with_expression(
+            Collection.my_score,
+            get_my_score_subquery(
+                Collection, constants.CONTENT_COLLECTION, request_user
+            ),
+        )
+    )
+
     if preview:
         query = query.options(
             with_loader_criteria(
@@ -367,8 +377,9 @@ def collections_load_options(
 
 # Vote stuff
 def get_my_score_subquery(content_model, content_type, request_user):
+    # We use func.sum inside func.coalesce because otherwise it won't work
     return (
-        select(Vote.score)
+        select(func.coalesce(func.sum(Vote.score), 0))
         .filter(
             Vote.user == request_user,
             Vote.content_id == content_model.id,

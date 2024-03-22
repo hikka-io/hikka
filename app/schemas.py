@@ -352,6 +352,7 @@ class CollectionResponse(CustomModel):
     vote_score: int
     tags: list[str]
     reference: str
+    my_score: int
     spoiler: bool
     entries: int
     title: str

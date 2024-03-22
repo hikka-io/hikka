@@ -155,9 +155,7 @@ async def get_user_collections(
         )
 
     return await session.scalars(
-        collection_comments_load_options(
-            collections_load_options(query, request_user, True)
-        )
+        collections_load_options(query, request_user, True)
         .limit(limit)
         .offset(offset)
     )
