@@ -26,6 +26,7 @@ from app.models import (
     Anime,
     Edit,
     User,
+    Vote,
     Log,
 )
 
@@ -362,3 +363,16 @@ def collections_load_options(
         )
 
     return query
+
+
+# Vote stuff
+def get_my_score_subquery(content_model, content_type, request_user):
+    return (
+        select(Vote.score)
+        .filter(
+            Vote.user == request_user,
+            Vote.content_id == content_model.id,
+            Vote.content_type == content_type,
+        )
+        .scalar_subquery()
+    )
