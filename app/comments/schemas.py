@@ -50,7 +50,6 @@ class CommentResponse(CustomModel):
     reference: str
     my_score: int
     hidden: bool
-    score: int
     depth: int
 
 
@@ -86,7 +85,6 @@ class CommentNode:
         self.created = comment.created
         self.author = comment.author
         self.hidden = comment.hidden
-        self.score = comment.score
         self.depth = comment.depth
         return self
 
