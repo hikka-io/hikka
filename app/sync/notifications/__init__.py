@@ -37,10 +37,10 @@ async def generate_notifications(session: AsyncSession):
             Log.log_type.in_(
                 [
                     constants.LOG_COMMENT_WRITE,
-                    constants.LOG_COMMENT_VOTE,
                     constants.LOG_EDIT_UPDATE,
                     constants.LOG_EDIT_ACCEPT,
                     constants.LOG_EDIT_DENY,
+                    constants.LOG_VOTE_SET,
                 ]
             )
         )
@@ -52,8 +52,9 @@ async def generate_notifications(session: AsyncSession):
         # We set timestamp here because after thay it won't be set due to continue
         system_timestamp.timestamp = log.created
 
-        if log.log_type == constants.LOG_COMMENT_VOTE:
-            await generate_comment_vote(session, log)
+        if log.log_type == constants.LOG_VOTE_SET:
+            if log.data["content_type"] == constants.CONTENT_COMMENT:
+                await generate_comment_vote(session, log)
 
         if log.log_type == constants.LOG_COMMENT_WRITE:
             await generate_comment_write(session, log)

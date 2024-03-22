@@ -22,10 +22,6 @@ class ContentTypeEnum(str, Enum):
 
 
 # Args
-class CommentVoteArgs(CustomModel):
-    score: int = Field(ge=-1, le=1)
-
-
 class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
 

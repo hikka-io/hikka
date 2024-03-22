@@ -63,7 +63,6 @@ from .comments import request_comments_write
 from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
-from .comments import request_comments_vote
 
 from .settings import request_settings_import_watch
 from .settings import request_settings_description
@@ -141,7 +140,6 @@ __all__ = [
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
-    "request_comments_vote",
     "request_settings_import_watch",
     "request_settings_description",
     "request_settings_username",

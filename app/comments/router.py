@@ -5,11 +5,9 @@ from app.database import get_session
 from app.models import Comment, User
 from .utils import build_comments
 from .utils import path_to_uuid
-from app import constants
 from . import service
 
 from .dependencies import (
-    validate_comment_not_hidden,
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
@@ -34,26 +32,12 @@ from .schemas import (
     CommentResponse,
     ContentTypeEnum,
     CommentTextArgs,
-    CommentVoteArgs,
     CommentNode,
     CommentArgs,
 )
 
 
 router = APIRouter(prefix="/comments", tags=["Comments"])
-
-
-@router.put("/vote/{comment_reference}", response_model=SuccessResponse)
-async def vote_comment(
-    args: CommentVoteArgs,
-    comment: Comment = Depends(validate_comment_not_hidden),
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_VOTE_SET])
-    ),
-):
-    await service.set_comment_vote(session, comment, user, args.score)
-    return {"success": True}
 
 
 @router.put("/{content_type}/{slug}", response_model=CommentResponse)
