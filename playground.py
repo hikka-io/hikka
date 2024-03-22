@@ -22,17 +22,18 @@ from app.admin.service import (
 )
 
 from app.models import (
+    CommentVoteLegacy,
     AnimeStaffRole,
     UserEditStats,
+    CommentVote,
     AnimeStaff,
     AnimeWatch,
     Collection,
+    Comment,
     Anime,
     User,
     Edit,
     Log,
-    CommentVote,
-    CommentVoteLegacy,
 )
 
 
@@ -344,8 +345,6 @@ async def run_migrate_votes():
     async with sessionmanager.session() as session:
         legacy_votes = await session.scalars(select(CommentVoteLegacy))
 
-        # ToDo: recalculate vote_score
-
         for legacy_vote in legacy_votes:
             if await session.scalar(
                 select(CommentVote).filter(
@@ -384,6 +383,23 @@ async def run_migrate_votes():
             session.add(log)
 
             print(f"Updated log {log.id}")
+
+        await session.commit()
+
+        comments = await session.scalars(select(Comment))
+
+        for comment in comments:
+            if vote_score := await session.scalar(
+                select(func.sum(CommentVote.score)).filter(
+                    CommentVote.content == comment
+                )
+            ):
+                comment.vote_score = vote_score
+                session.add(comment)
+
+                print(
+                    f"Updated vote score to {vote_score} for comment {comment.id}"
+                )
 
         await session.commit()
 
