@@ -345,7 +345,6 @@ async def run_migrate_votes():
         legacy_votes = await session.scalars(select(CommentVoteLegacy))
 
         # ToDo: recalculate vote_score
-        # ToDo: fix old comment vote logs
 
         for legacy_vote in legacy_votes:
             if await session.scalar(
@@ -371,6 +370,20 @@ async def run_migrate_votes():
             )
 
             session.add(vote)
+
+        await session.commit()
+
+        comment_vote_logs = await session.scalars(
+            select(Log).filter(Log.log_type == constants.LOG_COMMENT_VOTE)
+        )
+
+        for log in comment_vote_logs:
+            log.log_type = constants.LOG_VOTE_SET
+            log.data["content_type"] = constants.CONTENT_COMMENT
+
+            session.add(log)
+
+            print(f"Updated log {log.id}")
 
         await session.commit()
 
