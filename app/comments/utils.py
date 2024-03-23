@@ -1,3 +1,4 @@
+from app.utils import path_to_uuid
 from .schemas import CommentNode
 from datetime import timedelta
 
@@ -5,11 +6,6 @@ from datetime import timedelta
 # Convert uuid reference to comment path
 def uuid_to_path(obj_uuid):
     return str(obj_uuid).replace("-", "_")
-
-
-# Convert comment path to uuid reference
-def path_to_uuid(obj_uuid):
-    return str(obj_uuid).replace("_", "-")
 
 
 def build_comments(base_comment, sub_comments):

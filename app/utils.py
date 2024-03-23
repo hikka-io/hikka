@@ -312,3 +312,8 @@ def is_uuid(string):
         return True
     except ValueError:
         return False
+
+
+# Convert comment path to uuid reference
+def path_to_uuid(obj_uuid):
+    return str(obj_uuid).replace("_", "-")
