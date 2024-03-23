@@ -3,8 +3,8 @@ from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Comment, User
+from app.utils import path_to_uuid
 from .utils import build_comments
-from .utils import path_to_uuid
 from . import service
 
 from .dependencies import (

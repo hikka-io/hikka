@@ -1,12 +1,15 @@
 from pydantic import Field, field_validator
 from dataclasses import dataclass, field
-from app.utils import is_empty_markdown
-from .utils import path_to_uuid
 from app.models import Comment
 from datetime import datetime
 from app import constants
 from uuid import UUID
 from enum import Enum
+
+from app.utils import (
+    is_empty_markdown,
+    path_to_uuid,
+)
 
 from app.schemas import (
     PaginationResponse,
