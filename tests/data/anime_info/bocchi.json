@@ -965,5 +965,55 @@
         "score_10": 87424,
         "watching": 53358,
         "completed": 284747
-    }
+    },
+    "schedule": [
+        {
+            "airing_at": 1665241200,
+            "episode": 1
+        },
+        {
+            "airing_at": 1665846000,
+            "episode": 2
+        },
+        {
+            "airing_at": 1666450800,
+            "episode": 3
+        },
+        {
+            "airing_at": 1667055600,
+            "episode": 4
+        },
+        {
+            "airing_at": 1667660400,
+            "episode": 5
+        },
+        {
+            "airing_at": 1668265200,
+            "episode": 6
+        },
+        {
+            "airing_at": 1668870000,
+            "episode": 7
+        },
+        {
+            "airing_at": 1669474800,
+            "episode": 8
+        },
+        {
+            "airing_at": 1670079600,
+            "episode": 9
+        },
+        {
+            "airing_at": 1670684400,
+            "episode": 10
+        },
+        {
+            "airing_at": 1671289200,
+            "episode": 11
+        },
+        {
+            "airing_at": 1671894000,
+            "episode": 12
+        }
+    ]
 }

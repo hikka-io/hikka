@@ -341,7 +341,7 @@ async def process_staff(session, anime, data):
 
 
 async def process_poster(session, anime, data):
-    if not (path := data.get("poster")):
+    if not data.get("poster"):
         return
 
     if "poster" in anime.ignored_fields:
@@ -418,6 +418,7 @@ async def update_anime_info(session, anime, data):
         "synopsis_ua",
         "synopsis_en",
         "media_type",
+        "schedule",
         "duration",
         "title_en",
         "title_ja",
