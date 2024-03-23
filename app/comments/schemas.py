@@ -1,6 +1,7 @@
 from pydantic import Field, field_validator
 from dataclasses import dataclass, field
 from app.utils import is_empty_markdown
+from .utils import path_to_uuid
 from app.models import Comment
 from datetime import datetime
 from app import constants
@@ -89,7 +90,7 @@ class CommentNode:
         self.hidden = comment.hidden
         self.depth = comment.depth
         if len(comment.path) > 1:
-            self.parent = str(comment.path[-2])
+            self.parent = path_to_uuid(comment.path[-2])
         return self
 
     @classmethod
