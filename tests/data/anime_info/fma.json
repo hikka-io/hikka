@@ -4745,5 +4745,103 @@
         "score_10": 978818,
         "watching": 247728,
         "completed": 2305905
-    }
+    },
+    "schedule": [
+        {
+          "episode": 5,
+          "airing_at": 1696600800
+        },
+        {
+          "episode": 6,
+          "airing_at": 1697205600
+        },
+        {
+          "episode": 7,
+          "airing_at": 1697810400
+        },
+        {
+          "episode": 8,
+          "airing_at": 1698415200
+        },
+        {
+          "episode": 9,
+          "airing_at": 1699020000
+        },
+        {
+          "episode": 10,
+          "airing_at": 1699624800
+        },
+        {
+          "episode": 11,
+          "airing_at": 1700229600
+        },
+        {
+          "episode": 12,
+          "airing_at": 1700834400
+        },
+        {
+          "episode": 13,
+          "airing_at": 1701439200
+        },
+        {
+          "episode": 14,
+          "airing_at": 1702044000
+        },
+        {
+          "episode": 15,
+          "airing_at": 1702648800
+        },
+        {
+          "episode": 16,
+          "airing_at": 1703253600
+        },
+        {
+          "episode": 17,
+          "airing_at": 1704463200
+        },
+        {
+          "episode": 18,
+          "airing_at": 1705068000
+        },
+        {
+          "episode": 19,
+          "airing_at": 1705672800
+        },
+        {
+          "episode": 20,
+          "airing_at": 1706277600
+        },
+        {
+          "episode": 21,
+          "airing_at": 1706882400
+        },
+        {
+          "episode": 22,
+          "airing_at": 1707487200
+        },
+        {
+          "episode": 23,
+          "airing_at": 1708092000
+        },
+        {
+          "episode": 24,
+          "airing_at": 1708696800
+        },
+        {
+          "episode": 25,
+          "airing_at": 1709301600
+        },
+        {
+          "episode": 26,
+          "airing_at": 1709906400
+        },
+        {
+          "episode": 27,
+          "airing_at": 1710511200
+        },
+        {
+          "episode": 28,
+          "airing_at": 1711116000
+        }
+    ]
 }

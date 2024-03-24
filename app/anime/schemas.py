@@ -167,6 +167,7 @@ class AnimeInfoResponse(CustomModel):
     videos: list[AnimeVideoResponse]
     ost: list[AnimeOSTResponse]
     stats: AnimeStatsResponse
+    schedule: list[dict]
     translated_ua: bool
     updated: datetime
 
