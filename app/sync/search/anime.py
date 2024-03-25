@@ -64,10 +64,10 @@ async def update_anime_settings(index):
             ranking_rules=[
                 "words",
                 "typo",
-                "exactness",
                 "proximity",
                 "attribute",
                 "sort",
+                "exactness",
             ],
         )
     )
