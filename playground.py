@@ -502,7 +502,7 @@ async def collection_ranking():
 
             comments_count = await session.scalar(
                 select(func.count(Comment.id)).filter(
-                    Comment.content_type == constants.CONTENT_COMMENT,
+                    Comment.content_type == constants.CONTENT_COLLECTION,
                     Comment.content_id == collection.id,
                     Comment.hidden == False,  # noqa: E712
                 )
