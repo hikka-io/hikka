@@ -420,6 +420,28 @@ async def run_migrate_votes():
     await sessionmanager.close()
 
 
+async def spring_top():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        result = await session.execute(
+            select(Anime, func.count(Anime.id))
+            .join(AnimeWatch, AnimeWatch.anime_id == Anime.id)
+            .filter(AnimeWatch.status == constants.WATCH_PLANNED)
+            .filter(Anime.year == 2024, Anime.season == constants.SEASON_SPRING)
+            .group_by(Anime)
+            .order_by(func.count(Anime.id).desc())
+            .limit(100)
+        )
+
+        for anime, planned_count in result:
+            print(anime.title_ua, planned_count)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -429,7 +451,7 @@ if __name__ == "__main__":
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
-    asyncio.run(run_search())
+    # asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
@@ -438,4 +460,5 @@ if __name__ == "__main__":
     # asyncio.run(run_migrate_collections())
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
+    asyncio.run(spring_top())
     pass
