@@ -98,7 +98,7 @@ async def get_collections(
             request_user,
             True,
         )
-        .order_by(desc(Collection.created))
+        .order_by(desc(Collection.system_ranking), desc(Collection.created))
         .limit(limit)
         .offset(offset)
     )
