@@ -2,6 +2,7 @@ from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
 from app.service import calculate_watch_duration
 from app.sync.activity import generate_activity
+from meilisearch_python_sdk import AsyncClient
 from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
@@ -35,6 +36,19 @@ from app.models import (
     Edit,
     Log,
 )
+
+
+async def test_meiliserarch_ranking():
+    settings = get_settings()
+
+    # default = ["words", "typo", "proximity", "attribute", "sort", "exactness"]
+
+    async with AsyncClient(**settings.meilisearch) as client:
+        index = client.index(constants.SEARCH_INDEX_ANIME)
+
+        test = await index.get_ranking_rules()
+
+        print(test)
 
 
 async def query_activity():
@@ -415,12 +429,13 @@ if __name__ == "__main__":
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
-    # asyncio.run(run_search())
+    asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
     # asyncio.run(run_migrate_logs())
     # asyncio.run(calculate_stats())
     # asyncio.run(run_migrate_collections())
-    asyncio.run(run_migrate_votes())
+    # asyncio.run(run_migrate_votes())
+    # asyncio.run(test_meiliserarch_ranking())
     pass

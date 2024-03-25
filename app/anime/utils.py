@@ -34,7 +34,7 @@ def build_anime_filters(search: AnimeSearchArgs):
     if search.only_translated:
         translated = ["translated_ua = true"]
 
-    return [
+    search_filters = [
         translated,
         rating,
         status,
@@ -47,3 +47,5 @@ def build_anime_filters(search: AnimeSearchArgs):
         *year,
         *score,
     ]
+
+    return [entry for entry in search_filters if entry]
