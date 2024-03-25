@@ -27,6 +27,7 @@ class Collection(
     comments_count: Mapped[int] = query_expression()
     my_score: Mapped[int] = query_expression()
 
+    system_ranking: Mapped[float] = mapped_column(index=True, default=0)
     visibility: Mapped[str] = mapped_column(String(16), index=True)
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))
     description: Mapped[str] = mapped_column(nullable=True)
