@@ -472,16 +472,16 @@ async def spring_top():
     await sessionmanager.close()
 
 
-def calculate_score(vote_score, favourite_count, comments_count):
+def calculate_ranking(vote_score, favourite_count, comments_count):
     weight_vote_score = 1
     weight_favourite = 2
     weight_comments = 0.1
 
-    return (
-        (vote_score * weight_vote_score)
-        + (favourite_count * weight_favourite)
-        + (comments_count * weight_comments)
-    )
+    ranking = vote_score * weight_vote_score
+    ranking += favourite_count * weight_favourite
+    ranking += comments_count * weight_comments
+
+    return round(ranking, 2)
 
 
 async def collection_ranking():
@@ -508,21 +508,19 @@ async def collection_ranking():
                 )
             )
 
-            print(
-                f"Vote: {collection.vote_score},",
-                f"Favourite: {favourite_count},",
-                f"Comments: {comments_count},",
-                "Ranking: "
-                + str(
-                    calculate_score(
-                        collection.vote_score,
-                        favourite_count,
-                        comments_count,
-                    )
-                )
-                + ",",
-                collection.title,
+            collection.system_ranking = calculate_ranking(
+                collection.vote_score,
+                favourite_count,
+                comments_count,
             )
+
+            session.add(collection)
+
+            print(
+                f"Updated collection {collection.title} ranking to {collection.system_ranking}"
+            )
+
+        await session.commit()
 
     await sessionmanager.close()
 
