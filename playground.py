@@ -437,7 +437,11 @@ async def spring_top():
         )
 
         for anime, planned_count in result:
-            print(anime.title_ua, planned_count)
+            print(
+                anime.title_ua,
+                planned_count,
+                f"https://hikka.io/anime/{anime.slug}",
+            )
 
     await sessionmanager.close()
 
