@@ -509,12 +509,19 @@ async def collection_ranking():
             )
 
             print(
+                f"Vote: {collection.vote_score},",
+                f"Favourite: {favourite_count},",
+                f"Comments: {comments_count},",
+                "Ranking: "
+                + str(
+                    calculate_score(
+                        collection.vote_score,
+                        favourite_count,
+                        comments_count,
+                    )
+                )
+                + ",",
                 collection.title,
-                calculate_score(
-                    collection.vote_score,
-                    favourite_count,
-                    comments_count,
-                ),
             )
 
     await sessionmanager.close()
