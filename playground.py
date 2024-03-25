@@ -30,6 +30,7 @@ from app.models import (
     AnimeStaff,
     AnimeWatch,
     Collection,
+    Favourite,
     Comment,
     Anime,
     User,
@@ -471,6 +472,54 @@ async def spring_top():
     await sessionmanager.close()
 
 
+def calculate_score(vote_score, favourite_count, comments_count):
+    weight_vote_score = 1
+    weight_favourite = 2
+    weight_comments = 0.1
+
+    return (
+        (vote_score * weight_vote_score)
+        + (favourite_count * weight_favourite)
+        + (comments_count * weight_comments)
+    )
+
+
+async def collection_ranking():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        collections = await session.scalars(select(Collection))
+
+        for collection in collections:
+            favourite_count = await session.scalar(
+                select(func.count(Favourite.id)).filter(
+                    Favourite.content_type == constants.CONTENT_COMMENT,
+                    Favourite.content_id == collection.id,
+                )
+            )
+
+            comments_count = await session.scalar(
+                select(func.count(Comment.id)).filter(
+                    Comment.content_type == constants.CONTENT_COMMENT,
+                    Comment.content_id == collection.id,
+                    Comment.hidden == False,  # noqa: E712
+                )
+            )
+
+            print(
+                collection.title,
+                calculate_score(
+                    collection.vote_score,
+                    favourite_count,
+                    comments_count,
+                ),
+            )
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -489,5 +538,6 @@ if __name__ == "__main__":
     # asyncio.run(run_migrate_collections())
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
-    asyncio.run(spring_top())
+    # asyncio.run(spring_top())
+    asyncio.run(collection_ranking())
     pass
