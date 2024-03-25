@@ -61,6 +61,14 @@ async def update_anime_settings(index):
                 "year",
             ],
             distinct_attribute="slug",
+            ranking_rules=[
+                "words",
+                "typo",
+                "exactness",
+                "proximity",
+                "attribute",
+                "sort",
+            ],
         )
     )
 
