@@ -491,7 +491,7 @@ def calculate_ranking(score, favourite, comments, created):
     ranking += weight_favourite * favourite
     ranking += weight_comment * comments
 
-    ranking = ranking * boost_factor(days_since_creation, boost_duration_days)
+    ranking *= boost_factor(days_since_creation, boost_duration_days)
 
     return round(ranking, 8)
 
