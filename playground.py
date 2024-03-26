@@ -1,3 +1,4 @@
+from app.utils import get_settings, calculate_collection_ranking
 from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
 from app.service import calculate_watch_duration
@@ -8,7 +9,6 @@ from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
-from app.utils import get_settings
 from app.sync import update_search
 from datetime import datetime
 from app.sync import sitemap
@@ -16,6 +16,7 @@ from app.sync import email
 from app import constants
 import asyncio
 import math
+import copy
 import json
 
 from app.admin.service import (
@@ -252,33 +253,33 @@ async def run_migrate_logs():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        remove_logs = await session.scalars(
+        comment_logs = await session.scalars(
             select(Log).filter(
-                Log.log_type == constants.LOG_FAVOURITE_ANIME_REMOVE
+                Log.log_type.in_(
+                    [
+                        constants.LOG_COMMENT_WRITE,
+                        constants.LOG_COMMENT_EDIT,
+                        constants.LOG_COMMENT_HIDE,
+                    ]
+                )
             )
         )
 
-        for log in remove_logs:
-            log.data = {"content_type": constants.CONTENT_ANIME}
-            log.log_type = constants.LOG_FAVOURITE_REMOVE
+        for log in comment_logs:
+            if "content_type" in log.data:
+                continue
+
+            comment = await session.scalar(
+                select(Comment).filter(Comment.id == log.target_id)
+            )
+
+            log.data = copy.deepcopy(log.data)
+            log.data["content_type"] = comment.content_type
 
             session.add(log)
             await session.commit()
 
-            print(log)
-
-        add_logs = await session.scalars(
-            select(Log).filter(Log.log_type == constants.LOG_FAVOURITE_ANIME)
-        )
-
-        for log in add_logs:
-            log.data = {"content_type": constants.CONTENT_ANIME}
-            log.log_type = constants.LOG_FAVOURITE
-
-            session.add(log)
-            await session.commit()
-
-            print(log)
+            print(log.data)
 
     await sessionmanager.close()
 
@@ -473,29 +474,6 @@ async def spring_top():
     await sessionmanager.close()
 
 
-def boost_factor(day, boost_factor=10.0, boost_duration_days=30):
-    decay_rate = -math.log(1 / boost_factor) / boost_duration_days
-    return max(boost_factor * math.exp(-decay_rate * day), 1)
-
-
-def calculate_ranking(score, favourite, comments, created):
-    weight_score = 1
-    weight_favourite = 2
-    weight_comment = 0.1
-
-    days_since_creation = (datetime.utcnow() - created).days
-    boost_duration_days = 30
-
-    ranking = 0
-    ranking += weight_score * score
-    ranking += weight_favourite * favourite
-    ranking += weight_comment * comments
-
-    ranking *= boost_factor(days_since_creation, boost_duration_days)
-
-    return round(ranking, 8)
-
-
 async def collection_ranking():
     settings = get_settings()
 
@@ -520,7 +498,7 @@ async def collection_ranking():
                 )
             )
 
-            collection.system_ranking = calculate_ranking(
+            collection.system_ranking = calculate_collection_ranking(
                 collection.vote_score,
                 favourite_count,
                 comments_count,
@@ -551,11 +529,12 @@ if __name__ == "__main__":
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
-    # asyncio.run(run_migrate_logs())
+    asyncio.run(run_migrate_logs())
     # asyncio.run(calculate_stats())
     # asyncio.run(run_migrate_collections())
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
-    asyncio.run(collection_ranking())
+    # asyncio.run(collection_ranking())
+
     pass

@@ -317,3 +317,27 @@ def is_uuid(string):
 # Convert comment path to uuid reference
 def path_to_uuid(obj_uuid):
     return str(obj_uuid).replace("_", "-")
+
+
+# Collection ranking algorithm
+def calculate_collection_ranking(score, favourite, comments, created):
+    def boost_factor(day, boost_factor=10.0, boost_duration_days=30):
+        decay_rate = -math.log(1 / boost_factor) / boost_duration_days
+        return max(boost_factor * math.exp(-decay_rate * day), 1)
+
+    boost_duration_days = 30
+    now = datetime.utcnow()
+
+    weight_score = 1
+    weight_favourite = 2
+    weight_comment = 0.1
+
+    ranking = 0
+    ranking += weight_score * score
+    ranking += weight_favourite * favourite
+    ranking += weight_comment * comments
+
+    days_since_creation = (now - created).days
+    ranking *= boost_factor(days_since_creation, boost_duration_days)
+
+    return round(ranking, 8)
