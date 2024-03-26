@@ -32,6 +32,25 @@ async def collection_stats(session: AsyncSession, collection: Collection):
     return favourite, comments, collection.vote_score
 
 
+async def recalculate_ranking_daily(session: AsyncSession):
+    collections = await session.scalars(select(Collection))
+
+    for collection in collections:
+        favourite, comments, score = await collection_stats(session, collection)
+
+        collection.system_ranking = calculate_collection_ranking(
+            score, favourite, comments, collection.created
+        )
+
+        print(
+            f"Updated collection {collection.title} ranking to {collection.system_ranking}"
+        )
+
+        session.add(collection)
+
+    await session.commit()
+
+
 async def recalculate_ranking(session: AsyncSession):
     # Get system timestamp for latest ranking update
     if not (
@@ -106,9 +125,9 @@ async def recalculate_ranking(session: AsyncSession):
                 score, favourite, comments, collection.created
             )
 
-            print(
-                f"Updated collection {collection.title} ranking to {collection.system_ranking}"
-            )
+            # print(
+            #     f"Updated collection {collection.title} ranking to {collection.system_ranking} ({log.log_type})"
+            # )
 
             session.add(collection)
 
@@ -121,3 +140,10 @@ async def update_ranking():
 
     async with sessionmanager.session() as session:
         await recalculate_ranking(session)
+
+
+async def update_ranking_daily():
+    """Recalculare user generateg content ranking from logs daily"""
+
+    async with sessionmanager.session() as session:
+        await recalculate_ranking_daily(session)
