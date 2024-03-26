@@ -486,7 +486,7 @@ async def spring_top():
 
 
 def sigmoid(x, alpha=1, beta=0):
-    return 1 / (1 + math.exp(alpha * (x - beta)))
+    return 1 / (1 + math.exp(-alpha * (x - beta)))
 
 
 def calculate_ranking(score, favourite, comments, created):
@@ -496,18 +496,21 @@ def calculate_ranking(score, favourite, comments, created):
 
     # Define boost parameters
     boost_duration_days = 30
-    time_since_creation = (datetime.utcnow() - created).days
+    days_since_creation = (datetime.utcnow() - created).days
 
     boost_factor = sigmoid(
-        time_since_creation, alpha=0.1, beta=(boost_duration_days / 2)
+        days_since_creation, alpha=0.1, beta=boost_duration_days
     )
+
+    decay_rate = 0.05  # Adjust as needed
+    decay_factor = math.exp(-decay_rate * days_since_creation)
 
     # Calculate weighted average with boost factor
     weighted_average = (
         (w_score * score) + (w_favourite * favourite) + (w_comment * comments)
     )
 
-    return round(weighted_average * boost_factor, 8)
+    return round(weighted_average * boost_factor * decay_factor, 8)
 
 
 async def collection_ranking():
