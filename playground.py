@@ -486,7 +486,7 @@ async def spring_top():
 
 
 def sigmoid(x, alpha=1, beta=0):
-    return 1 / (1 + math.exp(-alpha * (x - beta)))
+    return 1 / (1 + math.exp(alpha * (x - beta)))
 
 
 def calculate_ranking(score, favourite, comments, created):
