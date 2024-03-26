@@ -502,15 +502,12 @@ def calculate_ranking(score, favourite, comments, created):
         days_since_creation, alpha=0.1, beta=boost_duration_days
     )
 
-    decay_rate = 0.05  # Adjust as needed
-    decay_factor = math.exp(-decay_rate * days_since_creation)
-
     # Calculate weighted average with boost factor
     weighted_average = (
         (w_score * score) + (w_favourite * favourite) + (w_comment * comments)
     )
 
-    return round(weighted_average * boost_factor * decay_factor, 8)
+    return round(weighted_average * boost_factor, 8)
 
 
 async def collection_ranking():
