@@ -495,11 +495,11 @@ def calculate_ranking(score, favourite, comments, created):
     w_comment = 0.1
 
     # Define boost parameters
-    boost_duration_days = 30
+    boost_duration_days = 10
     days_since_creation = (datetime.utcnow() - created).days
 
     boost_factor = sigmoid(
-        days_since_creation, alpha=0.1, beta=boost_duration_days
+        days_since_creation, alpha=-0.1, beta=(boost_duration_days / 2)
     )
 
     # Calculate weighted average with boost factor
@@ -507,10 +507,12 @@ def calculate_ranking(score, favourite, comments, created):
         (w_score * score) + (w_favourite * favourite) + (w_comment * comments)
     )
 
-    return round(weighted_average * boost_factor, 8)
+    return round(weighted_average + (weighted_average * boost_factor), 8)
 
 
 async def collection_ranking():
+    # for day in range(1, 30):
+    #     print(day, sigmoid(day, -0.1, (10 / 2)))
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
