@@ -11,6 +11,8 @@ from .notifications import update_notifications
 
 from .activity import update_activity
 
+from .ranking import update_ranking
+
 from .history import update_history
 
 from .weights import update_weights
@@ -31,6 +33,8 @@ __all__ = [
     "aggregator_people",
     "aggregator_anime",
     "update_notifications",
+    "update_activity",
+    "update_ranking",
     "update_history",
     "update_weights",
     "update_sitemap",

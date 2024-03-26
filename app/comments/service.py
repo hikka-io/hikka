@@ -76,6 +76,7 @@ async def create_comment(
         constants.LOG_COMMENT_WRITE,
         author,
         comment.id,
+        {"content_type": comment.content_type},
     )
 
     return comment
@@ -202,6 +203,7 @@ async def edit_comment(
         comment.author,
         comment.id,
         data={
+            "content_type": comment.content_type,
             "old_text": old_text,
             "new_text": new_text,
         },
@@ -223,6 +225,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         constants.LOG_COMMENT_HIDE,
         user,
         comment.id,
+        {"content_type": comment.content_type},
     )
 
     return True
