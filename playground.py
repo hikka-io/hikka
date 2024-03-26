@@ -10,6 +10,7 @@ from app.database import sessionmanager
 from sqlalchemy import make_url, func
 from app.utils import get_settings
 from app.sync import update_search
+from datetime import datetime
 from app.sync import sitemap
 from app.sync import email
 from app import constants
@@ -472,16 +473,41 @@ async def spring_top():
     await sessionmanager.close()
 
 
-def calculate_ranking(vote_score, favourite_count, comments_count):
-    weight_vote_score = 1
-    weight_favourite = 2
-    weight_comments = 0.1
+# def calculate_ranking(vote_score, favourite_count, comments_count):
+#     weight_vote_score = 1
+#     weight_favourite = 2
+#     weight_comments = 0.1
 
-    ranking = vote_score * weight_vote_score
-    ranking += favourite_count * weight_favourite
-    ranking += comments_count * weight_comments
+#     ranking = vote_score * weight_vote_score
+#     ranking += favourite_count * weight_favourite
+#     ranking += comments_count * weight_comments
 
-    return round(ranking, 2)
+#     return round(ranking, 2)
+
+
+def sigmoid(x, alpha=1, beta=0):
+    return 1 / (1 + math.exp(-alpha * (x - beta)))
+
+
+def calculate_ranking(score, favourite, comments, created):
+    w_score = 1
+    w_favourite = 2
+    w_comment = 0.1
+
+    # Define boost parameters
+    boost_duration_days = 30
+    time_since_creation = (datetime.utcnow() - created).days
+
+    boost_factor = sigmoid(
+        time_since_creation, alpha=0.1, beta=(boost_duration_days / 2)
+    )
+
+    # Calculate weighted average with boost factor
+    weighted_average = (
+        (w_score * score) + (w_favourite * favourite) + (w_comment * comments)
+    )
+
+    return round(weighted_average * boost_factor, 8)
 
 
 async def collection_ranking():
@@ -512,6 +538,7 @@ async def collection_ranking():
                 collection.vote_score,
                 favourite_count,
                 comments_count,
+                collection.created,
             )
 
             session.add(collection)
