@@ -24,7 +24,8 @@ async def collection_stats(session: AsyncSession, collection: Collection):
 
     comments = await session.scalar(
         select(func.count(CollectionComment.id)).filter(
-            CollectionComment.content_id == collection.id
+            CollectionComment.content_id == collection.id,
+            CollectionComment.hidden == False,  # noqa: E712
         )
     )
 
@@ -72,7 +73,6 @@ async def recalculate_ranking(session: AsyncSession):
         if log.log_type in [
             constants.LOG_FAVOURITE,
             constants.LOG_FAVOURITE_REMOVE,
-            constants.LOG_COMMENT_HIDE,
             constants.LOG_VOTE_SET,
         ]:
             if log.data["content_type"] != constants.CONTENT_COLLECTION:
@@ -82,7 +82,10 @@ async def recalculate_ranking(session: AsyncSession):
                 select(Collection).filter(Collection.id == log.target_id)
             )
 
-        if log.log_type == constants.LOG_COMMENT_WRITE:
+        if log.log_type in [
+            constants.LOG_COMMENT_WRITE,
+            constants.LOG_COMMENT_HIDE,
+        ]:
             if log.data["content_type"] != constants.CONTENT_COLLECTION:
                 continue
 
