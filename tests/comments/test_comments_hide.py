@@ -48,9 +48,9 @@ async def test_comments_hide(
     # Check comment hide log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_HIDE
+    assert log.data == {"content_type": "edit"}
     assert log.user == create_test_user
     assert log.user == comment.author
-    assert log.data == {}
 
 
 async def test_comments_hide_admin(
@@ -89,8 +89,8 @@ async def test_comments_hide_admin(
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_HIDE
     assert log.user == create_test_user_moderator
+    assert log.data == {"content_type": "edit"}
     assert log.user != comment.author
-    assert log.data == {}
 
 
 async def test_comments_hide_bad_admin(
