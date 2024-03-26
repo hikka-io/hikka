@@ -473,46 +473,30 @@ async def spring_top():
     await sessionmanager.close()
 
 
-# def calculate_ranking(vote_score, favourite_count, comments_count):
-#     weight_vote_score = 1
-#     weight_favourite = 2
-#     weight_comments = 0.1
-
-#     ranking = vote_score * weight_vote_score
-#     ranking += favourite_count * weight_favourite
-#     ranking += comments_count * weight_comments
-
-#     return round(ranking, 2)
-
-
-def sigmoid(x, alpha=1, beta=0):
-    return 1 / (1 + math.exp(-alpha * (x - beta)))
+def boost_factor(day, boost_factor=10.0, boost_duration_days=30):
+    decay_rate = -math.log(1 / boost_factor) / boost_duration_days
+    return max(boost_factor * math.exp(-decay_rate * day), 1)
 
 
 def calculate_ranking(score, favourite, comments, created):
-    w_score = 1
-    w_favourite = 2
-    w_comment = 0.1
+    weight_score = 1
+    weight_favourite = 2
+    weight_comment = 0.1
 
-    # Define boost parameters
-    boost_duration_days = 10
     days_since_creation = (datetime.utcnow() - created).days
+    boost_duration_days = 30
 
-    boost_factor = sigmoid(
-        days_since_creation, alpha=-0.1, beta=(boost_duration_days / 2)
-    )
+    ranking = 0
+    ranking += weight_score * score
+    ranking += weight_favourite * favourite
+    ranking += weight_comment * comments
 
-    # Calculate weighted average with boost factor
-    weighted_average = (
-        (w_score * score) + (w_favourite * favourite) + (w_comment * comments)
-    )
+    ranking = ranking * boost_factor(days_since_creation, boost_duration_days)
 
-    return round(weighted_average + (weighted_average * boost_factor), 8)
+    return round(ranking, 8)
 
 
 async def collection_ranking():
-    # for day in range(1, 30):
-    #     print(day, sigmoid(day, -0.1, (10 / 2)))
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
