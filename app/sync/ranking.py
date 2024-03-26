@@ -1,19 +1,37 @@
+from app.utils import calculate_collection_ranking
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timedelta
+from sqlalchemy import select, asc, func
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from sqlalchemy import select, asc
+from datetime import datetime
 from app import constants
-import copy
 
 from app.models import (
+    CollectionFavourite,
+    CollectionComment,
     SystemTimestamp,
     Collection,
     Log,
 )
 
 
-async def rcalculate_ranking(session: AsyncSession):
+async def collection_stats(session: AsyncSession, collection: Collection):
+    favourite = await session.scalar(
+        select(func.count(CollectionFavourite.id)).filter(
+            CollectionFavourite.content_id == collection.id,
+        )
+    )
+
+    comments = await session.scalar(
+        select(func.count(CollectionComment.id)).filter(
+            CollectionComment.content_id == collection.id
+        )
+    )
+
+    return favourite, comments, collection.vote_score
+
+
+async def recalculate_ranking(session: AsyncSession):
     # Get system timestamp for latest ranking update
     if not (
         system_timestamp := await session.scalar(
@@ -45,42 +63,51 @@ async def rcalculate_ranking(session: AsyncSession):
         .order_by(asc(Log.created))
     )
 
-    # for log in logs:
-    #     # We set timestamp here because after thay it won't be set due to continue
-    #     system_timestamp.timestamp = log.created
+    for log in logs:
+        # We set timestamp here because after thay it won't be set due to continue
+        system_timestamp.timestamp = log.created
 
-    #     timestamp = round_day(log.created)
+        collection = None
 
-    #     if not (
-    #         activity := await session.scalar(
-    #             select(Activity).filter(
-    #                 Activity.interval == constants.INTERVAL_DAY,
-    #                 Activity.timestamp == timestamp,
-    #                 Activity.user == log.user,
-    #             )
-    #         )
-    #     ):
-    #         activity = Activity(
-    #             **{
-    #                 "interval": constants.INTERVAL_DAY,
-    #                 "timestamp": timestamp,
-    #                 "user": log.user,
-    #                 "used_logs": [],
-    #                 "actions": 0,
-    #             }
-    #         )
+        if log.log_type in [
+            constants.LOG_FAVOURITE,
+            constants.LOG_FAVOURITE_REMOVE,
+            constants.LOG_COMMENT_HIDE,
+            constants.LOG_VOTE_SET,
+        ]:
+            if log.data["content_type"] != constants.CONTENT_COLLECTION:
+                continue
 
-    #     if str(log.id) in activity.used_logs:
-    #         continue
+            collection = await session.scalar(
+                select(Collection).filter(Collection.id == log.target_id)
+            )
 
-    #     # Just leave it here, trust me (SQLAlchemy shenanigans)
-    #     activity.used_logs = copy.deepcopy(activity.used_logs)
+        if log.log_type == constants.LOG_COMMENT_WRITE:
+            if log.data["content_type"] != constants.CONTENT_COLLECTION:
+                continue
 
-    #     activity.used_logs.append(str(log.id))
-    #     activity.actions = len(activity.used_logs)
+            comment = await session.scalar(
+                select(CollectionComment)
+                .filter(CollectionComment.id == log.target_id)
+                .options(selectinload(CollectionComment.content))
+            )
 
-    #     session.add(activity)
-    #     await session.commit()
+            collection = comment.content
+
+        if collection:
+            favourite, comments, score = await collection_stats(
+                session, collection
+            )
+
+            collection.system_ranking = calculate_collection_ranking(
+                score, favourite, comments, collection.created
+            )
+
+            print(
+                f"Updated collection {collection.title} ranking to {collection.system_ranking}"
+            )
+
+            session.add(collection)
 
     session.add(system_timestamp)
     await session.commit()
@@ -90,4 +117,4 @@ async def update_ranking():
     """Recalculare user generateg content ranking from logs"""
 
     async with sessionmanager.session() as session:
-        await rcalculate_ranking(session)
+        await recalculate_ranking(session)

@@ -1,8 +1,8 @@
 from app.utils import get_settings, calculate_collection_ranking
 from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
+from app.sync.ranking import recalculate_ranking
 from app.service import calculate_watch_duration
-from app.sync.activity import generate_activity
 from meilisearch_python_sdk import AsyncClient
 from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
@@ -209,7 +209,8 @@ async def test_sync_stuff():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await generate_activity(session)
+        # await generate_activity(session)
+        await recalculate_ranking(session)
         # await generate_notifications(session)
         # await generate_history(session)
 
@@ -523,13 +524,13 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    # asyncio.run(test_sync_stuff())
+    asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
     # asyncio.run(test())
-    asyncio.run(run_migrate_logs())
+    # asyncio.run(run_migrate_logs())
     # asyncio.run(calculate_stats())
     # asyncio.run(run_migrate_collections())
     # asyncio.run(run_migrate_votes())
