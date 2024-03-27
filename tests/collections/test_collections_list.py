@@ -1,5 +1,5 @@
 from client_requests import request_create_collection
-from client_requests import request_collections_list
+from client_requests import request_collections
 from fastapi import status
 from app import constants
 
@@ -90,7 +90,7 @@ async def test_collections_list(
     assert response.status_code == status.HTTP_200_OK
 
     # Now let's get list of collections
-    response = await request_collections_list(client)
+    response = await request_collections(client)
 
     assert len(response.json()["list"]) == 2
     assert response.json()["list"][0]["title"] == "Random people collection"

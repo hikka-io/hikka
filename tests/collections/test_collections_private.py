@@ -1,7 +1,6 @@
-from client_requests import request_user_collections_list
 from client_requests import request_create_collection
-from client_requests import request_collections_list
 from client_requests import request_collection_info
+from client_requests import request_collections
 from fastapi import status
 from app import constants
 
@@ -56,44 +55,48 @@ async def test_collections_list_private(
 
     # Now let's get list of collections
     # And make sure that without auth there are none
-    response = await request_collections_list(client)
+    response = await request_collections(client)
 
     assert response.json()["pagination"]["total"] == 0
     assert len(response.json()["list"]) == 0
 
     # Now let's get list of collections by different user
     # Number of collections still should be zero
-    response = await request_collections_list(client, token=get_dummy_token)
+    response = await request_collections(client, token=get_dummy_token)
 
     assert response.json()["pagination"]["total"] == 0
     assert len(response.json()["list"]) == 0
 
     # And finally let's get list of collections by author
     # And there are still should be none
-    response = await request_collections_list(client, token=get_test_token)
+    response = await request_collections(client, token=get_test_token)
 
     assert response.json()["pagination"]["total"] == 0
     assert len(response.json()["list"]) == 0
 
     # Now we will check user's collections list
     # Private collection shouldn't be there
-    response = await request_user_collections_list(client, "testuser")
+    response = await request_collections(client, filters={"author": "testuser"})
 
     assert response.json()["pagination"]["total"] == 0
     assert len(response.json()["list"]) == 0
 
     # Now with auth from different user
     # Still should be zero
-    response = await request_user_collections_list(
-        client, "testuser", token=get_dummy_token
+    response = await request_collections(
+        client,
+        filters={"author": "testuser", "only_public": False},
+        token=get_dummy_token,
     )
 
     assert response.json()["pagination"]["total"] == 0
     assert len(response.json()["list"]) == 0
 
     # And finally let's check with author's auth token
-    response = await request_user_collections_list(
-        client, "testuser", token=get_test_token
+    response = await request_collections(
+        client,
+        filters={"author": "testuser", "only_public": False},
+        token=get_test_token,
     )
 
     assert response.json()["pagination"]["total"] == 1
