@@ -252,6 +252,7 @@ def anime_search_filter(
                     constants.AGE_RATING_PG,
                     constants.AGE_RATING_G,
                     constants.AGE_RATING_R,
+                    None,
                 ]
             )
         )
