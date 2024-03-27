@@ -8,11 +8,13 @@ from . import service
 
 from .schemas import (
     CollectionsListResponse,
+    CollectionsListArgs,
     CollectionResponse,
     CollectionArgs,
 )
 
 from .dependencies import (
+    validate_collections_list_args,
     validate_collection_delete,
     validate_collection_update,
     validate_collection_create,
@@ -35,16 +37,36 @@ from app.dependencies import (
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
-@router.get("", response_model=CollectionsListResponse)
+@router.post("", response_model=CollectionsListResponse)
 async def get_collections(
+    args: CollectionsListArgs = Depends(validate_collections_list_args),
     request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_collections_count(session)
+    total = await service.get_collections_count(session, request_user, args)
     collections = await service.get_collections(
+        session, request_user, args, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": collections.unique().all(),
+    }
+
+
+@router.get("", response_model=CollectionsListResponse)
+async def get_collections_legacy(
+    request_user: User | None = Depends(auth_required(optional=True)),
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_collections_count_legacy(session)
+    collections = await service.get_collections_legacy(
         session, request_user, limit, offset
     )
 
@@ -55,7 +77,7 @@ async def get_collections(
 
 
 @router.get("/user/{username}", response_model=CollectionsListResponse)
-async def get_user_collections(
+async def get_user_collections_legacy(
     request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_user),
@@ -63,11 +85,11 @@ async def get_user_collections(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_collections_count(
+    total = await service.get_user_collections_count_legacy(
         session, user, request_user
     )
 
-    collections = await service.get_user_collections(
+    collections = await service.get_user_collections_legacy(
         session, user, request_user, limit, offset
     )
 

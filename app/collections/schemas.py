@@ -27,6 +27,37 @@ class CollectionContentArgs(CustomModel):
     slug: str
 
 
+class CollectionsListArgs(CustomModel):
+    sort: list[str] = ["system_ranking:desc", "created:desc"]
+    content_type: ContentTypeEnum | None = None
+    author: str | None = None
+    only_public: bool = True
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "system_ranking",
+            "created",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+
 class CollectionArgs(CustomModel):
     description: str = Field(min_length=3, max_length=8192)
     title: str = Field(min_length=3, max_length=255)

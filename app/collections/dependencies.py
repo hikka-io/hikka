@@ -1,15 +1,30 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_user_by_username
 from app.utils import check_user_permissions
 from app.dependencies import auth_required
 from app.models import Collection, User
 from app.database import get_session
 from .utils import check_consecutive
-from .schemas import CollectionArgs
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from uuid import UUID
 from . import service
+
+from .schemas import (
+    CollectionsListArgs,
+    CollectionArgs,
+)
+
+
+async def validate_collections_list_args(
+    args: CollectionsListArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    if args.author and not await get_user_by_username(session, args.author):
+        raise Abort("collections", "author-not-found")
+
+    return args
 
 
 async def validate_collection_args(

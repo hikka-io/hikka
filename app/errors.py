@@ -141,6 +141,7 @@ errors = {
         "bad-order-start": ["Order must start from 1", 400],
         "unlabled-content": ["Unlabled content", 400],
         "bad-labels-order": ["Bad labels order", 400],
+        "author-not-found": ["Author not found", 404],
         "not-found": ["Collection not found", 404],
         "bad-label": ["Unknown label", 400],
         "bad-content": ["Bad content", 400],
