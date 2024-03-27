@@ -1,4 +1,4 @@
-from sqlalchemy import select, asc, desc, and_, func
+from sqlalchemy import select, asc, desc, and_, or_, func
 from app.utils import new_token, is_int, is_uuid
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -244,16 +244,12 @@ def anime_search_filter(
     # In some cases, like on front page, we would want to hide NSFW content
     if len(search.rating) == 0 and hide_nsfw:
         # No hentai (RX) by default
+        # We are doing rating == None because PostgreSQL skips rows with
+        # rating set to null without this check
         query = query.filter(
-            Anime.rating.in_(
-                [
-                    constants.AGE_RATING_R_PLUS,
-                    constants.AGE_RATING_PG_13,
-                    constants.AGE_RATING_PG,
-                    constants.AGE_RATING_G,
-                    constants.AGE_RATING_R,
-                    None,
-                ]
+            or_(
+                Anime.rating != constants.AGE_RATING_RX,
+                Anime.rating == None,  # noqa: E711
             )
         )
 
