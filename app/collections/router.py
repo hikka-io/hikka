@@ -28,7 +28,6 @@ from app.utils import (
 
 from app.dependencies import (
     auth_required,
-    get_user,
     get_page,
     get_size,
 )
@@ -57,57 +56,46 @@ async def get_collections(
     }
 
 
-@router.get("", response_model=CollectionsListResponse)
-async def get_collections_legacy(
-    request_user: User | None = Depends(auth_required(optional=True)),
-    session: AsyncSession = Depends(get_session),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.get_collections_count_legacy(session)
-    collections = await service.get_collections_legacy(
-        session, request_user, limit, offset
-    )
+# @router.get("", response_model=CollectionsListResponse)
+# async def get_collections_legacy(
+#     request_user: User | None = Depends(auth_required(optional=True)),
+#     session: AsyncSession = Depends(get_session),
+#     page: int = Depends(get_page),
+#     size: int = Depends(get_size),
+# ):
+#     limit, offset = pagination(page, size)
+#     total = await service.get_collections_count_legacy(session)
+#     collections = await service.get_collections_legacy(
+#         session, request_user, limit, offset
+#     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": collections.unique().all(),
-    }
-
-
-@router.get("/user/{username}", response_model=CollectionsListResponse)
-async def get_user_collections_legacy(
-    request_user: User | None = Depends(auth_required(optional=True)),
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(get_user),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.get_user_collections_count_legacy(
-        session, user, request_user
-    )
-
-    collections = await service.get_user_collections_legacy(
-        session, user, request_user, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": collections.unique().all(),
-    }
+#     return {
+#         "pagination": pagination_dict(total, page, limit),
+#         "list": collections.unique().all(),
+#     }
 
 
-@router.get("/{reference}", response_model=CollectionResponse)
-async def get_collection(
-    request_user: User | None = Depends(auth_required(optional=True)),
-    collection: Collection = Depends(validate_collection),
-    session: AsyncSession = Depends(get_session),
-):
-    return await service.get_collection_display(
-        session, collection, request_user
-    )
+# @router.get("/user/{username}", response_model=CollectionsListResponse)
+# async def get_user_collections_legacy(
+#     request_user: User | None = Depends(auth_required(optional=True)),
+#     session: AsyncSession = Depends(get_session),
+#     user: User = Depends(get_user),
+#     page: int = Depends(get_page),
+#     size: int = Depends(get_size),
+# ):
+#     limit, offset = pagination(page, size)
+#     total = await service.get_user_collections_count_legacy(
+#         session, user, request_user
+#     )
+
+#     collections = await service.get_user_collections_legacy(
+#         session, user, request_user, limit, offset
+#     )
+
+#     return {
+#         "pagination": pagination_dict(total, page, limit),
+#         "list": collections.unique().all(),
+#     }
 
 
 @router.post("/create", response_model=CollectionResponse)
@@ -148,3 +136,14 @@ async def delete_collection(
 ):
     await service.delete_collection(session, collection, user)
     return {"success": True}
+
+
+@router.get("/{reference}", response_model=CollectionResponse)
+async def get_collection(
+    request_user: User | None = Depends(auth_required(optional=True)),
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.get_collection_display(
+        session, collection, request_user
+    )

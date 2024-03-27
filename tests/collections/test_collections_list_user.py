@@ -1,5 +1,5 @@
-from client_requests import request_user_collections_list
 from client_requests import request_create_collection
+from client_requests import request_collections
 from fastapi import status
 from app import constants
 
@@ -92,8 +92,8 @@ async def test_collections_list_user(
     assert response.status_code == status.HTTP_200_OK
 
     # Now let's get list of collections created by test user
-    response = await request_user_collections_list(
-        client, create_test_user.username
+    response = await request_collections(
+        client, filters={"author": create_test_user.username}
     )
 
     assert len(response.json()["list"]) == 1

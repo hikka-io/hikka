@@ -1,5 +1,5 @@
 from client_requests import request_create_collection
-from client_requests import request_collections_list
+from client_requests import request_collections
 from client_requests import request_watch_add
 from fastapi import status
 from app import constants
@@ -59,7 +59,7 @@ async def test_collections_list_watch(
     )
 
     # Now let's get list of collections
-    response = await request_collections_list(client, token=get_test_token)
+    response = await request_collections(client, token=get_test_token)
 
     watch_data = response.json()["list"][0]["collection"][0]["content"]["watch"]
 
@@ -72,7 +72,7 @@ async def test_collections_list_watch(
     assert watch_data[0]["note"] is None
 
     # And one more time but without auth
-    response = await request_collections_list(client)
+    response = await request_collections(client)
 
     watch_data = response.json()["list"][0]["collection"][0]["content"]["watch"]
 

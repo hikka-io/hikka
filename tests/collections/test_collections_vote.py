@@ -1,5 +1,5 @@
 from client_requests import request_create_collection
-from client_requests import request_collections_list
+from client_requests import request_collections
 from client_requests import request_vote
 from fastapi import status
 from app import constants
@@ -52,7 +52,7 @@ async def test_collections_list_vote(
     assert response.status_code == status.HTTP_200_OK
 
     # Now let's get list of collections
-    response = await request_collections_list(client, token=get_test_token)
+    response = await request_collections(client, token=get_test_token)
 
     # Score should be zero
     assert response.json()["list"][0]["vote_score"] == 0
@@ -67,7 +67,7 @@ async def test_collections_list_vote(
     )
 
     # Let's get collections list again
-    response = await request_collections_list(client, token=get_test_token)
+    response = await request_collections(client, token=get_test_token)
 
     # Let's check socre again
     assert response.json()["list"][0]["vote_score"] == 1
