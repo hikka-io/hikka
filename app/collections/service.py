@@ -1,13 +1,19 @@
 from sqlalchemy import select, desc, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import CollectionArgs
+from sqlalchemy.sql.selectable import Select
 from datetime import datetime
 from app import constants
 from uuid import UUID
 
+from .schemas import (
+    CollectionArgs,
+    CollectionsListArgs,
+)
+
 from app.service import (
     collection_comments_load_options,
     collections_load_options,
+    get_user_by_username,
     create_log,
 )
 
@@ -36,6 +42,24 @@ content_type_to_collection_content_class = {
     constants.CONTENT_PERSON: PersonCollectionContent,
     constants.CONTENT_ANIME: AnimeCollectionContent,
 }
+
+
+def build_order_by(sort: list[str]):
+    order_mapping = {
+        "system_ranking": Collection.system_ranking,
+        "created": Collection.created,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ]
+
+    return order_by
 
 
 async def build_collection_content(
@@ -77,7 +101,70 @@ async def count_content(
     )
 
 
-async def get_collections_count(session: AsyncSession) -> int:
+async def collections_list_filter(
+    query: Select,
+    request_user: User | None,
+    args: CollectionsListArgs,
+    session: AsyncSession,
+):
+    visibility = [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+
+    if args.author:
+        author = await get_user_by_username(session, args.author)
+        query = query.filter(Collection.author == author)
+
+        # Private collections can be seen only on per user basis
+        if author == request_user:
+            visibility.append(constants.COLLECTION_PRIVATE)
+
+    if args.content_type:
+        query = query.filter(Collection.content_type == args.content_type)
+
+    if args.only_public:
+        visibility = [constants.COLLECTION_PUBLIC]
+
+    query = query.filter(
+        Collection.visibility.in_(visibility),
+        Collection.deleted == False,  # noqa: E712
+    )
+
+    return query
+
+
+async def get_collections_count(
+    session: AsyncSession, request_user: User | None, args: CollectionsListArgs
+) -> int:
+    query = await collections_list_filter(
+        select(func.count(Collection.id)), request_user, args, session
+    )
+
+    return await session.scalar(query)
+
+
+async def get_collections(
+    session: AsyncSession,
+    request_user: User | None,
+    args: CollectionsListArgs,
+    limit: int,
+    offset: int,
+) -> list[Collection]:
+    query = await collections_list_filter(
+        collections_load_options(
+            select(Collection),
+            request_user,
+            True,
+        ),
+        request_user,
+        args,
+        session,
+    )
+
+    return await session.scalars(
+        query.order_by(*build_order_by(args.sort)).limit(limit).offset(offset)
+    )
+
+
+async def get_collections_count_legacy(session: AsyncSession) -> int:
     return await session.scalar(
         select(func.count(Collection.id)).filter(
             Collection.visibility == constants.COLLECTION_PUBLIC,
@@ -86,7 +173,7 @@ async def get_collections_count(session: AsyncSession) -> int:
     )
 
 
-async def get_collections(
+async def get_collections_legacy(
     session: AsyncSession, request_user: User | None, limit: int, offset: int
 ) -> list[Collection]:
     return await session.scalars(
@@ -115,7 +202,7 @@ async def get_user_collections_count_all(
     )
 
 
-async def get_user_collections_count(
+async def get_user_collections_count_legacy(
     session: AsyncSession,
     user: User,
     request_user: User,
@@ -135,7 +222,7 @@ async def get_user_collections_count(
     return await session.scalar(query)
 
 
-async def get_user_collections(
+async def get_user_collections_legacy(
     session: AsyncSession,
     user: User,
     request_user: User,

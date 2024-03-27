@@ -14,7 +14,6 @@ from app.service import (
 )
 
 from app.models import (
-    Character,
     Person,
     Anime,
     Edit,
