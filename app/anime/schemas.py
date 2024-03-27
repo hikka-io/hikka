@@ -161,6 +161,8 @@ class AnimeInfoResponse(CustomModel):
     score: float = Field(examples=[8.11])
     nsfw: bool = Field(examples=[False])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    season: str | None
+    year: int | None
 
     synonyms: list[str] = Field(examples=["Konosuba"])
     external: list[AnimeExternalResponse]
