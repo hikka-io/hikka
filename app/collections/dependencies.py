@@ -92,7 +92,7 @@ async def validate_collection_create(
         session, user
     )
 
-    if collections_count >= 10:
+    if collections_count >= 1000:
         raise Abort("collections", "limit")
 
     return args
