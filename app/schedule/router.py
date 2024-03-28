@@ -1,5 +1,6 @@
 from .schemas import AnimeScheduleResponsePaginationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from .schemas import AnimeScheduleArgs
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
@@ -20,17 +21,18 @@ from app.utils import (
 router = APIRouter(prefix="/schedule", tags=["Stats"])
 
 
-@router.get("/anime", response_model=AnimeScheduleResponsePaginationResponse)
+@router.post("/anime", response_model=AnimeScheduleResponsePaginationResponse)
 async def anime_schedule(
+    args: AnimeScheduleArgs,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_schedule_anime_count(session)
+    total = await service.get_schedule_anime_count(session, args)
     schedule = await service.get_schedule_anime(
-        session, request_user, limit, offset
+        session, args, request_user, limit, offset
     )
 
     return {
