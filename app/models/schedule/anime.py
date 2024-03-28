@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -15,3 +16,7 @@ class AnimeSchedule(Base, CreatedMixin, UpdatedMixin):
 
     anime_id = mapped_column(ForeignKey("service_content_anime.id"), index=True)
     anime: Mapped["Anime"] = relationship(foreign_keys=[anime_id])
+
+    @hybrid_property
+    def time_left(self):
+        return self.airing_at - datetime.utcnow()
