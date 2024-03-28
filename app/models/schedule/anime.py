@@ -13,11 +13,5 @@ class AnimeSchedule(Base, CreatedMixin):
     airing_at: Mapped[datetime]
     episode: Mapped[int]
 
-    anime_id = mapped_column(
-        ForeignKey("service_content_anime.id"),
-        index=True,
-    )
-
-    anime: Mapped["Anime"] = relationship(
-        back_populates="characters", foreign_keys=[anime_id]
-    )
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"), index=True)
+    anime: Mapped["Anime"] = relationship(foreign_keys=[anime_id])
