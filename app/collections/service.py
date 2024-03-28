@@ -218,7 +218,6 @@ async def create_collection(
 
     collection = Collection(
         **{
-            "private": False,  # ToDo: remove me
             "content_type": args.content_type,
             "labels_order": args.labels_order,
             "description": args.description,

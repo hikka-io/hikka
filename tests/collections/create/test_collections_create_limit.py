@@ -20,7 +20,6 @@ async def test_collections_create_limit(
         test_session.add(
             Collection(
                 **{
-                    "private": False,  # ToDo: remove me
                     "content_type": "anime",
                     "labels_order": ["Good", "Great"],
                     "description": "Description",
