@@ -164,33 +164,6 @@ async def get_collections(
     )
 
 
-async def get_collections_count_legacy(session: AsyncSession) -> int:
-    return await session.scalar(
-        select(func.count(Collection.id)).filter(
-            Collection.visibility == constants.COLLECTION_PUBLIC,
-            Collection.deleted == False,  # noqa: E712
-        )
-    )
-
-
-async def get_collections_legacy(
-    session: AsyncSession, request_user: User | None, limit: int, offset: int
-) -> list[Collection]:
-    return await session.scalars(
-        collections_load_options(
-            select(Collection).filter(
-                Collection.visibility == constants.COLLECTION_PUBLIC,
-                Collection.deleted == False,  # noqa: E712
-            ),
-            request_user,
-            True,
-        )
-        .order_by(desc(Collection.system_ranking), desc(Collection.created))
-        .limit(limit)
-        .offset(offset)
-    )
-
-
 async def get_user_collections_count_all(
     session: AsyncSession, user: User
 ) -> int:
@@ -199,52 +172,6 @@ async def get_user_collections_count_all(
             Collection.deleted == False,  # noqa: E712
             Collection.author == user,
         )
-    )
-
-
-async def get_user_collections_count_legacy(
-    session: AsyncSession,
-    user: User,
-    request_user: User,
-) -> int:
-    query = select(func.count(Collection.id)).filter(
-        Collection.deleted == False,  # noqa: E712
-        Collection.author == user,
-    )
-
-    if request_user != user:
-        query = query.filter(
-            Collection.visibility.in_(
-                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
-            )
-        )
-
-    return await session.scalar(query)
-
-
-async def get_user_collections_legacy(
-    session: AsyncSession,
-    user: User,
-    request_user: User,
-    limit: int,
-    offset: int,
-) -> list[Collection]:
-    query = select(Collection).filter(
-        Collection.deleted == False,  # noqa: E712
-        Collection.author == user,
-    )
-
-    if request_user != user:
-        query = query.filter(
-            Collection.visibility.in_(
-                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
-            )
-        )
-
-    return await session.scalars(
-        collections_load_options(query, request_user, True)
-        .limit(limit)
-        .offset(offset)
     )
 
 
@@ -291,7 +218,6 @@ async def create_collection(
 
     collection = Collection(
         **{
-            "private": False,  # ToDo: remove me
             "content_type": args.content_type,
             "labels_order": args.labels_order,
             "description": args.description,

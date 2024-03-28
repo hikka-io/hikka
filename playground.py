@@ -4,6 +4,7 @@ from app.sync.aggregator.info import update_anime_info
 from app.sync.ranking import recalculate_ranking_daily
 from app.service import calculate_watch_duration
 from meilisearch_python_sdk import AsyncClient
+from app.sync.schedule import build_schedule
 from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
@@ -13,6 +14,7 @@ from app.sync import update_search
 from datetime import datetime
 from app.sync import sitemap
 from app.sync import email
+from pprint import pprint
 from app import constants
 import asyncio
 import math
@@ -27,6 +29,7 @@ from app.admin.service import (
 from app.models import (
     CommentVoteLegacy,
     AnimeStaffRole,
+    AnimeSchedule,
     UserEditStats,
     CommentVote,
     AnimeStaff,
@@ -41,176 +44,15 @@ from app.models import (
 )
 
 
-async def test_meiliserarch_ranking():
-    settings = get_settings()
-
-    # default = ["words", "typo", "proximity", "attribute", "sort", "exactness"]
-
-    async with AsyncClient(**settings.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_ANIME)
-
-        test = await index.get_ranking_rules()
-
-        print(test)
-
-
-async def query_activity():
-    from datetime import datetime, timedelta
-    from app.models import Activity
-
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        threshold = datetime.utcnow() - timedelta(days=1)
-
-        test = await session.scalar(
-            select(Activity).filter(Activity.created > threshold)
-        )
-
-        print(test)
-
-    await sessionmanager.close()
-
-
-async def import_role_weights():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        with open("docs/roles.json", "r") as file:
-            data = json.load(file)
-
-            for entry in data["service_content_anime_staff_roles"]:
-                role = await session.scalar(
-                    select(AnimeStaffRole).filter(
-                        AnimeStaffRole.slug == entry["slug"]
-                    )
-                )
-
-                role.name_ua = entry["name_ua"]
-                role.weight = entry["weight"]
-
-                session.add(role)
-
-            await session.commit()
-
-    await sessionmanager.close()
-
-
-async def recalculate_anime_staff_weights():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        limit = 10000
-        total = await session.scalar(select(func.count(AnimeStaff.id)))
-        pages = math.ceil(total / limit) + 1
-
-        for page in range(1, pages):
-            print(page)
-
-            offset = (limit * (page)) - limit
-
-            staff_roles = await session.scalars(
-                select(AnimeStaff)
-                .options(selectinload(AnimeStaff.roles))
-                .order_by(desc(AnimeStaff.id))
-                .limit(limit)
-                .offset(offset)
-            )
-
-            for staff in staff_roles:
-                staff.weight = sum([role.weight for role in staff.roles])
-                session.add(staff)
-
-            await session.commit()
-
-    await sessionmanager.close()
-
-
-async def test_sitemap():
-    await sitemap.update_sitemap()
-
-
-async def test_email_template():
-    await email.send_emails()
-
-
-async def test_check():
-    settings = get_settings()
-    settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
-    url = make_url(settings.database.endpoint)
-    print(url.password)
-
-
-async def test():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-    semaphore = asyncio.Semaphore(10)
-
-    async with sessionmanager.session() as session:
-        anime = await session.scalar(
-            select(Anime).order_by(desc("score"), desc("scored_by")).limit(1)
-        )
-
-        await update_anime_info(semaphore, anime.content_id)
-
-    await sessionmanager.close()
-
-
-async def watch_stats():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        watch_entries = await session.scalars(
-            select(AnimeWatch)
-            .options(selectinload(AnimeWatch.anime))
-            .filter(AnimeWatch.duration == 0)
-            .limit(20000)
-        )
-
-        for watch in watch_entries:
-            watch.duration = calculate_watch_duration(watch)
-            session.add(watch)
-            await session.commit()
-
-    await sessionmanager.close()
-
-
-async def fix_closed_edits():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        edits = await session.scalars(
-            select(Edit).filter(Edit.before == None)  # noqa: E711
-        )
-
-        for edit in edits:
-            edit.before = calculate_before(edit.content, edit.after)
-            session.add(edit)
-
-        await session.commit()
-
-    await sessionmanager.close()
-
-
 async def test_sync_stuff():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
+        await build_schedule(session)
         # await generate_activity(session)
-        await recalculate_ranking_daily(session)
+        # await recalculate_ranking_daily(session)
         # await generate_notifications(session)
         # await generate_history(session)
 
@@ -234,16 +76,6 @@ async def test_system_notification():
         )
 
         # await delete_hikka_update_notification(session, update_name)
-
-    await sessionmanager.close()
-
-
-async def run_search():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    await update_search()
 
     await sessionmanager.close()
 
@@ -281,145 +113,6 @@ async def run_migrate_logs():
             await session.commit()
 
             print(log.data)
-
-    await sessionmanager.close()
-
-
-async def calculate_stats():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        users = await session.scalars(select(User).filter(User.edits.any()))
-
-        for user in users:
-            accepted = await session.scalar(
-                select(func.count(Edit.id)).filter(
-                    Edit.author == user, Edit.status == constants.EDIT_ACCEPTED
-                )
-            )
-
-            closed = await session.scalar(
-                select(func.count(Edit.id)).filter(
-                    Edit.author == user, Edit.status == constants.EDIT_CLOSED
-                )
-            )
-
-            denied = await session.scalar(
-                select(func.count(Edit.id)).filter(
-                    Edit.author == user, Edit.status == constants.EDIT_DENIED
-                )
-            )
-
-            if not (
-                stats := await session.scalar(
-                    select(UserEditStats).filter(UserEditStats.user == user)
-                )
-            ):
-                stats = UserEditStats(
-                    **{
-                        "user": user,
-                        "accepted": 0,
-                        "closed": 0,
-                        "denied": 0,
-                    }
-                )
-
-            stats.accepted = accepted
-            stats.closed = closed
-            stats.denied = denied
-
-            session.add(stats)
-            await session.commit()
-
-    await sessionmanager.close()
-
-
-async def run_migrate_collections():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        collections = await session.scalars(select(Collection))
-
-        for collection in collections:
-            if collection.private:
-                collection.visibility = constants.COLLECTION_UNLISTED
-
-            session.add(collection)
-
-        await session.commit()
-
-    await sessionmanager.close()
-
-
-async def run_migrate_votes():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        legacy_votes = await session.scalars(select(CommentVoteLegacy))
-
-        for legacy_vote in legacy_votes:
-            if await session.scalar(
-                select(CommentVote).filter(
-                    CommentVote.content_id == legacy_vote.comment_id,
-                    CommentVote.user_id == legacy_vote.user_id,
-                )
-            ):
-                print(
-                    f"Found CommentVote record for {legacy_vote.comment_id}:{legacy_vote.user_id}"
-                )
-
-                continue
-
-            vote = CommentVote(
-                **{
-                    "content_id": legacy_vote.comment_id,
-                    "user_id": legacy_vote.user_id,
-                    "created": legacy_vote.created,
-                    "updated": legacy_vote.updated,
-                    "score": legacy_vote.score,
-                }
-            )
-
-            session.add(vote)
-
-        await session.commit()
-
-        comment_vote_logs = await session.scalars(
-            select(Log).filter(Log.log_type == constants.LOG_COMMENT_VOTE)
-        )
-
-        for log in comment_vote_logs:
-            log.log_type = constants.LOG_VOTE_SET
-            log.data["content_type"] = constants.CONTENT_COMMENT
-
-            session.add(log)
-
-            print(f"Updated log {log.id}")
-
-        await session.commit()
-
-        comments = await session.scalars(select(Comment))
-
-        for comment in comments:
-            if vote_score := await session.scalar(
-                select(func.sum(CommentVote.score)).filter(
-                    CommentVote.content == comment
-                )
-            ):
-                comment.vote_score = vote_score
-                session.add(comment)
-
-                print(
-                    f"Updated vote score to {vote_score} for comment {comment.id}"
-                )
-
-        await session.commit()
 
     await sessionmanager.close()
 
@@ -475,42 +168,50 @@ async def spring_top():
     await sessionmanager.close()
 
 
-async def collection_ranking():
+async def test_build_schedule():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        collections = await session.scalars(select(Collection))
+        now = datetime.utcnow()
 
-        for collection in collections:
-            favourite_count = await session.scalar(
-                select(func.count(Favourite.id)).filter(
-                    Favourite.content_type == constants.CONTENT_COMMENT,
-                    Favourite.content_id == collection.id,
+        anime = await session.scalar(
+            select(Anime).filter(Anime.slug == "kaijuu-8-gou-fefba2")
+        )
+
+        schedule = await session.scalars(
+            select(AnimeSchedule).filter(AnimeSchedule.anime == anime)
+        )
+
+        cache = {entry.episode: entry for entry in schedule}
+
+        for episode_data in anime.schedule:
+            airing_at = datetime.utcfromtimestamp(episode_data["airing_at"])
+
+            if not (episode := cache.get(episode_data["episode"])):
+                episode = AnimeSchedule(
+                    **{
+                        "episode": episode_data["episode"],
+                        "airing_at": airing_at,
+                        "anime": anime,
+                        "created": now,
+                        "updated": now,
+                    }
                 )
-            )
 
-            comments_count = await session.scalar(
-                select(func.count(Comment.id)).filter(
-                    Comment.content_type == constants.CONTENT_COLLECTION,
-                    Comment.content_id == collection.id,
-                    Comment.hidden == False,  # noqa: E712
+                print(f"Added episode #{episode.episode} for {anime.title_ja}")
+
+            if episode.airing_at != airing_at:
+                episode.airing_at = airing_at
+                episode.updated = now
+                session.add(episode)
+
+                print(
+                    f"Updated episode #{episode.episode} for {anime.title_ja}"
                 )
-            )
 
-            collection.system_ranking = calculate_collection_ranking(
-                collection.vote_score,
-                favourite_count,
-                comments_count,
-                collection.created,
-            )
-
-            session.add(collection)
-
-            print(
-                f"Updated collection {collection.title} ranking to {collection.system_ranking}"
-            )
+            session.add(episode)
 
         await session.commit()
 
@@ -536,6 +237,6 @@ if __name__ == "__main__":
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
-    # asyncio.run(collection_ranking())
+    # asyncio.run(test_build_schedule())
 
     pass

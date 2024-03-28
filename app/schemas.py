@@ -1,10 +1,10 @@
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
+from datetime import datetime, timedelta
 from pydantic import model_serializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
 from pydantic import PositiveInt
-from datetime import datetime
 from typing import Callable
 from . import constants
 from enum import Enum
@@ -34,6 +34,11 @@ class CustomModel(BaseModel):
             if type(getattr(self, field_name)) == datetime:
                 result[field_name] = utils.to_timestamp(
                     getattr(self, field_name)
+                )
+
+            if type(getattr(self, field_name)) == timedelta:
+                result[field_name] = int(
+                    getattr(self, field_name).total_seconds()
                 )
 
         return result

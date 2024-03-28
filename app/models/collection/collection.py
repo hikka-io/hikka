@@ -38,7 +38,6 @@ class Collection(
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]
     deleted: Mapped[bool]
-    private: Mapped[bool]
     entries: Mapped[int]
 
     author_id = mapped_column(ForeignKey("service_users.id"))

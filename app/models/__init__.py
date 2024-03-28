@@ -64,6 +64,8 @@ from .collection.collection import Collection
 
 from .stats.edits import UserEditStats
 
+from .schedule.anime import AnimeSchedule
+
 from .base import Base
 
 __all__ = [
@@ -120,5 +122,6 @@ __all__ = [
     "CollectionContent",
     "Collection",
     "UserEditStats",
+    "AnimeSchedule",
     "Base",
 ]
