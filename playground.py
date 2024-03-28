@@ -13,6 +13,7 @@ from app.sync import update_search
 from datetime import datetime
 from app.sync import sitemap
 from app.sync import email
+from pprint import pprint
 from app import constants
 import asyncio
 import math
@@ -27,6 +28,7 @@ from app.admin.service import (
 from app.models import (
     CommentVoteLegacy,
     AnimeStaffRole,
+    AnimeSchedule,
     UserEditStats,
     CommentVote,
     AnimeStaff,
@@ -164,6 +166,56 @@ async def spring_top():
     await sessionmanager.close()
 
 
+async def test_build_schedule():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        now = datetime.utcnow()
+
+        anime = await session.scalar(
+            select(Anime).filter(Anime.slug == "kaijuu-8-gou-fefba2")
+        )
+
+        schedule = await session.scalars(
+            select(AnimeSchedule).filter(AnimeSchedule.anime == anime)
+        )
+
+        cache = {entry.episode: entry for entry in schedule}
+
+        for episode_data in anime.schedule:
+            airing_at = datetime.utcfromtimestamp(episode_data["airing_at"])
+
+            if not (episode := cache.get(episode_data["episode"])):
+                episode = AnimeSchedule(
+                    **{
+                        "episode": episode_data["episode"],
+                        "airing_at": airing_at,
+                        "anime": anime,
+                        "created": now,
+                        "updated": now,
+                    }
+                )
+
+                print(f"Added episode #{episode.episode} for {anime.title_ja}")
+
+            if episode.airing_at != airing_at:
+                episode.airing_at = airing_at
+                episode.updated = now
+                session.add(episode)
+
+                print(
+                    f"Updated episode #{episode.episode} for {anime.title_ja}"
+                )
+
+            session.add(episode)
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -171,7 +223,7 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    asyncio.run(test_sync_stuff())
+    # asyncio.run(test_sync_stuff())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
@@ -183,6 +235,6 @@ if __name__ == "__main__":
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
-    # asyncio.run(collection_ranking())
+    asyncio.run(test_build_schedule())
 
     pass
