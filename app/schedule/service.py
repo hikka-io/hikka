@@ -55,7 +55,9 @@ async def get_schedule_anime(
             select(AnimeSchedule).join(AnimeSchedule.anime), args
         )
         .options(
-            joinedload(AnimeSchedule.anime).joinedload(Anime.watch),
+            anime_loadonly(joinedload(AnimeSchedule.anime)).joinedload(
+                Anime.watch
+            ),
             with_loader_criteria(
                 AnimeWatch,
                 AnimeWatch.user_id == request_user.id if request_user else None,
