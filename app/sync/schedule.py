@@ -78,6 +78,19 @@ async def update_schedule_aired(session: AsyncSession):
             if "status" not in anime.ignored_fields:
                 anime.ignored_fields.append("status")
 
+        # Set status to ongoing if anime just started airing
+        if (
+            schedule.episode == 1
+            and anime.episodes_released == 0
+            and anime.status == constants.RELEASE_STATUS_ANNOUNCED
+        ):
+            before["status"] = anime.status
+            anime.status = constants.RELEASE_STATUS_ONGOING
+            after["status"] = anime.status
+
+            if "status" not in anime.ignored_fields:
+                anime.ignored_fields.append("status")
+
         # Only create new edit and log records when needed
         if before != {} and after != {}:
             edit = Edit(

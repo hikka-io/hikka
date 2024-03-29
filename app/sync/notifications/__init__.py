@@ -36,6 +36,7 @@ async def generate_notifications(session: AsyncSession):
         .filter(
             Log.log_type.in_(
                 [
+                    constants.LOG_SCHEDULE_ANIME,
                     constants.LOG_COMMENT_WRITE,
                     constants.LOG_EDIT_UPDATE,
                     constants.LOG_EDIT_ACCEPT,
