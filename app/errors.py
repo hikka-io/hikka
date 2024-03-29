@@ -154,6 +154,9 @@ errors = {
         "content-not-found": ["Content not found", 404],
         "not-found": ["Vote record not found", 404],
     },
+    "schedule": {
+        "incompatible-filters": ["You've specified incompatible filters", 400]
+    },
 }
 
 
