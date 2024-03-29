@@ -440,6 +440,16 @@ async def update_anime_info(session, anime, data):
         if data[field] == getattr(anime, field):
             continue
 
+        # Special checks to prevent overwriting
+        # changes made by our anime schedule task
+        if field == "episodes_released":
+            if getattr(anime, field) > data[field]:
+                continue
+
+        if field == "status":
+            if getattr(anime, field) == constants.RELEASE_STATUS_FINISHED:
+                continue
+
         # If field going to be changed first we need add it to before dict
         before[field] = getattr(anime, field)
 
