@@ -54,3 +54,7 @@ async def build_schedule(session: AsyncSession):
             session.add(episode)
 
         await session.commit()
+
+
+async def update_schedule_aired(session: AsyncSession):
+    now = datetime.utcnow()

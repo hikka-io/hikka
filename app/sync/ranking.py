@@ -32,7 +32,7 @@ async def collection_stats(session: AsyncSession, collection: Collection):
     return favourite, comments, collection.vote_score
 
 
-async def recalculate_ranking_daily(session: AsyncSession):
+async def recalculate_ranking_all(session: AsyncSession):
     collections = await session.scalars(select(Collection))
 
     for collection in collections:
@@ -142,8 +142,8 @@ async def update_ranking():
         await recalculate_ranking(session)
 
 
-async def update_ranking_daily():
-    """Recalculare user generateg content ranking from logs daily"""
+async def update_ranking_all():
+    """Refresh ranking from logs for all content"""
 
     async with sessionmanager.session() as session:
-        await recalculate_ranking_daily(session)
+        await recalculate_ranking_all(session)
