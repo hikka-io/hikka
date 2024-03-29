@@ -4,7 +4,6 @@ from app.sync.aggregator.info import update_anime_info
 from app.sync.ranking import recalculate_ranking_daily
 from app.service import calculate_watch_duration
 from meilisearch_python_sdk import AsyncClient
-from app.sync.schedule import build_schedule
 from app.edit.utils import calculate_before
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
@@ -20,6 +19,11 @@ import asyncio
 import math
 import copy
 import json
+
+from app.sync.schedule import (
+    update_schedule_aired,
+    build_schedule,
+)
 
 from app.admin.service import (
     create_hikka_update_notification,
@@ -50,7 +54,8 @@ async def test_sync_stuff():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await build_schedule(session)
+        await update_schedule_aired(session)
+        # await build_schedule(session)
         # await generate_activity(session)
         # await recalculate_ranking_daily(session)
         # await generate_notifications(session)

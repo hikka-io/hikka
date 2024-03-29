@@ -19,7 +19,7 @@ from app.utils import (
 )
 
 
-router = APIRouter(prefix="/schedule", tags=["Stats"])
+router = APIRouter(prefix="/schedule", tags=["Schedule"])
 
 
 @router.post("/anime", response_model=AnimeScheduleResponsePaginationResponse)
