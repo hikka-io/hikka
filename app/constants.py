@@ -244,6 +244,7 @@ LOG_COLLECTION_CREATE = "collection_create"
 LOG_COLLECTION_UPDATE = "collection_update"
 LOG_COLLECTION_DELETE = "collection_delete"
 LOG_VOTE_SET = "vote_set"
+LOG_SCHEDULE_ANIME = "schedule_anime"
 
 # History types
 HISTORY_WATCH = "watch"
