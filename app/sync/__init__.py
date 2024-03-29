@@ -11,7 +11,7 @@ from .notifications import update_notifications
 
 from .activity import update_activity
 
-from .ranking import update_ranking_daily
+from .ranking import update_ranking_all
 from .ranking import update_ranking
 
 from .history import update_history
@@ -35,7 +35,7 @@ __all__ = [
     "aggregator_anime",
     "update_notifications",
     "update_activity",
-    "update_ranking_daily",
+    "update_ranking_all",
     "update_ranking",
     "update_history",
     "update_weights",
