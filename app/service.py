@@ -183,6 +183,8 @@ def anime_loadonly(statement):
         Anime.episodes_released,
         Anime.episodes_total,
         Anime.translated_ua,
+        Anime.synopsis_en,
+        Anime.synopsis_ua,
         Anime.content_id,
         Anime.media_type,
         Anime.scored_by,

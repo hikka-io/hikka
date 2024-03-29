@@ -1,4 +1,5 @@
 from .schemas import AnimeScheduleResponsePaginationResponse
+from .dependencies import validate_schedule_args
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import AnimeScheduleArgs
 from fastapi import APIRouter, Depends
@@ -23,9 +24,9 @@ router = APIRouter(prefix="/schedule", tags=["Stats"])
 
 @router.post("/anime", response_model=AnimeScheduleResponsePaginationResponse)
 async def anime_schedule(
-    args: AnimeScheduleArgs,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
+    args: AnimeScheduleArgs = Depends(validate_schedule_args),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

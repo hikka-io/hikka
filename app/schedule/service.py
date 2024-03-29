@@ -22,6 +22,25 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
             Anime.year == args.airing_season[1],
         )
 
+    if args.airing_range:
+        airing_start = (
+            datetime.utcfromtimestamp(args.airing_range[0])
+            if args.airing_range[0]
+            else None
+        )
+
+        airing_end = (
+            datetime.utcfromtimestamp(args.airing_range[1])
+            if args.airing_range[1]
+            else None
+        )
+
+        if airing_start:
+            query = query.filter(AnimeSchedule.airing_at >= airing_start)
+
+        if airing_end:
+            query = query.filter(AnimeSchedule.airing_at <= airing_end)
+
     else:
         query = query.filter(
             AnimeSchedule.airing_at >= datetime.utcnow() - timedelta(hours=6)
@@ -55,7 +74,9 @@ async def get_schedule_anime(
             select(AnimeSchedule).join(AnimeSchedule.anime), args
         )
         .options(
-            joinedload(AnimeSchedule.anime).joinedload(Anime.watch),
+            anime_loadonly(joinedload(AnimeSchedule.anime)).joinedload(
+                Anime.watch
+            ),
             with_loader_criteria(
                 AnimeWatch,
                 AnimeWatch.user_id == request_user.id if request_user else None,
