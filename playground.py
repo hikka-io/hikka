@@ -1,7 +1,7 @@
 from app.utils import get_settings, calculate_collection_ranking
 from app.sync.notifications import generate_notifications
 from app.sync.aggregator.info import update_anime_info
-from app.sync.ranking import recalculate_ranking_daily
+from app.sync.ranking import recalculate_ranking_all
 from app.service import calculate_watch_duration
 from meilisearch_python_sdk import AsyncClient
 from app.edit.utils import calculate_before
