@@ -8,6 +8,7 @@ from app.schemas import (
     PaginationResponse,
     WatchResponseBase,
     AnimeResponse,
+    UserResponse,
     CustomModel,
 )
 
@@ -41,7 +42,6 @@ class WatchArgs(CustomModel):
     status: WatchStatusEnum
 
 
-# Args
 class AnimeWatchSearchArgs(AnimeSearchArgsBase):
     sort: list[str] = ["watch_score:desc", "watch_created:desc"]
     watch_status: WatchStatusEnum | None = None
@@ -81,9 +81,18 @@ class WatchResponse(WatchResponseBase):
     anime: AnimeResponse
 
 
+class UserResponseWithWatch(UserResponse):
+    watch: list[WatchResponseBase]
+
+
 class WatchPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[WatchResponse]
+
+
+class UserWatchPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[UserResponseWithWatch]
 
 
 class WatchStatsResponse(CustomModel):

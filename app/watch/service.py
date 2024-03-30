@@ -1,10 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import AnimeWatch, Anime, User
+from sqlalchemy import select, desc, func
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select, func
 from datetime import datetime
 from app import constants
 import random
+
+from app.models import (
+    AnimeWatch,
+    Follow,
+    Anime,
+    User,
+)
 
 from .schemas import (
     AnimeWatchSearchArgs,
@@ -153,3 +160,31 @@ async def get_user_watch_list_count(
     query = anime_search_filter(search, query.join(Anime), False)
 
     return await session.scalar(query)
+
+
+async def get_anime_watch_following_total(
+    session: AsyncSession, user: User, anime: Anime
+):
+    return await session.scalar(
+        select(func.count(User.id))
+        .join(Follow, Follow.followed_user_id == User.id)
+        .filter(Follow.user_id == user.id)
+        .join(User.watch)
+        .filter(AnimeWatch.anime == anime)
+    )
+
+
+async def get_anime_watch_following(
+    session: AsyncSession, user: User, anime: Anime, limit: int, offset: int
+):
+    return await session.scalars(
+        select(User)
+        .join(Follow, Follow.followed_user_id == User.id)
+        .filter(Follow.user_id == user.id)
+        .join(User.watch)
+        .filter(AnimeWatch.anime == anime)
+        .options(contains_eager(User.watch))
+        .order_by(desc(AnimeWatch.updated))
+        .limit(limit)
+        .offset(offset)
+    )

@@ -9,6 +9,7 @@ from typing import Tuple
 from . import service
 
 from app.dependencies import (
+    get_anime,
     get_user,
     get_page,
     get_size,
@@ -20,6 +21,7 @@ from app.utils import (
 )
 
 from .schemas import (
+    UserWatchPaginationResponse,
     WatchPaginationResponse,
     AnimeWatchSearchArgs,
     WatchStatsResponse,
@@ -41,6 +43,26 @@ router = APIRouter(prefix="/watch", tags=["Watch"])
 @router.get("/{slug}", response_model=WatchResponse)
 async def watch_get(watch: AnimeWatch = Depends(verify_watch)):
     return watch
+
+
+@router.get("/{slug}/following", response_model=UserWatchPaginationResponse)
+async def get_watch_following(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+    anime: Anime = Depends(get_anime),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_anime_watch_following_total(session, user, anime)
+    watch = await service.get_anime_watch_following(
+        session, user, anime, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": watch.unique().all(),
+    }
 
 
 @router.put("/{slug}", response_model=WatchResponse)
@@ -113,10 +135,7 @@ async def random_watch_entry(
     return result
 
 
-@router.post(
-    "/{username}/list",
-    response_model=WatchPaginationResponse,
-)
+@router.post("/{username}/list", response_model=WatchPaginationResponse)
 async def user_watch_list(
     search: AnimeWatchSearchArgs,
     session: AsyncSession = Depends(get_session),
