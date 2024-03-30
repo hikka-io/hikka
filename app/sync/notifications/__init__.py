@@ -6,6 +6,7 @@ from datetime import datetime
 from app import constants
 
 from .generate import (
+    generate_anime_schedule,
     generate_comment_write,
     generate_comment_vote,
     generate_edit_update,
@@ -71,6 +72,10 @@ async def generate_notifications(session: AsyncSession):
         # Create notification for edit author if edit was denied
         if log.log_type == constants.LOG_EDIT_UPDATE:
             await generate_edit_update(session, log)
+
+        # Create batch user notifications after anime aired
+        if log.log_type == constants.LOG_SCHEDULE_ANIME:
+            await generate_anime_schedule(session, log)
 
     session.add(system_timestamp)
     await session.commit()

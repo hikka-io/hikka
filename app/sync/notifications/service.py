@@ -1,11 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
+from app import constants
 from uuid import UUID
 
 from app.models import (
     Notification,
     Collection,
+    AnimeWatch,
     Comment,
+    Anime,
     Edit,
 )
 
@@ -56,5 +59,20 @@ async def get_collection(session, content_id):
         select(Collection).filter(
             Collection.id == content_id,
             Collection.deleted == False,  # noqa: E712
+        )
+    )
+
+
+async def get_anime(session, anime_id):
+    return await session.scalar(select(Anime).filter(Anime.id == anime_id))
+
+
+async def get_anime_watch_user_ids(session: AsyncSession, anime: Anime):
+    return await session.scalars(
+        select(AnimeWatch.user_id).filter(
+            AnimeWatch.anime == anime,
+            AnimeWatch.status.in_(
+                [constants.WATCH_PLANNED, constants.WATCH_WATCHING]
+            ),
         )
     )

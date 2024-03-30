@@ -48,17 +48,41 @@ from app.models import (
 )
 
 
+async def test_mass_notification():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        anime = await session.scalar(
+            select(Anime).filter(Anime.slug == "sousou-no-frieren-ad4e3e")
+        )
+
+        user_ids = await session.scalars(
+            select(AnimeWatch.user_id).filter(
+                AnimeWatch.anime == anime,
+                AnimeWatch.status.in_(
+                    [constants.WATCH_PLANNED, constants.WATCH_WATCHING]
+                ),
+            )
+        )
+
+        print(user_ids.all())
+
+    await sessionmanager.close()
+
+
 async def test_sync_stuff():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await update_schedule_aired(session)
+        # await update_schedule_aired(session)
         # await build_schedule(session)
         # await generate_activity(session)
         # await recalculate_ranking_daily(session)
-        # await generate_notifications(session)
+        await generate_notifications(session)
         # await generate_history(session)
 
     await sessionmanager.close()
@@ -231,6 +255,7 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     asyncio.run(test_sync_stuff())
+    # asyncio.run(test_mass_notification())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())

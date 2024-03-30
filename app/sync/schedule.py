@@ -93,6 +93,15 @@ async def update_schedule_aired(session: AsyncSession):
 
         # Only create new edit and log records when needed
         if before != {} and after != {}:
+            from pprint import pprint
+
+            pprint(
+                {
+                    "before": before,
+                    "after": after,
+                }
+            )
+
             edit = Edit(
                 **{
                     "content_type": constants.CONTENT_ANIME,

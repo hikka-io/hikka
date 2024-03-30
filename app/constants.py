@@ -263,6 +263,7 @@ NOTIFICATION_EDIT_ACCEPTED = "edit_accepted"
 NOTIFICATION_EDIT_DENIED = "edit_denied"
 NOTIFICATION_EDIT_UPDATED = "edit_updated"
 NOTIFICATION_HIKKA_UPDATE = "hikka_update"
+NOTIFICATION_SCHEDULE_ANIME = "schedule_anime"
 
 # Activity intervals
 INTERVAL_DAY = "day"
