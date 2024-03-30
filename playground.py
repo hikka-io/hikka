@@ -119,14 +119,14 @@ async def test_system_notification():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        update_name = "hikka_profile_update"
+        update_name = "hikka_schedule_update"
 
         await create_hikka_update_notification(
             session,
             update_name,
-            "Розказуємо про основні зміни за останні кілька тижнів",
-            "Редизайн профілю, активність та сповіщення",
-            "https://t.me/hikka_io/10",
+            "Розповідаємо про основні зміни за останні кілька тижнів",
+            "Календар, сторінка втора, та інше",
+            "https://t.me/hikka_io/17",
         )
 
         # await delete_hikka_update_notification(session, update_name)
