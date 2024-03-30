@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from .utils import calculate_before
 from datetime import datetime
 from app import constants
+import copy
 
 from app.service import (
     get_comments_count_subquery,
@@ -240,6 +241,9 @@ async def accept_pending_edit(
     """Accept pending edit"""
 
     content = edit.content
+
+    # Fix for SQLAlchemy shenanigans
+    content.ignored_fields = copy.deepcopy(content.ignored_fields)
 
     # We recalculate before here because field may have changed
     # Just in case, let's hope it won't happen on production

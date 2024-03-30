@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, asc
 from datetime import datetime
 from app import constants
+import copy
 
 from app.models import (
     SystemTimestamp,
@@ -46,6 +47,9 @@ async def update_schedule_aired(session: AsyncSession):
             select(Anime).filter(Anime.id == schedule.anime_id)
         )
 
+        # Fix for SQLAlchemy shenanigans
+        anime.ignored_fields = copy.deepcopy(anime.ignored_fields)
+
         before = {}
         after = {}
 
@@ -58,6 +62,9 @@ async def update_schedule_aired(session: AsyncSession):
             anime.episodes_released = schedule.episode
             after["episodes_released"] = anime.episodes_released
 
+            if "episodes_released" not in anime.ignored_fields:
+                anime.ignored_fields.append("episodes_released")
+
         # Change anime status when final episode has aired
         if (
             anime.episodes_total
@@ -68,8 +75,33 @@ async def update_schedule_aired(session: AsyncSession):
             anime.status = constants.RELEASE_STATUS_FINISHED
             after["status"] = anime.status
 
+            if "status" not in anime.ignored_fields:
+                anime.ignored_fields.append("status")
+
+        # Set status to ongoing if anime just started airing
+        if (
+            schedule.episode == 1
+            and anime.episodes_released == 0
+            and anime.status == constants.RELEASE_STATUS_ANNOUNCED
+        ):
+            before["status"] = anime.status
+            anime.status = constants.RELEASE_STATUS_ONGOING
+            after["status"] = anime.status
+
+            if "status" not in anime.ignored_fields:
+                anime.ignored_fields.append("status")
+
         # Only create new edit and log records when needed
         if before != {} and after != {}:
+            from pprint import pprint
+
+            pprint(
+                {
+                    "before": before,
+                    "after": after,
+                }
+            )
+
             edit = Edit(
                 **{
                     "content_type": constants.CONTENT_ANIME,

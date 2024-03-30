@@ -22,10 +22,7 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
 
     # Do not create notification if we already did that
     if await service.get_notification(
-        session,
-        comment.author_id,
-        log.id,
-        notification_type,
+        session, comment.author_id, log.id, notification_type
     ):
         return
 

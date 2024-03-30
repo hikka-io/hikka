@@ -35,6 +35,7 @@ from app.models import (
     AnimeStaffRole,
     AnimeSchedule,
     UserEditStats,
+    Notification,
     CommentVote,
     AnimeStaff,
     AnimeWatch,
@@ -48,17 +49,65 @@ from app.models import (
 )
 
 
+async def test_mass_notification():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        anime = await session.scalar(
+            select(Anime).filter(Anime.slug == "sousou-no-frieren-ad4e3e")
+        )
+
+        olexh = await session.scalar(
+            select(User).filter(User.username == "olexh")
+        )
+
+        now = datetime.utcnow()
+
+        notification = Notification(
+            **{
+                "notification_type": constants.NOTIFICATION_SCHEDULE_ANIME,
+                "user_id": olexh.id,
+                "created": now,
+                "updated": now,
+                "log_id": None,
+                "seen": False,
+                "data": {
+                    "slug": anime.slug,
+                    "poster": anime.poster,
+                    "title_ja": anime.title_ja,
+                    "title_en": anime.title_en,
+                    "title_ua": anime.title_ua,
+                    "before": {
+                        "episodes_released": 27,
+                        "status": "ongoing",
+                    },
+                    "after": {
+                        "episodes_released": 28,
+                        "status": "finished",
+                    },
+                },
+            }
+        )
+
+        session.add(notification)
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 async def test_sync_stuff():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await update_schedule_aired(session)
+        # await update_schedule_aired(session)
         # await build_schedule(session)
         # await generate_activity(session)
         # await recalculate_ranking_daily(session)
-        # await generate_notifications(session)
+        await generate_notifications(session)
         # await generate_history(session)
 
     await sessionmanager.close()
@@ -230,7 +279,8 @@ if __name__ == "__main__":
     # asyncio.run(import_role_weights())
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
-    asyncio.run(test_sync_stuff())
+    # asyncio.run(test_sync_stuff())
+    asyncio.run(test_mass_notification())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
