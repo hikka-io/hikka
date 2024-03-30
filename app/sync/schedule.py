@@ -84,6 +84,7 @@ async def update_schedule_aired(session: AsyncSession):
             schedule.episode == 1
             and anime.episodes_released == 0
             and anime.status == constants.RELEASE_STATUS_ANNOUNCED
+            and anime.media_type != constants.MEDIA_TYPE_MOVIE
         ):
             before["status"] = anime.status
             anime.status = constants.RELEASE_STATUS_ONGOING
