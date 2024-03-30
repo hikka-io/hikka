@@ -243,7 +243,8 @@ async def accept_pending_edit(
     content = edit.content
 
     # Fix for SQLAlchemy shenanigans
-    content.ignored_fields = copy.deepcopy(content.ignored_fields)
+    if hasattr(content, "ignored_fields"):
+        content.ignored_fields = copy.deepcopy(content.ignored_fields)
 
     # We recalculate before here because field may have changed
     # Just in case, let's hope it won't happen on production
