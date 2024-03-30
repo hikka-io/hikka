@@ -184,7 +184,7 @@ async def get_anime_watch_following(
         .join(User.watch)
         .filter(AnimeWatch.anime == anime)
         .options(contains_eager(User.watch))
-        .order_by(desc(AnimeWatch.updated))
+        .order_by(desc(AnimeWatch.score), desc(AnimeWatch.updated))
         .limit(limit)
         .offset(offset)
     )
