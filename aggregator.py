@@ -6,6 +6,7 @@ from app.sync import (
     aggregator_anime_franchises,
     aggregator_anime_genres,
     aggregator_anime_roles,
+    update_schedule_build,
     aggregator_characters,
     aggregator_anime_info,
     aggregator_companies,
@@ -29,6 +30,7 @@ async def import_aggregator():
     await aggregator_anime()
     await aggregator_anime_info()
     await aggregator_anime_franchises()
+    await update_schedule_build()
     await update_search()
 
     # ToDo: improve performance
