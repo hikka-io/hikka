@@ -7,6 +7,7 @@ from app.sync import (
     update_notifications,
     update_ranking_all,
     update_activity,
+    update_schedule,
     update_ranking,
     update_history,
     update_sitemap,
@@ -23,6 +24,7 @@ def init_scheduler():
     scheduler.add_job(update_notifications, "interval", seconds=10)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
     scheduler.add_job(update_activity, "interval", seconds=10)
+    scheduler.add_job(update_schedule, "interval", minutes=5)
     scheduler.add_job(update_ranking, "interval", seconds=10)
     scheduler.add_job(update_history, "interval", seconds=10)
     scheduler.add_job(update_search, "interval", minutes=1)

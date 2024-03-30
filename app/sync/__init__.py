@@ -22,6 +22,8 @@ from .sitemap import update_sitemap
 
 from .search import update_search
 
+from .schedule import update_schedule
+
 from .email import send_emails
 
 __all__ = [
@@ -41,5 +43,6 @@ __all__ = [
     "update_weights",
     "update_sitemap",
     "update_search",
+    "update_schedule",
     "send_emails",
 ]
