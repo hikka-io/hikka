@@ -179,6 +179,11 @@ async def build_schedule(session: AsyncSession):
         await session.commit()
 
 
+async def update_schedule_build():
+    async with sessionmanager.session() as session:
+        await build_schedule(session)
+
+
 async def update_schedule():
     async with sessionmanager.session() as session:
         await update_schedule_aired(session)
