@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import sessionmanager
 from sqlalchemy import select, asc
 from datetime import datetime
 from app import constants
@@ -93,15 +94,6 @@ async def update_schedule_aired(session: AsyncSession):
 
         # Only create new edit and log records when needed
         if before != {} and after != {}:
-            from pprint import pprint
-
-            pprint(
-                {
-                    "before": before,
-                    "after": after,
-                }
-            )
-
             edit = Edit(
                 **{
                     "content_type": constants.CONTENT_ANIME,
@@ -184,3 +176,8 @@ async def build_schedule(session: AsyncSession):
             session.add(episode)
 
         await session.commit()
+
+
+async def update_schedule():
+    async with sessionmanager.session() as session:
+        await update_schedule_aired(session)

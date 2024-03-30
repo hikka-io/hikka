@@ -36,6 +36,7 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
                     "title_ja": anime.title_ja,
                     "title_en": anime.title_en,
                     "title_ua": anime.title_ua,
+                    "media_type": anime.media_type,
                     "before": log.data["before"],
                     "after": log.data["after"],
                 },
