@@ -49,49 +49,38 @@ from app.models import (
 )
 
 
-async def test_mass_notification():
+async def test_migrate_comment_vote_notification():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        anime = await session.scalar(
-            select(Anime).filter(Anime.slug == "sousou-no-frieren-ad4e3e")
+        notifications = await session.scalars(
+            select(Notification).filter(
+                Notification.notification_type
+                == constants.NOTIFICATION_COMMENT_VOTE
+            )
         )
 
-        olexh = await session.scalar(
-            select(User).filter(User.username == "olexh")
-        )
+        for notification in notifications:
+            if "username" in notification.data:
+                continue
 
-        now = datetime.utcnow()
+            log = await session.scalar(
+                select(Log).filter(Log.id == notification.log_id)
+            )
 
-        notification = Notification(
-            **{
-                "notification_type": constants.NOTIFICATION_SCHEDULE_ANIME,
-                "user_id": olexh.id,
-                "created": now,
-                "updated": now,
-                "log_id": None,
-                "seen": False,
-                "data": {
-                    "slug": anime.slug,
-                    "poster": anime.poster,
-                    "title_ja": anime.title_ja,
-                    "title_en": anime.title_en,
-                    "title_ua": anime.title_ua,
-                    "before": {
-                        "episodes_released": 27,
-                        "status": "ongoing",
-                    },
-                    "after": {
-                        "episodes_released": 28,
-                        "status": "finished",
-                    },
-                },
-            }
-        )
+            user = await session.scalar(
+                select(User).filter(User.id == log.user_id)
+            )
 
-        session.add(notification)
+            notification.data["username"] = user.username
+            notification.data["avatar"] = user.avatar
+
+            session.add(notification)
+
+            print(notification.data)
+
         await session.commit()
 
     await sessionmanager.close()
@@ -280,8 +269,8 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    # asyncio.run(test_mass_notification())
-    asyncio.run(test_system_notification())
+    asyncio.run(test_migrate_comment_vote_notification())
+    # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())

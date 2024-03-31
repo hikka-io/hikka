@@ -56,3 +56,26 @@ async def test_notification_edit_comment(
     assert notificaiton.data["user_score"] == 1
     assert notificaiton.data["new_score"] == 1
     assert notificaiton.data["old_score"] == 0
+
+    # Now change vote to test notification spam prevention
+    await request_vote(
+        client,
+        get_test_token,
+        constants.CONTENT_COMMENT,
+        response.json()["reference"],
+        -1,
+    )
+
+    # Generate notifications again
+    await generate_notifications(test_session)
+
+    # And make sure there is still only one notification
+    notifications_count = await test_session.scalar(
+        select(
+            func.count(Notification.id).filter(
+                Notification.notification_type
+                == constants.NOTIFICATION_COMMENT_VOTE
+            )
+        )
+    )
+    assert notifications_count == 1
