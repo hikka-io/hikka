@@ -6,6 +6,7 @@ from datetime import datetime
 from app import constants
 
 from .generate import (
+    generate_collection_vote,
     generate_anime_schedule,
     generate_comment_write,
     generate_comment_vote,
@@ -59,6 +60,9 @@ async def generate_notifications(session: AsyncSession):
         if log.log_type == constants.LOG_VOTE_SET:
             if log.data["content_type"] == constants.CONTENT_COMMENT:
                 await generate_comment_vote(session, log)
+
+            if log.data["content_type"] == constants.CONTENT_COLLECTION:
+                await generate_collection_vote(session, log)
 
         if log.log_type == constants.LOG_COMMENT_WRITE:
             await generate_comment_write(session, log)

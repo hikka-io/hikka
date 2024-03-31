@@ -1,12 +1,12 @@
 from app.sync.notifications import generate_notifications
-from client_requests import request_comments_write
+from client_requests import request_create_collection
 from client_requests import request_vote
 from app.models import Notification
 from sqlalchemy import select, func
 from app import constants
 
 
-async def test_notification_edit_comment(
+async def test_notification_collection_vote(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -16,15 +16,40 @@ async def test_notification_edit_comment(
     get_test_token,
     test_session,
 ):
-    # Write comment for edit
-    response = await request_comments_write(
-        client, get_dummy_token, "edit", "17", "Nice edit"
+    # Create test collection
+    response = await request_create_collection(
+        client,
+        get_dummy_token,
+        {
+            "title": "Test collection",
+            "tags": ["romance", "comedy"],
+            "content_type": "anime",
+            "description": "Description",
+            "labels_order": ["Good", "Great"],
+            "visibility": constants.COLLECTION_PUBLIC,
+            "spoiler": False,
+            "nsfw": False,
+            "content": [
+                {
+                    "slug": "fullmetal-alchemist-brotherhood-fc524a",
+                    "comment": None,
+                    "label": "Good",
+                    "order": 1,
+                },
+                {
+                    "slug": "bocchi-the-rock-9e172d",
+                    "comment": "Author comment",
+                    "label": "Great",
+                    "order": 2,
+                },
+            ],
+        },
     )
 
     await request_vote(
         client,
         get_test_token,
-        constants.CONTENT_COMMENT,
+        constants.CONTENT_COLLECTION,
         response.json()["reference"],
         1,
     )
@@ -37,7 +62,7 @@ async def test_notification_edit_comment(
         select(
             func.count(Notification.id).filter(
                 Notification.notification_type
-                == constants.NOTIFICATION_COMMENT_VOTE
+                == constants.NOTIFICATION_COLLECTION_VOTE
             )
         )
     )
@@ -47,7 +72,7 @@ async def test_notification_edit_comment(
     notificaiton = await test_session.scalar(
         select(Notification).filter(
             Notification.notification_type
-            == constants.NOTIFICATION_COMMENT_VOTE
+            == constants.NOTIFICATION_COLLECTION_VOTE
         )
     )
 
@@ -63,7 +88,7 @@ async def test_notification_edit_comment(
     await request_vote(
         client,
         get_test_token,
-        constants.CONTENT_COMMENT,
+        constants.CONTENT_COLLECTION,
         response.json()["reference"],
         -1,
     )
@@ -76,7 +101,7 @@ async def test_notification_edit_comment(
         select(
             func.count(Notification.id).filter(
                 Notification.notification_type
-                == constants.NOTIFICATION_COMMENT_VOTE
+                == constants.NOTIFICATION_COLLECTION_VOTE
             )
         )
     )
