@@ -51,6 +51,20 @@ async def count_follow_notifications(
     )
 
 
+async def count_comment_vote_notifications(
+    session: AsyncSession, user_id: User, username: str
+):
+    return await session.scalar(
+        select(func.count(Notification.id)).filter(
+            Notification.notification_type
+            == constants.NOTIFICATION_COMMENT_VOTE,
+            Notification.created > datetime.utcnow() - timedelta(hours=6),
+            Notification.data.op("->>")("username") == username,
+            Notification.user_id == user_id,
+        )
+    )
+
+
 async def get_comment(session, comment_id, hidden=False):
     return await session.scalar(
         select(Comment).filter(

@@ -12,6 +12,10 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
     if not (comment := await service.get_comment(session, log.target_id)):
         return
 
+    # Stop if user who set the vote ceised to exist
+    if not (user := await service.get_user_by_id(session, log.user_id)):
+        return
+
     # Skip if user voted for own comment
     if log.user_id == comment.author_id:
         return
@@ -23,6 +27,12 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
     # Do not create notification if we already did that
     if await service.get_notification(
         session, comment.author_id, log.id, notification_type
+    ):
+        return
+
+    # Prevent comment vote notifications spam
+    if await service.count_comment_vote_notifications(
+        session, comment.author_id, user.username
     ):
         return
 
@@ -47,6 +57,8 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
                 "user_score": log.data["user_score"],
                 "old_score": log.data["old_score"],
                 "new_score": log.data["new_score"],
+                "username": user.username,
+                "avatar": user.avatar,
             },
         }
     )
