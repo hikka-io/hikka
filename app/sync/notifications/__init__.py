@@ -12,6 +12,7 @@ from .generate import (
     generate_edit_update,
     generate_edit_accept,
     generate_edit_deny,
+    generate_follow,
 )
 
 
@@ -43,6 +44,7 @@ async def generate_notifications(session: AsyncSession):
                     constants.LOG_EDIT_ACCEPT,
                     constants.LOG_EDIT_DENY,
                     constants.LOG_VOTE_SET,
+                    constants.LOG_FOLLOW,
                 ]
             )
         )
@@ -76,6 +78,9 @@ async def generate_notifications(session: AsyncSession):
         # Create batch user notifications after anime aired
         if log.log_type == constants.LOG_SCHEDULE_ANIME:
             await generate_anime_schedule(session, log)
+
+        if log.log_type == constants.LOG_FOLLOW:
+            await generate_follow(session, log)
 
     session.add(system_timestamp)
     await session.commit()
