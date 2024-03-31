@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Notification, Log
+from datetime import timedelta
 from app import constants
 from .. import service
 
@@ -20,8 +21,12 @@ async def generate_follow(session: AsyncSession, log: Log):
         return
 
     # Prevent follow notifications spam
-    if await service.count_follow_notifications(
-        session, log.target_id, user.username
+    if await service.count_notifications_spam(
+        session,
+        log.target_id,
+        user.username,
+        notification_type,
+        timedelta(hours=6),
     ):
         return
 

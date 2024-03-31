@@ -38,27 +38,17 @@ async def get_notification(
     return await session.scalar(query.order_by(desc(Notification.created)))
 
 
-async def count_follow_notifications(
-    session: AsyncSession, user_id: User, username: str
+async def count_notifications_spam(
+    session: AsyncSession,
+    user_id: User,
+    username: str,
+    notification_type: str,
+    delta: timedelta,
 ):
     return await session.scalar(
         select(func.count(Notification.id)).filter(
-            Notification.notification_type == constants.NOTIFICATION_FOLLOW,
-            Notification.created > datetime.utcnow() - timedelta(hours=6),
-            Notification.data.op("->>")("username") == username,
-            Notification.user_id == user_id,
-        )
-    )
-
-
-async def count_comment_vote_notifications(
-    session: AsyncSession, user_id: User, username: str
-):
-    return await session.scalar(
-        select(func.count(Notification.id)).filter(
-            Notification.notification_type
-            == constants.NOTIFICATION_COMMENT_VOTE,
-            Notification.created > datetime.utcnow() - timedelta(hours=6),
+            Notification.notification_type == notification_type,
+            Notification.created > datetime.utcnow() - delta,
             Notification.data.op("->>")("username") == username,
             Notification.user_id == user_id,
         )

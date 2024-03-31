@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.comments.utils import path_to_uuid
 from app.models import Notification, Log
+from datetime import timedelta
 from app import constants
 from .. import service
 
@@ -31,8 +32,12 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
         return
 
     # Prevent comment vote notifications spam
-    if await service.count_comment_vote_notifications(
-        session, comment.author_id, user.username
+    if await service.count_notifications_spam(
+        session,
+        comment.author_id,
+        user.username,
+        notification_type,
+        timedelta(hours=6),
     ):
         return
 
