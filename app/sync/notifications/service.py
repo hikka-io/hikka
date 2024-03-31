@@ -67,12 +67,16 @@ async def get_anime(session, anime_id):
     return await session.scalar(select(Anime).filter(Anime.id == anime_id))
 
 
-async def get_anime_watch_user_ids(session: AsyncSession, anime: Anime):
+async def get_anime_watch(session: AsyncSession, anime: Anime):
     return await session.scalars(
-        select(AnimeWatch.user_id).filter(
+        select(AnimeWatch).filter(
             AnimeWatch.anime == anime,
             AnimeWatch.status.in_(
-                [constants.WATCH_PLANNED, constants.WATCH_WATCHING]
+                [
+                    constants.WATCH_PLANNED,
+                    constants.WATCH_WATCHING,
+                    constants.WATCH_ON_HOLD,
+                ]
             ),
         )
     )

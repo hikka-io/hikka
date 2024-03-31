@@ -11,23 +11,29 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
     if not (anime := await service.get_anime(session, log.target_id)):
         return
 
-    user_ids = await service.get_anime_watch_user_ids(session, anime)
+    anime_watch = await service.get_anime_watch(session, anime)
 
     # ToDo: batch check for existing notifications here
 
-    for user_id in user_ids:
+    for watch in anime_watch:
         # Do not create notification if we already did that
         if await service.get_notification(
-            session, user_id, log.id, notification_type
+            session, watch.user_id, log.id, notification_type
         ):
             continue
+
+        # Special case for planned/on hold entries
+        # We only show notification if status of anime has changed
+        if watch.status in [constants.WATCH_PLANNED, constants.WATCH_ON_HOLD]:
+            if "status" not in log.data["after"]:
+                continue
 
         notification = Notification(
             **{
                 "notification_type": notification_type,
+                "user_id": watch.user_id,
                 "created": log.created,
                 "updated": log.created,
-                "user_id": user_id,
                 "log_id": log.id,
                 "seen": False,
                 "data": {
