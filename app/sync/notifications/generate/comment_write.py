@@ -49,11 +49,13 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,
+                    "comment_author": comment.author.username,  # ToDo: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
                     "base_comment_reference": path_to_uuid(comment.path[0]),
+                    "username": comment.author.username,
+                    "avatar": comment.author.avatar,
                 },
             }
         )
@@ -100,11 +102,13 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,
+                    "comment_author": comment.author.username,  # ToDo: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
                     "base_comment_reference": path_to_uuid(comment.path[0]),
+                    "username": comment.author.username,
+                    "avatar": comment.author.avatar,
                 },
             }
         )
@@ -155,11 +159,13 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,
+                    "comment_author": comment.author.username,  # ToDo: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
                     "base_comment_reference": path_to_uuid(comment.path[0]),
+                    "username": comment.author.username,
+                    "avatar": comment.author.avatar,
                 },
             }
         )
@@ -205,11 +211,13 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,
+                    "comment_author": comment.author.username,  # ToDo: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
                     "base_comment_reference": path_to_uuid(comment.path[0]),
+                    "username": comment.author.username,
+                    "avatar": comment.author.avatar,
                 },
             }
         )
