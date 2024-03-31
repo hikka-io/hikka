@@ -57,8 +57,14 @@ async def test_migrate_comment_vote_notification():
     async with sessionmanager.session() as session:
         notifications = await session.scalars(
             select(Notification).filter(
-                Notification.notification_type
-                == constants.NOTIFICATION_COMMENT_VOTE
+                Notification.notification_type.in_(
+                    [
+                        constants.NOTIFICATION_EDIT_COMMENT,
+                        constants.NOTIFICATION_COMMENT_TAG,
+                        constants.NOTIFICATION_COLLECTION_COMMENT,
+                        constants.NOTIFICATION_COMMENT_REPLY,
+                    ]
+                )
             )
         )
 
@@ -74,6 +80,7 @@ async def test_migrate_comment_vote_notification():
                 select(User).filter(User.id == log.user_id)
             )
 
+            notification.data = copy.deepcopy(notification.data)
             notification.data["username"] = user.username
             notification.data["avatar"] = user.avatar
 
