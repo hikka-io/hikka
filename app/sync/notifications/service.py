@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func
+from datetime import datetime, timedelta
 from app import constants
 from uuid import UUID
 
@@ -10,7 +11,12 @@ from app.models import (
     Comment,
     Anime,
     Edit,
+    User,
 )
+
+
+async def get_user_by_id(session: AsyncSession, user_id: UUID):
+    return await session.scalar(select(User).filter(User.id == user_id))
 
 
 async def get_notification(
@@ -30,6 +36,19 @@ async def get_notification(
         )
 
     return await session.scalar(query.order_by(desc(Notification.created)))
+
+
+async def count_follow_notifications(
+    session: AsyncSession, user_id: User, username: str
+):
+    return await session.scalar(
+        select(func.count(Notification.id)).filter(
+            Notification.notification_type == constants.NOTIFICATION_FOLLOW,
+            Notification.created > datetime.utcnow() - timedelta(hours=6),
+            Notification.data.op("->>")("username") == username,
+            Notification.user_id == user_id,
+        )
+    )
 
 
 async def get_comment(session, comment_id, hidden=False):

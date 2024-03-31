@@ -4,6 +4,7 @@ from .comment_vote import generate_comment_vote
 from .edit_update import generate_edit_update
 from .edit_accept import generate_edit_accept
 from .edit_deny import generate_edit_deny
+from .follow import generate_follow
 
 __all__ = [
     "generate_anime_schedule",
@@ -12,4 +13,5 @@ __all__ = [
     "generate_edit_update",
     "generate_edit_accept",
     "generate_edit_deny",
+    "generate_follow",
 ]
