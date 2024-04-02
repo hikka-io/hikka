@@ -357,7 +357,7 @@ if __name__ == "__main__":
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_migrate_comment_vote_notification())
-    asyncio.run(fix_colon_in_synopsis())
+    # asyncio.run(fix_colon_in_synopsis())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
@@ -370,5 +370,6 @@ if __name__ == "__main__":
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
     # asyncio.run(test_build_schedule())
+    asyncio.run(reset_needs_update())
 
     pass
