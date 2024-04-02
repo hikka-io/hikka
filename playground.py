@@ -273,6 +273,48 @@ async def reset_needs_update():
     await sessionmanager.close()
 
 
+async def fix_colon_in_synopsis():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        now = datetime.utcnow()
+
+        anime_list = await session.scalars(
+            select(Anime).filter(Anime.synopsis_ua.contains("Джерело: ["))
+        )
+
+        for anime in anime_list:
+            before = {"synopsis_ua": anime.synopsis_ua}
+
+            anime.synopsis_ua = anime.synopsis_ua.replace(
+                "Джерело: [", "Джерело ["
+            )
+
+            after = {"synopsis_ua": anime.synopsis_ua}
+
+            edit = Edit(
+                **{
+                    "content_type": constants.CONTENT_ANIME,
+                    "status": constants.EDIT_ACCEPTED,
+                    "content_id": anime.reference,
+                    "system_edit": True,
+                    "before": before,
+                    "after": after,
+                    "created": now,
+                    "updated": now,
+                }
+            )
+
+            session.add_all([anime, edit])
+            await session.commit()
+
+            print(anime.synopsis_ua)
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -282,7 +324,7 @@ if __name__ == "__main__":
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
     # asyncio.run(test_migrate_comment_vote_notification())
-    asyncio.run(reset_needs_update())
+    asyncio.run(fix_colon_in_synopsis())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
