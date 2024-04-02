@@ -173,23 +173,6 @@ async def spring_top():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        spring_result = await session.execute(
-            select(Anime, func.count(Anime.id))
-            .join(AnimeWatch, AnimeWatch.anime_id == Anime.id)
-            .filter(AnimeWatch.status == constants.WATCH_PLANNED)
-            .filter(Anime.year == 2024, Anime.season == constants.SEASON_SPRING)
-            .group_by(Anime)
-            .order_by(func.count(Anime.id).desc())
-            .limit(10)
-        )
-
-        print("Spring 2024:")
-        for anime, list_count in spring_result:
-            print(
-                list_count,
-                f"https://hikka.io/anime/{anime.slug}",
-            )
-
         winter_result = await session.execute(
             select(Anime, func.count(Anime.id))
             .join(AnimeWatch, AnimeWatch.anime_id == Anime.id)
@@ -202,18 +185,18 @@ async def spring_top():
                     ]
                 )
             )
-            .filter(Anime.year == 2023, Anime.season == constants.SEASON_WINTER)
+            .filter(Anime.year == 2024, Anime.season == constants.SEASON_WINTER)
             .group_by(Anime)
             .order_by(func.count(Anime.id).desc())
             .limit(10)
         )
 
-        print("Winter 2023:")
+        print("Winter 2024:")
         for anime, list_count in winter_result:
-            print(
-                list_count,
-                f"https://hikka.io/anime/{anime.slug}",
-            )
+            print(list_count)
+            print(f"https://hikka.io/anime/{anime.slug}")
+            print(anime.title_ua)
+            print(anime.poster)
 
     await sessionmanager.close()
 

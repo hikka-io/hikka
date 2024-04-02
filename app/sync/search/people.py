@@ -38,6 +38,7 @@ def person_to_document(person: Person):
     return {
         "name_native": person.name_native,
         "favorites": person.favorites,
+        "synonyms": person.synonyms,
         "name_ua": person.name_ua,
         "name_en": person.name_en,
         "id": person.content_id,
