@@ -312,6 +312,39 @@ async def fix_colon_in_synopsis():
 
             print(anime.synopsis_ua)
 
+        character_list = await session.scalars(
+            select(Character).filter(
+                Character.description_ua.contains("Джерело: [")
+            )
+        )
+
+        for character in character_list:
+            before = {"description_ua": character.description_ua}
+
+            character.description_ua = character.description_ua.replace(
+                "Джерело: [", "Джерело ["
+            )
+
+            after = {"description_ua": character.description_ua}
+
+            edit = Edit(
+                **{
+                    "content_type": constants.CONTENT_CHARACTER,
+                    "status": constants.EDIT_ACCEPTED,
+                    "content_id": character.reference,
+                    "system_edit": True,
+                    "before": before,
+                    "after": after,
+                    "created": now,
+                    "updated": now,
+                }
+            )
+
+            session.add_all([character, edit])
+            await session.commit()
+
+            print(character.description_ua)
+
     await sessionmanager.close()
 
 
