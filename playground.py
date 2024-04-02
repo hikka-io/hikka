@@ -10,6 +10,7 @@ from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
 from app.sync import update_search
+from sqlalchemy import update
 from datetime import datetime
 from app.sync import sitemap
 from app.sync import email
@@ -41,7 +42,9 @@ from app.models import (
     AnimeWatch,
     Collection,
     Favourite,
+    Character,
     Comment,
+    Person,
     Anime,
     User,
     Edit,
@@ -251,6 +254,25 @@ async def test_build_schedule():
     await sessionmanager.close()
 
 
+async def reset_needs_update():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        await session.execute(
+            update(Character).values(needs_search_update=True)
+        )
+
+        await session.commit()
+
+        await session.execute(update(Person).values(needs_search_update=True))
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -259,7 +281,8 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    asyncio.run(test_migrate_comment_vote_notification())
+    # asyncio.run(test_migrate_comment_vote_notification())
+    asyncio.run(reset_needs_update())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
