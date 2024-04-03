@@ -59,7 +59,7 @@ class CollectionsListArgs(CustomModel):
 
 
 class CollectionArgs(CustomModel):
-    description: str = Field(min_length=3, max_length=8192)
+    description: str = Field(min_length=3, max_length=16384)
     title: str = Field(min_length=3, max_length=255)
     tags: list[str] = Field(max_length=3)
     visibility: CollectionVisibilityEnum

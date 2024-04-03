@@ -35,21 +35,15 @@ async def update_characters_settings(index):
 
 
 def character_to_document(character: Character):
-    synonyms = character.synonyms
-
-    # Test fix for better name search
-    if character.name_ua and len(character.name_ua.split(" ")) == 2:
-        synonyms = [" ".join(character.name_ua.split(" ")[::-1])] + synonyms
-
     return {
         "favorites": character.favorites,
+        "synonyms": character.synonyms,
         "name_ua": character.name_ua,
         "name_en": character.name_en,
         "name_ja": character.name_ja,
         "id": character.content_id,
         "image": character.image,
         "slug": character.slug,
-        "synonyms": synonyms,
     }
 
 
