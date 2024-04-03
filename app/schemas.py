@@ -224,6 +224,7 @@ class WatchResponseBase(CustomModel):
 
 
 class AnimeResponse(CustomModel):
+    airing_seasons: list
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]

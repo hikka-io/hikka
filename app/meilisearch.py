@@ -16,24 +16,24 @@ async def search(
 ):
     settings = get_settings()
 
-    try:
-        async with AsyncClient(**settings.meilisearch) as client:
-            index = client.index(content_index)
+    # try:
+    async with AsyncClient(**settings.meilisearch) as client:
+        index = client.index(content_index)
 
-            result = await index.search(
-                hits_per_page=size,
-                filter=filter,
-                query=query,
-                sort=sort,
-                page=page,
-            )
+        result = await index.search(
+            hits_per_page=size,
+            filter=filter,
+            query=query,
+            sort=sort,
+            page=page,
+        )
 
-            return {
-                "pagination": pagination_dict(
-                    result.total_hits, result.page, result.hits_per_page
-                ),
-                "list": result.hits,
-            }
+        return {
+            "pagination": pagination_dict(
+                result.total_hits, result.page, result.hits_per_page
+            ),
+            "list": result.hits,
+        }
 
-    except MeilisearchError:
-        raise Abort("search", "query-down")
+    # except MeilisearchError:
+    #     raise Abort("search", "query-down")

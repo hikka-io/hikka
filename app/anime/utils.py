@@ -47,20 +47,23 @@ def build_anime_filters(search: AnimeSearchArgs):
                     f"airing_seasons = {season_tmp}_{year_tmp}"
                 )
 
-    year = " AND ".join(year)
-    season = " OR ".join(season)
-    airing_seasons = " OR ".join(airing_seasons)
+    # I really hate this but we need it for multiseason titles
+    # https://www.meilisearch.com/docs/reference/api/search#filter
+    convoluted_filters = (
+        [*year, *season]
+        if len(airing_seasons) == 0
+        else [[*year, *season], airing_seasons]
+    )
 
     search_filters = [
-        # Special logic to handle both seasons/years as well as airing seasons
-        *[f"({year} AND ({season})) OR ({airing_seasons})"],
-        *translated,
-        *media_type,
-        *producers,
-        *rating,
-        *status,
-        *source,
-        *studios,
+        translated,
+        media_type,
+        producers,
+        rating,
+        status,
+        source,
+        studios,
+        *convoluted_filters,
         *genres,
         *score,
     ]
