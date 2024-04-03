@@ -225,11 +225,6 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
-    if search.years[0]:
-        query = query.filter(Anime.year >= search.years[0])
-
-    if search.years[1]:
-        query = query.filter(Anime.year <= search.years[1])
 
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
@@ -237,14 +232,18 @@ def anime_search_filter(
     if search.score[1]:
         query = query.filter(Anime.score <= search.score[1])
 
-    if len(search.season) > 0:
-        query = query.filter(Anime.season.in_(search.season))
-
     if len(search.rating) > 0:
         query = query.filter(Anime.rating.in_(search.rating))
 
     # In some cases, like on front page, we would want to hide NSFW content
-    if len(search.rating) == 0 and len(search.genres) == 0 and hide_nsfw:
+    if (
+        len(search.rating) == 0
+        and all(
+            nsfw_genre not in search.genres
+            for nsfw_genre in ["ecchi", "erotica", "hentai"]
+        )
+        and hide_nsfw
+    ):
         # No hentai (RX) by default
         # We are doing rating == None because PostgreSQL skips rows with
         # rating set to null without this check
@@ -287,6 +286,44 @@ def anime_search_filter(
                 ]
             )
         )
+
+    airing_seasons_filters = []
+    season_filters = []
+
+    # Special filter for multi season titles
+    if (
+        search.include_multiseason
+        and search.years[0] is not None
+        and search.years[1] is not None
+    ):
+        for year in range(search.years[0], search.years[1] + 1):
+            for season in search.season:
+                airing_seasons_filters.append(
+                    Anime.airing_seasons.op("?")(f"{season}_{year}")
+                )
+
+    if search.years[0]:
+        season_filters.append(Anime.year >= search.years[0])
+
+    if search.years[1]:
+        season_filters.append(Anime.year <= search.years[1])
+
+    if len(search.season) > 0:
+        season_filters.append(Anime.season.in_(search.season))
+
+    # ToDo: make this code cleaner
+    convoluted_filters = []
+
+    if len(season_filters) > 0:
+        convoluted_filters.append(and_(*season_filters))
+
+    if len(airing_seasons_filters) > 0:
+        convoluted_filters.append(or_(*airing_seasons_filters))
+
+    if len(convoluted_filters) > 1:
+        convoluted_filters = [or_(*convoluted_filters)]
+
+    query = query.filter(*convoluted_filters)
 
     return query
 

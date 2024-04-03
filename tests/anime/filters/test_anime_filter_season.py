@@ -9,7 +9,7 @@ async def test_anime_filter_season(
     response = await request_anime_search(client, {"season": ["fall"]})
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 2
+    assert len(response.json()["list"]) == 3
     assert response.json()["list"][0]["season"] == "fall"
 
     # Get anime with summer season
@@ -25,7 +25,7 @@ async def test_anime_filter_season(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()["list"]) == 4
+    assert len(response.json()["list"]) == 5
     assert response.json()["list"][0]["season"] == "summer"
     assert response.json()["list"][1]["season"] == "fall"
 

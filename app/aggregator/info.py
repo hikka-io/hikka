@@ -472,11 +472,28 @@ async def update_anime_info(session, anime, data):
 
     # Update year and season fields
     if anime.start_date:
-        year = anime.start_date.year
-        season = utils.get_season(anime.start_date)
+        # Special case for titles starting in less than 7 days before new season
+        start_date = anime.start_date
+        if utils.days_until_next_month(start_date) < 7:
+            start_date = utils.get_next_month(start_date)
+
+        year = start_date.year
+        season = utils.get_season(start_date)
+        airing_seasons = []
+
+        if anime.start_date:
+            if (
+                anime.status == constants.RELEASE_STATUS_ONGOING
+                or anime.end_date is not None
+            ):
+                airing_seasons = utils.get_airing_seasons(
+                    anime.start_date, anime.end_date
+                )
+
     else:
         year = None
         season = None
+        airing_seasons = []
 
     # Get external list and translated_ua status
     translated_ua = process_translated_ua(data)
@@ -494,6 +511,7 @@ async def update_anime_info(session, anime, data):
             setattr(anime, field, value)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
+    anime.airing_seasons = airing_seasons
     anime.scored_by = data["scored_by"]
     anime.score = data["score"]
     anime.stats = data["stats"]
