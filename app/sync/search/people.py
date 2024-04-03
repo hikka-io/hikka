@@ -35,20 +35,14 @@ async def update_people_settings(index):
 
 
 def person_to_document(person: Person):
-    synonyms = person.synonyms
-
-    # Test fix for better name search
-    if person.name_en and len(person.name_en.split(" ")) == 2:
-        synonyms = [" ".join(person.name_en.split(" ")[::-1])] + synonyms
-
     return {
         "name_native": person.name_native,
         "favorites": person.favorites,
+        "synonyms": person.synonyms,
         "name_ua": person.name_ua,
         "name_en": person.name_en,
         "id": person.content_id,
         "image": person.image,
-        "synonyms": synonyms,
         "slug": person.slug,
     }
 
