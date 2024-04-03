@@ -244,7 +244,7 @@ def anime_search_filter(
         query = query.filter(Anime.rating.in_(search.rating))
 
     # In some cases, like on front page, we would want to hide NSFW content
-    if len(search.rating) == 0 and len(search.genres) and hide_nsfw:
+    if len(search.rating) == 0 and len(search.genres) == 0 and hide_nsfw:
         # No hentai (RX) by default
         # We are doing rating == None because PostgreSQL skips rows with
         # rating set to null without this check
