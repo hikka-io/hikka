@@ -238,7 +238,7 @@ def anime_search_filter(
     # In some cases, like on front page, we would want to hide NSFW content
     if (
         len(search.rating) == 0
-        and not all(
+        and all(
             nsfw_genre not in search.genres
             for nsfw_genre in ["ecchi", "erotica", "hentai"]
         )
@@ -311,9 +311,19 @@ def anime_search_filter(
     if len(search.season) > 0:
         season_filters.append(Anime.season.in_(search.season))
 
-    query = query.filter(
-        or_(and_(*season_filters), or_(*airing_seasons_filters))
-    )
+    # ToDo: make this code cleaner
+    convoluted_filters = []
+
+    if len(season_filters) > 0:
+        convoluted_filters.append(and_(*season_filters))
+
+    if len(airing_seasons_filters) > 0:
+        convoluted_filters.append(or_(*airing_seasons_filters))
+
+    if len(convoluted_filters) > 1:
+        convoluted_filters = [or_(*convoluted_filters)]
+
+    query = query.filter(*convoluted_filters)
 
     return query
 

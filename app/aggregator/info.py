@@ -504,7 +504,6 @@ async def update_anime_info(session, anime, data):
         ("season", season),
         ("translated_ua", translated_ua),
         ("external", external),
-        ("airing_seasons", airing_seasons),
     ]:
         if getattr(anime, field) != value and field not in anime.ignored_fields:
             before[field] = getattr(anime, field)
@@ -512,6 +511,7 @@ async def update_anime_info(session, anime, data):
             setattr(anime, field, value)
 
     anime.aggregator_updated = utils.from_timestamp(data["updated"])
+    anime.airing_seasons = airing_seasons
     anime.scored_by = data["scored_by"]
     anime.score = data["score"]
     anime.stats = data["stats"]
