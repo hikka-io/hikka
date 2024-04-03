@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from functools import lru_cache
 from urllib.parse import quote
 from dynaconf import Dynaconf
@@ -189,22 +190,54 @@ def pagination_dict(total, page, limit):
 
 # Convert month to season str
 def get_season(date):
+    # Anime seasons start from first month of the year
     season_map = {
-        12: constants.SEASON_WINTER,
         1: constants.SEASON_WINTER,
         2: constants.SEASON_WINTER,
-        3: constants.SEASON_SPRING,
+        3: constants.SEASON_WINTER,
         4: constants.SEASON_SPRING,
         5: constants.SEASON_SPRING,
-        6: constants.SEASON_SUMMER,
+        6: constants.SEASON_SPRING,
         7: constants.SEASON_SUMMER,
         8: constants.SEASON_SUMMER,
-        9: constants.SEASON_FALL,
+        9: constants.SEASON_SUMMER,
         10: constants.SEASON_FALL,
         11: constants.SEASON_FALL,
+        12: constants.SEASON_FALL,
     }
 
     return season_map.get(date.month) if date else None
+
+
+# Get datetime for next month since provided datetime
+def get_next_month(date):
+    return date.replace(day=1) + relativedelta(months=1)
+
+
+# I hate overly discriptive function names
+def days_until_next_month(date):
+    return (get_next_month(date) - date).days
+
+
+# Get list of seasons anime aired in for provided range of dates
+def get_airing_seasons(start_date: datetime, end_date: datetime | None):
+    end_date = datetime.utcnow() if not end_date else end_date
+
+    airing_seasons = []
+    date = start_date
+
+    if days_until_next_month(date) < 7:
+        date = get_next_month(date)
+
+    while date <= end_date:
+        season = [get_season(date), date.year]
+
+        if season not in airing_seasons:
+            airing_seasons.append(season)
+
+        date = get_next_month(date)
+
+    return [f"{entry[0]}_{entry[1]}" for entry in airing_seasons]
 
 
 # Function to check captcha

@@ -19,12 +19,6 @@ def build_anime_filters(search: AnimeSearchArgs):
     score = []
     year = []
 
-    if search.years[0]:
-        year.append([f"year>={search.years[0]}"])
-
-    if search.years[1]:
-        year.append([f"year<={search.years[1]}"])
-
     if search.score[0] and search.score[0] > 0:
         score.append([f"score>={search.score[0]}"])
 
@@ -34,17 +28,40 @@ def build_anime_filters(search: AnimeSearchArgs):
     if search.only_translated:
         translated = ["translated_ua = true"]
 
+    if search.years[0]:
+        year.append(f"year>={search.years[0]}")
+
+    if search.years[1]:
+        year.append(f"year<={search.years[1]}")
+
+    # Special filter for multi season titles
+    airing_seasons = []
+    if (
+        search.include_multiseason
+        and search.years[0] is not None
+        and search.years[1] is not None
+    ):
+        for year_tmp in range(search.years[0], search.years[1] + 1):
+            for season_tmp in search.season:
+                airing_seasons.append(
+                    f"airing_seasons = {season_tmp}_{year_tmp}"
+                )
+
+    year = " AND ".join(year)
+    season = " OR ".join(season)
+    airing_seasons = " OR ".join(airing_seasons)
+
     search_filters = [
-        translated,
-        rating,
-        status,
-        source,
-        media_type,
-        season,
-        producers,
-        studios,
+        # Special logic to handle both seasons/years as well as airing seasons
+        *[f"({year} AND ({season})) OR ({airing_seasons})"],
+        *translated,
+        *media_type,
+        *producers,
+        *rating,
+        *status,
+        *source,
+        *studios,
         *genres,
-        *year,
         *score,
     ]
 

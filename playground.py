@@ -5,21 +5,24 @@ from app.sync.ranking import recalculate_ranking_all
 from app.service import calculate_watch_duration
 from meilisearch_python_sdk import AsyncClient
 from app.edit.utils import calculate_before
+from datetime import datetime, timedelta
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from sqlalchemy import make_url, func
 from app.sync import update_search
 from sqlalchemy import update
-from datetime import datetime
 from app.sync import sitemap
 from app.sync import email
 from pprint import pprint
 from app import constants
+from app import utils
 import asyncio
 import math
 import copy
 import json
+
+from app.sync.search.anime import update_search_anime
 
 from app.sync.schedule import (
     update_schedule_aired,
@@ -348,6 +351,67 @@ async def fix_colon_in_synopsis():
     await sessionmanager.close()
 
 
+async def test_multiseason_range():
+    # start_date = datetime(1999, 10, 20)
+    # end_date = None
+    start_date = datetime(2023, 9, 29)
+    end_date = datetime(2024, 3, 22)
+
+    airing_seasons = utils.get_airing_seasons(start_date, end_date)
+
+    pprint(airing_seasons)
+
+
+async def seasons_fix():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    async with sessionmanager.session() as session:
+        anime_list = await session.scalars(
+            select(Anime).filter(Anime.start_date != None)  # noqa: E711
+        )
+
+        for anime in anime_list:
+            start_date = anime.start_date
+            if utils.days_until_next_month(start_date) < 7:
+                start_date = utils.get_next_month(start_date)
+
+            airing_seasons = []
+
+            if (
+                anime.status == constants.RELEASE_STATUS_ONGOING
+                or anime.end_date is not None
+            ):
+                airing_seasons = utils.get_airing_seasons(
+                    anime.start_date, anime.end_date
+                )
+
+            anime.year = start_date.year
+            anime.season = utils.get_season(start_date)
+            anime.airing_seasons = airing_seasons
+
+            print(f"Fixed season for {anime.title_ja}")
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
+async def anime_needs_update():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    # await update_search_anime()
+
+    async with sessionmanager.session() as session:
+        await session.execute(update(Anime).values(needs_search_update=True))
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -370,6 +434,9 @@ if __name__ == "__main__":
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
     # asyncio.run(test_build_schedule())
-    asyncio.run(reset_needs_update())
+    # asyncio.run(reset_needs_update())
+    # asyncio.run(test_multiseason_range())
+    asyncio.run(seasons_fix())
+    # asyncio.run(anime_needs_update())
 
     pass

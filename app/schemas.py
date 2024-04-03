@@ -145,6 +145,7 @@ class PasswordArgs(CustomModel):
 
 
 class AnimeSearchArgsBase(CustomModel):
+    include_multiseason: bool = False
     only_translated: bool = False
 
     years: list[PositiveInt | None] | None = Field(

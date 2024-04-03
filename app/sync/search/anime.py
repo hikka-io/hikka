@@ -17,6 +17,7 @@ async def update_anime_settings(index):
             filterable_attributes=[
                 "episodes_released",
                 "episodes_total",
+                "airing_seasons",
                 "translated_ua",
                 "media_type",
                 "producers",
@@ -90,6 +91,7 @@ def anime_to_document(anime: Anime):
         "start_date": to_timestamp(anime.start_date),
         "episodes_released": anime.episodes_released,
         "episodes_total": anime.episodes_total,
+        "airing_seasons": anime.airing_seasons,
         "season": get_season(anime.start_date),
         "translated_ua": anime.translated_ua,
         "media_type": anime.media_type,
@@ -105,8 +107,8 @@ def anime_to_document(anime: Anime):
         "id": anime.content_id,
         "producers": producers,
         "score": anime.score,
-        "studios": studios,
         "slug": anime.slug,
+        "studios": studios,
     }
 
 

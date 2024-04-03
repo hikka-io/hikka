@@ -225,20 +225,12 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
-    if search.years[0]:
-        query = query.filter(Anime.year >= search.years[0])
-
-    if search.years[1]:
-        query = query.filter(Anime.year <= search.years[1])
 
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Anime.score <= search.score[1])
-
-    if len(search.season) > 0:
-        query = query.filter(Anime.season.in_(search.season))
 
     if len(search.rating) > 0:
         query = query.filter(Anime.rating.in_(search.rating))
@@ -294,6 +286,34 @@ def anime_search_filter(
                 ]
             )
         )
+
+    airing_seasons_filters = []
+    season_filters = []
+
+    # Special filter for multi season titles
+    if (
+        search.include_multiseason
+        and search.years[0] is not None
+        and search.years[1] is not None
+    ):
+        for year in range(search.years[0], search.years[1] + 1):
+            for season in search.season:
+                airing_seasons_filters.append(
+                    Anime.airing_seasons.op("?")(f"{season}_{year}")
+                )
+
+    if search.years[0]:
+        season_filters.append(Anime.year >= search.years[0])
+
+    if search.years[1]:
+        season_filters.append(Anime.year <= search.years[1])
+
+    if len(search.season) > 0:
+        season_filters.append(Anime.season.in_(search.season))
+
+    query = query.filter(
+        or_(and_(*season_filters), or_(*airing_seasons_filters))
+    )
 
     return query
 
