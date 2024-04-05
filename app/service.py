@@ -330,7 +330,9 @@ def anime_search_filter(
 
 def build_order_by(sort: list[str]):
     order_mapping = {
+        "episodes_total": Anime.episodes_total,
         "watch_episodes": AnimeWatch.episodes,
+        "watch_updated": AnimeWatch.updated,
         "watch_created": AnimeWatch.created,
         "watch_score": AnimeWatch.score,
         "media_type": Anime.media_type,
