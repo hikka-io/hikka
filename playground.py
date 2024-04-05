@@ -55,7 +55,7 @@ from app.models import (
 )
 
 
-async def test_migrate_comment_vote_notification():
+async def migrate_notification():
     settings = get_settings()
 
     sessionmanager.init(settings.database.endpoint)
@@ -65,17 +65,16 @@ async def test_migrate_comment_vote_notification():
             select(Notification).filter(
                 Notification.notification_type.in_(
                     [
-                        constants.NOTIFICATION_EDIT_COMMENT,
-                        constants.NOTIFICATION_COMMENT_TAG,
-                        constants.NOTIFICATION_COLLECTION_COMMENT,
-                        constants.NOTIFICATION_COMMENT_REPLY,
+                        constants.NOTIFICATION_EDIT_ACCEPTED,
+                        constants.NOTIFICATION_EDIT_DENIED,
+                        constants.NOTIFICATION_EDIT_UPDATED,
                     ]
                 )
             )
         )
 
         for notification in notifications:
-            if "username" in notification.data:
+            if "avatar" in notification.data:
                 continue
 
             log = await session.scalar(
@@ -87,7 +86,6 @@ async def test_migrate_comment_vote_notification():
             )
 
             notification.data = copy.deepcopy(notification.data)
-            notification.data["username"] = user.username
             notification.data["avatar"] = user.avatar
 
             session.add(notification)
@@ -420,7 +418,7 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    # asyncio.run(test_migrate_comment_vote_notification())
+    asyncio.run(migrate_notification())
     # asyncio.run(fix_colon_in_synopsis())
     # asyncio.run(test_system_notification())
     # asyncio.run(run_search())
@@ -436,7 +434,7 @@ if __name__ == "__main__":
     # asyncio.run(test_build_schedule())
     # asyncio.run(reset_needs_update())
     # asyncio.run(test_multiseason_range())
-    asyncio.run(seasons_fix())
+    # asyncio.run(seasons_fix())
     # asyncio.run(anime_needs_update())
 
     pass

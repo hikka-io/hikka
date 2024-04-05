@@ -39,6 +39,7 @@ async def generate_edit_deny(session: AsyncSession, log: Log):
             "data": {
                 "description": edit.description,
                 "username": log.user.username,
+                "avatar": log.user.avatar,
                 "edit_id": edit.edit_id,
             },
         }
