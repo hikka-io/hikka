@@ -38,8 +38,9 @@ async def generate_edit_accept(session: AsyncSession, log: Log):
             "seen": False,
             "data": {
                 "description": edit.description,
-                "username": log.user.username,
                 "edit_id": edit.edit_id,
+                "username": log.user.username,
+                "avatar": log.user.avatar,
             },
         }
     )
