@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, delete, func
+from sqlalchemy import select, desc, delete, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from datetime import datetime
@@ -6,8 +6,8 @@ from app import constants
 from uuid import UUID
 
 from .schemas import (
-    CollectionArgs,
     CollectionsListArgs,
+    CollectionArgs,
 )
 
 from app.service import (
@@ -122,6 +122,26 @@ async def collections_list_filter(
 
     if args.only_public:
         visibility = [constants.COLLECTION_PUBLIC]
+
+    # Here we look up for collections with specified content present
+    if len(args.content) > 0:
+        # Get content model and fetch content ids for provided slugs
+        content_model = content_type_to_content_class[args.content_type]
+        content_ids = await session.scalars(
+            select(content_model.id).filter(
+                content_model.slug.in_(args.content)
+            )
+        )
+
+        # Here we use similar logic to anime genres filter
+        query = query.join(CollectionContent).filter(
+            and_(
+                *[
+                    CollectionContent.content_id == content_id
+                    for content_id in content_ids
+                ]
+            )
+        )
 
     query = query.filter(
         Collection.visibility.in_(visibility),

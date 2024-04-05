@@ -29,6 +29,7 @@ class CollectionContentArgs(CustomModel):
 
 class CollectionsListArgs(CustomModel):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
+    content: list[str] = Field([], max_length=1)
     content_type: ContentTypeEnum | None = None
     author: str | None = None
     only_public: bool = True

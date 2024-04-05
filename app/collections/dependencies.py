@@ -24,6 +24,16 @@ async def validate_collections_list_args(
     if args.author and not await get_user_by_username(session, args.author):
         raise Abort("collections", "author-not-found")
 
+    if len(args.content) > 0:
+        if not args.content_type:
+            raise Abort("collections", "empty-content-type")
+
+        # Make sure all provided content do exist in our catabase
+        if len(args.content) != await service.count_content(
+            session, args.content_type, args.content
+        ):
+            raise Abort("collections", "bad-content")
+
     return args
 
 
