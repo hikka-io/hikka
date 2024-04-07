@@ -44,3 +44,16 @@ async def get_user_activity(session: AsyncSession, user: User) -> User:
         )
         .order_by(desc(Activity.timestamp))
     )
+
+
+async def users_meilisearch(
+    session: AsyncSession,
+    meilisearch_result: dict,
+):
+    usernames = [user["username"] for user in meilisearch_result["list"]]
+
+    return await session.scalars(
+        select(User)
+        .filter(User.username.in_(usernames))
+        .order_by(desc(User.created))
+    )

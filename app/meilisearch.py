@@ -10,7 +10,7 @@ async def search(
     content_index,
     query=None,
     sort=None,
-    page=None,
+    page=1,
     filter=None,
     size=constants.SEARCH_RESULT_SIZE,
 ):
