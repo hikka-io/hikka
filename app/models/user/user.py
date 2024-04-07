@@ -1,4 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime, timedelta, UTC
 from ..mixins import NeedsSearchUpdateMixin
 from sqlalchemy.orm import query_expression
@@ -30,6 +31,7 @@ class User(Base, NeedsSearchUpdateMixin):
     last_username_change: Mapped[datetime] = mapped_column(nullable=True)
     last_email_change: Mapped[datetime] = mapped_column(nullable=True)
 
+    ignored_notifications: Mapped[list] = mapped_column(JSONB, default=[])
     updated: Mapped[datetime] = mapped_column(nullable=True)
     last_active: Mapped[datetime]
     created: Mapped[datetime]
@@ -51,38 +53,27 @@ class User(Base, NeedsSearchUpdateMixin):
     )
 
     following: Mapped[list["Follow"]] = relationship(
-        foreign_keys="[Follow.user_id]",
-        back_populates="user",
+        foreign_keys="[Follow.user_id]", back_populates="user"
     )
 
-    # favourite: Mapped[list["AnimeFavourite"]] = relationship(
-    #     foreign_keys="[AnimeFavourite.user_id]",
-    #     back_populates="user",
-    # )
-
     watch: Mapped[list["AnimeWatch"]] = relationship(
-        foreign_keys="[AnimeWatch.user_id]",
-        back_populates="user",
+        foreign_keys="[AnimeWatch.user_id]", back_populates="user"
     )
 
     oauth_providers: Mapped[list["UserOAuth"]] = relationship(
-        foreign_keys="[UserOAuth.user_id]",
-        back_populates="user",
+        foreign_keys="[UserOAuth.user_id]", back_populates="user"
     )
 
     edits: Mapped[list["Edit"]] = relationship(
-        foreign_keys="[Edit.author_id]",
-        back_populates="author",
+        foreign_keys="[Edit.author_id]", back_populates="author"
     )
 
     comments: Mapped[list["Comment"]] = relationship(
-        foreign_keys="[Comment.author_id]",
-        back_populates="author",
+        foreign_keys="[Comment.author_id]", back_populates="author"
     )
 
     decisions: Mapped[list["Edit"]] = relationship(
-        foreign_keys="[Edit.moderator_id]",
-        back_populates="moderator",
+        foreign_keys="[Edit.moderator_id]", back_populates="moderator"
     )
     avatar_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),

@@ -1,5 +1,6 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore
-from pydantic import Field
+from pydantic import Field, field_validator
+from app import constants
 from enum import Enum
 
 
@@ -13,6 +14,23 @@ class ImportWatchStatusEnum(str, Enum):
 
 
 # Args
+class IgnoredNotificationsArgs(CustomModel):
+    ignored_notifications: list[str]
+
+    @field_validator("ignored_notifications")
+    def validate_sort(cls, ignored_notifications):
+        if len(set(ignored_notifications)) != len(ignored_notifications):
+            raise ValueError("Duplicated notification type")
+
+        if any(
+            notification_type not in constants.NOTIFICATION_TYPES
+            for notification_type in ignored_notifications
+        ):
+            raise ValueError("Unknown notification type")
+
+        return ignored_notifications
+
+
 class DescriptionArgs(CustomModel):
     description: str | None = Field(
         default=None, max_length=140, examples=["Hikka"]
@@ -31,3 +49,8 @@ class ImportAnimeArgs(CustomModelExtraIgnore):
 class ImportAnimeListArgs(CustomModelExtraIgnore):
     anime: list[ImportAnimeArgs]
     overwrite: bool
+
+
+# Responses
+class IgnoredNotificationsResponse(CustomModel):
+    ignored_notifications: list[str]

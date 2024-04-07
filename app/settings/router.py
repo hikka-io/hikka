@@ -20,6 +20,8 @@ from app.service import (
 )
 
 from .schemas import (
+    IgnoredNotificationsResponse,
+    IgnoredNotificationsArgs,
     ImportAnimeListArgs,
     DescriptionArgs,
 )
@@ -118,3 +120,27 @@ async def import_watch(
     )
 
     return {"success": True}
+
+
+@router.put(
+    "/notifications",
+    response_model=IgnoredNotificationsResponse,
+    summary="Change ignored notification types",
+)
+async def change_ignored_notifications(
+    args: IgnoredNotificationsArgs,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    return await service.set_ignored_notifications(
+        session, user, args.ignored_notifications
+    )
+
+
+@router.get(
+    "/notifications",
+    response_model=IgnoredNotificationsResponse,
+    summary="Get ignored notification types",
+)
+async def get_ignored_notifications(user: User = Depends(auth_required())):
+    return user

@@ -190,3 +190,26 @@ async def import_watch_list(
             user,
             data={"imported": imported, "overwrite": args.overwrite},
         )
+
+
+async def set_ignored_notifications(
+    session: AsyncSession, user: User, ignored_notifications: list[str]
+):
+    """Changed ignored notifications"""
+
+    log_before = user.ignored_notifications
+    user.ignored_notifications = ignored_notifications
+    log_after = user.ignored_notifications
+
+    session.add(user)
+    await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_IGNORED_NOTIFICATIONS,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
+
+    return user
