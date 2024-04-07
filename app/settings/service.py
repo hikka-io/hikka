@@ -1,10 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ImportAnimeListArgs
-from app.utils import hashpwd, chunkify
 from sqlalchemy import select
-from datetime import datetime
 from app import constants
 from . import utils
+
+from app.utils import (
+    chunkify,
+    hashpwd,
+    utcnow,
+)
 
 from app.service import (
     calculate_watch_duration,
@@ -46,7 +50,7 @@ async def set_username(session: AsyncSession, user: User, username: str):
     """Changed username"""
 
     log_before = user.username
-    user.last_username_change = datetime.utcnow()
+    user.last_username_change = utcnow()
     user.needs_search_update = True
     user.username = username
     log_after = user.username
@@ -69,7 +73,7 @@ async def set_email(session: AsyncSession, user: User, email: str):
     """Changed email"""
 
     log_before = user.email
-    user.last_email_change = datetime.utcnow()
+    user.last_email_change = utcnow()
     user.email_confirmed = False
     user.email = email
     log_after = user.email
@@ -108,7 +112,7 @@ async def import_watch_list(
 ):
     """Import watch list"""
 
-    now = datetime.utcnow()
+    now = utcnow()
     imported = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits

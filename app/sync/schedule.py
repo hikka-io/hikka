@@ -5,6 +5,11 @@ from datetime import datetime
 from app import constants
 import copy
 
+from app.utils import (
+    utcfromtimestamp,
+    utcnow,
+)
+
 from app.models import (
     SystemTimestamp,
     AnimeSchedule,
@@ -15,7 +20,7 @@ from app.models import (
 
 
 async def update_schedule_aired(session: AsyncSession):
-    now = datetime.utcnow()
+    now = utcnow()
 
     # Get system timestamp for latest known aired episode
     if not (
@@ -129,7 +134,7 @@ async def update_schedule_aired(session: AsyncSession):
 
 
 async def build_schedule(session: AsyncSession):
-    now = datetime.utcnow()
+    now = utcnow()
 
     anime_list = await session.scalars(
         select(Anime).filter(
@@ -150,7 +155,7 @@ async def build_schedule(session: AsyncSession):
         cache = {entry.episode: entry for entry in schedule}
 
         for episode_data in anime.schedule:
-            airing_at = datetime.utcfromtimestamp(episode_data["airing_at"])
+            airing_at = utcfromtimestamp(episode_data["airing_at"])
 
             if not (episode := cache.get(episode_data["episode"])):
                 episode = AnimeSchedule(

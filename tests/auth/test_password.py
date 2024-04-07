@@ -1,6 +1,6 @@
 from sqlalchemy import select, desc
 from app.models import User, Log
-from datetime import datetime
+from app.utils import utcnow
 from fastapi import status
 from app import constants
 
@@ -56,7 +56,7 @@ async def test_password_reset_expired(client, test_session, create_test_user):
         select(User).filter(User.email == "user@mail.com")
     )
 
-    user.password_reset_expire = datetime.utcnow()
+    user.password_reset_expire = utcnow()
     test_session.add(user)
     await test_session.commit()
 

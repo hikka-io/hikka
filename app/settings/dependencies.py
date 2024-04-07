@@ -1,13 +1,12 @@
+from app.utils import is_protected_username, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import UsernameArgs, EmailArgs
-from app.utils import is_protected_username
 from app.dependencies import auth_required
-from datetime import datetime, timedelta
 from app.database import get_session
+from datetime import timedelta
 from app.errors import Abort
 from app.models import User
 from fastapi import Depends
-
 
 from app.service import (
     get_user_by_username,
@@ -21,7 +20,7 @@ async def validate_set_username(
     session: AsyncSession = Depends(get_session),
 ) -> UsernameArgs:
     if user.last_username_change:
-        if user.last_username_change + timedelta(hours=1) > datetime.utcnow():
+        if user.last_username_change + timedelta(hours=1) > utcnow():
             raise Abort("settings", "username-cooldown")
 
     if is_protected_username(args.username):
@@ -39,7 +38,7 @@ async def validate_set_email(
     session: AsyncSession = Depends(get_session),
 ) -> UsernameArgs:
     if user.last_email_change:
-        if user.last_email_change + timedelta(days=1) > datetime.utcnow():
+        if user.last_email_change + timedelta(days=1) > utcnow():
             raise Abort("settings", "email-cooldown")
 
     if await get_user_by_email(session, args.email):

@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import selectinload
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 import random
 
@@ -32,7 +32,7 @@ from app.service import (
 async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
-    now = datetime.utcnow()
+    now = utcnow()
     log_type = constants.LOG_WATCH_UPDATE
 
     # Create watch record if missing
@@ -84,7 +84,7 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
     await session.delete(watch)
 
     # Update user last list update
-    user.updated = datetime.utcnow()
+    user.updated = utcnow()
     session.add(user)
 
     await create_log(

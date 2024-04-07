@@ -1,6 +1,6 @@
 from client_requests import request_create_collection
 from app.models import Collection
-from datetime import datetime
+from app.utils import utcnow
 from fastapi import status
 from app import constants
 
@@ -14,7 +14,7 @@ async def test_collections_create_limit(
     test_session,
 ):
     collections_limit = 1000
-    now = datetime.utcnow()
+    now = utcnow()
 
     for step in range(0, collections_limit + 1):
         test_session.add(

@@ -1,6 +1,6 @@
 from app.models import Character, Image
 from sqlalchemy import select
-from datetime import datetime
+from app.utils import utcnow
 from app import utils
 
 
@@ -50,7 +50,7 @@ async def save_characters(session, data):
                     image = Image(
                         **{
                             "path": character_data["image"],
-                            "created": datetime.utcnow(),
+                            "created": utcnow(),
                             "uploaded": True,
                             "ignore": False,
                         }

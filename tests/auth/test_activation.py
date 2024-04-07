@@ -1,5 +1,5 @@
 from sqlalchemy import select, desc
-from datetime import datetime
+from app.utils import utcnow
 from app.models import Log
 from fastapi import status
 from app import constants
@@ -33,7 +33,7 @@ async def test_activation_expired(
     user = create_test_user_not_activated
 
     # Force expire activation token
-    user.activation_expire = datetime.utcnow()
+    user.activation_expire = utcnow()
     test_session.add(user)
     await test_session.commit()
 
@@ -51,7 +51,7 @@ async def test_activation_resend(
 
     old_activation_token = user.activation_token
 
-    user.activation_expire = datetime.utcnow()
+    user.activation_expire = utcnow()
     test_session.add(user)
     await test_session.commit()
 

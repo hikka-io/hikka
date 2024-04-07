@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
-from datetime import datetime, timedelta
+from datetime import timedelta
+from app.utils import utcnow
 
 from app.models import (
     Activity,
@@ -32,7 +33,7 @@ async def get_user_history(
 async def get_user_activity(session: AsyncSession, user: User) -> User:
     """Get user activity"""
 
-    end = datetime.utcnow()
+    end = utcnow()
     start = end - timedelta(weeks=16)
 
     return await session.scalars(

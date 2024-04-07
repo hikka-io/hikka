@@ -1,10 +1,9 @@
 from .schemas import UploadMetadata, UploadTypeEnum
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Image, Upload
+from app.utils import get_settings, utcnow
 from sqlalchemy import select, func
 from app.service import create_log
-from app.utils import get_settings
-from datetime import datetime
 from app import constants
 from uuid import uuid4
 from . import utils
@@ -42,7 +41,7 @@ async def s3_upload_file(upload_metadata: UploadMetadata, file_path: str):
 async def count_uploads_last_day(
     session: AsyncSession, user: User, upload_type: UploadTypeEnum
 ):
-    today = utils.round_day(datetime.now())
+    today = utils.round_day(utcnow())
     return await session.scalar(
         select(func.count(Upload.id)).filter(
             Upload.user == user,
@@ -62,7 +61,7 @@ async def process_upload_file(
 
     file_path = f"/uploads/{user.username}/{upload_type.name}/{str(uuid4())}.{extension}"
 
-    now = datetime.utcnow()
+    now = utcnow()
 
     image = Image(
         **{

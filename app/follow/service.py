@@ -3,7 +3,7 @@ from sqlalchemy import select, desc, func, case
 from sqlalchemy.orm import with_expression
 from app.models import User, Follow
 from app.service import create_log
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 
 
@@ -36,7 +36,7 @@ async def follow(session: AsyncSession, followed_user: User, user: User):
     follow = Follow(
         **{
             "followed_user": followed_user,
-            "created": datetime.utcnow(),
+            "created": utcnow(),
             "user": user,
         }
     )

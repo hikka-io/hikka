@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from sqlalchemy import select
+from app.utils import utcnow
 from app.models import User
 
 
@@ -13,7 +14,7 @@ async def test_user_active(test_session, create_test_user):
     assert user.active is True
 
     # Now let's travel back into past for 10 minutes
-    user.last_active = datetime.utcnow() - timedelta(minutes=10)
+    user.last_active = utcnow() - timedelta(minutes=10)
     test_session.add(user)
     await test_session.commit()
 

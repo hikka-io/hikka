@@ -1,7 +1,7 @@
 from sqlalchemy import select, desc, delete, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 from uuid import UUID
 
@@ -234,7 +234,7 @@ async def create_collection(
     args: CollectionArgs,
     user: User,
 ):
-    now = datetime.utcnow()
+    now = utcnow()
 
     collection = Collection(
         **{
@@ -320,7 +320,7 @@ async def update_collection(
             setattr(collection, key, new_value)
             after[key] = new_value
 
-    collection.updated = datetime.utcnow()
+    collection.updated = utcnow()
     session.add(collection)
 
     if len(args.content) > 0:

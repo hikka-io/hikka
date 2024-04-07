@@ -4,6 +4,7 @@ from sqlalchemy import select, desc
 from app.models import Log
 from fastapi import status
 from app import constants
+import asyncio
 
 
 async def test_edit_update(
@@ -29,6 +30,9 @@ async def test_edit_update(
     # Check status
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["created"] == response.json()["updated"]
+
+    # Simulate delay between create/update
+    await asyncio.sleep(1)
 
     # Update created edit
     response = await request_update_edit(

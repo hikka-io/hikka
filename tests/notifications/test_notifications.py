@@ -1,8 +1,9 @@
 from client_requests import request_notifications_count
 from client_requests import request_notification_seen
 from client_requests import request_notifications
-from datetime import datetime, timedelta
 from app.models import Notification
+from datetime import timedelta
+from app.utils import utcnow
 from fastapi import status
 from app import constants
 
@@ -15,7 +16,7 @@ async def test_notifications_count(
     get_test_token,
     test_session,
 ):
-    now = datetime.utcnow()
+    now = utcnow()
     notifications = [
         Notification(
             **{

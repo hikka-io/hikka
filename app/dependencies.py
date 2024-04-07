@@ -1,11 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Header, Query, Depends
-from datetime import datetime, timedelta
 from app.database import get_session
 from app.utils import get_settings
 from app.models import User, Anime
+from datetime import timedelta
 from typing import Annotated
 from app.errors import Abort
+from app.utils import utcnow
 from app import constants
 from app import utils
 
@@ -83,7 +84,7 @@ def auth_required(permissions: list = [], optional: bool = False):
             else:
                 raise error
 
-        now = datetime.utcnow()
+        now = utcnow()
 
         if now > token.expiration:
             raise Abort("auth", "token-expired")

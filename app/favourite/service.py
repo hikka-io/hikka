@@ -4,7 +4,7 @@ from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from .schemas import ContentTypeEnum
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 
 from app.service import (
@@ -57,8 +57,8 @@ async def create_favourite(
 
     favourite = favourite_model(
         **{
-            "created": datetime.utcnow(),
             "content_id": content.id,
+            "created": utcnow(),
             "user": user,
         }
     )

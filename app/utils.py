@@ -1,9 +1,9 @@
 from dateutil.relativedelta import relativedelta
+from datetime import datetime, UTC
 from functools import lru_cache
 from urllib.parse import quote
 from dynaconf import Dynaconf
 from datetime import timezone
-from datetime import datetime
 from app.models import User
 from app import constants
 from uuid import UUID
@@ -13,6 +13,16 @@ import secrets
 import bcrypt
 import math
 import re
+
+
+# Replacement for deprecated datetime's utcnow
+def utcnow():
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
+# Replacement for deprecated datetime's utcfromtimestamp
+def utcfromtimestamp(timestamp: int):
+    return datetime.fromtimestamp(timestamp, UTC).replace(tzinfo=None)
 
 
 # Simple check for permissions
@@ -163,7 +173,7 @@ def slugify(
 
 # Convest timestamp to UTC datetime
 def from_timestamp(timestamp: int):
-    return datetime.utcfromtimestamp(timestamp) if timestamp else None
+    return utcfromtimestamp(timestamp) if timestamp else None
 
 
 # Convert datetime to timestamp
@@ -221,7 +231,7 @@ def days_until_next_month(date):
 
 # Get list of seasons anime aired in for provided range of dates
 def get_airing_seasons(start_date: datetime, end_date: datetime | None):
-    end_date = datetime.utcnow() if not end_date else end_date
+    end_date = utcnow() if not end_date else end_date
 
     airing_seasons = []
     date = start_date
@@ -359,7 +369,7 @@ def calculate_collection_ranking(score, favourite, comments, created):
         return max(boost_factor * math.exp(-decay_rate * day), 1)
 
     boost_duration_days = 30
-    now = datetime.utcnow()
+    now = utcnow()
 
     weight_score = 1
     weight_favourite = 2

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 from app import utils
 
@@ -353,7 +353,7 @@ async def process_poster(session, anime, data):
     image = Image(
         **{
             "path": data["poster"],
-            "created": datetime.utcnow(),
+            "created": utcnow(),
             "uploaded": True,
             "ignore": False,
         }
@@ -407,7 +407,7 @@ async def update_anime_info(session, anime, data):
     # things I don't like. Let's just hope tests do cover all edge cases
     # and we will rewrite this abomination one day.
 
-    now = datetime.utcnow()
+    now = utcnow()
 
     before = {}
     after = {}
