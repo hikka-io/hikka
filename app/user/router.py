@@ -88,7 +88,7 @@ async def search_users(
     args: QuerySearchArgs, session: AsyncSession = Depends(get_session)
 ):
     meilisearch_result = await meilisearch.search(
-        constants.SEARCH_INDEX_USERS, sort=["created:desc"], query=args.query
+        constants.SEARCH_INDEX_USERS, query=args.query
     )
 
     return await service.users_meilisearch(session, meilisearch_result)
