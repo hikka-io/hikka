@@ -47,6 +47,7 @@ async def set_username(session: AsyncSession, user: User, username: str):
 
     log_before = user.username
     user.last_username_change = datetime.utcnow()
+    user.needs_search_update = True
     user.username = username
     log_after = user.username
 

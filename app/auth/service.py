@@ -72,6 +72,7 @@ async def create_oauth_user(
 
     user = User(
         **{
+            "needs_search_update": True,
             "email_confirmed": email is not None,
             "role": constants.ROLE_USER,
             "password_hash": None,
@@ -115,6 +116,7 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
 
     user = User(
         **{
+            "needs_search_update": True,
             "role": constants.ROLE_NOT_ACTIVATED,
             "activation_expire": now + timedelta(hours=3),
             "activation_token": activation_token,
