@@ -1,4 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from ..mixins import NeedsSearchUpdateMixin
 from sqlalchemy.orm import query_expression
 from datetime import datetime, timedelta
 from sqlalchemy.orm import mapped_column
@@ -9,7 +10,7 @@ from sqlalchemy import String
 from ..base import Base
 
 
-class User(Base):
+class User(Base, NeedsSearchUpdateMixin):
     __tablename__ = "service_users"
 
     email: Mapped[str] = mapped_column(String(255), index=True, nullable=True)

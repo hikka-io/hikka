@@ -1,9 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.schemas import UserResponse
+from app import meilisearch
 from app.models import User
+from app import constants
 from . import service
+
+from app.schemas import (
+    QuerySearchArgs,
+    UserResponse,
+)
 
 from .schemas import (
     HistoryPaginationResponse,
@@ -75,3 +81,14 @@ async def service_user_activity(
 ):
     activity = await service.get_user_activity(session, user)
     return activity.all()[::-1]
+
+
+@router.post("/list", response_model=list[UserResponse])
+async def search_users(
+    args: QuerySearchArgs, session: AsyncSession = Depends(get_session)
+):
+    meilisearch_result = await meilisearch.search(
+        constants.SEARCH_INDEX_USERS, sort=["created:desc"], query=args.query
+    )
+
+    return await service.users_meilisearch(session, meilisearch_result)

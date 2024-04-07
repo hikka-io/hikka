@@ -11,7 +11,7 @@ class SynonymsMixin:
 
 
 class NeedsSearchUpdateMixin:
-    needs_search_update: Mapped[bool] = mapped_column(default=False)
+    needs_search_update: Mapped[bool] = mapped_column(default=True)
 
 
 class ContentMixin:

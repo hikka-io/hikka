@@ -136,6 +136,7 @@ errors = {
         "bad-content-type": ["You can't change collection content type", 400],
         "bad-order-not-consecutive": ["Order must be consecutive", 400],
         "bad-order-duplicated": ["You can't set duplicated order", 400],
+        "empty-content-type": ["Content type is not specified", 400],
         "content-limit": ["Collectio content limit violation", 400],
         "limit": ["You have reached collections limit", 400],
         "bad-order-start": ["Order must start from 1", 400],
