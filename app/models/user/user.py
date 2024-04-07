@@ -1,7 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from datetime import datetime, timedelta, UTC
 from ..mixins import NeedsSearchUpdateMixin
 from sqlalchemy.orm import query_expression
-from datetime import datetime, timedelta
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -132,4 +132,5 @@ class User(Base, NeedsSearchUpdateMixin):
 
     @hybrid_property
     def active(self):
-        return self.last_active + timedelta(minutes=10) > datetime.utcnow()
+        now = datetime.now(UTC).replace(tzinfo=None)
+        return self.last_active + timedelta(minutes=10) > now

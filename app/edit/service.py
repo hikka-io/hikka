@@ -5,7 +5,7 @@ from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 import copy
 
@@ -183,7 +183,7 @@ async def update_pending_edit(
 
     edit.before = calculate_before(edit.content, args.after)
     edit.description = args.description
-    edit.updated = datetime.now()
+    edit.updated = utcnow()
     edit.after = args.after
 
     updated_edit = {
@@ -215,7 +215,7 @@ async def close_pending_edit(
     """Close pending edit"""
 
     edit.status = constants.EDIT_CLOSED
-    edit.updated = datetime.now()
+    edit.updated = utcnow()
 
     session.add(edit)
     await session.commit()
@@ -264,8 +264,8 @@ async def accept_pending_edit(
         content.needs_search_update = True
 
     edit.status = constants.EDIT_ACCEPTED
-    edit.updated = datetime.now()
     edit.moderator = moderator
+    edit.updated = utcnow()
     edit.before = before
 
     session.add(edit)
@@ -297,7 +297,7 @@ async def create_pending_edit(
 
     before = calculate_before(content, args.after)
 
-    now = datetime.utcnow()
+    now = utcnow()
 
     edit = edit_model(
         **{
@@ -343,8 +343,8 @@ async def deny_pending_edit(
     """Deny pending edit"""
 
     edit.status = constants.EDIT_DENIED
-    edit.updated = datetime.now()
     edit.moderator = moderator
+    edit.updated = utcnow()
 
     session.add(edit)
     await session.commit()

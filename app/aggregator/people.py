@@ -1,6 +1,6 @@
 from app.models import Person, Image
 from sqlalchemy import select
-from datetime import datetime
+from app.utils import utcnow
 from app import utils
 
 
@@ -26,7 +26,7 @@ async def save_people(session, data):
                 image = Image(
                     **{
                         "path": person_data["image"],
-                        "created": datetime.utcnow(),
+                        "created": utcnow(),
                         "uploaded": True,
                         "ignore": False,
                     }

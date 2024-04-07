@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func
 from app.models import Notification, User
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 
 
@@ -14,7 +14,7 @@ async def create_hikka_update_notification(
 ):
     users = await session.scalars(select(User))
     notification_type = constants.NOTIFICATION_HIKKA_UPDATE
-    now = datetime.utcnow()
+    now = utcnow()
 
     # Get user ids to make sure we don't duplicate system notification
     user_ids = await session.scalars(

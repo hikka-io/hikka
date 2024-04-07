@@ -4,7 +4,6 @@ from app.models import User, UserOAuth
 from app.database import get_session
 from .oauth_client import OAuthError
 from app.schemas import EmailArgs
-from datetime import datetime
 from app.errors import Abort
 from fastapi import Depends
 from . import oauth
@@ -13,6 +12,7 @@ from app.utils import (
     is_protected_username,
     get_settings,
     checkpwd,
+    utcnow,
 )
 
 from app.service import (
@@ -151,7 +151,7 @@ async def validate_activation(
         raise Abort("auth", "activation-expired")
 
     # Check if activation token still valid
-    if user.activation_expire < datetime.utcnow():
+    if user.activation_expire < utcnow():
         raise Abort("auth", "activation-expired")
 
     return user
@@ -166,7 +166,7 @@ async def validate_activation_resend(
 
     # Prevent sending new activation email if previous token still valid
     if user.activation_expire:
-        if datetime.utcnow() < user.activation_expire:
+        if utcnow() < user.activation_expire:
             raise Abort("auth", "activation-valid")
 
     return user
@@ -177,7 +177,7 @@ async def validate_password_reset(
 ) -> User:
     # Prevent sending new password reset email if previous token still valid
     if user.password_reset_expire:
-        if datetime.utcnow() < user.password_reset_expire:
+        if utcnow() < user.password_reset_expire:
             raise Abort("auth", "reset-valid")
 
     return user
@@ -195,7 +195,7 @@ async def validate_password_confirm(
         raise Abort("auth", "reset-expired")
 
     # Make sure reset token is valid
-    if datetime.utcnow() > user.password_reset_expire:
+    if utcnow() > user.password_reset_expire:
         raise Abort("auth", "reset-expired")
 
     return user, confirm.password

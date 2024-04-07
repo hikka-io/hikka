@@ -2,9 +2,9 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from datetime import datetime, UTC
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
-from datetime import datetime
 from ..base import Base
 
 
@@ -19,4 +19,5 @@ class AnimeSchedule(Base, CreatedMixin, UpdatedMixin):
 
     @hybrid_property
     def time_left(self):
-        return self.airing_at - datetime.utcnow()
+        now = datetime.now(UTC).replace(tzinfo=None)
+        return self.airing_at - now

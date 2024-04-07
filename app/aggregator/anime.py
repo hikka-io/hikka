@@ -1,6 +1,6 @@
 from app.models import Anime, Image
 from sqlalchemy import select
-from datetime import datetime
+from app.utils import utcnow
 from app import utils
 
 
@@ -45,7 +45,7 @@ async def save_anime_list(session, data):
                     image = Image(
                         **{
                             "path": anime_data["poster"],
-                            "created": datetime.utcnow(),
+                            "created": utcnow(),
                             "uploaded": True,
                             "ignore": False,
                         }

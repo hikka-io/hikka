@@ -1,11 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import get_settings, utcnow
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from app.models import EmailMessage
-from app.utils import get_settings
 from functools import lru_cache
 from sqlalchemy import select
-from datetime import datetime
 from app import constants
 import aiohttp
 
@@ -60,7 +59,7 @@ async def send_email(session: AsyncSession, email: EmailMessage):
             },
         ) as response:
             if response.status == 200:
-                email.sent_time = datetime.utcnow()
+                email.sent_time = utcnow()
                 email.sent = True
 
                 session.add(email)

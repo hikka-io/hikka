@@ -1,8 +1,7 @@
 from app.models import User, UserOAuth, AuthToken
-from datetime import datetime, timedelta
-from app.utils import new_token
+from app.utils import new_token, hashpwd, utcnow
+from datetime import timedelta
 from sqlalchemy import select
-from app.utils import hashpwd
 from app import constants
 import aiofiles
 import json
@@ -21,11 +20,11 @@ async def create_user(
     email="user@mail.com",
     role=constants.ROLE_USER,
 ):
-    now = datetime.utcnow()
+    now = utcnow()
 
     user = User(
         **{
-            "activation_expire": datetime.utcnow() + timedelta(hours=3),
+            "activation_expire": utcnow() + timedelta(hours=3),
             "password_hash": hashpwd("password"),
             "activation_token": new_token(),
             "email_confirmed": activated,
@@ -45,7 +44,7 @@ async def create_user(
 
 
 async def create_oauth(test_session, user_id):
-    now = datetime.utcnow()
+    now = utcnow()
 
     oauth = UserOAuth(
         **{
@@ -64,7 +63,7 @@ async def create_oauth(test_session, user_id):
 
 
 async def create_token(test_session, email, token_secret):
-    now = datetime.utcnow()
+    now = utcnow()
 
     user = await test_session.scalar(select(User).filter(User.email == email))
 

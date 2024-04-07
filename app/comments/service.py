@@ -4,8 +4,8 @@ from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
-from datetime import datetime
 from uuid import UUID, uuid4
+from app.utils import utcnow
 from app import constants
 from app import utils
 import copy
@@ -49,7 +49,7 @@ async def create_comment(
     parent: Comment | None = None,
 ):
     comment_model = content_type_to_comment_class[content_type]
-    now = datetime.utcnow()
+    now = utcnow()
 
     comment = comment_model(
         **{
@@ -168,7 +168,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     return await session.scalar(
         select(func.count(Comment.id)).filter(
             Comment.author == author,
-            Comment.created > round_hour(datetime.utcnow()),
+            Comment.created > round_hour(utcnow()),
         )
     )
 
@@ -178,7 +178,7 @@ async def edit_comment(
     comment: Comment,
     text: str,
 ) -> Comment:
-    now = datetime.utcnow()
+    now = utcnow()
 
     old_text = comment.text
     comment.updated = now
@@ -213,7 +213,7 @@ async def edit_comment(
 
 
 async def hide_comment(session: AsyncSession, comment: Comment, user: User):
-    comment.updated = datetime.utcnow()
+    comment.updated = utcnow()
     comment.hidden_by = user
     comment.hidden = True
 

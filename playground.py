@@ -12,6 +12,7 @@ from app.database import sessionmanager
 from sqlalchemy import make_url, func
 from app.sync import update_search
 from sqlalchemy import update
+from app.utils import utcnow
 from app.sync import sitemap
 from app.sync import email
 from pprint import pprint
@@ -205,56 +206,6 @@ async def spring_top():
     await sessionmanager.close()
 
 
-async def test_build_schedule():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
-    async with sessionmanager.session() as session:
-        now = datetime.utcnow()
-
-        anime = await session.scalar(
-            select(Anime).filter(Anime.slug == "kaijuu-8-gou-fefba2")
-        )
-
-        schedule = await session.scalars(
-            select(AnimeSchedule).filter(AnimeSchedule.anime == anime)
-        )
-
-        cache = {entry.episode: entry for entry in schedule}
-
-        for episode_data in anime.schedule:
-            airing_at = datetime.utcfromtimestamp(episode_data["airing_at"])
-
-            if not (episode := cache.get(episode_data["episode"])):
-                episode = AnimeSchedule(
-                    **{
-                        "episode": episode_data["episode"],
-                        "airing_at": airing_at,
-                        "anime": anime,
-                        "created": now,
-                        "updated": now,
-                    }
-                )
-
-                print(f"Added episode #{episode.episode} for {anime.title_ja}")
-
-            if episode.airing_at != airing_at:
-                episode.airing_at = airing_at
-                episode.updated = now
-                session.add(episode)
-
-                print(
-                    f"Updated episode #{episode.episode} for {anime.title_ja}"
-                )
-
-            session.add(episode)
-
-        await session.commit()
-
-    await sessionmanager.close()
-
-
 async def reset_needs_update():
     settings = get_settings()
 
@@ -280,7 +231,7 @@ async def fix_colon_in_synopsis():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        now = datetime.utcnow()
+        now = utcnow()
 
         anime_list = await session.scalars(
             select(Anime).filter(Anime.synopsis_ua.contains("Джерело: ["))
@@ -313,38 +264,38 @@ async def fix_colon_in_synopsis():
 
             print(anime.synopsis_ua)
 
-        character_list = await session.scalars(
-            select(Character).filter(
-                Character.description_ua.contains("Джерело: [")
-            )
-        )
+        # character_list = await session.scalars(
+        #     select(Character).filter(
+        #         Character.description_ua.contains("Джерело: [")
+        #     )
+        # )
 
-        for character in character_list:
-            before = {"description_ua": character.description_ua}
+        # for character in character_list:
+        #     before = {"description_ua": character.description_ua}
 
-            character.description_ua = character.description_ua.replace(
-                "Джерело: [", "Джерело ["
-            )
+        #     character.description_ua = character.description_ua.replace(
+        #         "Джерело: [", "Джерело ["
+        #     )
 
-            after = {"description_ua": character.description_ua}
+        #     after = {"description_ua": character.description_ua}
 
-            edit = Edit(
-                **{
-                    "content_type": constants.CONTENT_CHARACTER,
-                    "status": constants.EDIT_ACCEPTED,
-                    "content_id": character.reference,
-                    "system_edit": True,
-                    "before": before,
-                    "after": after,
-                    "created": now,
-                    "updated": now,
-                }
-            )
+        #     edit = Edit(
+        #         **{
+        #             "content_type": constants.CONTENT_CHARACTER,
+        #             "status": constants.EDIT_ACCEPTED,
+        #             "content_id": character.reference,
+        #             "system_edit": True,
+        #             "before": before,
+        #             "after": after,
+        #             "created": now,
+        #             "updated": now,
+        #         }
+        #     )
 
-            session.add_all([character, edit])
-            await session.commit()
+        #     session.add_all([character, edit])
+        #     await session.commit()
 
-            print(character.description_ua)
+        #     print(character.description_ua)
 
     await sessionmanager.close()
 
@@ -431,7 +382,6 @@ if __name__ == "__main__":
     # asyncio.run(run_migrate_votes())
     # asyncio.run(test_meiliserarch_ranking())
     # asyncio.run(spring_top())
-    # asyncio.run(test_build_schedule())
     # asyncio.run(reset_needs_update())
     # asyncio.run(test_multiseason_range())
     # asyncio.run(seasons_fix())

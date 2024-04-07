@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
-from datetime import datetime, timedelta
+from datetime import timedelta
+from app.utils import utcnow
 from app import constants
 from uuid import UUID
 
@@ -48,8 +49,8 @@ async def count_notifications_spam(
     return await session.scalar(
         select(func.count(Notification.id)).filter(
             Notification.notification_type == notification_type,
-            Notification.created > datetime.utcnow() - delta,
             Notification.data.op("->>")("username") == username,
+            Notification.created > utcnow() - delta,
             Notification.user_id == user_id,
         )
     )

@@ -2,10 +2,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, asc, func
-from datetime import datetime, timedelta
 from .schemas import AnimeScheduleArgs
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
+from datetime import timedelta
+
+from app.utils import (
+    utcfromtimestamp,
+    utcnow,
+)
 
 from app.models import (
     AnimeSchedule,
@@ -24,13 +29,13 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
 
     if args.airing_range:
         airing_start = (
-            datetime.utcfromtimestamp(args.airing_range[0])
+            utcfromtimestamp(args.airing_range[0])
             if args.airing_range[0]
             else None
         )
 
         airing_end = (
-            datetime.utcfromtimestamp(args.airing_range[1])
+            utcfromtimestamp(args.airing_range[1])
             if args.airing_range[1]
             else None
         )
@@ -43,7 +48,7 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
 
     else:
         query = query.filter(
-            AnimeSchedule.airing_at >= datetime.utcnow() - timedelta(hours=6)
+            AnimeSchedule.airing_at >= utcnow() - timedelta(hours=6)
         )
 
     if args.status:

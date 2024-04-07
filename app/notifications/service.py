@@ -1,6 +1,6 @@
 from sqlalchemy import select, desc, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime
+from app.utils import utcnow
 from uuid import UUID
 
 from app.models import (
@@ -54,7 +54,7 @@ async def notification_seen(session: AsyncSession, notification: Notification):
             Notification.seen == False,  # noqa: E712
         )
         .values(
-            updated=datetime.utcnow(),
+            updated=utcnow(),
             seen=True,
         )
     )

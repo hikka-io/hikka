@@ -1,12 +1,11 @@
 from app.models import User, AuthToken, UserOAuth
+from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
-from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
-from app.utils import new_token
+from datetime import timedelta
 from sqlalchemy import select
-from app.utils import hashpwd
 from app import constants
 import secrets
 
@@ -42,7 +41,7 @@ async def create_oauth_user(
     session: AsyncSession, provider: str, user_data: dict[str, str]
 ) -> UserOAuth:
     email = user_data.get("email")
-    now = datetime.utcnow()
+    now = utcnow()
 
     # I really hate this part of code
     # but we need it for better user experience
@@ -102,7 +101,7 @@ async def create_oauth_user(
 
 
 async def update_oauth_timestamp(session: AsyncSession, oauth: UserOAuth):
-    now = datetime.utcnow()
+    now = utcnow()
     oauth.last_used = now
 
     session.add(oauth)
@@ -112,7 +111,7 @@ async def update_oauth_timestamp(session: AsyncSession, oauth: UserOAuth):
 async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
     password_hash = hashpwd(signup.password)
     activation_token = new_token()
-    now = datetime.utcnow()
+    now = utcnow()
 
     user = User(
         **{
@@ -136,7 +135,7 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
 
 
 async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
-    now = datetime.utcnow()
+    now = utcnow()
 
     # Update user login time
     user.login = now
@@ -160,7 +159,7 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
 
 async def create_password_token(session: AsyncSession, user: User) -> User:
     # Generate new password reset token
-    user.password_reset_expire = datetime.utcnow() + timedelta(hours=3)
+    user.password_reset_expire = utcnow() + timedelta(hours=3)
     user.password_reset_token = new_token()
 
     session.add(user)

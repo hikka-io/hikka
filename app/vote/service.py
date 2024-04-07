@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ContentTypeEnum
 from sqlalchemy import select, func
 from app.service import create_log
-from datetime import datetime
+from app.utils import utcnow
 from app import constants
 
 from app.models import (
@@ -44,7 +44,7 @@ async def set_vote(
     user_score: int,
 ) -> CommentVote:
     vote_model = content_type_to_favourite_class[content_type]
-    now = datetime.utcnow()
+    now = utcnow()
 
     # Create vote record if missing
     if not (vote := await get_vote(session, content_type, content, user)):

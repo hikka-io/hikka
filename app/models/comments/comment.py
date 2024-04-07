@@ -1,8 +1,8 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin, UpdatedMixin
+from datetime import datetime, timedelta, UTC
 from sqlalchemy.orm import query_expression
-from datetime import datetime, timedelta
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import LtreeType
@@ -61,13 +61,14 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
 
     @hybrid_property
     def is_editable(self):
+        now = datetime.now(UTC).replace(tzinfo=None)
         time_limit = timedelta(hours=1)
         max_edits = 5
 
         if len(self.history) >= max_edits:
             return False
 
-        if datetime.utcnow() > self.created + time_limit:
+        if now > self.created + time_limit:
             return False
 
         return True

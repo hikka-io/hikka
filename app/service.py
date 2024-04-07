@@ -1,13 +1,13 @@
 from sqlalchemy import select, asc, desc, and_, or_, func
-from app.utils import new_token, is_int, is_uuid
+from app.utils import new_token, is_int, is_uuid, utcnow
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from .schemas import AnimeSearchArgsBase
-from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
+from datetime import timedelta
 from app import constants
 from uuid import UUID
 
@@ -126,7 +126,7 @@ async def get_auth_token(
 
 async def create_activation_token(session: AsyncSession, user: User) -> User:
     # Generate new token
-    user.activation_expire = datetime.utcnow() + timedelta(hours=3)
+    user.activation_expire = utcnow() + timedelta(hours=3)
     user.activation_token = new_token()
 
     session.add(user)
@@ -140,7 +140,7 @@ async def create_email(
 ) -> EmailMessage:
     message = EmailMessage(
         **{
-            "created": datetime.utcnow(),
+            "created": utcnow(),
             "content": content,
             "type": email_type,
             "user": user,
@@ -160,7 +160,7 @@ async def create_log(
     target_id: UUID | None = None,
     data: dict = {},
 ):
-    now = datetime.utcnow()
+    now = utcnow()
 
     log = Log(
         **{
