@@ -87,6 +87,7 @@ SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"
 SEARCH_INDEX_PEOPLE = "content_people"  # Note: rename it to person (?)
 SEARCH_INDEX_ANIME = "content_anime"
+SEARCH_INDEX_USERS = "content_users"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
