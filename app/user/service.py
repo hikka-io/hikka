@@ -55,5 +55,5 @@ async def users_meilisearch(
     return await session.scalars(
         select(User)
         .filter(User.username.in_(usernames))
-        .order_by(desc(User.created))
+        .order_by(desc(User.last_active))
     )
