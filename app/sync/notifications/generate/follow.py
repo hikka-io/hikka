@@ -11,6 +11,18 @@ async def generate_follow(session: AsyncSession, log: Log):
     if not (user := await service.get_user_by_id(session, log.user_id)):
         return
 
+    # Stop if we don't have notification user for some reason
+    if not (
+        notification_user := await service.get_user_by_id(
+            session, log.target_id
+        )
+    ):
+        return
+
+    # Stop if user wishes to ignore this type of notifications
+    if notification_type in notification_user.ignored_notifications:
+        return
+
     # Do not create notification if we already did that
     if await service.get_notification(
         session,

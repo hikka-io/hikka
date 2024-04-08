@@ -5,6 +5,8 @@ from .. import service
 
 
 async def generate_edit_accept(session: AsyncSession, log: Log):
+    notification_type = constants.NOTIFICATION_EDIT_ACCEPTED
+
     # If edit is gone for some reason, just continue on
     if not (edit := await service.get_edit(session, log.target_id)):
         return
@@ -12,10 +14,12 @@ async def generate_edit_accept(session: AsyncSession, log: Log):
     if not edit.author:
         return
 
-    if edit.author_id == edit.moderator_id:
+    # Stop if user wishes to ignore this type of notifications
+    if notification_type in edit.author.ignored_notifications:
         return
 
-    notification_type = constants.NOTIFICATION_EDIT_ACCEPTED
+    if edit.author_id == edit.moderator_id:
+        return
 
     # Do not create notification if we already did that
     if await service.get_notification(

@@ -26,6 +26,10 @@ async def generate_comment_write(session: AsyncSession, log: Log):
         if user == comment.author:
             continue
 
+        # Continue if user wishes to ignore this type of notifications
+        if notification_type in user.ignored_notifications:
+            return
+
         # Do not create notification if we already did that
         if await service.get_notification(
             session,
@@ -72,6 +76,10 @@ async def generate_comment_write(session: AsyncSession, log: Log):
             return
 
         if not edit.author:
+            return
+
+        # Stop if user wishes to ignore this type of notifications
+        if notification_type in edit.author.ignored_notifications:
             return
 
         if edit.author == comment.author:
@@ -131,6 +139,10 @@ async def generate_comment_write(session: AsyncSession, log: Log):
         if not collection.author:
             return
 
+        # Stop if user wishes to ignore this type of notifications
+        if notification_type in collection.author.ignored_notifications:
+            return
+
         if collection.author == comment.author:
             return
 
@@ -180,6 +192,10 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 session, parent_path
             )
         ):
+            return
+
+        # Stop if user wishes to ignore this type of notifications
+        if notification_type in parent_comment.author.ignored_notifications:
             return
 
         # If user replied to his own comment, we should skip it

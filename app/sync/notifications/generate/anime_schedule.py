@@ -22,6 +22,10 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
         ):
             continue
 
+        # Stop if user wishes to ignore this type of notifications
+        if notification_type in watch.user.ignored_notifications:
+            return
+
         # Special case for planned/on hold entries
         # We only show notification if status of anime has changed
         if watch.status in [constants.WATCH_PLANNED, constants.WATCH_ON_HOLD]:

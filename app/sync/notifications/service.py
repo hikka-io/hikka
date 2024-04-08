@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
+from sqlalchemy.orm import joinedload
 from datetime import timedelta
 from app.utils import utcnow
 from app import constants
@@ -93,7 +94,8 @@ async def get_anime(session, anime_id):
 
 async def get_anime_watch(session: AsyncSession, anime: Anime):
     return await session.scalars(
-        select(AnimeWatch).filter(
+        select(AnimeWatch)
+        .filter(
             AnimeWatch.anime == anime,
             AnimeWatch.status.in_(
                 [
@@ -103,4 +105,5 @@ async def get_anime_watch(session: AsyncSession, anime: Anime):
                 ]
             ),
         )
+        .options(joinedload(AnimeWatch.user))
     )
