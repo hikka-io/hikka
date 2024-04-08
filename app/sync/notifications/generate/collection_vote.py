@@ -12,6 +12,10 @@ async def generate_collection_vote(session: AsyncSession, log: Log):
     if not (collection := await service.get_collection(session, log.target_id)):
         return
 
+    # Stop if user wishes to ignore this type of notifications
+    if notification_type in collection.author.ignored_notifications:
+        return
+
     # Stop if user who set the vote ceised to exist
     if not (user := await service.get_user_by_id(session, log.user_id)):
         return
