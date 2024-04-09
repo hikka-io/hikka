@@ -158,3 +158,25 @@ async def delete_user_image(
     user: User = Depends(auth_required()),
 ):
     return await service.delete_user_image(session, user, image_type)
+
+
+@router.delete(
+    "/watch",
+    response_model=SuccessResponse,
+    summary="Delete user watch list",
+)
+async def delete_user_watch(
+    background_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    # Run watch list import in background
+    # This task may block event loop so we should keep that in mind
+    # https://stackoverflow.com/a/67601373
+    background_tasks.add_task(
+        service.delete_user_watch,
+        session,
+        user,
+    )
+
+    return {"success": True}

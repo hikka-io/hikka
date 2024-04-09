@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, delete, func
 from .schemas import ImportAnimeListArgs
-from sqlalchemy import select
 from app import constants
 from . import utils
 
@@ -216,14 +216,45 @@ async def set_ignored_notifications(
 
 
 async def delete_user_image(session: AsyncSession, user: User, image_type: str):
+    image_id = None
+
     if image_type == constants.UPLOAD_AVATAR:
+        image_id = user.avatar_image_id
         user.avatar_image_id = None
 
     if image_type == constants.UPLOAD_COVER:
+        image_id = user.avatar_image_id = user.cover_image_id
         user.cover_image_id = None
 
     session.add(user)
     await session.commit()
     await session.refresh(user)
 
+    if image_id:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_IMAGE_DELETE,
+            user,
+            data={
+                "image_type": image_type,
+                "image_id": str(image_id),
+            },
+        )
+
     return user
+
+
+async def delete_user_watch(session: AsyncSession, user: User):
+    watch_count = await session.scalar(
+        select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+    )
+
+    await session.execute(delete(AnimeWatch).filter(AnimeWatch.user == user))
+    await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_SETTINGS_WATCH_DELETE,
+        user,
+        data={"watch_count": watch_count},
+    )
