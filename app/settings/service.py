@@ -213,3 +213,17 @@ async def set_ignored_notifications(
         )
 
     return user
+
+
+async def delete_user_image(session: AsyncSession, user: User, image_type: str):
+    if image_type == constants.UPLOAD_AVATAR:
+        user.avatar_image_id = None
+
+    if image_type == constants.UPLOAD_COVER:
+        user.cover_image_id = None
+
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+
+    return user

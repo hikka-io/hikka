@@ -13,6 +13,11 @@ class ImportWatchStatusEnum(str, Enum):
     dropped = "Dropped"
 
 
+class ImageTypeEnum(str, Enum):
+    avatar = constants.UPLOAD_AVATAR
+    cover = constants.UPLOAD_COVER
+
+
 # Args
 class IgnoredNotificationsArgs(CustomModel):
     ignored_notifications: list[str]

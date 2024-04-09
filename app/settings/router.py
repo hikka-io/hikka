@@ -24,6 +24,7 @@ from .schemas import (
     IgnoredNotificationsArgs,
     ImportAnimeListArgs,
     DescriptionArgs,
+    ImageTypeEnum,
 )
 
 from .dependencies import (
@@ -144,3 +145,16 @@ async def change_ignored_notifications(
 )
 async def get_ignored_notifications(user: User = Depends(auth_required())):
     return user
+
+
+@router.delete(
+    "/image/{image_type}",
+    response_model=UserResponse,
+    summary="Delete user image",
+)
+async def delete_user_image(
+    image_type: ImageTypeEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    return await service.delete_user_image(session, user, image_type)
