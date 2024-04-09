@@ -64,6 +64,7 @@ from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
 
+from .settings import request_settings_delete_image
 from .settings import request_settings_import_watch
 from .settings import request_settings_description
 from .settings import request_settings_username
@@ -140,6 +141,7 @@ __all__ = [
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
+    "request_settings_delete_image",
     "request_settings_import_watch",
     "request_settings_description",
     "request_settings_username",

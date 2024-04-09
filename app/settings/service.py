@@ -216,14 +216,43 @@ async def set_ignored_notifications(
 
 
 async def delete_user_image(session: AsyncSession, user: User, image_type: str):
+    image_id = None
+
     if image_type == constants.UPLOAD_AVATAR:
+        image_id = user.avatar_image_id
         user.avatar_image_id = None
 
     if image_type == constants.UPLOAD_COVER:
+        image_id = user.avatar_image_id = user.cover_image_id
         user.cover_image_id = None
 
     session.add(user)
     await session.commit()
     await session.refresh(user)
 
+    if image_id:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_IMAGE_DELETE,
+            user,
+            data={
+                "image_type": image_type,
+                "image_id": str(image_id),
+            },
+        )
+
     return user
+
+
+# async def delete_user_watch(session: AsyncSession, user: User):
+#     if image_type == constants.UPLOAD_AVATAR:
+#         user.avatar_image_id = None
+
+#     if image_type == constants.UPLOAD_COVER:
+#         user.cover_image_id = None
+
+#     session.add(user)
+#     await session.commit()
+#     await session.refresh(user)
+
+#     return user
