@@ -42,3 +42,7 @@ def request_settings_delete_image(client, token, image_type):
     return client.delete(
         f"/settings/image/{image_type}", headers={"Auth": token}
     )
+
+
+def request_settings_delete_watch(client, token):
+    return client.delete("/settings/watch", headers={"Auth": token})
