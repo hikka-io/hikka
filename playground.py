@@ -361,6 +361,31 @@ async def anime_needs_update():
     await sessionmanager.close()
 
 
+async def fix_update_notification():
+    settings = get_settings()
+
+    sessionmanager.init(settings.database.endpoint)
+
+    # await update_search_anime()
+
+    async with sessionmanager.session() as session:
+        notifications = await session.scalars(
+            select(Notification).filter(
+                Notification.data.op("->>")("update_name")
+                == "hikka_schedule_update"
+            )
+        )
+
+        for notification in notifications:
+            notification.data = copy.deepcopy(notification.data)
+            notification.data["title"] = "Календар, сторінка автора, та інше"
+            session.add(notification)
+
+        await session.commit()
+
+    await sessionmanager.close()
+
+
 if __name__ == "__main__":
     # asyncio.run(test_email_template())
     # asyncio.run(test_sitemap())
@@ -369,9 +394,10 @@ if __name__ == "__main__":
     # asyncio.run(recalculate_anime_staff_weights())
     # asyncio.run(query_activity())
     # asyncio.run(test_sync_stuff())
-    asyncio.run(migrate_notification())
+    # asyncio.run(migrate_notification())
     # asyncio.run(fix_colon_in_synopsis())
     # asyncio.run(test_system_notification())
+    asyncio.run(fix_update_notification())
     # asyncio.run(run_search())
     # asyncio.run(watch_stats())
     # asyncio.run(fix_closed_edits())
