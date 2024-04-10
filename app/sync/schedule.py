@@ -86,9 +86,7 @@ async def update_schedule_aired(session: AsyncSession):
 
         # Set status to ongoing if anime just started airing
         if (
-            schedule.episode == 1
-            and anime.episodes_released == 0
-            and anime.status == constants.RELEASE_STATUS_ANNOUNCED
+            anime.status == constants.RELEASE_STATUS_ANNOUNCED
             and anime.media_type != constants.MEDIA_TYPE_MOVIE
         ):
             before["status"] = anime.status
