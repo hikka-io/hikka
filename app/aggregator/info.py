@@ -347,17 +347,19 @@ async def process_poster(session, anime, data):
     if "poster" in anime.ignored_fields:
         return
 
-    if anime.poster_id:
-        return
-
-    image = Image(
-        **{
-            "path": data["poster"],
-            "created": utcnow(),
-            "uploaded": True,
-            "ignore": False,
-        }
-    )
+    if not (
+        image := await session.scalar(
+            select(Image).filter(Image.path == data["poster"])
+        )
+    ):
+        image = Image(
+            **{
+                "path": data["poster"],
+                "created": utcnow(),
+                "uploaded": True,
+                "ignore": False,
+            }
+        )
 
     session.add(image)
     anime.poster_relation = image
