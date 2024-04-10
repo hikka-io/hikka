@@ -54,6 +54,9 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
     if args.status:
         query = query.filter(Anime.status == args.status)
 
+    if len(args.rating) > 0:
+        query = query.filter(Anime.rating.in_(args.rating))
+
     return query
 
 
