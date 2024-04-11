@@ -31,7 +31,7 @@ async def anime_schedule(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_schedule_anime_count(session, args)
+    total = await service.get_schedule_anime_count(session, args, request_user)
     schedule = await service.get_schedule_anime(
         session, args, request_user, limit, offset
     )
