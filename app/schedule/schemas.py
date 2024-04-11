@@ -16,8 +16,8 @@ from app.schemas import (
 class AnimeScheduleArgs(CustomModel):
     airing_range: list[PositiveInt | None] | None = None
     airing_season: list[SeasonEnum | int] | None = None
-    status: AnimeStatusEnum | None = None
     rating: list[AnimeAgeRatingEnum] = []
+    status: list[AnimeStatusEnum] = []
 
     @field_validator("airing_season")
     def validate_airing_season(cls, airing_season):

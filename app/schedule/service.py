@@ -51,8 +51,8 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
             AnimeSchedule.airing_at >= utcnow() - timedelta(hours=6)
         )
 
-    if args.status:
-        query = query.filter(Anime.status == args.status)
+    if len(args.status) > 0:
+        query = query.filter(Anime.status.in_(args.status))
 
     if len(args.rating) > 0:
         query = query.filter(Anime.rating.in_(args.rating))
