@@ -18,6 +18,7 @@ class AnimeScheduleArgs(CustomModel):
     airing_season: list[SeasonEnum | int] | None = None
     rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
+    only_watch: bool = False
 
     @field_validator("airing_season")
     def validate_airing_season(cls, airing_season):

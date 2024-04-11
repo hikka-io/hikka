@@ -156,7 +156,8 @@ errors = {
         "not-found": ["Vote record not found", 404],
     },
     "schedule": {
-        "incompatible-filters": ["You've specified incompatible filters", 400]
+        "incompatible-filters": ["You've specified incompatible filters", 400],
+        "watch-no-user": ["You can't use only_watch without user", 400],
     },
 }
 

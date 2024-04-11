@@ -20,7 +20,11 @@ from app.models import (
 )
 
 
-def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
+def anime_schedule_filters(
+    query: Select,
+    args: AnimeScheduleArgs,
+    request_user: User | None,
+):
     if args.airing_season:
         query = query.filter(
             Anime.season == args.airing_season[0],
@@ -57,15 +61,23 @@ def anime_schedule_filters(query: Select, args: AnimeScheduleArgs):
     if len(args.rating) > 0:
         query = query.filter(Anime.rating.in_(args.rating))
 
+    if request_user and args.only_watch:
+        query = query.join(AnimeWatch).filter(
+            AnimeWatch.anime_id == Anime.id,
+            AnimeWatch.user == request_user,
+        )
+
     return query
 
 
 async def get_schedule_anime_count(
-    session: AsyncSession, args: AnimeScheduleArgs
+    session: AsyncSession, args: AnimeScheduleArgs, request_user: User | None
 ):
     return await session.scalar(
         anime_schedule_filters(
-            select(func.count(AnimeSchedule.id)).join(AnimeSchedule.anime), args
+            select(func.count(AnimeSchedule.id)).join(AnimeSchedule.anime),
+            args,
+            request_user,
         )
     )
 
@@ -79,7 +91,9 @@ async def get_schedule_anime(
 ):
     return await session.scalars(
         anime_schedule_filters(
-            select(AnimeSchedule).join(AnimeSchedule.anime), args
+            select(AnimeSchedule).join(AnimeSchedule.anime),
+            args,
+            request_user,
         )
         .options(
             anime_loadonly(joinedload(AnimeSchedule.anime)).joinedload(
