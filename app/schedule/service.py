@@ -26,10 +26,10 @@ def anime_schedule_filters(
     request_user: User | None,
 ):
     if args.airing_season:
-        query = query.filter(
-            Anime.season == args.airing_season[0],
-            Anime.year == args.airing_season[1],
-        )
+        season = args.airing_season[0]
+        year = args.airing_season[1]
+
+        query = query.filter(Anime.airing_seasons.op("?")(f"{season}_{year}"))
 
     if args.airing_range:
         airing_start = (
