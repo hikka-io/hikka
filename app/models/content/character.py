@@ -61,6 +61,10 @@ class Character(
 
         return self.image_relation.url
 
+    @hybrid_property
+    def content_type(self):
+        return "character"
+
 
 class AnimeCharacter(Base):
     __tablename__ = "service_content_anime_characters"
