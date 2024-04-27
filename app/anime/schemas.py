@@ -9,6 +9,7 @@ from app.schemas import (
     AnimeStaffResponse,
     PaginationResponse,
     CharacterResponse,
+    ContentTypeMixin,
     CompanyTypeEnum,
     CompanyResponse,
     QuerySearchArgs,
@@ -128,7 +129,7 @@ class AnimeOSTResponse(CustomModel):
     ost_type: str = Field(examples=["opening"])
 
 
-class AnimeInfoResponse(CustomModel):
+class AnimeInfoResponse(CustomModel, ContentTypeMixin):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 

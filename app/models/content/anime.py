@@ -159,3 +159,7 @@ class Anime(
     @hybrid_property
     def has_franchise(self):
         return self.franchise_id is not None
+
+    @hybrid_property
+    def content_type(self):
+        return "anime"

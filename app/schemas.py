@@ -204,6 +204,11 @@ class AnimeSearchArgsBase(CustomModel):
         return scores
 
 
+# Mixins
+class ContentTypeMixin:
+    content_type: str
+
+
 # Responses
 class PaginationResponse(CustomModel):
     total: int = Field(examples=[20])
@@ -223,7 +228,7 @@ class WatchResponseBase(CustomModel):
     score: int = Field(examples=[8])
 
 
-class AnimeResponse(CustomModel):
+class AnimeResponse(CustomModel, ContentTypeMixin):
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
@@ -257,7 +262,7 @@ class AnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
 
 
-class CharacterResponse(CustomModel):
+class CharacterResponse(CustomModel, ContentTypeMixin):
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
@@ -266,7 +271,7 @@ class CharacterResponse(CustomModel):
     synonyms: list[str]
 
 
-class PersonResponse(CustomModel):
+class PersonResponse(CustomModel, ContentTypeMixin):
     name_native: str | None = Field(examples=["高橋 李依"])
     name_ua: str | None = Field(examples=["Ріє Такахаші"])
     name_en: str | None = Field(examples=["Rie Takahashi"])
