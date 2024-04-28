@@ -22,6 +22,7 @@ async def update_characters_settings(index):
             ],
             displayed_attributes=[
                 "content_type",  # TODO: remove me!
+                "data_type",
                 "synonyms",
                 "name_ua",
                 "name_en",
