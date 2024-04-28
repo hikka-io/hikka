@@ -205,8 +205,9 @@ class AnimeSearchArgsBase(CustomModel):
 
 
 # Mixins
-class ContentTypeMixin:
-    content_type: str
+class DataTypeMixin:
+    content_type: str  # TODO: Remove me!
+    data_type: str
 
 
 # Responses
@@ -228,7 +229,7 @@ class WatchResponseBase(CustomModel):
     score: int = Field(examples=[8])
 
 
-class AnimeResponse(CustomModel, ContentTypeMixin):
+class AnimeResponse(CustomModel, DataTypeMixin):
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
@@ -262,7 +263,7 @@ class AnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
 
 
-class CharacterResponse(CustomModel, ContentTypeMixin):
+class CharacterResponse(CustomModel, DataTypeMixin):
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
@@ -271,7 +272,7 @@ class CharacterResponse(CustomModel, ContentTypeMixin):
     synonyms: list[str]
 
 
-class PersonResponse(CustomModel, ContentTypeMixin):
+class PersonResponse(CustomModel, DataTypeMixin):
     name_native: str | None = Field(examples=["高橋 李依"])
     name_ua: str | None = Field(examples=["Ріє Такахаші"])
     name_en: str | None = Field(examples=["Rie Takahashi"])
@@ -351,7 +352,7 @@ class CollectionContentResponse(CustomModel):
     order: int
 
 
-class CollectionResponse(CustomModel):
+class CollectionResponse(CustomModel, DataTypeMixin):
     visibility: CollectionVisibilityEnum
     labels_order: list[str]
     author: UserResponse

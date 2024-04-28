@@ -61,3 +61,7 @@ class Person(
     @hybrid_property
     def content_type(self):
         return "person"
+
+    @hybrid_property
+    def data_type(self):
+        return "person"

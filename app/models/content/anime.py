@@ -163,3 +163,7 @@ class Anime(
     @hybrid_property
     def content_type(self):
         return "anime"
+
+    @hybrid_property
+    def data_type(self):
+        return "anime"
