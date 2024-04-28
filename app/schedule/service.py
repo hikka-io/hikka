@@ -104,7 +104,7 @@ async def get_schedule_anime(
                 AnimeWatch.user_id == request_user.id if request_user else None,
             ),
         )
-        .order_by(asc(AnimeSchedule.airing_at))
+        .order_by(asc(AnimeSchedule.airing_at), AnimeSchedule.id)
         .limit(limit)
         .offset(offset)
     )
