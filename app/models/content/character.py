@@ -65,6 +65,10 @@ class Character(
     def content_type(self):
         return "character"
 
+    @hybrid_property
+    def data_type(self):
+        return "character"
+
 
 class AnimeCharacter(Base):
     __tablename__ = "service_content_anime_characters"

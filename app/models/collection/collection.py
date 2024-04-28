@@ -54,3 +54,7 @@ class Collection(
     @hybrid_property
     def slug(self):
         return str(self.reference)
+
+    @hybrid_property
+    def data_type(self):
+        return "collection"
