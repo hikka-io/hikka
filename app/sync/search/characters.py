@@ -21,7 +21,6 @@ async def update_characters_settings(index):
                 "name_ja",
             ],
             displayed_attributes=[
-                "content_type",  # TODO: remove me!
                 "data_type",
                 "synonyms",
                 "name_ua",
@@ -38,7 +37,6 @@ async def update_characters_settings(index):
 
 def character_to_document(character: Character):
     return {
-        "content_type": "character",  # TODO: remove me!
         "data_type": "character",
         "favorites": character.favorites,
         "synonyms": character.synonyms,

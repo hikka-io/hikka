@@ -206,7 +206,6 @@ class AnimeSearchArgsBase(CustomModel):
 
 # Mixins
 class DataTypeMixin:
-    content_type: str  # TODO: Remove me!
     data_type: str
 
 
@@ -278,6 +277,7 @@ class PersonResponse(CustomModel, DataTypeMixin):
     name_en: str | None = Field(examples=["Rie Takahashi"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["rie-takahashi-123456"])
+    description_ua: str | None
     synonyms: list[str]
 
 

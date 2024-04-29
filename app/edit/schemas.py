@@ -114,6 +114,7 @@ class AnimeEditArgs(CustomModel):
 
 
 class PersonEditArgs(CustomModel):
+    description_ua: str | None = Field(None, examples=["..."])
     name_native: str | None = Field(
         None, examples=["丸山 博雄"], max_length=255
     )
