@@ -60,9 +60,5 @@ class Person(
         return self.image_relation.url
 
     @hybrid_property
-    def content_type(self):
-        return "person"
-
-    @hybrid_property
     def data_type(self):
         return "person"

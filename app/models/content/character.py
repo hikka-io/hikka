@@ -62,10 +62,6 @@ class Character(
         return self.image_relation.url
 
     @hybrid_property
-    def content_type(self):
-        return "character"
-
-    @hybrid_property
     def data_type(self):
         return "character"
 

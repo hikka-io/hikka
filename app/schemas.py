@@ -206,7 +206,6 @@ class AnimeSearchArgsBase(CustomModel):
 
 # Mixins
 class DataTypeMixin:
-    content_type: str  # TODO: Remove me!
     data_type: str
 
 
