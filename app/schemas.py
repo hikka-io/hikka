@@ -278,6 +278,7 @@ class PersonResponse(CustomModel, DataTypeMixin):
     name_en: str | None = Field(examples=["Rie Takahashi"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["rie-takahashi-123456"])
+    description_ua: str | None
     synonyms: list[str]
 
 

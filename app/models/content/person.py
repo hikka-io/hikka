@@ -30,6 +30,7 @@ class Person(
     characters_count: Mapped[int] = query_expression()
     anime_count: Mapped[int] = query_expression()
 
+    description_ua: Mapped[str] = mapped_column(nullable=True)
     name_native: Mapped[str] = mapped_column(nullable=True)
     name_en: Mapped[str] = mapped_column(nullable=True)
     name_ua: Mapped[str] = mapped_column(nullable=True)
