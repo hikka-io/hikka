@@ -318,6 +318,7 @@ def is_protected_username(username: str):
         ["www1", "www2", "www3", "www4", "www5", "www6", "www7"],
         ["wwww", "wws", "wwws", "web", "webmail", "website", "websites"],
         ["webmaster", "workshop", "xxx", "xpg", "you", "hikka"],
+        ["following"],  # Reserved keyword for /history/following
     ]
 
     usernames = list(set(item for sublist in usernames for item in sublist))

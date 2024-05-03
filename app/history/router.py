@@ -15,6 +15,7 @@ from app.utils import (
 )
 
 from app.dependencies import (
+    auth_required,
     get_user,
     get_page,
     get_size,
@@ -25,18 +26,23 @@ router = APIRouter(prefix="/history", tags=["History"])
 
 
 @router.get(
-    "",
+    "/following",
     response_model=HistoryPaginationResponse,
-    summary="Global history",
+    summary="Following history",
 )
-async def global_history(
+async def following_history(
     session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
+    user_ids = await service.following_ids(session, user)
+
     limit, offset = pagination(page, size)
-    total = await service.get_history_count(session)
-    history = await service.get_history(session, limit, offset)
+    total = await service.get_following_history_count(session, user_ids)
+    history = await service.get_following_history(
+        session, user_ids, limit, offset
+    )
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": history.all(),
