@@ -11,12 +11,12 @@ from app.schemas import (
 # Responses
 class HistoryResponse(CustomModel):
     content: AnimeResponse | None = None
+    user: UserResponse
     history_type: str
     created: datetime
     updated: datetime
     reference: str
     data: dict
-    user: UserResponse
 
 
 class HistoryPaginationResponse(CustomModel):

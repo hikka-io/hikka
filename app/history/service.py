@@ -4,6 +4,7 @@ from sqlalchemy.orm import joinedload
 
 from app.models import (
     History,
+    Follow,
     User,
 )
 
@@ -29,15 +30,33 @@ async def get_user_history(
     )
 
 
-async def get_history_count(session: AsyncSession) -> int:
-    return await session.scalar(select(func.count(History.id)))
+async def following_ids(session: AsyncSession, user: User):
+    user_ids = await session.scalars(
+        select(Follow.followed_user_id).filter(Follow.user == user)
+    )
+
+    user_ids = user_ids.all()
+    user_ids.append(user.id)
+
+    return user_ids
 
 
-async def get_history(session: AsyncSession, limit: int, offset: int) -> User:
-    """Get history"""
+async def get_following_history_count(
+    session: AsyncSession, user_ids: list
+) -> int:
+    return await session.scalar(
+        select(func.count(History.id)).filter(History.user_id.in_(user_ids))
+    )
+
+
+async def get_following_history(
+    session: AsyncSession, user_ids: list, limit: int, offset: int
+) -> User:
+    """Get following history"""
 
     return await session.scalars(
         select(History)
+        .filter(History.user_id.in_(user_ids))
         .options(joinedload(History.user))
         .order_by(desc(History.updated), desc(History.created))
         .limit(limit)
