@@ -306,7 +306,7 @@ async def latest_comments(session: AsyncSession):
         )
         .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
-        .limit(30)
+        .limit(3)
     )
 
     return await comments_preview_display(session, comment_ids)
