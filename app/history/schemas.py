@@ -3,6 +3,7 @@ from datetime import datetime
 from app.schemas import (
     PaginationResponse,
     AnimeResponse,
+    UserResponse,
     CustomModel,
 )
 
@@ -15,6 +16,7 @@ class HistoryResponse(CustomModel):
     updated: datetime
     reference: str
     data: dict
+    user: UserResponse
 
 
 class HistoryPaginationResponse(CustomModel):
