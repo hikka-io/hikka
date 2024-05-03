@@ -43,7 +43,7 @@ class FavouriteHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteHistory.target_id",
         foreign_keys=[target_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -62,7 +62,7 @@ class FavouriteRemoveHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteRemoveHistory.target_id",
         foreign_keys=[target_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -81,7 +81,7 @@ class WatchHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchHistory.target_id",
         foreign_keys=[target_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -100,7 +100,7 @@ class WatchDeleteHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchDeleteHistory.target_id",
         foreign_keys=[target_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 

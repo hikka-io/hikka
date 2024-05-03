@@ -77,7 +77,7 @@ class AnimeEdit(Edit):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -93,7 +93,7 @@ class PersonEdit(Edit):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -109,5 +109,5 @@ class CharacterEdit(Edit):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )

@@ -11,7 +11,7 @@ router = APIRouter(include_in_schema=False)
 async def analytics_event(request: Request, args: EventArgs):
     settings = get_settings()
 
-    # ToDo: handle failed aiohttp correctly
+    # TODO: handle failed aiohttp correctly
 
     async with aiohttp.ClientSession() as session:
         async with session.post(

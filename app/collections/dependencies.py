@@ -144,7 +144,7 @@ async def validate_collection_update(
         if not await service.content_compare(session, collection, args):
             raise Abort("collections", "moderator-content-update")
 
-    # ToDo: log based rate limit
+    # TODO: log based rate limit
 
     return args
 

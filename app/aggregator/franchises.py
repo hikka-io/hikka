@@ -3,7 +3,7 @@ from sqlalchemy import select
 from app import utils
 
 
-# ToDo: optimize it
+# TODO: optimize it
 async def save_anime_franchises_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
 

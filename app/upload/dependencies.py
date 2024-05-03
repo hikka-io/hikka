@@ -38,7 +38,7 @@ async def validate_upload_rate_limit(
     # Count uploads by given upload type
     count = await service.count_uploads_last_day(session, user, upload_type)
 
-    # ToDo: make this dynamic based on upload type (?)
+    # TODO: make this dynamic based on upload type (?)
     max_daily_uploads = 10
 
     if (
@@ -57,7 +57,7 @@ async def validate_upload_rate_limit(
 async def validate_upload_file(
     upload_type: UploadTypeEnum, file: UploadFile = File()
 ) -> UploadMetadata:
-    # ToDo: we probably need to reduce file size here
+    # TODO: we probably need to reduce file size here
     if file.size > 2 * 1024 * 1024:  # 2mb
         raise Abort("upload", "bad-size")
 
@@ -72,7 +72,7 @@ async def validate_upload_file(
         if width != height:
             raise Abort("upload", "not-square")
 
-        # ToDo: set specific image resolution here (?)
+        # TODO: set specific image resolution here (?)
         if width < 160 or height < 160:
             raise Abort("upload", "bad-resolution")
 
@@ -83,7 +83,7 @@ async def validate_upload_file(
         if width != 1500 or height != 500:
             raise Abort("upload", "bad-resolution")
 
-    # ToDo: add file hash check
+    # TODO: add file hash check
 
     await file.seek(0)
 

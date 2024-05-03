@@ -311,7 +311,7 @@ def anime_search_filter(
     if len(search.season) > 0:
         season_filters.append(Anime.season.in_(search.season))
 
-    # ToDo: make this code cleaner
+    # TODO: make this code cleaner
     convoluted_filters = []
 
     if len(season_filters) > 0:

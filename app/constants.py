@@ -85,7 +85,7 @@ SEARCH_RESULT_SIZE = 15
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"
-SEARCH_INDEX_PEOPLE = "content_people"  # Note: rename it to person (?)
+SEARCH_INDEX_PEOPLE = "content_people"  # NOTE: rename it to person (?)
 SEARCH_INDEX_ANIME = "content_anime"
 SEARCH_INDEX_USERS = "content_users"
 
@@ -110,7 +110,7 @@ CONTENT_COLLECTION = "collection"
 CONTENT_COMMENT = "comment"
 
 # Roles
-# ToDo: move to separate file (?)
+# TODO: move to separate file (?)
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"

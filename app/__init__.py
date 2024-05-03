@@ -46,6 +46,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Notifications"},
             {"name": "Integrations"},
             {"name": "Collections"},
+            {"name": "History"},
             {"name": "Stats"},
             {"name": "Vote"},
         ],
@@ -56,7 +57,6 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        # allow_origin_regex=settings.backend.origins_regex,
         allow_origins=settings.backend.origins,
         allow_credentials=True,
         allow_methods=["*"],
@@ -78,6 +78,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
+    from .history import router as history_router
     from .upload import router as upload_router
     from .people import router as people_router
     from .follow import router as follow_router
@@ -99,6 +100,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
+    app.include_router(history_router)
     app.include_router(upload_router)
     app.include_router(people_router)
     app.include_router(follow_router)

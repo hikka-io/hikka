@@ -78,7 +78,7 @@ async def validate_login(
         raise Abort("auth", "user-not-found")
 
     # Check password hash
-    # ToDo: add failed login attempts here
+    # TODO: add failed login attempts here
     if not checkpwd(login.password, user.password_hash):
         raise Abort("auth", "invalid-password")
 

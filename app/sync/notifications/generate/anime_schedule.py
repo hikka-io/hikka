@@ -13,7 +13,7 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
 
     anime_watch = await service.get_anime_watch(session, anime)
 
-    # ToDo: batch check for existing notifications here
+    # TODO: batch check for existing notifications here
 
     for watch in anime_watch:
         # Do not create notification if we already did that

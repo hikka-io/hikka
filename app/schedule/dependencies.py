@@ -9,7 +9,7 @@ async def validate_schedule_args(
     args: AnimeScheduleArgs,
     request_user: User | None = Depends(auth_required(optional=True)),
 ):
-    # ToDo: there should be better way to write this check
+    # TODO: there should be better way to write this check
     if args.airing_range is not None and args.airing_season is not None:
         raise Abort("schedule", "incompatible-filters")
 

@@ -21,7 +21,7 @@ def read_file(path: str):
         return file.read()
 
 
-# Note: I really hate hardcoded paths here
+# NOTE: I really hate hardcoded paths here
 # Is there another way to do that (?)
 async def get_template(email_type: str):
     if email_type == constants.EMAIL_ACTIVATION:
@@ -41,7 +41,7 @@ async def send_email(session: AsyncSession, email: EmailMessage):
         return
 
     # Replace token and username in template
-    # Note: This code would work only if template has username and token
+    # NOTE: This code would work only if template has username and token
     # We need better way to handle that
     template = template.replace("{username}", email.user.username)
     template = template.replace("{token}", email.content)

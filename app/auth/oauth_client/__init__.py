@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # Source: https://github.com/klen/aioauth-client
-# ToDo: replace with own implementation
+# TODO: replace with own implementation
 
 from __future__ import annotations
 from random import SystemRandom

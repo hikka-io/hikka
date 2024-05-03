@@ -147,7 +147,7 @@ class EditResponse(CustomModel):
     system_edit: bool
     after: dict
 
-    # ToDo: maybe we should use Pydantic's discriminator here?
+    # TODO: maybe we should use Pydantic's discriminator here?
     content: AnimeResponse | PersonResponse | CharacterResponse
 
     comments_count: int | None

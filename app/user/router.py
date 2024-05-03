@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
+from .schemas import ActivityResponse
 from app.database import get_session
 from app import meilisearch
 from app.models import User
@@ -11,10 +12,9 @@ from app.schemas import (
     UserResponse,
 )
 
-from .schemas import (
-    HistoryPaginationResponse,
-    ActivityResponse,
-)
+from app.history.schemas import HistoryPaginationResponse  # TODO: remove me!
+from app.history.service import get_user_history_count  # TODO: remove me!
+from app.history.service import get_user_history  # TODO: remove me!
 
 from app.utils import (
     pagination_dict,
@@ -50,6 +50,7 @@ async def user_profile(user: User = Depends(get_user)):
     return user
 
 
+# TODO: remove me!
 @router.get(
     "/{username}/history",
     response_model=HistoryPaginationResponse,
@@ -62,8 +63,8 @@ async def service_user_history(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_user_history_count(session, user)
-    history = await service.get_user_history(session, user, limit, offset)
+    total = await get_user_history_count(session, user)
+    history = await get_user_history(session, user, limit, offset)
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": history.all(),

@@ -55,7 +55,7 @@ async def process_companies_anime(session, anime, data):
         if not (company := companies_cache.get(entry["company"]["content_id"])):
             continue
 
-        # ToDo: cache here
+        # TODO: cache here
         if await session.scalar(
             select(CompanyAnime).filter(
                 CompanyAnime.type == entry["type"],
@@ -405,7 +405,7 @@ def process_translated_ua(data):
 
 
 async def update_anime_info(session, anime, data):
-    # Note: this code has a lot of moving parts, hardcoded values and generaly
+    # NOTE: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
     # and we will rewrite this abomination one day.
 

@@ -50,7 +50,7 @@ async def validate_franchise(
         raise Abort("anime", "no-franchise")
 
     # Dirty fix for empty franchises
-    # ToDo: fix me (please)
+    # TODO: fix me (please)
     total = await service.franchise_count(session, anime)
     if total <= 1:
         raise Abort("anime", "no-franchise")
