@@ -58,6 +58,19 @@ class CommentResponse(CustomModel):
     depth: int
 
 
+class CommentPreviewResponse(CustomModel):
+    author: UserResponse
+    updated: datetime
+    created: datetime
+    content_type: str
+    image: str | None
+    text: str | None
+    vote_score: int
+    reference: str
+    depth: int
+    slug: str
+
+
 class CommentListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CommentResponse]

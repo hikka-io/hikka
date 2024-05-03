@@ -28,6 +28,7 @@ from app.dependencies import (
 )
 
 from .schemas import (
+    CommentPreviewResponse,
     CommentListResponse,
     CommentResponse,
     ContentTypeEnum,
@@ -38,6 +39,14 @@ from .schemas import (
 
 
 router = APIRouter(prefix="/comments", tags=["Comments"])
+
+
+@router.get("/latest", response_model=list[CommentPreviewResponse])
+async def latest_comments(
+    session: AsyncSession = Depends(get_session),
+    request_user: User = Depends(auth_required(optional=True)),
+):
+    return await service.latest_comments(session, request_user)
 
 
 @router.put("/{content_type}/{slug}", response_model=CommentResponse)
