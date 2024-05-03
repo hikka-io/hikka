@@ -40,7 +40,7 @@ class AnimeCollectionContent(CollectionContent):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeCollectionContent.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -59,7 +59,7 @@ class CharacterCollectionContent(CollectionContent):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterCollectionContent.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -78,5 +78,5 @@ class PersonCollectionContent(CollectionContent):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonCollectionContent.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )

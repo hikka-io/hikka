@@ -34,14 +34,14 @@ class AnimeFavourite(Favourite):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
-    # ToDo: remove me
+    # TODO: remove me
     anime: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
         viewonly=True,
     )
 
@@ -61,7 +61,7 @@ class CollectionFavourite(Favourite):
     content: Mapped["Collection"] = relationship(
         primaryjoin="Collection.id == CollectionFavourite.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -80,5 +80,5 @@ class CharacterFavourite(Favourite):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterFavourite.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # ToDo: check if it is good idea
+        lazy="immediate",  # TODO: check if it is good idea
     )

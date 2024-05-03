@@ -121,7 +121,7 @@ class Anime(
         back_populates="anime", foreign_keys=[franchise_id]
     )
 
-    # ToDo: Check AssociationProxy
+    # TODO: Check AssociationProxy
     # https://docs.sqlalchemy.org/en/20/orm/extensions/associationproxy.html
     producers: Mapped[list["Company"]] = relationship(
         secondary="service_content_companies_anime",

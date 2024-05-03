@@ -248,7 +248,7 @@ async def accept_pending_edit(
 
     # We recalculate before here because field may have changed
     # Just in case, let's hope it won't happen on production
-    # ToDo: find better way to handle this behaviour
+    # TODO: find better way to handle this behaviour
     before = {}
 
     for key, value in edit.after.items():

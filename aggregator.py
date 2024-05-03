@@ -33,7 +33,7 @@ async def import_aggregator():
     await update_schedule_build()
     await update_search()
 
-    # ToDo: improve performance
+    # TODO: improve performance
     await update_weights()
 
     await sessionmanager.close()

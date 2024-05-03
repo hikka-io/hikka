@@ -89,7 +89,7 @@ async def test_watch_list_order(
     aggregator_anime,
     get_test_token,
 ):
-    # ToDo: this test ideally should be split into bunch of smaller tests
+    # TODO: this test ideally should be split into bunch of smaller tests
 
     # Add Bocchi to watch list
     await request_watch_add(

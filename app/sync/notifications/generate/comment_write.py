@@ -53,7 +53,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,  # ToDo: remove me
+                    "comment_author": comment.author.username,  # TODO: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
@@ -110,7 +110,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,  # ToDo: remove me
+                    "comment_author": comment.author.username,  # TODO: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
@@ -171,7 +171,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,  # ToDo: remove me
+                    "comment_author": comment.author.username,  # TODO: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,
@@ -227,7 +227,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                 "data": {
                     "slug": comment.content.slug,
                     "content_type": comment.content_type,
-                    "comment_author": comment.author.username,  # ToDo: remove me
+                    "comment_author": comment.author.username,  # TODO: remove me
                     "comment_reference": comment.reference,
                     "comment_depth": comment.depth,
                     "comment_text": comment.text,

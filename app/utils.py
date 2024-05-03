@@ -26,7 +26,7 @@ def utcfromtimestamp(timestamp: int):
 
 
 # Simple check for permissions
-# ToDo: move to separate file with role logic
+# TODO: move to separate file with role logic
 def check_user_permissions(user: User, permissions: list):
     role_permissions = constants.ROLES.get(user.role, [])
 

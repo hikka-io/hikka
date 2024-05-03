@@ -32,7 +32,7 @@ async def update_anime_roles(session, data):
 
 
 # This is bit hacky but works
-# ToDo: remove this (?)
+# TODO: remove this (?)
 async def update_anime_role_weights(session):
     async with aiofiles.open("docs/roles.json", mode="r") as file:
         contents = await file.read()
