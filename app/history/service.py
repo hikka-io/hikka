@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
+from sqlalchemy.orm import joinedload
 
 from app.models import (
     History,
@@ -21,6 +22,7 @@ async def get_user_history(
     return await session.scalars(
         select(History)
         .filter(History.user == user)
+        .options(joinedload(History.user))
         .order_by(desc(History.updated), desc(History.created))
         .limit(limit)
         .offset(offset)
@@ -36,6 +38,7 @@ async def get_history(session: AsyncSession, limit: int, offset: int) -> User:
 
     return await session.scalars(
         select(History)
+        .options(joinedload(History.user))
         .order_by(desc(History.updated), desc(History.created))
         .limit(limit)
         .offset(offset)
