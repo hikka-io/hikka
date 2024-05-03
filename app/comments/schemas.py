@@ -71,6 +71,11 @@ class CommentPreviewResponse(CustomModel):
     slug: str
 
 
+class CommentPreviewListResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CommentPreviewResponse]
+
+
 class CommentListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CommentResponse]

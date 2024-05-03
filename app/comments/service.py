@@ -238,13 +238,13 @@ async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):
     # NOTE: I HATE this function so much, it should be rewritten!
-
     comments = await session.scalars(
         select(Comment)
         .filter(Comment.id.in_(comment_ids))
         .options(immediateload(EditComment.content))
         .options(immediateload(CollectionComment.content))
         .options(immediateload(AnimeComment.content))
+        .order_by(desc(Comment.created))
     )
 
     result = []
@@ -256,6 +256,10 @@ async def comments_preview_display(
             image = comment.content.poster
 
         if isinstance(comment, EditComment):
+            # This is horrible hack, but we need this to prevent SQLAlchemy bug
+            # For some reason edit content is not loaded sometimes
+            await session.refresh(comment.content)
+
             if isinstance(comment.content.content, Anime):
                 image = comment.content.content.poster
             else:
@@ -293,7 +297,7 @@ async def comments_preview_display(
     return result
 
 
-async def latest_comments(session: AsyncSession, request_user: User | None):
+async def latest_comments(session: AsyncSession):
     comment_ids = await session.scalars(
         select(Comment.id, Comment.content_id)
         .filter(
@@ -302,7 +306,33 @@ async def latest_comments(session: AsyncSession, request_user: User | None):
         )
         .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
-        .limit(3)
+        .limit(30)
+    )
+
+    return await comments_preview_display(session, comment_ids)
+
+
+async def count_comments(session: AsyncSession) -> int:
+    """Count comments"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+        )
+    )
+
+
+async def get_comments(session: AsyncSession, limit: int, offset: int):
+    comment_ids = await session.scalars(
+        select(Comment.id, Comment.content_id)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
     )
 
     return await comments_preview_display(session, comment_ids)
