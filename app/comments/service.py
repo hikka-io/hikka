@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc, func
 from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
+from sqlalchemy.orm import immediateload
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from uuid import UUID, uuid4
@@ -16,10 +17,12 @@ from app.service import (
 )
 
 from app.models import (
+    CollectionContent,
     CollectionComment,
     AnimeComment,
     EditComment,
     Comment,
+    Anime,
     User,
     Edit,
 )
@@ -229,3 +232,107 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     )
 
     return True
+
+
+async def comments_preview_display(
+    session: AsyncSession, comment_ids: list[UUID]
+):
+    # NOTE: I HATE this function so much, it should be rewritten!
+    comments = await session.scalars(
+        select(Comment)
+        .filter(Comment.id.in_(comment_ids))
+        .options(immediateload(EditComment.content))
+        .options(immediateload(CollectionComment.content))
+        .options(immediateload(AnimeComment.content))
+        .order_by(desc(Comment.created))
+    )
+
+    result = []
+
+    for comment in comments:
+        image = None
+
+        if isinstance(comment, AnimeComment):
+            image = comment.content.poster
+
+        if isinstance(comment, EditComment):
+            # This is horrible hack, but we need this to prevent SQLAlchemy bug
+            # For some reason edit content is not loaded sometimes
+            await session.refresh(comment.content)
+
+            if isinstance(comment.content.content, Anime):
+                image = comment.content.content.poster
+            else:
+                image = comment.content.content.image
+
+        if isinstance(comment, CollectionComment):
+            collection_content = await session.scalar(
+                select(CollectionContent)
+                .filter(CollectionContent.collection == comment.content)
+                .order_by(asc(CollectionContent.order))
+                .limit(1)
+            )
+
+            if comment.content.content_type == constants.CONTENT_ANIME:
+                image = collection_content.content.poster
+
+            else:
+                image = collection_content.content.image
+
+        result.append(
+            {
+                "content_type": comment.content_type,
+                "vote_score": comment.vote_score,
+                "reference": comment.reference,
+                "slug": comment.content.slug,
+                "created": comment.created,
+                "updated": comment.updated,
+                "author": comment.author,
+                "depth": comment.depth,
+                "text": comment.text,
+                "image": image,
+            }
+        )
+
+    return result
+
+
+async def latest_comments(session: AsyncSession):
+    comment_ids = await session.scalars(
+        select(Comment.id, Comment.content_id)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+        )
+        .group_by(Comment.id, Comment.content_id)
+        .order_by(desc(Comment.created))
+        .limit(30)
+    )
+
+    return await comments_preview_display(session, comment_ids)
+
+
+async def count_comments(session: AsyncSession) -> int:
+    """Count comments"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+        )
+    )
+
+
+async def get_comments(session: AsyncSession, limit: int, offset: int):
+    comment_ids = await session.scalars(
+        select(Comment.id, Comment.content_id)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+    return await comments_preview_display(session, comment_ids)
