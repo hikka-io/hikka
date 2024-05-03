@@ -50,7 +50,7 @@ async def following_history(
 
 
 @router.get(
-    "/{username}",
+    "/user/{username}",
     response_model=HistoryPaginationResponse,
     summary="User history",
 )
