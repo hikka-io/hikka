@@ -24,7 +24,7 @@ from app.models import (
 
 async def process_genres(session, anime, data):
     genres = await session.scalars(
-        select(AnimeGenre).where(AnimeGenre.content_id.in_(data["genre_ids"]))
+        select(AnimeGenre).filter(AnimeGenre.content_id.in_(data["genre_ids"]))
     )
 
     genres_add = []
@@ -44,7 +44,7 @@ async def process_companies_anime(session, anime, data):
     ]
 
     cache = await session.scalars(
-        select(Company).where(Company.content_id.in_(content_ids))
+        select(Company).filter(Company.content_id.in_(content_ids))
     )
 
     companies_cache = {entry.content_id: entry for entry in cache}
@@ -90,19 +90,21 @@ async def process_characters_and_voices(session, anime, data):
     )
 
     cache = await session.scalars(
-        select(Character).where(Character.content_id.in_(character_content_ids))
+        select(Character).filter(
+            Character.content_id.in_(character_content_ids)
+        )
     )
 
     characters_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
-        select(Person).where(Person.content_id.in_(people_content_ids))
+        select(Person).filter(Person.content_id.in_(people_content_ids))
     )
 
     people_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
-        select(AnimeVoice).where(AnimeVoice.anime == anime)
+        select(AnimeVoice).filter(AnimeVoice.anime == anime)
     )
 
     anime_voice_cache = {
@@ -185,13 +187,13 @@ async def process_recommendations(session, anime, data):
     ]
 
     cache = await session.scalars(
-        select(Anime).where(Anime.content_id.in_(content_ids))
+        select(Anime).filter(Anime.content_id.in_(content_ids))
     )
 
     recommended_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
-        select(AnimeRecommendation).where(AnimeRecommendation.anime == anime)
+        select(AnimeRecommendation).filter(AnimeRecommendation.anime == anime)
     )
 
     recommendations_cache = {
@@ -233,7 +235,7 @@ async def process_episodes(session, anime, data):
     episodes = []
 
     cache = await session.scalars(
-        select(AnimeEpisode).where(
+        select(AnimeEpisode).filter(
             AnimeEpisode.anime == anime,
             AnimeEpisode.index.in_(
                 [entry["index"] for entry in data["episodes_list"]]
@@ -290,13 +292,13 @@ async def process_staff(session, anime, data):
     )
 
     cache = await session.scalars(
-        select(Person).where(Person.content_id.in_(people_content_ids))
+        select(Person).filter(Person.content_id.in_(people_content_ids))
     )
 
     people_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
-        select(AnimeStaffRole).where(AnimeStaffRole.slug.in_(role_slugs))
+        select(AnimeStaffRole).filter(AnimeStaffRole.slug.in_(role_slugs))
     )
 
     role_cache = {entry.slug: entry for entry in cache}
