@@ -65,6 +65,10 @@ class Anime(
         String(16), index=True, nullable=True
     )
 
+    test_field: Mapped[str] = mapped_column(
+        String(16), index=True, nullable=True
+    )
+
     schedule: Mapped[list] = mapped_column(JSONB, default=[])
     external: Mapped[list] = mapped_column(JSONB, default=[])
     videos: Mapped[list] = mapped_column(JSONB, default=[])
