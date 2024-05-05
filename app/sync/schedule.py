@@ -131,6 +131,58 @@ async def update_schedule_aired(session: AsyncSession):
     await session.commit()
 
 
+async def rollback_episodes_released(
+    session: AsyncSession, episode: AnimeSchedule, anime: Anime
+):
+    # TODO: implement notification deletion logic for bad schedule (?)
+    # TODO: implement anime status change (?)
+
+    now = utcnow()
+
+    # Stop if anime episodes_released haven't been updated yet
+    # Or episode haven't aired yet
+    if anime.episodes_released < episode.episode or episode.airing_at < now:
+        return
+
+    before = {}
+    after = {}
+
+    before["episodes_released"] = anime.episodes_released
+    anime.episodes_released = episode.episode - 1
+    after["episodes_released"] = anime.episodes_released
+
+    # Only create new edit and log records when needed
+    if before != {} and after != {}:
+        edit = Edit(
+            **{
+                "content_type": constants.CONTENT_ANIME,
+                "status": constants.EDIT_ACCEPTED,
+                "content_id": anime.reference,
+                "system_edit": True,
+                "before": before,
+                "after": after,
+                "created": now,
+                "updated": now,
+            }
+        )
+
+        log_type = constants.LOG_SCHEDULE_ANIME_ROLLBACK
+        log = Log(
+            **{
+                "target_id": anime.id,
+                "log_type": log_type,
+                "created": now,
+                "user": None,
+                "data": {
+                    "before": before,
+                    "after": after,
+                },
+            }
+        )
+
+        session.add_all([anime, edit, log])
+
+
 async def build_schedule(session: AsyncSession):
     now = utcnow()
 
@@ -172,6 +224,14 @@ async def build_schedule(session: AsyncSession):
                 episode.airing_at = airing_at
                 episode.updated = now
                 session.add(episode)
+
+                # Sometimes our schedule may be not up to date and system can
+                # incorrectly set episodes_released for some entries
+                # In this case we should roll it back
+                if anime := await session.scalar(
+                    select(Anime).filter(Anime.id == episode.anime_id)
+                ):
+                    await rollback_episodes_released(session, episode, anime)
 
                 print(
                     f"Updated episode #{episode.episode} for {anime.title_ja}"
