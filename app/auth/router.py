@@ -24,7 +24,7 @@ from .dependencies import (
     validate_signup,
     get_user_oauth,
     validate_login,
-    get_oauth_info,
+    get_oauth_data,
 )
 
 from .schemas import (
@@ -170,7 +170,7 @@ async def provider_url(provider: str = Depends(validate_provider)):
 async def oauth_token(
     session: AsyncSession = Depends(get_session),
     oauth_user: UserOAuth | None = Depends(get_user_oauth),
-    data: dict[str, str] = Depends(get_oauth_info),
+    data: dict[str, str] = Depends(get_oauth_data),
     provider: str = Depends(validate_provider),
 ):
     if not oauth_user:

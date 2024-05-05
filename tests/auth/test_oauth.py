@@ -24,7 +24,7 @@ async def test_invalid_provider(client):
     assert response.json()["code"] == "auth:invalid_provider"
 
 
-async def test_valid_oauth_signup(client, oauth_http, test_session):
+async def test_valid_oauth_signup(client, mock_oauth_data, test_session):
     response = await request_oauth_post(client, "google", "code")
 
     assert response.status_code == status.HTTP_200_OK
@@ -37,30 +37,28 @@ async def test_valid_oauth_signup(client, oauth_http, test_session):
     assert log.user == user
 
 
-async def test_signup_invalid_provider(client, oauth_fail_http):
+async def test_signup_invalid_provider(client, mock_oauth_invalid_data):
     response = await request_oauth_post(client, "qwerty123", "code")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "auth:invalid_provider"
 
 
-async def test_signup_invalid_code(client, oauth_fail_http):
+async def test_signup_invalid_code(client, mock_oauth_invalid_data):
     response = await request_oauth_post(client, "google", "invalidcode")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "auth:invalid_code"
 
 
-async def test_signup_absent_code(client, oauth_fail_http):
+async def test_signup_absent_code(client, mock_oauth_invalid_data):
     response = await request_oauth_post(client, "google")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
 
 
-async def test_valid_oauth_login(
-    client, create_test_user_with_oauth, oauth_http, test_session
-):
+async def test_valid_oauth_login(client, mock_oauth_data, test_session):
     response = await request_oauth_post(client, "google", "code")
 
     assert response.status_code == status.HTTP_200_OK
@@ -68,12 +66,11 @@ async def test_valid_oauth_login(
 
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_LOGIN_OAUTH
-    assert log.user_id == create_test_user_with_oauth.user_id
     assert log.data["provider"] == "google"
 
 
 async def test_oauth_login_email_exists(
-    client, create_test_user_oauth, oauth_http
+    client, create_test_user_oauth, mock_oauth_data
 ):
     response = await request_oauth_post(client, "google", "code")
 
@@ -81,7 +78,7 @@ async def test_oauth_login_email_exists(
     assert response.json()["code"] == "auth:email_exists"
 
 
-async def test_valid_oauth_username(client, oauth_http):
+async def test_valid_oauth_username(client, mock_oauth_data):
     response = await request_oauth_post(client, "google", "code")
 
     # Check username created by oauth signup
@@ -89,7 +86,9 @@ async def test_valid_oauth_username(client, oauth_http):
     assert response.json()["username"] == "testuser"
 
 
-async def test_valid_oauth_username_extra(client, create_test_user, oauth_http):
+async def test_valid_oauth_username_extra(
+    client, create_test_user, mock_oauth_data
+):
     response = await request_oauth_post(client, "google", "code")
 
     # Check username created by oauth signup

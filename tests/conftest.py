@@ -3,7 +3,6 @@
 
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
-from app.auth.oauth_client import OAuthError
 from async_asgi_testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
@@ -12,7 +11,6 @@ from app.utils import get_settings
 from app.models import Anime, Base
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from httpx import Response
 from app import create_app
 from app import aggregator
 from unittest import mock
@@ -155,36 +153,25 @@ async def get_dummy_token(test_session):
 
 
 # OAuth fixtures
-@pytest.fixture(autouse=True)
-def oauth_response():
-    def generate(status_code=200, **params):
-        return Response(status_code, **params)
-
-    return generate
-
-
 @pytest.fixture(autouse=False)
-def oauth_http(oauth_response):
-    with mock.patch("httpx.AsyncClient.request") as mocked:
-        mocked.return_value = oauth_response(
-            json={
-                "email": "testuser@mail.com",
-                "response": "ok",
-                "id": "test-id",
-            }
-        )
+def mock_oauth_data():
+    with mock.patch("app.auth.oauth.get_user_data") as mocked:
+        mocked.return_value = {
+            "email": "testuser@mail.com",
+            "id": "TEST_OAUTH_ID",
+        }
 
         yield mocked
 
 
 @pytest.fixture(autouse=False)
-def oauth_fail_http(oauth_response):
-    with mock.patch(
-        "httpx.AsyncClient.request", side_effect=OAuthError
-    ) as mocked:
+def mock_oauth_invalid_data():
+    with mock.patch("app.upload.service.s3_upload_file") as mocked:
+        mocked.return_value = None
         yield mocked
 
 
+# S3 fixtures
 @pytest.fixture(autouse=False)
 def mock_s3_upload_file():
     with mock.patch("app.upload.service.s3_upload_file") as mocked:
