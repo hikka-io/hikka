@@ -1,5 +1,4 @@
 from app.utils import get_settings
-from app import constants
 import aiohttp
 
 
