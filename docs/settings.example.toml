@@ -6,7 +6,7 @@
     enabled = true
 
     [default.database]
-    endpoint = "postgresql+asyncpg://user:password@localhost:5432/database"
+    endpoint = "postgresql+asyncpg://user:password@localhost:5432/hikka"
 
     [default.mailgun]
     endpoint = "https://api.eu.mailgun.net/v3/mail.hikka.io/messages"
@@ -18,12 +18,13 @@
     api_key = "xyz"
 
     [default.backend]
+    plausible = "http://127.0.0.1:8000"
+    aggregator = "http://aggregator.local/database"
     sitemap_path = "/Users/user/Work/Hikka/sitemap"
     auth_emails = []
     origins = [
         "http://localhost:8000",
         "http://localhost:3000",
-        "http://localhost:5173",
         "https://hikka.io",
     ]
 
@@ -35,7 +36,7 @@
     [default.s3]
     key = "s3_key"
     secret = "s3_secret"
-    endpoint = "https://endpoint.r2.cloudflarestorage.com"
+    endpoint = "https://endpoint.s3.provider.com"
     bucket = "hikka"
 
 [testing]

@@ -9,12 +9,12 @@ async def save_characters(session, data):
     images = [entry["image"] for entry in data]
 
     cache = await session.scalars(
-        select(Character).where(Character.content_id.in_(content_ids))
+        select(Character).filter(Character.content_id.in_(content_ids))
     )
 
     characters_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).where(Image.path.in_(images)))
+    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
 
     image_cache = {entry.path: entry for entry in cache}
 

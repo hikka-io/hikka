@@ -20,6 +20,7 @@ async def update_anime_roles(session, data):
             **{
                 "name_en": role_name,
                 "slug": slug,
+                "weight": 0,
             }
         )
 

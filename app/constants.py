@@ -249,6 +249,7 @@ LOG_COLLECTION_UPDATE = "collection_update"
 LOG_COLLECTION_DELETE = "collection_delete"
 LOG_VOTE_SET = "vote_set"
 LOG_SCHEDULE_ANIME = "schedule_anime"
+LOG_SCHEDULE_ANIME_ROLLBACK = "schedule_anime_rollback"
 
 # History types
 HISTORY_WATCH = "watch"

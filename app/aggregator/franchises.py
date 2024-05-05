@@ -8,7 +8,9 @@ async def save_anime_franchises_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
 
     cache = await session.scalars(
-        select(AnimeFranchise).where(AnimeFranchise.content_id.in_(content_ids))
+        select(AnimeFranchise).filter(
+            AnimeFranchise.content_id.in_(content_ids)
+        )
     )
 
     franchises_cache = {entry.content_id: entry for entry in cache}
@@ -32,7 +34,7 @@ async def save_anime_franchises_list(session, data):
         await session.commit()
 
         cache = await session.scalars(
-            select(Anime).where(
+            select(Anime).filter(
                 Anime.content_id.in_(franchise_data["franchise_entries"])
             )
         )

@@ -9,13 +9,13 @@ from app import constants
 
 async def count_followers(session: AsyncSession, user: User):
     return await session.scalar(
-        select(func.count(Follow.id)).where(Follow.followed_user == user)
+        select(func.count(Follow.id)).filter(Follow.followed_user == user)
     )
 
 
 async def count_following(session: AsyncSession, user: User):
     return await session.scalar(
-        select(func.count(Follow.id)).where(Follow.user == user)
+        select(func.count(Follow.id)).filter(Follow.user == user)
     )
 
 

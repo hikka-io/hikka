@@ -14,7 +14,6 @@ from .schemas import (
     CharacterVoicesPaginationResponse,
     CharacterAnimePaginationResponse,
     CharacterCountResponse,
-    CharacterFullResponse,
 )
 
 from app.utils import (

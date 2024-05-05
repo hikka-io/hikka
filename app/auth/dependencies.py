@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.models import User, UserOAuth
 from app.database import get_session
-from .oauth_client import OAuthError
 from app.schemas import EmailArgs
 from app.errors import Abort
 from fastapi import Depends
@@ -100,32 +99,18 @@ async def validate_provider(provider: str) -> str:
     return provider
 
 
-async def get_oauth_info(
+async def get_oauth_data(
     args: CodeArgs,
     provider: str = Depends(validate_provider),
 ):
-    client = oauth.get_client(provider)
-    data = None
-
-    settings = get_settings()
-    oauth_provider = settings.oauth.get(provider)
-
-    try:
-        otoken, _ = await client.get_access_token(
-            args.code, oauth_provider["redirect_uri"]
-        )
-
-        client.access_token = otoken
-        _, data = await client.user_info()
-
-    except OAuthError:
+    if not (data := await oauth.get_user_data(provider, args.code)):
         raise Abort("auth", "invalid-code")
 
     return data
 
 
 async def get_user_oauth(
-    data: dict[str, str] = Depends(get_oauth_info),
+    data: dict = Depends(get_oauth_data),
     provider: str = Depends(validate_provider),
     session: AsyncSession = Depends(get_session),
 ) -> UserOAuth | None:

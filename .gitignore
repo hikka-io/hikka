@@ -2,6 +2,7 @@
 __pycache__/
 venv/*
 config.py
+playground.py
 alembic.ini
 settings.toml
 .venv

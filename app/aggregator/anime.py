@@ -9,12 +9,12 @@ async def save_anime_list(session, data):
     posters = [entry["poster"] for entry in data]
 
     cache = await session.scalars(
-        select(Anime).where(Anime.content_id.in_(content_ids))
+        select(Anime).filter(Anime.content_id.in_(content_ids))
     )
 
     anime_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).where(Image.path.in_(posters)))
+    cache = await session.scalars(select(Image).filter(Image.path.in_(posters)))
 
     poster_cache = {entry.path: entry for entry in cache}
 
