@@ -255,6 +255,12 @@ async def anime_meilisearch_watch(
     if len(search.sort) > 0:
         query = query.order_by(*build_order_by(search.sort))
 
-    meilisearch_result["list"] = (await session.scalars(query)).unique().all()
+    anime_list = await session.scalars(query)
+    meilisearch_result["list"] = anime_list.unique().all()
+
+    # Results must be sorted here to ensure same order as Meilisearch results
+    meilisearch_result["list"] = sorted(
+        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
+    )
 
     return meilisearch_result

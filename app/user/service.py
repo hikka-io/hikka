@@ -32,6 +32,9 @@ async def users_meilisearch(
 ):
     usernames = [user["username"] for user in meilisearch_result["list"]]
 
+    # NOTE: we may need to preserve results order from Meilisearch here
+    # For reference see anime_meilisearch_watch function
+
     return await session.scalars(
         select(User)
         .filter(User.username.in_(usernames))
