@@ -67,7 +67,7 @@ async def request_user_data(
                 user_info_url,
                 headers={"Authorization": f"Bearer {access_token}"},
             ) as result:
-                return await result.text()
+                return await result.json()
 
     except aiohttp.ClientError:
         return None
