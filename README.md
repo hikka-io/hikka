@@ -1,6 +1,21 @@
-# Hikka
+<div align="center">
+  <a href="https://github.com/hikka-io/hikka">
+    <img src="https://github.com/rosset-nocpes/hikka/assets/53056080/7268effd-da63-49fa-97e2-732efaa54421" alt="banner" />
+  </a>
+  <p align="center">
+    Backend service for hikka.io - Ukrainian anime tracker.
+    <br />
+    <br />
+    <a href="https://hikka.io">View Project</a>
+    ·
+    <a href="https://github.com/hikka-io/hikka/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/hikka-io/hikka/issues">Request Feature</a>
+    ·
+    <a href="https://github.com/hikka-io/hikka-next">Frontend</a>
+  </p>
+</div>
 
-Backend service for [hikka.io](https://hikka.io) - Ukrainian anime tracker.
 
 ## About The Project
 
