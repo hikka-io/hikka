@@ -1,7 +1,7 @@
 from pydantic import Field, field_validator
 from dataclasses import dataclass, field
+from app.schemas import datetime_pd
 from app.models import Comment
-from datetime import datetime
 from app import constants
 from uuid import UUID
 from enum import Enum
@@ -45,11 +45,11 @@ class CommentArgs(CommentTextArgs):
 class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
+    updated: datetime_pd
+    created: datetime_pd
     author: UserResponse
     parent: str | None
     is_editable: bool
-    updated: datetime
-    created: datetime
     text: str | None
     vote_score: int
     reference: str
@@ -60,8 +60,8 @@ class CommentResponse(CustomModel):
 
 class CommentPreviewResponse(CustomModel):
     author: UserResponse
-    updated: datetime
-    created: datetime
+    updated: datetime_pd
+    created: datetime_pd
     content_type: str
     image: str | None
     text: str | None

@@ -1,4 +1,4 @@
-from datetime import datetime
+from app.schemas import datetime_pd
 from pydantic import Field
 
 from app.schemas import (
@@ -33,8 +33,8 @@ class ProviderUrlResponse(CustomModel):
 
 
 class TokenResponse(CustomModel):
-    expiration: datetime = Field(examples=[1686088809])
-    created: datetime = Field(examples=[1686088809])
+    expiration: datetime_pd = Field(examples=[1686088809])
+    created: datetime_pd = Field(examples=[1686088809])
     secret: str = Field(
         examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"]
     )

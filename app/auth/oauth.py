@@ -1,5 +1,5 @@
+from urllib.parse import urlencode, unquote
 from app.utils import get_settings
-from urllib.parse import urlencode
 import aiohttp
 
 
@@ -28,6 +28,9 @@ async def request_access_token(
     code: str,
 ) -> str | None:
     """Request access token from oauth provider service"""
+
+    # Unquote url encoded string (just in case)
+    code = unquote(code)
 
     try:
         async with aiohttp.ClientSession() as session:

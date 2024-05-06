@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from app.schemas import datetime_pd, timedelta_pd
 from pydantic import field_validator
 from pydantic import PositiveInt
 
@@ -66,8 +66,8 @@ class AnimeResponseWithSynopsis(AnimeResponseWithWatch):
 
 class AnimeScheduleResponse(CustomModel):
     anime: AnimeResponseWithSynopsis
-    time_left: timedelta
-    airing_at: datetime
+    time_left: timedelta_pd
+    airing_at: datetime_pd
     episode: int
 
 

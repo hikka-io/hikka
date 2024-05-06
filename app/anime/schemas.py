@@ -1,5 +1,5 @@
 from pydantic import Field, field_validator
-from datetime import datetime
+from app.schemas import datetime_pd
 from app import constants
 
 from app.schemas import (
@@ -9,10 +9,10 @@ from app.schemas import (
     AnimeStaffResponse,
     PaginationResponse,
     CharacterResponse,
-    DataTypeMixin,
     CompanyTypeEnum,
     CompanyResponse,
     QuerySearchArgs,
+    DataTypeMixin,
     CustomModel,
 )
 
@@ -50,7 +50,7 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 
 # Responses
 class AnimeEpisodeResponse(CustomModel):
-    aired: datetime | None = Field(examples=[1686088809])
+    aired: datetime_pd | None = Field(examples=[1686088809])
     title_ua: str | None = Field(
         examples=["Самопроголошена богиня і переродження в паралельному світі!"]
     )
@@ -133,10 +133,10 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
+    start_date: datetime_pd | None = Field(examples=[1686088809])
+    end_date: datetime_pd | None = Field(examples=[1686088809])
+    updated: datetime_pd
     comments_count: int
-
-    start_date: datetime | None = Field(examples=[1686088809])
-    end_date: datetime | None = Field(examples=[1686088809])
 
     episodes_released: int | None = Field(examples=[10])
     episodes_total: int | None = Field(examples=[10])
@@ -172,7 +172,6 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     stats: AnimeStatsResponse
     schedule: list[dict]
     translated_ua: bool
-    updated: datetime
 
     @field_validator("external")
     def external_ordering(cls, value):

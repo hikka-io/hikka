@@ -1,14 +1,32 @@
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime, timedelta
-from pydantic import model_serializer
+from pydantic import PlainSerializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
 from pydantic import PositiveInt
-from typing import Callable
+from typing import Annotated
 from . import constants
 from enum import Enum
 from . import utils
+
+
+# Custom Pydantic serializers
+datetime_pd = Annotated[
+    datetime,
+    PlainSerializer(
+        lambda x: utils.to_timestamp(x),
+        return_type=int,
+    ),
+]
+
+timedelta_pd = Annotated[
+    timedelta,
+    PlainSerializer(
+        lambda x: int(x.total_seconds()),
+        return_type=int,
+    ),
+]
 
 
 # Custom Pydantic model
@@ -23,25 +41,6 @@ class CustomModel(BaseModel):
     def serializable_dict(self, **kwargs):
         default_dict = self.model_dump()
         return jsonable_encoder(default_dict)
-
-    @model_serializer(mode="wrap")
-    def serialize(self, original_serializer: Callable) -> dict:
-        # Based on https://github.com/pydantic/pydantic/discussions/7199#discussioncomment-6841388
-
-        result = original_serializer(self)
-
-        for field_name, field_info in self.model_fields.items():
-            if type(getattr(self, field_name)) == datetime:
-                result[field_name] = utils.to_timestamp(
-                    getattr(self, field_name)
-                )
-
-            if type(getattr(self, field_name)) == timedelta:
-                result[field_name] = int(
-                    getattr(self, field_name).total_seconds()
-                )
-
-        return result
 
 
 class CustomModelExtraIgnore(CustomModel):
@@ -219,8 +218,8 @@ class PaginationResponse(CustomModel):
 class WatchResponseBase(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     note: str | None = Field(max_length=2048, examples=["🤯"])
-    updated: datetime = Field(examples=[1686088809])
-    created: datetime = Field(examples=[1686088809])
+    updated: datetime_pd = Field(examples=[1686088809])
+    created: datetime_pd = Field(examples=[1686088809])
     status: str = Field(examples=["watching"])
     rewatches: int = Field(examples=[2])
     duration: int = Field(examples=[24])
@@ -306,10 +305,10 @@ class CompanyResponse(CustomModel):
 
 class UserResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
-    updated: datetime | None = Field(examples=[1686088809])
+    updated: datetime_pd | None = Field(examples=[1686088809])
+    created: datetime_pd = Field(examples=[1686088809])
     description: str | None = Field(examples=["Hikka"])
     username: str | None = Field(examples=["hikka"])
-    created: datetime = Field(examples=[1686088809])
     cover: str | None
     active: bool
     avatar: str
@@ -333,8 +332,8 @@ class CommentResponse(CustomModel):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
     author: UserResponse
-    updated: datetime
-    created: datetime
+    updated: datetime_pd
+    created: datetime_pd
     text: str | None
     reference: str
     my_score: int
@@ -356,9 +355,9 @@ class CollectionResponse(CustomModel, DataTypeMixin):
     visibility: CollectionVisibilityEnum
     labels_order: list[str]
     author: UserResponse
+    created: datetime_pd
+    updated: datetime_pd
     comments_count: int
-    created: datetime
-    updated: datetime
     content_type: str
     description: str
     vote_score: int
