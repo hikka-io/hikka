@@ -42,25 +42,6 @@ class CustomModel(BaseModel):
         default_dict = self.model_dump()
         return jsonable_encoder(default_dict)
 
-    # @model_serializer(mode="wrap")
-    # def serialize(self, original_serializer: Callable) -> dict:
-    #     # Based on https://github.com/pydantic/pydantic/discussions/7199#discussioncomment-6841388
-
-    #     result = original_serializer(self)
-
-    #     for field_name, field_info in self.model_fields.items():
-    #         if type(getattr(self, field_name)) == datetime:
-    #             result[field_name] = utils.to_timestamp(
-    #                 getattr(self, field_name)
-    #             )
-
-    #         if type(getattr(self, field_name)) == timedelta:
-    #             result[field_name] = int(
-    #                 getattr(self, field_name).total_seconds()
-    #             )
-
-    #     return result
-
 
 class CustomModelExtraIgnore(CustomModel):
     model_config = ConfigDict(extra="ignore")
