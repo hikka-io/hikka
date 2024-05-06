@@ -1,5 +1,5 @@
 from pydantic import Field, field_validator
-from datetime import datetime
+from app.schemas import datetime_pd
 from app import constants
 from enum import Enum
 
@@ -137,9 +137,9 @@ class CharacterEditArgs(CustomModel):
 class EditResponse(CustomModel):
     content_type: ContentTypeEnum = Field(examples=["anime"])
     status: EditStatusEnum = Field(examples=["pending"])
+    created: datetime_pd = Field(examples=[1693850684])
+    updated: datetime_pd = Field(examples=[1693850684])
     description: str | None = Field(examples=["..."])
-    created: datetime = Field(examples=[1693850684])
-    updated: datetime = Field(examples=[1693850684])
     edit_id: int = Field(examples=[3])
     moderator: UserResponse | None
     author: UserResponse | None

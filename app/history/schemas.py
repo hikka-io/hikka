@@ -1,4 +1,4 @@
-from datetime import datetime
+from app.schemas import datetime_pd
 
 from app.schemas import (
     PaginationResponse,
@@ -11,10 +11,10 @@ from app.schemas import (
 # Responses
 class HistoryResponse(CustomModel):
     content: AnimeResponse | None = None
+    created: datetime_pd
+    updated: datetime_pd
     user: UserResponse
     history_type: str
-    created: datetime
-    updated: datetime
     reference: str
     data: dict
 

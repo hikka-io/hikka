@@ -1,11 +1,11 @@
 from app.schemas import PaginationResponse, CustomModel
-from datetime import datetime
+from app.schemas import datetime_pd
 
 
 # Responses
 class NotificationResponse(CustomModel):
     notification_type: str
-    created: datetime
+    created: datetime_pd
     reference: str
     seen: bool
     data: dict

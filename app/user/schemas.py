@@ -1,8 +1,8 @@
 from app.schemas import CustomModel
-from datetime import datetime
+from app.schemas import datetime_pd
 
 
 # Responses
 class ActivityResponse(CustomModel):
-    timestamp: datetime
+    timestamp: datetime_pd
     actions: int
