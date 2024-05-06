@@ -112,15 +112,27 @@ async def generate_history(session: AsyncSession):
 
             # Only record unknown keys to before
             for key in log.data["before"]:
+                # Skip edited notes
+                if key == "note":
+                    continue
+
                 if key not in history.data["before"]:
                     history.data["before"][key] = log.data["before"][key]
 
             # Update all keys in after
             for key in log.data["after"]:
+                # Skip edited notes here too
+                if key == "note":
+                    continue
+
                 history.data["after"][key] = log.data["after"][key]
 
             history.used_logs.append(str(log.id))
             history.updated = log.created
+
+            # Skip empty history edits
+            if history.data["before"] == {} and history.data["after"] == {}:
+                continue
 
             session.add(history)
             await session.commit()

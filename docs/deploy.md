@@ -27,11 +27,17 @@ sudo nano /etc/nginx/sites-available/api.hikka.io.conf
 ```
 
 ```
+limit_req_zone $binary_remote_addr zone=ip:10m rate=10r/s;
+
 server {
     server_name api.hikka.io;
     listen 80;
 
+    client_max_body_size 2M;
+
     location / {
+        limit_req zone=ip burst=10 delay=10;
+s
         proxy_pass http://localhost:8888;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -41,6 +47,8 @@ server {
     }
 }
 ```
+
+Note: it's possible to use $http_cf_connecting_ip or $http_x_forwarded_for instead of $binary_remote_addr
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/api.hikka.io.conf /etc/nginx/sites-enabled
