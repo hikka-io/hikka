@@ -19,7 +19,7 @@ from app.schemas import (
 
 # Args
 class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
-    sort: list[str] = ["score:desc", "scored_by:desc"]
+    sort: list[str] = []
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
