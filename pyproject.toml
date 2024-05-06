@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hikka"
-version = "0.1.0"
-description = ""
+version = "0.3.0"
+description = "Backend service for hikka.io - Ukrainian anime tracker"
 authors = ["Hikka Team"]
 readme = "README.md"
 
