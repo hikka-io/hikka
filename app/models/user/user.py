@@ -75,6 +75,7 @@ class User(Base, NeedsSearchUpdateMixin):
     decisions: Mapped[list["Edit"]] = relationship(
         foreign_keys="[Edit.moderator_id]", back_populates="moderator"
     )
+
     avatar_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),
         nullable=True,
