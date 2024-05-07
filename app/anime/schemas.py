@@ -172,6 +172,7 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     stats: AnimeStatsResponse
     schedule: list[dict]
     translated_ua: bool
+    mal_id: int
 
     @field_validator("external")
     def external_ordering(cls, value):
