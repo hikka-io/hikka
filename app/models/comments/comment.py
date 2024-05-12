@@ -40,9 +40,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
-        back_populates="comments",
-        foreign_keys=[author_id],
-        lazy="selectin",
+        foreign_keys=[author_id], lazy="selectin"
     )
 
     __table_args__ = (
