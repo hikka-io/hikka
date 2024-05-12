@@ -117,6 +117,10 @@ class QuerySearchArgs(CustomModel):
     query: str | None = Field(default=None, min_length=3, max_length=255)
 
 
+class QuerySearchRequiredArgs(CustomModel):
+    query: str = Field(min_length=3, max_length=255)
+
+
 class UsernameArgs(CustomModel):
     username: str = Field(
         pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]

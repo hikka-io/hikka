@@ -8,7 +8,7 @@ from app import constants
 from . import service
 
 from app.schemas import (
-    QuerySearchArgs,
+    QuerySearchRequiredArgs,
     UserResponse,
 )
 
@@ -86,7 +86,7 @@ async def service_user_activity(
 
 @router.post("/list", response_model=list[UserResponse])
 async def search_users(
-    args: QuerySearchArgs, session: AsyncSession = Depends(get_session)
+    args: QuerySearchRequiredArgs, session: AsyncSession = Depends(get_session)
 ):
     meilisearch_result = await meilisearch.search(
         constants.SEARCH_INDEX_USERS, query=args.query
