@@ -8,11 +8,12 @@ from .utils import build_comments
 from . import service
 
 from .dependencies import (
+    validate_comment_not_hidden,
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
-    validate_comment,
     validate_parent,
+    validate_comment,
     validate_hide,
 )
 
@@ -128,3 +129,16 @@ async def hide_comment(
 ):
     comment = await service.hide_comment(session, comment, user)
     return {"success": True}
+
+
+@router.get("/thread/{comment_reference}", response_model=CommentResponse)
+async def thread(
+    base_comment: Comment = Depends(validate_comment_not_hidden),
+    request_user: User = Depends(auth_required(optional=True)),
+    session: AsyncSession = Depends(get_session),
+):
+    sub_comments = await service.get_sub_comments(
+        session, base_comment, request_user
+    )
+
+    return build_comments(base_comment, sub_comments)
