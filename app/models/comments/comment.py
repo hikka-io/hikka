@@ -20,6 +20,8 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
         "polymorphic_on": "content_type",
     }
 
+    # This field is used for comment visibility for private content
+    private: Mapped[bool] = mapped_column(default=False)
     my_score: Mapped[int] = query_expression()
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
@@ -38,9 +40,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin):
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
-        back_populates="comments",
-        foreign_keys=[author_id],
-        lazy="selectin",
+        foreign_keys=[author_id], lazy="selectin"
     )
 
     __table_args__ = (

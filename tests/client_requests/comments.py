@@ -32,3 +32,7 @@ def request_comments_list(client, content_type, slug, token=None, page=1):
         f"/comments/{content_type}/{slug}/list?page={page}",
         headers=headers,
     )
+
+
+def request_comments_latest(client):
+    return client.get("/comments/latest")

@@ -59,6 +59,7 @@ from .edit import request_deny_edit
 from .edit import request_edit_list
 from .edit import request_edit
 
+from .comments import request_comments_latest
 from .comments import request_comments_write
 from .comments import request_comments_list
 from .comments import request_comments_edit
@@ -138,6 +139,7 @@ __all__ = [
     "request_deny_edit",
     "request_edit_list",
     "request_edit",
+    "request_comments_latest",
     "request_comments_write",
     "request_comments_list",
     "request_comments_edit",
