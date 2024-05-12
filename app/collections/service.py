@@ -412,8 +412,15 @@ async def delete_collection(
     session: AsyncSession, collection: Collection, user: User
 ):
     collection.deleted = True
-
     session.add(collection)
+
+    # Mark comments for deleted collection as private
+    await session.execute(
+        update(CollectionComment)
+        .filter(CollectionComment.content == collection)
+        .values(private=True)
+    )
+
     await session.commit()
 
     await create_log(
