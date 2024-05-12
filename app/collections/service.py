@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, delete, and_, func
+from sqlalchemy import select, desc, delete, update, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
@@ -22,6 +22,7 @@ from app.models import (
     PersonCollectionContent,
     AnimeCollectionContent,
     CollectionContent,
+    CollectionComment,
     Collection,
     Character,
     Person,
@@ -210,7 +211,8 @@ async def get_collection(
     )
 
     if (
-        collection.author != request_user
+        collection is not None
+        and collection.author != request_user
         and collection.visibility == constants.COLLECTION_PRIVATE
     ):
         return None
@@ -370,9 +372,6 @@ async def update_collection(
 
             session.add_all(collection_content)
 
-            await session.commit()
-            await session.refresh(collection)
-
             before["content"] = old_content
             after["content"] = new_content
 
@@ -387,6 +386,24 @@ async def update_collection(
                 "old_collection": before,
             },
         )
+
+    # Collection visibility has changed
+    # We need to update collection comments private status
+    if "visibility" in after:
+        private = (
+            True
+            if collection.visibility == constants.COLLECTION_PRIVATE
+            else False
+        )
+
+        await session.execute(
+            update(CollectionComment)
+            .filter(CollectionComment.content == collection)
+            .values(private=private)
+        )
+
+    await session.commit()
+    await session.refresh(collection)
 
     return collection
 

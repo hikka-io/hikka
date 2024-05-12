@@ -21,6 +21,7 @@ from app.models import (
     CollectionComment,
     AnimeComment,
     EditComment,
+    Collection,
     Comment,
     Anime,
     User,
@@ -58,6 +59,7 @@ async def create_comment(
         **{
             "content_type": content_type,
             "content_id": content_id,
+            "private": False,
             "author": author,
             "vote_score": 0,
             "created": now,
@@ -67,6 +69,15 @@ async def create_comment(
             "score": 0,
         }
     )
+
+    # Here we handle comments for private collections
+    if content_type == constants.CONTENT_COLLECTION:
+        visibility = await session.scalar(
+            select(Collection.visibility).filter(Collection.id == content_id)
+        )
+
+        if visibility == constants.COLLECTION_PRIVATE:
+            comment.private = True
 
     ltree_id = Ltree(uuid_to_path(comment.id))
     comment.path = ltree_id if parent is None else parent.path + ltree_id
@@ -303,6 +314,7 @@ async def latest_comments(session: AsyncSession):
         .filter(
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
         )
         .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
@@ -319,6 +331,7 @@ async def count_comments(session: AsyncSession) -> int:
         select(func.count(Comment.id)).filter(
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
         )
     )
 
@@ -329,6 +342,7 @@ async def get_comments(session: AsyncSession, limit: int, offset: int):
         .filter(
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
         )
         .order_by(desc(Comment.created))
         .limit(limit)
