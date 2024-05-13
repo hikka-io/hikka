@@ -14,14 +14,15 @@ def build_comments(base_comment, sub_comments):
         for reply in node.replies:
             calculate_total_replies(reply)
 
-    tree = CommentNode.create(path_to_uuid(base_comment.path), base_comment)
+    tree = CommentNode.create(path_to_uuid(base_comment.path[-1]), base_comment)
     tree_dict = {tree.reference: tree}
+    base_depth = base_comment.depth
 
     for sub_comment in sub_comments:
         path = [path_to_uuid(element) for element in sub_comment.path]
-        tree_node = tree_dict[path[0]]
+        tree_node = tree_dict[path[base_depth - 1]]
 
-        for path_node in path[1:]:
+        for path_node in path[base_depth:]:
             reply = next(
                 (
                     reply_node
