@@ -447,7 +447,7 @@ async def update_anime_info(session, anime, data):
         # Special checks to prevent overwriting
         # changes made by our anime schedule task
         if field == "episodes_released":
-            if getattr(anime, field) > data[field]:
+            if not getattr(anime, field) or getattr(anime, field) > data[field]:
                 continue
 
         if field == "status":
