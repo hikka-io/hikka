@@ -37,10 +37,21 @@ content_type_to_comment_class = {
 
 
 async def get_comment(
-    session: AsyncSession, comment_reference: UUID
+    session: AsyncSession,
+    comment_reference: UUID,
+    request_user: User | None,
 ) -> Comment:
     return await session.scalar(
-        select(Comment).filter(Comment.id == comment_reference)
+        select(Comment)
+        .filter(Comment.id == comment_reference)
+        .options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            )
+        )
     )
 
 
