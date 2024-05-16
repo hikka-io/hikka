@@ -1,5 +1,5 @@
+from fastapi import Header, Cookie, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Header, Query, Depends
 from app.database import get_session
 from app.utils import get_settings
 from app.models import User, Anime
@@ -53,10 +53,18 @@ async def get_anime(
     return anime
 
 
+# Get auth token either from header or cookies
+async def get_request_auth_token(
+    header_auth: Annotated[str | None, Header(alias="auth")] = None,
+    cookie_auth: Annotated[str | None, Cookie(alias="auth")] = None,
+) -> str | None:
+    return header_auth if header_auth else cookie_auth
+
+
 # Check user auth token
 def auth_required(permissions: list = [], optional: bool = False):
     async def auth(
-        auth_token: Annotated[str | None, Header(alias="auth")] = None,
+        auth_token: str = Depends(get_request_auth_token),
         session: AsyncSession = Depends(get_session),
     ) -> User | None:
         error = None
