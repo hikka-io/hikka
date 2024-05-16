@@ -74,8 +74,13 @@ async def validate_rate_limit(
 async def validate_comment(
     comment_reference: UUID,
     session: AsyncSession = Depends(get_session),
+    request_user: User = Depends(auth_required(optional=True)),
 ) -> Comment:
-    if not (comment := await service.get_comment(session, comment_reference)):
+    if not (
+        comment := await service.get_comment(
+            session, comment_reference, request_user
+        )
+    ):
         raise Abort("comment", "not-found")
 
     return comment
