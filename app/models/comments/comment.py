@@ -1,6 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from ..mixins import CreatedMixin, UpdatedMixin
 from datetime import datetime, timedelta, UTC
 from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
@@ -12,8 +11,14 @@ from sqlalchemy import Index
 from ..base import Base
 from uuid import UUID
 
+from ..mixins import (
+    CreatedMixin,
+    UpdatedMixin,
+    DeletedMixin,
+)
 
-class Comment(Base, CreatedMixin, UpdatedMixin):
+
+class Comment(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
     __tablename__ = "service_comments"
     __mapper_args__ = {
         "polymorphic_identity": "default",
@@ -90,7 +95,9 @@ class EditComment(Comment):
 
 
 class AnimeComment(Comment):
-    __mapper_args__ = {"polymorphic_identity": "anime"}
+    __mapper_args__ = {
+        "polymorphic_identity": "anime",
+    }
 
     content_id = mapped_column(
         ForeignKey("service_content_anime.id", ondelete="CASCADE"),

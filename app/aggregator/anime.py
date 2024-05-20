@@ -38,7 +38,9 @@ async def save_anime_list(session, data):
                     constants.LOG_CONTENT_DELETED,
                     None,
                     anime.id,
-                    {"content_type": constants.CONTENT_ANIME},
+                    {
+                        "content_type": constants.CONTENT_ANIME,
+                    },
                 )
 
                 continue

@@ -13,6 +13,7 @@ from app.sync import (
     aggregator_people,
     aggregator_anime,
     update_weights,
+    update_content,
     update_search,
 )
 
@@ -32,6 +33,7 @@ async def import_aggregator():
     await aggregator_anime_franchises()
     await update_schedule_build()
     await update_search()
+    await update_content()
 
     # TODO: improve performance
     await update_weights()

@@ -6,6 +6,10 @@ from sqlalchemy import String
 from datetime import datetime
 
 
+class DeletedMixin:
+    deleted: Mapped[bool] = mapped_column(default=False)
+
+
 class SynonymsMixin:
     synonyms: Mapped[list] = mapped_column(JSONB, default=[])
 

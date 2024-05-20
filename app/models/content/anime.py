@@ -15,6 +15,7 @@ from ..mixins import (
     SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
+    DeletedMixin,
     SlugMixin,
 )
 
@@ -24,6 +25,7 @@ class Anime(
     SlugMixin,
     ContentMixin,
     UpdatedMixin,
+    DeletedMixin,
     SynonymsMixin,
     IgnoredFieldsMixin,
     NeedsSearchUpdateMixin,
@@ -32,8 +34,6 @@ class Anime(
 
     favourite_created: Mapped[datetime] = query_expression()
     comments_count: Mapped[int] = query_expression()
-
-    deleted: Mapped[bool] = mapped_column(default=False)
 
     # Multilang fields
     title_ja: Mapped[str] = mapped_column(String(255), nullable=True)
