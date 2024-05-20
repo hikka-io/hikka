@@ -249,7 +249,10 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
 
 async def delete_user_watch(session: AsyncSession, user: User):
     watch_count = await session.scalar(
-        select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
+            AnimeWatch.user == user,
+        )
     )
 
     await session.execute(delete(AnimeWatch).filter(AnimeWatch.user == user))

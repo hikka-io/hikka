@@ -100,6 +100,7 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
 async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
     return await session.scalar(
         select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.status == status,
             AnimeWatch.user == user,
         )
@@ -135,7 +136,10 @@ async def get_user_watch_list(
     limit: int,
     offset: int,
 ) -> list[AnimeWatch]:
-    query = select(AnimeWatch).filter(AnimeWatch.user == user)
+    query = select(AnimeWatch).filter(
+        AnimeWatch.deleted == False,  # noqa: E712
+        AnimeWatch.user == user,
+    )
 
     if search.watch_status:
         query = query.filter(AnimeWatch.status == search.watch_status)
@@ -152,7 +156,10 @@ async def get_user_watch_list(
 async def get_user_watch_list_count(
     session: AsyncSession, search: AnimeWatchSearchArgs, user: User
 ) -> int:
-    query = select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+    query = select(func.count(AnimeWatch.id)).filter(
+        AnimeWatch.deleted == False,  # noqa: E712
+        AnimeWatch.user == user,
+    )
 
     if search.watch_status:
         query = query.filter(AnimeWatch.status == search.watch_status)

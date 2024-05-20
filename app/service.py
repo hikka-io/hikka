@@ -84,6 +84,7 @@ async def get_content_by_slug(
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.user == user,
         )
@@ -359,6 +360,7 @@ def get_comments_count_subquery(content_id, content_type):
         .filter(
             Comment.content_id == content_id,
             Comment.content_type == content_type,
+            Comment.deleted == False,  # noqa: E712
             Comment.hidden == False,  # noqa: E712
         )
         .scalar_subquery()

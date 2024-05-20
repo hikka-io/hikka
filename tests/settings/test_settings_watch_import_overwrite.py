@@ -90,7 +90,8 @@ async def test_settings_import_watch_overwrite(
     # Watch entry should be changed after import
     watch = await test_session.scalar(
         select(AnimeWatch).filter(
-            AnimeWatch.anime == anime_bocchi, AnimeWatch.user == user
+            AnimeWatch.anime == anime_bocchi,
+            AnimeWatch.user == user,
         )
     )
 
