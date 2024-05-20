@@ -155,7 +155,7 @@ async def create_email(
 async def create_log(
     session: AsyncSession,
     log_type: str,
-    user: User,
+    user: User | None,
     target_id: UUID | None = None,
     data: dict = {},
 ):
