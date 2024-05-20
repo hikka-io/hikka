@@ -11,7 +11,11 @@ async def generate_sitemap(session):
     result = []
 
     limit = 10000
-    total = await session.scalar(select(func.count(Anime.id)))
+    total = await session.scalar(
+        select(func.count(Anime.id)).filter(
+            Anime.deleted == False,  # noqa: E712
+        )
+    )
     pages = math.ceil(total / limit) + 1
 
     for page in range(1, pages):
@@ -19,6 +23,7 @@ async def generate_sitemap(session):
 
         data = await session.execute(
             select(Anime.slug, Anime.updated)
+            .filter(Anime.deleted == False)  # noqa: E712
             .order_by(
                 desc(Anime.score),
                 desc(Anime.scored_by),

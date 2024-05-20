@@ -89,7 +89,12 @@ async def get_collection(session, content_id):
 
 
 async def get_anime(session, anime_id):
-    return await session.scalar(select(Anime).filter(Anime.id == anime_id))
+    return await session.scalar(
+        select(Anime).filter(
+            Anime.id == anime_id,
+            Anime.deleted == False,  # noqa: E712
+        )
+    )
 
 
 async def get_anime_watch(session: AsyncSession, anime: Anime):

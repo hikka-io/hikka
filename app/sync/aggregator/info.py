@@ -27,7 +27,10 @@ async def aggregator_anime_info():
     async with sessionmanager.session() as session:
         anime_list = await session.scalars(
             select(Anime.content_id)
-            .filter(Anime.needs_update == True)  # noqa: E712
+            .filter(
+                Anime.needs_update == True,  # noqa: E712
+                Anime.deleted == False,  # noqa: E712
+            )
             .order_by(desc("score"), desc("scored_by"))
         )
 

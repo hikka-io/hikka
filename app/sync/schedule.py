@@ -50,8 +50,15 @@ async def update_schedule_aired(session: AsyncSession):
         system_timestamp.timestamp = schedule.airing_at
 
         anime = await session.scalar(
-            select(Anime).filter(Anime.id == schedule.anime_id)
+            select(Anime).filter(
+                Anime.id == schedule.anime_id,
+                Anime.deleted == False,  # noqa: E712
+            )
         )
+
+        # Just in case
+        if not anime:
+            continue
 
         # Fix for SQLAlchemy shenanigans
         anime.ignored_fields = copy.deepcopy(anime.ignored_fields)

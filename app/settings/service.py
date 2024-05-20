@@ -122,7 +122,10 @@ async def import_watch_list(
 
         # Query list of anime based on mal_ids
         cache = await session.scalars(
-            select(Anime).filter(Anime.mal_id.in_(mal_ids))
+            select(Anime).filter(
+                Anime.mal_id.in_(mal_ids),
+                Anime.deleted == False,  # noqa: E712
+            )
         )
 
         # And build key/value dict
