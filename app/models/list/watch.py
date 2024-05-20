@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey, UniqueConstraint
+from ..mixins import DeletedMixin
 from datetime import datetime
 from ..base import Base
 
 
-class AnimeWatch(Base):
+class AnimeWatch(Base, DeletedMixin):
     __tablename__ = "service_watch"
 
     # Watch fields

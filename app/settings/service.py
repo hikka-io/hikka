@@ -122,7 +122,10 @@ async def import_watch_list(
 
         # Query list of anime based on mal_ids
         cache = await session.scalars(
-            select(Anime).filter(Anime.mal_id.in_(mal_ids))
+            select(Anime).filter(
+                Anime.mal_id.in_(mal_ids),
+                Anime.deleted == False,  # noqa: E712
+            )
         )
 
         # And build key/value dict
@@ -246,7 +249,10 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
 
 async def delete_user_watch(session: AsyncSession, user: User):
     watch_count = await session.scalar(
-        select(func.count(AnimeWatch.id)).filter(AnimeWatch.user == user)
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
+            AnimeWatch.user == user,
+        )
     )
 
     await session.execute(delete(AnimeWatch).filter(AnimeWatch.user == user))

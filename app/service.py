@@ -84,6 +84,7 @@ async def get_content_by_slug(
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.user == user,
         )
@@ -106,12 +107,11 @@ async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
 
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
     return await session.scalar(
-        select(Anime).filter(func.lower(Anime.slug) == slug.lower())
+        select(Anime).filter(
+            func.lower(Anime.slug) == slug.lower(),
+            Anime.deleted == False,  # noqa: E712
+        )
     )
-
-
-async def get_anime_by_id(session: AsyncSession, id: str) -> Anime | None:
-    return await session.scalar(select(Anime).filter(Anime.id == id))
 
 
 async def get_auth_token(
@@ -156,7 +156,7 @@ async def create_email(
 async def create_log(
     session: AsyncSession,
     log_type: str,
-    user: User,
+    user: User | None,
     target_id: UUID | None = None,
     data: dict = {},
 ):
@@ -360,6 +360,7 @@ def get_comments_count_subquery(content_id, content_type):
         .filter(
             Comment.content_id == content_id,
             Comment.content_type == content_type,
+            Comment.deleted == False,  # noqa: E712
             Comment.hidden == False,  # noqa: E712
         )
         .scalar_subquery()

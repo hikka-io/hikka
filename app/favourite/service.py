@@ -118,6 +118,10 @@ async def get_user_favourite_list(
     )
 
     if content_type == constants.CONTENT_ANIME:
+        query = query.filter(
+            content_model.deleted == False,  # noqa: E712
+        )
+
         query = query.options(
             joinedload(Anime.watch),
             with_loader_criteria(
@@ -174,6 +178,11 @@ async def get_user_favourite_list_count(
         )
         .filter(favourite_model.user == user)
     )
+
+    if content_type == constants.CONTENT_ANIME:
+        query = query.filter(
+            content_model.deleted == False,  # noqa: E712
+        )
 
     if content_type == constants.CONTENT_COLLECTION and request_user != user:
         query = query.filter(

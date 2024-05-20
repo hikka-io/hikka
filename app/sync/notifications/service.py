@@ -62,6 +62,7 @@ async def get_comment(session, comment_id, hidden=False):
         select(Comment).filter(
             Comment.id == comment_id,
             Comment.hidden == hidden,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
     )
 
@@ -71,6 +72,7 @@ async def get_comment_by_path(session, path, hidden=False):
         select(Comment).filter(
             Comment.path == path,
             Comment.hidden == hidden,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
     )
 
@@ -89,13 +91,19 @@ async def get_collection(session, content_id):
 
 
 async def get_anime(session, anime_id):
-    return await session.scalar(select(Anime).filter(Anime.id == anime_id))
+    return await session.scalar(
+        select(Anime).filter(
+            Anime.id == anime_id,
+            Anime.deleted == False,  # noqa: E712
+        )
+    )
 
 
 async def get_anime_watch(session: AsyncSession, anime: Anime):
     return await session.scalars(
         select(AnimeWatch)
         .filter(
+            AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.status.in_(
                 [

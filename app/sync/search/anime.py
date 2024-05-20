@@ -115,7 +115,8 @@ def anime_to_document(anime: Anime):
 async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
-        .filter(Anime.media_type is not None)
+        .filter(Anime.media_type != None)  # noqa: E711
+        .filter(Anime.deleted == False)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
@@ -141,7 +142,7 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
 async def anime_documents_total(session: AsyncSession):
     return await session.scalar(
         select(func.count(Anime.id))
-        .filter(Anime.media_type is not None)
+        .filter(Anime.media_type != None)  # noqa: E711
         .filter(Anime.needs_search_update == True)  # noqa: E712
     )
 

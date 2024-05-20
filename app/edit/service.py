@@ -366,7 +366,8 @@ async def anime_todo_total(
     todo_type: AnimeToDoEnum,
 ):
     query = select(func.count(Anime.id)).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC])
+        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        Anime.deleted == False,  # noqa: E712
     )
 
     if todo_type == constants.TODO_ANIME_TITLE_UA:
@@ -395,7 +396,8 @@ async def anime_todo(
     ]
 
     query = select(Anime).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC])
+        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        Anime.deleted == False,  # noqa: E712
     )
 
     if todo_type == constants.TODO_ANIME_TITLE_UA:

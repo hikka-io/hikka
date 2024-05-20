@@ -43,7 +43,10 @@ async def get_comment(
 ) -> Comment:
     return await session.scalar(
         select(Comment)
-        .filter(Comment.id == comment_reference)
+        .filter(
+            Comment.id == comment_reference,
+            Comment.deleted == False,  # noqa: E712
+        )
         .options(
             with_expression(
                 Comment.my_score,
@@ -115,6 +118,7 @@ async def get_comment_by_content(
 ) -> Comment | None:
     return await session.scalar(
         select(Comment).filter(
+            Comment.deleted == False,  # noqa: E712
             Comment.content_type == content_type,
             Comment.content_id == content_id,
             Comment.id == reference,
@@ -131,6 +135,7 @@ async def count_comments_by_content_id(
         select(func.count(Comment.id)).filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.deleted == False,  # noqa: E712
             Comment.hidden == False,  # noqa: E712
         )
     )
@@ -150,6 +155,7 @@ async def get_comments_by_content_id(
         .filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
+            Comment.deleted == False,  # noqa: E712
             Comment.hidden == False,  # noqa: E712
         )
         .options(
@@ -174,6 +180,7 @@ async def get_sub_comments(
     return await session.scalars(
         select(Comment)
         .filter(
+            Comment.deleted == False,  # noqa: E712
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
         )
@@ -194,6 +201,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
         select(func.count(Comment.id)).filter(
             Comment.author == author,
             Comment.created > round_hour(utcnow()),
+            Comment.deleted == False,  # noqa: E712
         )
     )
 
@@ -326,6 +334,7 @@ async def latest_comments(session: AsyncSession):
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
             Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
         .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
@@ -343,6 +352,7 @@ async def count_comments(session: AsyncSession) -> int:
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
             Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
     )
 
@@ -354,6 +364,7 @@ async def get_comments(session: AsyncSession, limit: int, offset: int):
             func.nlevel(Comment.path) == 1,
             Comment.hidden == False,  # noqa: E712
             Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
         .order_by(desc(Comment.created))
         .limit(limit)

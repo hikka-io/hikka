@@ -25,26 +25,29 @@ from .search import update_search
 from .schedule import update_schedule_build
 from .schedule import update_schedule
 
+from .content import update_content
+
 from .email import send_emails
 
 __all__ = [
     "aggregator_anime_franchises",
-    "aggregator_characters",
-    "aggregator_companies",
     "aggregator_anime_genres",
     "aggregator_anime_roles",
     "aggregator_anime_info",
+    "update_schedule_build",
+    "aggregator_characters",
+    "aggregator_companies",
+    "update_notifications",
+    "update_ranking_all",
     "aggregator_people",
     "aggregator_anime",
-    "update_notifications",
     "update_activity",
-    "update_ranking_all",
+    "update_schedule",
+    "update_content",
     "update_ranking",
     "update_history",
     "update_weights",
     "update_sitemap",
     "update_search",
-    "update_schedule_build",
-    "update_schedule",
     "send_emails",
 ]

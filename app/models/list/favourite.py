@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from ..mixins import CreatedMixin, DeletedMixin
 from sqlalchemy import ForeignKey
-from ..mixins import CreatedMixin
 from ..base import Base
 from uuid import UUID
 
 
-class Favourite(Base, CreatedMixin):
+class Favourite(Base, CreatedMixin, DeletedMixin):
     __tablename__ = "service_favourite"
     __mapper_args__ = {
         "polymorphic_identity": "default",

@@ -1,6 +1,8 @@
 from app.models import Anime, Image
 from sqlalchemy import select
 from app.utils import utcnow
+from app import constants
+from app import service
 from app import utils
 
 
@@ -27,6 +29,22 @@ async def save_anime_list(session, data):
         if anime_data["content_id"] in anime_cache:
             anime = anime_cache[anime_data["content_id"]]
 
+            if anime.deleted is False and anime_data["deleted"] is True:
+                anime.deleted = True
+                session.add(anime)
+
+                await service.create_log(
+                    session,
+                    constants.LOG_CONTENT_DELETED,
+                    None,
+                    anime.id,
+                    {
+                        "content_type": constants.CONTENT_ANIME,
+                    },
+                )
+
+                continue
+
             if updated == anime.aggregator_updated:
                 continue
 
@@ -40,6 +58,9 @@ async def save_anime_list(session, data):
             # print(f"Anime needs update: {anime.title_ja}")
 
         else:
+            if anime_data["deleted"] is True:
+                continue
+
             if not (image := poster_cache.get(anime_data["poster"])):
                 if anime_data["poster"]:
                     image = Image(

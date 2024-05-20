@@ -15,6 +15,7 @@ from ..mixins import (
     SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
+    DeletedMixin,
     SlugMixin,
 )
 
@@ -24,6 +25,7 @@ class Anime(
     SlugMixin,
     ContentMixin,
     UpdatedMixin,
+    DeletedMixin,
     SynonymsMixin,
     IgnoredFieldsMixin,
     NeedsSearchUpdateMixin,

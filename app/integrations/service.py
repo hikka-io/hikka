@@ -16,16 +16,26 @@ from app.models import (
 async def get_anime_by_mal_id(
     session: AsyncSession, mal_id: int
 ) -> Anime | None:
-    return await session.scalar(select(Anime).filter(Anime.mal_id == mal_id))
+    return await session.scalar(
+        select(Anime).filter(
+            Anime.mal_id == mal_id,
+            Anime.deleted == False,  # noqa: E712
+        )
+    )
 
 
 async def get_anime_by_watari(session: AsyncSession, slug: UUID):
     watari_url = f"https://www.watari-anime.com/watch?wid={slug}"
     return await session.scalar(
         select(Anime)
-        .filter(Anime.external.op("@>")([{"url": watari_url}]))
+        .filter(
+            Anime.external.op("@>")([{"url": watari_url}]),
+            Anime.deleted == False,  # noqa: E712
+        )
         .order_by(
-            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+            desc(Anime.score),
+            desc(Anime.scored_by),
+            desc(Anime.content_id),
         )
     )
 
@@ -35,7 +45,11 @@ async def get_watari_related(
 ) -> list[Character]:
     return await session.scalars(
         select(Anime.external)
-        .filter(Anime.franchise_id == anime.franchise_id, Anime.id != anime.id)
+        .filter(
+            Anime.franchise_id == anime.franchise_id,
+            Anime.id != anime.id,
+            Anime.deleted == False,  # noqa: E712
+        )
         .filter(Anime.external.op("@>")([{"text": "Watari Anime"}]))
         .order_by(desc(Anime.start_date))
     )
@@ -75,7 +89,10 @@ async def get_anime_main_staff(
 async def get_by_mal_ids(
     session: AsyncSession, args: MALAnimeArgs
 ) -> list[Anime | None]:
-    query = select(Anime).filter(Anime.mal_id.in_(args.mal_ids))
+    query = select(Anime).filter(
+        Anime.mal_id.in_(args.mal_ids),
+        Anime.deleted == False,  # noqa: E712
+    )
     anime = await session.scalars(query)
     anime_cache = {entry.mal_id: entry for entry in anime}
     return [anime_cache.get(mal_id) for mal_id in args.mal_ids]
