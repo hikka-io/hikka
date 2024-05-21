@@ -6,17 +6,11 @@ from datetime import datetime
 from app import constants
 
 from app.models import (
-    AnimeRecommendation,
     SystemTimestamp,
     AnimeFavourite,
-    AnimeCharacter,
     AnimeSchedule,
-    CompanyAnime,
-    AnimeEpisode,
     AnimeComment,
     AnimeWatch,
-    AnimeStaff,
-    AnimeVoice,
     AnimeEdit,
     Anime,
     Log,
@@ -58,21 +52,12 @@ async def process_content_deleted(session: AsyncSession):
         system_timestamp.timestamp = log.created
 
         if log.log_type == constants.LOG_CONTENT_DELETED:
-            # This records can be recovered from aggregator so we delete them
-            for model in [
-                AnimeRecommendation,
-                AnimeCharacter,
-                AnimeSchedule,
-                CompanyAnime,
-                AnimeEpisode,
-                AnimeStaff,
-                AnimeVoice,
-            ]:
-                await session.execute(
-                    delete(model).filter(
-                        model.anime_id == log.target_id,
-                    )
+            # We can recover schedule from aggregator if needed
+            await session.execute(
+                delete(AnimeSchedule).filter(
+                    model.anime_id == log.target_id,
                 )
+            )
 
             # Here we mark anime related models as deleted
             # instead of actually deleting them so they can be

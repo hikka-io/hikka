@@ -54,8 +54,11 @@ async def companies_search(
 async def company_anime_total(
     session: AsyncSession, company: Company, company_type: str | None
 ):
-    query = select(func.count(CompanyAnime.id)).filter(
-        CompanyAnime.company == company
+    query = (
+        select(func.count(CompanyAnime.id))
+        .filter(CompanyAnime.company == company)
+        .join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
     )
 
     if company_type:
@@ -78,6 +81,7 @@ async def company_anime(
 
     return await session.scalars(
         query.join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
         .options(anime_loadonly(joinedload(CompanyAnime.anime)))
         .order_by(
             desc(Anime.score),

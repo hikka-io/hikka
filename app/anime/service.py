@@ -234,6 +234,7 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = select(func.count(Anime.id)).filter(
         Anime.deleted == False,  # noqa: E712
     )
+
     query = anime_search_filter(search, query)
 
     return await session.scalar(query)
