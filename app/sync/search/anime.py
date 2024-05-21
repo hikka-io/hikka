@@ -141,13 +141,20 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
 
 async def anime_document_ids_delete(session: AsyncSession):
     anime_list = await session.scalars(
-        select(Anime.content_id)
+        select(Anime)
         .filter(Anime.media_type != None)  # noqa: E711
         .filter(Anime.deleted == True)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
     )
 
-    return [anime.content_id for anime in anime_list]
+    delete_ids = []
+
+    for anime in anime_list:
+        delete_ids.append(anime.content_id)
+        anime.needs_search_update = False
+        session.add(anime)
+
+    return delete_ids
 
 
 async def anime_documents_total(session: AsyncSession):
@@ -178,12 +185,13 @@ async def meilisearch_populate(session: AsyncSession):
             limit, offset = pagination(page, size)
             documents = await anime_documents(session, limit, offset)
 
-            await index.add_documents(documents)
+            if len(documents) > 0:
+                await index.add_documents(documents)
 
         delete_document_ids = await anime_document_ids_delete(session)
-        await index.delete_documents(delete_document_ids)
 
         if len(delete_document_ids) > 0:
+            await index.delete_documents(delete_document_ids)
             print(
                 f"Meilisearch: deleted {len(delete_document_ids)} animes from search"
             )
