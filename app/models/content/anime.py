@@ -127,7 +127,12 @@ class Anime(
     # https://docs.sqlalchemy.org/en/20/orm/extensions/associationproxy.html
     producers: Mapped[list["Company"]] = relationship(
         secondary="service_content_companies_anime",
-        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        # primaryjoin="Anime.id == CompanyAnime.anime_id",
+        primaryjoin=(
+            "and_("
+            "Anime.id == CompanyAnime.anime_id,"
+            "Anime.deleted == false())"  # Magic, do not touch
+        ),
         secondaryjoin=(
             "and_("
             "CompanyAnime.company_id == Company.id,"
@@ -138,7 +143,12 @@ class Anime(
 
     studios: Mapped[list["Company"]] = relationship(
         secondary="service_content_companies_anime",
-        primaryjoin="Anime.id == CompanyAnime.anime_id",
+        # primaryjoin="Anime.id == CompanyAnime.anime_id",
+        primaryjoin=(
+            "and_("
+            "Anime.id == CompanyAnime.anime_id,"
+            "Anime.deleted == false())"  # Magic, do not touch
+        ),
         secondaryjoin=(
             "and_("
             "CompanyAnime.company_id == Company.id,"

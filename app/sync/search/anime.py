@@ -139,6 +139,17 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
     return documents
 
 
+async def anime_document_ids_delete(session: AsyncSession):
+    anime_list = await session.scalars(
+        select(Anime.content_id)
+        .filter(Anime.media_type != None)  # noqa: E711
+        .filter(Anime.deleted == True)  # noqa: E712
+        .filter(Anime.needs_search_update == True)  # noqa: E712
+    )
+
+    return [anime.content_id for anime in anime_list]
+
+
 async def anime_documents_total(session: AsyncSession):
     return await session.scalar(
         select(func.count(Anime.id))
@@ -169,8 +180,16 @@ async def meilisearch_populate(session: AsyncSession):
 
             await index.add_documents(documents)
 
-            # Let's just hope if Meilisearch is down this fails ;)
-            await session.commit()
+        delete_document_ids = await anime_document_ids_delete(session)
+        await index.delete_documents(delete_document_ids)
+
+        if len(delete_document_ids) > 0:
+            print(
+                f"Meilisearch: deleted {len(delete_document_ids)} animes from search"
+            )
+
+        # Let's just hope if Meilisearch is down this fails ;)
+        await session.commit()
 
 
 async def update_search_anime():

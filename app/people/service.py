@@ -22,6 +22,8 @@ async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
                 Person.anime_count,
                 select(func.count(AnimeStaff.id))
                 .filter(AnimeStaff.person_id == Person.id)
+                .join(Anime)
+                .filter(Anime.deleted == False)  # noqa: E712
                 .scalar_subquery(),
             )
         )
@@ -30,6 +32,8 @@ async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
                 Person.characters_count,
                 select(func.count(AnimeVoice.id))
                 .filter(AnimeVoice.person_id == Person.id)
+                .join(Anime)
+                .filter(Anime.deleted == False)  # noqa: E712
                 .scalar_subquery(),
             )
         )
@@ -58,7 +62,10 @@ async def people_search(
 
 async def person_anime_total(session: AsyncSession, person: Person):
     return await session.scalar(
-        select(func.count(AnimeStaff.id)).filter(AnimeStaff.person == person)
+        select(func.count(AnimeStaff.id))
+        .filter(AnimeStaff.person == person)
+        .join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
     )
 
 
@@ -72,6 +79,7 @@ async def person_anime(
         select(AnimeStaff)
         .filter(AnimeStaff.person == person)
         .join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
         .options(anime_loadonly(joinedload(AnimeStaff.anime)))
         .order_by(
             desc(Anime.score),
@@ -85,7 +93,10 @@ async def person_anime(
 
 async def person_voices_total(session: AsyncSession, person: Person):
     return await session.scalar(
-        select(func.count(AnimeVoice.id)).filter(AnimeVoice.person == person)
+        select(func.count(AnimeVoice.id))
+        .filter(AnimeVoice.person == person)
+        .join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
     )
 
 
@@ -101,6 +112,7 @@ async def person_voices(
         .options(anime_loadonly(joinedload(AnimeVoice.anime)))
         .options(joinedload(AnimeVoice.character))
         .join(Anime)
+        .filter(Anime.deleted == False)  # noqa: E712
         .order_by(
             desc(Anime.score),
             desc(Anime.scored_by),
