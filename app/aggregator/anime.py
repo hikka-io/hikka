@@ -30,6 +30,7 @@ async def save_anime_list(session, data):
             anime = anime_cache[anime_data["content_id"]]
 
             if anime.deleted is False and anime_data["deleted"] is True:
+                anime.needs_search_update = True
                 anime.deleted = True
                 session.add(anime)
 
