@@ -55,7 +55,7 @@ async def process_content_deleted(session: AsyncSession):
             # We can recover schedule from aggregator if needed
             await session.execute(
                 delete(AnimeSchedule).filter(
-                    model.anime_id == log.target_id,
+                    AnimeSchedule.anime_id == log.target_id
                 )
             )
 
@@ -76,7 +76,7 @@ async def process_content_deleted(session: AsyncSession):
 
             await session.execute(
                 update(AnimeWatch)
-                .filter(AnimeFavourite.anime_id == log.target_id)
+                .filter(AnimeWatch.anime_id == log.target_id)
                 .values(deleted=True)
             )
 
