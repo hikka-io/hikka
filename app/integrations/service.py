@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
 from .schemas import MALAnimeArgs
-from uuid import UUID
 
 from app.models import (
     AnimeCharacter,
@@ -21,37 +20,6 @@ async def get_anime_by_mal_id(
             Anime.mal_id == mal_id,
             Anime.deleted == False,  # noqa: E712
         )
-    )
-
-
-async def get_anime_by_watari(session: AsyncSession, slug: UUID):
-    watari_url = f"https://www.watari-anime.com/watch?wid={slug}"
-    return await session.scalar(
-        select(Anime)
-        .filter(
-            Anime.external.op("@>")([{"url": watari_url}]),
-            Anime.deleted == False,  # noqa: E712
-        )
-        .order_by(
-            desc(Anime.score),
-            desc(Anime.scored_by),
-            desc(Anime.content_id),
-        )
-    )
-
-
-async def get_watari_related(
-    session: AsyncSession, anime: Anime
-) -> list[Character]:
-    return await session.scalars(
-        select(Anime.external)
-        .filter(
-            Anime.franchise_id == anime.franchise_id,
-            Anime.id != anime.id,
-            Anime.deleted == False,  # noqa: E712
-        )
-        .filter(Anime.external.op("@>")([{"text": "Watari Anime"}]))
-        .order_by(desc(Anime.start_date))
     )
 
 

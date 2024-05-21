@@ -377,9 +377,8 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["anitube", "toloka", "watari"]:
+    for source in ["anitube", "toloka"]:
         website_name = {
-            "watari": "Watari Anime",
             "anitube": "Anitube",
             "toloka": "Toloka",
         }.get(source)
@@ -399,11 +398,7 @@ def process_external(data):
 
 
 def process_translated_ua(data):
-    return (
-        len(data["anitube"]) > 0
-        or len(data["toloka"]) > 0
-        or len(data["watari"]) > 0
-    )
+    return len(data["anitube"]) > 0 or len(data["toloka"]) > 0
 
 
 async def update_anime_info(session, anime, data):
