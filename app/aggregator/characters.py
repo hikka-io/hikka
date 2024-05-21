@@ -21,6 +21,19 @@ async def save_characters(session, data):
     add_characters = []
 
     for character_data in data:
+        if not (image := image_cache.get(character_data["image"])):
+            if character_data["image"]:
+                image = Image(
+                    **{
+                        "path": character_data["image"],
+                        "created": utcnow(),
+                        "uploaded": True,
+                        "ignore": False,
+                    }
+                )
+
+                image_cache[character_data["image"]] = image
+
         updated = utils.from_timestamp(character_data["updated"])
         slug = utils.slugify(
             character_data["name_en"], character_data["content_id"]
@@ -36,6 +49,7 @@ async def save_characters(session, data):
                 continue
 
             character.favorites = character_data["favorites"]
+            character.image_relation = image
             character.updated = updated
 
             add_characters.append(character)
@@ -45,19 +59,6 @@ async def save_characters(session, data):
             # )
 
         else:
-            if not (image := image_cache.get(character_data["image"])):
-                if character_data["image"]:
-                    image = Image(
-                        **{
-                            "path": character_data["image"],
-                            "created": utcnow(),
-                            "uploaded": True,
-                            "ignore": False,
-                        }
-                    )
-
-                    image_cache[character_data["image"]] = image
-
             character = Character(
                 **{
                     "needs_search_update": True,
