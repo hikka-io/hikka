@@ -136,12 +136,18 @@ async def process_characters_and_voices(session, anime, data):
         ):
             continue
 
-        if not await session.scalar(
+        if character_role := await session.scalar(
             select(AnimeCharacter).filter(
                 AnimeCharacter.anime == anime,
                 AnimeCharacter.character == character,
             )
         ):
+            character_role.main = entry["main"]
+
+            if session.is_modified(character_role):
+                session.add(character_role)
+
+        else:
             character_role = AnimeCharacter(
                 **{
                     "character": character,
