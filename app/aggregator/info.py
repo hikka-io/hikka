@@ -145,7 +145,7 @@ async def process_characters_and_voices(session, anime, data):
             character_role.main = entry["main"]
 
             if session.is_modified(character_role):
-                session.add(anime_character)
+                session.add(character_role)
 
         else:
             character_role = AnimeCharacter(
