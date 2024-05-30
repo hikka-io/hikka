@@ -23,6 +23,7 @@ class Edit(
     __mapper_args__ = {
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
+        "with_polymorphic": "*",
     }
 
     comments_count: Mapped[int] = query_expression()
@@ -63,10 +64,7 @@ class Edit(
 
 
 class AnimeEdit(Edit):
-    __mapper_args__ = {
-        "polymorphic_identity": "anime",
-        "eager_defaults": True,
-    }
+    __mapper_args__ = {"polymorphic_identity": "anime"}
 
     content_id = mapped_column(
         ForeignKey("service_content_anime.id", ondelete="CASCADE"),
@@ -77,7 +75,6 @@ class AnimeEdit(Edit):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -93,7 +90,6 @@ class PersonEdit(Edit):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # TODO: check if it is good idea
     )
 
 
@@ -109,5 +105,4 @@ class CharacterEdit(Edit):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterEdit.content_id",
         foreign_keys=[content_id],
-        lazy="immediate",  # TODO: check if it is good idea
     )

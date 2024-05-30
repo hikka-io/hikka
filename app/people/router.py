@@ -65,9 +65,10 @@ async def person_anime(
     limit, offset = pagination(page, size)
     total = await service.person_anime_total(session, person)
     anime = await service.person_anime(session, person, limit, offset)
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": anime.all(),
+        "list": anime.unique().all(),
     }
 
 

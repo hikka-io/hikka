@@ -30,7 +30,7 @@ class AnimeStaff(Base):
         secondary=anime_staff_roles_association_table,
         order_by="AnimeStaffRole.weight.desc()",
         back_populates="staff",
-        lazy="selectin",
+        lazy="joined",
     )
 
     person_id = mapped_column(
