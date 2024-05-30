@@ -274,6 +274,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
 async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):
+    # TODO: Add preview image to comment (?)
     # NOTE: I HATE this function so much, it should be rewritten!
     comments = await session.scalars(
         select(Comment)
