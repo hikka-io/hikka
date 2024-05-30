@@ -3,6 +3,7 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
 from app.utils import utcnow
@@ -160,6 +161,27 @@ async def get_edits(
             Edit.comments_count,
             get_comments_count_subquery(Edit.id, constants.CONTENT_SYSTEM_EDIT),
         )
+    )
+
+    query = query.options(
+        immediateload(AnimeEdit.content).load_only(
+            Anime.title_ja,
+            Anime.title_en,
+            Anime.title_ua,
+            Anime.slug,
+        ),
+        immediateload(PersonEdit.content).load_only(
+            Person.name_native,
+            Person.name_en,
+            Person.name_ua,
+            Person.slug,
+        ),
+        immediateload(CharacterEdit.content).load_only(
+            Character.name_ja,
+            Character.name_en,
+            Character.name_ua,
+            Character.slug,
+        ),
     )
 
     query = query.order_by(*build_order_by(args.sort))

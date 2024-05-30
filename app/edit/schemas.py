@@ -134,7 +134,7 @@ class CharacterEditArgs(CustomModel):
 
 
 # Response
-class EditResponse(CustomModel):
+class EditResponseBase(CustomModel):
     content_type: ContentTypeEnum = Field(examples=["anime"])
     status: EditStatusEnum = Field(examples=["pending"])
     created: datetime_pd = Field(examples=[1693850684])
@@ -147,6 +147,8 @@ class EditResponse(CustomModel):
     system_edit: bool
     after: dict
 
+
+class EditResponse(EditResponseBase):
     # TODO: maybe we should use Pydantic's discriminator here?
     content: AnimeResponse | PersonResponse | CharacterResponse
 
@@ -160,6 +162,35 @@ class EditResponse(CustomModel):
         return comments_count
 
 
+class EditSimpleAnimeResponse(CustomModel):
+    title_ja: str | None
+    title_en: str | None
+    title_ua: str | None
+    slug: str
+
+
+class EditSimplePersonResponse(CustomModel):
+    name_native: str | None
+    name_en: str | None
+    name_ua: str | None
+    slug: str
+
+
+class EditSimpleCharacterResponse(CustomModel):
+    name_ja: str | None
+    name_en: str | None
+    name_ua: str | None
+    slug: str
+
+
+class EditSimpleResponse(EditResponseBase):
+    content: (
+        EditSimpleAnimeResponse
+        | EditSimplePersonResponse
+        | EditSimpleCharacterResponse
+    )
+
+
 class EditListResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[EditResponse]
+    list: list[EditSimpleResponse]
