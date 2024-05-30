@@ -151,6 +151,7 @@ class EditResponseBase(CustomModel):
 class EditResponse(EditResponseBase):
     # TODO: maybe we should use Pydantic's discriminator here?
     content: AnimeResponse | PersonResponse | CharacterResponse
+    reference: str
 
     comments_count: int | None
 

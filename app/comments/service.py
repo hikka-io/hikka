@@ -3,6 +3,7 @@ from sqlalchemy import select, desc, asc, func
 from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
+from sqlalchemy.orm import joinedload
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from uuid import UUID, uuid4
@@ -16,13 +17,19 @@ from app.service import (
     create_log,
 )
 
+
 from app.models import (
     CollectionContent,
     CollectionComment,
+    CharacterEdit,
     AnimeComment,
     EditComment,
     Collection,
+    PersonEdit,
+    AnimeEdit,
+    Character,
     Comment,
+    Person,
     Anime,
     User,
     Edit,
@@ -267,6 +274,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
 async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):
+    # TODO: Add preview image to comment (?)
     # NOTE: I HATE this function so much, it should be rewritten!
     comments = await session.scalars(
         select(Comment)
@@ -290,10 +298,29 @@ async def comments_preview_display(
             # For some reason edit content is not loaded sometimes
             await session.refresh(comment.content)
 
+            edit = await session.scalar(
+                select(Edit)
+                .filter(Edit.id == comment.content_id)
+                .options(
+                    joinedload(PersonEdit.content).joinedload(
+                        Person.image_relation
+                    ),
+                    joinedload(AnimeEdit.content).joinedload(
+                        Anime.poster_relation
+                    ),
+                    joinedload(CharacterEdit.content).joinedload(
+                        Character.image_relation
+                    ),
+                )
+            )
+
+            if not edit:
+                continue
+
             if isinstance(comment.content.content, Anime):
-                image = comment.content.content.poster
+                image = edit.content.poster
             else:
-                image = comment.content.content.image
+                image = edit.content.image
 
         if isinstance(comment, CollectionComment):
             collection_content = await session.scalar(
