@@ -37,7 +37,7 @@ class Company(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
-    image_relation: Mapped["Image"] = relationship(lazy="selectin")
+    image_relation: Mapped["Image"] = relationship(lazy="joined")
 
     produced_anime: Mapped[list["Anime"]] = relationship(
         secondary="service_content_companies_anime",

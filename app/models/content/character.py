@@ -41,7 +41,7 @@ class Character(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
-    image_relation: Mapped["Image"] = relationship(lazy="selectin")
+    image_relation: Mapped["Image"] = relationship(lazy="joined")
 
     anime: Mapped[list["AnimeCharacter"]] = relationship(
         back_populates="character", viewonly=True

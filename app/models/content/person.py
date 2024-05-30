@@ -47,7 +47,7 @@ class Person(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
-    image_relation: Mapped["Image"] = relationship(lazy="selectin")
+    image_relation: Mapped["Image"] = relationship(lazy="joined")
 
     @hybrid_property
     def image(self):

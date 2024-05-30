@@ -112,7 +112,7 @@ class Anime(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
-    poster_relation: Mapped["Image"] = relationship(lazy="selectin")
+    poster_relation: Mapped["Image"] = relationship(lazy="joined")
 
     franchise_id = mapped_column(
         ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL"),
