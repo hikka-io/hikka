@@ -326,6 +326,11 @@ def is_protected_username(username: str):
     return username in usernames
 
 
+def remove_bad_characters(text):
+    text.replace("\ufff4", "")
+    return text
+
+
 def is_empty_markdown(text):
     # First we remove markdown tags
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)  # **text**
@@ -336,6 +341,9 @@ def is_empty_markdown(text):
 
     # Then remove spaces
     text = text.replace(" ", "")
+
+    # Replace special (bad) characters
+    text = remove_bad_characters(text)
 
     # And now check if string is empty
     return len(text) == 0

@@ -73,6 +73,7 @@ async def create_comment(
     text: str,
     parent: Comment | None = None,
 ):
+    cleaned_text = utils.remove_bad_characters(remove_bad_characters)
     comment_model = content_type_to_comment_class[content_type]
     now = utcnow()
 
@@ -80,13 +81,13 @@ async def create_comment(
         **{
             "content_type": content_type,
             "content_id": content_id,
+            "text": cleaned_text,
             "private": False,
             "author": author,
             "vote_score": 0,
             "created": now,
             "updated": now,
             "id": uuid4(),
-            "text": text,
             "score": 0,
         }
     )
