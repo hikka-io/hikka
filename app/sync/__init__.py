@@ -6,6 +6,7 @@ from .aggregator.roles import aggregator_anime_roles
 from .aggregator.info import aggregator_anime_info
 from .aggregator.people import aggregator_people
 from .aggregator.anime import aggregator_anime
+from .aggregator.manga import aggregator_manga
 
 from .notifications import update_notifications
 
@@ -41,6 +42,7 @@ __all__ = [
     "update_ranking_all",
     "aggregator_people",
     "aggregator_anime",
+    "aggregator_manga",
     "update_activity",
     "update_schedule",
     "update_content",

@@ -38,9 +38,9 @@ class Manga(
     comments_count: Mapped[int] = query_expression()
 
     # Multilang fields
-    title_original: Mapped[str] = mapped_column(String(255), nullable=True)
-    title_en: Mapped[str] = mapped_column(String(255), nullable=True)
-    title_ua: Mapped[str] = mapped_column(String(255), nullable=True)
+    title_original: Mapped[str] = mapped_column(nullable=True)
+    title_en: Mapped[str] = mapped_column(nullable=True)
+    title_ua: Mapped[str] = mapped_column(nullable=True)
     synopsis_en: Mapped[str] = mapped_column(nullable=True)
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)
 
@@ -52,6 +52,7 @@ class Manga(
 
     # Metadata
     status: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
+    year: Mapped[int] = mapped_column(index=True, nullable=True)
     start_date: Mapped[datetime] = mapped_column(nullable=True)
     end_date: Mapped[datetime] = mapped_column(nullable=True)
     chapters: Mapped[int] = mapped_column(nullable=True)
@@ -85,7 +86,7 @@ class Manga(
         back_populates="manga",
     )
 
-    poster_id = mapped_column(
+    image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 

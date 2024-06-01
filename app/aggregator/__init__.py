@@ -6,6 +6,7 @@ from .companies import save_companies
 from .genres import save_anime_genres
 from .info import update_anime_info
 from .anime import save_anime_list
+from .manga import save_manga_list
 from .people import save_people
 
 __all__ = [
@@ -18,5 +19,6 @@ __all__ = [
     "save_anime_genres",
     "update_anime_info",
     "save_anime_list",
+    "save_manga_list",
     "save_people",
 ]

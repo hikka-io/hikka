@@ -68,6 +68,17 @@ async def get_anime(page):
             return data
 
 
+async def get_manga(page):
+    settings = get_settings()
+
+    endpoint = f"{settings.backend.aggregator}/manga?page={page}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
 async def get_anime_franchises(page):
     settings = get_settings()
 
