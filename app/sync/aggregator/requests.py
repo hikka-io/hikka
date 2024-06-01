@@ -13,6 +13,17 @@ async def get_anime_genres():
             return data
 
 
+async def get_manga_genres():
+    settings = get_settings()
+
+    endpoint = f"{settings.backend.aggregator}/genres/manga"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
 async def get_anime_roles():
     settings = get_settings()
 
