@@ -10,6 +10,7 @@ from app.sync import (
     aggregator_characters,
     aggregator_anime_info,
     aggregator_companies,
+    aggregator_magazines,
     aggregator_people,
     aggregator_anime,
     aggregator_manga,
@@ -28,9 +29,10 @@ async def import_aggregator():
     # await aggregator_anime_roles()
     # await aggregator_characters()
     # await aggregator_companies()
+    await aggregator_magazines()
     # await aggregator_people()
     # await aggregator_anime()
-    await aggregator_manga()
+    # await aggregator_manga()
     # await aggregator_anime_info()
     # await aggregator_anime_franchises()
     # await update_schedule_build()

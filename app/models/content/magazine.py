@@ -10,7 +10,7 @@ class Magazine(Base, ContentMixin, SlugMixin):
     __tablename__ = "service_content_magazines"
 
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
-    name: Mapped[str]
+    name_en: Mapped[str]
 
     manga: Mapped[list["Manga"]] = relationship(
         secondary=manga_magazines_association_table,
