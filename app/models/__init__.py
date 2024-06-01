@@ -31,19 +31,26 @@ from .list.watch import AnimeWatch
 from .content.recommendation import AnimeRecommendation
 from .content.franchise import AnimeFranchise
 from .content.episode import AnimeEpisode
+from .content.magazine import Magazine
 from .content.genre import AnimeGenre
+from .content.genre import MangaGenre
 from .content.person import Person
 from .content.anime import Anime
+from .content.manga import Manga
 
 from .content.company import CompanyAnime
 from .content.company import Company
 
 from .content.character import AnimeCharacter
+from .content.character import MangaCharacter
 from .content.character import Character
 
 from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
+
+from .content.author import MangaAuthorRole
+from .content.author import MangaAuthor
 
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
@@ -98,15 +105,21 @@ __all__ = [
     "AnimeFranchise",
     "AnimeEpisode",
     "AnimeGenre",
+    "MangaGenre",
+    "Magazine",
     "Person",
     "Anime",
+    "Manga",
     "CompanyAnime",
     "Company",
     "AnimeCharacter",
+    "MangaCharacter",
     "Character",
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
+    "MangaAuthorRole",
+    "MangaAuthor",
     "Notification",
     "SystemTimestamp",
     "Activity",

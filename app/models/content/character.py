@@ -47,6 +47,10 @@ class Character(
         back_populates="character", viewonly=True
     )
 
+    manga: Mapped[list["MangaCharacter"]] = relationship(
+        back_populates="character", viewonly=True
+    )
+
     voices: Mapped[list["AnimeVoice"]] = relationship(
         back_populates="character", viewonly=True
     )
@@ -90,3 +94,29 @@ class AnimeCharacter(Base):
     )
 
     unique_constraint = UniqueConstraint(character_id, anime_id)
+
+
+class MangaCharacter(Base):
+    __tablename__ = "service_content_manga_characters"
+
+    main: Mapped[bool]
+
+    character_id = mapped_column(
+        ForeignKey("service_content_characters.id"),
+        index=True,
+    )
+
+    manga_id = mapped_column(
+        ForeignKey("service_content_manga.id"),
+        index=True,
+    )
+
+    character: Mapped["Character"] = relationship(
+        back_populates="manga", foreign_keys=[character_id]
+    )
+
+    manga: Mapped["Manga"] = relationship(
+        back_populates="characters", foreign_keys=[manga_id]
+    )
+
+    unique_constraint = UniqueConstraint(character_id, manga_id)
