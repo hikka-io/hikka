@@ -74,6 +74,7 @@ class Manga(
 
     authors: Mapped[list["MangaAuthor"]] = relationship(
         back_populates="manga",
+        viewonly=True,
     )
 
     characters: Mapped[list["MangaCharacter"]] = relationship(

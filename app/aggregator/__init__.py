@@ -1,11 +1,12 @@
 from .franchises import save_anime_franchises_list
 from .staff import update_anime_staff_weights
+from .info.anime import update_anime_info
+from .info.manga import update_manga_info
 from .characters import save_characters
 from .companies import save_companies
 from .magazines import save_magazines
 from .genres import save_anime_genres
 from .genres import save_manga_genres
-from .info import update_anime_info
 from .anime import save_anime_list
 from .manga import save_manga_list
 from .people import save_people
@@ -25,6 +26,7 @@ __all__ = [
     "save_anime_genres",
     "save_manga_genres",
     "update_anime_info",
+    "update_manga_info",
     "save_anime_list",
     "save_manga_list",
     "save_characters",

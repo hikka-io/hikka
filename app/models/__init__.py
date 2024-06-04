@@ -14,6 +14,7 @@ from .user.user import User
 from .edit.edit import CharacterEdit
 from .edit.edit import PersonEdit
 from .edit.edit import AnimeEdit
+from .edit.edit import MangaEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
@@ -90,6 +91,7 @@ __all__ = [
     "CharacterEdit",
     "PersonEdit",
     "AnimeEdit",
+    "MangaEdit",
     "Edit",
     "CollectionComment",
     "AnimeComment",

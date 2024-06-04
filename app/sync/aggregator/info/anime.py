@@ -3,7 +3,7 @@ from app.database import sessionmanager
 from sqlalchemy import select, desc
 from app.models import Anime
 from app import aggregator
-from . import requests
+from .. import requests
 import asyncio
 
 

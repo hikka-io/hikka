@@ -1,8 +1,9 @@
 from .aggregator.franchises import aggregator_anime_franchises
 from .aggregator.characters import aggregator_characters
+from .aggregator.info.anime import aggregator_anime_info
+from .aggregator.info.manga import aggregator_manga_info
 from .aggregator.companies import aggregator_companies
 from .aggregator.magazines import aggregator_magazines
-from .aggregator.info import aggregator_anime_info
 from .aggregator.people import aggregator_people
 from .aggregator.genres import aggregator_genres
 from .aggregator.anime import aggregator_anime
@@ -34,6 +35,7 @@ from .email import send_emails
 __all__ = [
     "aggregator_anime_franchises",
     "aggregator_anime_info",
+    "aggregator_manga_info",
     "update_schedule_build",
     "aggregator_characters",
     "aggregator_companies",

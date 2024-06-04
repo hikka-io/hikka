@@ -78,6 +78,21 @@ class AnimeEdit(Edit):
     )
 
 
+class MangaEdit(Edit):
+    __mapper_args__ = {"polymorphic_identity": "manga"}
+
+    content_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == MangaEdit.content_id",
+        foreign_keys=[content_id],
+    )
+
+
 class PersonEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "person"}
 

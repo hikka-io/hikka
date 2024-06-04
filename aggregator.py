@@ -7,6 +7,7 @@ from app.sync import (
     update_schedule_build,
     aggregator_characters,
     aggregator_anime_info,
+    aggregator_manga_info,
     aggregator_companies,
     aggregator_magazines,
     aggregator_genres,
@@ -26,7 +27,7 @@ async def import_aggregator():
     sessionmanager.init(settings.database.endpoint)
 
     # await aggregator_genres()
-    await aggregator_roles()
+    # await aggregator_roles()
     # await aggregator_characters()
     # await aggregator_companies()
     # await aggregator_magazines()
@@ -34,6 +35,7 @@ async def import_aggregator():
     # await aggregator_anime()
     # await aggregator_manga()
     # await aggregator_anime_info()
+    await aggregator_manga_info()
     # await aggregator_anime_franchises()
     # await update_schedule_build()
     # await update_search()
