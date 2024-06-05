@@ -1,5 +1,5 @@
-from app.models import MangaAuthorRole
 from app.models import AnimeStaffRole
+from app.models import AuthorRole
 from sqlalchemy import select
 from app import utils
 import aiofiles
@@ -40,11 +40,11 @@ async def update_manga_roles(session, data):
         slug = utils.slugify(role_name)
 
         if await session.scalar(
-            select(MangaAuthorRole).filter(MangaAuthorRole.slug == slug)
+            select(AuthorRole).filter(AuthorRole.slug == slug)
         ):
             continue
 
-        role = MangaAuthorRole(
+        role = AuthorRole(
             **{
                 "name_en": role_name,
                 "slug": slug,

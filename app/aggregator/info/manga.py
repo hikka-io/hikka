@@ -5,9 +5,9 @@ from app import constants
 from app import utils
 
 from app.models import (
-    MangaAuthorRole,
     MangaCharacter,
     MangaAuthor,
+    AuthorRole,
     Character,
     Magazine,
     Person,
@@ -119,7 +119,7 @@ async def process_authors(session, manga, data):
     people_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
-        select(MangaAuthorRole).filter(MangaAuthorRole.slug.in_(role_slugs))
+        select(AuthorRole).filter(AuthorRole.slug.in_(role_slugs))
     )
 
     role_cache = {entry.slug: entry for entry in cache}

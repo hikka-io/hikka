@@ -72,7 +72,22 @@ manga_author_roles_association_table = Table(
     ),
     Column(
         "role_id",
-        ForeignKey("service_content_manga_author_roles.id"),
+        ForeignKey("service_content_author_roles.id"),
         primary_key=True,
     ),
 )
+
+# novel_author_roles_association_table = Table(
+#     "service_relation_novel_author_roles",
+#     Base.metadata,
+#     Column(
+#         "author_id",
+#         ForeignKey("service_content_novel_authors.id"),
+#         primary_key=True,
+#     ),
+#     Column(
+#         "role_id",
+#         ForeignKey("service_content_author_roles.id"),
+#         primary_key=True,
+#     ),
+# )

@@ -49,8 +49,8 @@ from .content.staff import AnimeStaffRole
 from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
-from .content.author import MangaAuthorRole
 from .content.author import MangaAuthor
+from .content.author import AuthorRole
 
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
@@ -118,7 +118,7 @@ __all__ = [
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
-    "MangaAuthorRole",
+    "AuthorRole",
     "MangaAuthor",
     "Notification",
     "SystemTimestamp",
