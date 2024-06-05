@@ -21,11 +21,11 @@ class AuthorRole(Base, SlugMixin):
         viewonly=True,
     )
 
-    # novel_authors: Mapped[list["NovelAuthor"]] = relationship(
-    #     secondary=novel_author_roles_association_table,
-    #     back_populates="roles",
-    #     viewonly=True,
-    # )
+    novel_authors: Mapped[list["NovelAuthor"]] = relationship(
+        secondary=novel_author_roles_association_table,
+        back_populates="roles",
+        viewonly=True,
+    )
 
 
 class MangaAuthor(Base):
@@ -49,7 +49,7 @@ class MangaAuthor(Base):
     )
 
     person: Mapped["Person"] = relationship(
-        back_populates="author_roles", foreign_keys=[person_id]
+        back_populates="manga_author_roles", foreign_keys=[person_id]
     )
 
     manga: Mapped["Manga"] = relationship(
@@ -80,7 +80,7 @@ class NovelAuthor(Base):
     )
 
     person: Mapped["Person"] = relationship(
-        back_populates="author_roles", foreign_keys=[person_id]
+        back_populates="novel_author_roles", foreign_keys=[person_id]
     )
 
     novel: Mapped["Novel"] = relationship(

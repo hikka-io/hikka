@@ -84,7 +84,7 @@ class Novel(
 
     magazines: Mapped[list["Magazine"]] = relationship(
         secondary=novel_magazines_association_table,
-        back_populates="manga",
+        back_populates="novel",
     )
 
     image_id = mapped_column(
