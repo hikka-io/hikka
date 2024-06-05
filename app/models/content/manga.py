@@ -93,6 +93,15 @@ class Manga(
 
     image_relation: Mapped["Image"] = relationship(lazy="joined")
 
+    franchise_id = mapped_column(
+        ForeignKey("service_content_franchises.id", ondelete="SET NULL"),
+        index=True,
+    )
+
+    franchise_relation: Mapped["AnimeFranchise"] = relationship(
+        back_populates="manga", foreign_keys=[franchise_id]
+    )
+
     @hybrid_property
     def image(self):
         if not self.image_relation:

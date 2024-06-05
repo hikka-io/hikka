@@ -115,7 +115,7 @@ class Anime(
     poster_relation: Mapped["Image"] = relationship(lazy="joined")
 
     franchise_id = mapped_column(
-        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL"),
+        ForeignKey("service_content_franchises.id", ondelete="SET NULL"),
         index=True,
     )
 
