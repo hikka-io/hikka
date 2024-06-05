@@ -1,7 +1,37 @@
 from sqlalchemy import Table, Column, ForeignKey
 from .base import Base
 
-anime_genres_association_table = Table(
+genres_anime_association_table = Table(
+    "service_relation_genres_anime",
+    Base.metadata,
+    Column(
+        "anime_id",
+        ForeignKey("service_content_anime.id"),
+        primary_key=True,
+    ),
+    Column(
+        "genre_id",
+        ForeignKey("service_content_genres.id"),
+        primary_key=True,
+    ),
+)
+
+genres_manga_association_table = Table(
+    "service_relation_genres_manga",
+    Base.metadata,
+    Column(
+        "manga_id",
+        ForeignKey("service_content_manga.id"),
+        primary_key=True,
+    ),
+    Column(
+        "genre_id",
+        ForeignKey("service_content_genres.id"),
+        primary_key=True,
+    ),
+)
+
+anime_genres_association_table_legacy = Table(
     "service_relation_anime_genres",
     Base.metadata,
     Column(
@@ -32,7 +62,7 @@ anime_staff_roles_association_table = Table(
 )
 
 
-manga_genres_association_table = Table(
+manga_genres_association_table_legacy = Table(
     "service_relation_manga_genres",
     Base.metadata,
     Column(

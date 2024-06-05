@@ -1,5 +1,6 @@
+from ..association import manga_genres_association_table_legacy
 from ..association import manga_magazines_association_table
-from ..association import manga_genres_association_table
+from ..association import genres_manga_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import query_expression
@@ -67,8 +68,13 @@ class Manga(
     external: Mapped[list] = mapped_column(JSONB, default=[])
     stats: Mapped[list] = mapped_column(JSONB, default=[])
 
-    genres: Mapped[list["MangaGenre"]] = relationship(
-        secondary=manga_genres_association_table,
+    genres: Mapped[list["Genre"]] = relationship(
+        secondary=genres_manga_association_table,
+        back_populates="manga",
+    )
+
+    genres_legacy: Mapped[list["MangaGenreLegacy"]] = relationship(
+        secondary=manga_genres_association_table_legacy,
         back_populates="manga",
     )
 

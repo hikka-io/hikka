@@ -33,11 +33,12 @@ from .content.recommendation import AnimeRecommendation
 from .content.franchise import Franchise
 from .content.episode import AnimeEpisode
 from .content.magazine import Magazine
-from .content.genre import AnimeGenre
-from .content.genre import MangaGenre
+from .content.genre import AnimeGenreLegacy
+from .content.genre import MangaGenreLegacy
 from .content.person import Person
 from .content.anime import Anime
 from .content.manga import Manga
+from .content.genre import Genre
 
 from .content.company import CompanyAnime
 from .content.company import Company
@@ -106,12 +107,13 @@ __all__ = [
     "AnimeRecommendation",
     "Franchise",
     "AnimeEpisode",
-    "AnimeGenre",
-    "MangaGenre",
+    "AnimeGenreLegacy",
+    "MangaGenreLegacy",
     "Magazine",
     "Person",
     "Anime",
     "Manga",
+    "Genre",
     "CompanyAnime",
     "Company",
     "AnimeCharacter",

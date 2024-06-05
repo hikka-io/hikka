@@ -15,7 +15,6 @@ from app.models import (
     AnimeCollectionContent,
     CollectionContent,
     EmailMessage,
-    AnimeGenre,
     Collection,
     AnimeWatch,
     AuthToken,
@@ -23,6 +22,7 @@ from app.models import (
     Company,
     Comment,
     Person,
+    Genre,
     Anime,
     Edit,
     User,
@@ -281,7 +281,7 @@ def anime_search_filter(
         query = query.filter(
             and_(
                 *[
-                    Anime.genres.any(AnimeGenre.slug == slug)
+                    Anime.genres.any(Genre.slug == slug)
                     for slug in search.genres
                 ]
             )

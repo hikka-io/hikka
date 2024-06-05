@@ -1,5 +1,5 @@
-from app.models import AnimeGenre, MangaGenre
 from sqlalchemy import select
+from app.models import Genre
 from app import utils
 
 TRANSLATIONS = {
@@ -91,12 +91,10 @@ async def save_anime_genres(session, data):
         slug = utils.slugify(genre_data["name"])
         name_ua = TRANSLATIONS.get(slug)
 
-        if await session.scalar(
-            select(AnimeGenre).filter(AnimeGenre.slug == slug)
-        ):
+        if await session.scalar(select(Genre).filter(Genre.slug == slug)):
             continue
 
-        genre = AnimeGenre(
+        genre = Genre(
             **{
                 "content_id": genre_data["content_id"],
                 "name_en": genre_data["name"],
@@ -108,7 +106,7 @@ async def save_anime_genres(session, data):
 
         create_genres.append(genre)
 
-        print(f"Added anime genre: {genre.name_en}")
+        print(f"Added genre: {genre.name_en}")
 
     session.add_all(create_genres)
     await session.commit()
@@ -124,12 +122,10 @@ async def save_manga_genres(session, data):
         if name_ua is None:
             print(slug)
 
-        if await session.scalar(
-            select(MangaGenre).filter(MangaGenre.slug == slug)
-        ):
+        if await session.scalar(select(Genre).filter(Genre.slug == slug)):
             continue
 
-        genre = MangaGenre(
+        genre = Genre(
             **{
                 "content_id": genre_data["content_id"],
                 "name_en": genre_data["name"],
@@ -141,7 +137,7 @@ async def save_manga_genres(session, data):
 
         create_genres.append(genre)
 
-        print(f"Added manga genre: {genre.name_en}")
+        print(f"Added genre: {genre.name_en}")
 
     session.add_all(create_genres)
     await session.commit()

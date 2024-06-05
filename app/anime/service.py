@@ -19,11 +19,11 @@ from app.models import (
     AnimeCharacter,
     CompanyAnime,
     AnimeEpisode,
-    AnimeGenre,
     AnimeStaff,
     AnimeWatch,
     Company,
     Person,
+    Genre,
     Anime,
     User,
 )
@@ -199,7 +199,7 @@ async def company_count(session: AsyncSession, slugs: list[str]):
 
 async def anime_genre_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
-        select(func.count(AnimeGenre.id)).filter(AnimeGenre.slug.in_(slugs))
+        select(func.count(Genre.id)).filter(Genre.slug.in_(slugs))
     )
 
 
@@ -241,7 +241,7 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
 
 
 async def anime_genres(session: AsyncSession):
-    return await session.scalars(select(AnimeGenre).order_by(AnimeGenre.slug))
+    return await session.scalars(select(Genre).order_by(Genre.slug))
 
 
 # I hate this function so much
