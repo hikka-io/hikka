@@ -2,12 +2,14 @@ from .aggregator.franchises import aggregator_franchises
 from .aggregator.characters import aggregator_characters
 from .aggregator.info.anime import aggregator_anime_info
 from .aggregator.info.manga import aggregator_manga_info
+from .aggregator.info.novel import aggregator_novel_info
 from .aggregator.companies import aggregator_companies
 from .aggregator.magazines import aggregator_magazines
 from .aggregator.people import aggregator_people
 from .aggregator.genres import aggregator_genres
 from .aggregator.anime import aggregator_anime
 from .aggregator.manga import aggregator_manga
+from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
 
 from .notifications import update_notifications
@@ -36,6 +38,7 @@ __all__ = [
     "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",
+    "aggregator_novel_info",
     "update_schedule_build",
     "aggregator_characters",
     "aggregator_companies",
@@ -46,6 +49,7 @@ __all__ = [
     "aggregator_genres",
     "aggregator_anime",
     "aggregator_manga",
+    "aggregator_novel",
     "aggregator_roles",
     "update_activity",
     "update_schedule",

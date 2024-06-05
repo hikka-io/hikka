@@ -8,12 +8,14 @@ from app.sync import (
     aggregator_characters,
     aggregator_anime_info,
     aggregator_manga_info,
+    aggregator_novel_info,
     aggregator_companies,
     aggregator_magazines,
     aggregator_genres,
     aggregator_people,
     aggregator_anime,
     aggregator_manga,
+    aggregator_novel,
     aggregator_roles,
     update_weights,
     update_content,
@@ -34,9 +36,11 @@ async def import_aggregator():
     # await aggregator_people()
     # await aggregator_anime()
     # await aggregator_manga()
+    # await aggregator_novel()
     # await aggregator_anime_info()
     # await aggregator_manga_info()
-    await aggregator_franchises()
+    await aggregator_novel_info()
+    # await aggregator_franchises()
     # await update_schedule_build()
     # await update_search()
     # await update_content()

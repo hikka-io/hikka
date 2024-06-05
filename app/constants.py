@@ -99,6 +99,7 @@ EDIT_CLOSED = "closed"
 
 CONTENT_ANIME = "anime"
 CONTENT_MANGA = "manga"
+CONTENT_NOVEL = "novel"
 CONTENT_CHARACTER = "character"
 CONTENT_COMPANY = "company"
 CONTENT_EPISODE = "episode"

@@ -101,6 +101,17 @@ async def get_manga(page):
             return data
 
 
+async def get_novel(page):
+    settings = get_settings()
+
+    endpoint = f"{settings.backend.aggregator}/novel?page={page}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
 async def get_franchises(page):
     settings = get_settings()
 
@@ -127,6 +138,17 @@ async def get_manga_info(content_id):
     settings = get_settings()
 
     endpoint = f"{settings.backend.aggregator}/manga/{content_id}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            data = await r.json()
+            return data
+
+
+async def get_novel_info(content_id):
+    settings = get_settings()
+
+    endpoint = f"{settings.backend.aggregator}/novel/{content_id}"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(endpoint) as r:
