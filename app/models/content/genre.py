@@ -1,5 +1,6 @@
 from ..association import genres_anime_association_table
 from ..association import genres_manga_association_table
+from ..association import genres_novel_association_table
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -26,5 +27,10 @@ class Genre(Base, ContentMixin, SlugMixin):
 
     manga: Mapped[list["Manga"]] = relationship(
         secondary=genres_manga_association_table,
+        back_populates="genres",
+    )
+
+    novel: Mapped[list["Novel"]] = relationship(
+        secondary=genres_novel_association_table,
         back_populates="genres",
     )

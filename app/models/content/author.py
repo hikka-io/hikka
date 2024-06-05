@@ -1,6 +1,5 @@
 from ..association import manga_author_roles_association_table
-
-# from ..association import novel_author_roles_association_table
+from ..association import novel_author_roles_association_table
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -60,32 +59,32 @@ class MangaAuthor(Base):
     unique_constraint = UniqueConstraint(person_id, manga_id)
 
 
-# class NovelAuthor(Base):
-#     __tablename__ = "service_content_novel_authors"
+class NovelAuthor(Base):
+    __tablename__ = "service_content_novel_authors"
 
-#     roles: Mapped[list["MangaAuthorRole"]] = relationship(
-#         secondary=novel_author_roles_association_table,
-#         order_by="MangaAuthorRole.weight.desc()",
-#         back_populates="author",
-#         lazy="joined",
-#     )
+    roles: Mapped[list["AuthorRole"]] = relationship(
+        secondary=novel_author_roles_association_table,
+        order_by="AuthorRole.weight.desc()",
+        back_populates="novel_authors",
+        lazy="joined",
+    )
 
-#     person_id = mapped_column(
-#         ForeignKey("service_content_people.id"),
-#         index=True,
-#     )
+    person_id = mapped_column(
+        ForeignKey("service_content_people.id"),
+        index=True,
+    )
 
-#     manga_id = mapped_column(
-#         ForeignKey("service_content_manga.id"),
-#         index=True,
-#     )
+    novel_id = mapped_column(
+        ForeignKey("service_content_novel.id"),
+        index=True,
+    )
 
-#     person: Mapped["Person"] = relationship(
-#         back_populates="author_roles", foreign_keys=[person_id]
-#     )
+    person: Mapped["Person"] = relationship(
+        back_populates="author_roles", foreign_keys=[person_id]
+    )
 
-#     manga: Mapped["Manga"] = relationship(
-#         back_populates="authors", foreign_keys=[manga_id]
-#     )
+    novel: Mapped["Novel"] = relationship(
+        back_populates="authors", foreign_keys=[novel_id]
+    )
 
-#     unique_constraint = UniqueConstraint(person_id, manga_id)
+    unique_constraint = UniqueConstraint(person_id, novel_id)

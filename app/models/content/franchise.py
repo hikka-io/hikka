@@ -22,3 +22,7 @@ class Franchise(Base, ContentMixin, UpdatedMixin):
     manga: Mapped[list["Manga"]] = relationship(
         back_populates="franchise_relation"
     )
+
+    novel: Mapped[list["Novel"]] = relationship(
+        back_populates="franchise_relation"
+    )

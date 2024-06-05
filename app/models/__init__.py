@@ -36,6 +36,7 @@ from .content.magazine import Magazine
 from .content.person import Person
 from .content.anime import Anime
 from .content.manga import Manga
+from .content.novel import Novel
 from .content.genre import Genre
 
 from .content.company import CompanyAnime
@@ -43,6 +44,7 @@ from .content.company import Company
 
 from .content.character import AnimeCharacter
 from .content.character import MangaCharacter
+from .content.character import NovelCharacter
 from .content.character import Character
 
 from .content.staff import AnimeStaffRole
@@ -50,6 +52,7 @@ from .content.staff import AnimeStaff
 from .content.staff import AnimeVoice
 
 from .content.author import MangaAuthor
+from .content.author import NovelAuthor
 from .content.author import AuthorRole
 
 from .system.notification import Notification
@@ -109,17 +112,20 @@ __all__ = [
     "Person",
     "Anime",
     "Manga",
+    "Novel",
     "Genre",
     "CompanyAnime",
     "Company",
     "AnimeCharacter",
     "MangaCharacter",
+    "NovelCharacter",
     "Character",
     "AnimeStaffRole",
     "AnimeStaff",
     "AnimeVoice",
     "AuthorRole",
     "MangaAuthor",
+    "NovelAuthor",
     "Notification",
     "SystemTimestamp",
     "Activity",

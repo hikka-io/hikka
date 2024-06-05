@@ -1,4 +1,5 @@
 from ..association import manga_magazines_association_table
+from ..association import novel_magazines_association_table
 from ..mixins import ContentMixin, SlugMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -14,5 +15,10 @@ class Magazine(Base, ContentMixin, SlugMixin):
 
     manga: Mapped[list["Manga"]] = relationship(
         secondary=manga_magazines_association_table,
+        back_populates="magazines",
+    )
+
+    novel: Mapped[list["Novel"]] = relationship(
+        secondary=novel_magazines_association_table,
         back_populates="magazines",
     )
