@@ -1,7 +1,13 @@
-from app.models import Anime, Manga, Franchise
 from sqlalchemy import select
 from app import constants
 from app import utils
+
+from app.models import (
+    Franchise,
+    Anime,
+    Manga,
+    Novel,
+)
 
 
 # TODO: optimize it
@@ -56,6 +62,18 @@ async def save_franchises_list(session, data):
             )
         )
 
+        novel_cache = await session.scalars(
+            select(Novel).filter(
+                Novel.content_id.in_(
+                    [
+                        entry["content_id"]
+                        for entry in franchise_data["franchise_entries"]
+                        if entry["content_type"] == constants.CONTENT_NOVEL
+                    ]
+                )
+            )
+        )
+
         update_content = []
 
         for anime in anime_cache:
@@ -65,6 +83,10 @@ async def save_franchises_list(session, data):
         for manga in manga_cache:
             manga.franchise_relation = franchise
             update_content.append(manga)
+
+        for novel in novel_cache:
+            novel.franchise_relation = franchise
+            update_content.append(novel)
 
         session.add_all(update_content)
 
