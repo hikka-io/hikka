@@ -30,7 +30,7 @@ from .list.favourite import Favourite
 from .list.watch import AnimeWatch
 
 from .content.recommendation import AnimeRecommendation
-from .content.franchise import AnimeFranchise
+from .content.franchise import Franchise
 from .content.episode import AnimeEpisode
 from .content.magazine import Magazine
 from .content.genre import AnimeGenre
@@ -104,7 +104,7 @@ __all__ = [
     "Favourite",
     "AnimeWatch",
     "AnimeRecommendation",
-    "AnimeFranchise",
+    "Franchise",
     "AnimeEpisode",
     "AnimeGenre",
     "MangaGenre",

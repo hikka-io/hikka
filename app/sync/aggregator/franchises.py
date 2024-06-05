@@ -7,17 +7,17 @@ import asyncio
 
 async def make_request(semaphore, page):
     async with semaphore:
-        data = await requests.get_anime_franchises(page)
+        data = await requests.get_franchises(page)
         return data["list"]
 
 
-async def save_anime_franchises_list(data):
+async def save_franchises_list(data):
     async with sessionmanager.session() as session:
-        await aggregator.save_anime_franchises_list(session, data)
+        await aggregator.save_franchises_list(session, data)
 
 
-async def aggregator_anime_franchises():
-    data = await requests.get_anime_franchises(1)
+async def aggregator_franchises():
+    data = await requests.get_franchises(1)
     pages = data["pagination"]["pages"]
 
     semaphore = asyncio.Semaphore(5)
@@ -28,4 +28,4 @@ async def aggregator_anime_franchises():
     data = [item for sublist in result for item in sublist]
 
     for data_chunk in utils.chunkify(data, 20000):
-        await save_anime_franchises_list(data_chunk)
+        await save_franchises_list(data_chunk)

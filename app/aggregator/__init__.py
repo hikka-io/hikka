@@ -1,5 +1,5 @@
-from .franchises import save_anime_franchises_list
 from .staff import update_anime_staff_weights
+from .franchises import save_franchises_list
 from .info.anime import update_anime_info
 from .info.manga import update_manga_info
 from .characters import save_characters
@@ -18,9 +18,9 @@ from .roles import (
 )
 
 __all__ = [
-    "save_anime_franchises_list",
     "update_anime_staff_weights",
     "update_anime_role_weights",
+    "save_franchises_list",
     "update_anime_roles",
     "update_manga_roles",
     "save_anime_genres",

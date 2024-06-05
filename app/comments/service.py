@@ -73,7 +73,7 @@ async def create_comment(
     text: str,
     parent: Comment | None = None,
 ):
-    cleaned_text = utils.remove_bad_characters(remove_bad_characters)
+    cleaned_text = utils.remove_bad_characters(text)
     comment_model = content_type_to_comment_class[content_type]
     now = utcnow()
 

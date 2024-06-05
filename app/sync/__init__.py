@@ -1,4 +1,4 @@
-from .aggregator.franchises import aggregator_anime_franchises
+from .aggregator.franchises import aggregator_franchises
 from .aggregator.characters import aggregator_characters
 from .aggregator.info.anime import aggregator_anime_info
 from .aggregator.info.manga import aggregator_manga_info
@@ -33,7 +33,7 @@ from .content import update_content
 from .email import send_emails
 
 __all__ = [
-    "aggregator_anime_franchises",
+    "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",
     "update_schedule_build",

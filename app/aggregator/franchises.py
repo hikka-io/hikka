@@ -1,16 +1,15 @@
-from app.models import Anime, AnimeFranchise
+from app.models import Anime, Manga, Franchise
 from sqlalchemy import select
+from app import constants
 from app import utils
 
 
 # TODO: optimize it
-async def save_anime_franchises_list(session, data):
+async def save_franchises_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
 
     cache = await session.scalars(
-        select(AnimeFranchise).filter(
-            AnimeFranchise.content_id.in_(content_ids)
-        )
+        select(Franchise).filter(Franchise.content_id.in_(content_ids))
     )
 
     franchises_cache = {entry.content_id: entry for entry in cache}
@@ -19,7 +18,7 @@ async def save_anime_franchises_list(session, data):
         if not (
             franchise := franchises_cache.get(franchise_data["content_id"])
         ):
-            franchise = AnimeFranchise(content_id=franchise_data["content_id"])
+            franchise = Franchise(content_id=franchise_data["content_id"])
 
         updated = utils.from_timestamp(franchise_data["updated"])
 
@@ -33,20 +32,42 @@ async def save_anime_franchises_list(session, data):
         session.add(franchise)
         await session.commit()
 
-        cache = await session.scalars(
+        anime_cache = await session.scalars(
             select(Anime).filter(
-                Anime.content_id.in_(franchise_data["franchise_entries"])
+                Anime.content_id.in_(
+                    [
+                        entry["content_id"]
+                        for entry in franchise_data["franchise_entries"]
+                        if entry["content_type"] == constants.CONTENT_ANIME
+                    ]
+                )
             )
         )
 
-        update_anime = []
+        manga_cache = await session.scalars(
+            select(Manga).filter(
+                Manga.content_id.in_(
+                    [
+                        entry["content_id"]
+                        for entry in franchise_data["franchise_entries"]
+                        if entry["content_type"] == constants.CONTENT_MANGA
+                    ]
+                )
+            )
+        )
 
-        for anime in cache:
+        update_content = []
+
+        for anime in anime_cache:
             anime.franchise_relation = franchise
-            update_anime.append(anime)
+            update_content.append(anime)
 
-        session.add_all(update_anime)
+        for manga in manga_cache:
+            manga.franchise_relation = franchise
+            update_content.append(manga)
 
-        # print("Processed franchise " + franchise_data["content_id"])
+        session.add_all(update_content)
+
+        print(f"Processed franchise {franchise.content_id}")
 
     await session.commit()

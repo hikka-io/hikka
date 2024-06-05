@@ -3,7 +3,7 @@ from app.utils import get_settings
 import asyncio
 
 from app.sync import (
-    aggregator_anime_franchises,
+    aggregator_franchises,
     update_schedule_build,
     aggregator_characters,
     aggregator_anime_info,
@@ -35,8 +35,8 @@ async def import_aggregator():
     # await aggregator_anime()
     # await aggregator_manga()
     # await aggregator_anime_info()
-    await aggregator_manga_info()
-    # await aggregator_anime_franchises()
+    # await aggregator_manga_info()
+    await aggregator_franchises()
     # await update_schedule_build()
     # await update_search()
     # await update_content()

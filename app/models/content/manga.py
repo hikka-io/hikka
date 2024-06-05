@@ -98,7 +98,7 @@ class Manga(
         index=True,
     )
 
-    franchise_relation: Mapped["AnimeFranchise"] = relationship(
+    franchise_relation: Mapped["Franchise"] = relationship(
         back_populates="manga", foreign_keys=[franchise_id]
     )
 

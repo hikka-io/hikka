@@ -9,7 +9,7 @@ from ..mixins import (
 )
 
 
-class AnimeFranchise(Base, ContentMixin, UpdatedMixin):
+class Franchise(Base, ContentMixin, UpdatedMixin):
     __tablename__ = "service_content_franchises"
 
     scored_by: Mapped[int] = mapped_column(default=0)
