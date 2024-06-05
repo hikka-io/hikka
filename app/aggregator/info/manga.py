@@ -8,20 +8,18 @@ from app.models import (
     MangaAuthorRole,
     MangaCharacter,
     MangaAuthor,
-    MangaGenreLegacy,
     Character,
     Magazine,
     Person,
     Image,
+    Genre,
     Edit,
 )
 
 
 async def process_genres(session, manga, data):
     genres = await session.scalars(
-        select(MangaGenreLegacy).filter(
-            MangaGenreLegacy.content_id.in_(data["genre_ids"])
-        )
+        select(Genre).filter(Genre.content_id.in_(data["genre_ids"]))
     )
 
     genres_add = []

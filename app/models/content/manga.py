@@ -1,4 +1,3 @@
-from ..association import manga_genres_association_table_legacy
 from ..association import manga_magazines_association_table
 from ..association import genres_manga_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -70,11 +69,6 @@ class Manga(
 
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_manga_association_table,
-        back_populates="manga",
-    )
-
-    genres_legacy: Mapped[list["MangaGenreLegacy"]] = relationship(
-        secondary=manga_genres_association_table_legacy,
         back_populates="manga",
     )
 

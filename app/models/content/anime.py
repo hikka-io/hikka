@@ -1,4 +1,3 @@
-from ..association import anime_genres_association_table_legacy
 from ..association import genres_anime_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
@@ -98,11 +97,6 @@ class Anime(
 
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_anime_association_table,
-        back_populates="anime",
-    )
-
-    genres_legacy: Mapped[list["AnimeGenreLegacy"]] = relationship(
-        secondary=anime_genres_association_table_legacy,
         back_populates="anime",
     )
 
