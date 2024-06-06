@@ -291,9 +291,12 @@ class RoleResponse(CustomModel):
     slug: str
 
 
-class AnimeStaffResponse(CustomModel):
-    person: PersonResponse | None
+class ContentAuthorResponse(CustomModel):
     roles: list[RoleResponse]
+    person: PersonResponse
+
+
+class AnimeStaffResponse(ContentAuthorResponse):
     weight: int | None
 
 
@@ -319,7 +322,7 @@ class UserResponse(CustomModel):
     role: str
 
 
-class AnimeExternalResponse(CustomModel):
+class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
     type: str
@@ -378,3 +381,47 @@ class CollectionResponse(CustomModel, DataTypeMixin):
     @field_validator("collection")
     def collection_ordering(cls, collection):
         return sorted(collection, key=lambda c: c.order)
+
+
+class GenreResponse(CustomModel):
+    name_ua: str | None = Field(examples=["Комедія"])
+    name_en: str | None = Field(examples=["Comedy"])
+    slug: str = Field(examples=["comedy"])
+    type: str = Field(examples=["genre"])
+
+
+class GenreListResponse(CustomModel):
+    list: list[GenreResponse]
+
+
+class ReadStatsResponse(CustomModel):
+    completed: int = Field(examples=[1502335], default=0)
+    reading: int = Field(examples=[83106], default=0)
+    on_hold: int = Field(examples=[206073], default=0)
+    dropped: int = Field(examples=[33676], default=0)
+    planned: int = Field(examples=[30222], default=0)
+    score_1: int = Field(examples=[3087], default=0)
+    score_2: int = Field(examples=[2633], default=0)
+    score_3: int = Field(examples=[4583], default=0)
+    score_4: int = Field(examples=[11343], default=0)
+    score_5: int = Field(examples=[26509], default=0)
+    score_6: int = Field(examples=[68501], default=0)
+    score_7: int = Field(examples=[211113], default=0)
+    score_8: int = Field(examples=[398095], default=0)
+    score_9: int = Field(examples=[298198], default=0)
+    score_10: int = Field(examples=[184038], default=0)
+
+
+class MagazineResponse(CustomModel):
+    name_en: str
+    slug: str
+
+
+class ContentCharacterResponse(CustomModel):
+    main: bool = Field(examples=[True])
+    character: CharacterResponse
+
+
+class ContentCharacterPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[ContentCharacterResponse]

@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_session
+from app.service import genres_count
 from .schemas import AnimeSearchArgs
 from app.models import Anime
 from app.errors import Abort
@@ -35,7 +36,7 @@ async def validate_search_anime(
 
     # Check if provided genres exist
     if len(search.genres) > 0:
-        genres = await service.anime_genre_count(session, search.genres)
+        genres = await genres_count(session, search.genres)
         if genres != len(search.genres):
             raise Abort("anime", "unknown-genre")
 

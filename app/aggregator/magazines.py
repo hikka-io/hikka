@@ -21,6 +21,7 @@ async def save_magazines(session, data):
             magazine = Magazine(
                 **{
                     "content_id": magazine_data["content_id"],
+                    "mal_id": magazine_data["mal_id"],
                     "name_en": magazine_data["name"],
                     "slug": slug,
                 }

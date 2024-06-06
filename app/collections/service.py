@@ -45,7 +45,7 @@ content_type_to_collection_content_class = {
 }
 
 
-def build_order_by(sort: list[str]):
+def build_collection_order_by(sort: list[str]):
     order_mapping = {
         "system_ranking": Collection.system_ranking,
         "created": Collection.created,
@@ -181,7 +181,9 @@ async def get_collections(
     )
 
     return await session.scalars(
-        query.order_by(*build_order_by(args.sort)).limit(limit).offset(offset)
+        query.order_by(*build_collection_order_by(args.sort))
+        .limit(limit)
+        .offset(offset)
     )
 
 

@@ -87,7 +87,7 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
     )
 
 
-def build_order_by(sort: list[str]):
+def build_edit_order_by(sort: list[str]):
     order_mapping = {
         "edit_id": Edit.edit_id,
         "created": Edit.created,
@@ -186,7 +186,7 @@ async def get_edits(
         ),
     )
 
-    query = query.order_by(*build_order_by(args.sort))
+    query = query.order_by(*build_edit_order_by(args.sort))
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)

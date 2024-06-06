@@ -10,8 +10,8 @@ from app import constants
 
 from app.service import (
     get_comments_count_subquery,
+    build_anime_order_by,
     anime_search_filter,
-    build_order_by,
 )
 
 from app.models import (
@@ -57,7 +57,7 @@ async def anime_characters(
     return await session.scalars(
         select(AnimeCharacter)
         .filter(AnimeCharacter.anime == anime)
-        .options(selectinload(AnimeCharacter.character))
+        .options(joinedload(AnimeCharacter.character))
         .limit(limit)
         .offset(offset)
     )
@@ -197,12 +197,6 @@ async def company_count(session: AsyncSession, slugs: list[str]):
     )
 
 
-async def anime_genre_count(session: AsyncSession, slugs: list[str]):
-    return await session.scalar(
-        select(func.count(Genre.id)).filter(Genre.slug.in_(slugs))
-    )
-
-
 async def anime_search(
     session: AsyncSession,
     search: AnimeSearchArgs,
@@ -222,7 +216,7 @@ async def anime_search(
     query = select(Anime).filter(Anime.deleted == False)  # noqa: E712
     query = anime_search_filter(search, query)
 
-    query = query.order_by(*build_order_by(search.sort))
+    query = query.order_by(*build_anime_order_by(search.sort))
 
     query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
@@ -266,7 +260,7 @@ async def anime_meilisearch_watch(
     query = select(Anime).filter(Anime.slug.in_(slugs)).options(*load_options)
 
     if len(search.sort) > 0:
-        query = query.order_by(*build_order_by(search.sort))
+        query = query.order_by(*build_anime_order_by(search.sort))
 
     anime_list = await session.scalars(query)
     meilisearch_result["list"] = anime_list.unique().all()

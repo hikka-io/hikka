@@ -225,7 +225,6 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
-
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
 
@@ -328,7 +327,7 @@ def anime_search_filter(
     return query
 
 
-def build_order_by(sort: list[str]):
+def build_anime_order_by(sort: list[str]):
     order_mapping = {
         "episodes_total": Anime.episodes_total,
         "watch_episodes": AnimeWatch.episodes,
@@ -425,4 +424,10 @@ def get_my_score_subquery(content_model, content_type, request_user):
             Vote.content_type == content_type,
         )
         .scalar_subquery()
+    )
+
+
+async def genres_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(Genre.id)).filter(Genre.slug.in_(slugs))
     )

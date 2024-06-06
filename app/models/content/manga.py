@@ -113,5 +113,9 @@ class Manga(
         return self.image_relation.url
 
     @hybrid_property
+    def has_franchise(self):
+        return self.franchise_id is not None
+
+    @hybrid_property
     def data_type(self):
         return "manga"

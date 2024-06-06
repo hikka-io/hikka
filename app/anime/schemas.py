@@ -3,16 +3,16 @@ from app.schemas import datetime_pd
 from app import constants
 
 from app.schemas import (
-    AnimeExternalResponse,
     AnimeSearchArgsBase,
     AnimeVideoResponse,
     AnimeStaffResponse,
     PaginationResponse,
-    CharacterResponse,
+    ExternalResponse,
     CompanyTypeEnum,
     CompanyResponse,
     QuerySearchArgs,
     DataTypeMixin,
+    GenreResponse,
     CustomModel,
 )
 
@@ -70,30 +70,9 @@ class AnimeEpisodesListResponse(CustomModel):
     list: list[AnimeEpisodeResponse]
 
 
-class AnimeCharacterResponse(CustomModel):
-    main: bool = Field(examples=[True])
-    character: CharacterResponse
-
-
-class GenreResponse(CustomModel):
-    name_ua: str | None = Field(examples=["Комедія"])
-    name_en: str | None = Field(examples=["Comedy"])
-    slug: str = Field(examples=["comedy"])
-    type: str = Field(examples=["genre"])
-
-
-class GenreListResposne(CustomModel):
-    list: list[GenreResponse]
-
-
 class AnimeCompanyResponse(CustomModel):
     company: CompanyResponse
     type: CompanyTypeEnum
-
-
-class AnimeCharacterPaginationResponse(CustomModel):
-    pagination: PaginationResponse
-    list: list[AnimeCharacterResponse]
 
 
 class AnimeStaffPaginationResponse(CustomModel):
@@ -166,7 +145,7 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     year: int | None
 
     synonyms: list[str] = Field(examples=["Konosuba"])
-    external: list[AnimeExternalResponse]
+    external: list[ExternalResponse]
     videos: list[AnimeVideoResponse]
     ost: list[AnimeOSTResponse]
     stats: AnimeStatsResponse
