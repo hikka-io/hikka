@@ -28,21 +28,21 @@ async def import_aggregator():
 
     sessionmanager.init(settings.database.endpoint)
 
-    await aggregator_genres()
+    # await aggregator_genres()
     # await aggregator_roles()
     # await aggregator_characters()
     # await aggregator_companies()
-    await aggregator_magazines()
+    # await aggregator_magazines()
     # await aggregator_people()
     # await aggregator_anime()
     # await aggregator_manga()
     # await aggregator_novel()
     # await aggregator_anime_info()
-    await aggregator_manga_info()
+    # await aggregator_manga_info()
     # await aggregator_novel_info()
     # await aggregator_franchises()
     # await update_schedule_build()
-    # await update_search()
+    await update_search()
     # await update_content()
 
     # TODO: improve performance
