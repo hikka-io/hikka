@@ -53,6 +53,7 @@ errors = {
         "not-found": ["Anime not found", 404],
     },
     "manga": {
+        "unknown-magazine": ["Unknown magazine", 400],
         "unknown-genre": ["Unknown genre", 400],
         "not-found": ["Manga not found", 404],
     },

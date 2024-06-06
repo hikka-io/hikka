@@ -47,13 +47,13 @@ async def search_manga(
     if not search.query:
         limit, offset = pagination(page, size)
         total = await service.manga_search_total(session, search)
-        anime = await service.manga_search(
+        manga = await service.manga_search(
             session, search, request_user, limit, offset
         )
 
         return {
             "pagination": pagination_dict(total, page, limit),
-            "list": anime.unique().all(),
+            "list": manga.unique().all(),
         }
 
     return await service.manga_search_query(
@@ -70,8 +70,8 @@ async def search_manga(
     response_model=MangaInfoResponse,
     summary="Manga info",
 )
-async def manga_info(anime: Manga = Depends(valdidate_manga_info)):
-    return anime
+async def manga_info(manga: Manga = Depends(valdidate_manga_info)):
+    return manga
 
 
 @router.get(

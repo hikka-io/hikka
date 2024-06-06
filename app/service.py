@@ -19,6 +19,7 @@ from app.models import (
     AnimeWatch,
     AuthToken,
     Character,
+    Magazine,
     Company,
     Comment,
     Person,
@@ -430,4 +431,10 @@ def get_my_score_subquery(content_model, content_type, request_user):
 async def genres_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
         select(func.count(Genre.id)).filter(Genre.slug.in_(slugs))
+    )
+
+
+async def magazines_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(Magazine.id)).filter(Magazine.slug.in_(slugs))
     )
