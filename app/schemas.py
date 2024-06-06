@@ -59,6 +59,14 @@ class AnimeStatusEnum(str, Enum):
     ongoing = constants.RELEASE_STATUS_ONGOING
 
 
+class ContentStatusEnum(str, Enum):
+    discontinued = constants.RELEASE_STATUS_DISCONTINUED
+    announced = constants.RELEASE_STATUS_ANNOUNCED
+    finished = constants.RELEASE_STATUS_FINISHED
+    ongoing = constants.RELEASE_STATUS_ONGOING
+    paused = constants.RELEASE_STATUS_PAUSED
+
+
 class SeasonEnum(str, Enum):
     winter = constants.SEASON_WINTER
     spring = constants.SEASON_SPRING
@@ -73,6 +81,19 @@ class AnimeMediaEnum(str, Enum):
     ova = constants.MEDIA_TYPE_OVA
     ona = constants.MEDIA_TYPE_ONA
     tv = constants.MEDIA_TYPE_TV
+
+
+class MangaMediaEnum(str, Enum):
+    one_shot = constants.MEDIA_TYPE_ONE_SHOT
+    doujin = constants.MEDIA_TYPE_DOUJIN
+    manhua = constants.MEDIA_TYPE_MANHUA
+    manhwa = constants.MEDIA_TYPE_MANHWA
+    manga = constants.MEDIA_TYPE_MANGA
+
+
+class NovelMediaEnum(str, Enum):
+    light_novel = constants.MEDIA_TYPE_LIGHT_NOVEL
+    novel = constants.MEDIA_TYPE_NOVEL
 
 
 class AnimeAgeRatingEnum(str, Enum):

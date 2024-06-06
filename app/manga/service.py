@@ -5,12 +5,13 @@ from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
 from .schemas import MangaSearchArgs
-from sqlalchemy import func
+from sqlalchemy import func, and_
 from app import constants
 
 from app.models import (
     MangaCharacter,
     MangaAuthor,
+    Magazine,
     Genre,
     Manga,
     User,
@@ -72,6 +73,43 @@ def manga_search_filter(
     query: Select,
     hide_nsfw=True,
 ):
+    if search.score[0] and search.score[0] > 0:
+        query = query.filter(Manga.score >= search.score[0])
+
+    if search.score[1]:
+        query = query.filter(Manga.score <= search.score[1])
+
+    if len(search.status) > 0:
+        query = query.filter(Manga.status.in_(search.status))
+
+    if len(search.media_type) > 0:
+        query = query.filter(Manga.media_type.in_(search.media_type))
+
+    if search.only_translated:
+        query = query.filter(Manga.translated_ua == True)  # noqa: E712
+
+    if search.years[0]:
+        query = query.filter(Manga.year >= search.years[0])
+
+    if search.years[1]:
+        query = query.filter(Manga.year <= search.years[1])
+
+    if len(search.magazines) > 0:
+        query = query.join(Manga.magazines).filter(
+            Magazine.slug.in_(search.magazines)
+        )
+
+    # In some cases, like on front page, we would want to hide NSFW content
+    if len(search.genres) == 0 and hide_nsfw:
+        query = query.filter(
+            and_(
+                *[
+                    ~Manga.genres.any(Genre.slug == slug)
+                    for slug in ["ecchi", "erotica", "hentai"]
+                ]
+            )
+        )
+
     # All genres must be present in query result
     if len(search.genres) > 0:
         query = query.filter(

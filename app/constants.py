@@ -48,6 +48,15 @@ MEDIA_TYPE_OVA = "ova"
 MEDIA_TYPE_ONA = "ona"
 MEDIA_TYPE_TV = "tv"
 
+MEDIA_TYPE_LIGHT_NOVEL = "light_novel"
+MEDIA_TYPE_NOVEL = "novel"
+
+MEDIA_TYPE_ONE_SHOT = "one_shot"
+MEDIA_TYPE_DOUJIN = "doujin"
+MEDIA_TYPE_MANHUA = "manhua"
+MEDIA_TYPE_MANHWA = "manhwa"
+MEDIA_TYPE_MANGA = "manga"
+
 AGE_RATING_R_PLUS = "r_plus"
 AGE_RATING_PG_13 = "pg_13"
 AGE_RATING_PG = "pg"
