@@ -44,16 +44,25 @@ async def search_manga(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page, size)
-    total = await service.manga_search_total(session, search)
-    anime = await service.manga_search(
-        session, search, request_user, limit, offset
-    )
+    if not search.query:
+        limit, offset = pagination(page, size)
+        total = await service.manga_search_total(session, search)
+        anime = await service.manga_search(
+            session, search, request_user, limit, offset
+        )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
-    }
+        return {
+            "pagination": pagination_dict(total, page, limit),
+            "list": anime.unique().all(),
+        }
+
+    return await service.manga_search_query(
+        session,
+        search,
+        request_user,
+        page,
+        size,
+    )
 
 
 @router.get(

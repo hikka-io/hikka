@@ -2,10 +2,12 @@ from app.service import get_comments_count_subquery
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from .utils import build_manga_filters_ms
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
 from .schemas import MangaSearchArgs
 from sqlalchemy import func, and_
+from app import meilisearch
 from app import constants
 
 from app.models import (
@@ -170,3 +172,37 @@ async def manga_characters(
         .limit(limit)
         .offset(offset)
     )
+
+
+async def manga_search_query(
+    session: AsyncSession,
+    search: MangaSearchArgs,
+    request_user: User | None,
+    page: int,
+    size: int,
+):
+    meilisearch_result = await meilisearch.search(
+        constants.SEARCH_INDEX_MANGA,
+        filter=build_manga_filters_ms(search),
+        query=search.query,
+        sort=search.sort,
+        page=page,
+        size=size,
+    )
+
+    slugs = [manga["slug"] for manga in meilisearch_result["list"]]
+
+    query = select(Manga).filter(Manga.slug.in_(slugs))
+
+    if len(search.sort) > 0:
+        query = query.order_by(*build_manga_order_by(search.sort))
+
+    manga_list = await session.scalars(query)
+    meilisearch_result["list"] = manga_list.unique().all()
+
+    # Results must be sorted here to ensure same order as Meilisearch results
+    meilisearch_result["list"] = sorted(
+        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
+    )
+
+    return meilisearch_result
