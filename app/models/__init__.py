@@ -32,6 +32,10 @@ from .list.favourite import AnimeFavourite
 from .list.favourite import Favourite
 from .list.watch import AnimeWatch
 
+from .list.read import MangaRead
+from .list.read import NovelRead
+from .list.read import Read
+
 from .content.recommendation import AnimeRecommendation
 from .content.franchise import Franchise
 from .content.episode import AnimeEpisode
@@ -111,6 +115,9 @@ __all__ = [
     "AnimeFavourite",
     "Favourite",
     "AnimeWatch",
+    "MangaRead",
+    "NovelRead",
+    "Read",
     "AnimeRecommendation",
     "Franchise",
     "AnimeEpisode",
