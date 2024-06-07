@@ -50,3 +50,11 @@ class UserResponseWithRead(UserResponse):
 class UserReadPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[UserResponseWithRead]
+
+
+class ReadStatsResponse(CustomModel):
+    completed: int = Field(examples=[20])
+    reading: int = Field(examples=[3])
+    planned: int = Field(examples=[7])
+    dropped: int = Field(examples=[1])
+    on_hold: int = Field(examples=[2])

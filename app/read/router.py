@@ -1,11 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Manga, Novel, Read
-from app.dependencies import get_page, get_size
-from app.dependencies import auth_required
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import constants
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    get_page,
+    get_size,
+    get_user,
+)
 
 from app.utils import (
     pagination_dict,
@@ -15,6 +21,7 @@ from app.utils import (
 from .schemas import (
     UserReadPaginationResponse,
     ReadContentTypeEnum,
+    ReadStatsResponse,
     ReadResponse,
     ReadArgs,
 )
@@ -85,4 +92,45 @@ async def get_read_following(
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": read.unique().all(),
+    }
+
+
+@router.get(
+    "/{content_type}/{username}/stats",
+    summary="Get user read list stats",
+    response_model=ReadStatsResponse,
+)
+async def user_read_stats(
+    content_type: ReadContentTypeEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+
+    # This looks awful -> refactor it into something better
+    completed = await service.get_user_read_stats(
+        session, user, content_type, constants.READ_COMPLETED
+    )
+
+    reading = await service.get_user_read_stats(
+        session, user, content_type, constants.READ_READING
+    )
+
+    planned = await service.get_user_read_stats(
+        session, user, content_type, constants.READ_PLANNED
+    )
+
+    on_hold = await service.get_user_read_stats(
+        session, user, content_type, constants.READ_ON_HOLD
+    )
+
+    dropped = await service.get_user_read_stats(
+        session, user, content_type, constants.READ_DROPPED
+    )
+
+    return {
+        "completed": completed,
+        "reading": reading,
+        "planned": planned,
+        "on_hold": on_hold,
+        "dropped": dropped,
     }

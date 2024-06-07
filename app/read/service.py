@@ -144,3 +144,19 @@ async def get_manga_read_following(
         .limit(limit)
         .offset(offset)
     )
+
+
+async def get_user_read_stats(
+    session: AsyncSession,
+    user: User,
+    content_type: str,
+    status: str,
+):
+    return await session.scalar(
+        select(func.count(Read.id)).filter(
+            Read.content_type == content_type,
+            Read.deleted == False,  # noqa: E712
+            Read.status == status,
+            Read.user == user,
+        )
+    )
