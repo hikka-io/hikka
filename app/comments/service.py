@@ -23,6 +23,8 @@ from app.models import (
     CollectionComment,
     CharacterEdit,
     AnimeComment,
+    MangaComment,
+    NovelComment,
     EditComment,
     Collection,
     PersonEdit,
@@ -40,6 +42,8 @@ content_type_to_comment_class = {
     constants.CONTENT_COLLECTION: CollectionComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ANIME: AnimeComment,
+    constants.CONTENT_MANGA: MangaComment,
+    constants.CONTENT_NOVEL: NovelComment,
 }
 
 
@@ -272,6 +276,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     return True
 
 
+# TODO: FIXME!!!
 async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):

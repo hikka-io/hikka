@@ -25,6 +25,8 @@ from app.models import (
     Person,
     Genre,
     Anime,
+    Manga,
+    Novel,
     Edit,
     User,
     Vote,
@@ -39,6 +41,8 @@ content_type_to_content_class = {
     constants.CONTENT_COMMENT: Comment,
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
+    constants.CONTENT_MANGA: Manga,
+    constants.CONTENT_NOVEL: Novel,
 }
 
 

@@ -21,6 +21,8 @@ from .edit.edit import Edit
 from .comments.comment import CollectionComment
 from .comments.vote import CommentVoteLegacy
 from .comments.comment import AnimeComment
+from .comments.comment import MangaComment
+from .comments.comment import NovelComment
 from .comments.comment import EditComment
 from .comments.comment import Comment
 
@@ -99,6 +101,8 @@ __all__ = [
     "Edit",
     "CollectionComment",
     "AnimeComment",
+    "MangaComment",
+    "NovelComment",
     "EditComment",
     "CommentVoteLegacy",
     "Comment",
