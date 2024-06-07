@@ -1,10 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Manga, Novel, User, Read
+from sqlalchemy.orm import contains_eager
+from sqlalchemy import select, desc, func
 from app.service import create_log
-from sqlalchemy import select
 from .schemas import ReadArgs
 from app.utils import utcnow
 from app import constants
+
+from app.models import (
+    Follow,
+    Manga,
+    Novel,
+    User,
+    Read,
+)
 
 
 async def get_read(
@@ -98,3 +106,41 @@ async def delete_read(
     )
 
     await session.commit()
+
+
+async def get_manga_read_following_total(
+    session: AsyncSession,
+    user: User,
+    content_type: str,
+    content: Manga | Novel,
+):
+    return await session.scalar(
+        select(func.count(User.id))
+        .join(Follow, Follow.followed_user_id == User.id)
+        .filter(Follow.user_id == user.id)
+        .join(User.read)
+        .filter(Read.content_type == content_type)
+        .filter(Read.content_id == content.id)
+    )
+
+
+async def get_manga_read_following(
+    session: AsyncSession,
+    user: User,
+    content_type: str,
+    content: Manga | Novel,
+    limit: int,
+    offset: int,
+):
+    return await session.scalars(
+        select(User)
+        .join(Follow, Follow.followed_user_id == User.id)
+        .filter(Follow.user_id == user.id)
+        .join(User.read)
+        .filter(Read.content_type == content_type)
+        .filter(Read.content_id == content.id)
+        .options(contains_eager(User.read))
+        .order_by(desc(Read.score), desc(Read.updated))
+        .limit(limit)
+        .offset(offset)
+    )

@@ -1,5 +1,6 @@
+from app.schemas import CustomModel, UserResponse
+from app.schemas import PaginationResponse
 from app.schemas import datetime_pd
-from app.schemas import CustomModel
 from pydantic import Field
 from app import constants
 from enum import Enum
@@ -40,3 +41,12 @@ class ReadResponse(CustomModel):
     volumes: int = Field(examples=[3])
     rereads: int = Field(examples=[2])
     score: int = Field(examples=[8])
+
+
+class UserResponseWithRead(UserResponse):
+    read: list[ReadResponse]
+
+
+class UserReadPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[UserResponseWithRead]
