@@ -98,6 +98,12 @@ errors = {
         "bad-episodes": ["Bad episodes number provided", 400],
         "not-found": ["Watch record not found", 404],
     },
+    "read": {
+        "bad-chapters": ["Bad chapters number provided", 400],
+        "bad-volumes": ["Bad volumes number provided", 400],
+        "content-not-found": ["Content not found", 404],
+        "not-found": ["Read record not found", 404],
+    },
     "favourite": {
         "exists": ["Favourite record already exists", 400],
         "not-found": ["Favourite record not found", 404],

@@ -9,6 +9,13 @@ CDN_ENDPOINT = "https://cdn.hikka.io"
 SORT_DESC = "desc"
 SORT_ASC = "asc"
 
+# Read stuff
+READ_COMPLETED = "completed"
+READ_READING = "reading"
+READ_ON_HOLD = "on_hold"
+READ_DROPPED = "dropped"
+READ_PLANNED = "planned"
+
 # Watch list statuses
 WATCH_PLANNED = "planned"
 WATCH_WATCHING = "watching"
@@ -248,6 +255,9 @@ LOG_EDIT_DENY = "edit_deny"
 LOG_WATCH_CREATE = "watch_create"
 LOG_WATCH_UPDATE = "watch_update"
 LOG_WATCH_DELETE = "watch_delete"
+LOG_READ_CREATE = "read_create"
+LOG_READ_UPDATE = "read_update"
+LOG_READ_DELETE = "read_delete"
 LOG_SETTINGS_DESCRIPTION = "settings_description"
 LOG_SETTINGS_IMAGE_DELETE = "settings_image_delete"
 LOG_SETTINGS_WATCH_DELETE = "settings_watch_delete"

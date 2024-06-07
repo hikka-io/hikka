@@ -89,6 +89,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .novel import router as novel_router
     from .watch import router as watch_router
     from .stats import router as stats_router
+    from .read import router as read_router
     from .user import router as user_router
     from .auth import router as auth_router
     from .edit import router as edit_router
@@ -113,6 +114,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(novel_router)
     app.include_router(watch_router)
     app.include_router(stats_router)
+    app.include_router(read_router)
     app.include_router(user_router)
     app.include_router(auth_router)
     app.include_router(edit_router)
