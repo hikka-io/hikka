@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from .schemas import FavouriteContentTypeEnum
 from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
-from .schemas import ContentTypeEnum
 from app.utils import utcnow
 from app import constants
 
@@ -34,7 +34,7 @@ content_type_to_favourite_class = {
 
 async def get_favourite(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     content: Anime,
     user: User,
 ) -> Favourite | None:
@@ -49,7 +49,7 @@ async def get_favourite(
 
 async def create_favourite(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     content: Anime,
     user: User,
 ) -> Favourite:
@@ -92,7 +92,7 @@ async def delete_favourite(session: AsyncSession, favourite: Favourite):
 
 async def get_user_favourite_list(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     user: User,
     request_user: User | None,
     limit: int,
@@ -163,7 +163,7 @@ async def get_user_favourite_list(
 
 async def get_user_favourite_list_count(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     user: User,
     request_user: User,
 ) -> int:

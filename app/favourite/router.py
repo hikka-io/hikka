@@ -1,14 +1,23 @@
 from app.utils import pagination, pagination_dict
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User, Anime, Favourite
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from . import service
 
+from app.models import (
+    Collection,
+    Favourite,
+    Character,
+    Anime,
+    Manga,
+    Novel,
+    User,
+)
+
 from .schemas import (
     FavouritePaginationResponse,
+    FavouriteContentTypeEnum,
     FavouriteResponse,
-    ContentTypeEnum,
 )
 
 from app.dependencies import (
@@ -40,9 +49,11 @@ async def get_favourite(
 
 @router.put("/{content_type}/{slug}", response_model=FavouriteResponse)
 async def favourite_add(
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content: Anime = Depends(validate_add_favourite),
+    content: Collection | Character | Anime | Manga | Novel = Depends(
+        validate_add_favourite
+    ),
     user: User = Depends(auth_required()),
 ):
     return await service.create_favourite(session, content_type, content, user)
