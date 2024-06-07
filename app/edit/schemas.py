@@ -8,6 +8,8 @@ from app.schemas import (
     CharacterResponse,
     PersonResponse,
     AnimeResponse,
+    MangaResponse,
+    NovelResponse,
     UserResponse,
     CustomModel,
 )
@@ -170,10 +172,16 @@ class EditResponseBase(CustomModel):
 
 class EditResponse(EditResponseBase):
     # TODO: maybe we should use Pydantic's discriminator here?
-    content: AnimeResponse | PersonResponse | CharacterResponse
-    reference: str
+    content: (
+        AnimeResponse
+        | MangaResponse
+        | NovelResponse
+        | PersonResponse
+        | CharacterResponse
+    )
 
     comments_count: int | None
+    reference: str
 
     @field_validator("comments_count")
     def validate_after(cls, comments_count):

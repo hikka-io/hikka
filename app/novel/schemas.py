@@ -13,6 +13,7 @@ from app.schemas import (
     NovelMediaEnum,
     DataTypeMixin,
     GenreResponse,
+    NovelResponse,
     CustomModel,
 )
 
@@ -85,22 +86,6 @@ class NovelSearchArgs(QuerySearchArgs):
 
 
 # Responses
-class NovelResponse(CustomModel, DataTypeMixin):
-    title_original: str | None
-    media_type: str | None
-    title_ua: str | None
-    title_en: str | None
-    chapters: int | None
-    volumes: int | None
-    translated_ua: bool
-    status: str | None
-    image: str | None
-    year: int | None
-    scored_by: int
-    score: float
-    slug: str
-
-
 class NovelPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[NovelResponse]
