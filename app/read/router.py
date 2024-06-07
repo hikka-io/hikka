@@ -1,3 +1,4 @@
+from app.schemas import MangaResponse, NovelResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Manga, Novel, Read
 from app.schemas import SuccessResponse
@@ -22,11 +23,14 @@ from .schemas import (
     UserReadPaginationResponse,
     ReadContentTypeEnum,
     ReadStatsResponse,
+    ReadStatusEnum,
     ReadResponse,
     ReadArgs,
 )
 
 from .dependencies import (
+    verify_user_random_manga,
+    verify_user_random_novel,
     verify_read_content,
     verify_add_read,
     verify_read,
@@ -105,7 +109,6 @@ async def user_read_stats(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_user),
 ):
-
     # This looks awful -> refactor it into something better
     completed = await service.get_user_read_stats(
         session, user, content_type, constants.READ_COMPLETED
@@ -134,3 +137,31 @@ async def user_read_stats(
         "on_hold": on_hold,
         "dropped": dropped,
     }
+
+
+@router.get(
+    "/manga/random/{username}/{status}",
+    response_model=MangaResponse,
+)
+async def random_read_manga(
+    status: ReadStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(verify_user_random_manga),
+):
+    return await service.random_read(
+        session, user, constants.CONTENT_MANGA, status
+    )
+
+
+@router.get(
+    "/novel/random/{username}/{status}",
+    response_model=NovelResponse,
+)
+async def random_read_novel(
+    status: ReadStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(verify_user_random_novel),
+):
+    return await service.random_read(
+        session, user, constants.CONTENT_NOVEL, status
+    )

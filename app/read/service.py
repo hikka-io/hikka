@@ -1,3 +1,4 @@
+from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import contains_eager
 from sqlalchemy import select, desc, func
@@ -5,6 +6,7 @@ from app.service import create_log
 from .schemas import ReadArgs
 from app.utils import utcnow
 from app import constants
+import random
 
 from app.models import (
     Follow,
@@ -158,5 +160,28 @@ async def get_user_read_stats(
             Read.deleted == False,  # noqa: E712
             Read.status == status,
             Read.user == user,
+        )
+    )
+
+
+async def random_read(
+    session: AsyncSession,
+    user: User,
+    content_type: str,
+    status: str,
+):
+    content_model = content_type_to_content_class[content_type]
+
+    content_ids = await session.scalars(
+        select(Read.content_id).filter(
+            Read.content_type == content_type,
+            Read.status == status,
+            Read.user == user,
+        )
+    )
+
+    return await session.scalar(
+        select(content_model).filter(
+            content_model.id == random.choice(content_ids.all())
         )
     )

@@ -99,6 +99,7 @@ errors = {
         "not-found": ["Watch record not found", 404],
     },
     "read": {
+        "empty-random": ["You don't have any read entries", 400],
         "bad-chapters": ["Bad chapters number provided", 400],
         "bad-volumes": ["Bad volumes number provided", 400],
         "content-not-found": ["Content not found", 404],

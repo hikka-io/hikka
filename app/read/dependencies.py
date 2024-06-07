@@ -1,15 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Read, Manga, Novel, User
-from app.dependencies import auth_required
+from app.service import get_content_by_slug
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
-
-from app.service import get_content_by_slug
+from app import constants
 from . import service
+
+from app.dependencies import (
+    auth_required,
+    get_user,
+)
 
 from .schemas import (
     ReadContentTypeEnum,
+    ReadStatusEnum,
     ReadArgs,
 )
 
@@ -57,3 +62,33 @@ async def verify_add_read(
         raise Abort("read", "bad-volumes")
 
     return content
+
+
+async def verify_user_random_manga(
+    status: ReadStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    read_count = await service.get_user_read_stats(
+        session, user, constants.CONTENT_MANGA, status
+    )
+
+    if read_count == 0:
+        raise Abort("read", "empty-random")
+
+    return user
+
+
+async def verify_user_random_novel(
+    status: ReadStatusEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    read_count = await service.get_user_read_stats(
+        session, user, constants.CONTENT_NOVEL, status
+    )
+
+    if read_count == 0:
+        raise Abort("read", "empty-random")
+
+    return user
