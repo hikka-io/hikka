@@ -57,6 +57,11 @@ errors = {
         "unknown-genre": ["Unknown genre", 400],
         "not-found": ["Manga not found", 404],
     },
+    "novel": {
+        "unknown-magazine": ["Unknown magazine", 400],
+        "unknown-genre": ["Unknown genre", 400],
+        "not-found": ["Manga not found", 404],
+    },
     "edit": {
         "missing-content-type": ["You must specify content type", 400],
         "not-pending": ["Only pending edit can be changed", 400],
