@@ -17,7 +17,7 @@ from app.service import (
 )
 
 from .schemas import (
-    ContentTypeEnum,
+    EditContentTypeEnum,
     EditSearchArgs,
     AnimeToDoEnum,
     EditArgs,
@@ -29,6 +29,8 @@ from app.models import (
     AnimeWatch,
     PersonEdit,
     AnimeEdit,
+    MangaEdit,
+    NovelEdit,
     Character,
     Person,
     Anime,
@@ -41,6 +43,8 @@ content_type_to_edit_class = {
     constants.CONTENT_CHARACTER: CharacterEdit,
     constants.CONTENT_PERSON: PersonEdit,
     constants.CONTENT_ANIME: AnimeEdit,
+    constants.CONTENT_MANGA: MangaEdit,
+    constants.CONTENT_NOVEL: NovelEdit,
 }
 
 
@@ -310,7 +314,7 @@ async def accept_pending_edit(
 
 async def create_pending_edit(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     content: Person | Anime | Character,
     args: EditArgs,
     author: User,
