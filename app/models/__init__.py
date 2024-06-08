@@ -76,6 +76,8 @@ from .vote.vote import Vote
 from .collection.content import CharacterCollectionContent
 from .collection.content import PersonCollectionContent
 from .collection.content import AnimeCollectionContent
+from .collection.content import MangaCollectionContent
+from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
@@ -151,6 +153,8 @@ __all__ = [
     "CharacterCollectionContent",
     "PersonCollectionContent",
     "AnimeCollectionContent",
+    "MangaCollectionContent",
+    "NovelCollectionContent",
     "CollectionContent",
     "Collection",
     "UserEditStats",

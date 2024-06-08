@@ -327,6 +327,18 @@ class WatchResponseBase(CustomModel):
     score: int = Field(examples=[8])
 
 
+class ReadResponseBase(CustomModel):
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    note: str | None = Field(max_length=2048, examples=["🤯"])
+    updated: datetime_pd = Field(examples=[1686088809])
+    created: datetime_pd = Field(examples=[1686088809])
+    status: str = Field(examples=["reading"])
+    chapters: int = Field(examples=[3])
+    volumes: int = Field(examples=[3])
+    rereads: int = Field(examples=[2])
+    score: int = Field(examples=[8])
+
+
 class AnimeResponse(CustomModel, DataTypeMixin):
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
@@ -386,6 +398,14 @@ class NovelResponse(CustomModel, DataTypeMixin):
 
 class AnimeResponseWithWatch(AnimeResponse):
     watch: list[WatchResponseBase]
+
+
+class MangaResponseWithRead(MangaResponse):
+    read: list[ReadResponseBase]
+
+
+class NovelResponseWithRead(NovelResponse):
+    read: list[ReadResponseBase]
 
 
 class AnimePaginationResponse(CustomModel):
@@ -479,11 +499,18 @@ class CommentResponse(CustomModel):
 
 # Collections
 class CollectionContentResponse(CustomModel):
-    content: AnimeResponseWithWatch | CharacterResponse | PersonResponse
     comment: str | None
     label: str | None
     content_type: str
     order: int
+
+    content: (
+        AnimeResponseWithWatch
+        | MangaResponseWithRead
+        | NovelResponseWithRead
+        | CharacterResponse
+        | PersonResponse
+    )
 
 
 class CollectionResponse(CustomModel, DataTypeMixin):

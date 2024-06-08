@@ -18,12 +18,16 @@ from .schemas import (
 
 from app.models import (
     AnimeCollectionContent,
+    MangaCollectionContent,
+    NovelCollectionContent,
     CollectionContent,
     EmailMessage,
     Collection,
     AnimeWatch,
     AuthToken,
     Character,
+    MangaRead,
+    NovelRead,
     Magazine,
     Company,
     Comment,
@@ -395,6 +399,7 @@ def collection_comments_load_options(query: Select):
     )
 
 
+# TODO: Novel and manga
 def collections_load_options(
     query: Select, request_user: User | None, preview: bool = False
 ):
@@ -407,6 +412,20 @@ def collections_load_options(
             with_loader_criteria(
                 AnimeWatch,
                 AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+            joinedload(Collection.collection.of_type(MangaCollectionContent))
+            .joinedload(MangaCollectionContent.content)
+            .joinedload(Manga.read),
+            with_loader_criteria(
+                MangaRead,
+                MangaRead.user_id == request_user.id if request_user else None,
+            ),
+            joinedload(Collection.collection.of_type(NovelCollectionContent))
+            .joinedload(NovelCollectionContent.content)
+            .joinedload(Novel.read),
+            with_loader_criteria(
+                NovelRead,
+                NovelRead.user_id == request_user.id if request_user else None,
             ),
         )
     )

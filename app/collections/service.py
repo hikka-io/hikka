@@ -1,4 +1,5 @@
 from sqlalchemy import select, desc, delete, update, and_, func
+from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
@@ -21,27 +22,21 @@ from app.models import (
     CharacterCollectionContent,
     PersonCollectionContent,
     AnimeCollectionContent,
+    MangaCollectionContent,
+    NovelCollectionContent,
     CollectionContent,
     CollectionComment,
     Collection,
-    Character,
-    Person,
-    Anime,
     User,
 )
-
-
-content_type_to_content_class = {
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_PERSON: Person,
-    constants.CONTENT_ANIME: Anime,
-}
 
 
 content_type_to_collection_content_class = {
     constants.CONTENT_CHARACTER: CharacterCollectionContent,
     constants.CONTENT_PERSON: PersonCollectionContent,
     constants.CONTENT_ANIME: AnimeCollectionContent,
+    constants.CONTENT_MANGA: MangaCollectionContent,
+    constants.CONTENT_NOVEL: NovelCollectionContent,
 }
 
 

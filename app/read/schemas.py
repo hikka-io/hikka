@@ -1,13 +1,13 @@
 from app.schemas import CustomModel, UserResponse
 from pydantic import Field, field_validator
 from app.schemas import PaginationResponse
-from app.schemas import datetime_pd
 from app.utils import check_sort
 from app import constants
 from enum import Enum
 
 from app.schemas import (
     MangaSearchBaseMixin,
+    ReadResponseBase,
     MangaResponse,
     NovelResponse,
     YearsMixin,
@@ -60,18 +60,6 @@ class ReadSearchArgs(CustomModel, MangaSearchBaseMixin, YearsMixin):
 
 
 # Responses
-class ReadResponseBase(CustomModel):
-    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
-    note: str | None = Field(max_length=2048, examples=["🤯"])
-    updated: datetime_pd = Field(examples=[1686088809])
-    created: datetime_pd = Field(examples=[1686088809])
-    status: str = Field(examples=["reading"])
-    chapters: int = Field(examples=[3])
-    volumes: int = Field(examples=[3])
-    rereads: int = Field(examples=[2])
-    score: int = Field(examples=[8])
-
-
 class ReadResponse(ReadResponseBase):
     content: MangaResponse | NovelResponse
 

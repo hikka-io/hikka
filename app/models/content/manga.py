@@ -39,10 +39,10 @@ class Manga(
 
     # Multilang fields
     title_original: Mapped[str] = mapped_column(nullable=True)
-    title_en: Mapped[str] = mapped_column(nullable=True)
-    title_ua: Mapped[str] = mapped_column(nullable=True)
     synopsis_en: Mapped[str] = mapped_column(nullable=True)
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)
+    title_en: Mapped[str] = mapped_column(nullable=True)
+    title_ua: Mapped[str] = mapped_column(nullable=True)
 
     # Service fields
     aggregator_updated: Mapped[datetime] = mapped_column(nullable=True)
@@ -100,6 +100,12 @@ class Manga(
 
     franchise_relation: Mapped["Franchise"] = relationship(
         back_populates="manga", foreign_keys=[franchise_id]
+    )
+
+    read: Mapped[list["MangaRead"]] = relationship(
+        primaryjoin="Manga.id == MangaRead.content_id",
+        foreign_keys="[MangaRead.content_id]",
+        viewonly=True,
     )
 
     @hybrid_property
