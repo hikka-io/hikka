@@ -1,14 +1,24 @@
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
+from .schemas import ReadArgs, ReadSearchArgs
 from sqlalchemy.orm import contains_eager
 from sqlalchemy import select, desc, func
-from app.service import create_log
-from .schemas import ReadArgs
+from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
 import random
 
+from app.service import (
+    build_manga_order_by,
+    build_novel_order_by,
+    manga_search_filter,
+    novel_search_filter,
+    create_log,
+)
+
 from app.models import (
+    MangaRead,
+    NovelRead,
     Follow,
     Manga,
     Novel,
@@ -185,3 +195,73 @@ async def random_read(
             content_model.id == random.choice(content_ids.all())
         )
     )
+
+
+async def get_user_read_list_count(
+    session: AsyncSession,
+    search: ReadSearchArgs,
+    content_type: str,
+    user: User,
+) -> int:
+    query = select(func.count(Read.id)).filter(
+        Read.content_type == content_type,
+        Read.deleted == False,  # noqa: E712
+        Read.user == user,
+    )
+
+    if search.read_status:
+        query = query.filter(Read.status == search.read_status)
+
+    if content_type == constants.CONTENT_MANGA:
+        query = manga_search_filter(
+            search, query.join(MangaRead.content), False
+        )
+
+    if content_type == constants.CONTENT_NOVEL:
+        query = novel_search_filter(
+            search, query.join(NovelRead.content), False
+        )
+
+    return await session.scalar(query)
+
+
+async def get_user_read_list(
+    session: AsyncSession,
+    search: ReadSearchArgs,
+    content_type: str,
+    user: User,
+    limit: int,
+    offset: int,
+) -> list[Read]:
+    query = select(Read).filter(
+        Read.content_type == content_type,
+        Read.deleted == False,  # noqa: E712
+        Read.user == user,
+    )
+
+    if search.read_status:
+        query = query.filter(Read.status == search.read_status)
+
+    if content_type == constants.CONTENT_MANGA:
+        query = (
+            manga_search_filter(
+                search,
+                query.join(MangaRead.content),
+                False,
+            )
+            .order_by(*build_manga_order_by(search.sort))
+            .options(joinedload(MangaRead.content))
+        )
+
+    if content_type == constants.CONTENT_NOVEL:
+        query = (
+            novel_search_filter(
+                search,
+                query.join(NovelRead.content),
+                False,
+            )
+            .order_by(*build_novel_order_by(search.sort))
+            .options(joinedload(NovelRead.content))
+        )
+
+    return await session.scalars(query.limit(limit).offset(offset))

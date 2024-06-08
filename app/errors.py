@@ -94,14 +94,14 @@ errors = {
         "not-found": ["Genre not found", 404],
     },
     "watch": {
-        "empty-random": ["You don't have any watch entries", 400],
         "bad-episodes": ["Bad episodes number provided", 400],
+        "empty-random": ["User watch list is empty", 400],
         "not-found": ["Watch record not found", 404],
     },
     "read": {
-        "empty-random": ["You don't have any read entries", 400],
         "bad-chapters": ["Bad chapters number provided", 400],
         "bad-volumes": ["Bad volumes number provided", 400],
+        "empty-random": ["User read list is empty", 400],
         "content-not-found": ["Content not found", 404],
         "not-found": ["Read record not found", 404],
     },

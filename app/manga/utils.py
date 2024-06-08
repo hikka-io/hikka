@@ -1,4 +1,4 @@
-from .schemas import MangaSearchArgs
+from app.schemas import MangaSearchArgs
 
 
 def build_manga_filters_ms(search: MangaSearchArgs):

@@ -129,6 +129,51 @@ class CollectionVisibilityEnum(str, Enum):
     visibility_public = constants.COLLECTION_PUBLIC
 
 
+# Mixins
+class DataTypeMixin:
+    data_type: str
+
+
+class YearsMixin:
+    years: list[PositiveInt | None] | None = Field(
+        default=[None, None],
+        examples=[[2000, 2020]],
+    )
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if not years:
+            return [None, None]
+
+        if len(years) == 0:
+            return [None, None]
+
+        if len(years) != 2:
+            raise ValueError("Lenght of years list must be 2.")
+
+        if all(year is not None for year in years) and years[0] > years[1]:
+            raise ValueError(
+                "The first year must be less than the second year."
+            )
+
+        return years
+
+
+class MangaSearchBaseMixin:
+    media_type: list[MangaMediaEnum] = []
+    status: list[ContentStatusEnum] = []
+    only_translated: bool = False
+    magazines: list[str] = []
+    genres: list[str] = []
+
+    score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
+
 # Args
 class PaginationArgs(CustomModel):
     page: int = Field(default=1, gt=0, examples=[1])
@@ -168,14 +213,9 @@ class PasswordArgs(CustomModel):
     password: str = Field(min_length=8, max_length=256, examples=["password"])
 
 
-class AnimeSearchArgsBase(CustomModel):
+class AnimeSearchArgsBase(CustomModel, YearsMixin):
     include_multiseason: bool = False
     only_translated: bool = False
-
-    years: list[PositiveInt | None] | None = Field(
-        default=[None, None],
-        examples=[[2000, 2020]],
-    )
 
     score: list[int | None] = Field(
         default=[None, None],
@@ -228,9 +268,44 @@ class AnimeSearchArgsBase(CustomModel):
         return scores
 
 
-# Mixins
-class DataTypeMixin:
-    data_type: str
+class MangaSearchArgs(
+    QuerySearchArgs,
+    MangaSearchBaseMixin,
+    YearsMixin,
+):
+    sort: list[str] = ["score:desc", "scored_by:desc"]
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return utils.check_sort(
+            sort_list,
+            [
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+            ],
+        )
+
+
+class NovelSearchArgs(
+    QuerySearchArgs,
+    MangaSearchBaseMixin,
+    YearsMixin,
+):
+    sort: list[str] = ["score:desc", "scored_by:desc"]
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return utils.check_sort(
+            sort_list,
+            [
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+            ],
+        )
 
 
 # Responses

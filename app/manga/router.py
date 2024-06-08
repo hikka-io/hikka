@@ -1,4 +1,3 @@
-from app.schemas import ContentCharacterPaginationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -14,13 +13,17 @@ from .dependencies import (
 from .schemas import (
     MangaPaginationResponse,
     MangaInfoResponse,
-    MangaSearchArgs,
 )
 
 from app.dependencies import (
     auth_required,
     get_page,
     get_size,
+)
+
+from app.schemas import (
+    ContentCharacterPaginationResponse,
+    MangaSearchArgs,
 )
 
 from app.utils import (

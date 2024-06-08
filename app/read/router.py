@@ -21,9 +21,11 @@ from app.utils import (
 
 from .schemas import (
     UserReadPaginationResponse,
+    ReadPaginationResponse,
     ReadContentTypeEnum,
     ReadStatsResponse,
     ReadStatusEnum,
+    ReadSearchArgs,
     ReadResponse,
     ReadArgs,
 )
@@ -165,3 +167,31 @@ async def random_read_novel(
     return await service.random_read(
         session, user, constants.CONTENT_NOVEL, status
     )
+
+
+@router.post(
+    "/{content_type}/{username}/list",
+    response_model=ReadPaginationResponse,
+)
+async def user_read_list(
+    search: ReadSearchArgs,
+    content_type: ReadContentTypeEnum,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+
+    total = await service.get_user_read_list_count(
+        session, search, content_type, user
+    )
+
+    read = await service.get_user_read_list(
+        session, search, content_type, user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": read.all(),
+    }

@@ -1,20 +1,21 @@
-from app.service import get_comments_count_subquery
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from .utils import build_novel_filters_ms
-from sqlalchemy import select, desc, asc
+from app.schemas import NovelSearchArgs
 from sqlalchemy.orm import joinedload
-from .schemas import NovelSearchArgs
-from sqlalchemy import func, and_
+from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
+
+from app.service import (
+    get_comments_count_subquery,
+    build_novel_order_by,
+    novel_search_filter,
+)
 
 from app.models import (
     NovelCharacter,
     NovelAuthor,
-    Magazine,
-    Genre,
     Novel,
     User,
 )
@@ -50,80 +51,6 @@ async def get_novel_by_slug(session: AsyncSession, slug: str) -> Novel | None:
             Novel.deleted == False,  # noqa: E712
         )
     )
-
-
-def build_novel_order_by(sort: list[str]):
-    order_mapping = {
-        "scored_by": Novel.scored_by,
-        "score": Novel.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Novel.content_id)]
-
-    return order_by
-
-
-def novel_search_filter(
-    search: NovelSearchArgs,
-    query: Select,
-    hide_nsfw=True,
-):
-    if search.score[0] and search.score[0] > 0:
-        query = query.filter(Novel.score >= search.score[0])
-
-    if search.score[1]:
-        query = query.filter(Novel.score <= search.score[1])
-
-    if len(search.status) > 0:
-        query = query.filter(Novel.status.in_(search.status))
-
-    if len(search.media_type) > 0:
-        query = query.filter(Novel.media_type.in_(search.media_type))
-
-    if search.only_translated:
-        query = query.filter(Novel.translated_ua == True)  # noqa: E712
-
-    if search.years[0]:
-        query = query.filter(Novel.year >= search.years[0])
-
-    if search.years[1]:
-        query = query.filter(Novel.year <= search.years[1])
-
-    if len(search.magazines) > 0:
-        query = query.join(Novel.magazines).filter(
-            Magazine.slug.in_(search.magazines)
-        )
-
-    # In some cases, like on front page, we would want to hide NSFW content
-    if len(search.genres) == 0 and hide_nsfw:
-        query = query.filter(
-            and_(
-                *[
-                    ~Novel.genres.any(Genre.slug == slug)
-                    for slug in ["ecchi", "erotica", "hentai"]
-                ]
-            )
-        )
-
-    # All genres must be present in query result
-    if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Novel.genres.any(Genre.slug == slug)
-                    for slug in search.genres
-                ]
-            )
-        )
-
-    return query
 
 
 async def novel_search(
