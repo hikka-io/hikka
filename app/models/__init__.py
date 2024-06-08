@@ -29,6 +29,8 @@ from .comments.comment import Comment
 from .list.favourite import CollectionFavourite
 from .list.favourite import CharacterFavourite
 from .list.favourite import AnimeFavourite
+from .list.favourite import MangaFavourite
+from .list.favourite import NovelFavourite
 from .list.favourite import Favourite
 from .list.watch import AnimeWatch
 
@@ -115,6 +117,8 @@ __all__ = [
     "CollectionFavourite",
     "CharacterFavourite",
     "AnimeFavourite",
+    "MangaFavourite",
+    "NovelFavourite",
     "Favourite",
     "AnimeWatch",
     "MangaRead",

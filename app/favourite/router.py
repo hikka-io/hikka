@@ -73,7 +73,7 @@ async def favourite_delete(
     response_model=FavouritePaginationResponse,
 )
 async def favourite_list(
-    content_type: str,
+    content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(get_user),
@@ -81,6 +81,7 @@ async def favourite_list(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
+
     total = await service.get_user_favourite_list_count(
         session, content_type, user, request_user
     )

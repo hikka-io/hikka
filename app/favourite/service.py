@@ -17,6 +17,8 @@ from app.models import (
     CollectionFavourite,
     CharacterFavourite,
     AnimeFavourite,
+    MangaFavourite,
+    NovelFavourite,
     AnimeWatch,
     Collection,
     Favourite,
@@ -29,6 +31,8 @@ content_type_to_favourite_class = {
     constants.CONTENT_COLLECTION: CollectionFavourite,
     constants.CONTENT_CHARACTER: CharacterFavourite,
     constants.CONTENT_ANIME: AnimeFavourite,
+    constants.CONTENT_MANGA: MangaFavourite,
+    constants.CONTENT_NOVEL: NovelFavourite,
 }
 
 
