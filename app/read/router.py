@@ -31,9 +31,8 @@ from .schemas import (
 )
 
 from .dependencies import (
-    verify_user_random_manga,
-    verify_user_random_novel,
     verify_read_content,
+    verify_user_random,
     verify_add_read,
     verify_read,
 )
@@ -142,30 +141,20 @@ async def user_read_stats(
 
 
 @router.get(
-    "/manga/random/{username}/{status}",
-    response_model=MangaResponse,
-)
-async def random_read_manga(
-    status: ReadStatusEnum,
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(verify_user_random_manga),
-):
-    return await service.random_read(
-        session, user, constants.CONTENT_MANGA, status
-    )
-
-
-@router.get(
-    "/novel/random/{username}/{status}",
-    response_model=NovelResponse,
+    "/{content_type}/random/{username}/{status}",
+    response_model=MangaResponse | NovelResponse,
 )
 async def random_read_novel(
     status: ReadStatusEnum,
+    content_type: ReadContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(verify_user_random_novel),
+    user: User = Depends(verify_user_random),
 ):
     return await service.random_read(
-        session, user, constants.CONTENT_NOVEL, status
+        session,
+        user,
+        content_type,
+        status,
     )
 
 
