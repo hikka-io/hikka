@@ -399,7 +399,6 @@ def collection_comments_load_options(query: Select):
     )
 
 
-# TODO: Novel and manga
 def collections_load_options(
     query: Select, request_user: User | None, preview: bool = False
 ):

@@ -120,7 +120,7 @@ async def delete_read(
     await session.commit()
 
 
-async def get_manga_read_following_total(
+async def get_read_following_total(
     session: AsyncSession,
     user: User,
     content_type: str,
@@ -136,7 +136,7 @@ async def get_manga_read_following_total(
     )
 
 
-async def get_manga_read_following(
+async def get_read_following(
     session: AsyncSession,
     user: User,
     content_type: str,

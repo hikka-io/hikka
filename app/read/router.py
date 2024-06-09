@@ -86,11 +86,11 @@ async def get_read_following(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_manga_read_following_total(
+    total = await service.get_read_following_total(
         session, user, content_type, content
     )
 
-    read = await service.get_manga_read_following(
+    read = await service.get_read_following(
         session, user, content_type, content, limit, offset
     )
 

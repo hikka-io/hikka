@@ -185,6 +185,7 @@ async def anime_recommendations(
     }
 
 
+# TODO: remove me!
 @router.get(
     "/{slug}/franchise",
     response_model=AnimePaginationResponse,
