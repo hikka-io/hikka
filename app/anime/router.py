@@ -79,7 +79,7 @@ async def search_anime(
     )
 
 
-# TODO: Move to separate router
+# TODO: remove me!
 @router.get(
     "/genres",
     response_model=GenreListResponse,

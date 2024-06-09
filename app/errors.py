@@ -176,6 +176,10 @@ errors = {
         "incompatible-filters": ["You've specified incompatible filters", 400],
         "watch-no-user": ["You can't use only_watch without user", 400],
     },
+    "related": {
+        "no-franchise": ["Content doesn't have franchise", 400],
+        "content-not-found": ["Content not found", 404],
+    },
 }
 
 

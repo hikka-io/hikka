@@ -79,6 +79,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
+    from .related import router as related_router
     from .history import router as history_router
     from .genres import router as genres_router
     from .upload import router as upload_router
@@ -105,6 +106,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
+    app.include_router(related_router)
     app.include_router(history_router)
     app.include_router(genres_router)
     app.include_router(upload_router)
