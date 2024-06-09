@@ -322,6 +322,6 @@ async def update_manga_info(session, manga, data):
 
     session.add(manga)
 
-    print(f"Update metadata for manga {manga.title_original}")
+    # print(f"Update metadata for manga {manga.title_original}")
 
     await session.commit()

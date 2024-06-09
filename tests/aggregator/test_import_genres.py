@@ -3,7 +3,7 @@ from app.models import Genre
 from sqlalchemy import func
 
 
-async def test_import_anime_genres(test_session, aggregator_anime_genres):
+async def test_import_anime_genres(test_session, aggregator_genres):
     # Make sure we imported all genres
     genres_count = await test_session.scalar(select(func.count(Genre.id)))
     assert genres_count == 76

@@ -56,7 +56,7 @@ async def save_manga_list(session, data):
 
             add_manga.append(manga)
 
-            print(f"Manga needs update: {manga.title_original}")
+            # print(f"Manga needs update: {manga.title_original}")
 
         else:
             if manga_data["deleted"] is True:
@@ -122,7 +122,7 @@ async def save_manga_list(session, data):
 
             add_manga.append(manga)
 
-            print(f"Added manga: {manga.title_original}")
+            # print(f"Added manga: {manga.title_original}")
 
     session.add_all(add_manga)
     await session.commit()

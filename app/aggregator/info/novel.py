@@ -320,6 +320,6 @@ async def update_novel_info(session, novel, data):
 
     session.add(novel)
 
-    print(f"Update metadata for novel {novel.title_original}")
+    # print(f"Update metadata for novel {novel.title_original}")
 
     await session.commit()

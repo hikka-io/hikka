@@ -90,6 +90,6 @@ async def save_franchises_list(session, data):
 
         session.add_all(update_content)
 
-        print(f"Processed franchise {franchise.content_id}")
+        # print(f"Processed franchise {franchise.content_id}")
 
     await session.commit()

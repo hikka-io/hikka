@@ -56,7 +56,7 @@ async def save_novel_list(session, data):
 
             add_novel.append(novel)
 
-            print(f"Novel needs update: {novel.title_original}")
+            # print(f"Novel needs update: {novel.title_original}")
 
         else:
             if novel_data["deleted"] is True:
@@ -122,7 +122,7 @@ async def save_novel_list(session, data):
 
             add_novel.append(novel)
 
-            print(f"Added novel: {novel.title_original}")
+            # print(f"Added novel: {novel.title_original}")
 
     session.add_all(add_novel)
     await session.commit()

@@ -54,7 +54,7 @@ async def update_manga_roles(session, data):
 
         create_roles.append(role)
 
-        print(f"Added manga staff role: {role.name_en}")
+        # print(f"Added manga staff role: {role.name_en}")
 
     session.add_all(create_roles)
     await session.commit()

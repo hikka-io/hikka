@@ -29,7 +29,7 @@ async def save_magazines(session, data):
 
             add_magazines.append(magazine)
 
-            print(f"Added magazine: {magazine.name_en}")
+            # print(f"Added magazine: {magazine.name_en}")
 
     session.add_all(add_magazines)
     await session.commit()

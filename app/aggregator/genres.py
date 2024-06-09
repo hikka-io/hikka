@@ -84,7 +84,7 @@ TRANSLATIONS = {
 }
 
 
-async def save_anime_genres(session, data):
+async def save_genres(session, data):
     create_genres = []
 
     for genre_data in data:
@@ -106,7 +106,7 @@ async def save_anime_genres(session, data):
 
         create_genres.append(genre)
 
-        print(f"Added genre: {genre.name_en}")
+        # print(f"Added genre: {genre.name_en}")
 
     session.add_all(create_genres)
     await session.commit()
@@ -119,8 +119,8 @@ async def save_manga_genres(session, data):
         slug = utils.slugify(genre_data["name"])
         name_ua = TRANSLATIONS.get(slug)
 
-        if name_ua is None:
-            print(slug)
+        # if name_ua is None:
+        #     print(slug)
 
         if await session.scalar(select(Genre).filter(Genre.slug == slug)):
             continue
@@ -137,7 +137,7 @@ async def save_manga_genres(session, data):
 
         create_genres.append(genre)
 
-        print(f"Added genre: {genre.name_en}")
+        # print(f"Added genre: {genre.name_en}")
 
     session.add_all(create_genres)
     await session.commit()

@@ -1,0 +1,967 @@
+{
+    "characters": [
+        {
+            "character": {
+                "name_en": "Casca",
+                "name_ja": "キャスカ",
+                "image": "/content/characters/casca-78bf27/Fm_Gwt6Lq38MMuMzE1BU7A.jpg",
+                "updated": 1698417861,
+                "content_id": "78bf2728-6748-463a-94ba-6cca2809731c",
+                "favorites": 4078
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Farnese de Vandimion",
+                "name_ja": "ファルネーゼ・ド・ヴァンディミオン",
+                "image": "/content/characters/farnese-de-vandimion-2e9108/VFQ_99qh4-YG-k4w3n2vJw.jpg",
+                "updated": 1698418247,
+                "content_id": "2e9108f8-c566-42c3-a985-8e777fe1fb1a",
+                "favorites": 912
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Griffith",
+                "name_ja": "グリフィス",
+                "image": "/content/characters/griffith-8f4374/8a0esSml1U7YUo6yDW3TiQ.jpg",
+                "updated": 1698417975,
+                "content_id": "8f4374f3-b59d-4f07-ac89-6ccf4b2b14bf",
+                "favorites": 14635
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Guts",
+                "name_ja": "ガッツ",
+                "image": "/content/characters/guts-9f9850/KAuQIo6dvLiO0sYvn7R1Kg.jpg",
+                "updated": 1698418056,
+                "content_id": "9f9850b1-86e6-4fd3-a4b7-0e1d0d3a5787",
+                "favorites": 78701
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Isidro",
+                "name_ja": "イシドロ",
+                "image": "/content/characters/isidro-57f4b8/sCtAY0iuLm4k94i6SQncIQ.jpg",
+                "updated": 1698418139,
+                "content_id": "57f4b8a1-d9bf-4854-85a8-d8e0c2906bc3",
+                "favorites": 273
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Puck",
+                "name_ja": "パック",
+                "image": "/content/characters/puck-4eaa34/TF0wimlQX69PaStsasaOTA.jpg",
+                "updated": 1698418004,
+                "content_id": "4eaa3494-8e1f-4cd3-8801-da50ae0e1528",
+                "favorites": 1648
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Schierke",
+                "name_ja": "シールケ",
+                "image": "/content/characters/schierke-1f1fe8/Rk4SgR6FZZWBNBFd_wsJGg.jpg",
+                "updated": 1698418337,
+                "content_id": "1f1fe8e1-f822-4ce4-b5ff-ef41e20af76c",
+                "favorites": 1486
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Serpico",
+                "name_ja": "セルピコ",
+                "image": "/content/characters/serpico-b07f5f/0dRdN_jH7-2gLEIdOrXc0g.jpg",
+                "updated": 1698418204,
+                "content_id": "b07f5f41-0675-46b5-8d7b-762f39d66580",
+                "favorites": 872
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Adolf",
+                "name_ja": "アドルフ",
+                "image": "/content/characters/adolf-19821b/EvhNwE5VBo8Fx6cxarVlbQ.jpg",
+                "updated": 1689380917,
+                "content_id": "19821b35-ea8b-4d18-8681-ed4a4b561698",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Adonis",
+                "name_ja": "アドニス",
+                "image": "/content/characters/adonis-bf5620/bEZJRpD-I8yrU6L5xb3xJw.jpg",
+                "updated": 1689381209,
+                "content_id": "bf56204b-d71f-46b8-bcdb-7f8847819d95",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Azan",
+                "name_ja": "アザン",
+                "image": "/content/characters/azan-955603/fveN-gFjuphZJsPQKe8-lQ.jpg",
+                "updated": 1698417872,
+                "content_id": "9556035f-9d20-41ee-bc05-26ad389a8e2c",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Bazuso",
+                "name_ja": "バズーソ",
+                "image": "/content/characters/bazuso-ab96d3/PqH5RbLUXJEd5yGGYoLLOw.jpg",
+                "updated": 1698418341,
+                "content_id": "ab96d364-9247-4f46-aa63-595213b6ccb0",
+                "favorites": 19
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Beast of Darkness",
+                "name_ja": null,
+                "image": "/content/characters/beast-of-darkness-dd6788/opnPrkkd5f8kqVrasGrFNA.jpg",
+                "updated": 1715335945,
+                "content_id": "dd678855-9575-42d8-8e9f-89f667f5c11f",
+                "favorites": 32
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Bonebeard",
+                "name_ja": "ひげ",
+                "image": "/content/characters/bonebeard-d31759/HIURiVJxq1kVW-8h4fLoEw.jpg",
+                "updated": 1689380930,
+                "content_id": "d317599d-f7f8-4e18-a22d-cb455307bb31",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Chicchi",
+                "name_ja": "チッチ",
+                "image": "/content/characters/chicchi-ec2e9d/YDvuFxvSmbF8fmZQx6siXA.jpg",
+                "updated": 1698418230,
+                "content_id": "ec2e9d15-bda4-45f8-8a5b-91a16a4e59e4",
+                "favorites": 81
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Adon Coborlwitz",
+                "name_ja": "アドン コボルイッツ",
+                "image": "/content/characters/adon-coborlwitz-f6614b/Kufh50tqM1IFXqmvDfiAgg.jpg",
+                "updated": 1698418340,
+                "content_id": "f6614b09-1285-486d-9e46-b234057dcff0",
+                "favorites": 12
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Collette",
+                "name_ja": "コレット",
+                "image": "/content/characters/collette-83cf00/ZKjZl8D8gfBE03eOPjvfxA.jpg",
+                "updated": 1689381147,
+                "content_id": "83cf00d2-a3a5-4073-b0fa-0c9eef28e729",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Conrad",
+                "name_ja": "コンラッド",
+                "image": "/content/characters/conrad-c471b4/QxSUdLPrq9aF92MoRoNnrw.jpg",
+                "updated": 1689381100,
+                "content_id": "c471b4c2-66ce-44e7-82a2-4913938f6d87",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Corkus",
+                "name_ja": "コルカス",
+                "image": "/content/characters/corkus-96cd65/KYpHHWctJggdEqwaYbzYPg.jpg",
+                "updated": 1698417908,
+                "content_id": "96cd659c-42ca-43cd-a32f-aa943c48c4fa",
+                "favorites": 28
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dhaiva",
+                "name_ja": null,
+                "image": "/content/characters/dhaiva-d331d9/36bK8AJ953XvhTpwrSE9hQ.jpg",
+                "updated": 1715340659,
+                "content_id": "d331d990-21a9-43f4-bf9e-7a090afa0f20",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Donovan",
+                "name_ja": "ドノヴァン",
+                "image": "/content/characters/donovan-da0347/Y6J0EdJ1j2Mv8jbN4ndmtA.jpg",
+                "updated": 1698417974,
+                "content_id": "da03475e-c7f6-4667-9ad7-b5ca8d1c8ba8",
+                "favorites": 250
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Egg of the Perfect World",
+                "name_ja": "完璧な世界の卵",
+                "image": "/content/characters/egg-of-the-perfect-world-7ca919/n8Irjq7UG7dYtoVY1JeQDg.jpg",
+                "updated": 1698418004,
+                "content_id": "7ca9194e-ec7b-4d84-bf4b-fc238bd2fa79",
+                "favorites": 9
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Emperor Ganishka",
+                "name_ja": null,
+                "image": "/content/characters/emperor-ganishka-76e0f4/yUCI7fJX16K5kAN0Waw9LQ.jpg",
+                "updated": 1715335663,
+                "content_id": "76e0f45e-d840-4c8a-a179-6a387ef8406d",
+                "favorites": 9
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Erica",
+                "name_ja": "エリカ",
+                "image": "/content/characters/erica-afe624/b1v4xY5_Fcl6bfN_iEXwfg.jpg",
+                "updated": 1689381323,
+                "content_id": "afe624cc-8292-422a-ac53-a0025dad923e",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Evarella",
+                "name_ja": null,
+                "image": "/content/characters/evarella-1742f6/c5XVDKCUGTiAyiaMR1Yx-w.jpg",
+                "updated": 1715339628,
+                "content_id": "1742f6d6-960e-47b8-b468-c9ca95782a3f",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Flora",
+                "name_ja": null,
+                "image": "/content/characters/flora-666fc2/4Ci3WgocgIGXg2iui1_PaQ.jpg",
+                "updated": 1715337071,
+                "content_id": "666fc210-9e15-4e2c-9e43-5ce62878c251",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Foss",
+                "name_ja": "フォス",
+                "image": "/content/characters/foss-625ead/and7V4eFW90wbDMXfm8PNg.jpg",
+                "updated": 1689380861,
+                "content_id": "625ead39-2d49-4d75-975a-e9bbc812cd9a",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Gambino",
+                "name_ja": "ガンビーノ",
+                "image": "/content/characters/gambino-e00b14/bVJBGkuhlDmxWSar5JN-NQ.jpg",
+                "updated": 1698417856,
+                "content_id": "e00b1408-a238-415a-8074-3d5d5e79cfec",
+                "favorites": 10
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Gaston",
+                "name_ja": "ガストン",
+                "image": "/content/characters/gaston-1b300f/KLNNN9S_Dyud3Hquzdttug.jpg",
+                "updated": 1689381124,
+                "content_id": "1b300f6a-2685-4a48-893e-2f483b6b2103",
+                "favorites": 16
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "General Boscogne",
+                "name_ja": "ボスコーン",
+                "image": "/content/characters/general-boscogne-2a8b14/azhyTbVBK4eaqBnZDZcaXQ.jpg",
+                "updated": 1689381360,
+                "content_id": "2a8b144f-b60b-4cd8-b3f4-9aabc71279e1",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Godo",
+                "name_ja": null,
+                "image": "/content/characters/godo-1dc69c/oKr2siEy8HewrbgORl80RA.jpg",
+                "updated": 1715373147,
+                "content_id": "1dc69c94-2838-4ce1-8a7f-3e05c6f4befb",
+                "favorites": 67
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Grunbeld",
+                "name_ja": "グルンベルド",
+                "image": "/content/characters/grunbeld-99dae6/wgMTKhYWF01fKk2X5kZ7sA.jpg",
+                "updated": 1698418148,
+                "content_id": "99dae61d-efff-4255-90d0-658bd0bef21e",
+                "favorites": 9
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Hanafubuku",
+                "name_ja": null,
+                "image": "/content/characters/hanafubuku-15e192/Jw4C5A1cUxzn0VHKLI1tjA.jpg",
+                "updated": 1715363034,
+                "content_id": "15e192a5-7640-4e35-8457-2534fdede896",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Hebi Shuryou",
+                "name_ja": "ヘビ首領",
+                "image": "/content/characters/hebi-shuryou-187c1a/HZqlMit3ao2jqr6LMWmVTQ.jpg",
+                "updated": 1689381273,
+                "content_id": "187c1a2f-ac86-49fe-a7e8-f628e5e54a1b",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Irvine",
+                "name_ja": "アーヴァン",
+                "image": "/content/characters/irvine-077ce5/7jxew6Hil_UnO0okbiWd4g.jpg",
+                "updated": 1698417828,
+                "content_id": "077ce580-91ae-43a0-bc44-82eea8cd02f4",
+                "favorites": 35
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Isma",
+                "name_ja": "イスマ",
+                "image": "/content/characters/isma-5f57a0/YEzrwJa183BdFqKe6W21dA.jpg",
+                "updated": 1698417873,
+                "content_id": "5f57a063-83cd-4057-9d8d-caee81e0ce78",
+                "favorites": 42
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Jerome",
+                "name_ja": "ジェローム",
+                "image": "/content/characters/jerome-212d73/EGKk31sC7FcUyuQxL68FJQ.jpg",
+                "updated": 1689381268,
+                "content_id": "212d7302-fec1-4629-be27-17f4825052d7",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Jill",
+                "name_ja": null,
+                "image": "/content/characters/jill-6b34fb/PAJZ4ueDIqeCn3nvAFxhmw.jpg",
+                "updated": 1715337049,
+                "content_id": "6b34fb18-7b7c-40ec-ab08-d2df8b15939f",
+                "favorites": 24
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Joachim",
+                "name_ja": "ヨアヒム",
+                "image": "/content/characters/joachim-11cdc6/eNm_nUyzWSZmLbETIqmVSw.jpg",
+                "updated": 1689381013,
+                "content_id": "11cdc61f-e627-410e-8bb5-b70b2df904b5",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Judeau",
+                "name_ja": "ジュドー",
+                "image": "/content/characters/judeau-f9128c/vj5kPtwic7BpO6QROWq0dQ.jpg",
+                "updated": 1698418337,
+                "content_id": "f9128c2a-ba13-4fd5-a1f1-ffd2c7c7d5e4",
+                "favorites": 1442
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Julius",
+                "name_ja": "ユリウス",
+                "image": "/content/characters/julius-d37121/1ByVMLDODCiUxtJ8AdJrvw.jpg",
+                "updated": 1689381173,
+                "content_id": "d371214b-0f05-4ed7-9575-6be519dbf6d6",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "King of Midland",
+                "name_ja": "ミッドランドの王",
+                "image": "/content/characters/king-of-midland-f45df8/ws-sc4xKTdsK49QaEBzSPw.jpg",
+                "updated": 1689380871,
+                "content_id": "f45df835-3638-489c-83b0-871623f635c0",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Locus",
+                "name_ja": "ロクス",
+                "image": "/content/characters/locus-cf3124/VGV-o4isHGjn5zv89brdMw.jpg",
+                "updated": 1689380919,
+                "content_id": "cf312434-2ac0-4f46-bf39-c40b6c42400e",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Lord Gennon",
+                "name_ja": "ゲノン",
+                "image": "/content/characters/lord-gennon-70458f/rEplAsyQNuuW0FGIaG06rg.jpg",
+                "updated": 1689381402,
+                "content_id": "70458ffb-a1e1-4137-9985-5ccadbad8d7e",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Luca",
+                "name_ja": "ルカ",
+                "image": "/content/characters/luca-25c7b9/drY7MzxcL0CAVJsC9KK6lw.jpg",
+                "updated": 1698418288,
+                "content_id": "25c7b9c1-c7b9-4b98-98b4-0bba09af099e",
+                "favorites": 91
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Martino",
+                "name_ja": null,
+                "image": "/content/characters/martino-185115/bqbXIuTrI81JoCmHAFCIsQ.jpg",
+                "updated": 1715297963,
+                "content_id": "18511570-8804-4aed-b932-9d2f4271c5e1",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Moonlight Boy",
+                "name_ja": "月下の少年",
+                "image": "/content/characters/moonlight-boy-0957c4/qcJERyhvoEdZ6NFcbXhDHw.jpg",
+                "updated": 1689380862,
+                "content_id": "0957c4d9-747f-4b64-96e8-31d982724928",
+                "favorites": 8
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Morda",
+                "name_ja": "モルダ",
+                "image": "/content/characters/morda-a60d6e/t0S4fOBzAL4XKCy592hPrw.jpg",
+                "updated": 1689381152,
+                "content_id": "a60d6e37-8b9d-4124-95bd-19c969ccbe2e",
+                "favorites": 27
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Morgan",
+                "name_ja": "モーガン",
+                "image": "/content/characters/morgan-295ba9/ohrNepjHWrh9L5-tjyTtjQ.jpg",
+                "updated": 1689380862,
+                "content_id": "295ba92d-d696-4e4c-8b4c-0b0fe905a9ac",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mozgus",
+                "name_ja": null,
+                "image": "/content/characters/mozgus-ee0193/APSOyPzwl17QitpVhp3RBQ.jpg",
+                "updated": 1715300521,
+                "content_id": "ee019330-6c48-4ec7-9efb-4b78eb799716",
+                "favorites": 45
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Nina",
+                "name_ja": "ニーナ",
+                "image": "/content/characters/nina-7fdadc/iEyFuNZF9m-qhGjvO3Ljyg.jpg",
+                "updated": 1698417842,
+                "content_id": "7fdadc20-4116-436e-abff-c1ef20439816",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Zodd Nosferatu",
+                "name_ja": "ゾッド",
+                "image": "/content/characters/zodd-nosferatu-a75a0a/QbcRHyH884H_bLXJD8s7zg.jpg",
+                "updated": 1698418221,
+                "content_id": "a75a0a1c-e395-4d2b-8d34-2a68fb5ab623",
+                "favorites": 375
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Roderick of Staufen",
+                "name_ja": "ロデリック・オブ・シュタウフェン",
+                "image": "/content/characters/roderick-of-staufen-277997/0p5wTpdnN0g_veE2y1WPpA.jpg",
+                "updated": 1689381002,
+                "content_id": "27799736-7e11-43d6-866e-eb10f0f0efcf",
+                "favorites": 18
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Owen",
+                "name_ja": "オーウェン",
+                "image": "/content/characters/owen-2bb214/bmqUCghXrq9TDd2E7pcnUg.jpg",
+                "updated": 1689381384,
+                "content_id": "2bb2145a-0092-47e4-ba04-610231020ffe",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Pippin",
+                "name_ja": "ピピン",
+                "image": "/content/characters/pippin-0a7065/66rgXvrXAYaboupvcuZFYA.jpg",
+                "updated": 1698417811,
+                "content_id": "0a7065c1-4f3e-4eb8-b537-511be2114a31",
+                "favorites": 139
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Pontiff",
+                "name_ja": "法王",
+                "image": "/content/characters/pontiff-4d7f60/o05LeLCuXXBojzCrHqBCOg.jpg",
+                "updated": 1689380999,
+                "content_id": "4d7f6033-2c12-4637-9580-735c248b360a",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Queen of Midland",
+                "name_ja": "ミッドランドの王妃",
+                "image": "/content/characters/queen-of-midland-f7ae41/AL0DnNDoiDeXumsG-CxNkQ.jpg",
+                "updated": 1689380886,
+                "content_id": "f7ae41cd-4e9a-48fc-964c-4b5afd210209",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Raban",
+                "name_ja": "ラバン",
+                "image": "/content/characters/raban-3e049e/y8qU4zoaGxtIX2n7-ROY7Q.jpg",
+                "updated": 1689381367,
+                "content_id": "3e049e2f-0d91-4304-9ab6-76444323616c",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rakshas",
+                "name_ja": null,
+                "image": "/content/characters/rakshas-7b278d/08WSmPVdZrWK9s7a_FzlMw.jpg",
+                "updated": 1715339275,
+                "content_id": "7b278dc4-4b68-454f-8f24-ea744ad3fbe2",
+                "favorites": 13
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Charlotte Beatrix Marie Rhody Windam",
+                "name_ja": "シャルロット・ベアトリックス・マリー・ルホディ・ウインダム",
+                "image": "/content/characters/charlotte-beatrix-marie-rhody-windam-4cc92f/RXBWpyt3FLygmyhhDGbWYw.jpg",
+                "updated": 1689380871,
+                "content_id": "4cc92f56-5d03-4018-8105-789dcda10da0",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rickert",
+                "name_ja": "リッケルト",
+                "image": "/content/characters/rickert-d845d6/FoUM6xt48q3Se5v7I7VwLw.jpg",
+                "updated": 1689381020,
+                "content_id": "d845d6a2-20eb-48f2-aee8-03c4d868e71f",
+                "favorites": 121
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rosine",
+                "name_ja": "ロシーヌ",
+                "image": "/content/characters/rosine-0758b0/diLTtFNFTs7qFbEI4lj6_Q.jpg",
+                "updated": 1689381079,
+                "content_id": "0758b09f-02d3-4316-8918-192fd2cbb10e",
+                "favorites": 24
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Shisu",
+                "name_ja": null,
+                "image": "/content/characters/shisu-f65792/DT7Nwv8F-pFnclUPnE0DMA.jpg",
+                "updated": 1715366371,
+                "content_id": "f65792aa-b095-4c92-bd63-a785a948d252",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Silat",
+                "name_ja": "シラット",
+                "image": "/content/characters/silat-56f31b/DWlsqNfJMUbaBVt7EQ4Blg.jpg",
+                "updated": 1689381014,
+                "content_id": "56f31b84-142d-42d2-b232-85385e604bd7",
+                "favorites": 9
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Slan",
+                "name_ja": "スラン",
+                "image": "/content/characters/slan-ab3ee7/dIDf-0LowrC4oU-sk9xUkQ.jpg",
+                "updated": 1698418314,
+                "content_id": "ab3ee711-9149-4dda-990a-09fdff2b209e",
+                "favorites": 95
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sonia",
+                "name_ja": "ソーニャ",
+                "image": "/content/characters/sonia-afbc70/kTf66jP2CJAPTgscPdqxJg.jpg",
+                "updated": 1689380929,
+                "content_id": "afbc708b-98f6-4743-8f7a-22cae3a66b55",
+                "favorites": 17
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "The Count",
+                "name_ja": null,
+                "image": "/content/characters/the-count-5ae926/mJF_foZu9o6_3iorFOnM4w.jpg",
+                "updated": 1715335879,
+                "content_id": "5ae92678-0508-4c6b-9d91-d6d85bb6af81",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "The Skull Knight",
+                "name_ja": "髑髏の騎士",
+                "image": "/content/characters/the-skull-knight-6b1ea3/dDKlsXzu_IQtIvTfXtGbNw.jpg",
+                "updated": 1698417810,
+                "content_id": "6b1ea390-d656-4449-83f8-4f0684d8ea8b",
+                "favorites": 1839
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Theresia",
+                "name_ja": "テレジア",
+                "image": "/content/characters/theresia-6b3578/27q-L2-AXkECWYTctsEFiQ.jpg",
+                "updated": 1689380930,
+                "content_id": "6b357849-32c0-4cb4-aa73-7ff309b599fa",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Torturer",
+                "name_ja": "拷問官",
+                "image": "/content/characters/torturer-5abcee/Mq2OcNwFwZ3rQW2koX_XPg.jpg",
+                "updated": 1689381071,
+                "content_id": "5abcee9c-cf5f-494f-8bc6-4e3ddf8feee5",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ubik",
+                "name_ja": "ユービック",
+                "image": "/content/characters/ubik-30501c/rJtPiVSW2u0seviCALqxYQ.jpg",
+                "updated": 1689381118,
+                "content_id": "30501c08-6de2-470a-9697-c41dab48cfe9",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Vargas",
+                "name_ja": null,
+                "image": "/content/characters/vargas-160df9/7WhsNkcfOZDfeHgFQvk4lQ.jpg",
+                "updated": 1715336950,
+                "content_id": "160df99d-e078-4b55-a9cc-d36005dce1a1",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Void",
+                "name_ja": "ボイド",
+                "image": "/content/characters/void-d2db53/00Bnsj7yP3SkBlZ8dN7omw.jpg",
+                "updated": 1698418340,
+                "content_id": "d2db5322-dbde-493a-9d14-12d487851d3d",
+                "favorites": 63
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mule Wolflame",
+                "name_ja": "ミュール・ウォーフレイム",
+                "image": "/content/characters/mule-wolflame-9e39a9/dz3DFqgDjfpdzdhyHelqNg.jpg",
+                "updated": 1689380959,
+                "content_id": "9e39a999-f3fb-4608-ba1f-5eaf9a8a907d",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Wyald",
+                "name_ja": null,
+                "image": "/content/characters/wyald-9d9a20/o_AMlwZ4ouyxeEnb0AOjiQ.jpg",
+                "updated": 1715339393,
+                "content_id": "9d9a2096-963a-4ea3-94d4-a0002a8e73a1",
+                "favorites": 14
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Angel of Mozgus",
+                "name_ja": null,
+                "image": null,
+                "updated": 1716754261,
+                "content_id": "0691e2b0-17f7-4a62-9f1d-a1a4b56aff80",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dahl",
+                "name_ja": null,
+                "image": null,
+                "updated": 1716754261,
+                "content_id": "a20d20a8-b0ed-4b12-a881-7cf486a3cf1e",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "The Count's Wife",
+                "name_ja": null,
+                "image": null,
+                "updated": 1716754261,
+                "content_id": "3a6b9d5b-043a-4a90-ad3b-3c05eda68efd",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Zondark",
+                "name_ja": null,
+                "image": null,
+                "updated": 1716754261,
+                "content_id": "ebfcdf24-4140-4d40-abc6-8c4dceb76a0d",
+                "favorites": 0
+            },
+            "main": false
+        }
+    ],
+    "authors": [
+        {
+            "person": {
+                "content_id": "856e5943-526e-4e36-8241-918ba30a38d3"
+            },
+            "roles": [
+                "Story",
+                "Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "106b3ed6-d09b-4c01-a154-7b29581ce8cf"
+            },
+            "roles": [
+                "Art"
+            ]
+        }
+    ],
+    "magazines": [
+        {
+            "mal_id": 2,
+            "name": "Young Animal"
+        }
+    ],
+    "start_date": 620006400,
+    "end_date": null,
+    "title_native": "ベルセルク",
+    "synopsis_en": "Guts, a former mercenary now known as the \"Black Swordsman,\" is out for revenge. After a tumultuous childhood, he finally finds someone he respects and believes he can trust, only to have everything fall apart when this person takes away everything important to Guts for the purpose of fulfilling his own desires. Now marked for death, Guts becomes condemned to a fate in which he is relentlessly pursued by demonic beings.\n\nSetting out on a dreadful quest riddled with misfortune, Guts, armed with a massive sword and monstrous strength, will let nothing stop him, not even death itself, until he is finally able to take the head of the one who stripped him—and his loved one—of their humanity.\n\n[Written by MAL Rewrite]\n\nIncluded one-shot:\nVolume 14: Berserk: The Prototype",
+    "synopsis_ua": null,
+    "media_type": "manga",
+    "genre_ids": [
+        "45a3e2cf-0d37-4bad-bed0-9268f02f7d6b",
+        "5277d2bf-715c-4576-83ab-981afabb4ca2",
+        "b3c7aa68-5cb4-40fb-b0e0-47099f10fc7b",
+        "95ae63e0-a4d7-4f88-8596-92216073db24",
+        "545bb81f-8702-4358-8f8e-596910ac394c",
+        "e47f0d66-3ae8-4d28-84a5-e77169c74048",
+        "c89748be-c9a0-4a13-8f0d-374593a23d7e",
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "75673e0b-e199-49f9-8414-e69db616dcb4",
+        "7e8372f1-f621-4e52-acd2-e158ab08780e",
+        "ebaba115-e384-4707-94e1-944f6c22c7d2"
+    ],
+    "external": [
+        {
+            "url": "http://www.younganimal.com/berserk/index.html",
+            "text": "Official Site"
+        },
+        {
+            "url": "http://ja.wikipedia.org/wiki/%E3%83%99%E3%83%AB%E3%82%BB%E3%83%AB%E3%82%AF_%28%E6%BC%AB%E7%94%BB%29",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Berserk_(manga)",
+            "text": "Wikipedia"
+        }
+    ],
+    "created": 1687304733,
+    "updated": 1717532039,
+    "title_en": "Berserk",
+    "title_ja": "Berserk",
+    "title_ua": null,
+    "chapters": null,
+    "synonyms": [
+        "Berserk: The Prototype"
+    ],
+    "volumes": null,
+    "poster": "/content/manga/berserk-fb9fbd/_k-c2Jia2JOcguyOMMEPGQ.jpg",
+    "status": "ongoing",
+    "content_id": "fb9fbd44-76f6-4b22-9438-05d7e3a43c37",
+    "scored_by": 348624,
+    "deleted": false,
+    "score": 9.47,
+    "mal_id": 2,
+    "stats": {
+        "dropped": 10975,
+        "on_hold": 53719,
+        "planned": 159402,
+        "reading": 381473,
+        "score_1": 2768,
+        "score_2": 353,
+        "score_3": 276,
+        "score_4": 540,
+        "score_5": 1155,
+        "score_6": 2820,
+        "score_7": 9133,
+        "score_8": 26154,
+        "score_9": 65478,
+        "score_10": 239947,
+        "completed": 91303
+    },
+    "nsfw": false
+}
