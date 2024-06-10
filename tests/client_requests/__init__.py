@@ -30,6 +30,9 @@ from .anime import request_anime_info
 from .manga import request_manga_search
 from .manga import request_manga_info
 
+from .novel import request_novel_search
+from .novel import request_novel_info
+
 from .characters import request_characters_search
 from .characters import request_characters_anime
 from .characters import request_characters_info
@@ -118,6 +121,8 @@ __all__ = [
     "request_anime_info",
     "request_manga_search",
     "request_manga_info",
+    "request_novel_search",
+    "request_novel_info",
     "request_characters_search",
     "request_characters_anime",
     "request_characters_info",
