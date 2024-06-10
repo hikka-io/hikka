@@ -1,0 +1,556 @@
+{
+    "characters": [
+        {
+            "character": {
+                "name_en": "Aqua",
+                "name_ja": "アクア",
+                "image": "/content/characters/aqua-d9b4c7/cAbdpV-yA30ckR0xkJAvvg.jpg",
+                "updated": 1698418328,
+                "content_id": "d9b4c7e6-d218-4f4c-b1ed-45c8b709bb74",
+                "favorites": 11255
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Lalatina Dustiness Ford",
+                "name_ja": "ダスティネス・フォード・ララティーナ / ダクネス",
+                "image": "/content/characters/lalatina-dustiness-ford-af67d9/alrEvBe_nS8XJ73iIXWH8g.jpg",
+                "updated": 1698418221,
+                "content_id": "af67d900-7d37-4c2e-a2b2-45510b450f26",
+                "favorites": 5903
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Megumin",
+                "name_ja": "めぐみん",
+                "image": "/content/characters/megumin-2af3af/5wtO4AV4Avru_OS_zNQH-w.jpg",
+                "updated": 1698418056,
+                "content_id": "2af3af8a-6b38-4c62-aca1-e459dbbaa434",
+                "favorites": 40489
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Kazuma Satou",
+                "name_ja": "佐藤 和真",
+                "image": "/content/characters/kazuma-satou-0ab44b/8q7BDYc48H2luXw6x1ONMw.jpg",
+                "updated": 1698417985,
+                "content_id": "0ab44b9b-b065-4a08-8fb8-d05f05280331",
+                "favorites": 19702
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Aldarp Alex Barnes",
+                "name_ja": "アレクセイ・バーネス・アルダープ",
+                "image": "/content/characters/aldarp-alex-barnes-9cca10/ekvNHdM7jF9Lm0UI2qkn6w.jpg",
+                "updated": 1689380923,
+                "content_id": "9cca1055-d3bc-453f-ac28-29a8a899c752",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Anraku Shoujo",
+                "name_ja": "安楽少女",
+                "image": "/content/characters/anraku-shoujo-a8fdf6/Rfp59tPuXKaPiz0louBzDQ.jpg",
+                "updated": 1715362333,
+                "content_id": "a8fdf650-a816-44bf-a999-808ef2131884",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Beldia",
+                "name_ja": "ベルディア",
+                "image": "/content/characters/beldia-c65b56/6b0Rfx-NGjlnhKksdzJucg.jpg",
+                "updated": 1698418280,
+                "content_id": "c65b56e2-6e2c-4a80-bf4d-2dd9daf666d2",
+                "favorites": 52
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Cecily",
+                "name_ja": "セシリー",
+                "image": "/content/characters/cecily-21312b/Jk07MKd2e8yGx12L41slEA.jpg",
+                "updated": 1698417869,
+                "content_id": "21312bd7-ed35-46a3-b0b1-72147633582f",
+                "favorites": 14
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Cedre",
+                "name_ja": "セドル",
+                "image": "/content/characters/cedre-c0ec96/1szZLIe_hc-gCMngymwpug.jpg",
+                "updated": 1689381128,
+                "content_id": "c0ec96b1-f05a-42ae-b9bf-9eb47d3b0e27",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Chomusuke",
+                "name_ja": "ちょむすけ",
+                "image": "/content/characters/chomusuke-ff9a7a/N_vzJxPh7Sqlz8UG15xVPQ.jpg",
+                "updated": 1698417904,
+                "content_id": "ff9a7a64-c428-4a1d-aeca-820c1ef53766",
+                "favorites": 136
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Chris",
+                "name_ja": "クリス",
+                "image": "/content/characters/chris-d5afbe/KFmIiuQxMnkO9L8iFYlP9w.jpg",
+                "updated": 1698418228,
+                "content_id": "d5afbe0f-98a7-494d-a6f9-9b7948c117d8",
+                "favorites": 178
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Claire",
+                "name_ja": "クレア",
+                "image": "/content/characters/claire-d41bdf/3CJ_op1FPafIGq16ucB6Mg.jpg",
+                "updated": 1698418215,
+                "content_id": "d41bdf09-f7c8-4dbf-8262-451f3270cd33",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dust",
+                "name_ja": "ダスト",
+                "image": "/content/characters/dust-143c3e/D8l1tMcic7P9yJ-WuOsW6g.jpg",
+                "updated": 1689381143,
+                "content_id": "143c3e86-acd9-46b7-9af9-ef686f5644f2",
+                "favorites": 19
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ignis Dustiness Ford",
+                "name_ja": "ダスティネス・フォード・イグニス",
+                "image": "/content/characters/ignis-dustiness-ford-28f662/CLfh-6Idr2UFQb9T-Ck23g.jpg",
+                "updated": 1689381201,
+                "content_id": "28f662e5-e41d-4af4-9d9f-217c958e4577",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sylphina Dustiness Ford",
+                "name_ja": null,
+                "image": "/content/characters/sylphina-dustiness-ford-cd248d/T9Umci4kBpWYUPcIV9F_7A.jpg",
+                "updated": 1715341429,
+                "content_id": "cd248d65-fc40-4302-a712-50ce607aa067",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Eris",
+                "name_ja": "エリス",
+                "image": "/content/characters/eris-f838a5/crP7K8mbLNUhABvNDJy2Bw.jpg",
+                "updated": 1698418072,
+                "content_id": "f838a57b-1851-4358-8b14-74d372320e80",
+                "favorites": 326
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Anna Filante Asteroid",
+                "name_ja": null,
+                "image": "/content/characters/anna-filante-asteroid-7ce2a6/BG1_cCp8mwVKt_jBL_SV_g.jpg",
+                "updated": 1715370462,
+                "content_id": "7ce2a62e-deff-4439-9b7c-0f16d6622c37",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Garilhe",
+                "name_ja": "ガリル",
+                "image": "/content/characters/garilhe-ff955b/N4YlaTC3eWwsdn-Qlx29gg.jpg",
+                "updated": 1689380882,
+                "content_id": "ff955bec-5d52-4d2d-b4a4-4ee5670f5699",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Hans",
+                "name_ja": "ハンス",
+                "image": "/content/characters/hans-ba426e/bAss2-zuCZhP0I4eDrtTOA.jpg",
+                "updated": 1698418358,
+                "content_id": "ba426e32-25f0-444f-9bfd-6405561d301a",
+                "favorites": 8
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Heidel",
+                "name_ja": "ハイデル",
+                "image": "/content/characters/heidel-8dfeb2/hYeVc5uQH9LY6TOz9ppV0g.jpg",
+                "updated": 1715364430,
+                "content_id": "8dfeb2d2-48de-47c1-8b51-52f53176002d",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Heinz",
+                "name_ja": "ヘインズ",
+                "image": "/content/characters/heinz-b48dea/Iv7753ct0HRHN41vSbeA2w.jpg",
+                "updated": 1689381307,
+                "content_id": "b48dea76-46ba-4e6a-a334-e5276bdd89d9",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Hyoizaburo",
+                "name_ja": "ひょいざぶろー",
+                "image": "/content/characters/hyoizaburo-27f29e/fdPGI5HtGYR_cFFNTsHXfw.jpg",
+                "updated": 1689381054,
+                "content_id": "27f29e4a-04f7-4e3f-ac36-3a3db5cec77c",
+                "favorites": 4
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Keele",
+                "name_ja": "キール",
+                "image": "/content/characters/keele-5b8d1e/H2AdqAswnKrBlpHm9DDDLA.jpg",
+                "updated": 1689381149,
+                "content_id": "5b8d1e22-837e-4c05-a1ba-25382b29e1e7",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Keith",
+                "name_ja": "キース",
+                "image": "/content/characters/keith-29a39c/il0XdwGA9-3IdV3b9YVVRw.jpg",
+                "updated": 1689380866,
+                "content_id": "29a39c1a-5c16-47d4-9c23-9b24261121f3",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Luna",
+                "name_ja": "ルナ",
+                "image": "/content/characters/luna-83cc88/s3f_mjqZ0cvMd8GL_wPOrQ.jpg",
+                "updated": 1689381315,
+                "content_id": "83cc88f7-9b93-4e4f-8a74-fbe547ef304c",
+                "favorites": 83
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mary",
+                "name_ja": "メアリー",
+                "image": "/content/characters/mary-6c19f7/6rUybZCtC4yw-SgTysb3Xg.jpg",
+                "updated": 1715298744,
+                "content_id": "6c19f743-8a20-4aad-bda1-5a50a8c4fc87",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Kyouya Mitsurugi",
+                "name_ja": "御剣 響夜",
+                "image": "/content/characters/kyouya-mitsurugi-ba5a8f/LRZarxIAgxb315vApSiQaQ.jpg",
+                "updated": 1689381378,
+                "content_id": "ba5a8f8e-2e75-4bf0-8114-31bd85431397",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Shinjin Succubus",
+                "name_ja": "新人サキュバス",
+                "image": "/content/characters/shinjin-succubus-7f7cbb/TCSCkpf46PXrIl4HKk9QpQ.jpg",
+                "updated": 1689381216,
+                "content_id": "7f7cbb3b-4b52-48f1-b80b-78b15fcf6010",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Pucchin",
+                "name_ja": "ぷっちん",
+                "image": "/content/characters/pucchin-08d7a6/JjuiFjjj-OA15ZMba-zhUA.jpg",
+                "updated": 1698418150,
+                "content_id": "08d7a68b-3666-44c1-ba90-1c18057c13e2",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rein",
+                "name_ja": "レイン",
+                "image": "/content/characters/rein-902a31/sSCsQV5PKY1fbo9iAYwGtg.jpg",
+                "updated": 1698417810,
+                "content_id": "902a31a1-13c0-4bc5-b574-2f45f9fc0048",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ran",
+                "name_ja": "ラン",
+                "image": "/content/characters/ran-f23dc9/Cn2jcdClVfemCqqMifd_Zw.jpg",
+                "updated": 1689381331,
+                "content_id": "f23dc933-de29-43ca-8f4c-fae39a2376b4",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Receptionist Succubus",
+                "name_ja": "受付サキュバス",
+                "image": "/content/characters/receptionist-succubus-03ff9e/xJ468o38H7091D-a6jiS9Q.jpg",
+                "updated": 1698418113,
+                "content_id": "03ff9ed6-3780-4a30-95e4-0a0d2aa85628",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Lean",
+                "name_ja": "リーン",
+                "image": "/content/characters/lean-194d24/TWJC5oaa_a_hP54JikcS6Q.jpg",
+                "updated": 1698417876,
+                "content_id": "194d24a6-93c4-420d-97bd-5a0d3c98cdbf",
+                "favorites": 12
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sena",
+                "name_ja": "セナ",
+                "image": "/content/characters/sena-43da81/4wl3lzgsOlmyeptqHhnVBA.jpg",
+                "updated": 1698417923,
+                "content_id": "43da8141-f530-4227-af8a-bc9ab938a613",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Seresdina",
+                "name_ja": "セレスディナ",
+                "image": "/content/characters/seresdina-1c49bb/v5F-Fd91-baOLdmj9JOtHw.jpg",
+                "updated": 1689381314,
+                "content_id": "1c49bbf4-215f-4888-a720-33a8f681a575",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Iris Stylish-Sword Belzerg",
+                "name_ja": "ベルゼルグ･スタイリッシュ・ソード・アイリス",
+                "image": "/content/characters/iris-stylish-sword-belzerg-08aa80/iCZ1T0ImBxSDiA2AIZ4r4A.jpg",
+                "updated": 1698418139,
+                "content_id": "08aa80dc-bf13-432e-8f85-51d6d1b572c9",
+                "favorites": 69
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Taylor",
+                "name_ja": "テイラー",
+                "image": "/content/characters/taylor-77cdc0/trzZo4OId107gP-JGZ6TLg.jpg",
+                "updated": 1689381304,
+                "content_id": "77cdc097-a0cd-401a-90ea-66915f0655a4",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Vanir",
+                "name_ja": "バニル",
+                "image": "/content/characters/vanir-c85f9c/urDENod05lQkA5JjwD7tag.jpg",
+                "updated": 1698418072,
+                "content_id": "c85f9cc2-8c8f-4479-9618-b420825e8f14",
+                "favorites": 324
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Wiz",
+                "name_ja": "ウィズ",
+                "image": "/content/characters/wiz-b88eba/U8xkO7nNyccAh2VcS7tfMQ.jpg",
+                "updated": 1698418337,
+                "content_id": "b88ebad9-b457-4907-ae4b-014c9f97413e",
+                "favorites": 1502
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Wolbach",
+                "name_ja": "ウォルバク",
+                "image": "/content/characters/wolbach-946155/HFABujlh6X1wr59zVrVqiA.jpg",
+                "updated": 1698417857,
+                "content_id": "946155f8-def0-4c76-bb74-4d770b6a5430",
+                "favorites": 10
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yuiyui",
+                "name_ja": "ゆいゆい",
+                "image": "/content/characters/yuiyui-eb44d8/a1_W9JCgcxo5oZIxYY5mVg.jpg",
+                "updated": 1698417830,
+                "content_id": "eb44d8ee-75ed-4359-81ed-d8d2d7eb1e73",
+                "favorites": 14
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yunyun",
+                "name_ja": "ゆんゆん",
+                "image": "/content/characters/yunyun-355d49/9QvspUzSUVUnyJq30KmnDw.jpg",
+                "updated": 1698418193,
+                "content_id": "355d4952-732d-4ef7-825b-c3d62174b70b",
+                "favorites": 1302
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Zesta",
+                "name_ja": "ゼスタ",
+                "image": "/content/characters/zesta-6fcf96/4Z1d-O7YOHIAwDfmc38Ofg.jpg",
+                "updated": 1689381151,
+                "content_id": "6fcf9604-9824-4739-8e4d-285842f9bca4",
+                "favorites": 2
+            },
+            "main": false
+        }
+    ],
+    "authors": [
+        {
+            "person": {
+                "content_id": "addf51d1-7384-4869-af19-9bdc67ef70df"
+            },
+            "roles": [
+                "Art"
+            ]
+        },
+        {
+            "person": {
+                "content_id": "e4dda625-82a4-420f-b610-a86c9d7edd73"
+            },
+            "roles": [
+                "Story"
+            ]
+        }
+    ],
+    "magazines": [],
+    "start_date": 1380585600,
+    "end_date": 1588291200,
+    "title_native": "この素晴らしい世界に祝福を！",
+    "synopsis_en": "Kazuma Satou lives a laughable and pathetic life, being a shut-in NEET with no distinguishable qualities other than an addiction to video games. On his way home, Kazuma dies trying to save a girl from an oncoming truck—or so he believes. In reality, the \"truck\" was a slow-moving tractor, and he merely died from shock.\n\nWaking up in limbo between death and heaven, Kazuma finds himself facing the arrogant goddess Aqua. Here, he must choose between two options: go on to heaven or be sent to a fantasy world that needs his help to defeat the Demon King. Initially unimpressed by the challenging prospect of fighting a Demon King, Kazuma changes his mind after Aqua tells him he can bring any one item he wants. What better choice does Kazuma have than the goddess standing before him?\n\nUnfortunately, after the two arrive in their new world, two things become clear: Aqua is useless beyond belief, and life in this fantasy realm will be anything but smooth sailing. From paying for food and accommodations to trying to learn new skills, the duo's problems are just starting to take shape—and the arrival of eccentric allies may only make things worse.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": null,
+    "media_type": "light_novel",
+    "genre_ids": [
+        "b377cf64-9a8b-455f-9634-d1183b5b88b8",
+        "b8add093-93bd-4448-9712-36198eba7a56",
+        "d5eb04ca-9125-4be5-9eae-8f9f2be6b8ac",
+        "75673e0b-e199-49f9-8414-e69db616dcb4",
+        "ebaba115-e384-4707-94e1-944f6c22c7d2"
+    ],
+    "external": [
+        {
+            "url": "http://www.sneakerbunko.jp/series/konosuba/",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/KonoSuba",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://ja.wikipedia.org/wiki/%E3%81%93%E3%81%AE%E7%B4%A0%E6%99%B4%E3%82%89%E3%81%97%E3%81%84%E4%B8%96%E7%95%8C%E3%81%AB%E7%A5%9D%E7%A6%8F%E3%82%92!",
+            "text": "Wikipedia"
+        }
+    ],
+    "created": 1715442019,
+    "updated": 1717532743,
+    "title_en": "Konosuba: God's Blessing on This Wonderful World!",
+    "title_ja": "Kono Subarashii Sekai ni Shukufuku wo!",
+    "title_ua": null,
+    "chapters": 127,
+    "synonyms": [],
+    "volumes": 17,
+    "poster": "/content/novel/kono-subarashii-sekai-ni-shukufuku-wo-cc5525/9Jt3zddDmPdJTiqPtYJNog.jpg",
+    "status": "finished",
+    "content_id": "cc552518-5e42-43fa-a729-0f9a81db5767",
+    "scored_by": 17510,
+    "deleted": false,
+    "score": 8.61,
+    "mal_id": 60553,
+    "stats": {
+        "dropped": 1289,
+        "on_hold": 3259,
+        "planned": 22088,
+        "reading": 16846,
+        "score_1": 144,
+        "score_2": 52,
+        "score_3": 68,
+        "score_4": 79,
+        "score_5": 225,
+        "score_6": 569,
+        "score_7": 1611,
+        "score_8": 3997,
+        "score_9": 5297,
+        "score_10": 5468,
+        "completed": 10157
+    },
+    "nsfw": false
+}

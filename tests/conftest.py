@@ -3,8 +3,8 @@
 
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
+from app.models import Anime, Manga, Novel, Base
 from async_asgi_testclient import TestClient
-from app.models import Anime, Manga, Base
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, text
@@ -193,6 +193,8 @@ async def aggregator_anime_roles(test_session):
 
     await aggregator.update_anime_roles(test_session, data)
 
+    await aggregator.update_anime_role_weights(test_session)
+
 
 @pytest.fixture
 async def aggregator_manga_roles(test_session):
@@ -234,6 +236,13 @@ async def aggregator_manga(test_session):
     data = await helpers.load_json("tests/data/manga.json")
 
     await aggregator.save_manga_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_novel(test_session):
+    data = await helpers.load_json("tests/data/novels.json")
+
+    await aggregator.save_novel_list(test_session, data["list"])
 
 
 @pytest.fixture
@@ -299,6 +308,30 @@ async def aggregator_manga_info(test_session):
             await aggregator.update_manga_info(
                 test_session,
                 manga,
+                data,
+            )
+
+
+@pytest.fixture
+async def aggregator_novel_info(test_session):
+    novel_list = {
+        "7bb1594b-9a84-4632-948d-594903e85676": "tian.json",
+        "cc552518-5e42-43fa-a729-0f9a81db5767": "konosuba.json",
+    }
+
+    for slug in novel_list:
+        if novel := await test_session.scalar(
+            select(Novel)
+            .filter(Novel.content_id == slug)
+            .options(selectinload(Novel.genres))
+        ):
+            data = await helpers.load_json(
+                f"tests/data/novel_info/{novel_list[slug]}"
+            )
+
+            await aggregator.update_novel_info(
+                test_session,
+                novel,
                 data,
             )
 
