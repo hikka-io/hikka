@@ -27,6 +27,9 @@ from .anime import request_anime_genres
 from .anime import request_anime_staff
 from .anime import request_anime_info
 
+from .manga import request_manga_search
+from .manga import request_manga_info
+
 from .characters import request_characters_search
 from .characters import request_characters_anime
 from .characters import request_characters_info
@@ -113,6 +116,8 @@ __all__ = [
     "request_anime_genres",
     "request_anime_staff",
     "request_anime_info",
+    "request_manga_search",
+    "request_manga_info",
     "request_characters_search",
     "request_characters_anime",
     "request_characters_info",
