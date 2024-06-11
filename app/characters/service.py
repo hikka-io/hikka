@@ -1,3 +1,4 @@
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from app.service import anime_loadonly
@@ -7,9 +8,17 @@ from sqlalchemy import func
 
 from app.models import (
     AnimeCharacter,
+    MangaCharacter,
+    NovelCharacter,
     AnimeVoice,
+    AnimeWatch,
+    MangaRead,
+    NovelRead,
     Character,
     Anime,
+    Manga,
+    Novel,
+    User,
 )
 
 
@@ -71,6 +80,7 @@ async def character_anime_total(session: AsyncSession, character: Character):
 async def character_anime(
     session: AsyncSession,
     character: Character,
+    request_user: User | None,
     limit: int,
     offset: int,
 ):
@@ -79,9 +89,89 @@ async def character_anime(
         .filter(AnimeCharacter.character == character)
         .join(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
-        .options(anime_loadonly(joinedload(AnimeCharacter.anime)))
+        .options(
+            anime_loadonly(joinedload(AnimeCharacter.anime)).joinedload(
+                Anime.watch
+            ),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        )
         .order_by(
             desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+        )
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def character_manga_total(session: AsyncSession, character: Character):
+    return await session.scalar(
+        select(func.count(MangaCharacter.id))
+        .filter(MangaCharacter.character == character)
+        .join(Manga)
+        .filter(Manga.deleted == False)  # noqa: E712
+    )
+
+
+async def character_manga(
+    session: AsyncSession,
+    character: Character,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    return await session.scalars(
+        select(MangaCharacter)
+        .filter(MangaCharacter.character == character)
+        .join(Manga)
+        .filter(Manga.deleted == False)  # noqa: E712
+        .options(
+            joinedload(MangaCharacter.manga).joinedload(Manga.read),
+            with_loader_criteria(
+                MangaRead,
+                MangaRead.user_id == request_user.id if request_user else None,
+            ),
+        )
+        .order_by(
+            desc(Manga.score), desc(Manga.scored_by), desc(Manga.content_id)
+        )
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def character_novel_total(session: AsyncSession, character: Character):
+    return await session.scalar(
+        select(func.count(NovelCharacter.id))
+        .filter(NovelCharacter.character == character)
+        .join(Novel)
+        .filter(Novel.deleted == False)  # noqa: E712
+    )
+
+
+async def character_novel(
+    session: AsyncSession,
+    character: Character,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    return await session.scalars(
+        select(NovelCharacter)
+        .filter(NovelCharacter.character == character)
+        .join(Novel)
+        .filter(Novel.deleted == False)  # noqa: E712
+        .options(
+            joinedload(NovelCharacter.novel).joinedload(Novel.read),
+            with_loader_criteria(
+                NovelRead,
+                NovelRead.user_id == request_user.id if request_user else None,
+            ),
+        )
+        .order_by(
+            desc(Novel.score), desc(Novel.scored_by), desc(Novel.content_id)
         )
         .limit(limit)
         .offset(offset)
@@ -100,6 +190,7 @@ async def character_voices_total(session: AsyncSession, character: Character):
 async def character_voices(
     session: AsyncSession,
     character: Character,
+    request_user: User | None,
     limit: int,
     offset: int,
 ):
@@ -108,7 +199,16 @@ async def character_voices(
         .filter(AnimeVoice.character == character)
         .join(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
-        .options(anime_loadonly(joinedload(AnimeVoice.anime)))
+        # .options(anime_loadonly(joinedload(AnimeVoice.anime)))
+        .options(
+            anime_loadonly(joinedload(AnimeVoice.anime)).joinedload(
+                Anime.watch
+            ),
+            with_loader_criteria(
+                AnimeWatch,
+                AnimeWatch.user_id == request_user.id if request_user else None,
+            ),
+        )
         .options(joinedload(AnimeVoice.person))
         .order_by(
             desc(Anime.score),

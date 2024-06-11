@@ -72,6 +72,9 @@ async def person_anime(
     }
 
 
+# TODO: Manga/novel
+
+
 @router.get(
     "/{slug}/characters", response_model=PersonCharactersPaginationResponse
 )

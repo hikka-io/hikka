@@ -1,10 +1,12 @@
 from pydantic import Field
 
 from app.schemas import (
+    AnimeResponseWithWatch,
+    MangaResponseWithRead,
+    NovelResponseWithRead,
     PaginationResponse,
     CharacterResponse,
     PersonResponse,
-    AnimeResponse,
     CustomModel,
 )
 
@@ -20,14 +22,24 @@ class CharacterCountResponse(CharacterFullResponse, CustomModel):
 
 
 class CharacterVoiceResponse(CustomModel):
+    anime: AnimeResponseWithWatch
     person: PersonResponse
-    anime: AnimeResponse
     language: str
 
 
 class CharacterAnimeResponse(CustomModel):
     main: bool = Field(examples=[True])
-    anime: AnimeResponse
+    anime: AnimeResponseWithWatch
+
+
+class CharacterMangaResponse(CustomModel):
+    main: bool = Field(examples=[True])
+    manga: MangaResponseWithRead
+
+
+class CharacterNovelResponse(CustomModel):
+    main: bool = Field(examples=[True])
+    novel: NovelResponseWithRead
 
 
 class CharactersSearchPaginationResponse(CustomModel):
@@ -38,6 +50,16 @@ class CharactersSearchPaginationResponse(CustomModel):
 class CharacterAnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CharacterAnimeResponse]
+
+
+class CharacterMangaPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CharacterMangaResponse]
+
+
+class CharacterNovelPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CharacterNovelResponse]
 
 
 class CharacterVoicesPaginationResponse(CustomModel):
