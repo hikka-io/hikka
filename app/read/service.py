@@ -126,6 +126,9 @@ async def delete_read(
         constants.LOG_READ_DELETE,
         user,
         read.content.id,
+        {
+            "content_type": read.content.data_type,
+        },
     )
 
     await session.commit()
