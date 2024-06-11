@@ -83,7 +83,7 @@ async def validate_upload_file(
         if width != 1500 or height != 500:
             raise Abort("upload", "bad-resolution")
 
-    # TODO: add file hash check
+    # TODO: add file hash check (?)
 
     await file.seek(0)
 

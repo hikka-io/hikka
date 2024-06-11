@@ -28,7 +28,6 @@ from app.service import (
 )
 
 
-# TODO: rewrite this function?
 async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
