@@ -34,11 +34,16 @@ async def get_read(
     user: User,
 ):
     return await session.scalar(
-        select(Read).filter(
+        select(Read)
+        .filter(
             Read.deleted == False,  # noqa: E712
             Read.content_type == content_type,
             Read.content_id == content.id,
             Read.user == user,
+        )
+        .options(
+            joinedload(MangaRead.content),
+            joinedload(NovelRead.content),
         )
     )
 
@@ -53,13 +58,19 @@ async def save_read(
     now = utcnow()
     log_type = constants.LOG_READ_UPDATE
 
+    # We need to do this in order to return object with content inside
+    # when read record is created for the first time
+    read_model = {
+        constants.CONTENT_MANGA: MangaRead,
+        constants.CONTENT_NOVEL: NovelRead,
+    }.get(content_type)
+
     # Create read record if missing
     if not (read := await get_read(session, content_type, content, user)):
         log_type = constants.LOG_READ_CREATE
-        read = Read()
+        read = read_model()
+        read.content = content
         read.created = now
-        read.content_type = content_type
-        read.content_id = content.id
         read.user = user
 
     log_before = {}

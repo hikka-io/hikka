@@ -57,6 +57,13 @@ from .watch import request_watch_list
 from .watch import request_watch_add
 from .watch import request_watch
 
+from .read import request_read_random
+from .read import request_read_delete
+from .read import request_read_stats
+from .read import request_read_list
+from .read import request_read_add
+from .read import request_read
+
 from .edit import request_accept_edit
 from .edit import request_create_edit
 from .edit import request_update_edit
@@ -142,6 +149,12 @@ __all__ = [
     "request_watch_list",
     "request_watch_add",
     "request_watch",
+    "request_read_random",
+    "request_read_delete",
+    "request_read_stats",
+    "request_read_list",
+    "request_read_add",
+    "request_read",
     "request_accept_edit",
     "request_create_edit",
     "request_update_edit",
