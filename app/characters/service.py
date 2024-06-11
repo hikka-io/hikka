@@ -199,7 +199,6 @@ async def character_voices(
         .filter(AnimeVoice.character == character)
         .join(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
-        # .options(anime_loadonly(joinedload(AnimeVoice.anime)))
         .options(
             anime_loadonly(joinedload(AnimeVoice.anime)).joinedload(
                 Anime.watch
