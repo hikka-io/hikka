@@ -109,3 +109,79 @@ class WatchImportHistory(History):
         "polymorphic_identity": constants.HISTORY_WATCH_IMPORT,
         "eager_defaults": True,
     }
+
+
+class ReadMangaHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_READ_MANGA,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == ReadMangaHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class ReadMangaDeleteHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_READ_MANGA_DELETE,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == ReadMangaDeleteHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class ReadNovelHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_READ_NOVEL,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == ReadNovelHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class ReadNovelDeleteHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_READ_NOVEL_DELETE,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == ReadNovelDeleteHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )

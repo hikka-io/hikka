@@ -276,7 +276,11 @@ LOG_CONTENT_DELETED = "content_deleted"
 
 # History types
 HISTORY_WATCH = "watch"
+HISTORY_READ_MANGA = "manga"
+HISTORY_READ_NOVEL = "novel"
 HISTORY_WATCH_DELETE = "watch_delete"
+HISTORY_READ_MANGA_DELETE = "manga_delete"
+HISTORY_READ_NOVEL_DELETE = "novel_delete"
 HISTORY_FAVOURITE_ANIME = "favourite_anime_add"
 HISTORY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
 HISTORY_WATCH_IMPORT = "watch_import"
