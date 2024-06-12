@@ -28,9 +28,9 @@ async def fix_aggregator():
             update(Character).values(needs_search_update=True)
         )
 
-        await session.execute(update(Anime).values(needs_search_update=True))
-        await session.execute(update(Manga).values(needs_search_update=True))
-        await session.execute(update(Novel).values(needs_search_update=True))
+        await session.execute(update(Anime).values(needs_update=True))
+        await session.execute(update(Manga).values(needs_update=True))
+        await session.execute(update(Novel).values(needs_update=True))
 
         await session.commit()
 
