@@ -1,11 +1,16 @@
-from .aggregator.franchises import aggregator_anime_franchises
+from .aggregator.franchises import aggregator_franchises
 from .aggregator.characters import aggregator_characters
+from .aggregator.info.anime import aggregator_anime_info
+from .aggregator.info.manga import aggregator_manga_info
+from .aggregator.info.novel import aggregator_novel_info
 from .aggregator.companies import aggregator_companies
-from .aggregator.genres import aggregator_anime_genres
-from .aggregator.roles import aggregator_anime_roles
-from .aggregator.info import aggregator_anime_info
+from .aggregator.magazines import aggregator_magazines
 from .aggregator.people import aggregator_people
+from .aggregator.genres import aggregator_genres
 from .aggregator.anime import aggregator_anime
+from .aggregator.manga import aggregator_manga
+from .aggregator.novel import aggregator_novel
+from .aggregator.roles import aggregator_roles
 
 from .notifications import update_notifications
 
@@ -30,17 +35,22 @@ from .content import update_content
 from .email import send_emails
 
 __all__ = [
-    "aggregator_anime_franchises",
-    "aggregator_anime_genres",
-    "aggregator_anime_roles",
+    "aggregator_franchises",
     "aggregator_anime_info",
+    "aggregator_manga_info",
+    "aggregator_novel_info",
     "update_schedule_build",
     "aggregator_characters",
     "aggregator_companies",
+    "aggregator_magazines",
     "update_notifications",
     "update_ranking_all",
     "aggregator_people",
+    "aggregator_genres",
     "aggregator_anime",
+    "aggregator_manga",
+    "aggregator_novel",
+    "aggregator_roles",
     "update_activity",
     "update_schedule",
     "update_content",

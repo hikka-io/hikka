@@ -4,15 +4,17 @@ from app import constants
 
 from .schemas import (
     CharacterEditArgs,
-    ContentTypeEnum,
+    EditContentTypeEnum,
     PersonEditArgs,
     AnimeEditArgs,
+    MangaEditArgs,
+    NovelEditArgs,
     EditArgs,
 )
 
 
 def check_edit_schema(
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     args: EditArgs,
 ):
     # Make sure we know how to validate proposed content changes
@@ -20,6 +22,8 @@ def check_edit_schema(
         constants.CONTENT_CHARACTER: CharacterEditArgs,
         constants.CONTENT_PERSON: PersonEditArgs,
         constants.CONTENT_ANIME: AnimeEditArgs,
+        constants.CONTENT_MANGA: MangaEditArgs,
+        constants.CONTENT_NOVEL: NovelEditArgs,
     }
 
     if not (schema := schemas.get(content_type)):

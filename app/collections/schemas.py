@@ -1,5 +1,6 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
+from app.utils import check_sort
 from .utils import is_valid_tag
 from app import constants
 from enum import Enum
@@ -17,6 +18,8 @@ class ContentTypeEnum(str, Enum):
     content_character = constants.CONTENT_CHARACTER
     content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
 
 
 # Args
@@ -36,27 +39,13 @@ class CollectionsListArgs(CustomModel):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "system_ranking",
-            "created",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "system_ranking",
+                "created",
+            ],
+        )
 
 
 class CollectionArgs(CustomModel):

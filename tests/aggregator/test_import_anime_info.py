@@ -6,7 +6,7 @@ from app import constants
 
 async def test_import_anime_info(
     test_session,
-    aggregator_anime_genres,
+    aggregator_genres,
     aggregator_anime,
     aggregator_people,
     aggregator_characters,

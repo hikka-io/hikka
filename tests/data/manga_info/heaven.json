@@ -1,0 +1,326 @@
+{
+    "characters": [
+        {
+            "character": {
+                "name_en": "Cheng Hua",
+                "name_ja": "花 城",
+                "image": "/content/characters/cheng-hua-60ec6e/pPB2cDQccs6UxuW3kAV1yw.jpg",
+                "updated": 1698417855,
+                "content_id": "60ec6ed3-e1e1-4b00-9532-03f01e28fe4b",
+                "favorites": 2545
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Lian Xie",
+                "name_ja": "谢 怜",
+                "image": "/content/characters/lian-xie-f59843/xmZ2f-izoiyqA7DNd_xeZw.jpg",
+                "updated": 1698417976,
+                "content_id": "f598432f-2b81-4970-a5e5-0aa89370a8d9",
+                "favorites": 2110
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Bai Wuxiang",
+                "name_ja": "白无相",
+                "image": "/content/characters/bai-wuxiang-7aaac7/bGPTwyPGJAVqlT4qsiIlkw.jpg",
+                "updated": 1698418270,
+                "content_id": "7aaac722-4f55-40b7-8c90-16e03c1d9c82",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yue Ban",
+                "name_ja": "半 月",
+                "image": "/content/characters/yue-ban-4b729e/tqzVVZTFYQaj0TPrSuGeTQ.jpg",
+                "updated": 1689380934,
+                "content_id": "4b729e10-8426-4d13-810e-4bce57698a0c",
+                "favorites": 13
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Butcher Zhu",
+                "name_ja": "朱屠夫",
+                "image": "/content/characters/butcher-zhu-6fa5a2/L9DNjeqAfOB7c7-w-pnjAg.jpg",
+                "updated": 1689381215,
+                "content_id": "6fa5a25b-48cc-40d9-8f43-1fef54b1630c",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Xin Feng",
+                "name_ja": "风信",
+                "image": "/content/characters/xin-feng-c16a1a/_gwPG6e6upWS3jdXq0CcWw.jpg",
+                "updated": 1689381113,
+                "content_id": "c16a1a9a-0635-438b-b48d-c74d50ff64d9",
+                "favorites": 8
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yao Fu",
+                "name_ja": "扶 摇",
+                "image": "/content/characters/yao-fu-2806a8/Qw2XHQ9jn_pSHv9Y2mAtMw.jpg",
+                "updated": 1698418267,
+                "content_id": "2806a89d-237c-490b-a9fe-26bfec9e07c1",
+                "favorites": 52
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Xuan He",
+                "name_ja": "贺 玄",
+                "image": "/content/characters/xuan-he-0a964d/pGfGmTIxCPnvkxi0gpWfgw.jpg",
+                "updated": 1689381163,
+                "content_id": "0a964d06-6441-4db0-a52b-996031b5d53a",
+                "favorites": 10
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Lan Jian",
+                "name_ja": "剑兰",
+                "image": "/content/characters/lan-jian-c6d566/tX26OWp14JvrruAZAaMIrg.jpg",
+                "updated": 1689381198,
+                "content_id": "c6d56653-c4b2-4f2d-9ddb-b3b79e1b0ab7",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Wu Jun",
+                "name_ja": "君吾",
+                "image": "/content/characters/wu-jun-e52283/00R31SVP5qDfaiWQInbpVA.jpg",
+                "updated": 1698417933,
+                "content_id": "e5228352-1444-458d-a6b5-99cb8c6c82ab",
+                "favorites": 4
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Kemo",
+                "name_ja": "刻磨",
+                "image": "/content/characters/kemo-be10df/9yI5GUBbdrPP7zLWL7Tn8w.jpg",
+                "updated": 1689381368,
+                "content_id": "be10df31-f1e8-4ed7-b026-2419179616a8",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Qianqiu Lang",
+                "name_ja": "郎千秋",
+                "image": "/content/characters/qianqiu-lang-dc6048/rW72jjrbRCmc8fR2YEJaUw.jpg",
+                "updated": 1698417819,
+                "content_id": "dc6048bb-22c9-4103-8ca3-7ee41449817a",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ying Lang",
+                "name_ja": "郎萤",
+                "image": "/content/characters/ying-lang-006d94/gTPrS-AxYqp1Bw8TOzTtzw.jpg",
+                "updated": 1689381385,
+                "content_id": "006d942e-c556-43df-9077-423e8f4504b5",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Wen Ling",
+                "name_ja": "灵 文",
+                "image": "/content/characters/wen-ling-1f884c/wYoZGakbBjHGOV9Y0QjiLA.jpg",
+                "updated": 1698417845,
+                "content_id": "1f884cb9-410c-47cf-aba0-6bc66ac36b7e",
+                "favorites": 57
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yi Ming",
+                "name_ja": "明 仪",
+                "image": "/content/characters/yi-ming-1ca073/u9nHcHTXrKlHXLIUBFyHew.jpg",
+                "updated": 1698418337,
+                "content_id": "1ca07300-7bc5-4898-b24b-ed2c624cf812",
+                "favorites": 36
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Qing Mu",
+                "name_ja": "慕 情",
+                "image": "/content/characters/qing-mu-633838/URC6tepy6W0zVrqoOFCQZA.jpg",
+                "updated": 1698417914,
+                "content_id": "6338388c-fcc5-485c-832e-ed1960a5b1cc",
+                "favorites": 84
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Feng Nan",
+                "name_ja": "南 风",
+                "image": "/content/characters/feng-nan-587d34/Ns9qAiOfA8ZrPMqLHktTmg.jpg",
+                "updated": 1689381148,
+                "content_id": "587d34c0-0596-4e48-a6b7-3e958f579b3c",
+                "favorites": 33
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ming Pei",
+                "name_ja": "裴 茗",
+                "image": "/content/characters/ming-pei-39d8df/jS0wPj-DvIQltUDZiSCbVg.jpg",
+                "updated": 1698418340,
+                "content_id": "39d8df02-f604-4dee-a8f0-05d7b210cb66",
+                "favorites": 32
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Xiu Pei",
+                "name_ja": "裴 宿",
+                "image": "/content/characters/xiu-pei-fba341/lHcojE_hmfi05Ciw2K7kLQ.jpg",
+                "updated": 1689381002,
+                "content_id": "fba341f7-5b5f-4024-a257-5bd33e588da3",
+                "favorites": 18
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Qingxuan Shi",
+                "name_ja": "师 青玄",
+                "image": "/content/characters/qingxuan-shi-ee4338/00HF64t9x3NMdJkLbcVcHg.jpg",
+                "updated": 1698418224,
+                "content_id": "ee433842-5987-475a-acee-096fd7f58e85",
+                "favorites": 298
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sheng Tian",
+                "name_ja": "天生",
+                "image": "/content/characters/sheng-tian-23aa25/bWMRL5CaD_6fD1c4yhY8Fw.jpg",
+                "updated": 1689380886,
+                "content_id": "23aa25d7-02df-4627-8ed1-ce3ffcba9715",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ji Xuan",
+                "name_ja": "宣 姬",
+                "image": "/content/characters/ji-xuan-a80c9a/G1iyvm_-dNEfj5hs3PtPjg.jpg",
+                "updated": 1689381355,
+                "content_id": "a80c9a4c-d7a3-4eba-9d2d-2e3737dd1cec",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yu Yin",
+                "name_ja": "引 玉",
+                "image": "/content/characters/yu-yin-21654b/ZR8unC-JcLp20CmcT_nwcA.jpg",
+                "updated": 1698417856,
+                "content_id": "21654b8e-7ecc-4338-9c9a-3c1416b014b8",
+                "favorites": 12
+            },
+            "main": false
+        }
+    ],
+    "authors": [
+        {
+            "person": {
+                "content_id": "ca7b26c1-1fe6-4b4c-a73f-3334c40c66a1"
+            },
+            "roles": [
+                "Story"
+            ]
+        }
+    ],
+    "magazines": [],
+    "start_date": 1571443200,
+    "end_date": null,
+    "title_native": "天官赐福",
+    "synopsis_en": "800 years ago, Xie Lian was a pure-blooded and noble Crown Prince, a well-regarded child of Heaven with unlimited potential. But who knew that, after he ascended and became a god with tens of thousands of worshippers, his fate would take such a sharp downhill turn? He was demoted again and again, and fell to rock bottom.\n\n800 years later, Xie Lian ascended again, but this time, without worshippers and without incense. One day, after returning from collecting scraps, he took a mysterious young man home. And this young man was the Ghost King that made others pale in fear whenever discussed—Hua Cheng.\n\n(Source: Bilibili Comics)",
+    "synopsis_ua": null,
+    "media_type": "manhua",
+    "genre_ids": [
+        "367a3e7d-12bd-4393-bdf3-b11ffb4cb130",
+        "95ae63e0-a4d7-4f88-8596-92216073db24",
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "ebaba115-e384-4707-94e1-944f6c22c7d2"
+    ],
+    "external": [
+        {
+            "url": "https://manga.bilibili.com/detail/mc26769",
+            "text": "Official Site"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Heaven_Official%27s_Blessing",
+            "text": "Wikipedia"
+        }
+    ],
+    "created": 1715442019,
+    "updated": 1717532879,
+    "title_en": "Heaven Official's Blessing",
+    "title_ja": "Tian Guan Cifu",
+    "title_ua": null,
+    "chapters": null,
+    "synonyms": [
+        "TGCF"
+    ],
+    "volumes": null,
+    "poster": "/content/manga/tian-guan-cifu-7cc791/grWQGM_y7Z7xVZ4nKa47uw.jpg",
+    "status": "ongoing",
+    "content_id": "7cc791e6-392a-4560-8809-ae2a9cad205b",
+    "scored_by": 3686,
+    "deleted": false,
+    "score": 8.89,
+    "mal_id": 140765,
+    "stats": {
+        "dropped": 194,
+        "on_hold": 748,
+        "planned": 3912,
+        "reading": 5933,
+        "score_1": 156,
+        "score_2": 43,
+        "score_3": 39,
+        "score_4": 27,
+        "score_5": 37,
+        "score_6": 65,
+        "score_7": 190,
+        "score_8": 496,
+        "score_9": 798,
+        "score_10": 1835,
+        "completed": 849
+    },
+    "nsfw": false
+}

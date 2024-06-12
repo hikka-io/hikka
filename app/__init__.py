@@ -34,6 +34,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "User"},
             {"name": "Follow"},
             {"name": "Anime"},
+            {"name": "Manga"},
             {"name": "Characters"},
             {"name": "Companies"},
             {"name": "People"},
@@ -78,14 +79,19 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
+    from .related import router as related_router
     from .history import router as history_router
+    from .genres import router as genres_router
     from .upload import router as upload_router
     from .people import router as people_router
     from .follow import router as follow_router
     from .system import router as system_router
     from .anime import router as anime_router
+    from .manga import router as manga_router
+    from .novel import router as novel_router
     from .watch import router as watch_router
     from .stats import router as stats_router
+    from .read import router as read_router
     from .user import router as user_router
     from .auth import router as auth_router
     from .edit import router as edit_router
@@ -100,14 +106,19 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
+    app.include_router(related_router)
     app.include_router(history_router)
+    app.include_router(genres_router)
     app.include_router(upload_router)
     app.include_router(people_router)
     app.include_router(follow_router)
     app.include_router(system_router)
     app.include_router(anime_router)
+    app.include_router(manga_router)
+    app.include_router(novel_router)
     app.include_router(watch_router)
     app.include_router(stats_router)
+    app.include_router(read_router)
     app.include_router(user_router)
     app.include_router(auth_router)
     app.include_router(edit_router)

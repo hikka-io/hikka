@@ -1,0 +1,224 @@
+{
+    "characters": [
+        {
+            "character": {
+                "name_en": "The Boy",
+                "name_ja": null,
+                "image": "/content/characters/the-boy-753c7e/AqD7IRuPFD9BmJbZPHcAkQ.jpg",
+                "updated": 1715374955,
+                "content_id": "753c7e39-d7ce-4353-acd6-980db2d2c999",
+                "favorites": 296
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "The Girl",
+                "name_ja": null,
+                "image": "/content/characters/the-girl-d1178c/ocKj1zPKLjvq5gE6wZW3CQ.jpg",
+                "updated": 1715299249,
+                "content_id": "d1178c99-bd18-4f9a-bf33-3341d433f6d3",
+                "favorites": 67
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Boy in Forest",
+                "name_ja": null,
+                "image": "/content/characters/boy-in-forest-3cafbb/vlK9NogK9vkbwHZ8mtmBsA.jpg",
+                "updated": 1715362417,
+                "content_id": "3cafbb66-894b-45b9-b79f-c1cb8da23e09",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Child",
+                "name_ja": null,
+                "image": "/content/characters/child-184052/ibPX8KL9xzPn6Xj4EKHUAQ.jpg",
+                "updated": 1715341126,
+                "content_id": "1840521f-4e62-4736-b7f9-50b6586662c9",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Driver",
+                "name_ja": null,
+                "image": "/content/characters/driver-77709b/lbW5ihFUbRjHsq7z3y94Vg.jpg",
+                "updated": 1715367164,
+                "content_id": "77709b92-f6a3-4e26-b16c-c40366c30bda",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Girl in Forest",
+                "name_ja": null,
+                "image": "/content/characters/girl-in-forest-b785f0/UVp-HtdVLrT-sztcuEPa1w.jpg",
+                "updated": 1715336201,
+                "content_id": "b785f0a9-057b-4f30-9152-d33766703bbe",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Girl's Father",
+                "name_ja": null,
+                "image": "/content/characters/girls-father-82640b/hObgSyMdIrpqbghtXMKQ8w.jpg",
+                "updated": 1715337596,
+                "content_id": "82640b59-97ca-44e5-b42d-e9b4a54d3a5b",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Man in a Suit",
+                "name_ja": null,
+                "image": "/content/characters/man-in-a-suit-6b126d/jv2BswVP8DiU3SOigaR0Yw.jpg",
+                "updated": 1715299876,
+                "content_id": "6b126d06-fe56-42ad-b221-563f1ea0af59",
+                "favorites": 28
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Novelist",
+                "name_ja": null,
+                "image": "/content/characters/novelist-96e637/OSzLkwQ1Uv7R9Y-YNTnTTw.jpg",
+                "updated": 1715365847,
+                "content_id": "96e637b3-99a3-480c-bf49-98feef351626",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Old Man",
+                "name_ja": null,
+                "image": "/content/characters/old-man-52a03d/79DbopPTtr_PDJcDA-7Uhw.jpg",
+                "updated": 1715362404,
+                "content_id": "52a03d08-fc24-4b7f-94d6-a3ac84bd0499",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Seaside Man",
+                "name_ja": null,
+                "image": "/content/characters/seaside-man-3fe246/NHmKJZvCRd5seEd1cFKWLg.jpg",
+                "updated": 1715340449,
+                "content_id": "3fe2462e-31f8-4550-ad1d-9f9123c08120",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Seaside Woman",
+                "name_ja": null,
+                "image": "/content/characters/seaside-woman-053645/UQEMCNtrwNUqjtXfQoNBwA.jpg",
+                "updated": 1715302279,
+                "content_id": "053645ab-c727-4992-a130-733ef9050d29",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Strange Man",
+                "name_ja": null,
+                "image": "/content/characters/strange-man-0a58f5/QBs0S8T1iBxkusJzlYka0w.jpg",
+                "updated": 1715298053,
+                "content_id": "0a58f5d6-cbbe-40c1-b1a2-d71f230260e3",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Woman with Glasses",
+                "name_ja": null,
+                "image": "/content/characters/woman-with-glasses-681c63/0taR8E0p32RR7R9WRFnwdA.jpg",
+                "updated": 1715366860,
+                "content_id": "681c6386-2c7f-4b9e-8128-f6bde6d48847",
+                "favorites": 0
+            },
+            "main": false
+        }
+    ],
+    "authors": [
+        {
+            "person": {
+                "content_id": "d14dd93f-bb31-490a-ac4a-f1ad24d3289b"
+            },
+            "roles": [
+                "Story",
+                "Art"
+            ]
+        }
+    ],
+    "magazines": [
+        {
+            "mal_id": 1515,
+            "name": "Comica"
+        }
+    ],
+    "start_date": 1459296000,
+    "end_date": 1469059200,
+    "title_native": "수평선",
+    "synopsis_en": "In a world ravaged by war, a young boy walks down a lonely road in the aftermath of his mother's death. Along his journey, he witnesses military tanks, dead bodies, and his beloved city in ruins. With eyes clouded by anguish, he pushes himself to keep moving forward.\n\nOne morning, he meets a girl in an abandoned bus where he spent the night. Moments after their encounter, the area turns into a battlefield, and the pair escapes into a long abandoned lane. The two strangers decide to walk together to the end of the road, thus beginning a companionship that will ignite new hope inside their shriveled hearts.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": null,
+    "media_type": "manhwa",
+    "genre_ids": [
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "ebaba115-e384-4707-94e1-944f6c22c7d2"
+    ],
+    "external": [
+        {
+            "url": "https://namu.wiki/w/%EC%88%98%ED%8F%89%EC%84%A0(%EC%9B%B9%ED%88%B0)",
+            "text": "Namu.wiki"
+        }
+    ],
+    "created": 1715442019,
+    "updated": 1717529205,
+    "title_en": "The Horizon",
+    "title_ja": "The Horizon",
+    "title_ua": null,
+    "chapters": 21,
+    "synonyms": [],
+    "volumes": 3,
+    "poster": "/content/manga/the-horizon-f9ebc0/Us1AP19KemJwBCzJeDV96A.jpg",
+    "status": "finished",
+    "content_id": "f9ebc0e1-7c08-499d-8c0e-7e531683c4aa",
+    "scored_by": 41800,
+    "deleted": false,
+    "score": 8.7,
+    "mal_id": 125036,
+    "stats": {
+        "dropped": 338,
+        "on_hold": 789,
+        "planned": 35674,
+        "reading": 5591,
+        "score_1": 319,
+        "score_2": 158,
+        "score_3": 166,
+        "score_4": 230,
+        "score_5": 459,
+        "score_6": 1109,
+        "score_7": 3598,
+        "score_8": 9310,
+        "score_9": 13210,
+        "score_10": 13241,
+        "completed": 47469
+    },
+    "nsfw": false
+}

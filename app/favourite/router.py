@@ -1,14 +1,23 @@
 from app.utils import pagination, pagination_dict
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User, Anime, Favourite
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from . import service
 
+from app.models import (
+    Collection,
+    Favourite,
+    Character,
+    Anime,
+    Manga,
+    Novel,
+    User,
+)
+
 from .schemas import (
     FavouritePaginationResponse,
+    FavouriteContentTypeEnum,
     FavouriteResponse,
-    ContentTypeEnum,
 )
 
 from app.dependencies import (
@@ -40,9 +49,11 @@ async def get_favourite(
 
 @router.put("/{content_type}/{slug}", response_model=FavouriteResponse)
 async def favourite_add(
-    content_type: ContentTypeEnum,
+    content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content: Anime = Depends(validate_add_favourite),
+    content: Collection | Character | Anime | Manga | Novel = Depends(
+        validate_add_favourite
+    ),
     user: User = Depends(auth_required()),
 ):
     return await service.create_favourite(session, content_type, content, user)
@@ -62,7 +73,7 @@ async def favourite_delete(
     response_model=FavouritePaginationResponse,
 )
 async def favourite_list(
-    content_type: str,
+    content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     user: User = Depends(get_user),
@@ -70,6 +81,7 @@ async def favourite_list(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
+
     total = await service.get_user_favourite_list_count(
         session, content_type, user, request_user
     )

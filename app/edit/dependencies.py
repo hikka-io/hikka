@@ -21,7 +21,7 @@ from app.models import (
 )
 
 from .schemas import (
-    ContentTypeEnum,
+    EditContentTypeEnum,
     EditSearchArgs,
     EditArgs,
 )
@@ -124,7 +124,7 @@ async def validate_edit_accept(
 
 async def validate_content(
     slug: str,
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ):
     if not (content := await get_content_by_slug(session, content_type, slug)):
@@ -134,7 +134,7 @@ async def validate_content(
 
 
 async def validate_edit_create_args(
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     args: EditArgs,
 ) -> EditArgs:
     """Validate create edit args"""

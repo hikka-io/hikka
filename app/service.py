@@ -4,29 +4,42 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
-from .schemas import AnimeSearchArgsBase
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from datetime import timedelta
 from app import constants
 from uuid import UUID
 
+from .schemas import (
+    AnimeSearchArgsBase,
+    MangaSearchArgs,
+    NovelSearchArgs,
+)
+
 from app.models import (
     AnimeCollectionContent,
+    MangaCollectionContent,
+    NovelCollectionContent,
     CollectionContent,
     EmailMessage,
-    AnimeGenre,
     Collection,
     AnimeWatch,
     AuthToken,
     Character,
+    MangaRead,
+    NovelRead,
+    Magazine,
     Company,
     Comment,
     Person,
+    Genre,
     Anime,
+    Manga,
+    Novel,
     Edit,
     User,
     Vote,
+    Read,
     Log,
 )
 
@@ -38,6 +51,15 @@ content_type_to_content_class = {
     constants.CONTENT_COMMENT: Comment,
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
+    constants.CONTENT_MANGA: Manga,
+    constants.CONTENT_NOVEL: Novel,
+}
+
+read_order_mapping = {
+    "read_chapters": Read.chapters,
+    "read_volumes": Read.volumes,
+    "read_created": Read.created,
+    "read_score": Read.score,
 }
 
 
@@ -225,7 +247,6 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
-
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
 
@@ -281,7 +302,7 @@ def anime_search_filter(
         query = query.filter(
             and_(
                 *[
-                    Anime.genres.any(AnimeGenre.slug == slug)
+                    Anime.genres.any(Genre.slug == slug)
                     for slug in search.genres
                 ]
             )
@@ -328,7 +349,7 @@ def anime_search_filter(
     return query
 
 
-def build_order_by(sort: list[str]):
+def build_anime_order_by(sort: list[str]):
     order_mapping = {
         "episodes_total": Anime.episodes_total,
         "watch_episodes": AnimeWatch.episodes,
@@ -391,6 +412,20 @@ def collections_load_options(
                 AnimeWatch,
                 AnimeWatch.user_id == request_user.id if request_user else None,
             ),
+            joinedload(Collection.collection.of_type(MangaCollectionContent))
+            .joinedload(MangaCollectionContent.content)
+            .joinedload(Manga.read),
+            with_loader_criteria(
+                MangaRead,
+                MangaRead.user_id == request_user.id if request_user else None,
+            ),
+            joinedload(Collection.collection.of_type(NovelCollectionContent))
+            .joinedload(NovelCollectionContent.content)
+            .joinedload(Novel.read),
+            with_loader_criteria(
+                NovelRead,
+                NovelRead.user_id == request_user.id if request_user else None,
+            ),
         )
     )
 
@@ -426,3 +461,167 @@ def get_my_score_subquery(content_model, content_type, request_user):
         )
         .scalar_subquery()
     )
+
+
+async def genres_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(Genre.id)).filter(Genre.slug.in_(slugs))
+    )
+
+
+async def magazines_count(session: AsyncSession, slugs: list[str]):
+    return await session.scalar(
+        select(func.count(Magazine.id)).filter(Magazine.slug.in_(slugs))
+    )
+
+
+def build_manga_order_by(sort: list[str]):
+    order_mapping = read_order_mapping | {
+        "media_type": Novel.media_type,
+        "start_date": Novel.start_date,
+        "scored_by": Manga.scored_by,
+        "score": Manga.score,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ] + [desc(Manga.content_id)]
+
+    return order_by
+
+
+def manga_search_filter(
+    search: MangaSearchArgs,
+    query: Select,
+    hide_nsfw=True,
+):
+    if search.score[0] and search.score[0] > 0:
+        query = query.filter(Manga.score >= search.score[0])
+
+    if search.score[1]:
+        query = query.filter(Manga.score <= search.score[1])
+
+    if len(search.status) > 0:
+        query = query.filter(Manga.status.in_(search.status))
+
+    if len(search.media_type) > 0:
+        query = query.filter(Manga.media_type.in_(search.media_type))
+
+    if search.only_translated:
+        query = query.filter(Manga.translated_ua == True)  # noqa: E712
+
+    if search.years[0]:
+        query = query.filter(Manga.year >= search.years[0])
+
+    if search.years[1]:
+        query = query.filter(Manga.year <= search.years[1])
+
+    if len(search.magazines) > 0:
+        query = query.join(Manga.magazines).filter(
+            Magazine.slug.in_(search.magazines)
+        )
+
+    # In some cases, like on front page, we would want to hide NSFW content
+    if len(search.genres) == 0 and hide_nsfw:
+        query = query.filter(
+            and_(
+                *[
+                    ~Manga.genres.any(Genre.slug == slug)
+                    for slug in ["ecchi", "erotica", "hentai"]
+                ]
+            )
+        )
+
+    # All genres must be present in query result
+    if len(search.genres) > 0:
+        query = query.filter(
+            and_(
+                *[
+                    Manga.genres.any(Genre.slug == slug)
+                    for slug in search.genres
+                ]
+            )
+        )
+
+    return query
+
+
+def build_novel_order_by(sort: list[str]):
+    order_mapping = read_order_mapping | {
+        "media_type": Novel.media_type,
+        "start_date": Novel.start_date,
+        "scored_by": Novel.scored_by,
+        "score": Novel.score,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ] + [desc(Novel.content_id)]
+
+    return order_by
+
+
+def novel_search_filter(
+    search: NovelSearchArgs,
+    query: Select,
+    hide_nsfw=True,
+):
+    if search.score[0] and search.score[0] > 0:
+        query = query.filter(Novel.score >= search.score[0])
+
+    if search.score[1]:
+        query = query.filter(Novel.score <= search.score[1])
+
+    if len(search.status) > 0:
+        query = query.filter(Novel.status.in_(search.status))
+
+    if len(search.media_type) > 0:
+        query = query.filter(Novel.media_type.in_(search.media_type))
+
+    if search.only_translated:
+        query = query.filter(Novel.translated_ua == True)  # noqa: E712
+
+    if search.years[0]:
+        query = query.filter(Novel.year >= search.years[0])
+
+    if search.years[1]:
+        query = query.filter(Novel.year <= search.years[1])
+
+    if len(search.magazines) > 0:
+        query = query.join(Novel.magazines).filter(
+            Magazine.slug.in_(search.magazines)
+        )
+
+    # In some cases, like on front page, we would want to hide NSFW content
+    if len(search.genres) == 0 and hide_nsfw:
+        query = query.filter(
+            and_(
+                *[
+                    ~Novel.genres.any(Genre.slug == slug)
+                    for slug in ["ecchi", "erotica", "hentai"]
+                ]
+            )
+        )
+
+    # All genres must be present in query result
+    if len(search.genres) > 0:
+        query = query.filter(
+            and_(
+                *[
+                    Novel.genres.any(Genre.slug == slug)
+                    for slug in search.genres
+                ]
+            )
+        )
+
+    return query

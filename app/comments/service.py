@@ -23,6 +23,8 @@ from app.models import (
     CollectionComment,
     CharacterEdit,
     AnimeComment,
+    MangaComment,
+    NovelComment,
     EditComment,
     Collection,
     PersonEdit,
@@ -40,6 +42,8 @@ content_type_to_comment_class = {
     constants.CONTENT_COLLECTION: CollectionComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ANIME: AnimeComment,
+    constants.CONTENT_MANGA: MangaComment,
+    constants.CONTENT_NOVEL: NovelComment,
 }
 
 
@@ -73,6 +77,7 @@ async def create_comment(
     text: str,
     parent: Comment | None = None,
 ):
+    cleaned_text = utils.remove_bad_characters(text)
     comment_model = content_type_to_comment_class[content_type]
     now = utcnow()
 
@@ -80,13 +85,13 @@ async def create_comment(
         **{
             "content_type": content_type,
             "content_id": content_id,
+            "text": cleaned_text,
             "private": False,
             "author": author,
             "vote_score": 0,
             "created": now,
             "updated": now,
             "id": uuid4(),
-            "text": text,
             "score": 0,
         }
     )
@@ -271,6 +276,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     return True
 
 
+# TODO: FIXME!!!
 async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):

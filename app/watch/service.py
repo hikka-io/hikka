@@ -20,15 +20,14 @@ from .schemas import (
 
 from app.service import (
     calculate_watch_duration,
+    build_anime_order_by,
     anime_search_filter,
     get_anime_watch,
     anime_loadonly,
-    build_order_by,
     create_log,
 )
 
 
-# TODO: rewrite this function?
 async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
@@ -146,7 +145,7 @@ async def get_user_watch_list(
 
     return await session.scalars(
         anime_search_filter(search, query.join(Anime), False)
-        .order_by(*build_order_by(search.sort))
+        .order_by(*build_anime_order_by(search.sort))
         .options(anime_loadonly(selectinload(AnimeWatch.anime)))
         .limit(limit)
         .offset(offset)

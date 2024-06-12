@@ -17,7 +17,7 @@ from app.service import (
 )
 
 from .schemas import (
-    ContentTypeEnum,
+    EditContentTypeEnum,
     EditSearchArgs,
     AnimeToDoEnum,
     EditArgs,
@@ -29,6 +29,8 @@ from app.models import (
     AnimeWatch,
     PersonEdit,
     AnimeEdit,
+    MangaEdit,
+    NovelEdit,
     Character,
     Person,
     Anime,
@@ -41,6 +43,8 @@ content_type_to_edit_class = {
     constants.CONTENT_CHARACTER: CharacterEdit,
     constants.CONTENT_PERSON: PersonEdit,
     constants.CONTENT_ANIME: AnimeEdit,
+    constants.CONTENT_MANGA: MangaEdit,
+    constants.CONTENT_NOVEL: NovelEdit,
 }
 
 
@@ -87,7 +91,7 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
     )
 
 
-def build_order_by(sort: list[str]):
+def build_edit_order_by(sort: list[str]):
     order_mapping = {
         "edit_id": Edit.edit_id,
         "created": Edit.created,
@@ -186,7 +190,7 @@ async def get_edits(
         ),
     )
 
-    query = query.order_by(*build_order_by(args.sort))
+    query = query.order_by(*build_edit_order_by(args.sort))
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)
@@ -310,7 +314,7 @@ async def accept_pending_edit(
 
 async def create_pending_edit(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     content: Person | Anime | Character,
     args: EditArgs,
     author: User,

@@ -45,6 +45,24 @@ async def watch_get(watch: AnimeWatch = Depends(verify_watch)):
     return watch
 
 
+@router.put("/{slug}", response_model=WatchResponse)
+async def watch_add(
+    session: AsyncSession = Depends(get_session),
+    data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
+):
+    return await service.save_watch(session, *data)
+
+
+@router.delete("/{slug}", response_model=SuccessResponse)
+async def delete_watch(
+    session: AsyncSession = Depends(get_session),
+    watch: AnimeWatch = Depends(verify_watch),
+    user: User = Depends(auth_required()),
+):
+    await service.delete_watch(session, watch, user)
+    return {"success": True}
+
+
 @router.get("/{slug}/following", response_model=UserWatchPaginationResponse)
 async def get_watch_following(
     session: AsyncSession = Depends(get_session),
@@ -63,24 +81,6 @@ async def get_watch_following(
         "pagination": pagination_dict(total, page, limit),
         "list": watch.unique().all(),
     }
-
-
-@router.put("/{slug}", response_model=WatchResponse)
-async def watch_add(
-    session: AsyncSession = Depends(get_session),
-    data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
-):
-    return await service.save_watch(session, *data)
-
-
-@router.delete("/{slug}", response_model=SuccessResponse)
-async def delete_watch(
-    session: AsyncSession = Depends(get_session),
-    watch: AnimeWatch = Depends(verify_watch),
-    user: User = Depends(auth_required()),
-):
-    await service.delete_watch(session, watch, user)
-    return {"success": True}
 
 
 @router.get(

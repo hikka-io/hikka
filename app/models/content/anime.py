@@ -1,4 +1,4 @@
-from ..association import anime_genres_association_table
+from ..association import genres_anime_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import query_expression
@@ -95,8 +95,9 @@ class Anime(
         viewonly=True,
     )
 
-    genres: Mapped[list["AnimeGenre"]] = relationship(
-        secondary=anime_genres_association_table, back_populates="anime"
+    genres: Mapped[list["Genre"]] = relationship(
+        secondary=genres_anime_association_table,
+        back_populates="anime",
     )
 
     companies: Mapped[list["CompanyAnime"]] = relationship(
@@ -115,11 +116,11 @@ class Anime(
     poster_relation: Mapped["Image"] = relationship(lazy="joined")
 
     franchise_id = mapped_column(
-        ForeignKey("service_content_anime_franchises.id", ondelete="SET NULL"),
+        ForeignKey("service_content_franchises.id", ondelete="SET NULL"),
         index=True,
     )
 
-    franchise_relation: Mapped["AnimeFranchise"] = relationship(
+    franchise_relation: Mapped["Franchise"] = relationship(
         back_populates="anime", foreign_keys=[franchise_id]
     )
 

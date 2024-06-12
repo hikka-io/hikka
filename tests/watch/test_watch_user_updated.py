@@ -1,7 +1,6 @@
 from client_requests import request_watch_delete
 from client_requests import request_watch_add
 from client_requests import request_me
-from fastapi import status
 
 
 async def test_watch_delete(

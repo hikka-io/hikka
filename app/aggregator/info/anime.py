@@ -10,12 +10,12 @@ from app.models import (
     AnimeCharacter,
     AnimeEpisode,
     CompanyAnime,
-    AnimeGenre,
     AnimeStaff,
     AnimeVoice,
     Character,
     Company,
     Person,
+    Genre,
     Anime,
     Image,
     Edit,
@@ -24,7 +24,7 @@ from app.models import (
 
 async def process_genres(session, anime, data):
     genres = await session.scalars(
-        select(AnimeGenre).filter(AnimeGenre.content_id.in_(data["genre_ids"]))
+        select(Genre).filter(Genre.content_id.in_(data["genre_ids"]))
     )
 
     genres_add = []

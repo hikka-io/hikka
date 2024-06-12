@@ -8,6 +8,8 @@ from app.schemas import (
     CharacterResponse,
     PersonResponse,
     AnimeResponse,
+    MangaResponse,
+    NovelResponse,
     UserResponse,
     CustomModel,
 )
@@ -19,10 +21,12 @@ class AnimeToDoEnum(str, Enum):
     title_ua = constants.TODO_ANIME_TITLE_UA
 
 
-class ContentTypeEnum(str, Enum):
+class EditContentTypeEnum(str, Enum):
     content_character = constants.CONTENT_CHARACTER
     content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
 
 
 class AnimeVideoTypeEnum(str, Enum):
@@ -45,7 +49,7 @@ class EditStatusEnum(str, Enum):
 # Args
 class EditSearchArgs(CustomModel):
     sort: list[str] = ["edit_id:desc", "created:desc"]
-    content_type: ContentTypeEnum | None = None
+    content_type: EditContentTypeEnum | None = None
     status: EditStatusEnum | None = None
     moderator: str | None = None
     author: str | None = None
@@ -113,6 +117,24 @@ class AnimeEditArgs(CustomModel):
     )
 
 
+class MangaEditArgs(CustomModel):
+    synopsis_en: str | None = Field(None, examples=["..."])
+    synopsis_ua: str | None = Field(None, examples=["..."])
+    synonyms: list[str] | None = None
+    title_original: str | None = None
+    title_en: str | None = None
+    title_ua: str | None = None
+
+
+class NovelEditArgs(CustomModel):
+    synopsis_en: str | None = Field(None, examples=["..."])
+    synopsis_ua: str | None = Field(None, examples=["..."])
+    synonyms: list[str] | None = None
+    title_original: str | None = None
+    title_en: str | None = None
+    title_ua: str | None = None
+
+
 class PersonEditArgs(CustomModel):
     description_ua: str | None = Field(None, examples=["..."])
     name_native: str | None = Field(
@@ -135,7 +157,7 @@ class CharacterEditArgs(CustomModel):
 
 # Response
 class EditResponseBase(CustomModel):
-    content_type: ContentTypeEnum = Field(examples=["anime"])
+    content_type: EditContentTypeEnum = Field(examples=["anime"])
     status: EditStatusEnum = Field(examples=["pending"])
     created: datetime_pd = Field(examples=[1693850684])
     updated: datetime_pd = Field(examples=[1693850684])
@@ -150,10 +172,16 @@ class EditResponseBase(CustomModel):
 
 class EditResponse(EditResponseBase):
     # TODO: maybe we should use Pydantic's discriminator here?
-    content: AnimeResponse | PersonResponse | CharacterResponse
-    reference: str
+    content: (
+        AnimeResponse
+        | MangaResponse
+        | NovelResponse
+        | PersonResponse
+        | CharacterResponse
+    )
 
     comments_count: int | None
+    reference: str
 
     @field_validator("comments_count")
     def validate_after(cls, comments_count):

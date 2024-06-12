@@ -60,6 +60,10 @@ class User(Base, NeedsSearchUpdateMixin):
         foreign_keys="[AnimeWatch.user_id]", back_populates="user"
     )
 
+    read: Mapped[list["Read"]] = relationship(
+        foreign_keys="[Read.user_id]", back_populates="user"
+    )
+
     oauth_providers: Mapped[list["UserOAuth"]] = relationship(
         foreign_keys="[UserOAuth.user_id]", back_populates="user"
     )

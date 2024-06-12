@@ -27,6 +27,12 @@ from .anime import request_anime_genres
 from .anime import request_anime_staff
 from .anime import request_anime_info
 
+from .manga import request_manga_search
+from .manga import request_manga_info
+
+from .novel import request_novel_search
+from .novel import request_novel_info
+
 from .characters import request_characters_search
 from .characters import request_characters_anime
 from .characters import request_characters_info
@@ -50,6 +56,13 @@ from .watch import request_watch_stats
 from .watch import request_watch_list
 from .watch import request_watch_add
 from .watch import request_watch
+
+from .read import request_read_random
+from .read import request_read_delete
+from .read import request_read_stats
+from .read import request_read_list
+from .read import request_read_add
+from .read import request_read
 
 from .edit import request_accept_edit
 from .edit import request_create_edit
@@ -113,6 +126,10 @@ __all__ = [
     "request_anime_genres",
     "request_anime_staff",
     "request_anime_info",
+    "request_manga_search",
+    "request_manga_info",
+    "request_novel_search",
+    "request_novel_info",
     "request_characters_search",
     "request_characters_anime",
     "request_characters_info",
@@ -132,6 +149,12 @@ __all__ = [
     "request_watch_list",
     "request_watch_add",
     "request_watch",
+    "request_read_random",
+    "request_read_delete",
+    "request_read_stats",
+    "request_read_list",
+    "request_read_add",
+    "request_read",
     "request_accept_edit",
     "request_create_edit",
     "request_update_edit",

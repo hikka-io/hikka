@@ -3,6 +3,8 @@ from app.schemas import datetime_pd
 from app.schemas import (
     PaginationResponse,
     AnimeResponse,
+    MangaResponse,
+    NovelResponse,
     UserResponse,
     CustomModel,
 )
@@ -10,7 +12,7 @@ from app.schemas import (
 
 # Responses
 class HistoryResponse(CustomModel):
-    content: AnimeResponse | None = None
+    content: AnimeResponse | MangaResponse | NovelResponse | None = None
     created: datetime_pd
     updated: datetime_pd
     user: UserResponse

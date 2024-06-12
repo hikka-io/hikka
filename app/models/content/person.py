@@ -35,6 +35,14 @@ class Person(
     name_en: Mapped[str] = mapped_column(nullable=True)
     name_ua: Mapped[str] = mapped_column(nullable=True)
 
+    manga_author_roles: Mapped[list["MangaAuthor"]] = relationship(
+        back_populates="person", viewonly=True
+    )
+
+    novel_author_roles: Mapped[list["NovelAuthor"]] = relationship(
+        back_populates="person", viewonly=True
+    )
+
     staff_roles: Mapped[list["AnimeStaff"]] = relationship(
         back_populates="person", viewonly=True
     )

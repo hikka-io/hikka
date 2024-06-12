@@ -326,6 +326,11 @@ def is_protected_username(username: str):
     return username in usernames
 
 
+def remove_bad_characters(text):
+    text.replace("\ufff4", "")
+    return text
+
+
 def is_empty_markdown(text):
     # First we remove markdown tags
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)  # **text**
@@ -336,6 +341,9 @@ def is_empty_markdown(text):
 
     # Then remove spaces
     text = text.replace(" ", "")
+
+    # Replace special (bad) characters
+    text = remove_bad_characters(text)
 
     # And now check if string is empty
     return len(text) == 0
@@ -385,3 +393,23 @@ def calculate_collection_ranking(score, favourite, comments, created):
     ranking *= boost_factor(days_since_creation, boost_duration_days)
 
     return round(ranking, 8)
+
+
+def check_sort(sort_list, valid_fields):
+    valid_orders = ["asc", "desc"]
+
+    if len(sort_list) != len(set(sort_list)):
+        raise ValueError("Invalid sort: duplicates")
+
+    for sort_item in sort_list:
+        parts = sort_item.split(":")
+
+        if len(parts) != 2:
+            raise ValueError(f"Invalid sort format: {sort_item}")
+
+        field, order = parts
+
+        if field not in valid_fields or order not in valid_orders:
+            raise ValueError(f"Invalid sort value: {sort_item}")
+
+    return sort_list

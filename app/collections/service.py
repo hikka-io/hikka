@@ -1,4 +1,5 @@
 from sqlalchemy import select, desc, delete, update, and_, func
+from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
@@ -21,31 +22,25 @@ from app.models import (
     CharacterCollectionContent,
     PersonCollectionContent,
     AnimeCollectionContent,
+    MangaCollectionContent,
+    NovelCollectionContent,
     CollectionContent,
     CollectionComment,
     Collection,
-    Character,
-    Person,
-    Anime,
     User,
 )
-
-
-content_type_to_content_class = {
-    constants.CONTENT_CHARACTER: Character,
-    constants.CONTENT_PERSON: Person,
-    constants.CONTENT_ANIME: Anime,
-}
 
 
 content_type_to_collection_content_class = {
     constants.CONTENT_CHARACTER: CharacterCollectionContent,
     constants.CONTENT_PERSON: PersonCollectionContent,
     constants.CONTENT_ANIME: AnimeCollectionContent,
+    constants.CONTENT_MANGA: MangaCollectionContent,
+    constants.CONTENT_NOVEL: NovelCollectionContent,
 }
 
 
-def build_order_by(sort: list[str]):
+def build_collection_order_by(sort: list[str]):
     order_mapping = {
         "system_ranking": Collection.system_ranking,
         "created": Collection.created,
@@ -181,7 +176,9 @@ async def get_collections(
     )
 
     return await session.scalars(
-        query.order_by(*build_order_by(args.sort)).limit(limit).offset(offset)
+        query.order_by(*build_collection_order_by(args.sort))
+        .limit(limit)
+        .offset(offset)
     )
 
 

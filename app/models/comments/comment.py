@@ -94,6 +94,21 @@ class EditComment(Comment):
     )
 
 
+class CollectionComment(Comment):
+    __mapper_args__ = {"polymorphic_identity": "collection"}
+
+    content_id = mapped_column(
+        ForeignKey("service_collections.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Collection"] = relationship(
+        primaryjoin="Collection.id == CollectionComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
 class AnimeComment(Comment):
     __mapper_args__ = {
         "polymorphic_identity": "anime",
@@ -111,16 +126,35 @@ class AnimeComment(Comment):
     )
 
 
-class CollectionComment(Comment):
-    __mapper_args__ = {"polymorphic_identity": "collection"}
+class MangaComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "manga",
+    }
 
     content_id = mapped_column(
-        ForeignKey("service_collections.id", ondelete="CASCADE"),
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
         use_existing_column=True,
         index=True,
     )
 
-    content: Mapped["Collection"] = relationship(
-        primaryjoin="Collection.id == CollectionComment.content_id",
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == MangaComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
+class NovelComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "novel",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == NovelComment.content_id",
         foreign_keys=[content_id],
     )

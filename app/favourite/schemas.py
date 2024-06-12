@@ -8,15 +8,19 @@ from app.schemas import (
     PaginationResponse,
     CollectionResponse,
     CharacterResponse,
+    MangaResponse,
+    NovelResponse,
     CustomModel,
 )
 
 
 # Enums
-class ContentTypeEnum(str, Enum):
+class FavouriteContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
     content_character = constants.CONTENT_CHARACTER
     content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
 
 
 # Mixins
@@ -34,6 +38,14 @@ class FavouriteAnimeResponse(AnimeResponseWithWatch, FavouriteMeta):
     pass
 
 
+class FavouriteMangaResponse(MangaResponse, FavouriteMeta):
+    pass
+
+
+class FavouriteNovelResponse(NovelResponse, FavouriteMeta):
+    pass
+
+
 class FavouriteCollectionResponse(CollectionResponse, FavouriteMeta):
     pass
 
@@ -45,6 +57,8 @@ class FavouriteCharacterResponse(CharacterResponse, FavouriteMeta):
 class FavouritePaginationResponse(CustomModel):
     list: list[
         FavouriteAnimeResponse
+        | FavouriteMangaResponse
+        | FavouriteNovelResponse
         | FavouriteCollectionResponse
         | FavouriteCharacterResponse
     ]

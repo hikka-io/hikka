@@ -80,3 +80,41 @@ class PersonCollectionContent(CollectionContent):
         foreign_keys=[content_id],
         lazy="immediate",  # TODO: check if it is good idea
     )
+
+
+class MangaCollectionContent(CollectionContent):
+    __mapper_args__ = {
+        "polymorphic_identity": "manga",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == MangaCollectionContent.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class NovelCollectionContent(CollectionContent):
+    __mapper_args__ = {
+        "polymorphic_identity": "novel",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == NovelCollectionContent.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )

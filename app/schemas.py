@@ -59,6 +59,14 @@ class AnimeStatusEnum(str, Enum):
     ongoing = constants.RELEASE_STATUS_ONGOING
 
 
+class ContentStatusEnum(str, Enum):
+    discontinued = constants.RELEASE_STATUS_DISCONTINUED
+    announced = constants.RELEASE_STATUS_ANNOUNCED
+    finished = constants.RELEASE_STATUS_FINISHED
+    ongoing = constants.RELEASE_STATUS_ONGOING
+    paused = constants.RELEASE_STATUS_PAUSED
+
+
 class SeasonEnum(str, Enum):
     winter = constants.SEASON_WINTER
     spring = constants.SEASON_SPRING
@@ -73,6 +81,19 @@ class AnimeMediaEnum(str, Enum):
     ova = constants.MEDIA_TYPE_OVA
     ona = constants.MEDIA_TYPE_ONA
     tv = constants.MEDIA_TYPE_TV
+
+
+class MangaMediaEnum(str, Enum):
+    one_shot = constants.MEDIA_TYPE_ONE_SHOT
+    doujin = constants.MEDIA_TYPE_DOUJIN
+    manhua = constants.MEDIA_TYPE_MANHUA
+    manhwa = constants.MEDIA_TYPE_MANHWA
+    manga = constants.MEDIA_TYPE_MANGA
+
+
+class NovelMediaEnum(str, Enum):
+    light_novel = constants.MEDIA_TYPE_LIGHT_NOVEL
+    novel = constants.MEDIA_TYPE_NOVEL
 
 
 class AnimeAgeRatingEnum(str, Enum):
@@ -106,6 +127,51 @@ class CollectionVisibilityEnum(str, Enum):
     visibility_unlisted = constants.COLLECTION_UNLISTED
     visibility_private = constants.COLLECTION_PRIVATE
     visibility_public = constants.COLLECTION_PUBLIC
+
+
+# Mixins
+class DataTypeMixin:
+    data_type: str
+
+
+class YearsMixin:
+    years: list[PositiveInt | None] | None = Field(
+        default=[None, None],
+        examples=[[2000, 2020]],
+    )
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if not years:
+            return [None, None]
+
+        if len(years) == 0:
+            return [None, None]
+
+        if len(years) != 2:
+            raise ValueError("Lenght of years list must be 2.")
+
+        if all(year is not None for year in years) and years[0] > years[1]:
+            raise ValueError(
+                "The first year must be less than the second year."
+            )
+
+        return years
+
+
+class MangaSearchBaseMixin:
+    media_type: list[MangaMediaEnum] = []
+    status: list[ContentStatusEnum] = []
+    only_translated: bool = False
+    magazines: list[str] = []
+    genres: list[str] = []
+
+    score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
 
 
 # Args
@@ -147,14 +213,9 @@ class PasswordArgs(CustomModel):
     password: str = Field(min_length=8, max_length=256, examples=["password"])
 
 
-class AnimeSearchArgsBase(CustomModel):
+class AnimeSearchArgsBase(CustomModel, YearsMixin):
     include_multiseason: bool = False
     only_translated: bool = False
-
-    years: list[PositiveInt | None] | None = Field(
-        default=[None, None],
-        examples=[[2000, 2020]],
-    )
 
     score: list[int | None] = Field(
         default=[None, None],
@@ -207,9 +268,44 @@ class AnimeSearchArgsBase(CustomModel):
         return scores
 
 
-# Mixins
-class DataTypeMixin:
-    data_type: str
+class MangaSearchArgs(
+    QuerySearchArgs,
+    MangaSearchBaseMixin,
+    YearsMixin,
+):
+    sort: list[str] = ["score:desc", "scored_by:desc"]
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return utils.check_sort(
+            sort_list,
+            [
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+            ],
+        )
+
+
+class NovelSearchArgs(
+    QuerySearchArgs,
+    MangaSearchBaseMixin,
+    YearsMixin,
+):
+    sort: list[str] = ["score:desc", "scored_by:desc"]
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return utils.check_sort(
+            sort_list,
+            [
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+            ],
+        )
 
 
 # Responses
@@ -228,6 +324,18 @@ class WatchResponseBase(CustomModel):
     rewatches: int = Field(examples=[2])
     duration: int = Field(examples=[24])
     episodes: int = Field(examples=[3])
+    score: int = Field(examples=[8])
+
+
+class ReadResponseBase(CustomModel):
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
+    note: str | None = Field(max_length=2048, examples=["🤯"])
+    updated: datetime_pd = Field(examples=[1686088809])
+    created: datetime_pd = Field(examples=[1686088809])
+    status: str = Field(examples=["reading"])
+    chapters: int = Field(examples=[3])
+    volumes: int = Field(examples=[3])
+    rereads: int = Field(examples=[2])
     score: int = Field(examples=[8])
 
 
@@ -256,8 +364,48 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     year: int | None
 
 
+class MangaResponse(CustomModel, DataTypeMixin):
+    title_original: str | None
+    media_type: str | None
+    title_ua: str | None
+    title_en: str | None
+    chapters: int | None
+    volumes: int | None
+    translated_ua: bool
+    status: str | None
+    image: str | None
+    year: int | None
+    scored_by: int
+    score: float
+    slug: str
+
+
+class NovelResponse(CustomModel, DataTypeMixin):
+    title_original: str | None
+    media_type: str | None
+    title_ua: str | None
+    title_en: str | None
+    chapters: int | None
+    volumes: int | None
+    translated_ua: bool
+    status: str | None
+    image: str | None
+    year: int | None
+    scored_by: int
+    score: float
+    slug: str
+
+
 class AnimeResponseWithWatch(AnimeResponse):
     watch: list[WatchResponseBase]
+
+
+class MangaResponseWithRead(MangaResponse):
+    read: list[ReadResponseBase]
+
+
+class NovelResponseWithRead(NovelResponse):
+    read: list[ReadResponseBase]
 
 
 class AnimePaginationResponse(CustomModel):
@@ -291,9 +439,12 @@ class RoleResponse(CustomModel):
     slug: str
 
 
-class AnimeStaffResponse(CustomModel):
-    person: PersonResponse | None
+class ContentAuthorResponse(CustomModel):
     roles: list[RoleResponse]
+    person: PersonResponse
+
+
+class AnimeStaffResponse(ContentAuthorResponse):
     weight: int | None
 
 
@@ -319,7 +470,7 @@ class UserResponse(CustomModel):
     role: str
 
 
-class AnimeExternalResponse(CustomModel):
+class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
     type: str
@@ -348,11 +499,18 @@ class CommentResponse(CustomModel):
 
 # Collections
 class CollectionContentResponse(CustomModel):
-    content: AnimeResponseWithWatch | CharacterResponse | PersonResponse
     comment: str | None
     label: str | None
     content_type: str
     order: int
+
+    content: (
+        AnimeResponseWithWatch
+        | MangaResponseWithRead
+        | NovelResponseWithRead
+        | CharacterResponse
+        | PersonResponse
+    )
 
 
 class CollectionResponse(CustomModel, DataTypeMixin):
@@ -378,3 +536,47 @@ class CollectionResponse(CustomModel, DataTypeMixin):
     @field_validator("collection")
     def collection_ordering(cls, collection):
         return sorted(collection, key=lambda c: c.order)
+
+
+class GenreResponse(CustomModel):
+    name_ua: str | None = Field(examples=["Комедія"])
+    name_en: str | None = Field(examples=["Comedy"])
+    slug: str = Field(examples=["comedy"])
+    type: str = Field(examples=["genre"])
+
+
+class GenreListResponse(CustomModel):
+    list: list[GenreResponse]
+
+
+class ReadStatsResponse(CustomModel):
+    completed: int = Field(examples=[1502335], default=0)
+    reading: int = Field(examples=[83106], default=0)
+    on_hold: int = Field(examples=[206073], default=0)
+    dropped: int = Field(examples=[33676], default=0)
+    planned: int = Field(examples=[30222], default=0)
+    score_1: int = Field(examples=[3087], default=0)
+    score_2: int = Field(examples=[2633], default=0)
+    score_3: int = Field(examples=[4583], default=0)
+    score_4: int = Field(examples=[11343], default=0)
+    score_5: int = Field(examples=[26509], default=0)
+    score_6: int = Field(examples=[68501], default=0)
+    score_7: int = Field(examples=[211113], default=0)
+    score_8: int = Field(examples=[398095], default=0)
+    score_9: int = Field(examples=[298198], default=0)
+    score_10: int = Field(examples=[184038], default=0)
+
+
+class MagazineResponse(CustomModel):
+    name_en: str
+    slug: str
+
+
+class ContentCharacterResponse(CustomModel):
+    main: bool = Field(examples=[True])
+    character: CharacterResponse
+
+
+class ContentCharacterPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[ContentCharacterResponse]

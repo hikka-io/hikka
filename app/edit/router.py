@@ -9,6 +9,8 @@ from app.models import (
     Character,
     Person,
     Anime,
+    Manga,
+    Novel,
     User,
     Edit,
 )
@@ -38,8 +40,8 @@ from .dependencies import (
 )
 
 from .schemas import (
+    EditContentTypeEnum,
     EditListResponse,
-    ContentTypeEnum,
     EditSearchArgs,
     AnimeToDoEnum,
     EditResponse,
@@ -74,9 +76,11 @@ async def get_edit(edit: Edit = Depends(validate_edit_id)):
 
 @router.put("/{content_type}/{slug}", response_model=EditResponse)
 async def create_edit(
-    content_type: ContentTypeEnum,
+    content_type: EditContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content: Person | Anime | Character = Depends(validate_content),
+    content: Person | Anime | Manga | Novel | Character = Depends(
+        validate_content
+    ),
     args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(
         auth_required(permissions=[constants.PERMISSION_EDIT_CREATE])

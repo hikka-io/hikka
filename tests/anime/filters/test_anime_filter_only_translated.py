@@ -4,7 +4,7 @@ from fastapi import status
 
 async def test_anime_only_translated(
     client,
-    aggregator_anime_genres,
+    aggregator_genres,
     aggregator_anime,
     aggregator_anime_info,
 ):

@@ -52,6 +52,16 @@ errors = {
         "unknown-genre": ["Unknown genre", 400],
         "not-found": ["Anime not found", 404],
     },
+    "manga": {
+        "unknown-magazine": ["Unknown magazine", 400],
+        "unknown-genre": ["Unknown genre", 400],
+        "not-found": ["Manga not found", 404],
+    },
+    "novel": {
+        "unknown-magazine": ["Unknown magazine", 400],
+        "unknown-genre": ["Unknown genre", 400],
+        "not-found": ["Manga not found", 404],
+    },
     "edit": {
         "missing-content-type": ["You must specify content type", 400],
         "not-pending": ["Only pending edit can be changed", 400],
@@ -84,9 +94,16 @@ errors = {
         "not-found": ["Genre not found", 404],
     },
     "watch": {
-        "empty-random": ["You don't have any watch entries", 400],
         "bad-episodes": ["Bad episodes number provided", 400],
+        "empty-random": ["User watch list is empty", 400],
         "not-found": ["Watch record not found", 404],
+    },
+    "read": {
+        "bad-chapters": ["Bad chapters number provided", 400],
+        "bad-volumes": ["Bad volumes number provided", 400],
+        "empty-random": ["User read list is empty", 400],
+        "content-not-found": ["Content not found", 404],
+        "not-found": ["Read record not found", 404],
     },
     "favourite": {
         "exists": ["Favourite record already exists", 400],
@@ -158,6 +175,10 @@ errors = {
     "schedule": {
         "incompatible-filters": ["You've specified incompatible filters", 400],
         "watch-no-user": ["You can't use only_watch without user", 400],
+    },
+    "related": {
+        "no-franchise": ["Content doesn't have franchise", 400],
+        "content-not-found": ["Content not found", 404],
     },
 }
 

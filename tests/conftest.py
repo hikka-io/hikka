@@ -3,12 +3,12 @@
 
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
+from app.models import Anime, Manga, Novel, Base
 from async_asgi_testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, text
 from app.utils import get_settings
-from app.models import Anime, Base
 from contextlib import ExitStack
 from sqlalchemy import make_url
 from app import create_app
@@ -181,10 +181,10 @@ def mock_s3_upload_file():
 
 # Aggregator fixtures
 @pytest.fixture
-async def aggregator_anime_genres(test_session):
+async def aggregator_genres(test_session):
     data = await helpers.load_json("tests/data/anime_genres.json")
 
-    await aggregator.save_anime_genres(test_session, data)
+    await aggregator.save_genres(test_session, data)
 
 
 @pytest.fixture
@@ -194,6 +194,13 @@ async def aggregator_anime_roles(test_session):
     await aggregator.update_anime_roles(test_session, data)
 
     await aggregator.update_anime_role_weights(test_session)
+
+
+@pytest.fixture
+async def aggregator_manga_roles(test_session):
+    data = await helpers.load_json("tests/data/manga_roles.json")
+
+    await aggregator.update_manga_roles(test_session, data)
 
 
 @pytest.fixture
@@ -222,6 +229,20 @@ async def aggregator_anime(test_session):
     data = await helpers.load_json("tests/data/anime.json")
 
     await aggregator.save_anime_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_manga(test_session):
+    data = await helpers.load_json("tests/data/manga.json")
+
+    await aggregator.save_manga_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def aggregator_novel(test_session):
+    data = await helpers.load_json("tests/data/novels.json")
+
+    await aggregator.save_novel_list(test_session, data["list"])
 
 
 @pytest.fixture
@@ -266,7 +287,57 @@ async def aggregator_anime_info(test_session):
 
 
 @pytest.fixture
+async def aggregator_manga_info(test_session):
+    manga_list = {
+        "fb9fbd44-76f6-4b22-9438-05d7e3a43c37": "berserk.json",
+        "7ef8d2cf-0565-4ddd-9498-7fae392a7421": "fma.json",
+        "f9ebc0e1-7c08-499d-8c0e-7e531683c4aa": "horizon.json",
+        "7cc791e6-392a-4560-8809-ae2a9cad205b": "heaven.json",
+    }
+
+    for slug in manga_list:
+        if manga := await test_session.scalar(
+            select(Manga)
+            .filter(Manga.content_id == slug)
+            .options(selectinload(Manga.genres))
+        ):
+            data = await helpers.load_json(
+                f"tests/data/manga_info/{manga_list[slug]}"
+            )
+
+            await aggregator.update_manga_info(
+                test_session,
+                manga,
+                data,
+            )
+
+
+@pytest.fixture
+async def aggregator_novel_info(test_session):
+    novel_list = {
+        "7bb1594b-9a84-4632-948d-594903e85676": "tian.json",
+        "cc552518-5e42-43fa-a729-0f9a81db5767": "konosuba.json",
+    }
+
+    for slug in novel_list:
+        if novel := await test_session.scalar(
+            select(Novel)
+            .filter(Novel.content_id == slug)
+            .options(selectinload(Novel.genres))
+        ):
+            data = await helpers.load_json(
+                f"tests/data/novel_info/{novel_list[slug]}"
+            )
+
+            await aggregator.update_novel_info(
+                test_session,
+                novel,
+                data,
+            )
+
+
+@pytest.fixture
 async def aggregator_anime_franchises(test_session):
     data = await helpers.load_json("tests/data/anime_franchises.json")
 
-    await aggregator.save_anime_franchises_list(test_session, data["list"])
+    await aggregator.save_franchises_list(test_session, data["list"])

@@ -1,0 +1,49 @@
+{
+    "pagination": {
+        "total": 2,
+        "pages": 1,
+        "page": 1
+    },
+    "list": [
+        {
+            "start_date": 1612396800,
+            "end_date": 1648684800,
+            "media_type": "novel",
+            "created": 1715442078,
+            "updated": 1717532067,
+            "title_en": "Heaven Official's Blessing: Tian Guan Ci Fu",
+            "title_ja": "Tian Guan Cifu",
+            "title_ua": null,
+            "chapters": null,
+            "volumes": 6,
+            "poster": "/content/manga/tian-guan-cifu-7bb159/FDtKht5rV6D2LI5kPhHs4w.jpg",
+            "status": "finished",
+            "content_id": "7bb1594b-9a84-4632-948d-594903e85676",
+            "scored_by": 4049,
+            "deleted": false,
+            "score": 9.15,
+            "mal_id": 130826,
+            "nsfw": false
+        },
+        {
+            "start_date": 1380585600,
+            "end_date": 1588291200,
+            "media_type": "light_novel",
+            "created": 1715442019,
+            "updated": 1717532743,
+            "title_en": "Konosuba: God's Blessing on This Wonderful World!",
+            "title_ja": "Kono Subarashii Sekai ni Shukufuku wo!",
+            "title_ua": null,
+            "chapters": 127,
+            "volumes": 17,
+            "poster": "/content/novel/kono-subarashii-sekai-ni-shukufuku-wo-cc5525/9Jt3zddDmPdJTiqPtYJNog.jpg",
+            "status": "finished",
+            "content_id": "cc552518-5e42-43fa-a729-0f9a81db5767",
+            "scored_by": 17510,
+            "deleted": false,
+            "score": 8.61,
+            "mal_id": 60553,
+            "nsfw": false
+        }
+    ]
+}

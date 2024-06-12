@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import AnimePaginationResponse
 from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -20,11 +19,15 @@ from .dependencies import (
     get_anime_info,
 )
 
+from app.schemas import (
+    ContentCharacterPaginationResponse,
+    AnimePaginationResponse,
+    GenreListResponse,
+)
+
 from .schemas import (
-    AnimeCharacterPaginationResponse,
     AnimeStaffPaginationResponse,
     AnimeEpisodesListResponse,
-    GenreListResposne,
     AnimeInfoResponse,
     AnimeSearchArgs,
 )
@@ -76,9 +79,10 @@ async def search_anime(
     )
 
 
+# TODO: remove me!
 @router.get(
     "/genres",
-    response_model=GenreListResposne,
+    response_model=GenreListResponse,
     summary="Genres list",
 )
 async def anime_genres(
@@ -99,7 +103,7 @@ async def anime_slug(anime: Anime = Depends(get_anime_info)):
 
 @router.get(
     "/{slug}/characters",
-    response_model=AnimeCharacterPaginationResponse,
+    response_model=ContentCharacterPaginationResponse,
     summary="Anime characters",
 )
 async def anime_characters(
@@ -181,6 +185,7 @@ async def anime_recommendations(
     }
 
 
+# TODO: remove me!
 @router.get(
     "/{slug}/franchise",
     response_model=AnimePaginationResponse,

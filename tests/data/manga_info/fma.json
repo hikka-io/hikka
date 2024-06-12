@@ -1,0 +1,1034 @@
+{
+    "characters": [
+        {
+            "character": {
+                "name_en": "Alphonse Elric",
+                "name_ja": "アルフォンス・エルリック",
+                "image": "/content/characters/alphonse-elric-e3622e/mBdYBEmILeVDCf52mMmAqQ.jpg",
+                "updated": 1698417975,
+                "content_id": "e3622e2a-c6fa-4c22-ad6d-3412f1b7c6b2",
+                "favorites": 14564
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Edward Elric",
+                "name_ja": "エドワード・エルリック",
+                "image": "/content/characters/edward-elric-3a3963/oUNX9S8JWIbXgN-93yuNjQ.jpg",
+                "updated": 1698418056,
+                "content_id": "3a396391-dbc0-47b2-8ddf-8a1141748a3a",
+                "favorites": 86599
+            },
+            "main": true
+        },
+        {
+            "character": {
+                "name_en": "Philip Gargantos Armstrong",
+                "name_ja": "フィリップ・ガルガントス・アームストロング",
+                "image": "/content/characters/philip-gargantos-armstrong-7f1528/Xmz-wIYnyNMttbpSwxQ3CQ.jpg",
+                "updated": 1689381117,
+                "content_id": "7f1528cf-9d3b-4c9a-a523-18b098c85bf6",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Alex Louis Armstrong",
+                "name_ja": "アレックス・ルイ・アームストロング",
+                "image": "/content/characters/alex-louis-armstrong-c4d2c7/qX6f_x2x_5MBfRDCI1c2FQ.jpg",
+                "updated": 1715363080,
+                "content_id": "c4d2c773-ff3e-47f6-9efc-43f6454e98d9",
+                "favorites": 3964
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Kathleen Elle Armstrong",
+                "name_ja": "キャスリン·エル·アームストロング",
+                "image": "/content/characters/kathleen-elle-armstrong-34efc9/vq8yXAPLmVFPk7ekJU3ulQ.jpg",
+                "updated": 1689381143,
+                "content_id": "34efc90d-6e5f-4ff2-842a-5010dcc55fcf",
+                "favorites": 13
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Olivier Mira Armstrong",
+                "name_ja": "オリヴィエ・ミラ・アームストロング",
+                "image": "/content/characters/olivier-mira-armstrong-5e3cba/EekMwvKWPt4lbXb9scnmgg.jpg",
+                "updated": 1698417861,
+                "content_id": "5e3cba6c-6aed-4b68-9edb-edfdc76cdb63",
+                "favorites": 3814
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Bard",
+                "name_ja": "バルド",
+                "image": "/content/characters/bard-2c032c/XY_ttHae0Dsk-ltAqbGWjQ.jpg",
+                "updated": 1689381302,
+                "content_id": "2c032cab-4bd3-4391-9420-295bcea7674e",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Barry the Chopper",
+                "name_ja": "バリー・ザ・チョッパー/ナンバー66",
+                "image": "/content/characters/barry-the-chopper-571252/bgK7s6yRFWGfz-2w8No06A.jpg",
+                "updated": 1698418305,
+                "content_id": "57125242-fc28-42e3-8ab5-fa222c5987b2",
+                "favorites": 201
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Bido",
+                "name_ja": "ビドー",
+                "image": "/content/characters/bido-425ab3/CXTK4gw49Ae6jmY29CxbQA.jpg",
+                "updated": 1689381008,
+                "content_id": "425ab349-aa7d-43bd-92a2-cf3505be5296",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Black Hayate",
+                "name_ja": "ブラックハヤテ",
+                "image": "/content/characters/black-hayate-d7c920/IXyglKsGiA9Cd38Nr3Fv0w.jpg",
+                "updated": 1698418229,
+                "content_id": "d7c920e4-5ad1-437f-988d-0a86879bcbbd",
+                "favorites": 133
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Bobby",
+                "name_ja": "ボビー",
+                "image": "/content/characters/bobby-c84ea5/zL9hlUsq5szfIKpW6P8VzA.jpg",
+                "updated": 1689380885,
+                "content_id": "c84ea53e-1f5c-4660-aca3-6a14d1e09f85",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Selim Bradley",
+                "name_ja": "セリム・ブラッドレイ",
+                "image": "/content/characters/selim-bradley-e3c0ba/MC_KqZHln9atJC2mShCXiw.jpg",
+                "updated": 1698417876,
+                "content_id": "e3c0bafc-bbee-4518-8eda-c4b2852da4c4",
+                "favorites": 381
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mrs. Bradley",
+                "name_ja": null,
+                "image": "/content/characters/mrs-bradley-18c452/-i8mwZpOOg16SNXdCuvDvQ.jpg",
+                "updated": 1715365859,
+                "content_id": "18c4524a-cacf-495e-a863-a61dd23b0d9c",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "King Bradley",
+                "name_ja": "キング・ブラッドレイ",
+                "image": "/content/characters/king-bradley-2258d7/MEmBqVXwyOU8U6W1-IiUgQ.jpg",
+                "updated": 1698417976,
+                "content_id": "2258d77a-229a-40f1-a157-9d1a013c6205",
+                "favorites": 2118
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Heymans Breda",
+                "name_ja": "ハイマンス・ブレダ",
+                "image": "/content/characters/heymans-breda-877031/atCyxRlS9VTmtQjySixpLg.jpg",
+                "updated": 1689381386,
+                "content_id": "8770314f-d125-4022-a372-03846b88c0b5",
+                "favorites": 12
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Denny Brosh",
+                "name_ja": "デニー・ブロッシュ",
+                "image": "/content/characters/denny-brosh-302950/sOHc3hk05TbXUCBLcpwH8Q.jpg",
+                "updated": 1698418037,
+                "content_id": "302950bf-60f6-4b7e-9d31-2ad8e57f941e",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Buccaneer",
+                "name_ja": null,
+                "image": "/content/characters/buccaneer-726e52/8S32BJacoa5LRqM-pXzOHA.jpg",
+                "updated": 1715363767,
+                "content_id": "726e525b-a027-4c9c-b7fa-2a23351c750b",
+                "favorites": 11
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rebecca Catalina",
+                "name_ja": null,
+                "image": "/content/characters/rebecca-catalina-c1f339/stmDBE1WqQyp2hdhuRek7g.jpg",
+                "updated": 1715340792,
+                "content_id": "c1f339c1-ab61-486c-9204-3396e65f336a",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mei Chang",
+                "name_ja": "メイ・チャン",
+                "image": "/content/characters/mei-chang-03a39f/NseScrfyt94nbyuOr-s_EQ.jpg",
+                "updated": 1698417882,
+                "content_id": "03a39f01-ec00-4873-85cf-70a752e3e449",
+                "favorites": 209
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Charlie",
+                "name_ja": "チャーリー",
+                "image": "/content/characters/charlie-89bf80/thAJq9Z3inXTXMkyw5KVNQ.jpg",
+                "updated": 1689381378,
+                "content_id": "89bf8065-466f-48e9-bc72-406f507aeff0",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Giolio Comanche",
+                "name_ja": "銀の錬金術師",
+                "image": "/content/characters/giolio-comanche-c5de4e/MOF4f-LpOTkjq586cWjrQA.jpg",
+                "updated": 1689381406,
+                "content_id": "c5de4ed1-0c63-451a-993e-d1c1c339c2f2",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Cornello",
+                "name_ja": "コーネロ",
+                "image": "/content/characters/cornello-a8aaae/IkfvsE6gian8C19YVN8tZA.jpg",
+                "updated": 1689381282,
+                "content_id": "a8aaae9c-9d41-485d-bafb-1c4625e6c598",
+                "favorites": 2
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Cray",
+                "name_ja": "クレイ",
+                "image": "/content/characters/cray-874d3c/S1IOf6Tsyb4TvwwC32a6IQ.jpg",
+                "updated": 1689380956,
+                "content_id": "874d3c0e-d408-45a4-ae49-a10470baebe1",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Izumi Curtis",
+                "name_ja": "イズミ･カーティス",
+                "image": "/content/characters/izumi-curtis-73f623/AwRKihlt4DwKqcmsRfz3BQ.jpg",
+                "updated": 1698417815,
+                "content_id": "73f623c1-cb2d-4076-9aad-443a74882711",
+                "favorites": 919
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sig Curtis",
+                "name_ja": null,
+                "image": "/content/characters/sig-curtis-a45582/wNdj3gRcnY9kgFlKRXpo1w.jpg",
+                "updated": 1715342233,
+                "content_id": "a4558212-ae74-44f3-852d-8fceab2c16b3",
+                "favorites": 41
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Damiano",
+                "name_ja": "ダミアノ",
+                "image": "/content/characters/damiano-d2b07b/1taYeu1-RL8V4uWlQaIMmw.jpg",
+                "updated": 1689381051,
+                "content_id": "d2b07be1-99ad-4a6c-872d-84b05c081b3a",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Darius",
+                "name_ja": null,
+                "image": "/content/characters/darius-ee1dce/n21Kp-qyY3sc8PomL6Cezg.jpg",
+                "updated": 1715364970,
+                "content_id": "ee1dce5f-959a-4bb3-b58e-aa967c2c749e",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dolcetto",
+                "name_ja": null,
+                "image": "/content/characters/dolcetto-cd49aa/Bq_e1uH5yLaLY26i_iVK8A.jpg",
+                "updated": 1715301264,
+                "content_id": "cd49aa37-49ff-42ef-991f-991619ffb885",
+                "favorites": 6
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dr. Knox",
+                "name_ja": null,
+                "image": "/content/characters/dr-knox-fc38f1/Tpl37dHkCsD4-j6FlRDjew.jpg",
+                "updated": 1715374470,
+                "content_id": "fc38f1a6-16d8-4e37-8b15-3af548e1d079",
+                "favorites": 10
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Trisha Elric",
+                "name_ja": "トリシャ･エルリック",
+                "image": "/content/characters/trisha-elric-fec407/SQn-bVYS_FcWuFS1MWtnNQ.jpg",
+                "updated": 1698418314,
+                "content_id": "fec407f1-207d-42b6-94bc-27250d11e5cd",
+                "favorites": 65
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Envy",
+                "name_ja": "エンヴィー",
+                "image": "/content/characters/envy-88760a/_pLXPxw58KWgLQ_u-FX3UA.jpg",
+                "updated": 1698417836,
+                "content_id": "88760a85-6482-40ae-8428-7bd67d737196",
+                "favorites": 3111
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Vato Falman",
+                "name_ja": "ヴァトー・ファルマン",
+                "image": "/content/characters/vato-falman-fcb262/FGQTef4FJOLn7fwcMX_gAA.jpg",
+                "updated": 1689380940,
+                "content_id": "fcb26288-1cfc-4733-9dcb-b186771cbf35",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Fu",
+                "name_ja": null,
+                "image": "/content/characters/fu-91a770/4IF0jvYmnEWnH1Gygzr73Q.jpg",
+                "updated": 1715301519,
+                "content_id": "91a770a6-fb33-46a3-b52f-297a0115d2c0",
+                "favorites": 21
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Kain Fuery",
+                "name_ja": "ケイン・フュリー",
+                "image": "/content/characters/kain-fuery-3e1757/4lQ7VK2AeqWy4mrvDfM4JQ.jpg",
+                "updated": 1689381312,
+                "content_id": "3e1757f7-4732-4ac6-8145-65925ed1c03e",
+                "favorites": 20
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Garfiel",
+                "name_ja": "ガーフィール",
+                "image": "/content/characters/garfiel-0245e8/0g8iUqmDQloFK24jqwTAFg.jpg",
+                "updated": 1689381062,
+                "content_id": "0245e87d-c33f-41c3-949b-431647ccff91",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Gluttony",
+                "name_ja": "グラトニー",
+                "image": "/content/characters/gluttony-8662dd/tRXbeTZO_CEYVxjmj5jKDQ.jpg",
+                "updated": 1698417919,
+                "content_id": "8662dda3-3e81-46c1-897f-2d91e5faa09b",
+                "favorites": 193
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Basque Grand",
+                "name_ja": null,
+                "image": "/content/characters/basque-grand-eb9963/-U3r3p1hBgX5iXlN6V9l3g.jpg",
+                "updated": 1715363395,
+                "content_id": "eb9963da-35d5-4bd3-aed9-b6952e7b7544",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Greed",
+                "name_ja": "グリード",
+                "image": "/content/characters/greed-3dced4/qQyTsDoTQs8UOf8wMlM9zw.jpg",
+                "updated": 1698418221,
+                "content_id": "3dced461-38ab-4b35-bff5-467c826b0668",
+                "favorites": 5848
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Grumman",
+                "name_ja": null,
+                "image": "/content/characters/grumman-634638/Ih9cc2OkDFGkJ7lG5KY2mw.jpg",
+                "updated": 1715301587,
+                "content_id": "63463890-2e20-4c32-961e-5b049cab5132",
+                "favorites": 18
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Hakuro",
+                "name_ja": null,
+                "image": "/content/characters/hakuro-4e98a6/JUShYQdJMAbRNl8jjyfR-g.jpg",
+                "updated": 1689381368,
+                "content_id": "4e98a664-2039-4ca4-87ae-ee832f9ea164",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Harris",
+                "name_ja": null,
+                "image": "/content/characters/harris-2ad685/onjOu4zCgIC7_melnvyz6w.jpg",
+                "updated": 1715302862,
+                "content_id": "2ad68518-0325-41ee-b6c0-76ca1fb9bc9a",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Jean Havoc",
+                "name_ja": "ジャン・ハボック",
+                "image": "/content/characters/jean-havoc-931a18/jDUgIp0oHdh1mApaXzDj4A.jpg",
+                "updated": 1689381338,
+                "content_id": "931a18b3-ad48-44d2-8fe8-3b0b14f9c54f",
+                "favorites": 224
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Berthold Hawkeye",
+                "name_ja": "ホークアイの父",
+                "image": "/content/characters/berthold-hawkeye-ecb8de/Smunu7s49R8KDYR62KQC4g.jpg",
+                "updated": 1689380925,
+                "content_id": "ecb8de1c-fbed-49ed-84e6-200a341ad4a3",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Riza Hawkeye",
+                "name_ja": "リザ・ホークアイ",
+                "image": "/content/characters/riza-hawkeye-6570a2/I-MCllSxpW7R3A73qSGXmA.jpg",
+                "updated": 1698418221,
+                "content_id": "6570a211-5aaf-4231-9d5a-519b69734b8c",
+                "favorites": 5495
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Heinkel",
+                "name_ja": null,
+                "image": "/content/characters/heinkel-664d02/Qo47ZQHi-uQQaR33ipKY4A.jpg",
+                "updated": 1715301965,
+                "content_id": "664d0261-0da9-4b75-8d63-22cc14043c48",
+                "favorites": 16
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Van Hohenheim",
+                "name_ja": "ヴァン・ホーエンハイム",
+                "image": "/content/characters/van-hohenheim-79fa6a/pn4cd5-99-nlwzMsrympAQ.jpg",
+                "updated": 1698417965,
+                "content_id": "79fa6a51-0044-4f23-a34c-9623f1150711",
+                "favorites": 2476
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Homunculus",
+                "name_ja": "人造人間 / ホムンクルス",
+                "image": "/content/characters/homunculus-317910/u4RVyVkgGatZFsJqZSCqtA.jpg",
+                "updated": 1715364256,
+                "content_id": "31791043-021e-46c7-94a4-213cd7f49331",
+                "favorites": 170
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Elicia Hughes",
+                "name_ja": null,
+                "image": "/content/characters/elicia-hughes-1c4ab6/4bC3j-_V-D9sFC7p2WQ9qA.jpg",
+                "updated": 1715336563,
+                "content_id": "1c4ab66b-790f-4bbf-8ef0-6f53558f6ac8",
+                "favorites": 21
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Maes Hughes",
+                "name_ja": "マース･ヒューズ",
+                "image": "/content/characters/maes-hughes-684f7a/8Un_QWP4xpraf1tO1vSbFg.jpg",
+                "updated": 1698417900,
+                "content_id": "684f7a4f-6d9d-4413-a067-ef3645567be7",
+                "favorites": 6253
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Gracia Hughes",
+                "name_ja": "グレイシア・ヒューズ",
+                "image": "/content/characters/gracia-hughes-fa24f9/-vP9TnWXh6pTMWeTBqgeWg.jpg",
+                "updated": 1689380909,
+                "content_id": "fa24f91b-6fe7-4808-98eb-d7e198bbb184",
+                "favorites": 6
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Jerso",
+                "name_ja": null,
+                "image": "/content/characters/jerso-00a210/vM9Zoa5h81YH29lQn1zEYQ.jpg",
+                "updated": 1715339225,
+                "content_id": "00a2107f-cc33-4797-94ea-c744ec50038f",
+                "favorites": 6
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Karley",
+                "name_ja": "カッリ",
+                "image": "/content/characters/karley-305e64/TIM6yj51eAGii1fm2BYcTQ.jpg",
+                "updated": 1689381169,
+                "content_id": "305e64d1-d972-4a6f-b7f2-74f123734b87",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Solf J. Kimblee",
+                "name_ja": "ゾルフ・J・キンブリー",
+                "image": "/content/characters/solf-j-kimblee-2ba2bc/M1rvDQAveA-YNYGq7pqmNw.jpg",
+                "updated": 1698417815,
+                "content_id": "2ba2bcd1-9401-446f-bd3c-208e2c33a37e",
+                "favorites": 939
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Knox's Son",
+                "name_ja": "ノックス息子",
+                "image": "/content/characters/knoxs-son-3e5374/u2kzD-ryOT2ra1Kh8QqQDw.jpg",
+                "updated": 1689380855,
+                "content_id": "3e537418-cc45-419e-9384-4a2ef3da48db",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Lan Fan",
+                "name_ja": "ランファン",
+                "image": "/content/characters/lan-fan-11ed74/IBcxWaRtlJNmq7VS1tfi8w.jpg",
+                "updated": 1698417913,
+                "content_id": "11ed749f-83d4-442d-989e-a243324569b9",
+                "favorites": 443
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Dominic LeCoulte",
+                "name_ja": "ドミニク・レコルト",
+                "image": "/content/characters/dominic-lecoulte-72c071/jXtFKw7uleV6Te6ZxW7CNA.jpg",
+                "updated": 1689381094,
+                "content_id": "72c0713d-a265-4df1-bd9a-f8e09ecdf268",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Lust",
+                "name_ja": "ラスト",
+                "image": "/content/characters/lust-28e00a/eBg7VJwYTWVeZ2jxYgs_KQ.jpg",
+                "updated": 1698418096,
+                "content_id": "28e00ab6-fe8d-4b80-8683-fde765a31460",
+                "favorites": 812
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Madame Christmas",
+                "name_ja": "マダム クリスマス",
+                "image": "/content/characters/madame-christmas-b863a6/w7MtCemFjVliisX_7WW_CA.jpg",
+                "updated": 1689381223,
+                "content_id": "b863a6be-a9f7-44f1-9c47-a24c1d5803da",
+                "favorites": 3
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Tim Marcoh",
+                "name_ja": null,
+                "image": "/content/characters/tim-marcoh-3ff139/y5X21Sl63y8lte2DYWrMwA.jpg",
+                "updated": 1715375637,
+                "content_id": "3ff139c6-391d-44e2-92a5-5b6b7ab57a81",
+                "favorites": 8
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Martel",
+                "name_ja": "マーテル",
+                "image": "/content/characters/martel-f6e6af/FFoqGYQDa-6J63x1Yavo7Q.jpg",
+                "updated": 1689381046,
+                "content_id": "f6e6afc9-a223-4e61-8b5f-ed30b7880796",
+                "favorites": 12
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Mason",
+                "name_ja": null,
+                "image": "/content/characters/mason-41266f/wsEL0AUGFCgjhaeIwyx0OQ.jpg",
+                "updated": 1715366809,
+                "content_id": "41266fc1-7b69-4efb-9659-92496dce78e6",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Shao May",
+                "name_ja": "シャオメイ",
+                "image": "/content/characters/shao-may-c04b33/IVrqGYf-UYBYjK_k5xRfOQ.jpg",
+                "updated": 1698418288,
+                "content_id": "c04b3382-f772-4b3b-936f-31ab065bd1aa",
+                "favorites": 173
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Miles",
+                "name_ja": "マイルズ",
+                "image": "/content/characters/miles-0d3f04/0JENzVHoS451nnDLNXVesQ.jpg",
+                "updated": 1698418197,
+                "content_id": "0d3f0438-8a0e-4321-8c11-92d6d65546d7",
+                "favorites": 66
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Roy Mustang",
+                "name_ja": "ロイ・マスタング",
+                "image": "/content/characters/roy-mustang-0dfa24/J535xUmc47QZ93eYE2jJbQ.jpg",
+                "updated": 1698418056,
+                "content_id": "0dfa24c9-4520-41f6-a046-b6b1bc0b500b",
+                "favorites": 36696
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Neil",
+                "name_ja": "ニール",
+                "image": "/content/characters/neil-86aa7a/10qq8n5Cr20uH-syi0lSVw.jpg",
+                "updated": 1689381092,
+                "content_id": "86aa7a8f-4670-44bd-8afd-47d26a277581",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Paninya",
+                "name_ja": "パニーニャ",
+                "image": "/content/characters/paninya-f073f6/Qqpd4ymlYJFj3AjrNJx_lA.jpg",
+                "updated": 1689381055,
+                "content_id": "f073f639-3bb0-4823-9d83-ebb8de3dbcb9",
+                "favorites": 8
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Raven",
+                "name_ja": null,
+                "image": "/content/characters/raven-6db487/hhnyo2gl0cL2EJ3B96Y9Qg.jpg",
+                "updated": 1689378274,
+                "content_id": "6db48790-f916-4e9e-9cc3-c720553418fc",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rick",
+                "name_ja": "リック",
+                "image": "/content/characters/rick-522bbe/1qBhOlKGgdlluk1tEsHn3Q.jpg",
+                "updated": 1689380924,
+                "content_id": "522bbe99-70ba-4264-9687-de5f8ea2449d",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Roa",
+                "name_ja": null,
+                "image": "/content/characters/roa-303907/U0xRR4i1Y-enLffWJu3XPw.jpg",
+                "updated": 1715299821,
+                "content_id": "303907c7-c039-4e66-b0ae-ebd6a208b963",
+                "favorites": 0
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Pinako Rockbell",
+                "name_ja": "ピナコ・ロックベル",
+                "image": "/content/characters/pinako-rockbell-382c21/rDved8t4JBTlBbPAjSmvrA.jpg",
+                "updated": 1698417831,
+                "content_id": "382c2133-0b72-4937-a096-f8a025f14658",
+                "favorites": 20
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Den Rockbell",
+                "name_ja": null,
+                "image": "/content/characters/den-rockbell-a2cd0c/44_ErogT5Q3o9JPXk2RCkw.jpg",
+                "updated": 1715375782,
+                "content_id": "a2cd0c0f-e556-4d06-8218-a4aa9e202bf8",
+                "favorites": 30
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Winry Rockbell",
+                "name_ja": "ウィンリィ・ロックベル",
+                "image": "/content/characters/winry-rockbell-1a146f/5GJToC305Xo8XjHhNEeULA.jpg",
+                "updated": 1698417861,
+                "content_id": "1a146fad-df31-4833-b571-0ad661696205",
+                "favorites": 3908
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Maria Ross",
+                "name_ja": "マリア・ロス",
+                "image": "/content/characters/maria-ross-fa7d6f/jZS4z66XUWvrAOsyPVUxlw.jpg",
+                "updated": 1698417875,
+                "content_id": "fa7d6fdf-5429-49ad-a2d7-7d204337b811",
+                "favorites": 34
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Scar",
+                "name_ja": "スカー (傷の男",
+                "image": "/content/characters/scar-57c734/RR4msrYluTMgBmwq_fCRYw.jpg",
+                "updated": 1698417918,
+                "content_id": "57c7344f-4d83-42a5-9587-be281856fb7f",
+                "favorites": 1938
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Scar's Brother",
+                "name_ja": null,
+                "image": "/content/characters/scars-brother-307531/LtF13jwFHXoVTkqnbVnxkQ.jpg",
+                "updated": 1715373170,
+                "content_id": "3075310b-85f6-474f-b33d-b5c1decfb1f1",
+                "favorites": 7
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Scar's Master",
+                "name_ja": null,
+                "image": "/content/characters/scars-master-78e2b2/LFXF9tQxWNkQdJCxZx_Gpg.jpg",
+                "updated": 1715373334,
+                "content_id": "78e2b225-ebfb-4a7f-916b-d8a16f272ff2",
+                "favorites": 1
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sheska",
+                "name_ja": "シェスカ",
+                "image": "/content/characters/sheska-53d961/wvx07gmmb5qsNnDm71WN3g.jpg",
+                "updated": 1698418315,
+                "content_id": "53d961ed-c21c-43e1-b719-b71e26122858",
+                "favorites": 54
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Slicer Brothers",
+                "name_ja": null,
+                "image": "/content/characters/slicer-brothers-d6b4e5/RPp51mPJXpYqBYSRJYF0bA.jpg",
+                "updated": 1715302967,
+                "content_id": "d6b4e5b5-08e6-4666-a5d3-ca4462d248ef",
+                "favorites": 5
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Sloth",
+                "name_ja": null,
+                "image": "/content/characters/sloth-0189db/6CJX5G9GISkouesc12vPAw.jpg",
+                "updated": 1715363076,
+                "content_id": "0189db51-5d76-4b1c-bc86-31bb62553dc2",
+                "favorites": 45
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Rosé Tomas",
+                "name_ja": "ロゼ",
+                "image": "/content/characters/rose-tomas-b4b4eb/gZYAHkhmQkDIf1-GQSEs-g.jpg",
+                "updated": 1689381160,
+                "content_id": "b4b4ebb8-486f-4559-8c98-2bbeee23805a",
+                "favorites": 19
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Truth",
+                "name_ja": "真理",
+                "image": "/content/characters/truth-39ab0a/Ea3mEE4Tz7hHMzHKo6o62w.jpg",
+                "updated": 1715369773,
+                "content_id": "39ab0a06-4f0b-4d13-9f27-abd6cab25354",
+                "favorites": 280
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Shou Tucker",
+                "name_ja": "ショウ タッカー",
+                "image": "/content/characters/shou-tucker-351146/VFWgnR_VO6WP0jtyVwS2Fg.jpg",
+                "updated": 1698417823,
+                "content_id": "3511468c-9d7f-484e-bd0f-47a7cee2efb2",
+                "favorites": 160
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Nina Tucker",
+                "name_ja": null,
+                "image": "/content/characters/nina-tucker-7155d6/FOKpcMybJ3-ryLrqOYYEDw.jpg",
+                "updated": 1715370342,
+                "content_id": "7155d6a0-c078-4add-9b30-c9a53e7c162c",
+                "favorites": 77
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Ling Yao",
+                "name_ja": "リン・ヤオ",
+                "image": "/content/characters/ling-yao-bd281a/2PzY3HlQCf_4MGjXkTf6Uw.jpg",
+                "updated": 1698418235,
+                "content_id": "bd281a02-822b-418b-a166-d509b8e7702b",
+                "favorites": 4664
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Yoki",
+                "name_ja": "ヨキ",
+                "image": "/content/characters/yoki-004f18/fXLbkoZsUwE99Ge_ydfe_A.jpg",
+                "updated": 1689380871,
+                "content_id": "004f18a7-eda4-445b-8d1c-657dce26f4f1",
+                "favorites": 9
+            },
+            "main": false
+        },
+        {
+            "character": {
+                "name_en": "Zampano",
+                "name_ja": "ザンパノ",
+                "image": "/content/characters/zampano-5eb7e2/SmJG5MZvFasGMjHdnTiKiA.jpg",
+                "updated": 1689380907,
+                "content_id": "5eb7e246-a301-42d7-bc7a-706c87fad772",
+                "favorites": 2
+            },
+            "main": false
+        }
+    ],
+    "authors": [
+        {
+            "person": {
+                "content_id": "ea706de2-f864-40c8-a90e-311f6af9ae68"
+            },
+            "roles": [
+                "Story",
+                "Art"
+            ]
+        }
+    ],
+    "magazines": [
+        {
+            "mal_id": 13,
+            "name": "Shounen Gangan"
+        }
+    ],
+    "start_date": 994896000,
+    "end_date": 1284163200,
+    "title_native": "鋼の錬金術師",
+    "synopsis_en": "Alchemists are knowledgeable and naturally talented individuals who can manipulate and modify matter due to their art. Yet despite the wide range of possibilities, alchemy is not as all-powerful as most would believe. Human transmutation is strictly forbidden, and whoever attempts it risks severe consequences. Even so, siblings Edward and Alphonse Elric decide to ignore this great taboo and bring their mother back to life. Unfortunately, not only do they fail in resurrecting her, they also pay an extremely high price for their arrogance: Edward loses his left leg and Alphonse his entire body. Furthermore, Edward also gives up his right arm in order to seal his brother's soul into a suit of armor.\n\nYears later, the young alchemists travel across the country looking for the Philosopher's Stone, in the hopes of recovering their old bodies with its power. However, their quest for the fated stone also leads them to unravel far darker secrets than they could ever imagine.\n\n[Written by MAL Rewrite]",
+    "synopsis_ua": null,
+    "media_type": "manga",
+    "genre_ids": [
+        "545bb81f-8702-4358-8f8e-596910ac394c",
+        "d1b83f6d-a3f3-4114-9c3e-6d0850e090d4",
+        "77572b04-8ab6-4f74-b65e-e1194da761fb",
+        "a0f61194-e2b7-4f7c-9620-42e4f9003fdf",
+        "75673e0b-e199-49f9-8414-e69db616dcb4",
+        "ebaba115-e384-4707-94e1-944f6c22c7d2"
+    ],
+    "external": [
+        {
+            "url": "http://gangan.square-enix.co.jp/hagaren/",
+            "text": "Official Site"
+        },
+        {
+            "url": "http://ja.wikipedia.org/wiki/%E9%8B%BC%E3%81%AE%E9%8C%AC%E9%87%91%E8%A1%93%E5%B8%AB",
+            "text": "Wikipedia"
+        },
+        {
+            "url": "https://en.wikipedia.org/wiki/Fullmetal_Alchemist",
+            "text": "Wikipedia"
+        }
+    ],
+    "created": 1687304733,
+    "updated": 1717529678,
+    "title_en": "Fullmetal Alchemist",
+    "title_ja": "Fullmetal Alchemist",
+    "title_ua": null,
+    "chapters": 116,
+    "synonyms": [
+        "Full Metal Alchemist",
+        " Hagane no Renkinjutsushi",
+        " FMA",
+        " HagaRen",
+        " Fullmetal Alchemist Gaiden"
+    ],
+    "volumes": 27,
+    "poster": "/content/manga/fullmetal-alchemist-7ef8d2/EzjWvOwzurMs6fmWJKXjVA.jpg",
+    "status": "finished",
+    "content_id": "7ef8d2cf-0565-4ddd-9498-7fae392a7421",
+    "scored_by": 158333,
+    "deleted": false,
+    "score": 9.04,
+    "mal_id": 25,
+    "stats": {
+        "dropped": 6393,
+        "on_hold": 16941,
+        "planned": 62318,
+        "reading": 49287,
+        "score_1": 2686,
+        "score_2": 155,
+        "score_3": 141,
+        "score_4": 275,
+        "score_5": 892,
+        "score_6": 2357,
+        "score_7": 8653,
+        "score_8": 24189,
+        "score_9": 45644,
+        "score_10": 73337,
+        "completed": 160273
+    },
+    "nsfw": false
+}
