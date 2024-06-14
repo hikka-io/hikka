@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import get_page, get_size
+from .dependencies import validate_backup_token
 from fastapi import APIRouter, Request, Depends
 from .schemas import ImagesPaginationResponse
 from app.database import get_session
@@ -52,7 +53,11 @@ async def analytics_event(request: Request, args: EventArgs):
         return {}
 
 
-@router.get("/backup/images", response_model=ImagesPaginationResponse)
+@router.get(
+    "/backup/images",
+    response_model=ImagesPaginationResponse,
+    dependencies=[Depends(validate_backup_token)],
+)
 async def backup_images(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),

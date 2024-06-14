@@ -180,6 +180,9 @@ errors = {
         "no-franchise": ["Content doesn't have franchise", 400],
         "content-not-found": ["Content not found", 404],
     },
+    "system": {
+        "bad-backup-token": ["Bad backup token", 401],
+    },
 }
 
 

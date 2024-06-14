@@ -28,6 +28,9 @@
         "https://hikka.io",
     ]
 
+    [default.backup]
+    token = "backup_token"
+
     [default.captcha]
     secret_key = "captcha_secret"
     site_key = "captcha_key"
@@ -56,6 +59,9 @@
     [testing.backend]
     auth_emails = ["user@mail.com"]
     origins = []
+
+    [testing.backup]
+    token = "backup_token"
 
     [testing.captcha]
     secret_key = "test_secter_key"
