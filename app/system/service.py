@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, asc, func
+from sqlalchemy import select, desc, func
 from app.models import Image
 
 
@@ -15,7 +15,7 @@ async def get_images(session: AsyncSession, limit: int, offset: int):
     return await session.scalars(
         select(Image)
         .filter(Image.uploaded == True)  # noqa: E712
-        .order_by(asc(Image.created))
+        .order_by(desc(Image.created))
         .limit(limit)
         .offset(offset)
     )
