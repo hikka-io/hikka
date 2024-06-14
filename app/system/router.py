@@ -1,7 +1,18 @@
-from fastapi import APIRouter, Request
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.dependencies import get_page, get_size
+from .dependencies import validate_backup_token
+from fastapi import APIRouter, Request, Depends
+from .schemas import ImagesPaginationResponse
+from app.database import get_session
 from app.utils import get_settings
 from .schemas import EventArgs
+from . import service
 import aiohttp
+
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
 
 
 router = APIRouter(include_in_schema=False)
@@ -40,3 +51,23 @@ async def analytics_event(request: Request, args: EventArgs):
 
     except aiohttp.ClientError:
         return {}
+
+
+@router.get(
+    "/backup/images",
+    response_model=ImagesPaginationResponse,
+    dependencies=[Depends(validate_backup_token)],
+)
+async def backup_images(
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_images_count(session)
+    images = await service.get_images(session, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": images.all(),
+    }

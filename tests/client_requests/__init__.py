@@ -101,6 +101,8 @@ from .vote import request_vote
 
 from .upload import request_upload
 
+from .system import request_backup_images
+
 __all__ = [
     "request_activation_resend",
     "request_password_confirm",
@@ -185,4 +187,5 @@ __all__ = [
     "request_vote_status",
     "request_vote",
     "request_upload",
+    "request_backup_images",
 ]
