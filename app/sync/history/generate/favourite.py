@@ -12,26 +12,31 @@ async def generate_favourite(
 ):
     threshold = log.created - favourite_delta
 
-    if log.data["content_type"] == constants.CONTENT_ANIME:
-        history = await service.get_history(
-            session,
-            constants.HISTORY_FAVOURITE_ANIME,
-            log.target_id,
-            log.user_id,
-            threshold,
+    history_type = {
+        constants.CONTENT_ANIME: constants.HISTORY_FAVOURITE_ANIME,
+        constants.CONTENT_MANGA: constants.HISTORY_FAVOURITE_MANGA,
+        constants.CONTENT_NOVEL: constants.HISTORY_FAVOURITE_NOVEL,
+    }.get(log.data["content_type"])
+
+    history = await service.get_history(
+        session,
+        history_type,
+        log.target_id,
+        log.user_id,
+        threshold,
+    )
+
+    if not history:
+        history = History(
+            **{
+                "history_type": history_type,
+                "used_logs": [str(log.id)],
+                "target_id": log.target_id,
+                "user_id": log.user_id,
+                "created": log.created,
+                "updated": log.created,
+            }
         )
 
-        if not history:
-            history = History(
-                **{
-                    "history_type": constants.HISTORY_FAVOURITE_ANIME,
-                    "used_logs": [str(log.id)],
-                    "target_id": log.target_id,
-                    "user_id": log.user_id,
-                    "created": log.created,
-                    "updated": log.created,
-                }
-            )
-
-            session.add(history)
-            await session.commit()
+        session.add(history)
+        await session.commit()

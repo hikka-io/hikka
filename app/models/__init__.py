@@ -1,10 +1,15 @@
 from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
 
-from .user.history import FavouriteRemoveHistory
+
+from .user.history import FavouriteAnimeRemoveHistory
+from .user.history import FavouriteMangaRemoveHistory
+from .user.history import FavouriteNovelRemoveHistory
+from .user.history import FavouriteAnimeHistory
+from .user.history import FavouriteMangaHistory
+from .user.history import FavouriteNovelHistory
 from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
-from .user.history import FavouriteHistory
 from .user.history import WatchHistory
 from .user.history import History
 from .user.oauth import UserOAuth
@@ -92,10 +97,14 @@ from .base import Base
 __all__ = [
     "EmailMessage",
     "AuthToken",
-    "FavouriteRemoveHistory",
+    "FavouriteAnimeRemoveHistory",
+    "FavouriteMangaRemoveHistory",
+    "FavouriteNovelRemoveHistory",
+    "FavouriteAnimeHistory",
+    "FavouriteMangaHistory",
+    "FavouriteNovelHistory",
     "WatchImportHistory",
     "WatchDeleteHistory",
-    "FavouriteHistory",
     "WatchHistory",
     "History",
     "UserOAuth",
