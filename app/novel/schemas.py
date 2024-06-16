@@ -2,13 +2,13 @@ from app.schemas import datetime_pd
 
 from app.schemas import (
     ContentAuthorResponse,
+    NovelResponseWithRead,
     PaginationResponse,
     ReadStatsResponse,
     MagazineResponse,
     ExternalResponse,
     DataTypeMixin,
     GenreResponse,
-    NovelResponse,
     CustomModel,
 )
 
@@ -16,7 +16,7 @@ from app.schemas import (
 # Responses
 class NovelPaginationResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[NovelResponse]
+    list: list[NovelResponseWithRead]
 
 
 class NovelInfoResponse(CustomModel, DataTypeMixin):
