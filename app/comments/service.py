@@ -29,10 +29,14 @@ from app.models import (
     Collection,
     PersonEdit,
     AnimeEdit,
+    MangaEdit,
+    NovelEdit,
     Character,
     Comment,
     Person,
     Anime,
+    Manga,
+    Novel,
     User,
     Edit,
 )
@@ -276,18 +280,111 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     return True
 
 
-# TODO: FIXME!!!
+async def latest_comments(session: AsyncSession):
+    comments = await session.scalars(
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .group_by(Comment.id, Comment.content_id)
+        .order_by(desc(Comment.created))
+        .limit(3)
+    )
+
+    return comments
+
+
+# TODO: Remove me!
+async def latest_comments_legacy(session: AsyncSession):
+    comment_ids = await session.scalars(
+        select(Comment.id, Comment.content_id)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .group_by(Comment.id, Comment.content_id)
+        .order_by(desc(Comment.created))
+        .limit(3)
+    )
+
+    return await comments_preview_display(session, comment_ids)
+
+
+async def count_comments(session: AsyncSession) -> int:
+    """Count comments"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+    )
+
+
+# TODO: Remove me!
+async def get_comments_legacy(session: AsyncSession, limit: int, offset: int):
+    comment_ids = await session.scalars(
+        select(Comment.id, Comment.content_id)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+    return await comments_preview_display(session, comment_ids)
+
+
+async def get_comments(
+    session: AsyncSession,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    return await session.scalars(
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            )
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
 async def comments_preview_display(
     session: AsyncSession, comment_ids: list[UUID]
 ):
-    # TODO: Add preview image to comment (?)
-    # NOTE: I HATE this function so much, it should be rewritten!
     comments = await session.scalars(
         select(Comment)
         .filter(Comment.id.in_(comment_ids))
-        .options(immediateload(EditComment.content))
         .options(immediateload(CollectionComment.content))
         .options(immediateload(AnimeComment.content))
+        .options(immediateload(MangaComment.content))
+        .options(immediateload(NovelComment.content))
+        .options(immediateload(EditComment.content))
         .order_by(desc(Comment.created))
     )
 
@@ -299,6 +396,11 @@ async def comments_preview_display(
         if isinstance(comment, AnimeComment):
             image = comment.content.poster
 
+        if isinstance(comment, MangaComment) or isinstance(
+            comment, NovelComment
+        ):
+            image = comment.content.image
+
         if isinstance(comment, EditComment):
             # This is horrible hack, but we need this to prevent SQLAlchemy bug
             # For some reason edit content is not loaded sometimes
@@ -308,25 +410,38 @@ async def comments_preview_display(
                 select(Edit)
                 .filter(Edit.id == comment.content_id)
                 .options(
-                    joinedload(PersonEdit.content).joinedload(
-                        Person.image_relation
-                    ),
                     joinedload(AnimeEdit.content).joinedload(
                         Anime.poster_relation
+                    ),
+                    joinedload(MangaEdit.content).joinedload(
+                        Manga.image_relation
+                    ),
+                    joinedload(NovelEdit.content).joinedload(
+                        Novel.image_relation
                     ),
                     joinedload(CharacterEdit.content).joinedload(
                         Character.image_relation
                     ),
+                    joinedload(PersonEdit.content).joinedload(
+                        Person.image_relation
+                    ),
                 )
             )
 
-            if not edit:
-                continue
+            if edit:
+                image = (
+                    edit.content.poster
+                    if isinstance(comment.content.content, Anime)
+                    else edit.content.image
+                )
 
-            if isinstance(comment.content.content, Anime):
-                image = edit.content.poster
-            else:
-                image = edit.content.image
+                if not edit:
+                    continue
+
+                if isinstance(comment.content.content, Anime):
+                    image = edit.content.poster
+                else:
+                    image = edit.content.image
 
         if isinstance(comment, CollectionComment):
             collection_content = await session.scalar(
@@ -360,48 +475,83 @@ async def comments_preview_display(
     return result
 
 
-async def latest_comments(session: AsyncSession):
-    comment_ids = await session.scalars(
-        select(Comment.id, Comment.content_id)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .group_by(Comment.id, Comment.content_id)
+# NOTE: I still hate this function but less than before.
+# NOTE: This code is a liability. It must be updated when
+# new identities added for Comment or Edit
+async def generate_preview(
+    session: AsyncSession,
+    original_comment: Comment,
+):
+    comment = await session.scalar(
+        select(Comment)
+        .filter(Comment.id == original_comment.id)
+        .options(immediateload(CollectionComment.content))
+        .options(immediateload(AnimeComment.content))
+        .options(immediateload(MangaComment.content))
+        .options(immediateload(NovelComment.content))
+        .options(immediateload(EditComment.content))
         .order_by(desc(Comment.created))
-        .limit(3)
     )
 
-    return await comments_preview_display(session, comment_ids)
+    slug = comment.content.slug
+    image = None
 
+    if isinstance(comment, AnimeComment):
+        image = comment.content.poster
 
-async def count_comments(session: AsyncSession) -> int:
-    """Count comments"""
+    if isinstance(comment, MangaComment) or isinstance(comment, NovelComment):
+        image = comment.content.image
 
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
+    if isinstance(comment, EditComment):
+        # This is horrible hack, but we need this to prevent SQLAlchemy bug
+        # For some reason edit content is not loaded sometimes
+        await session.refresh(comment.content)
+
+        edit = await session.scalar(
+            select(Edit)
+            .filter(Edit.id == comment.content_id)
+            .options(
+                joinedload(AnimeEdit.content).joinedload(Anime.poster_relation),
+                joinedload(MangaEdit.content).joinedload(Manga.image_relation),
+                joinedload(NovelEdit.content).joinedload(Novel.image_relation),
+                joinedload(CharacterEdit.content).joinedload(
+                    Character.image_relation
+                ),
+                joinedload(PersonEdit.content).joinedload(
+                    Person.image_relation
+                ),
+            )
         )
-    )
 
+        if edit:
+            image = (
+                edit.content.poster
+                if isinstance(comment.content.content, Anime)
+                else edit.content.image
+            )
 
-async def get_comments(session: AsyncSession, limit: int, offset: int):
-    comment_ids = await session.scalars(
-        select(Comment.id, Comment.content_id)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
+    if isinstance(comment, CollectionComment):
+        collection_content = await session.scalar(
+            select(CollectionContent)
+            .filter(CollectionContent.collection == comment.content)
+            .order_by(asc(CollectionContent.order))
+            .limit(1)
         )
-        .order_by(desc(Comment.created))
-        .limit(limit)
-        .offset(offset)
-    )
 
-    return await comments_preview_display(session, comment_ids)
+        content = collection_content.content
+
+        image = (
+            content.poster
+            if comment.content.content_type == constants.CONTENT_ANIME
+            else content.image
+        )
+
+    original_comment.preview = {
+        "image": image,
+        "slug": slug,
+    }
+
+    session.add(original_comment)
+    await session.commit()
+
+    return original_comment
