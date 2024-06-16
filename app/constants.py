@@ -282,7 +282,11 @@ HISTORY_WATCH_DELETE = "watch_delete"
 HISTORY_READ_MANGA_DELETE = "read_manga_delete"
 HISTORY_READ_NOVEL_DELETE = "read_novel_delete"
 HISTORY_FAVOURITE_ANIME = "favourite_anime_add"
+HISTORY_FAVOURITE_MANGA = "favourite_manga_add"
+HISTORY_FAVOURITE_NOVEL = "favourite_novel_add"
 HISTORY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
+HISTORY_FAVOURITE_MANGA_REMOVE = "favourite_manga_remove"
+HISTORY_FAVOURITE_NOVEL_REMOVE = "favourite_novel_remove"
 HISTORY_WATCH_IMPORT = "watch_import"
 
 # Notification types

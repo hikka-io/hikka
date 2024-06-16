@@ -28,7 +28,7 @@ class History(Base, CreatedMixin, UpdatedMixin):
     used_logs: Mapped[list[str]] = mapped_column(ARRAY(String))
 
 
-class FavouriteHistory(History):
+class FavouriteAnimeHistory(History):
     __mapper_args__ = {
         "polymorphic_identity": constants.HISTORY_FAVOURITE_ANIME,
         "eager_defaults": True,
@@ -41,13 +41,13 @@ class FavouriteHistory(History):
     )
 
     content: Mapped["Anime"] = relationship(
-        primaryjoin="Anime.id == FavouriteHistory.target_id",
+        primaryjoin="Anime.id == FavouriteAnimeHistory.target_id",
         foreign_keys=[target_id],
         lazy="immediate",  # TODO: check if it is good idea
     )
 
 
-class FavouriteRemoveHistory(History):
+class FavouriteAnimeRemoveHistory(History):
     __mapper_args__ = {
         "polymorphic_identity": constants.HISTORY_FAVOURITE_ANIME_REMOVE,
         "eager_defaults": True,
@@ -60,7 +60,83 @@ class FavouriteRemoveHistory(History):
     )
 
     content: Mapped["Anime"] = relationship(
-        primaryjoin="Anime.id == FavouriteRemoveHistory.target_id",
+        primaryjoin="Anime.id == FavouriteAnimeRemoveHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class FavouriteMangaHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_FAVOURITE_MANGA,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == FavouriteMangaHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class FavouriteMangaRemoveHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_FAVOURITE_MANGA_REMOVE,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Manga"] = relationship(
+        primaryjoin="Manga.id == FavouriteMangaRemoveHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class FavouriteNovelHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_FAVOURITE_NOVEL,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == FavouriteNovelHistory.target_id",
+        foreign_keys=[target_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )
+
+
+class FavouriteNovelRemoveHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_FAVOURITE_NOVEL_REMOVE,
+        "eager_defaults": True,
+    }
+
+    target_id = mapped_column(
+        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Novel"] = relationship(
+        primaryjoin="Novel.id == FavouriteNovelRemoveHistory.target_id",
         foreign_keys=[target_id],
         lazy="immediate",  # TODO: check if it is good idea
     )
