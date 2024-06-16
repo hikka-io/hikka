@@ -1,5 +1,5 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, AliasChoices
 from app import constants
 from enum import Enum
 
@@ -65,13 +65,19 @@ class ImportWatchArgs(CustomModelExtraIgnore):
 
 
 class ImportReadArgs(CustomModelExtraIgnore):
-    my_times_read: int = Field(ge=0, alias="my_times_watched")
     manga_mangadb_id: int = Field(ge=0, le=1000000)
     my_read_chapters: int = Field(ge=0, le=10000)
     my_read_volumes: int = Field(ge=0, le=10000)
     my_score: int = Field(ge=0, le=10)
     my_status: ImportReadStatusEnum
     my_comments: str | dict
+    my_times_read: int = Field(
+        ge=0,
+        validation_alias=AliasChoices(
+            "my_times_read",
+            "my_times_watched",
+        ),
+    )
 
 
 class ImportWatchListArgs(CustomModelExtraIgnore):
