@@ -52,13 +52,16 @@ async def verify_add_read(
     args: ReadArgs,
     content: Manga | Novel = Depends(verify_read_content),
 ) -> Manga | Novel:
-    # Make sure user provided chapters within constraints
-    if content.chapters and args.chapters > content.chapters:
-        raise Abort("read", "bad-chapters")
+    # NOTE: I decided to disable those checks since we may have outdated data
+    # TODO: remove this dependency (?)
 
-    # Make sure user provided volumes within constraints
-    if content.volumes and args.volumes > content.volumes:
-        raise Abort("read", "bad-volumes")
+    # # Make sure user provided chapters within constraints
+    # if content.chapters and args.chapters > content.chapters:
+    #     raise Abort("read", "bad-chapters")
+
+    # # Make sure user provided volumes within constraints
+    # if content.volumes and args.volumes > content.volumes:
+    #     raise Abort("read", "bad-volumes")
 
     return content
 

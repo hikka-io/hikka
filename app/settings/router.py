@@ -22,7 +22,9 @@ from app.service import (
 from .schemas import (
     IgnoredNotificationsResponse,
     IgnoredNotificationsArgs,
-    ImportAnimeListArgs,
+    ReadDeleteContenType,
+    ImportWatchListArgs,
+    ImportReadListArgs,
     DescriptionArgs,
     ImageTypeEnum,
 )
@@ -105,7 +107,7 @@ async def change_email(
     summary="Import watch list",
 )
 async def import_watch(
-    args: ImportAnimeListArgs,
+    args: ImportWatchListArgs,
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(auth_required()),
@@ -115,6 +117,30 @@ async def import_watch(
     # https://stackoverflow.com/a/67601373
     background_tasks.add_task(
         service.import_watch_list,
+        session,
+        args,
+        user,
+    )
+
+    return {"success": True}
+
+
+@router.post(
+    "/import/read",
+    response_model=SuccessResponse,
+    summary="Import read list",
+)
+async def import_read(
+    args: ImportReadListArgs,
+    background_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    # Run watch list import in background
+    # This task may block event loop so we should keep that in mind
+    # https://stackoverflow.com/a/67601373
+    background_tasks.add_task(
+        service.import_read_list,
         session,
         args,
         user,
@@ -177,6 +203,30 @@ async def delete_user_watch(
         service.delete_user_watch,
         session,
         user,
+    )
+
+    return {"success": True}
+
+
+@router.delete(
+    "/read/{content_type}",
+    response_model=SuccessResponse,
+    summary="Delete user watch list",
+)
+async def delete_user_read(
+    content_type: ReadDeleteContenType,
+    background_tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    # Run watch list import in background
+    # This task may block event loop so we should keep that in mind
+    # https://stackoverflow.com/a/67601373
+    background_tasks.add_task(
+        service.delete_user_read,
+        session,
+        user,
+        content_type,
     )
 
     return {"success": True}
