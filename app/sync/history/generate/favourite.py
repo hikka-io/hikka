@@ -18,6 +18,9 @@ async def generate_favourite(
         constants.CONTENT_NOVEL: constants.HISTORY_FAVOURITE_NOVEL,
     }.get(log.data["content_type"])
 
+    if not history_type:
+        return
+
     history = await service.get_history(
         session,
         history_type,
