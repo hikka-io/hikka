@@ -5,17 +5,18 @@ from datetime import datetime
 from app import constants
 
 
-async def test_history_watch_import(test_session, create_test_user):
+async def test_history_read_import(test_session, create_test_user):
     user_id = create_test_user.id
 
     test_logs = [
         {
             "created": datetime(2024, 2, 1, 0, 0, 0),
-            "log_type": constants.LOG_SETTINGS_IMPORT_WATCH,
+            "log_type": constants.LOG_SETTINGS_IMPORT_READ,
             "target_id": None,
             "user_id": user_id,
             "data": {
-                "imported": 10,
+                "imported_manga": 10,
+                "imported_novel": 9,
                 "overwrite": True,
             },
         }
@@ -39,8 +40,9 @@ async def test_history_watch_import(test_session, create_test_user):
     # And how get history entry
     history = await test_session.scalar(select(History))
 
-    assert history.history_type == constants.HISTORY_WATCH_IMPORT
+    assert history.history_type == constants.HISTORY_READ_IMPORT
     assert history.data == {
-        "imported": 10,
+        "imported_manga": 10,
+        "imported_novel": 9,
         "overwrite": True,
     }

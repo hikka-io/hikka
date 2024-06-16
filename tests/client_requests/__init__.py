@@ -81,6 +81,8 @@ from .comments import request_comments_hide
 from .settings import request_settings_delete_watch
 from .settings import request_settings_delete_image
 from .settings import request_settings_import_watch
+from .settings import request_settings_delete_read
+from .settings import request_settings_import_read
 from .settings import request_settings_description
 from .settings import request_settings_username
 from .settings import request_settings_password
@@ -172,6 +174,8 @@ __all__ = [
     "request_settings_delete_watch",
     "request_settings_delete_image",
     "request_settings_import_watch",
+    "request_settings_delete_read",
+    "request_settings_import_read",
     "request_settings_description",
     "request_settings_username",
     "request_settings_password",

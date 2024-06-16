@@ -8,9 +8,10 @@ from app import constants
 from .generate import (
     generate_favourite_delete,
     generate_watch_delete,
+    generate_import_watch,
+    generate_import_read,
     generate_read_delete,
     generate_favourite,
-    generate_import,
     generate_watch,
     generate_read,
 )
@@ -48,7 +49,8 @@ async def generate_history(session: AsyncSession):
                     constants.LOG_READ_DELETE,
                     constants.LOG_FAVOURITE,
                     constants.LOG_FAVOURITE_REMOVE,
-                    constants.LOG_SETTINGS_IMPORT,
+                    constants.LOG_SETTINGS_IMPORT_WATCH,
+                    constants.LOG_SETTINGS_IMPORT_READ,
                 ]
             )
         )
@@ -84,8 +86,11 @@ async def generate_history(session: AsyncSession):
         if log.log_type == constants.LOG_FAVOURITE_REMOVE:
             await generate_favourite_delete(session, log, favourite_delta)
 
-        if log.log_type == constants.LOG_SETTINGS_IMPORT:
-            await generate_import(session, log)
+        if log.log_type == constants.LOG_SETTINGS_IMPORT_WATCH:
+            await generate_import_watch(session, log)
+
+        if log.log_type == constants.LOG_SETTINGS_IMPORT_READ:
+            await generate_import_read(session, log)
 
     session.add(system_timestamp)
     await session.commit()

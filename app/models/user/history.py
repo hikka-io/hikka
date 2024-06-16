@@ -187,6 +187,13 @@ class WatchImportHistory(History):
     }
 
 
+class ReadImportHistory(History):
+    __mapper_args__ = {
+        "polymorphic_identity": constants.HISTORY_READ_IMPORT,
+        "eager_defaults": True,
+    }
+
+
 class ReadMangaHistory(History):
     __mapper_args__ = {
         "polymorphic_identity": constants.HISTORY_READ_MANGA,

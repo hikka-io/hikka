@@ -10,6 +10,7 @@ from .user.history import FavouriteMangaHistory
 from .user.history import FavouriteNovelHistory
 from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
+from .user.history import ReadImportHistory
 from .user.history import WatchHistory
 from .user.history import History
 from .user.oauth import UserOAuth
@@ -105,6 +106,7 @@ __all__ = [
     "FavouriteNovelHistory",
     "WatchImportHistory",
     "WatchDeleteHistory",
+    "ReadImportHistory",
     "WatchHistory",
     "History",
     "UserOAuth",

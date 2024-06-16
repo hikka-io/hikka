@@ -13,9 +13,22 @@ class ImportWatchStatusEnum(str, Enum):
     dropped = "Dropped"
 
 
+class ImportReadStatusEnum(str, Enum):
+    completed = "Completed"
+    reading = "Reading"
+    planned = "Plan to Read"
+    on_hold = "On-Hold"
+    dropped = "Dropped"
+
+
 class ImageTypeEnum(str, Enum):
     avatar = constants.UPLOAD_AVATAR
     cover = constants.UPLOAD_COVER
+
+
+class ReadDeleteContenType(str, Enum):
+    manga = constants.CONTENT_MANGA
+    novel = constants.CONTENT_NOVEL
 
 
 # Args
@@ -42,7 +55,7 @@ class DescriptionArgs(CustomModel):
     )
 
 
-class ImportAnimeArgs(CustomModelExtraIgnore):
+class ImportWatchArgs(CustomModelExtraIgnore):
     series_animedb_id: int = Field(ge=0, le=1000000)
     my_watched_episodes: int = Field(ge=0, le=10000)
     my_times_watched: int = Field(default=0, ge=0)
@@ -51,8 +64,23 @@ class ImportAnimeArgs(CustomModelExtraIgnore):
     my_comments: str | dict
 
 
-class ImportAnimeListArgs(CustomModelExtraIgnore):
-    anime: list[ImportAnimeArgs]
+class ImportReadArgs(CustomModelExtraIgnore):
+    my_times_read: int = Field(ge=0, alias="my_times_watched")
+    manga_mangadb_id: int = Field(ge=0, le=1000000)
+    my_read_chapters: int = Field(ge=0, le=10000)
+    my_read_volumes: int = Field(ge=0, le=10000)
+    my_score: int = Field(ge=0, le=10)
+    my_status: ImportReadStatusEnum
+    my_comments: str | dict
+
+
+class ImportWatchListArgs(CustomModelExtraIgnore):
+    anime: list[ImportWatchArgs]
+    overwrite: bool
+
+
+class ImportReadListArgs(CustomModelExtraIgnore):
+    content: list[ImportReadArgs]
     overwrite: bool
 
 

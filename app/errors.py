@@ -218,6 +218,7 @@ async def abort_handler(request: Request, exception: Abort):
 async def validation_handler(
     request: Request, exception: RequestValidationError
 ):
+    print(exception.errors())
     error = exception.errors()[0]
 
     field_location = error["loc"][0]

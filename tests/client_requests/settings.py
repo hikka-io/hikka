@@ -38,6 +38,14 @@ def request_settings_import_watch(client, token, data):
     )
 
 
+def request_settings_import_read(client, token, data):
+    return client.post(
+        "/settings/import/read",
+        headers={"Auth": token},
+        json=data,
+    )
+
+
 def request_settings_delete_image(client, token, image_type):
     return client.delete(
         f"/settings/image/{image_type}", headers={"Auth": token}
@@ -46,3 +54,9 @@ def request_settings_delete_image(client, token, image_type):
 
 def request_settings_delete_watch(client, token):
     return client.delete("/settings/watch", headers={"Auth": token})
+
+
+def request_settings_delete_read(client, content_type, token):
+    return client.delete(
+        f"/settings/read/{content_type}", headers={"Auth": token}
+    )
