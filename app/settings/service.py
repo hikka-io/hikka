@@ -298,7 +298,7 @@ async def import_watch_list(
     if imported > 0:
         await create_log(
             session,
-            constants.LOG_SETTINGS_IMPORT,
+            constants.LOG_SETTINGS_IMPORT_WATCH,
             user,
             data={"imported": imported, "overwrite": args.overwrite},
         )

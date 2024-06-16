@@ -94,7 +94,7 @@ async def test_settings_import_watch(
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
-    assert log.log_type == constants.LOG_SETTINGS_IMPORT
+    assert log.log_type == constants.LOG_SETTINGS_IMPORT_WATCH
     assert log.user == create_test_user
     assert log.data["imported"] == 1
     assert log.data["overwrite"] is False

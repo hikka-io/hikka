@@ -11,7 +11,7 @@ async def test_history_watch_import(test_session, create_test_user):
     test_logs = [
         {
             "created": datetime(2024, 2, 1, 0, 0, 0),
-            "log_type": constants.LOG_SETTINGS_IMPORT,
+            "log_type": constants.LOG_SETTINGS_IMPORT_WATCH,
             "target_id": None,
             "user_id": user_id,
             "data": {
