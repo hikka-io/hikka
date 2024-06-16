@@ -30,6 +30,7 @@ class Comment(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
     my_score: Mapped[int] = query_expression()
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
+    preview: Mapped[dict] = mapped_column(JSONB, default={})
     hidden: Mapped[bool] = mapped_column(default=False)
     score: Mapped[int] = mapped_column(nullable=False)
     path: Mapped[str] = mapped_column(LtreeType)

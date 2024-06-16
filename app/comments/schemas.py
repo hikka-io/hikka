@@ -56,6 +56,7 @@ class CommentResponse(CustomModel):
     vote_score: int
     reference: str
     my_score: int
+    preview: dict
     hidden: bool
     depth: int
 
@@ -94,6 +95,7 @@ class CommentNode:
     parent: str | None = None
     total_replies: int = 0
     vote_score: int = None
+    preview: dict = None
     hidden: bool = False
     my_score: int = None
     created: str = None
@@ -107,6 +109,7 @@ class CommentNode:
         self.text = comment.text if not comment.hidden else None
         self.is_editable = comment.is_editable
         self.vote_score = comment.vote_score
+        self.preview = comment.preview
         self.updated = comment.updated
         self.created = comment.created
         self.author = comment.author

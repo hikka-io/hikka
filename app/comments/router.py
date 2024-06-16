@@ -43,26 +43,55 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
+# TODO: Remove me!
 @router.get("/latest", response_model=list[CommentPreviewResponse])
-async def latest_comments(
-    session: AsyncSession = Depends(get_session),
-):
-    return await service.latest_comments(session)
+async def latest_comments_legacy(session: AsyncSession = Depends(get_session)):
+    return await service.latest_comments_legacy(session)
 
 
+@router.get("/latest/new", response_model=list[CommentResponse])
+async def latest_comments(session: AsyncSession = Depends(get_session)):
+    comments = await service.latest_comments(session)
+    return [
+        CommentNode.create(path_to_uuid(comment.reference), comment)
+        for comment in comments
+    ]
+
+
+# TODO: Remove me!
 @router.get("/list", response_model=CommentPreviewListResponse)
-async def comments_list(
+async def comments_list_legacy(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.count_comments(session)
-    comments = await service.get_comments(session, limit, offset)
+    comments = await service.get_comments_legacy(session, limit, offset)
 
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": comments,
+    }
+
+
+@router.get("/list/new", response_model=CommentListResponse)
+async def comments_list(
+    request_user: User = Depends(auth_required(optional=True)),
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.count_comments(session)
+    comments = await service.get_comments(session, request_user, limit, offset)
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": [
+            CommentNode.create(path_to_uuid(comment.reference), comment)
+            for comment in comments
+        ],
     }
 
 
@@ -78,6 +107,8 @@ async def write_comment(
     comment = await service.create_comment(
         session, content_type, content_id, author, args.text, parent
     )
+
+    comment = await service.generate_preview(session, comment)
 
     return CommentNode.create(path_to_uuid(comment.reference), comment)
 
@@ -118,6 +149,7 @@ async def edit_comment(
     comment: Comment = Depends(validate_comment_edit),
 ):
     comment = await service.edit_comment(session, comment, args.text)
+    comment = await service.generate_preview(session, comment)
     return CommentNode.create(path_to_uuid(comment.reference), comment)
 
 

@@ -24,6 +24,8 @@ async def test_comments_write(
     assert response.json()["text"] == "First comment, yay!"
     assert response.json()["total_replies"] == 0
 
+    assert response.json()["preview"]["slug"] == "17"
+
     # Check first comment log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_WRITE

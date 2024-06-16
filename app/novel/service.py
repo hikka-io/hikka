@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
 from .utils import build_novel_filters_ms
 from app.schemas import NovelSearchArgs
@@ -16,6 +17,7 @@ from app.service import (
 from app.models import (
     NovelCharacter,
     NovelAuthor,
+    NovelRead,
     Novel,
     User,
 )
@@ -60,12 +62,21 @@ async def novel_search(
     limit: int,
     offset: int,
 ):
+    # Load request user read statuses here
+    load_options = [
+        joinedload(Novel.read),
+        with_loader_criteria(
+            NovelRead,
+            NovelRead.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
     query = select(Novel).filter(Novel.deleted == False)  # noqa: E712
     query = novel_search_filter(search, query)
 
     query = query.order_by(*build_novel_order_by(search.sort))
 
-    # query = query.options(*load_options)
+    query = query.options(*load_options)
     query = query.limit(limit).offset(offset)
 
     return await session.scalars(query)
@@ -119,7 +130,16 @@ async def novel_search_query(
 
     slugs = [novel["slug"] for novel in meilisearch_result["list"]]
 
-    query = select(Novel).filter(Novel.slug.in_(slugs))
+    # Load request user read statuses here
+    load_options = [
+        joinedload(Novel.read),
+        with_loader_criteria(
+            NovelRead,
+            NovelRead.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Novel).filter(Novel.slug.in_(slugs)).options(*load_options)
 
     if len(search.sort) > 0:
         query = query.order_by(*build_novel_order_by(search.sort))
