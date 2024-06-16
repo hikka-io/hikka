@@ -290,6 +290,7 @@ HISTORY_FAVOURITE_ANIME_REMOVE = "favourite_anime_remove"
 HISTORY_FAVOURITE_MANGA_REMOVE = "favourite_manga_remove"
 HISTORY_FAVOURITE_NOVEL_REMOVE = "favourite_novel_remove"
 HISTORY_WATCH_IMPORT = "watch_import"
+HISTORY_READ_IMPORT = "read_import"
 
 # Notification types
 NOTIFICATION_COMMENT_REPLY = "comment_reply"
