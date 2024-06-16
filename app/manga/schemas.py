@@ -2,13 +2,13 @@ from app.schemas import datetime_pd
 
 from app.schemas import (
     ContentAuthorResponse,
+    MangaResponseWithRead,
     PaginationResponse,
     ReadStatsResponse,
     MagazineResponse,
     ExternalResponse,
     DataTypeMixin,
     GenreResponse,
-    MangaResponse,
     CustomModel,
 )
 
@@ -16,7 +16,7 @@ from app.schemas import (
 # Responses
 class MangaPaginationResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[MangaResponse]
+    list: list[MangaResponseWithRead]
 
 
 class MangaInfoResponse(CustomModel, DataTypeMixin):
