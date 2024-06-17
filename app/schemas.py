@@ -367,7 +367,9 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     )
     episodes_released: int | None = Field(examples=["10"])
     episodes_total: int | None = Field(examples=["10"])
+    # TODO: Remove me!
     poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
