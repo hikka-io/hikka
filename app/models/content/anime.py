@@ -159,8 +159,19 @@ class Anime(
     )
 
     # Very dirty hacks, but they do the trick
+    # TODO: Remove me!
     @hybrid_property
     def poster(self):
+        if not self.poster_relation:
+            return None
+
+        if self.poster_relation.ignore or not self.poster_relation.uploaded:
+            return None
+
+        return self.poster_relation.url
+
+    @hybrid_property
+    def image(self):
         if not self.poster_relation:
             return None
 
