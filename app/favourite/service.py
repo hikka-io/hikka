@@ -22,7 +22,11 @@ from app.models import (
     AnimeWatch,
     Collection,
     Favourite,
+    MangaRead,
+    NovelRead,
     Anime,
+    Manga,
+    Novel,
     User,
 )
 
@@ -132,6 +136,40 @@ async def get_user_favourite_list(
                 AnimeWatch,
                 (
                     AnimeWatch.user_id == request_user.id
+                    if request_user
+                    else None
+                ),
+            ),
+        )
+
+    if content_type == constants.CONTENT_MANGA:
+        query = query.filter(
+            content_model.deleted == False,  # noqa: E712
+        )
+
+        query = query.options(
+            joinedload(Manga.read),
+            with_loader_criteria(
+                MangaRead,
+                (
+                    MangaRead.user_id == request_user.id
+                    if request_user
+                    else None
+                ),
+            ),
+        )
+
+    if content_type == constants.CONTENT_NOVEL:
+        query = query.filter(
+            content_model.deleted == False,  # noqa: E712
+        )
+
+        query = query.options(
+            joinedload(Novel.read),
+            with_loader_criteria(
+                NovelRead,
+                (
+                    NovelRead.user_id == request_user.id
                     if request_user
                     else None
                 ),
