@@ -67,11 +67,11 @@ async def signup(
     "/login",
     response_model=TokenResponse,
     summary="Login",
+    dependencies=[Depends(check_captcha)],
 )
 async def login(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(validate_login),
-    _: bool = Depends(check_captcha),
 ):
     await create_log(session, constants.LOG_LOGIN, user)
     return await service.create_auth_token(session, user)
