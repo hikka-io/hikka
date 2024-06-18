@@ -506,6 +506,7 @@ class CommentResponse(CustomModel):
     author: UserResponse
     updated: datetime_pd
     created: datetime_pd
+    content_type: str
     text: str | None
     reference: str
     my_score: int
