@@ -29,6 +29,7 @@ puremagic = "^1.15"
 imagesize = "^1.4.1"
 sqlalchemy-utils = "^0.41.1"
 requests = "2.32.0"
+urllib3 = "2.2.2"
 
 [build-system]
 requires = ["poetry-core"]
