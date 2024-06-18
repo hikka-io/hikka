@@ -5,11 +5,11 @@ from enum import Enum
 
 from app.schemas import (
     AnimeResponseWithWatch,
+    MangaResponseWithRead,
+    NovelResponseWithRead,
     PaginationResponse,
     CollectionResponse,
     CharacterResponse,
-    MangaResponse,
-    NovelResponse,
     CustomModel,
 )
 
@@ -38,11 +38,11 @@ class FavouriteAnimeResponse(AnimeResponseWithWatch, FavouriteMeta):
     pass
 
 
-class FavouriteMangaResponse(MangaResponse, FavouriteMeta):
+class FavouriteMangaResponse(MangaResponseWithRead, FavouriteMeta):
     pass
 
 
-class FavouriteNovelResponse(NovelResponse, FavouriteMeta):
+class FavouriteNovelResponse(NovelResponseWithRead, FavouriteMeta):
     pass
 
 
