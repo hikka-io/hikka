@@ -51,6 +51,7 @@ class CommentResponse(CustomModel):
     created: datetime_pd
     author: UserResponse
     parent: str | None
+    content_type: str
     is_editable: bool
     text: str | None
     vote_score: int
@@ -93,6 +94,7 @@ class CommentNode:
     replies: list["CommentNode"] = field(default_factory=list)
     is_editable: bool = False
     parent: str | None = None
+    content_type: str = None
     total_replies: int = 0
     vote_score: int = None
     preview: dict = None
@@ -107,6 +109,7 @@ class CommentNode:
     def from_comment(self, comment: Comment):
         self.my_score = comment.my_score if comment.my_score else 0
         self.text = comment.text if not comment.hidden else None
+        self.content_type = comment.content_type
         self.is_editable = comment.is_editable
         self.vote_score = comment.vote_score
         self.preview = comment.preview

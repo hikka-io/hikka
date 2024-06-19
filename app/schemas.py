@@ -500,21 +500,6 @@ class AnimeVideoResponse(CustomModel):
     video_type: str = Field(examples=["video_music"])
 
 
-class CommentResponse(CustomModel):
-    replies: list["CommentResponse"] = []
-    total_replies: int = 0
-    author: UserResponse
-    updated: datetime_pd
-    created: datetime_pd
-    content_type: str
-    text: str | None
-    reference: str
-    my_score: int
-    hidden: bool
-    score: int
-    depth: int
-
-
 # Collections
 class CollectionContentResponse(CustomModel):
     comment: str | None
