@@ -5,6 +5,7 @@ from app.database import get_session
 from app.errors import Abort
 from app.models import User
 from fastapi import Depends
+from app import constants
 from typing import Tuple
 from . import service
 
@@ -14,6 +15,9 @@ async def validate_username(
 ) -> User:
     if not (user := await get_user_by_username(session, username)):
         raise Abort("user", "not-found")
+
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
 
     return user
 
