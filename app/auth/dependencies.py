@@ -5,6 +5,7 @@ from app.database import get_session
 from app.schemas import EmailArgs
 from app.errors import Abort
 from fastapi import Depends
+from app import constants
 from . import oauth
 
 from app.utils import (
@@ -42,6 +43,9 @@ async def body_email_user(
     if not (user := await get_user_by_email(session, args.email)):
         raise Abort("auth", "user-not-found")
 
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
+
     return user
 
 
@@ -75,6 +79,9 @@ async def validate_login(
     # Find user by email
     if not (user := await get_user_by_email(session, login.email)):
         raise Abort("auth", "user-not-found")
+
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
 
     # Check password hash
     # TODO: add failed login attempts here
@@ -131,6 +138,9 @@ async def validate_activation(
     if not (user := await get_user_by_activation(session, args.token)):
         raise Abort("auth", "activation-invalid")
 
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
+
     # Let's have it here just in case
     if not user.activation_expire:
         raise Abort("auth", "activation-expired")
@@ -174,6 +184,9 @@ async def validate_password_confirm(
     # Get user by reset token
     if not (user := await get_user_by_reset(session, confirm.token)):
         raise Abort("auth", "reset-invalid")
+
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
 
     # Just in case
     if not user.password_reset_expire:

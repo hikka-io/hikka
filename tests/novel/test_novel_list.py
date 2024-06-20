@@ -10,10 +10,6 @@ async def test_novel_list(
     # Make request to novel list
     response = await request_novel_search(client)
 
-    from pprint import pprint
-
-    pprint(response.json())
-
     assert response.status_code == status.HTTP_200_OK
 
     # Check pagination data

@@ -135,6 +135,7 @@ ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
 ROLE_BANNED = "banned"
 ROLE_NOT_ACTIVATED = "not_activated"
+ROLE_DELETED = "deleted"
 
 # Permissions
 PERMISSION_EDIT_CREATE = "edit:create"
@@ -220,6 +221,7 @@ ROLES = {
         PERMISSION_UPLOAD_COVER,
     ],
     ROLE_BANNED: [],
+    ROLE_DELETED: [],
 }
 
 # Upload types

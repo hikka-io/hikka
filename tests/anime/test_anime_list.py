@@ -6,10 +6,6 @@ async def test_anime_list(client, aggregator_anime, aggregator_anime_info):
     # Make request to anime list
     response = await request_anime_search(client)
 
-    from pprint import pprint
-
-    pprint(response.json())
-
     assert response.status_code == status.HTTP_200_OK
 
     # Check pagination data

@@ -24,6 +24,9 @@ async def get_user(
     if not (user := await get_user_by_username(session, username)):
         raise Abort("user", "not-found")
 
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
+
     return user
 
 
@@ -100,6 +103,9 @@ def auth_required(permissions: list = [], optional: bool = False):
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):
             raise Abort("permission", "denied")
+
+        if token.user.role == constants.ROLE_DELETED:
+            raise Abort("user", "deleted")
 
         # After each authenticated request token expiration will be reset
         token.expiration = now + timedelta(days=7)

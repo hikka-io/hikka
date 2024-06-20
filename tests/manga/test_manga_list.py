@@ -10,10 +10,6 @@ async def test_manga_list(
     # Make request to manga list
     response = await request_manga_search(client)
 
-    from pprint import pprint
-
-    pprint(response.json())
-
     assert response.status_code == status.HTTP_200_OK
 
     # Check pagination data

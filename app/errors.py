@@ -115,6 +115,7 @@ errors = {
     },
     "user": {
         "not-found": ["User not found", 404],
+        "deleted": ["Deleted", 400],
     },
     "follow": {
         "already-following": ["This user is already followed", 400],
