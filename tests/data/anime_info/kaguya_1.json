@@ -734,7 +734,6 @@
     ],
     "episodes_list": [
         {
-            "title_native": "映画に誘わせたい / かぐや様は止められたい / かぐや様はいただきたい",
             "aired": 1547244000,
             "title_ja": "Eiga ni Sasowasetai / Kaguya-sama wa Tomeraretai / Kaguya-sama wa Itadakitai",
             "title_en": "I Will Make You Invite Me to a Movie / Kaguya Wants to Be Stopped / Kaguya Wants It",
@@ -743,7 +742,6 @@
             "index": 1
         },
         {
-            "title_native": "かぐや様は交換したい / 藤原ちゃんは出かけたい / 白銀御行は隠したい",
             "aired": 1547848800,
             "title_ja": "Kaguya-sama wa Koukan Shitai / Fujiwara-chan wa Dekaketai / Shirogane Miyuki wa Kakushitai",
             "title_en": "Kaguya Wants to Trade / Chika Wants to Go Somewhere / Miyuki Wants to Hide His Ignorance",
@@ -752,7 +750,6 @@
             "index": 2
         },
         {
-            "title_native": "白銀御行はまだしてない / かぐや様は当てられたい / かぐや様は歩きたい",
             "aired": 1548453600,
             "title_ja": "Shirogane Miyuki wa Mada Shite Nai / Kayuga-sama wa Ateraretai / Kaguya-sama wa Arukitai",
             "title_en": "Miyuki Shirogane Still Hasn't Done It / Kaguya Wants to Be Figured Out / Kaguya Wants to Walk",
@@ -761,7 +758,6 @@
             "index": 3
         },
         {
-            "title_native": "かぐや様は愛でたい / 生徒会は言わせたい / かぐや様は送らせたい / 白銀御行は話したい",
             "aired": 1549058400,
             "title_ja": "Kaguya-sama wa Medetai / Seitokai wa Iwasetai / Kaguya-sama wa Okurasetai / Shirogane Miyuki wa Hanashitai",
             "title_en": "Kaguya Wants Affection / The Student Council Wants It to Be Said / Kaguya Wants Him to Send It / Miyuki Shirogane Wants to Talk",
@@ -770,7 +766,6 @@
             "index": 4
         },
         {
-            "title_native": "かぐや様はこなしたい / 白銀御行は見せつけたい / かぐや様は差されたい",
             "aired": 1549663200,
             "title_ja": "Kaguya-sama wa Konashitai / Shirogane Miyuki wa Misetsuketai / Kaguya-sama wa Sasaretai",
             "title_en": "Kaguya Wants to Handle It / Miyuki Shirogane Wants to Show Off / Kaguya Wants to Be Covered",
@@ -779,7 +774,6 @@
             "index": 5
         },
         {
-            "title_native": "石上優は生き延びたい / 藤原千花はテストしたい / かぐや様は気づかれたい",
             "aired": 1550268000,
             "title_ja": "Ishigami Yuu wa Ikinobitai / Fujiwara Chika wa Test Shitai / Kaguya-sama wa Kizukaretai",
             "title_en": "Yu Ishigami Wants to Live / Chika Fujiwara Wants to Test You / Kaguya Wants to Be Noticed",
@@ -788,7 +782,6 @@
             "index": 6
         },
         {
-            "title_native": "白銀御行は働きたい / かぐや様は入れたい / かぐや様は堪えたい",
             "aired": 1550872800,
             "title_ja": "Shirogane Miyuki wa Hatarakitai / Kaguya-sama wa Iretai / Kaguya-sama wa Kotaetai",
             "title_en": "Miyuki Shirogane Wants to Work / Kaguya Wants Him to Join In / Kaguya Wants to Control It",
@@ -797,7 +790,6 @@
             "index": 7
         },
         {
-            "title_native": "かぐや様は呼ばせたい / 白銀御行は負けられない / そして石上優は目を閉じた",
             "aired": 1551477600,
             "title_ja": "Kaguya-sama wa Yobasetai / Shirogane Miyuki wa Makerarenai / Soshite Ishigami Yuu wa Me wo Tojita",
             "title_en": "Kaguya Wants Her to Say It / Miyuki Shirogane Can't Lose / Yu Ishigami Closes His Eyes",
@@ -806,7 +798,6 @@
             "index": 8
         },
         {
-            "title_native": "かぐや様は送りたい / 藤原千花は見舞いたい / 四宮かぐやについて①",
             "aired": 1552082400,
             "title_ja": "Kaguya-sama wa Okuritai / Fujiwara Chika wa Mimaitai / Shinomiya Kaguya ni Tsuite 1",
             "title_en": "Kaguya Wants to Give a Gift / Chika Fujiwara Wants to Pay a Visit / About Kaguya Shinomiya, Part 1",
@@ -815,7 +806,6 @@
             "index": 9
         },
         {
-            "title_native": "かぐや様は許せない / かぐや様は許したい / 白銀御行は出かけたい",
             "aired": 1552687200,
             "title_ja": "Kaguya-sama wa Yurusenai / Kaguya-sama wa Yurushitai / Shirogane Miyuki wa Dekaketai",
             "title_en": "Kaguya Won't Forgive / Kaguya Wants to Forgive / Miyuki Shirogane Wants to Go Somewhere",
@@ -824,7 +814,6 @@
             "index": 10
         },
         {
-            "title_native": "早坂愛は浸かりたい / 藤原千花は超食べたい / 白銀御行は出会いたい / 花火の音は聞こえない　前編",
             "aired": 1553292000,
             "title_ja": "Hayasaka Ai wa Tsukaritai / Fujiwara Chika wa Chou Tabetai / Shirogane Miyuki wa Deaitai / Hanabi no Oto wa Kikoenai: Zenpen",
             "title_en": "Ai Hayasaka Wants to Get Soaked / Chika Fujiwara Really Wants to Eat It / Miyuki Shirogane Wants to See You / I Can't Hear the Fireworks, Part 1",
@@ -833,7 +822,6 @@
             "index": 11
         },
         {
-            "title_native": "花火の音は聞こえない 後編 / かぐや様は避けたくない",
             "aired": 1553896800,
             "title_ja": "Hanabi no Oto wa Kikoenai: Kouhen / Kaguya-sama wa Saketakunai",
             "title_en": "I Can't Hear the Fireworks, Part 2 / Kaguya Doesn't Want to Avoid Him",

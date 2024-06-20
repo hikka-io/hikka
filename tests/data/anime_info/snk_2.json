@@ -386,7 +386,6 @@
     ],
     "episodes_list": [
         {
-            "title_native": "獣の巨人",
             "aired": 1490994000,
             "title_ja": "Kemono no Kyojin",
             "title_en": "Beast Titan",
@@ -395,7 +394,6 @@
             "index": 1
         },
         {
-            "title_native": "ただいま",
             "aired": 1491598800,
             "title_ja": "Tadaima",
             "title_en": "I'm Home",
@@ -404,7 +402,6 @@
             "index": 2
         },
         {
-            "title_native": "南西へ",
             "aired": 1492203600,
             "title_ja": "Nansei e",
             "title_en": "Southwestward",
@@ -413,7 +410,6 @@
             "index": 3
         },
         {
-            "title_native": "兵士",
             "aired": 1492808400,
             "title_ja": "Heishi",
             "title_en": "Soldier",
@@ -422,7 +418,6 @@
             "index": 4
         },
         {
-            "title_native": "ヒストリア",
             "aired": 1493413200,
             "title_ja": "Historia",
             "title_en": "Historia",
@@ -431,7 +426,6 @@
             "index": 5
         },
         {
-            "title_native": "戦士",
             "aired": 1494018000,
             "title_ja": "Senshi",
             "title_en": "Warrior",
@@ -440,7 +434,6 @@
             "index": 6
         },
         {
-            "title_native": "打・投・極",
             "aired": 1494622800,
             "title_ja": "Da Tou Kyou",
             "title_en": "Close Combat",
@@ -449,7 +442,6 @@
             "index": 7
         },
         {
-            "title_native": "追う者",
             "aired": 1495227600,
             "title_ja": "Ou Mono",
             "title_en": "The Hunters",
@@ -458,7 +450,6 @@
             "index": 8
         },
         {
-            "title_native": "開口",
             "aired": 1495832400,
             "title_ja": "Kaikou",
             "title_en": "Opening",
@@ -467,7 +458,6 @@
             "index": 9
         },
         {
-            "title_native": "子供達",
             "aired": 1496437200,
             "title_ja": "Kodomotachi",
             "title_en": "Children",
@@ -476,7 +466,6 @@
             "index": 10
         },
         {
-            "title_native": "突撃",
             "aired": 1497042000,
             "title_ja": "Totsugeki",
             "title_en": "Charge",
@@ -485,7 +474,6 @@
             "index": 11
         },
         {
-            "title_native": "叫び",
             "aired": 1497646800,
             "title_ja": "Sakebi",
             "title_en": "Scream",

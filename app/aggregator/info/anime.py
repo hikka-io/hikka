@@ -256,7 +256,6 @@ async def process_episodes(session, anime, data):
             episode = AnimeEpisode(
                 **{
                     "aired": utils.from_timestamp(episode_data["aired"]),
-                    "title_native": episode_data["title_native"],
                     "title_ja": episode_data["title_ja"],
                     "title_en": episode_data["title_en"],
                     "title_ua": episode_data["title_ua"],
@@ -269,7 +268,6 @@ async def process_episodes(session, anime, data):
 
         else:
             episode.aired = utils.from_timestamp(episode_data["aired"])
-            episode.title_native = episode_data["title_native"]
             episode.title_ja = episode_data["title_ja"]
             episode.title_en = episode_data["title_en"]
             episode.title_ua = episode_data["title_ua"]

@@ -10,8 +10,6 @@ from ..base import Base
 class AnimeEpisode(Base, TitlesMixin):
     __tablename__ = "service_content_anime_episodes"
 
-    title_native: Mapped[str] = mapped_column(nullable=True)
-
     type: Mapped[str] = mapped_column(String(32), nullable=True)
     aired: Mapped[datetime] = mapped_column(nullable=True)
     index: Mapped[int]

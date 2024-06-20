@@ -734,7 +734,6 @@
     ],
     "episodes_list": [
         {
-            "title_native": "海の向こう側",
             "aired": 1607292000,
             "title_ja": "Umi no Mukougawa",
             "title_en": "The Other Side of the Sea",
@@ -743,7 +742,6 @@
             "index": 1
         },
         {
-            "title_native": "闇夜の列車",
             "aired": 1607896800,
             "title_ja": "Yamiyo no Ressha",
             "title_en": "Midnight Train",
@@ -752,7 +750,6 @@
             "index": 2
         },
         {
-            "title_native": "希望の扉",
             "aired": 1608501600,
             "title_ja": "Kibou no Tobira",
             "title_en": "The Door of Hope",
@@ -761,7 +758,6 @@
             "index": 3
         },
         {
-            "title_native": "手から手へ",
             "aired": 1609106400,
             "title_ja": "Te Kara Te e",
             "title_en": "From One Hand to Another",
@@ -770,7 +766,6 @@
             "index": 4
         },
         {
-            "title_native": "宣戦布告",
             "aired": 1610316000,
             "title_ja": "Sensen Fukoku",
             "title_en": "Declaration of War",
@@ -779,7 +774,6 @@
             "index": 5
         },
         {
-            "title_native": "戦鎚の巨人",
             "aired": 1610920800,
             "title_ja": "Sentsui no Kyojin",
             "title_en": "The War Hammer Titan",
@@ -788,7 +782,6 @@
             "index": 6
         },
         {
-            "title_native": "強襲",
             "aired": 1611525600,
             "title_ja": "Kyoushuu",
             "title_en": "Assault",
@@ -797,7 +790,6 @@
             "index": 7
         },
         {
-            "title_native": "凶弾",
             "aired": 1612130400,
             "title_ja": "Kyoudan",
             "title_en": "Assassin's Bullet",
@@ -806,7 +798,6 @@
             "index": 8
         },
         {
-            "title_native": "勇敢なボランティア",
             "aired": 1612735200,
             "title_ja": "Giyuuhei",
             "title_en": "Brave Volunteers",
@@ -815,7 +806,6 @@
             "index": 9
         },
         {
-            "title_native": "正論",
             "aired": 1613340000,
             "title_ja": "Seiron",
             "title_en": "A Sound Argument",
@@ -824,7 +814,6 @@
             "index": 10
         },
         {
-            "title_native": "偽り者",
             "aired": 1613944800,
             "title_ja": "Itsuwarimono",
             "title_en": "Deceiver",
@@ -833,7 +822,6 @@
             "index": 11
         },
         {
-            "title_native": "導く者",
             "aired": 1614549600,
             "title_ja": "Michibikumono",
             "title_en": "Guides",
@@ -842,7 +830,6 @@
             "index": 12
         },
         {
-            "title_native": "森の子ら",
             "aired": 1615154400,
             "title_ja": "Mori no Kora",
             "title_en": "Children of the Forest",
@@ -851,7 +838,6 @@
             "index": 13
         },
         {
-            "title_native": "暴悪",
             "aired": 1616364000,
             "title_ja": "Bouaku",
             "title_en": "Savagery",
@@ -860,7 +846,6 @@
             "index": 14
         },
         {
-            "title_native": "唯一の救い",
             "aired": 1616364000,
             "title_ja": "Yuiitsu no Sukui",
             "title_en": "Sole Salvation",
@@ -869,7 +854,6 @@
             "index": 15
         },
         {
-            "title_native": "天地",
             "aired": 1616965200,
             "title_ja": "Tenchi",
             "title_en": "Above and Below",
@@ -878,7 +862,6 @@
             "index": 16
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Judgment",
@@ -887,7 +870,6 @@
             "index": 17
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Sneak Attack",
@@ -896,7 +878,6 @@
             "index": 18
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Two Brothers",
@@ -905,7 +886,6 @@
             "index": 19
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Memories of the Future",
@@ -914,7 +894,6 @@
             "index": 20
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "From You, 2,000 Years Ago",
@@ -923,7 +902,6 @@
             "index": 21
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Thaw",
@@ -932,7 +910,6 @@
             "index": 22
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Sunset",
@@ -941,7 +918,6 @@
             "index": 23
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Pride",
@@ -950,7 +926,6 @@
             "index": 24
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Night of the End",
@@ -959,7 +934,6 @@
             "index": 25
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Traitor",
@@ -968,7 +942,6 @@
             "index": 26
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Retrospective",
@@ -977,7 +950,6 @@
             "index": 27
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "The Dawn of Humanity",
