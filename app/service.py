@@ -477,8 +477,8 @@ async def magazines_count(session: AsyncSession, slugs: list[str]):
 
 def build_manga_order_by(sort: list[str]):
     order_mapping = read_order_mapping | {
-        "media_type": Novel.media_type,
-        "start_date": Novel.start_date,
+        "media_type": Manga.media_type,
+        "start_date": Manga.start_date,
         "scored_by": Manga.scored_by,
         "score": Manga.score,
     }
