@@ -422,7 +422,6 @@
     ],
     "episodes_list": [
         {
-            "title_native": "狼煙",
             "aired": 1532293200,
             "title_ja": "Noroshi",
             "title_en": "Smoke Signal",
@@ -431,7 +430,6 @@
             "index": 1
         },
         {
-            "title_native": "痛み",
             "aired": 1532898000,
             "title_ja": "Itami",
             "title_en": "Pain",
@@ -440,7 +438,6 @@
             "index": 2
         },
         {
-            "title_native": "オールドストーリー",
             "aired": 1533502800,
             "title_ja": "Mukashibanashi",
             "title_en": "Old Story",
@@ -449,7 +446,6 @@
             "index": 3
         },
         {
-            "title_native": "信頼",
             "aired": 1534107600,
             "title_ja": "Shinrai",
             "title_en": "Trust",
@@ -458,7 +454,6 @@
             "index": 4
         },
         {
-            "title_native": "回答",
             "aired": 1534712400,
             "title_ja": "Kaitou",
             "title_en": "Reply",
@@ -467,7 +462,6 @@
             "index": 5
         },
         {
-            "title_native": "罪",
             "aired": 1535317200,
             "title_ja": "Tsumi",
             "title_en": "Sin",
@@ -476,7 +470,6 @@
             "index": 6
         },
         {
-            "title_native": "願い",
             "aired": 1535922000,
             "title_ja": "Negai",
             "title_en": "Wish",
@@ -485,7 +478,6 @@
             "index": 7
         },
         {
-            "title_native": "オルブド区外壁",
             "aired": 1536526800,
             "title_ja": "Orvud-ku Sotokabe",
             "title_en": "Outside the Walls of Orvud District",
@@ -494,7 +486,6 @@
             "index": 8
         },
         {
-            "title_native": "壁の王",
             "aired": 1537131600,
             "title_ja": "Kabe no Ou",
             "title_en": "Ruler of the Walls",
@@ -503,7 +494,6 @@
             "index": 9
         },
         {
-            "title_native": "友人",
             "aired": 1537736400,
             "title_ja": "Yuujin",
             "title_en": "Friends",
@@ -512,7 +502,6 @@
             "index": 10
         },
         {
-            "title_native": "傍観者",
             "aired": 1538946000,
             "title_ja": "Boukansha",
             "title_en": "Bystander",
@@ -521,7 +510,6 @@
             "index": 11
         },
         {
-            "title_native": "奪還作戦の夜",
             "aired": 1539550800,
             "title_ja": "Dakkan Sakusen no Yoru",
             "title_en": "Night of the Battle to Retake the Wall",
@@ -530,7 +518,6 @@
             "index": 12
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "The Town Where Everything Began",
@@ -539,7 +526,6 @@
             "index": 13
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Thunder Spears",
@@ -548,7 +534,6 @@
             "index": 14
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Descent",
@@ -557,7 +542,6 @@
             "index": 15
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Perfect Game",
@@ -566,7 +550,6 @@
             "index": 16
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Hero",
@@ -575,7 +558,6 @@
             "index": 17
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Midnight Sun",
@@ -584,7 +566,6 @@
             "index": 18
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "The Basement",
@@ -593,7 +574,6 @@
             "index": 19
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "That Day",
@@ -602,7 +582,6 @@
             "index": 20
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "Attack Titan",
@@ -611,7 +590,6 @@
             "index": 21
         },
         {
-            "title_native": null,
             "aired": null,
             "title_ja": null,
             "title_en": "The Other Side of the Wall",
