@@ -37,13 +37,23 @@ server {
 
     location / {
         limit_req zone=ip burst=10 delay=10;
-s
+
         proxy_pass http://localhost:8888;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
+    }
+
+    location /sitemap/ {
+        alias /home/debian/sitemap/;
+        try_files $uri =404;
+    }
+
+    location /metrics {
+        deny all;
+        return 403;
     }
 }
 ```
