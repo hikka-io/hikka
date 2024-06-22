@@ -51,6 +51,7 @@ class AnimeWatchSearchArgs(AnimeSearchArgsBase):
         valid_orders = ["asc", "desc"]
         valid_fields = [
             "watch_episodes",
+            "watch_updated",
             "watch_created",
             "watch_score",
             "media_type",

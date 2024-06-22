@@ -49,6 +49,7 @@ class ReadSearchArgs(CustomModel, MangaSearchBaseMixin, YearsMixin):
             [
                 "read_chapters",
                 "read_volumes",
+                "read_updated",
                 "read_created",
                 "read_score",
                 "media_type",
