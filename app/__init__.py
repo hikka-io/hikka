@@ -1,3 +1,4 @@
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -132,5 +133,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     @app.get("/ping")
     async def ping_pong():
         return "pong"
+
+    Instrumentator().instrument(app).expose(app)
 
     return app
