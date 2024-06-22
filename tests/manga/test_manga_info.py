@@ -21,8 +21,7 @@ async def test_manga_info(
     assert response.json()["scored_by"] == 158333
     assert response.json()["score"] == 9.04
 
-    # assert len(response.json()["authors"]) == 3
-    assert len(response.json()["external"]) == 3
+    assert len(response.json()["external"]) == 4
     assert len(response.json()["genres"]) == 6
 
     assert response.json()["translated_ua"] is False

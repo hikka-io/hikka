@@ -28,12 +28,14 @@ async def test_import_manga_info(
 
     assert len(manga.genres) == 6
     assert len(manga.authors) == 1
-    assert len(manga.external) == 3
+    assert len(manga.external) == 4
     assert manga.chapters == 116
     assert manga.volumes == 27
 
     assert manga.external[0]["type"] == constants.EXTERNAL_GENERAL
     assert manga.external[0]["text"] == "Official Site"
+    assert manga.external[3]["type"] == constants.EXTERNAL_READ
+    assert manga.external[3]["text"] == "Manga.in.ua"
 
     # Check edit
     edit = await test_session.scalar(
@@ -71,13 +73,19 @@ async def test_import_manga_info(
                 "text": "Wikipedia",
                 "type": "general",
             },
+            {
+                "url": "https://manga.in.ua/mangas/boyovik/3260-stalevij-alhimik-fullmetal-alchemist.html",
+                "text": "Manga.in.ua",
+                "type": "read",
+            },
         ],
         "synonyms": [
+            "FMA",
             "Full Metal Alchemist",
-            " Hagane no Renkinjutsushi",
-            " FMA",
-            " HagaRen",
-            " Fullmetal Alchemist Gaiden",
+            "Fullmetal Alchemist Gaiden",
+            "HagaRen",
+            "Hagane no Renkinjutsushi",
+            "Алхімік",
         ],
         "synopsis_en": "Alchemists are knowledgeable and naturally talented "
         "individuals who can manipulate and modify matter due to their art. "

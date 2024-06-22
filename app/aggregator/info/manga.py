@@ -47,6 +47,24 @@ def process_external(data):
         for entry in data["external"]
     ]
 
+    for source in ["honey", "zenko", "miu"]:
+        website_name = {
+            "miu": "Manga.in.ua",
+            "honey": "Honey Manga",
+            "zenko": "Zenko",
+        }.get(source)
+
+        result.extend(
+            [
+                {
+                    "type": constants.EXTERNAL_READ,
+                    "text": website_name,
+                    "url": entry["url"],
+                }
+                for entry in data.get(source, [])
+            ]
+        )
+
     return result
 
 
@@ -209,6 +227,17 @@ async def process_characters(session, manga, data):
     return characters
 
 
+def process_synonyms(data):
+    result = []
+
+    synonyms = data.get("synonyms", []) + data.get("synonyms_alt", [])
+
+    for synonym in list(set(synonyms)):
+        result.append(synonym.strip())
+
+    return sorted(result)
+
+
 async def update_manga_info(session, manga, data):
     # NOTE: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
@@ -226,7 +255,6 @@ async def update_manga_info(session, manga, data):
         ["media_type", "media_type"],
         ["title_en", "title_en"],
         ["title_ua", "title_ua"],
-        ["synonyms", "synonyms"],
         ["chapters", "chapters"],
         ["volumes", "volumes"],
         ["status", "status"],
@@ -267,11 +295,13 @@ async def update_manga_info(session, manga, data):
     # Get external list and translated_ua status
     translated_ua = process_translated_ua(data)
     external = process_external(data)
+    synonyms = process_synonyms(data)
 
     for field, value in [
         ("year", year),
         ("translated_ua", translated_ua),
         ("external", external),
+        ("synonyms", synonyms),
     ]:
         if getattr(manga, field) != value and field not in manga.ignored_fields:
             before[field] = getattr(manga, field)

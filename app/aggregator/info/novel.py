@@ -209,6 +209,17 @@ async def process_characters(session, novel, data):
     return characters
 
 
+def process_synonyms(data):
+    result = []
+
+    synonyms = data.get("synonyms", []) + data.get("synonyms_alt", [])
+
+    for synonym in list(set(synonyms)):
+        result.append(synonym.strip())
+
+    return sorted(result)
+
+
 async def update_novel_info(session, novel, data):
     # NOTE: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
@@ -226,7 +237,6 @@ async def update_novel_info(session, novel, data):
         ["media_type", "media_type"],
         ["title_en", "title_en"],
         ["title_ua", "title_ua"],
-        ["synonyms", "synonyms"],
         ["chapters", "chapters"],
         ["volumes", "volumes"],
         ["status", "status"],
@@ -267,11 +277,13 @@ async def update_novel_info(session, novel, data):
     # Get external list and translated_ua status
     translated_ua = process_translated_ua(data)
     external = process_external(data)
+    synonyms = process_synonyms(data)
 
     for field, value in [
         ("year", year),
         ("translated_ua", translated_ua),
         ("external", external),
+        ("synonyms", synonyms),
     ]:
         if getattr(novel, field) != value and field not in novel.ignored_fields:
             before[field] = getattr(novel, field)

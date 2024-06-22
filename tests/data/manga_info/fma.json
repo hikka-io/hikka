@@ -1029,5 +1029,9 @@
         "score_10": 73337,
         "completed": 160273
     },
-    "nsfw": false
+    "nsfw": false,
+    "miu": [{
+        "url": "https://manga.in.ua/mangas/boyovik/3260-stalevij-alhimik-fullmetal-alchemist.html"
+    }],
+    "synonyms_alt": ["Алхімік"]
 }
