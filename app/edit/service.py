@@ -34,6 +34,8 @@ from app.models import (
     Character,
     Person,
     Anime,
+    Manga,
+    Novel,
     Edit,
     User,
 )
@@ -81,6 +83,8 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
             joinedload(CharacterEdit.content),
             joinedload(PersonEdit.content),
             joinedload(AnimeEdit.content),
+            joinedload(MangaEdit.content),
+            joinedload(NovelEdit.content),
             with_expression(
                 Edit.comments_count,
                 get_comments_count_subquery(
@@ -175,6 +179,18 @@ async def get_edits(
             Anime.title_en,
             Anime.title_ua,
             Anime.slug,
+        ),
+        joinedload(MangaEdit.content).load_only(
+            Manga.title_original,
+            Manga.title_en,
+            Manga.title_ua,
+            Manga.slug,
+        ),
+        joinedload(NovelEdit.content).load_only(
+            Novel.title_original,
+            Novel.title_en,
+            Novel.title_ua,
+            Novel.slug,
         ),
         joinedload(PersonEdit.content).load_only(
             Person.name_native,

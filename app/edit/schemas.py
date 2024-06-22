@@ -198,6 +198,20 @@ class EditSimpleAnimeResponse(CustomModel):
     slug: str
 
 
+class EditSimpleMangaResponse(CustomModel):
+    title_original: str | None
+    title_en: str | None
+    title_ua: str | None
+    slug: str
+
+
+class EditSimpleNovelResponse(CustomModel):
+    title_original: str | None
+    title_en: str | None
+    title_ua: str | None
+    slug: str
+
+
 class EditSimplePersonResponse(CustomModel):
     name_native: str | None
     name_en: str | None
@@ -215,6 +229,8 @@ class EditSimpleCharacterResponse(CustomModel):
 class EditSimpleResponse(EditResponseBase):
     content: (
         EditSimpleAnimeResponse
+        | EditSimpleMangaResponse
+        | EditSimpleNovelResponse
         | EditSimplePersonResponse
         | EditSimpleCharacterResponse
     )
