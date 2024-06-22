@@ -29,8 +29,6 @@ from app.dependencies import (
 )
 
 from .schemas import (
-    CommentPreviewListResponse,
-    CommentPreviewResponse,
     CommentListResponse,
     CommentResponse,
     ContentTypeEnum,
@@ -43,12 +41,7 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-# TODO: Remove me!
-@router.get("/latest", response_model=list[CommentPreviewResponse])
-async def latest_comments_legacy(session: AsyncSession = Depends(get_session)):
-    return await service.latest_comments_legacy(session)
-
-
+@router.get("/latest", response_model=list[CommentResponse])
 @router.get("/latest/new", response_model=list[CommentResponse])
 async def latest_comments(session: AsyncSession = Depends(get_session)):
     comments = await service.latest_comments(session)
@@ -58,23 +51,7 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
     ]
 
 
-# TODO: Remove me!
-@router.get("/list", response_model=CommentPreviewListResponse)
-async def comments_list_legacy(
-    session: AsyncSession = Depends(get_session),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.count_comments(session)
-    comments = await service.get_comments_legacy(session, limit, offset)
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": comments,
-    }
-
-
+@router.get("/list", response_model=CommentListResponse)
 @router.get("/list/new", response_model=CommentListResponse)
 async def comments_list(
     request_user: User = Depends(auth_required(optional=True)),
