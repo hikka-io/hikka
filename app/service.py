@@ -58,6 +58,7 @@ content_type_to_content_class = {
 read_order_mapping = {
     "read_chapters": Read.chapters,
     "read_volumes": Read.volumes,
+    "read_updated": Read.updated,
     "read_created": Read.created,
     "read_score": Read.score,
 }
