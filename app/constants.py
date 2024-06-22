@@ -95,6 +95,7 @@ SOURCE_BOOK = "book"
 
 EXTERNAL_GENERAL = "general"
 EXTERNAL_WATCH = "watch"
+EXTERNAL_READ = "read"
 
 SEARCH_RESULT_SIZE = 15
 
