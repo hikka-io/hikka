@@ -89,7 +89,9 @@ async def test_edit_create(
     # And now check if SQLAlchemy's polymorphic identity works
     edits = (
         await test_session.scalars(
-            select(Edit).filter(Edit.system_edit == False)  # noqa: E712
+            select(Edit)
+            .filter(Edit.system_edit == False)  # noqa: E712
+            .order_by(Edit.created.asc())
         )
     ).all()
 

@@ -24,4 +24,4 @@ class Upload(Base, CreatedMixin):
         index=True,
     )
 
-    image: Mapped["Image"] = relationship(lazy="selectin")
+    image: Mapped["Image"] = relationship(lazy="joined")

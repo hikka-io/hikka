@@ -93,11 +93,11 @@ class User(Base, NeedsSearchUpdateMixin):
     )
 
     avatar_image_relation: Mapped["Image"] = relationship(
-        foreign_keys=[avatar_image_id], lazy="selectin"
+        foreign_keys=[avatar_image_id], lazy="joined"
     )
 
     cover_image_relation: Mapped["Image"] = relationship(
-        foreign_keys=[cover_image_id], lazy="selectin"
+        foreign_keys=[cover_image_id], lazy="joined"
     )
 
     @hybrid_property

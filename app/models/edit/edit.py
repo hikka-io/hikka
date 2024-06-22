@@ -47,13 +47,13 @@ class Edit(
     moderator: Mapped["User"] = relationship(
         back_populates="decisions",
         foreign_keys=[moderator_id],
-        lazy="selectin",
+        lazy="joined",
     )
 
     author: Mapped["User"] = relationship(
         back_populates="edits",
         foreign_keys=[author_id],
-        lazy="selectin",
+        lazy="joined",
     )
 
     content_id: Mapped[UUID]
