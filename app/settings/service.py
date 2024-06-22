@@ -143,7 +143,7 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
         user.avatar_image_id = None
 
     if image_type == constants.UPLOAD_COVER:
-        image_id = user.avatar_image_id = user.cover_image_id
+        image_id = user.cover_image_id
         user.cover_image_id = None
 
     session.add(user)
