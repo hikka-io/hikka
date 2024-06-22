@@ -297,24 +297,6 @@ async def latest_comments(session: AsyncSession):
     return comments
 
 
-# TODO: Remove me!
-async def latest_comments_legacy(session: AsyncSession):
-    comment_ids = await session.scalars(
-        select(Comment.id, Comment.content_id)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .group_by(Comment.id, Comment.content_id)
-        .order_by(desc(Comment.created))
-        .limit(3)
-    )
-
-    return await comments_preview_display(session, comment_ids)
-
-
 async def count_comments(session: AsyncSession) -> int:
     """Count comments"""
 
@@ -326,24 +308,6 @@ async def count_comments(session: AsyncSession) -> int:
             Comment.deleted == False,  # noqa: E712
         )
     )
-
-
-# TODO: Remove me!
-async def get_comments_legacy(session: AsyncSession, limit: int, offset: int):
-    comment_ids = await session.scalars(
-        select(Comment.id, Comment.content_id)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .order_by(desc(Comment.created))
-        .limit(limit)
-        .offset(offset)
-    )
-
-    return await comments_preview_display(session, comment_ids)
 
 
 async def get_comments(
