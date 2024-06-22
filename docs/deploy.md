@@ -15,7 +15,7 @@ User=debian
 Group=www-data
 WorkingDirectory=/home/debian/hikka
 Environment="PATH=/home/debian/hikka/venv/bin"
-ExecStart=/home/debian/hikka/venv/bin/uvicorn run:app --port=8888
+ExecStart=/home/debian/hikka/venv/bin/gunicorn run:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 127.0.0.1:8888
 
 [Install]
 WantedBy=multi-user.target

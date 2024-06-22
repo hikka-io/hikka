@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import contains_eager
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
 import random
@@ -146,7 +146,7 @@ async def get_user_watch_list(
     return await session.scalars(
         anime_search_filter(search, query.join(Anime), False)
         .order_by(*build_anime_order_by(search.sort))
-        .options(anime_loadonly(selectinload(AnimeWatch.anime)))
+        .options(anime_loadonly(joinedload(AnimeWatch.anime)))
         .limit(limit)
         .offset(offset)
     )
