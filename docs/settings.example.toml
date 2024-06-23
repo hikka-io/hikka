@@ -79,3 +79,7 @@
     endpoint = "https://fake.s3.example.com"
     bucket = "hikka-test"
 
+    [testing.profiling]
+    enabled = false
+    trigger = "query"  # [query/all]
+    path = ".profile_info"
