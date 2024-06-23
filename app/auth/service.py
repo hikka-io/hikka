@@ -53,7 +53,7 @@ async def create_oauth_user(
         tmp_username = email.split("@")[0][:32]
 
         # Thanks @t for finding this ;)
-        if tmp_username > 4:
+        if len(tmp_username) > 4:
             username = tmp_username
 
     # Just in case
