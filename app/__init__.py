@@ -7,6 +7,8 @@ from app.utils import get_settings
 from fastapi import FastAPI
 from app import errors
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 
 def create_app(init_db: bool = True) -> FastAPI:
     settings = get_settings()
@@ -132,5 +134,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     @app.get("/ping")
     async def ping_pong():
         return "pong"
+
+    Instrumentator().instrument(app).expose(app)
 
     return app
