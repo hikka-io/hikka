@@ -50,7 +50,11 @@ async def create_oauth_user(
 
     # If email is present we split it and get first 32 characters
     if email:
-        username = email.split("@")[0][:32]
+        tmp_username = email.split("@")[0][:32]
+
+        # Thanks @t for finding this ;)
+        if tmp_username > 4:
+            username = tmp_username
 
     # Just in case
     max_attempts = 5
