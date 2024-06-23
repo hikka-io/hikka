@@ -28,6 +28,72 @@ from app.service import (
 )
 
 
+async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
+    return await session.scalar(
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.deleted == False,  # noqa: E712
+            AnimeWatch.status == status,
+            AnimeWatch.user == user,
+        )
+    )
+
+
+async def get_user_watch_duration(session: AsyncSession, user: User):
+    duration = await session.scalar(
+        select(func.sum(AnimeWatch.duration)).filter(AnimeWatch.user == user)
+    )
+
+    return duration if duration else 0
+
+
+async def generate_watch_stats(session: AsyncSession, user: User) -> User:
+    completed = await get_user_watch_stats(
+        session,
+        user,
+        constants.WATCH_COMPLETED,
+    )
+
+    watching = await get_user_watch_stats(
+        session,
+        user,
+        constants.WATCH_WATCHING,
+    )
+
+    planned = await get_user_watch_stats(
+        session,
+        user,
+        constants.WATCH_PLANNED,
+    )
+
+    on_hold = await get_user_watch_stats(
+        session,
+        user,
+        constants.WATCH_ON_HOLD,
+    )
+
+    dropped = await get_user_watch_stats(
+        session,
+        user,
+        constants.WATCH_DROPPED,
+    )
+
+    duration = await get_user_watch_duration(session, user)
+
+    user.anime_stats = {
+        "duration": duration,
+        "completed": completed,
+        "watching": watching,
+        "planned": planned,
+        "on_hold": on_hold,
+        "dropped": dropped,
+    }
+
+    session.add(user)
+    await session.commit()
+
+    return user
+
+
 async def save_watch(
     session: AsyncSession, anime: Anime, user: User, args: WatchArgs
 ):
@@ -76,6 +142,8 @@ async def save_watch(
             },
         )
 
+        await generate_watch_stats(session, user)
+
     return watch
 
 
@@ -93,17 +161,9 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
         watch.anime.id,
     )
 
+    await generate_watch_stats(session, user)
+
     await session.commit()
-
-
-async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
-    return await session.scalar(
-        select(func.count(AnimeWatch.id)).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
-            AnimeWatch.status == status,
-            AnimeWatch.user == user,
-        )
-    )
 
 
 async def random_watch(session: AsyncSession, user: User, status: str | None):
@@ -118,14 +178,6 @@ async def random_watch(session: AsyncSession, user: User, status: str | None):
     )
 
     return anime
-
-
-async def get_user_watch_duration(session: AsyncSession, user: User):
-    duration = await session.scalar(
-        select(func.sum(AnimeWatch.duration)).filter(AnimeWatch.user == user)
-    )
-
-    return duration if duration else 0
 
 
 async def get_user_watch_list(

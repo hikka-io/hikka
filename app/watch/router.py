@@ -4,7 +4,6 @@ from app.models import User, Anime, AnimeWatch
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app import constants
 from typing import Tuple
 from . import service
 
@@ -88,41 +87,8 @@ async def get_watch_following(
     summary="Get user watch list stats",
     response_model=WatchStatsResponse,
 )
-async def user_watch_stats(
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(get_user),
-):
-    # This looks awful -> refactor it into something better
-    completed = await service.get_user_watch_stats(
-        session, user, constants.WATCH_COMPLETED
-    )
-
-    watching = await service.get_user_watch_stats(
-        session, user, constants.WATCH_WATCHING
-    )
-
-    planned = await service.get_user_watch_stats(
-        session, user, constants.WATCH_PLANNED
-    )
-
-    on_hold = await service.get_user_watch_stats(
-        session, user, constants.WATCH_ON_HOLD
-    )
-
-    dropped = await service.get_user_watch_stats(
-        session, user, constants.WATCH_DROPPED
-    )
-
-    duration = await service.get_user_watch_duration(session, user)
-
-    return {
-        "duration": duration,
-        "completed": completed,
-        "watching": watching,
-        "planned": planned,
-        "on_hold": on_hold,
-        "dropped": dropped,
-    }
+async def user_watch_stats(user: User = Depends(get_user)):
+    return user.anime_stats
 
 
 @router.get("/random/{username}/{status}", response_model=AnimeResponse)
@@ -131,8 +97,7 @@ async def random_watch_entry(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(verify_user_random),
 ):
-    result = await service.random_watch(session, user, status)
-    return result
+    return await service.random_watch(session, user, status)
 
 
 @router.post("/{username}/list", response_model=WatchPaginationResponse)

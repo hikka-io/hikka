@@ -27,6 +27,65 @@ from app.models import (
 )
 
 
+async def get_user_read_stats(
+    session: AsyncSession,
+    user: User,
+    content_type: str,
+    status: str,
+):
+    return await session.scalar(
+        select(func.count(Read.id)).filter(
+            Read.content_type == content_type,
+            Read.deleted == False,  # noqa: E712
+            Read.status == status,
+            Read.user == user,
+        )
+    )
+
+
+async def generate_read_stats(
+    session: AsyncSession, user: User, content_type: str
+) -> User:
+    completed = await get_user_read_stats(
+        session, user, content_type, constants.READ_COMPLETED
+    )
+
+    reading = await get_user_read_stats(
+        session, user, content_type, constants.READ_READING
+    )
+
+    planned = await get_user_read_stats(
+        session, user, content_type, constants.READ_PLANNED
+    )
+
+    on_hold = await get_user_read_stats(
+        session, user, content_type, constants.READ_ON_HOLD
+    )
+
+    dropped = await get_user_read_stats(
+        session, user, content_type, constants.READ_DROPPED
+    )
+
+    read_stats = {
+        "completed": completed,
+        "reading": reading,
+        "planned": planned,
+        "on_hold": on_hold,
+        "dropped": dropped,
+    }
+
+    if content_type == constants.CONTENT_MANGA:
+        user.manga_stats = read_stats
+
+    if content_type == constants.CONTENT_NOVEL:
+        user.novel_stats = read_stats
+
+    session.add(user)
+    await session.commit()
+
+    return user
+
+
 async def get_read(
     session: AsyncSession,
     content_type: str,
@@ -107,6 +166,8 @@ async def save_read(
             },
         )
 
+        await generate_read_stats(session, user, content_type)
+
     return read
 
 
@@ -130,6 +191,8 @@ async def delete_read(
             "content_type": read.content.data_type,
         },
     )
+
+    await generate_read_stats(session, user, read.content.data_type)
 
     await session.commit()
 
@@ -169,22 +232,6 @@ async def get_read_following(
         .order_by(desc(Read.score), desc(Read.updated))
         .limit(limit)
         .offset(offset)
-    )
-
-
-async def get_user_read_stats(
-    session: AsyncSession,
-    user: User,
-    content_type: str,
-    status: str,
-):
-    return await session.scalar(
-        select(func.count(Read.id)).filter(
-            Read.content_type == content_type,
-            Read.deleted == False,  # noqa: E712
-            Read.status == status,
-            Read.user == user,
-        )
     )
 
 

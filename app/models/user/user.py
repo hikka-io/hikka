@@ -72,10 +72,6 @@ class User(Base, NeedsSearchUpdateMixin):
         foreign_keys="[Edit.author_id]", back_populates="author"
     )
 
-    # comments: Mapped[list["Comment"]] = relationship(
-    #     foreign_keys="[Comment.author_id]", back_populates="author"
-    # )
-
     decisions: Mapped[list["Edit"]] = relationship(
         foreign_keys="[Edit.moderator_id]", back_populates="moderator"
     )
@@ -98,6 +94,42 @@ class User(Base, NeedsSearchUpdateMixin):
 
     cover_image_relation: Mapped["Image"] = relationship(
         foreign_keys=[cover_image_id], lazy="joined"
+    )
+
+    # Here we record users watch/read stats to prevent slow db queries
+    # NOTE: if we add/remove fields from watch/read we must reflect them here
+    anime_stats: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "duration": 0,
+            "completed": 0,
+            "watching": 0,
+            "planned": 0,
+            "on_hold": 0,
+            "dropped": 0,
+        },
+    )
+
+    manga_stats: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "completed": 0,
+            "reading": 0,
+            "planned": 0,
+            "on_hold": 0,
+            "dropped": 0,
+        },
+    )
+
+    novel_stats: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "completed": 0,
+            "reading": 0,
+            "planned": 0,
+            "on_hold": 0,
+            "dropped": 0,
+        },
     )
 
     @hybrid_property
