@@ -1,3 +1,5 @@
+from app.watch.service import generate_watch_stats
+from app.read.service import generate_read_stats
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func
 from app import constants
@@ -182,6 +184,8 @@ async def delete_user_watch(session: AsyncSession, user: User):
         data={"watch_count": watch_count},
     )
 
+    await generate_watch_stats(session, user)
+
 
 async def delete_user_read(
     session: AsyncSession, user: User, content_type: str
@@ -212,6 +216,8 @@ async def delete_user_read(
             "read_count": read_count,
         },
     )
+
+    await generate_read_stats(session, user, content_type)
 
 
 async def import_watch_list(
@@ -302,6 +308,8 @@ async def import_watch_list(
             user,
             data={"imported": imported, "overwrite": args.overwrite},
         )
+
+        await generate_watch_stats(session, user)
 
 
 async def get_read(session: AsyncSession, content: Manga | Novel, user: User):
@@ -427,3 +435,9 @@ async def import_read_list(
                 "overwrite": args.overwrite,
             },
         )
+
+        if imported_manga > 0:
+            await generate_read_stats(session, user, constants.CONTENT_MANGA)
+
+        if imported_novel > 0:
+            await generate_read_stats(session, user, constants.CONTENT_NOVEL)
