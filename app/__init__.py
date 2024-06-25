@@ -63,7 +63,7 @@ def create_app(init_db: bool = True) -> FastAPI:
         # docs_url=None,
     )
 
-    app.add_middleware(TimeoutMiddleware, timeout=10)
+    app.add_middleware(TimeoutMiddleware, timeout=60)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.backend.origins,
