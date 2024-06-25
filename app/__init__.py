@@ -1,13 +1,13 @@
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.database import sessionmanager
+from app.utils import TimeoutMiddleware
 import fastapi.openapi.utils as fu
 from app.utils import get_settings
 from fastapi import FastAPI
 from app import errors
-
-from prometheus_fastapi_instrumentator import Instrumentator
 
 
 def create_app(init_db: bool = True) -> FastAPI:
@@ -63,6 +63,7 @@ def create_app(init_db: bool = True) -> FastAPI:
         # docs_url=None,
     )
 
+    app.add_middleware(TimeoutMiddleware, timeout=3)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.backend.origins,
