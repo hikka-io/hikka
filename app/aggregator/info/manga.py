@@ -34,7 +34,9 @@ async def process_genres(session, manga, data):
 
 
 def process_translated_ua(data):
-    return False
+    return (
+        len(data["honey"]) > 0 or len(data["zenko"]) > 0 or len(data["miu"]) > 0
+    )
 
 
 def process_external(data):
