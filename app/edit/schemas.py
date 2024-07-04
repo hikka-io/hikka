@@ -16,9 +16,9 @@ from app.schemas import (
 
 
 # Enums
-class AnimeToDoEnum(str, Enum):
-    synopsis_ua = constants.TODO_ANIME_SYNOPSIS_UA
-    title_ua = constants.TODO_ANIME_TITLE_UA
+class ToDoEnum(str, Enum):
+    synopsis_ua = constants.TODO_SYNOPSIS_UA
+    title_ua = constants.TODO_TITLE_UA
 
 
 class EditContentTypeEnum(str, Enum):

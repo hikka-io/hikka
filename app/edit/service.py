@@ -4,6 +4,8 @@ from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
+
+from app.models.list.read import MangaRead, NovelRead
 from .utils import calculate_before
 from app.utils import utcnow
 from app import constants
@@ -19,8 +21,8 @@ from app.service import (
 from .schemas import (
     EditContentTypeEnum,
     EditSearchArgs,
-    AnimeToDoEnum,
     EditArgs,
+    ToDoEnum,
 )
 
 from app.models import (
@@ -407,17 +409,17 @@ async def deny_pending_edit(
 
 async def anime_todo_total(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    todo_type: ToDoEnum,
 ):
     query = select(func.count(Anime.id)).filter(
         ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
         Anime.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
+    if todo_type == constants.TODO_TITLE_UA:
         query = query.filter(Anime.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
+    if todo_type == constants.TODO_SYNOPSIS_UA:
         query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
 
     return await session.scalar(query)
@@ -425,7 +427,7 @@ async def anime_todo_total(
 
 async def anime_todo(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    todo_type: ToDoEnum,
     request_user: User | None,
     limit: int,
     offset: int,
@@ -444,15 +446,119 @@ async def anime_todo(
         Anime.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
+    if todo_type == constants.TODO_TITLE_UA:
         query = query.filter(Anime.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
+    if todo_type == constants.TODO_SYNOPSIS_UA:
         query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
 
     return await session.scalars(
         query.order_by(
             desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+        )
+        .options(*load_options)
+        .limit(limit)
+        .offset(offset)
+    )
+
+async def manga_todo_total(
+    session: AsyncSession,
+    todo_type: ToDoEnum,
+):
+    query = select(func.count(Manga.id)).filter(
+        Manga.deleted == False,  # noqa: E712
+    )
+
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(Manga.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(Manga.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalar(query)
+
+
+async def manga_todo(
+    session: AsyncSession,
+    todo_type: ToDoEnum,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Manga.read),
+        with_loader_criteria(
+            MangaRead,
+            MangaRead.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Manga).filter(
+        Manga.deleted == False,  # noqa: E712
+    )
+
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(Manga.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(Manga.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalars(
+        query.order_by(
+            desc(Manga.score), desc(Manga.scored_by), desc(Manga.content_id)
+        )
+        .options(*load_options)
+        .limit(limit)
+        .offset(offset)
+    )
+
+async def novel_todo_total(
+    session: AsyncSession,
+    todo_type: ToDoEnum,
+):
+    query = select(func.count(Manga.id)).filter(
+        Manga.deleted == False,  # noqa: E712
+    )
+
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(Manga.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(Manga.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalar(query)
+
+
+async def novel_todo(
+    session: AsyncSession,
+    todo_type: ToDoEnum,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    # Load request user watch statuses here
+    load_options = [
+        joinedload(Novel.read),
+        with_loader_criteria(
+            NovelRead,
+            NovelRead.user_id == request_user.id if request_user else None,
+        ),
+    ]
+
+    query = select(Novel).filter(
+        Novel.deleted == False,  # noqa: E712
+    )
+
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(Novel.title_ua == None)  # noqa: E711
+
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(Novel.synopsis_ua == None)  # noqa: E711
+
+    return await session.scalars(
+        query.order_by(
+            desc(Novel.score), desc(Novel.scored_by), desc(Novel.content_id)
         )
         .options(*load_options)
         .limit(limit)

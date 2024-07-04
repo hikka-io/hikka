@@ -1,4 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.manga.schemas import MangaPaginationResponse
+from app.novel.schemas import NovelPaginationResponse
 from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -43,9 +45,9 @@ from .schemas import (
     EditContentTypeEnum,
     EditListResponse,
     EditSearchArgs,
-    AnimeToDoEnum,
     EditResponse,
     EditArgs,
+    ToDoEnum,
 )
 
 
@@ -136,8 +138,8 @@ async def deny_edit(
 
 
 @router.get("/todo/anime/{todo_type}", response_model=AnimePaginationResponse)
-async def get_edit_todo(
-    todo_type: AnimeToDoEnum,
+async def get_anime_edit_todo(
+    todo_type: ToDoEnum,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     page: int = Depends(get_page),
@@ -152,4 +154,42 @@ async def get_edit_todo(
     return {
         "pagination": pagination_dict(total, page, limit),
         "list": anime.unique().all(),
+    }
+
+@router.get("/todo/manga/{todo_type}", response_model=MangaPaginationResponse)
+async def get_manga_edit_todo(
+    todo_type: ToDoEnum,
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.manga_todo_total(session, todo_type)
+    manga = await service.manga_todo(
+        session, todo_type, request_user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": manga.unique().all(),
+    }
+
+@router.get("/todo/novel/{todo_type}", response_model=NovelPaginationResponse)
+async def get_novel_edit_todo(
+    todo_type: ToDoEnum,
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    total = await service.novel_todo_total(session, todo_type)
+    novel = await service.novel_todo(
+        session, todo_type, request_user, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": novel.unique().all(),
     }
