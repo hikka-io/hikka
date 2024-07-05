@@ -42,12 +42,13 @@ from .dependencies import (
 )
 
 from .schemas import (
+    ContentToDoEnum,
+    EditContentToDoEnum,
     EditContentTypeEnum,
     EditListResponse,
     EditSearchArgs,
     EditResponse,
     EditArgs,
-    ToDoEnum,
 )
 
 
@@ -137,59 +138,27 @@ async def deny_edit(
     return await service.deny_pending_edit(session, edit, moderator)
 
 
-@router.get("/todo/anime/{todo_type}", response_model=AnimePaginationResponse)
-async def get_anime_edit_todo(
-    todo_type: ToDoEnum,
+@router.get(
+    "/todo/{content_type}/{todo_type}",
+    response_model=AnimePaginationResponse
+    | MangaPaginationResponse
+    | NovelPaginationResponse,
+)
+async def get_content_edit_todo(
+    content_type: EditContentToDoEnum,
+    todo_type: ContentToDoEnum,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.anime_todo_total(session, todo_type)
-    anime = await service.anime_todo(
-        session, todo_type, request_user, limit, offset
+    total = await service.content_todo_total(session, content_type, todo_type)
+    content = await service.content_todo(
+        session, content_type, todo_type, request_user, limit, offset
     )
 
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
-    }
-
-@router.get("/todo/manga/{todo_type}", response_model=MangaPaginationResponse)
-async def get_manga_edit_todo(
-    todo_type: ToDoEnum,
-    session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.manga_todo_total(session, todo_type)
-    manga = await service.manga_todo(
-        session, todo_type, request_user, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": manga.unique().all(),
-    }
-
-@router.get("/todo/novel/{todo_type}", response_model=NovelPaginationResponse)
-async def get_novel_edit_todo(
-    todo_type: ToDoEnum,
-    session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.novel_todo_total(session, todo_type)
-    novel = await service.novel_todo(
-        session, todo_type, request_user, limit, offset
-    )
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": novel.unique().all(),
+        "list": content.unique().all(),
     }
