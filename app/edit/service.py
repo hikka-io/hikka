@@ -143,7 +143,7 @@ async def edits_search_filter(
         query = query.filter(Edit.status == args.status)
 
     query = query.filter(
-        Edit.system_edit == False,
+        Edit.system_edit == False,  # noqa: E712
         Edit.hidden == False,  # noqa: E712
     )
 
