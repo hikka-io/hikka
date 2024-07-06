@@ -382,19 +382,19 @@ class AnimeResponse(CustomModel, DataTypeMixin):
 
 
 class MangaResponse(CustomModel, DataTypeMixin):
-    title_original: str | None
-    media_type: str | None
-    title_ua: str | None
-    title_en: str | None
-    chapters: int | None
-    volumes: int | None
-    translated_ua: bool
-    status: str | None
-    image: str | None
-    year: int | None
-    scored_by: int
-    score: float
-    slug: str
+    title_original: str | None = Field(examples=["Monster"])
+    media_type: str | None = Field(examples=["manga"])
+    title_ua: str | None = Field(examples=["Монстр"])
+    title_en: str | None = Field(examples=["Monster"])
+    chapters: int | None = Field(examples=[162])
+    volumes: int | None = Field(examples=[18])
+    translated_ua: bool = Field(True)
+    status: str | None = Field(examples=["finished"])
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    year: int | None = Field(examples=[1994])
+    scored_by: int = Field(examples=[99368])
+    score: float = Field(examples=[9.16])
+    slug: str = Field(examples=["monster-54bb37"])
 
 
 class NovelResponse(CustomModel, DataTypeMixin):
