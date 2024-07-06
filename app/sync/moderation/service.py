@@ -1,24 +1,28 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
-from app.models import Moderation
-# from datetime import datetime
-# from uuid import UUID
+from app.models import Moderation, Edit
+from datetime import datetime
+from uuid import UUID
 
 
 async def get_moderation(
     session: AsyncSession,
-    # content_type: str,
-    # content_id: UUID,
-    # user_id: UUID,
-    # threshold: datetime,
+    user_id: UUID,
+    log_id: UUID,
+    target_type: str | None = None,
 ):
-    return await session.scalar(
-        select(Moderation)
-        # .filter(
-        #     Moderation.content_type == content_type,
-        #     Moderation.content_id == content_id,
-        #     Moderation.user_id == user_id,
-        #     Moderation.created > threshold,
-        # )
-        .order_by(desc(Moderation.created))
+    query = select(Moderation).filter(
+        Moderation.user_id == user_id,
+        Moderation.log_id == log_id,
     )
+
+    if target_type:
+        query = query.filter(
+            Moderation.target_type == target_type,
+        )
+
+    return await session.scalar(query.order_by(desc(Moderation.created)))
+
+
+async def get_edit(session, content_id):
+    return await session.scalar(select(Edit).filter(Edit.id == content_id))

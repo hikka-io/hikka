@@ -1,38 +1,20 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.dialects.postgresql import JSONB
 from ..mixins import CreatedMixin
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
+from sqlalchemy import String
 from ..base import Base
 from uuid import UUID
 
 
 class Moderation(Base, CreatedMixin):
     __tablename__ = "service_moderation"
-    __mapper_args__ = {
-        "polymorphic_identity": "default",
-        "polymorphic_on": "content_type",
-    }
 
-    content_type: Mapped[str]
-    content_id: Mapped[UUID]
+    target_type: Mapped[str] = mapped_column(String(64), index=True)
+    data: Mapped[dict] = mapped_column(JSONB, default={})
+    log_id: Mapped[UUID] = mapped_column(nullable=True)
 
     user_id = mapped_column(ForeignKey("service_users.id"))
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
-
-
-class EditModeration(Moderation):
-    __mapper_args__ = {
-        "polymorphic_identity": "edit",
-        "eager_defaults": True,
-    }
-
-    content_id = mapped_column(
-        ForeignKey("service_edits.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
-    content: Mapped["Edit"] = relationship(
-        primaryjoin="Edit.id == EditModeration.content_id",
-        foreign_keys=[content_id],
-        lazy="immediate",
-    )
