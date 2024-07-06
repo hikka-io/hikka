@@ -331,3 +331,7 @@ INTERVAL_DAY = "day"
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+# Moderation types
+MODERATION_EDIT_ACCEPTED = "edit_accepted"
+MODERATION_EDIT_DENIED = "edit_denied"
