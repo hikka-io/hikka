@@ -8,6 +8,7 @@ from app import constants
 from .generate import (
     generate_comment_hide,
     generate_edit_accept,
+    generate_edit_update,
     generate_edit_deny,
 )
 
@@ -32,6 +33,7 @@ async def generate_moderation(session: AsyncSession):
                 [
                     constants.LOG_EDIT_ACCEPT,
                     constants.LOG_EDIT_DENY,
+                    constants.LOG_EDIT_UPDATE,
                     constants.LOG_COMMENT_HIDE,
                 ]
             )
@@ -48,6 +50,9 @@ async def generate_moderation(session: AsyncSession):
 
         if log.log_type == constants.LOG_EDIT_DENY:
             await generate_edit_deny(session, log)
+
+        if log.log_type == constants.LOG_EDIT_UPDATE:
+            await generate_edit_update(session, log)
 
         if log.log_type == constants.LOG_COMMENT_HIDE:
             await generate_comment_hide(session, log)
