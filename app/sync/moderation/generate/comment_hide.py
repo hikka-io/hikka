@@ -5,7 +5,7 @@ from .. import service
 
 
 async def generate_comment_hide(session: AsyncSession, log: Log):
-    target_type = constants.MODERATION_COMMENT_HIDE
+    target_type = constants.MODERATION_COMMENT_HIDDEN
 
     if not (comment := await service.get_comment(session, log.target_id)):
         return

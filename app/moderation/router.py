@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
-from app import constants
 from app.database import get_session
 from app.models import User
 from . import service
@@ -8,7 +7,10 @@ from . import service
 
 from .schemas import (
     ModerationPaginationResponse,
+    ModerationSearchArgs,
 )
+
+from .dependencies import validate_moderation_search_args
 
 from app.utils import (
     pagination_dict,
@@ -22,28 +24,23 @@ from app.dependencies import (
 )
 
 
-class ModerationError(Exception):
-    def __init__(self, content: dict, status_code: int):
-        self.status_code = status_code
-        self.content = content
-
-
 router = APIRouter(prefix="/moderation", tags=["Moderation"])
 
 
-@router.get(
+@router.post(
     "/log",
     response_model=ModerationPaginationResponse,
     summary="Moderation log",
 )
 async def moderation_log(
+    args: ModerationSearchArgs = Depends(validate_moderation_search_args),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_moderation_count(session)
-    moderation = await service.get_moderation(session, limit, offset)
+    total = await service.get_moderation_count(session, args)
+    moderation = await service.get_moderation(session, args, limit, offset)
 
     return {
         "pagination": pagination_dict(total, page, limit),

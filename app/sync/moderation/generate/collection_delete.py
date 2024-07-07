@@ -5,7 +5,7 @@ from .. import service
 
 
 async def generate_collection_delete(session: AsyncSession, log: Log):
-    target_type = constants.MODERATION_COLLECTION_DELETE
+    target_type = constants.MODERATION_COLLECTION_DELETED
 
     if not (collection := await service.get_collection(session, log.target_id)):
         return

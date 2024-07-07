@@ -5,7 +5,7 @@ from .. import service
 
 
 async def generate_collection_update(session: AsyncSession, log: Log):
-    target_type = constants.MODERATION_COLLECTION_UPDATE
+    target_type = constants.MODERATION_COLLECTION_UPDATED
 
     if not (collection := await service.get_collection(session, log.target_id)):
         return
