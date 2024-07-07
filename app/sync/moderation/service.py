@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
-from app.models import Moderation, Edit, Comment
+from app.models import Moderation, Edit, Comment, Collection
 from uuid import UUID
 
 
@@ -30,4 +30,10 @@ async def get_edit(session, content_id):
 async def get_comment(session, content_id):
     return await session.scalar(
         select(Comment).filter(Comment.id == content_id)
+    )
+
+
+async def get_collection(session, content_id):
+    return await session.scalar(
+        select(Collection).filter(Collection.id == content_id)
     )

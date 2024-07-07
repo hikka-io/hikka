@@ -6,6 +6,8 @@ from datetime import datetime
 from app import constants
 
 from .generate import (
+    generate_collection_delete,
+    generate_collection_update,
     generate_comment_hide,
     generate_edit_accept,
     generate_edit_update,
@@ -35,6 +37,8 @@ async def generate_moderation(session: AsyncSession):
                     constants.LOG_EDIT_DENY,
                     constants.LOG_EDIT_UPDATE,
                     constants.LOG_COMMENT_HIDE,
+                    constants.LOG_COLLECTION_DELETE,
+                    constants.LOG_COLLECTION_UPDATE,
                 ]
             )
         )
@@ -56,6 +60,12 @@ async def generate_moderation(session: AsyncSession):
 
         if log.log_type == constants.LOG_COMMENT_HIDE:
             await generate_comment_hide(session, log)
+
+        if log.log_type == constants.LOG_COLLECTION_DELETE:
+            await generate_collection_delete(session, log)
+
+        if log.log_type == constants.LOG_COLLECTION_UPDATE:
+            await generate_collection_update(session, log)
 
     session.add(system_timestamp)
     await session.commit()
