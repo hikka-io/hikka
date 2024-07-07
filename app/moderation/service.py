@@ -2,10 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy import asc, select, desc, func
 
-from app.models import (
-    Moderation,
-    User,
-)
+from app.models import Moderation
 from app.service import get_user_by_username
 from .schemas import ModerationSearchArgs
 
