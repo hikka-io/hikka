@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
+from app import constants
 from app.database import get_session
 from app.models import User
 from . import service
@@ -18,6 +19,7 @@ from app.utils import (
 )
 
 from app.dependencies import (
+    auth_required,
     get_page,
     get_size,
     get_user,
@@ -35,6 +37,10 @@ router = APIRouter(prefix="/moderation", tags=["Moderation"])
 async def moderation_log(
     args: ModerationSearchArgs = Depends(validate_moderation_search_args),
     session: AsyncSession = Depends(get_session),
+    # TODO: replace with role check
+    user: User = Depends(
+        auth_required(permissions=[constants.PERMISSION_EDIT_AUTO])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
