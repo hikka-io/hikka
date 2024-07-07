@@ -35,6 +35,7 @@ async def generate_comment_hide(session: AsyncSession, log: Log):
             "data": {
                 "content_type": comment.content_type,
                 "content_slug": comment.preview["slug"],
+                "comment_path": comment.path,
                 "username": log.user.username,
                 "avatar": log.user.avatar,
             },
