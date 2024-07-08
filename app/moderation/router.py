@@ -11,7 +11,10 @@ from .schemas import (
     ModerationSearchArgs,
 )
 
-from .dependencies import validate_moderation_search_args
+from .dependencies import (
+    validate_moderation_search_args,
+    validate_moderation_role,
+)
 
 from app.utils import (
     pagination_dict,
@@ -37,39 +40,13 @@ router = APIRouter(prefix="/moderation", tags=["Moderation"])
 async def moderation_log(
     args: ModerationSearchArgs = Depends(validate_moderation_search_args),
     session: AsyncSession = Depends(get_session),
-    # TODO: replace with role check
-    user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_AUTO])
-    ),
+    user: User = Depends(validate_moderation_role),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
     total = await service.get_moderation_count(session, args)
     moderation = await service.get_moderation(session, args, limit, offset)
-
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": moderation.all(),
-    }
-
-
-@router.get(
-    "/{username}/log",
-    response_model=ModerationPaginationResponse,
-    summary="User moderation log",
-)
-async def moderation_user_log(
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(get_user),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-    total = await service.get_user_moderation_count(session, user.id)
-    moderation = await service.get_user_moderation(
-        session, user.id, limit, offset
-    )
 
     return {
         "pagination": pagination_dict(total, page, limit),
