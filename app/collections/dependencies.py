@@ -123,6 +123,16 @@ async def validate_collection(
     return collection
 
 
+async def validate_collection_get(
+    collection: Collection = Depends(validate_collection),
+    user: User = Depends(auth_required(optional=True)),
+) -> Collection:
+    if collection.deleted and user.role not in ["admin", "moderator"]:
+        raise Abort("collections", "not-found")
+
+    return collection
+
+
 async def validate_collection_update(
     args: CollectionArgs = Depends(validate_collection_args),
     collection: Collection = Depends(validate_collection),
