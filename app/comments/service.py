@@ -356,19 +356,25 @@ async def generate_preview(
         .order_by(desc(Comment.created))
     )
 
-    title = (
-        comment.content.title_ua
-        or comment.content.title_en
-        or comment.content.title_ja
-    )
+    title = None
     slug = comment.content.slug
     image = None
 
     if isinstance(comment, AnimeComment):
         image = comment.content.poster
+        title = (
+            comment.content.title_ua
+            or comment.content.title_en
+            or comment.content.title_ja
+        )
 
     if isinstance(comment, MangaComment) or isinstance(comment, NovelComment):
         image = comment.content.image
+        title = (
+            comment.content.title_ua
+            or comment.content.title_en
+            or comment.content.title_original
+        )
 
     if isinstance(comment, EditComment):
         # This is horrible hack, but we need this to prevent SQLAlchemy bug
@@ -413,6 +419,8 @@ async def generate_preview(
             if comment.content.content_type == constants.CONTENT_ANIME
             else content.image
         )
+
+        title = collection_content.collection.title
 
     original_comment.preview = {
         "image": image,
