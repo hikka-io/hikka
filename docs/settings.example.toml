@@ -46,6 +46,7 @@
     enabled = true
     trigger = "query"  # [query/all]
     path = ".profile_info"
+    profiling_secret = "secret"
 
 [testing]
     [testing.database]
@@ -83,3 +84,4 @@
     enabled = false
     trigger = "query"  # [query/all]
     path = ".profile_info"
+    profiling_secret = "secret"
