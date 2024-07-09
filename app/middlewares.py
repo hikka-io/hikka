@@ -28,7 +28,8 @@ def register_profiling_middleware(app: FastAPI):
         if (
             settings.profiling.trigger == "all"
             or settings.profiling.trigger == "query"
-            and request.query_params.get("profile", False)
+            and request.query_params.get("profiling_flag", False)
+            and request.query_params.get("profiling_secret", None) == settings.profiling.profiling_secret
         ):
             with Profiler(interval=0.001, async_mode="enabled") as profiler:
                 response = await call_next(request)
