@@ -356,6 +356,11 @@ async def generate_preview(
         .order_by(desc(Comment.created))
     )
 
+    title = (
+        comment.content.title_ua
+        or comment.content.title_en
+        or comment.content.title_ja
+    )
     slug = comment.content.slug
     image = None
 
@@ -412,6 +417,7 @@ async def generate_preview(
     original_comment.preview = {
         "image": image,
         "slug": slug,
+        "title": title,
     }
 
     session.add(original_comment)
