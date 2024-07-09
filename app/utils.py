@@ -1,4 +1,7 @@
+from starlette.middleware.base import BaseHTTPMiddleware
 from dateutil.relativedelta import relativedelta
+from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Request
 from datetime import datetime, UTC
 from functools import lru_cache
 from urllib.parse import quote
@@ -9,10 +12,33 @@ from app import constants
 from uuid import UUID
 import unicodedata
 import aiohttp
+import asyncio
 import secrets
 import bcrypt
 import math
 import re
+
+
+# Timeout middleware (class name is pretty self explanatory)
+class TimeoutMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app: FastAPI, timeout: int) -> None:
+        super().__init__(app)
+        self.timeout = timeout
+
+    async def dispatch(self, request: Request, call_next):
+        try:
+            return await asyncio.wait_for(
+                call_next(request), timeout=self.timeout
+            )
+
+        except asyncio.TimeoutError:
+            return JSONResponse(
+                status_code=408,
+                content={
+                    "message": "Request timeout",
+                    "code": "timeout",
+                },
+            )
 
 
 # Replacement for deprecated datetime's utcnow

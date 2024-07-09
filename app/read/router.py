@@ -107,37 +107,13 @@ async def get_read_following(
 )
 async def user_read_stats(
     content_type: ReadContentTypeEnum,
-    session: AsyncSession = Depends(get_session),
     user: User = Depends(get_user),
 ):
-    # This looks awful -> refactor it into something better
-    completed = await service.get_user_read_stats(
-        session, user, content_type, constants.READ_COMPLETED
-    )
+    if content_type == constants.CONTENT_MANGA:
+        return user.manga_stats
 
-    reading = await service.get_user_read_stats(
-        session, user, content_type, constants.READ_READING
-    )
-
-    planned = await service.get_user_read_stats(
-        session, user, content_type, constants.READ_PLANNED
-    )
-
-    on_hold = await service.get_user_read_stats(
-        session, user, content_type, constants.READ_ON_HOLD
-    )
-
-    dropped = await service.get_user_read_stats(
-        session, user, content_type, constants.READ_DROPPED
-    )
-
-    return {
-        "completed": completed,
-        "reading": reading,
-        "planned": planned,
-        "on_hold": on_hold,
-        "dropped": dropped,
-    }
+    if content_type == constants.CONTENT_NOVEL:
+        return user.novel_stats
 
 
 @router.get(
