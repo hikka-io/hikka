@@ -42,6 +42,12 @@
     endpoint = "https://endpoint.s3.provider.com"
     bucket = "hikka"
 
+    [default.profiling]
+    enabled = true
+    trigger = "query"  # [query/all]
+    path = ".profile_info"
+    profiling_secret = "secret"
+
 [testing]
     [testing.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
@@ -73,3 +79,9 @@
     secret = "FAKE_SECRET"
     endpoint = "https://fake.s3.example.com"
     bucket = "hikka-test"
+
+    [testing.profiling]
+    enabled = false
+    trigger = "query"  # [query/all]
+    path = ".profile_info"
+    profiling_secret = "secret"
