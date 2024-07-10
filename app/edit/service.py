@@ -140,7 +140,8 @@ async def edits_search_filter(
         query = query.filter(Edit.status == args.status)
 
     query = query.filter(
-        Edit.system_edit == False, Edit.hidden == False  # noqa: E712
+        Edit.system_edit == False,  # noqa: E712
+        Edit.hidden == False,  # noqa: E712
     )
 
     return query
@@ -248,6 +249,9 @@ async def update_pending_edit(
             "old_edit": old_edit,
         },
     )
+
+    if args.auto:
+        await accept_pending_edit(session, edit, user, True)
 
     return edit
 
