@@ -1,11 +1,12 @@
 from prometheus_fastapi_instrumentator import Instrumentator
+from app.middlewares import register_profiling_middleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.database import sessionmanager
 from app.utils import TimeoutMiddleware
-import fastapi.openapi.utils as fu
 from app.utils import get_settings
+import fastapi.openapi.utils as fu
 from fastapi import FastAPI
 from app import errors
 
@@ -24,9 +25,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             if sessionmanager._engine is not None:
                 await sessionmanager.close()
 
-    fu.validation_error_response_definition = (
-        errors.ErrorResponse.model_json_schema()
-    )
+    fu.validation_error_response_definition = errors.ErrorResponse.model_json_schema()
 
     app = FastAPI(
         title="Hikka API",
@@ -72,6 +71,8 @@ def create_app(init_db: bool = True) -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    register_profiling_middleware(app)
 
     app.add_exception_handler(errors.Abort, errors.abort_handler)
     app.add_exception_handler(

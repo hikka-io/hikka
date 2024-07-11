@@ -4,6 +4,8 @@ from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
+
+from app.models.list.read import MangaRead, NovelRead
 from .utils import calculate_before
 from app.utils import utcnow
 from app import constants
@@ -17,9 +19,10 @@ from app.service import (
 )
 
 from .schemas import (
+    ContentToDoEnum,
+    EditContentToDoEnum,
     EditContentTypeEnum,
     EditSearchArgs,
-    AnimeToDoEnum,
     EditArgs,
 )
 
@@ -140,7 +143,8 @@ async def edits_search_filter(
         query = query.filter(Edit.status == args.status)
 
     query = query.filter(
-        Edit.system_edit == False, Edit.hidden == False  # noqa: E712
+        Edit.system_edit == False,  # noqa: E712
+        Edit.hidden == False,  # noqa: E712
     )
 
     return query
@@ -405,54 +409,79 @@ async def deny_pending_edit(
     return edit
 
 
-async def anime_todo_total(
+async def content_todo_total(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    content_type: EditContentToDoEnum,
+    todo_type: ContentToDoEnum,
 ):
-    query = select(func.count(Anime.id)).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
-        Anime.deleted == False,  # noqa: E712
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+
+    query = select(func.count(content_type.id)).filter(
+        ~content_type.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        content_type.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
-        query = query.filter(Anime.title_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(content_type.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
-        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(content_type.synopsis_ua == None)  # noqa: E711
 
     return await session.scalar(query)
 
 
-async def anime_todo(
+async def content_todo(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    content_type: EditContentTypeEnum,
+    todo_type: ContentToDoEnum,
     request_user: User | None,
     limit: int,
     offset: int,
 ):
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+            option = AnimeWatch
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+            option = MangaRead
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+            option = NovelRead
+
     # Load request user watch statuses here
     load_options = [
-        joinedload(Anime.watch),
+        joinedload(
+            content_type.read if content_type != Anime else content_type.watch
+        ),
         with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
+            option,
+            option.user_id == request_user.id if request_user else None,
         ),
     ]
 
-    query = select(Anime).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
-        Anime.deleted == False,  # noqa: E712
+    query = select(content_type).filter(
+        ~content_type.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        content_type.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
-        query = query.filter(Anime.title_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(content_type.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
-        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(content_type.synopsis_ua == None)  # noqa: E711
 
     return await session.scalars(
         query.order_by(
-            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+            desc(content_type.score),
+            desc(content_type.scored_by),
+            desc(content_type.content_id),
         )
         .options(*load_options)
         .limit(limit)

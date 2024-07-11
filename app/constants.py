@@ -230,8 +230,8 @@ UPLOAD_AVATAR = "avatar"
 UPLOAD_COVER = "cover"
 
 # Todo types
-TODO_ANIME_SYNOPSIS_UA = "synopsis_ua"
-TODO_ANIME_TITLE_UA = "title_ua"
+TODO_SYNOPSIS_UA = "synopsis_ua"
+TODO_TITLE_UA = "title_ua"
 
 # Log types
 LOG_FAVOURITE = "favourite_add"
