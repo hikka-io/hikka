@@ -25,9 +25,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             if sessionmanager._engine is not None:
                 await sessionmanager.close()
 
-    fu.validation_error_response_definition = (
-        errors.ErrorResponse.model_json_schema()
-    )
+    fu.validation_error_response_definition = errors.ErrorResponse.model_json_schema()
 
     app = FastAPI(
         title="Hikka API",
