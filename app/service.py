@@ -17,6 +17,7 @@ from .schemas import (
 )
 
 from app.models import (
+    CharacterCollectionContent,
     AnimeCollectionContent,
     MangaCollectionContent,
     NovelCollectionContent,
@@ -427,6 +428,9 @@ def collections_load_options(
                 NovelRead,
                 NovelRead.user_id == request_user.id if request_user else None,
             ),
+            joinedload(
+                Collection.collection.of_type(CharacterCollectionContent)
+            ).joinedload(CharacterCollectionContent.content),
         )
     )
 
