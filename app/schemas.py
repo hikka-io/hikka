@@ -354,6 +354,12 @@ class ReadResponseBase(CustomModel):
     score: int = Field(examples=[8])
 
 
+class ClientResponse(CustomModel):
+    reference: str
+    name: str
+    description: str
+
+
 class AnimeResponse(CustomModel, DataTypeMixin):
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(

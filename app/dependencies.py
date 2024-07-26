@@ -1,8 +1,8 @@
 from fastapi import Header, Cookie, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import User, Anime, AuthToken
 from app.database import get_session
 from app.utils import get_settings
-from app.models import User, Anime
 from datetime import timedelta
 from typing import Annotated
 from app.errors import Abort
@@ -64,36 +64,61 @@ async def get_request_auth_token(
     return header_auth if header_auth else cookie_auth
 
 
+async def _auth_token_or_abort(
+    session: AsyncSession = Depends(get_session),
+    token: str | None = Depends(get_request_auth_token),
+) -> Abort | AuthToken:
+    if not token:
+        return Abort("auth", "missing-token")
+
+    if not (token := await get_auth_token(session, token)):
+        return Abort("auth", "invalid-token")
+
+    if not token.user:
+        return Abort("auth", "user-not-found")
+
+    if token.user.banned:
+        return Abort("auth", "banned")
+
+    return token
+
+
+async def auth_token_required(
+    token: AuthToken | Abort = Depends(_auth_token_or_abort),
+) -> AuthToken:
+    if isinstance(token, Abort):
+        raise token
+
+    return token
+
+
 # Check user auth token
-def auth_required(permissions: list = [], optional: bool = False):
+def auth_required(permissions: list = None, scope: list = None, optional: bool = False):
+    """
+    Authorization dependency with permission check
+
+    If optional set to True and token not provided or invalid - returns None
+    If optional set to False and token not provided or invalid - raises abort
+
+    If token provided and valid - returns user from token
+    """
+    if not permissions:
+        permissions = []
+
+    if not scope:
+        scope = []
+
     async def auth(
-        auth_token: str = Depends(get_request_auth_token),
+        token: AuthToken | Abort = Depends(_auth_token_or_abort),
         session: AsyncSession = Depends(get_session),
     ) -> User | None:
-        error = None
-
-        if not auth_token:
-            error = Abort("auth", "missing-token")
-
-        if not error and not (
-            token := await get_auth_token(session, auth_token)
-        ):
-            error = Abort("auth", "invalid-token")
-
-        if not error and not token.user:
-            error = Abort("auth", "user-not-found")
-
-        if not error and token.user.banned:
-            error = Abort("auth", "banned")
-
-        # If optional set to true folowing checks would fail silently by returning None
-        # I really hate this if statement but idea of creating separade dependency
-        # for optional auth I hate even more
-        if error:
+        if isinstance(token, Abort):
+            # If authorization is optional - ignore abort and return None
             if optional:
                 return None
-            else:
-                raise error
+
+            # If authorization is required - raise abort
+            raise token
 
         now = utcnow()
 
@@ -103,6 +128,9 @@ def auth_required(permissions: list = [], optional: bool = False):
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):
             raise Abort("permission", "denied")
+
+        if not utils.check_token_scope(token, scope):
+            raise Abort("scope", "denied")
 
         if token.user.role == constants.ROLE_DELETED:
             raise Abort("user", "deleted")

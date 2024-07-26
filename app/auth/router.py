@@ -1,7 +1,7 @@
+from app.dependencies import check_captcha, auth_required, auth_token_required
+from app.models import User, UserOAuth, AuthToken, Client, AuthTokenRequest
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import check_captcha
 from fastapi import APIRouter, Depends
-from app.models import User, UserOAuth
 from app.schemas import UserResponse
 from app.database import get_session
 from app import constants
@@ -16,6 +16,7 @@ from app.service import (
 )
 
 from .dependencies import (
+    validate_auth_token_request,
     validate_activation_resend,
     validate_password_confirm,
     validate_password_reset,
@@ -25,14 +26,17 @@ from .dependencies import (
     get_user_oauth,
     validate_login,
     get_oauth_data,
+    validate_client,
+    validate_scope,
 )
 
 from .schemas import (
+    TokenRequestResponse,
     ProviderUrlResponse,
+    AuthInfoResponse,
     TokenResponse,
     SignupArgs,
 )
-
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -186,3 +190,36 @@ async def oauth_token(
     )
 
     return await service.create_auth_token(session, oauth_user.user)
+
+
+@router.get(
+    "/info", summary="Get authorization info", response_model=AuthInfoResponse
+)
+async def auth_info(token: AuthToken = Depends(auth_token_required)):
+    return token
+
+
+@router.post(
+    "/token/request/{client_reference}",
+    summary="Make token request for a third-party client",
+    response_model=TokenRequestResponse,
+)
+async def request_token(
+    client: Client = Depends(validate_client),
+    scope: list[str] = Depends(validate_scope),
+    user: User = Depends(auth_required()),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.create_auth_token_request(session, user, client, scope)
+
+
+@router.post(
+    "/token",
+    summary="Make token for a third-party client",
+    response_model=TokenResponse,
+)
+async def third_party_auth_token(
+    token_request: AuthTokenRequest = Depends(validate_auth_token_request),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.create_auth_token_from_request(session, token_request)

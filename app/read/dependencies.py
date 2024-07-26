@@ -4,6 +4,7 @@ from app.service import get_content_by_slug
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
+from app import constants
 from . import service
 
 from app.dependencies import (
@@ -31,7 +32,9 @@ async def verify_read_content(
 
 async def verify_read(
     content_type: ReadContentTypeEnum,
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_READLIST])
+    ),
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_read_content),
 ) -> Read:

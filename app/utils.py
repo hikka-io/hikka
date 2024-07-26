@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Request
 from datetime import datetime, UTC
+from app.models import AuthToken
 from functools import lru_cache
 from urllib.parse import quote
 from dynaconf import Dynaconf
@@ -61,6 +62,12 @@ def check_user_permissions(user: User, permissions: list):
     )
 
     return has_permission
+
+def check_token_scope(token: AuthToken, scope: list[str]) -> bool:
+    if not token.scope:
+        return True
+
+    return set(token.scope).issuperset(set(scope))
 
 
 # Get bcrypt hash of password

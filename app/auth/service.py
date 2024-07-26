@@ -1,4 +1,8 @@
-from app.models import User, AuthToken, UserOAuth
+import uuid
+
+from starlette.datastructures import URL
+
+from app.models import User, AuthToken, UserOAuth, AuthTokenRequest, Client
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
@@ -198,3 +202,65 @@ async def change_password(session: AsyncSession, user: User, new_password: str):
     await session.commit()
 
     return user
+
+
+async def create_auth_token_request(
+    session: AsyncSession, user: User, client: Client, scope: list[str]
+) -> dict:
+
+    # Remove duplicates in scope (just in case)
+    scope = list(set(scope))
+
+    now = utcnow()
+
+    request = AuthTokenRequest(
+        **{
+            "expiration": now + timedelta(minutes=1),
+            "created": now,
+            "user": user,
+            "client": client,
+            "scope": scope,
+        }
+    )
+    session.add(request)
+    await session.commit()
+
+    return {
+        "reference": request.reference,
+        "expiration": request.expiration,
+        "redirect_url": str(
+            URL(client.endpoint).replace_query_params(
+                reference=request.reference
+            )
+        ),
+    }
+
+
+async def get_auth_token_request(
+    session: AsyncSession, reference: str | uuid.UUID
+) -> AuthTokenRequest:
+    return await session.scalar(
+        select(AuthTokenRequest)
+        .filter(AuthTokenRequest.id == reference)
+        .options(
+            selectinload(AuthTokenRequest.user),
+            selectinload(AuthTokenRequest.client),
+        )
+    )
+
+
+async def create_auth_token_from_request(
+    session: AsyncSession, request: AuthTokenRequest
+):
+    token = await create_auth_token(session, request.user)
+
+    # Add client and scope to just created token
+    token.client = request.client
+    token.scope = request.scope
+
+    # Expire token request
+    request.expiration = utcnow() - timedelta(minutes=1)
+
+    await session.commit()
+
+    return token

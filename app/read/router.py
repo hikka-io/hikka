@@ -52,7 +52,9 @@ async def read_add(
     content_type: ReadContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_add_read),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_READLIST])
+    ),
 ):
     return await service.save_read(
         session,
@@ -66,7 +68,9 @@ async def read_add(
 @router.delete("/{content_type}/{slug}", response_model=SuccessResponse)
 async def delete_read(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_READLIST])
+    ),
     read: Read = Depends(verify_read),
 ):
     await service.delete_read(session, read, user)
@@ -81,7 +85,9 @@ async def get_read_following(
     content_type: ReadContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_read_content),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

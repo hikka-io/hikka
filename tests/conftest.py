@@ -89,8 +89,13 @@ async def test_session():
 
 
 @pytest.fixture
-async def create_test_user(test_session):
+async def test_user(test_session):
     return await helpers.create_user(test_session)
+
+
+@pytest.fixture
+async def create_test_user(test_user):
+    return test_user
 
 
 @pytest.fixture
@@ -135,12 +140,17 @@ async def create_test_user_with_oauth(test_session):
 
 
 @pytest.fixture
-async def get_test_token(test_session):
+async def test_token(test_user, test_session):
     token = await helpers.create_token(
-        test_session, "user@mail.com", "SECRET_TOKEN"
+        test_session, test_user.email, "SECRET_TOKEN"
     )
 
     return token.secret
+
+
+@pytest.fixture
+async def get_test_token(test_token):
+    return test_token
 
 
 @pytest.fixture

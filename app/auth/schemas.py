@@ -1,4 +1,4 @@
-from app.schemas import datetime_pd
+from app.schemas import datetime_pd, ClientResponse
 from pydantic import Field
 
 from app.schemas import (
@@ -38,3 +38,27 @@ class TokenResponse(CustomModel):
     secret: str = Field(
         examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"]
     )
+
+
+class AuthInfoResponse(CustomModel):
+    created: datetime_pd = Field(examples=[1686088809])
+    client: ClientResponse | None = Field(
+        description="Information about logged by third-party client"
+    )
+    scope: list[str]
+    expiration: datetime_pd = Field(examples=[1686088809])
+
+
+class TokenRequestResponse(CustomModel):
+    reference: str
+    redirect_url: str
+    expiration: datetime_pd = Field(examples=[1686088809])
+
+
+class TokenRequestArgs(CustomModel):
+    scope: list[str]
+
+
+class TokenArgs(CustomModel):
+    request_reference: str
+    client_secret: str
