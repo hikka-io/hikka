@@ -3,7 +3,7 @@ from starlette import status
 from tests.client_requests import request_client_create
 
 
-async def test_client_create(client, test_token):
+async def test_client_create(client, test_token, test_user):
     name = "test-client"
     description = "test client description"
     endpoint = "http://localhost/"
@@ -19,8 +19,10 @@ async def test_client_create(client, test_token):
     created_client = response.json()
 
     assert created_client["name"] == name
-    assert created_client["description"] == description
     assert created_client["endpoint"] == endpoint
+    assert created_client["description"] == description
+    assert created_client["user"]["username"] == test_user.username
+
     assert len(created_client["secret"]) == 128
 
 

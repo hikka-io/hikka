@@ -99,6 +99,8 @@ EXTERNAL_READ = "read"
 
 SEARCH_RESULT_SIZE = 15
 
+MAX_USER_CLIENTS = 15
+
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"

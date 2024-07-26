@@ -354,12 +354,6 @@ class ReadResponseBase(CustomModel):
     score: int = Field(examples=[8])
 
 
-class ClientResponse(CustomModel):
-    reference: str
-    name: str
-    description: str
-
-
 class AnimeResponse(CustomModel, DataTypeMixin):
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
@@ -589,3 +583,14 @@ class ContentCharacterResponse(CustomModel):
 class ContentCharacterPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[ContentCharacterResponse]
+
+
+class ClientResponse(CustomModel):
+    reference: str
+    name: str
+    description: str
+
+    user: UserResponse
+
+    created: datetime_pd
+    updated: datetime_pd

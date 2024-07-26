@@ -10,9 +10,9 @@ def request_client_create(client, token: str, name: str, description: str, endpo
     )
 
 
-def request_my_client_info(client, token: str):
+def request_client_full_info(client, token: str, client_reference: str):
     return client.get(
-        "/client/",
+        f"/client/{client_reference}/full",
         headers={"Auth": token}
     )
 
@@ -24,13 +24,14 @@ def request_client_info(client, reference: str):
 def request_client_update(
     client,
     token: str,
+    client_reference: str,
     name: str | None = None,
     description: str | None = None,
     endpoint: str | None = None,
     revoke_secret: bool = False
 ):
     return client.put(
-        "/client/",
+        f"/client/{client_reference}",
         headers={"Auth": token},
         json={
             "name": name,
@@ -42,9 +43,16 @@ def request_client_update(
 
 
 def request_client_delete(
-        client, token: str
+        client, token: str, client_reference: str
 ):
     return client.delete(
-        "/client/",
+        f"/client/{client_reference}",
         headers={"Auth": token}
+    )
+
+
+def request_list_clients(client, token: str):
+    return client.get(
+        "/client/",
+        headers={"Auth": token},
     )

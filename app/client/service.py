@@ -2,7 +2,8 @@ import secrets
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy.orm import joinedload
+from sqlalchemy import select, func, ScalarResult
 
 from app.client.schemas import ClientCreate, ClientUpdate
 from app.models import User, Client
@@ -13,13 +14,54 @@ def _client_secret():
     return secrets.token_urlsafe(96)
 
 
-async def get_client(session: AsyncSession, reference: str | uuid.UUID) -> Client:
-    return await session.scalar(select(Client).filter(Client.id == reference))
-
-
-async def get_user_client(session: AsyncSession, user: User) -> Client:
+async def get_client(
+    session: AsyncSession, reference: str | uuid.UUID
+) -> Client:
     return await session.scalar(
-        select(Client).filter(Client.user_id == user.id)
+        select(Client)
+        .filter(Client.id == reference)
+        .options(joinedload(Client.user))
+    )
+
+
+async def get_user_client(
+    session: AsyncSession, user: User, name: str
+) -> Client:
+    return await session.scalar(
+        select(Client).filter(
+            Client.user_id == user.id, func.lower(Client.name) == name.lower()
+        )
+    )
+
+
+async def list_user_clients(
+    session: AsyncSession,
+    user: User,
+    offset: int,
+    limit: int,
+) -> ScalarResult[Client]:
+    return await session.scalars(
+        select(Client)
+        .filter(
+            Client.user_id == user.id,
+        )
+        .offset(offset)
+        .limit(limit)
+        .order_by(Client.created.asc())
+    )
+
+
+async def count_user_clients(
+    session: AsyncSession,
+    user: User,
+    offset: int,
+    limit: int,
+) -> int:
+    return await session.scalar(
+        select(func.count(Client.id))
+        .filter(Client.user_id == user.id)
+        .offset(offset)
+        .limit(limit)
     )
 
 
@@ -36,6 +78,7 @@ async def create_user_client(
             "endpoint": str(create.endpoint),
             "user_id": user.id,
             "created": now,
+            "updated": utcnow(),
         }
     )
 
@@ -48,6 +91,8 @@ async def create_user_client(
 async def update_client(
     session: AsyncSession, client: Client, update: ClientUpdate
 ) -> Client:
+    now = utcnow()
+
     if update.name is not None:
         client.name = update.name
 
@@ -59,6 +104,8 @@ async def update_client(
 
     if update.revoke_secret is not None:
         client.secret = _client_secret()
+
+    client.updated = now
 
     await session.commit()
 

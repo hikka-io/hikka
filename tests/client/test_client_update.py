@@ -1,3 +1,5 @@
+import uuid
+
 from starlette import status
 
 from tests.client_requests import request_client_create, request_client_update
@@ -25,6 +27,7 @@ async def test_client_update(client, test_token):
     response = await request_client_update(
         client,
         test_token,
+        old_client_info["reference"],
         new_name,
         new_description,
         new_endpoint,
@@ -40,9 +43,11 @@ async def test_client_update(client, test_token):
     assert new_client_info["secret"] != old_client_info["secret"]
 
 
-async def test_client_update_non_existent(client, test_token):
+async def test_client_update_nonexistent(client, test_token):
+    reference = str(uuid.uuid4())
+
     response = await request_client_update(
-        client, test_token, revoke_secret=True
+        client, test_token, reference, revoke_secret=True
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND
 

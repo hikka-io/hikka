@@ -1,11 +1,16 @@
 from pydantic import Field, HttpUrl
 
-from app.schemas import CustomModel, ClientResponse
+from app.schemas import CustomModel, ClientResponse, PaginationResponse
 
 
 class ClientFullResponse(ClientResponse):
     secret: str
     endpoint: str
+
+
+class ClientPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[ClientResponse]
 
 
 class ClientCreate(CustomModel):

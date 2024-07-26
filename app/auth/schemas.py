@@ -1,5 +1,6 @@
 from app.schemas import datetime_pd, ClientResponse
 from pydantic import Field
+import uuid
 
 from app.schemas import (
     UsernameArgs,
@@ -59,6 +60,6 @@ class TokenRequestArgs(CustomModel):
     scope: list[str]
 
 
-class TokenArgs(CustomModel):
-    request_reference: str
+class TokenProceedArgs(CustomModel):
+    request_reference: uuid.UUID
     client_secret: str

@@ -8,10 +8,11 @@ from .auth import request_auth_info
 from .auth import request_signup
 from .auth import request_login
 
-from .client import request_my_client_info
+from .client import request_client_full_info
 from .client import request_client_create
 from .client import request_client_update
 from .client import request_client_delete
+from .client import request_list_clients
 from .client import request_client_info
 
 from .oauth import request_oauth_post
@@ -124,10 +125,11 @@ __all__ = [
     "request_auth_info",
     "request_signup",
     "request_login",
-    "request_my_client_info",
+    "request_client_full_info",
     "request_client_create",
     "request_client_update",
     "request_client_delete",
+    "request_list_clients",
     "request_client_info",
     "request_oauth_post",
     "request_oauth_url",

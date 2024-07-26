@@ -23,3 +23,4 @@ class Client(Base):
     )
 
     created: Mapped[datetime]
+    updated: Mapped[datetime]

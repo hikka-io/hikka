@@ -41,7 +41,7 @@ async def test_auth_thirdparty(client, test_token):
     )
     assert response.status_code == status.HTTP_200_OK
 
-    thirdparty_token = await response.json()["secret"]
+    thirdparty_token = response.json()["secret"]
 
     response = await request_auth_info(client, thirdparty_token)
     assert response.status_code == status.HTTP_200_OK

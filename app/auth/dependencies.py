@@ -8,6 +8,7 @@ from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import oauth
+import uuid
 
 from app.utils import (
     is_protected_username,
@@ -30,11 +31,12 @@ from .service import (
 
 from .schemas import (
     ComfirmResetArgs,
+    TokenRequestArgs,
+    TokenProceedArgs,
     SignupArgs,
     LoginArgs,
     TokenArgs,
     CodeArgs,
-    TokenRequestArgs,
 )
 
 
@@ -203,7 +205,7 @@ async def validate_password_confirm(
 
 
 async def validate_client(
-    client_reference: str, session: AsyncSession = Depends(get_session)
+    client_reference: uuid.UUID, session: AsyncSession = Depends(get_session)
 ) -> Client:
     if not (client := await get_client(session, client_reference)):
         raise Abort("auth", "client-not-found")
@@ -223,7 +225,7 @@ def validate_scope(request: TokenRequestArgs) -> list[str]:
 
 
 async def validate_auth_token_request(
-    args: TokenArgs,
+    args: TokenProceedArgs,
     session: AsyncSession = Depends(get_session),
 ):
     now = utcnow()
