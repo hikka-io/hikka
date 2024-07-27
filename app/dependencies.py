@@ -93,7 +93,7 @@ async def auth_token_required(
 
 
 # Check user auth token
-def auth_required(permissions: list = None, scope: list = None, optional: bool = False):
+def auth_required(permissions: list = None, scope: list = None, forbid_thirdparty: bool = False, optional: bool = False):
     """
     Authorization dependency with permission check
 
@@ -127,6 +127,9 @@ def auth_required(permissions: list = None, scope: list = None, optional: bool =
 
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):
+            raise Abort("permission", "denied")
+
+        if forbid_thirdparty and token.client:
             raise Abort("permission", "denied")
 
         if not utils.check_token_scope(token, scope):

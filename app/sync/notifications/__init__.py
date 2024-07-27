@@ -6,6 +6,7 @@ from datetime import datetime
 from app import constants
 
 from .generate import (
+    generate_thirdparty_login,
     generate_collection_vote,
     generate_anime_schedule,
     generate_comment_write,
@@ -39,6 +40,7 @@ async def generate_notifications(session: AsyncSession):
         .filter(
             Log.log_type.in_(
                 [
+                    constants.LOG_LOGIN_THIRDPARTY,
                     constants.LOG_SCHEDULE_ANIME,
                     constants.LOG_COMMENT_WRITE,
                     constants.LOG_EDIT_UPDATE,
@@ -85,6 +87,9 @@ async def generate_notifications(session: AsyncSession):
 
         if log.log_type == constants.LOG_FOLLOW:
             await generate_follow(session, log)
+
+        if log.log_type == constants.LOG_LOGIN_THIRDPARTY:
+            await generate_thirdparty_login(session, log)
 
     session.add(system_timestamp)
     await session.commit()

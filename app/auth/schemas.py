@@ -1,3 +1,4 @@
+from app import constants
 from app.schemas import datetime_pd, ClientResponse
 from pydantic import Field
 import uuid
@@ -57,7 +58,7 @@ class TokenRequestResponse(CustomModel):
 
 
 class TokenRequestArgs(CustomModel):
-    scope: list[str]
+    scope: list[str] = Field(examples=[constants.ALL_SCOPES])
 
 
 class TokenProceedArgs(CustomModel):

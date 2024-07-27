@@ -207,7 +207,7 @@ async def auth_info(token: AuthToken = Depends(auth_token_required)):
 async def request_token(
     client: Client = Depends(validate_client),
     scope: list[str] = Depends(validate_scope),
-    user: User = Depends(auth_required()),
+    user: User = Depends(auth_required(forbid_thirdparty=True)),
     session: AsyncSession = Depends(get_session),
 ):
     return await service.create_auth_token_request(session, user, client, scope)
@@ -222,4 +222,11 @@ async def third_party_auth_token(
     token_request: AuthTokenRequest = Depends(validate_auth_token_request),
     session: AsyncSession = Depends(get_session),
 ):
+    await create_log(
+        session,
+        constants.LOG_LOGIN_THIRDPARTY,
+        token_request.user,
+        token_request.client_id,
+        {"scope": token_request.scope},
+    )
     return await service.create_auth_token_from_request(session, token_request)
