@@ -108,6 +108,8 @@ def auth_required(permissions: list = None, scope: list = None, forbid_thirdpart
     if not scope:
         scope = []
 
+    scope = utils.resolve_aliased_scopes(scope)
+
     async def auth(
         token: AuthToken | Abort = Depends(_auth_token_or_abort),
         session: AsyncSession = Depends(get_session),

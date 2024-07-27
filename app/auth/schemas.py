@@ -58,7 +58,9 @@ class TokenRequestResponse(CustomModel):
 
 
 class TokenRequestArgs(CustomModel):
-    scope: list[str] = Field(examples=[constants.ALL_SCOPES])
+    scope: list[str] = Field(
+        examples=[constants.ALL_SCOPES + list(constants.SCOPE_ALIASES)]
+    )
 
 
 class TokenProceedArgs(CustomModel):

@@ -131,22 +131,13 @@ CONTENT_SYSTEM_EDIT = "edit"
 CONTENT_COLLECTION = "collection"
 CONTENT_COMMENT = "comment"
 
-# Roles
-# TODO: move to separate file (?)
-ROLE_USER = "user"
-ROLE_MODERATOR = "moderator"
-ROLE_ADMIN = "admin"
-ROLE_BANNED = "banned"
-ROLE_NOT_ACTIVATED = "not_activated"
-ROLE_DELETED = "deleted"
-
-# User access scope
-SCOPE_READ_USER_DETAILS = "user:read:details"
-SCOPE_UPDATE_USER_DETAILS = "user:update:details"
-SCOPE_READ_USER_WATCHLIST = "user:read:watchlist"
-SCOPE_UPDATE_USER_WATCHLIST = "user:update:watchlist"
-SCOPE_READ_USER_READLIST = "user:read:readlist"
-SCOPE_UPDATE_USER_READLIST = "user:update:readlist"
+# Client access scopes
+SCOPE_READ_USER_DETAILS = "read:user:details"
+SCOPE_UPDATE_USER_DETAILS = "update:user:details"
+SCOPE_READ_USER_WATCHLIST = "read:user:watchlist"
+SCOPE_UPDATE_USER_WATCHLIST = "update:user:watchlist"
+SCOPE_READ_USER_READLIST = "read:user:readlist"
+SCOPE_UPDATE_USER_READLIST = "update:user:readlist"
 SCOPE_UPLOAD = "upload"
 
 ALL_SCOPES = [
@@ -158,6 +149,29 @@ ALL_SCOPES = [
     SCOPE_UPDATE_USER_READLIST,
     SCOPE_UPLOAD,
 ]
+
+# Not real scopes - will be replaced with simple versions on each scope check
+SCOPE_USER_DETAILS = "user:details"
+SCOPE_USER_WATCHLIST = "user:watchlist"
+SCOPE_USER_READLIST = "user:readlist"
+SCOPE_ALL = "all"
+
+# This aliases will be resolved at token scope checking
+SCOPE_ALIASES = {
+    SCOPE_USER_DETAILS: [SCOPE_READ_USER_DETAILS, SCOPE_UPDATE_USER_DETAILS],
+    SCOPE_USER_WATCHLIST: [SCOPE_READ_USER_WATCHLIST, SCOPE_UPDATE_USER_WATCHLIST],
+    SCOPE_USER_READLIST: [SCOPE_READ_USER_READLIST, SCOPE_UPDATE_USER_READLIST],
+    SCOPE_ALL: ALL_SCOPES
+}
+
+# Roles
+# TODO: move to separate file (?)
+ROLE_USER = "user"
+ROLE_MODERATOR = "moderator"
+ROLE_ADMIN = "admin"
+ROLE_BANNED = "banned"
+ROLE_NOT_ACTIVATED = "not_activated"
+ROLE_DELETED = "deleted"
 
 # Permissions
 PERMISSION_EDIT_CREATE = "edit:create"

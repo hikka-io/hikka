@@ -64,10 +64,26 @@ def check_user_permissions(user: User, permissions: list):
     return has_permission
 
 def check_token_scope(token: AuthToken, scope: list[str]) -> bool:
+    token_scope = set(resolve_aliased_scopes(token.scope))
+
+    scope = set(scope)
+
     if not token.scope:
         return True
 
-    return set(token.scope).issuperset(set(scope))
+    return token_scope.issuperset(scope)
+
+
+def resolve_aliased_scopes(scopes: list[str]) -> list[str]:
+    simplified_scopes = []
+
+    for scope in scopes:
+        if scope in constants.SCOPE_ALIASES:
+            simplified_scopes.extend(constants.SCOPE_ALIASES[scope])
+        else:
+            simplified_scopes.append(scope)
+
+    return simplified_scopes
 
 
 # Get bcrypt hash of password
