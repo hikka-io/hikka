@@ -94,7 +94,10 @@ async def validate_edit_update(
 async def validate_edit_close(
     edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_CLOSE])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CLOSE],
+            scope=[constants.SCOPE_CLOSE_EDIT],
+        )
     ),
 ):
     """Check if user which is trying to close edit it the author"""

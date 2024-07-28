@@ -32,9 +32,7 @@ async def verify_read_content(
 
 async def verify_read(
     content_type: ReadContentTypeEnum,
-    user: User = Depends(
-        auth_required(scope=[constants.SCOPE_READ_USER_READLIST])
-    ),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_READ_READLIST])),
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_read_content),
 ) -> Read:

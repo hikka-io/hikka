@@ -53,7 +53,7 @@ async def read_add(
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_add_read),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_READLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
     ),
 ):
     return await service.save_read(
@@ -69,7 +69,7 @@ async def read_add(
 async def delete_read(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_READLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
     ),
     read: Read = Depends(verify_read),
 ):

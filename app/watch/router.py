@@ -39,12 +39,24 @@ from .dependencies import (
 router = APIRouter(prefix="/watch", tags=["Watch"])
 
 
-@router.get("/{slug}", response_model=WatchResponse)
+@router.get(
+    "/{slug}",
+    response_model=WatchResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_READ_WATCHLIST]))
+    ],
+)
 async def watch_get(watch: AnimeWatch = Depends(verify_watch)):
     return watch
 
 
-@router.put("/{slug}", response_model=WatchResponse)
+@router.put(
+    "/{slug}",
+    response_model=WatchResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST]))
+    ],
+)
 async def watch_add(
     session: AsyncSession = Depends(get_session),
     data: Tuple[Anime, User, WatchArgs] = Depends(verify_add_watch),
@@ -56,7 +68,9 @@ async def watch_add(
 async def delete_watch(
     session: AsyncSession = Depends(get_session),
     watch: AnimeWatch = Depends(verify_watch),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
+    ),
 ):
     await service.delete_watch(session, watch, user)
     return {"success": True}
@@ -65,9 +79,7 @@ async def delete_watch(
 @router.get("/{slug}/following", response_model=UserWatchPaginationResponse)
 async def get_watch_following(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
-    ),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_READ_FOLLOW])),
     anime: Anime = Depends(get_anime),
     page: int = Depends(get_page),
     size: int = Depends(get_size),

@@ -13,9 +13,7 @@ from . import service
 
 async def verify_watch(
     anime: Anime = Depends(get_anime),
-    user: User = Depends(
-        auth_required(scope=[constants.SCOPE_READ_USER_WATCHLIST])
-    ),
+    user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ) -> AnimeWatch:
     if not (watch := await get_anime_watch(session, anime, user)):
@@ -27,9 +25,7 @@ async def verify_watch(
 async def verify_add_watch(
     args: WatchArgs,
     anime: Anime = Depends(get_anime),
-    user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_WATCHLIST])
-    ),
+    user: User = Depends(auth_required()),
 ) -> Tuple[Anime, User, WatchArgs]:
     # TODO: We probably should add anime.episodes_released here
     # TODO: Ideally we need to check anime status

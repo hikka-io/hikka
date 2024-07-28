@@ -47,7 +47,7 @@ async def change_description(
     args: DescriptionArgs,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_DESCRIPTION])
     ),
 ):
     return await service.change_description(session, user, args.description)
@@ -62,7 +62,7 @@ async def change_password(
     args: PasswordArgs,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_PASSWORD])
     ),
 ):
     return await service.set_password(session, user, args.password)
@@ -77,7 +77,7 @@ async def change_username(
     session: AsyncSession = Depends(get_session),
     args: UsernameArgs = Depends(validate_set_username),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_USERNAME])
     ),
 ):
     return await service.set_username(session, user, args.username)
@@ -92,7 +92,7 @@ async def change_email(
     session: AsyncSession = Depends(get_session),
     args: EmailArgs = Depends(validate_set_email),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_EMAIL])
     ),
 ):
     user = await service.set_email(session, user, args.email)
@@ -119,7 +119,7 @@ async def import_watch(
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_WATCHLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
     ),
 ):
     # Run watch list import in background
@@ -145,7 +145,7 @@ async def import_read(
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_READLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
     ),
 ):
     # Run watch list import in background
@@ -215,7 +215,7 @@ async def delete_user_watch(
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_WATCHLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
     ),
 ):
     # Run watch list import in background
@@ -240,7 +240,7 @@ async def delete_user_read(
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_WATCHLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
     ),
 ):
     # Run watch list import in background

@@ -86,7 +86,10 @@ async def create_edit(
     ),
     args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_CREATE])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CREATE],
+            scope=[constants.SCOPE_CREATE_EDIT],
+        )
     ),
     _: bool = Depends(check_captcha),
 ):
@@ -101,7 +104,10 @@ async def update_edit(
     args: EditArgs = Depends(validate_edit_update_args),
     edit: Edit = Depends(validate_edit_update),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_UPDATE])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_UPDATE],
+            scope=[constants.SCOPE_UPDATE_EDIT],
+        )
     ),
     _: bool = Depends(check_captcha),
 ):
@@ -121,7 +127,10 @@ async def accept_edit(
     session: AsyncSession = Depends(get_session),
     edit: Edit = Depends(validate_edit_accept),
     moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_ACCEPT])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_ACCEPT],
+            scope=[constants.SCOPE_ACCEPT_EDIT],
+        )
     ),
 ):
     return await service.accept_pending_edit(session, edit, moderator)
@@ -132,7 +141,10 @@ async def deny_edit(
     session: AsyncSession = Depends(get_session),
     edit: Edit = Depends(validate_edit_id_pending),
     moderator: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_ACCEPT])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_ACCEPT],
+            scope=[constants.SCOPE_DENY_EDIT],
+        )
     ),
 ):
     return await service.deny_pending_edit(session, edit, moderator)
@@ -148,7 +160,15 @@ async def get_content_edit_todo(
     content_type: EditContentToDoEnum,
     todo_type: ContentToDoEnum,
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(
+            optional=True,
+            scope=[
+                constants.SCOPE_READ_READLIST,
+                constants.SCOPE_READ_WATCHLIST,
+            ],
+        )
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

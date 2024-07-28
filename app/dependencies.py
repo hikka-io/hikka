@@ -108,7 +108,7 @@ def auth_required(permissions: list = None, scope: list = None, forbid_thirdpart
     if not scope:
         scope = []
 
-    scope = utils.resolve_aliased_scopes(scope)
+    scope = utils.resolve_scope_groups(scope)
 
     async def auth(
         token: AuthToken | Abort = Depends(_auth_token_or_abort),
