@@ -17,4 +17,4 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 COPY sync.py .
 COPY app ./app
 
-CMD poetry run uvicorn app:create_app --host 0.0.0.0 --port 8000
+CMD poetry run gunicorn app:create_app --workers 4 --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
