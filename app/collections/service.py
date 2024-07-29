@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, delete, update, and_, func
+from sqlalchemy import select, desc, asc, delete, update, and_, func
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select

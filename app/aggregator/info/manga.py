@@ -34,9 +34,11 @@ async def process_genres(session, manga, data):
 
 
 def process_translated_ua(data):
-    return (
-        len(data["honey"]) > 0 or len(data["zenko"]) > 0 or len(data["miu"]) > 0
-    )
+    honey_count = len(data["honey"]) if "honey" in data else 0
+    zenko_count = len(data["zenko"]) if "zenko" in data else 0
+    miu_count = len(data["miu"]) if "miu" in data else 0
+
+    return honey_count > 0 or zenko_count > 0 or miu_count > 0
 
 
 def process_external(data):
