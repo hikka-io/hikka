@@ -19,7 +19,6 @@ from app.models import (
 
 from app.dependencies import (
     auth_required,
-    check_captcha,
     get_page,
     get_size,
 )
@@ -39,6 +38,7 @@ from .dependencies import (
     validate_edit_close,
     validate_content,
     validate_edit_id,
+    check_captcha,
 )
 
 from .schemas import (

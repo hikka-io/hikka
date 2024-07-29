@@ -92,8 +92,22 @@ async def auth_token_required(
     return token
 
 
+async def auth_token_optional(
+    token: AuthToken | Abort = Depends(_auth_token_or_abort),
+) -> AuthToken | None:
+    if isinstance(token, Abort):
+        return None
+
+    return token
+
+
 # Check user auth token
-def auth_required(permissions: list = None, scope: list = None, forbid_thirdparty: bool = False, optional: bool = False):
+def auth_required(
+    permissions: list = None,
+    scope: list = None,
+    forbid_thirdparty: bool = False,
+    optional: bool = False,
+):
     """
     Authorization dependency with permission check
 
