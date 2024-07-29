@@ -86,6 +86,16 @@ async def validate_comment(
     return comment
 
 
+async def validate_comment_get(
+    comment: Comment = Depends(validate_comment),
+    author: User = Depends(auth_required(optional=True)),
+):
+    if comment.hidden and author.role not in ["admin", "moderator"]:
+        raise Abort("comment", "hidden")
+
+    return comment
+
+
 async def validate_comment_not_hidden(
     comment: Comment = Depends(validate_comment),
 ):
