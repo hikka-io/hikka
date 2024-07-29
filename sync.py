@@ -6,6 +6,7 @@ import asyncio
 from app.sync import (
     update_notifications,
     update_ranking_all,
+    update_moderation,
     update_activity,
     update_schedule,
     update_ranking,
@@ -22,6 +23,7 @@ def init_scheduler():
     sessionmanager.init(settings.database.endpoint)
 
     scheduler.add_job(update_notifications, "interval", seconds=10)
+    scheduler.add_job(update_moderation, "interval", seconds=10)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
     scheduler.add_job(update_activity, "interval", seconds=10)
     scheduler.add_job(update_schedule, "interval", minutes=5)

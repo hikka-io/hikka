@@ -184,6 +184,9 @@ errors = {
     "system": {
         "bad-backup-token": ["Bad backup token", 401],
     },
+    "moderation-log": {
+        "no-access": ["You do not have permission to access", 400]
+    },
 }
 
 
