@@ -116,3 +116,9 @@ async def delete_client(session: AsyncSession, client: Client) -> Client:
     await session.delete(client)
     await session.commit()
     return client
+
+
+async def verify_client(session: AsyncSession, client: Client) -> Client:
+    client.verified = True
+    await session.commit()
+    return client

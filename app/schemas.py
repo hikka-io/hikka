@@ -589,6 +589,7 @@ class ClientResponse(CustomModel):
     reference: str
     name: str
     description: str
+    verified: bool
 
     user: UserResponse
 

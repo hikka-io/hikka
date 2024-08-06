@@ -191,6 +191,7 @@ errors = {
         "bad-backup-token": ["Bad backup token", 401],
     },
     "client": {
+        "already-verified": ["Client is already verified", 400],
         "not-owner": ["User not owner of the client", 400],
         "max-clients": ["Maximum clients reached", 400],
         "not-found": ["Client not found", 404],

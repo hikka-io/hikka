@@ -56,3 +56,10 @@ def request_list_clients(client, token: str):
         "/client/",
         headers={"Auth": token},
     )
+
+
+def request_client_verify(client, token: str, client_reference: str):
+    return client.post(
+        f"/client/{client_reference}/verify",
+        headers={"Auth": token},
+    )

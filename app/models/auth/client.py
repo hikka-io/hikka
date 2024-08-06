@@ -14,6 +14,7 @@ class Client(Base):
     name: Mapped[str]
     description: Mapped[str]
     endpoint: Mapped[str]
+    verified: Mapped[bool] = mapped_column(default=False)
 
     user_id = mapped_column(ForeignKey("service_users.id"))
     user: Mapped["User"] = relationship(foreign_keys=user_id)

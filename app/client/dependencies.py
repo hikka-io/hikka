@@ -15,7 +15,7 @@ async def validate_client_create(
     create: ClientCreate,
     user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
-):
+) -> ClientCreate:
     if (await service.get_user_client(session, user, create.name)) is not None:
         raise Abort("client", "already-exists")
 
@@ -42,8 +42,17 @@ async def validate_client(
 async def validate_user_client(
     client: Client = Depends(validate_client),
     user: User = Depends(auth_required()),
-):
+) -> Client:
     if client.user_id != user.id:
         raise Abort("client", "not-owner")
+
+    return client
+
+
+async def validate_unverified_client(
+    client: Client = Depends(validate_client),
+) -> Client:
+    if client.verified:
+        raise Abort("client", "already-verified")
 
     return client

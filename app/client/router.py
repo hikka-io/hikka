@@ -13,6 +13,7 @@ from app.client.dependencies import (
     validate_client_create,
     validate_user_client,
     validate_client,
+    validate_unverified_client,
 )
 from app.client.schemas import (
     ClientPaginationResponse,
@@ -120,3 +121,23 @@ async def delete_user_client(
     client: Client = Depends(validate_user_client),
 ):
     return await service.delete_client(session, client)
+
+
+@router.post(
+    "/{client_reference}/verify",
+    summary="Verify third-party client",
+    response_model=ClientResponse,
+    dependencies=[
+        Depends(
+            auth_required(
+                permissions=[constants.PERMISSION_CLIENT_VERIFY],
+                scope=[constants.SCOPE_VERIFY_CLIENT],
+            )
+        )
+    ],
+)
+async def verify_third_party_client(
+    session: AsyncSession = Depends(get_session),
+    client: Client = Depends(validate_unverified_client),
+):
+    return await service.verify_client(session, client)

@@ -104,6 +104,25 @@ async def create_test_user_oauth(test_session):
 
 
 @pytest.fixture
+async def moderator_user(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="moderator",
+        email="moderator@mail.com",
+        role=constants.ROLE_MODERATOR,
+    )
+
+
+@pytest.fixture
+async def moderator_token(test_session, moderator_user):
+    return (
+        await helpers.create_token(
+            test_session, moderator_user.email, "moderator-token"
+        )
+    ).secret
+
+
+@pytest.fixture
 async def create_test_user_moderator(test_session):
     return await helpers.create_user(
         test_session,
