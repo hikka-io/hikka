@@ -102,7 +102,7 @@ async def update_client(
     if update.endpoint is not None:
         client.endpoint = str(update.endpoint)
 
-    if update.revoke_secret is not None:
+    if update.revoke_secret:
         client.secret = _client_secret()
 
     client.updated = now
