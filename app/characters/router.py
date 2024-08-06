@@ -82,7 +82,9 @@ async def character_anime(
 async def character_manga(
     session: AsyncSession = Depends(get_session),
     character: Character = Depends(get_character),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -102,7 +104,9 @@ async def character_manga(
 async def character_novel(
     session: AsyncSession = Depends(get_session),
     character: Character = Depends(get_character),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -122,7 +126,9 @@ async def character_novel(
 async def character_voices(
     session: AsyncSession = Depends(get_session),
     character: Character = Depends(get_character),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_WATCHLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

@@ -5,6 +5,7 @@ from app.database import get_session
 from app.models import Comment, User
 from app.utils import path_to_uuid
 from .utils import build_comments
+from app import constants
 from . import service
 
 from .dependencies import (
@@ -54,7 +55,9 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
 @router.get("/list", response_model=CommentListResponse)
 @router.get("/list/new", response_model=CommentListResponse)
 async def comments_list(
-    request_user: User = Depends(auth_required(optional=True)),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -94,7 +97,9 @@ async def write_comment(
 async def get_contents_list(
     session: AsyncSession = Depends(get_session),
     content_id: str = Depends(validate_content_slug),
-    request_user: User = Depends(auth_required(optional=True)),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -143,7 +148,9 @@ async def hide_comment(
 @router.get("/thread/{comment_reference}", response_model=CommentResponse)
 async def thread(
     base_comment: Comment = Depends(validate_comment_not_hidden),
-    request_user: User = Depends(auth_required(optional=True)),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
     session: AsyncSession = Depends(get_session),
 ):
     sub_comments = await service.get_sub_comments(

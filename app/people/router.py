@@ -66,7 +66,9 @@ async def search_people(
 async def person_anime(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_WATCHLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -86,7 +88,9 @@ async def person_anime(
 async def person_manga(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -106,7 +110,9 @@ async def person_manga(
 async def person_novel(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -128,7 +134,9 @@ async def person_novel(
 async def person_voices(
     session: AsyncSession = Depends(get_session),
     person: Person = Depends(get_person),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_WATCHLIST])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

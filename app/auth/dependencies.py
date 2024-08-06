@@ -1,12 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import User, UserOAuth, Client
 from app.dependencies import auth_required
-from app.models import User, UserOAuth
+from app.client.service import get_client
 from app.database import get_session
 from app.schemas import EmailArgs
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import oauth
+import uuid
 
 from app.utils import (
     is_protected_username,
@@ -21,6 +23,7 @@ from app.service import (
 )
 
 from .service import (
+    get_auth_token_request,
     get_user_by_activation,
     get_user_by_reset,
     get_oauth_by_id,
@@ -28,6 +31,8 @@ from .service import (
 
 from .schemas import (
     ComfirmResetArgs,
+    TokenRequestArgs,
+    TokenProceedArgs,
     SignupArgs,
     LoginArgs,
     TokenArgs,
@@ -197,3 +202,43 @@ async def validate_password_confirm(
         raise Abort("auth", "reset-expired")
 
     return user, confirm.password
+
+
+async def validate_client(
+    client_reference: uuid.UUID, session: AsyncSession = Depends(get_session)
+) -> Client:
+    if not (client := await get_client(session, client_reference)):
+        raise Abort("auth", "client-not-found")
+
+    return client
+
+
+def validate_scope(request: TokenRequestArgs) -> list[str]:
+    for scope in request.scope:
+        if scope not in constants.ALL_SCOPES:
+            raise Abort("auth", "invalid-scope")
+
+    if len(request.scope) == 0:
+        raise Abort("auth", "scope-empty")
+
+    return request.scope
+
+
+async def validate_auth_token_request(
+    args: TokenProceedArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    now = utcnow()
+
+    if not (
+        request := await get_auth_token_request(session, args.request_reference)
+    ):
+        raise Abort("auth", "invalid-token-request")
+
+    if now > request.expiration:
+        raise Abort("auth", "token-request-expired")
+
+    if request.client.secret != args.client_secret:
+        raise Abort("auth", "invalid-client-credentials")
+
+    return request

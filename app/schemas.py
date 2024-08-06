@@ -583,3 +583,15 @@ class ContentCharacterResponse(CustomModel):
 class ContentCharacterPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[ContentCharacterResponse]
+
+
+class ClientResponse(CustomModel):
+    reference: str
+    name: str
+    description: str
+    verified: bool
+
+    user: UserResponse
+
+    created: datetime_pd
+    updated: datetime_pd

@@ -5,6 +5,7 @@ from .schemas import AnimeScheduleArgs
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
+from app import constants
 from . import service
 
 from app.dependencies import (
@@ -25,7 +26,9 @@ router = APIRouter(prefix="/schedule", tags=["Schedule"])
 @router.post("/anime", response_model=AnimeScheduleResponsePaginationResponse)
 async def anime_schedule(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_WATCHLIST])
+    ),
     args: AnimeScheduleArgs = Depends(validate_schedule_args),
     page: int = Depends(get_page),
     size: int = Depends(get_size),

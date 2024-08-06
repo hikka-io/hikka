@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
+from app import constants
 from typing import Tuple
 from . import service
 
@@ -33,6 +34,9 @@ router = APIRouter(prefix="/follow", tags=["Follow"])
     "/{username}",
     response_model=FollowResponse,
     summary="Check follow",
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_READ_FAVOURITE]))
+    ],
 )
 async def check(
     session: AsyncSession = Depends(get_session),
@@ -45,6 +49,7 @@ async def check(
     "/{username}",
     response_model=FollowResponse,
     summary="Follow",
+    dependencies=[Depends(auth_required(scope=[constants.SCOPE_FOLLOW]))],
 )
 async def follow(
     session: AsyncSession = Depends(get_session),
@@ -57,6 +62,7 @@ async def follow(
     "/{username}",
     response_model=FollowResponse,
     summary="Unfollow",
+    dependencies=[Depends(auth_required(scope=[constants.SCOPE_UNFOLLOW]))],
 )
 async def unfollow(
     session: AsyncSession = Depends(get_session),
@@ -87,7 +93,9 @@ async def follow_stats(
 )
 async def following_list(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_FOLLOW])
+    ),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -111,7 +119,9 @@ async def following_list(
 )
 async def followers_list(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_FOLLOW])
+    ),
     user: User = Depends(validate_username),
     page: int = Depends(get_page),
     size: int = Depends(get_size),

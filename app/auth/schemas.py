@@ -1,5 +1,7 @@
-from app.schemas import datetime_pd
+from app import constants
+from app.schemas import datetime_pd, ClientResponse
 from pydantic import Field
+import uuid
 
 from app.schemas import (
     UsernameArgs,
@@ -38,3 +40,29 @@ class TokenResponse(CustomModel):
     secret: str = Field(
         examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"]
     )
+
+
+class AuthInfoResponse(CustomModel):
+    created: datetime_pd = Field(examples=[1686088809])
+    client: ClientResponse | None = Field(
+        description="Information about logged by third-party client"
+    )
+    scope: list[str]
+    expiration: datetime_pd = Field(examples=[1686088809])
+
+
+class TokenRequestResponse(CustomModel):
+    reference: str
+    redirect_url: str
+    expiration: datetime_pd = Field(examples=[1686088809])
+
+
+class TokenRequestArgs(CustomModel):
+    scope: list[str] = Field(
+        examples=[constants.ALL_SCOPES + list(constants.SCOPE_GROUPS)]
+    )
+
+
+class TokenProceedArgs(CustomModel):
+    request_reference: uuid.UUID
+    client_secret: str
