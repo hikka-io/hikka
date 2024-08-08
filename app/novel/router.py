@@ -69,6 +69,17 @@ async def search_novel(
 
 
 @router.get(
+    "/random",
+    response_model=NovelInfoResponse,
+    summary="Random novel",
+)
+async def random_novel(
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.random_novel(session)
+
+
+@router.get(
     "/{slug}",
     response_model=NovelInfoResponse,
     summary="Novel info",
