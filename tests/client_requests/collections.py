@@ -38,6 +38,13 @@ def request_collection_info(client, reference, token=None):
     )
 
 
+def request_collection_random(client, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.get(
+        "/collections/random",
+        headers=headers,)
+
+
 # def request_collections_list(client, page=1, token=None):
 #     headers = {"Auth": token} if token else {}
 #     return client.get(

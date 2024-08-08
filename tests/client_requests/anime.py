@@ -11,6 +11,10 @@ def request_anime_genres(client):
     return client.get("/anime/genres")
 
 
+def request_anime_random(client):
+    return client.get("/anime/random")
+
+
 def request_anime_info(client, slug):
     return client.get(f"/anime/{slug}")
 

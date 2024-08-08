@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
+import random
 
 from app.service import (
     get_comments_count_subquery,
@@ -153,3 +154,12 @@ async def manga_search_query(
     )
 
     return meilisearch_result
+
+
+async def random_manga(session: AsyncSession):
+    manga_ids = await session.scalars(select(Manga.id))
+    manga = await session.scalar(
+        select(Manga).filter(Manga.id == random.choice(manga_ids.all()))
+    )
+    return await get_manga_info_by_slug(session, manga.slug)
+

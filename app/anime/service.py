@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from app import constants
+import random
 
 from app.service import (
     get_comments_count_subquery,
@@ -271,3 +272,13 @@ async def anime_meilisearch_watch(
     )
 
     return meilisearch_result
+
+
+async def random_anime(session: AsyncSession):
+    anime_ids = await session.scalars(select(Anime.id))
+
+    anime = await session.scalar(
+        select(Anime).filter(Anime.id == random.choice(anime_ids.all()))
+    )
+
+    return await get_anime_info_by_slug(session,anime.slug)

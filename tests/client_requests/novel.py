@@ -9,3 +9,7 @@ def request_novel_search(client, filters={}, page=1, size=15, token=None):
 
 def request_novel_info(client, slug):
     return client.get(f"/novel/{slug}")
+
+
+def request_novel_random(client):
+    return client.get("/novel/random")

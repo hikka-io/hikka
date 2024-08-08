@@ -26,12 +26,15 @@ from .anime import request_anime_search
 from .anime import request_anime_genres
 from .anime import request_anime_staff
 from .anime import request_anime_info
+from .anime import request_anime_random
 
 from .manga import request_manga_search
 from .manga import request_manga_info
+from .manga import request_manga_random
 
 from .novel import request_novel_search
 from .novel import request_novel_info
+from .novel import request_novel_random
 
 from .characters import request_characters_search
 from .characters import request_characters_anime
@@ -93,6 +96,7 @@ from .collections import request_update_collection
 from .collections import request_delete_collection
 from .collections import request_collection_info
 from .collections import request_collections
+from .collections import request_collection_random
 
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
@@ -130,10 +134,13 @@ __all__ = [
     "request_anime_genres",
     "request_anime_staff",
     "request_anime_info",
+    "request_anime_random",
     "request_manga_search",
     "request_manga_info",
+    "request_manga_random",
     "request_novel_search",
     "request_novel_info",
+    "request_novel_random",
     "request_characters_search",
     "request_characters_anime",
     "request_characters_info",
@@ -185,6 +192,7 @@ __all__ = [
     "request_delete_collection",
     "request_collection_info",
     "request_collections",
+    "request_collection_random",
     "request_notifications_count",
     "request_notification_seen",
     "request_notifications",

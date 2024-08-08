@@ -93,6 +93,17 @@ async def anime_genres(
 
 
 @router.get(
+    "/random",
+    response_model=AnimeInfoResponse,
+    summary="Random anime",
+)
+async def random_anime(
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.random_anime(session)
+
+
+@router.get(
     "/{slug}",
     response_model=AnimeInfoResponse,
     summary="Anime info",
