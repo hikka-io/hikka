@@ -200,10 +200,7 @@ async def get_collection(
 ):
     collection = await session.scalar(
         collection_comments_load_options(
-            select(Collection).filter(
-                Collection.deleted == False,  # noqa: E712
-                Collection.id == reference,
-            )
+            select(Collection).filter(Collection.id == reference)
         )
     )
 
