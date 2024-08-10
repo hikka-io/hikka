@@ -15,6 +15,7 @@ RUN touch README.md
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
 COPY sync.py .
+COPY aggregator.py .
 COPY app ./app
 
 CMD poetry run gunicorn "app:create_app()" --workers 4 --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
