@@ -37,7 +37,7 @@ errors = {
         "user-not-found": ["User not found", 404],
         "invalid-scope": ["Invalid scope", 400],
         "email-set": ["Email already set", 400],
-        "not-available": ["Signup not available ", 400],
+        "not-available": ["Signup not available", 400],
         "invalid-username": ["Invalid username", 400],
         "scope-empty": ["Scope empty", 400],
     },
@@ -82,7 +82,7 @@ errors = {
         "empty-edit": ["Empty edit", 400],
     },
     "comment": {
-        "rate-limit": ["You have reached comment rate limit, try later", 400],
+        "rate-limit": ["You have reached comment rate limit, try later", 429],
         "not-editable": ["This comment can't be edited anymore", 400],
         "parent-not-found": ["Parent comment not found", 404],
         "already-hidden": ["Comment is already hidden", 400],
@@ -142,7 +142,7 @@ errors = {
         "not-found": ["Person not found", 404],
     },
     "upload": {
-        "rate-limit": ["You have reached upload rate limit, try later", 400],
+        "rate-limit": ["You have reached upload rate limit, try later", 429],
         "not-square": ["Image should be square", 400],
         "bad-resolution": ["Bad resolution", 400],
         "bad-mime": ["Don't be bad mime", 400],
@@ -195,7 +195,7 @@ errors = {
         "not-owner": ["User not owner of the client", 400],
         "max-clients": ["Maximum clients reached", 400],
         "not-found": ["Client not found", 404],
-    }
+    },
 }
 
 

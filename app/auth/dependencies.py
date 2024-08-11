@@ -215,7 +215,7 @@ async def validate_client(
 
 def validate_scope(request: TokenRequestArgs) -> list[str]:
     for scope in request.scope:
-        if scope not in constants.ALL_SCOPES:
+        if scope not in constants.ALL_SCOPES + list(constants.SCOPE_GROUPS):
             raise Abort("auth", "invalid-scope")
 
     if len(request.scope) == 0:

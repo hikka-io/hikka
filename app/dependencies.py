@@ -149,7 +149,7 @@ def auth_required(
             raise Abort("permission", "denied")
 
         if not utils.check_token_scope(token, scope):
-            raise Abort("scope", "denied")
+            raise Abort("permission", "denied")
 
         if token.user.role == constants.ROLE_DELETED:
             raise Abort("user", "deleted")

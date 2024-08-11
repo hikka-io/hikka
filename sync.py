@@ -22,7 +22,7 @@ def init_scheduler():
     settings = get_settings()
     sessionmanager.init(settings.database.endpoint)
 
-    scheduler.add_job(delete_expired_token_requests, "interval", seconds=5)
+    scheduler.add_job(delete_expired_token_requests, "interval", seconds=30)
     scheduler.add_job(update_notifications, "interval", seconds=10)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
     scheduler.add_job(update_activity, "interval", seconds=10)

@@ -63,12 +63,13 @@ def check_user_permissions(user: User, permissions: list):
 
     return has_permission
 
+
 def check_token_scope(token: AuthToken, scope: list[str]) -> bool:
     token_scope = set(resolve_scope_groups(token.scope))
 
     scope = set(scope)
 
-    if not token.scope:
+    if not token.scope and not token.client:
         return True
 
     return token_scope.issuperset(scope)
@@ -85,9 +86,7 @@ def resolve_scope_groups(scopes: list[str]) -> list[str]:
             # we need resolve them too
             group = resolve_scope_groups(group)
 
-            plain_scopes.extend(
-                group
-            )
+            plain_scopes.extend(group)
         else:
             plain_scopes.append(scope)
 
