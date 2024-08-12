@@ -195,4 +195,4 @@ async def check_captcha(
     if auth_token is not None and auth_token.client is not None:
         return True
 
-    return _check_captcha(captcha)
+    return await _check_captcha(captcha)
