@@ -68,6 +68,8 @@ async def _auth_token_or_abort(
     session: AsyncSession = Depends(get_session),
     token: str | None = Depends(get_request_auth_token),
 ) -> Abort | AuthToken:
+    now = utcnow()
+
     if not token:
         return Abort("auth", "missing-token")
 
@@ -80,8 +82,13 @@ async def _auth_token_or_abort(
     if token.user.banned:
         return Abort("auth", "banned")
 
-    return token
+    if now > token.expiration:
+        return Abort("auth", "token-expired")
 
+    token.used = now
+    await session.commit()
+
+    return token
 
 async def auth_token_required(
     token: AuthToken | Abort = Depends(_auth_token_or_abort),
@@ -93,7 +100,7 @@ async def auth_token_required(
 
 
 async def auth_token_optional(
-    token: AuthToken | Abort = Depends(_auth_token_or_abort),
+    token: AuthToken | Abort = Depends(_auth_token_or_abort)
 ) -> AuthToken | None:
     if isinstance(token, Abort):
         return None
@@ -137,9 +144,6 @@ def auth_required(
             raise token
 
         now = utcnow()
-
-        if now > token.expiration:
-            raise Abort("auth", "token-expired")
 
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):

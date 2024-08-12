@@ -3,13 +3,13 @@ import uuid
 from starlette.datastructures import URL
 
 from app.models import User, AuthToken, UserOAuth, AuthTokenRequest, Client
+from sqlalchemy import select, func, ScalarResult
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
+from datetime import timedelta, datetime
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
-from datetime import timedelta
-from sqlalchemy import select
 from app import constants
 import secrets
 
@@ -155,6 +155,7 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
             "expiration": now + timedelta(minutes=30),
             "secret": new_token(),
             "created": now,
+            "used": now,
             "user": user,
         }
     )
@@ -261,6 +262,55 @@ async def create_auth_token_from_request(
     # Expire token request
     request.expiration = utcnow() - timedelta(minutes=1)
 
+    await session.commit()
+
+    return token
+
+
+async def count_user_thirdparty_auth_tokens(
+    session: AsyncSession, user: User, now: datetime
+) -> int:
+    return await session.scalar(
+        select(func.count(AuthToken.id)).filter(
+            AuthToken.user_id == user.id,
+            AuthToken.client_id.is_not(None),
+            AuthToken.expiration >= now,
+        )
+    )
+
+
+async def list_user_thirdparty_auth_tokens(
+    session: AsyncSession,
+    user: User,
+    offset: int,
+    limit: int,
+    now: datetime,
+) -> ScalarResult[AuthToken]:
+    return await session.scalars(
+        select(AuthToken)
+        .options(selectinload(AuthToken.client))
+        .filter(
+            AuthToken.user_id == user.id,
+            AuthToken.client_id.is_not(None),
+            AuthToken.expiration >= now,
+        )
+        .offset(offset)
+        .limit(limit)
+    )
+
+
+async def get_auth_token(
+    session: AsyncSession, reference: str | uuid.UUID
+) -> AuthToken:
+    return await session.scalar(
+        select(AuthToken)
+        .filter(AuthToken.id == reference)
+        .options(selectinload(AuthToken.client), selectinload(AuthToken.user))
+    )
+
+
+async def revoke_auth_token(session: AsyncSession, token: AuthToken):
+    await session.delete(token)
     await session.commit()
 
     return token

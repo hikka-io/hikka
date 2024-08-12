@@ -1,10 +1,12 @@
+from .auth import request_list_thirdparty_tokens
 from .auth import request_auth_token_request
 from .auth import request_activation_resend
 from .auth import request_password_confirm
+from .auth import request_auth_token_info
 from .auth import request_password_reset
+from .auth import request_revoke_token
 from .auth import request_activation
 from .auth import request_auth_token
-from .auth import request_auth_info
 from .auth import request_signup
 from .auth import request_login
 
@@ -117,13 +119,15 @@ from .upload import request_upload
 from .system import request_backup_images
 
 __all__ = [
+    "request_list_thirdparty_tokens",
     "request_auth_token_request",
     "request_activation_resend",
     "request_password_confirm",
+    "request_auth_token_info",
     "request_password_reset",
+    "request_revoke_token",
     "request_activation",
     "request_auth_token",
-    "request_auth_info",
     "request_signup",
     "request_login",
     "request_client_full_info",

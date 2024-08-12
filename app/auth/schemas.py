@@ -1,6 +1,6 @@
-from app import constants
-from app.schemas import datetime_pd, ClientResponse
+from app.schemas import datetime_pd, ClientResponse, PaginationResponse
 from pydantic import Field
+from app import constants
 import uuid
 
 from app.schemas import (
@@ -42,13 +42,20 @@ class TokenResponse(CustomModel):
     )
 
 
-class AuthInfoResponse(CustomModel):
+class AuthTokenInfoResponse(CustomModel):
+    reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     created: datetime_pd = Field(examples=[1686088809])
     client: ClientResponse | None = Field(
         description="Information about logged by third-party client"
     )
     scope: list[str]
     expiration: datetime_pd = Field(examples=[1686088809])
+    used: datetime_pd | None = Field(examples=[1686088809, None])
+
+
+class AuthTokenInfoPaginationResponse(CustomModel):
+    list: list[AuthTokenInfoResponse]
+    pagination: PaginationResponse
 
 
 class TokenRequestResponse(CustomModel):

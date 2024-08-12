@@ -1,5 +1,6 @@
-from app.models import User, UserOAuth, AuthToken
+from app.models import User, UserOAuth, AuthToken, Client
 from app.utils import new_token, hashpwd, utcnow
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta
 from sqlalchemy import select
 from app import constants
@@ -62,7 +63,9 @@ async def create_oauth(test_session, user_id):
     return oauth
 
 
-async def create_token(test_session, email, token_secret):
+async def create_token(
+    test_session, email, token_secret, client: Client = None
+):
     now = utcnow()
 
     user = await test_session.scalar(select(User).filter(User.email == email))
@@ -73,6 +76,7 @@ async def create_token(test_session, email, token_secret):
             "secret": token_secret,
             "created": now,
             "user": user,
+            "client": client,
         }
     )
 
@@ -80,3 +84,32 @@ async def create_token(test_session, email, token_secret):
     await test_session.commit()
 
     return token
+
+
+async def create_client(
+    session: AsyncSession,
+    user: User,
+    secret: str,
+    name: str = "TestClient",
+    description: str = "Test client",
+    endpoint: str = "http://localhost/",
+    verified: bool = False,
+):
+    now = utcnow()
+    client = Client(
+        **{
+            "secret": secret,
+            "name": name,
+            "description": description,
+            "endpoint": endpoint,
+            "verified": verified,
+            "user": user,
+            "created": now,
+            "updated": now,
+        }
+    )
+
+    session.add(client)
+    await session.commit()
+
+    return client

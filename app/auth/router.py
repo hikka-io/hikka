@@ -1,5 +1,5 @@
-from app.dependencies import check_captcha, auth_required, auth_token_required
 from app.models import User, UserOAuth, AuthToken, Client, AuthTokenRequest
+from app.utils import pagination, pagination_dict, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.schemas import UserResponse
@@ -9,6 +9,13 @@ from typing import Tuple
 from . import service
 from . import oauth
 
+from app.dependencies import (
+    auth_token_required,
+    check_captcha,
+    auth_required,
+    get_page,
+    get_size,
+)
 from app.service import (
     create_activation_token,
     create_email,
@@ -20,6 +27,7 @@ from .dependencies import (
     validate_activation_resend,
     validate_password_confirm,
     validate_password_reset,
+    validate_auth_token,
     validate_activation,
     validate_provider,
     validate_signup,
@@ -31,9 +39,10 @@ from .dependencies import (
 )
 
 from .schemas import (
+    AuthTokenInfoPaginationResponse,
+    AuthTokenInfoResponse,
     TokenRequestResponse,
     ProviderUrlResponse,
-    AuthInfoResponse,
     TokenResponse,
     SignupArgs,
 )
@@ -193,7 +202,9 @@ async def oauth_token(
 
 
 @router.get(
-    "/info", summary="Get authorization info", response_model=AuthInfoResponse
+    "/token/info",
+    summary="Get token info",
+    response_model=AuthTokenInfoResponse,
 )
 async def auth_info(token: AuthToken = Depends(auth_token_required)):
     return token
@@ -230,3 +241,41 @@ async def third_party_auth_token(
         {"scope": token_request.scope},
     )
     return await service.create_auth_token_from_request(session, token_request)
+
+
+@router.get(
+    "/token/thirdparty",
+    summary="List third-party auth tokens",
+    response_model=AuthTokenInfoPaginationResponse,
+)
+async def third_party_auth_tokens(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required(forbid_thirdparty=True)),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+    now = utcnow()
+
+    total = await service.count_user_thirdparty_auth_tokens(session, user, now)
+    tokens = await service.list_user_thirdparty_auth_tokens(
+        session, user, offset, limit, now
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": tokens.all(),
+    }
+
+
+@router.delete(
+    "/token/{token_reference}",
+    summary="Revoke auth token",
+    response_model=AuthTokenInfoResponse,
+    dependencies=[Depends(auth_required(forbid_thirdparty=True))],
+)
+async def revoke_token(
+    token: AuthToken = Depends(validate_auth_token),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.revoke_auth_token(session, token)

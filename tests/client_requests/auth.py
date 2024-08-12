@@ -46,9 +46,9 @@ def request_password_confirm(client, token, new_password):
     )
 
 
-def request_auth_info(client, token: str):
+def request_auth_token_info(client, token: str):
     return client.get(
-        "/auth/info",
+        "/auth/token/info",
         headers={"Auth": token},
     )
 
@@ -70,4 +70,17 @@ def request_auth_token(client, request_reference: str, client_secret: str):
         json={"request_reference": request_reference, "client_secret": client_secret},
 
 
+    )
+
+
+def request_list_thirdparty_tokens(client, token: str):
+    return client.get(
+        "/auth/token/thirdparty",
+        headers={"Auth": token},
+    )
+
+def request_revoke_token(client, token: str, token_reference: str):
+    return client.delete(
+        f"/auth/token/{token_reference}",
+        headers={"Auth": token},
     )

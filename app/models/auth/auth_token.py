@@ -12,7 +12,9 @@ class AuthToken(Base):
 
     secret: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     expiration: Mapped[datetime]
+
     created: Mapped[datetime]
+    used: Mapped[datetime] = mapped_column(nullable=True)
 
     user_id = mapped_column(ForeignKey("service_users.id"))
 

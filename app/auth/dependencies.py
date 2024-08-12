@@ -27,6 +27,7 @@ from .service import (
     get_user_by_activation,
     get_user_by_reset,
     get_oauth_by_id,
+    get_auth_token,
 )
 
 from .schemas import (
@@ -242,3 +243,21 @@ async def validate_auth_token_request(
         raise Abort("auth", "invalid-client-credentials")
 
     return request
+
+
+async def validate_auth_token(
+    token_reference: uuid.UUID,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    now = utcnow()
+    if not (token := await get_auth_token(session, token_reference)):
+        raise Abort("auth", "invalid-token")
+
+    if now > token.expiration:
+        raise Abort("auth", "token-expired")
+
+    if token.user_id != user.id:
+        raise Abort("auth", "not-token-owner")
+
+    return token

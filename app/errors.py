@@ -20,6 +20,7 @@ errors = {
         "token-request-expired": ["Token request has expired", 400],
         "activation-invalid": ["Activation token is invalid", 400],
         "invalid-token-request": ["Invalid token request", 400],
+        "not-token-owner": ["User is not token owner", 400],
         "oauth-code-required": ["OAuth code required", 400],
         "invalid-provider": ["Invalid OAuth provider", 400],
         "username-taken": ["Username already taken", 400],

@@ -4,9 +4,9 @@ from app import constants
 
 from tests.client_requests import (
     request_auth_token_request,
+    request_auth_token_info,
     request_client_create,
     request_auth_token,
-    request_auth_info,
 )
 
 
@@ -43,9 +43,9 @@ async def test_auth_thirdparty(client, test_token):
 
     thirdparty_token = response.json()["secret"]
 
-    response = await request_auth_info(client, thirdparty_token)
+    response = await request_auth_token_info(client, thirdparty_token)
     assert response.status_code == status.HTTP_200_OK
 
-    auth_info = response.json()
+    token_info = response.json()
 
-    assert auth_info["client"]["reference"] == client_reference
+    assert token_info["client"]["reference"] == client_reference

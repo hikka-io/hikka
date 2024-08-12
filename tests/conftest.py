@@ -370,3 +370,24 @@ async def aggregator_anime_franchises(test_session):
     data = await helpers.load_json("tests/data/anime_franchises.json")
 
     await aggregator.save_franchises_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def test_thirdparty_client(test_session, test_user):
+    return await helpers.create_client(
+        test_session, test_user, "test-thirdparty-client"
+    )
+
+
+@pytest.fixture
+async def test_thirdparty_token(
+    test_session, test_user, test_thirdparty_client
+):
+    return (
+        await helpers.create_token(
+            test_session,
+            test_user.email,
+            "thirdparty-token-secret",
+            test_thirdparty_client,
+        )
+    ).secret
