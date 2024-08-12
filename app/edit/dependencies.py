@@ -157,6 +157,7 @@ async def validate_edit_create_args(
 async def validate_edit_update_args(
     args: EditArgs,
     edit: Edit = Depends(validate_edit_update),
+    author: User = Depends(auth_required()),
 ) -> EditArgs:
     """Validate update edit args"""
 
@@ -166,6 +167,11 @@ async def validate_edit_update_args(
     args.after = utils.check_after(args.after, edit.content)
     if len(args.after) == 0:
         raise Abort("edit", "empty-edit")
+
+    if args.auto and not check_user_permissions(
+        author, [constants.PERMISSION_EDIT_AUTO]
+    ):
+        raise Abort("permission", "denied")
 
     return args
 

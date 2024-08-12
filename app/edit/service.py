@@ -252,6 +252,12 @@ async def update_pending_edit(
         },
     )
 
+    # If user marked edit as auto accept we should do that
+    if args.auto:
+        await accept_pending_edit(
+            session, edit, user, constants.LOG_EDIT_UPDATE_ACCEPT_AUTO
+        )
+
     return edit
 
 
@@ -283,7 +289,7 @@ async def accept_pending_edit(
     session: AsyncSession,
     edit: Edit,
     moderator: User,
-    auto: bool = False,
+    log_type: str = constants.LOG_EDIT_ACCEPT,
 ) -> Edit:
     """Accept pending edit"""
 
@@ -321,7 +327,7 @@ async def accept_pending_edit(
 
     await create_log(
         session,
-        constants.LOG_EDIT_ACCEPT_AUTO if auto else constants.LOG_EDIT_ACCEPT,
+        log_type,
         moderator,
         edit.id,
     )
@@ -366,7 +372,9 @@ async def create_pending_edit(
     # If user marked edit as auto accept we should do that
     if args.auto:
         await session.refresh(edit)
-        await accept_pending_edit(session, edit, author, True)
+        await accept_pending_edit(
+            session, edit, author, constants.LOG_EDIT_ACCEPT_AUTO
+        )
 
     else:
         await create_log(

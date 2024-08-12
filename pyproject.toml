@@ -33,6 +33,7 @@ urllib3 = "2.2.2"
 gunicorn = "^22.0.0"
 prometheus-fastapi-instrumentator = "^7.0.0"
 pyinstrument = "^4.6.2"
+certifi = "2024.07.04"
 
 [build-system]
 requires = ["poetry-core"]
