@@ -70,6 +70,7 @@ errors = {
         "not-found": ["Manga not found", 404],
     },
     "edit": {
+        "rate-limit": ["You have reached the edit rate limit, try later", 429],
         "missing-content-type": ["You must specify content type", 400],
         "not-pending": ["Only pending edit can be changed", 400],
         "moderator-not-found": ["Moderator not found", 404],

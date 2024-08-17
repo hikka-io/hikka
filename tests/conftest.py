@@ -11,12 +11,13 @@ from sqlalchemy import select, text
 from app.utils import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from app import create_app
+from datetime import datetime
 from app import aggregator
-from unittest import mock
+from app import create_app
 from app import constants
-import helpers
+from unittest import mock
 import asyncio
+import helpers
 import pytest
 
 
@@ -205,6 +206,14 @@ def mock_oauth_invalid_data():
 def mock_s3_upload_file():
     with mock.patch("app.upload.service.s3_upload_file") as mocked:
         mocked.return_value = True
+        yield mocked
+
+
+# Fix utcnow() datetime for tests that rely on it not changing within the duration of the test
+@pytest.fixture(autouse=False)
+def mock_utcnow():
+    with mock.patch("app.utils.utcnow") as mocked:
+        mocked.return_value = datetime(2024, 2, 17, 10, 23, 29, 305502)
         yield mocked
 
 

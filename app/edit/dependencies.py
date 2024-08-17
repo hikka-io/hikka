@@ -202,3 +202,54 @@ async def check_captcha(
         return True
 
     return await _check_captcha(captcha)
+
+
+# Todo: perhaps the log based rate limiting logic could be abstracted in the future?
+async def validate_edit_create_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CREATE],
+            scope=[constants.SCOPE_CREATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_created_edit_limit(session, user)
+    create_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= create_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user
+
+
+async def validate_edit_update_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_UPDATE],
+            scope=[constants.SCOPE_UPDATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_update_edit_limit(session, user)
+    update_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= update_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user

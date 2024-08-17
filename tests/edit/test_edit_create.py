@@ -32,7 +32,7 @@ async def test_edit_create(
             "description": "Brief description",
             "after": {
                 "title_en": "Bocchi The Rock!",
-                "synonyms": ["bochchi"],  # This shoud be filtered out
+                "synonyms": ["bochchi"],  # This should be filtered out
             },
         },
     )
@@ -243,3 +243,39 @@ async def test_edit_create_empty_edit(
     # Check status
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
+
+
+async def test_edit_create_rate_limit(
+    client,
+    aggregator_anime,
+    create_test_user,
+    get_test_token,
+    test_session,
+    mock_utcnow,
+):
+    create_edit_limit = 25
+
+    for index in range(0, create_edit_limit + 1):
+        # Create edit for anime
+        response = await request_create_edit(
+            client,
+            get_test_token,
+            "anime",
+            "bocchi-the-rock-9e172d",
+            {
+                "description": "Brief description",
+                "after": {
+                    "title_en": "Bocchi The Rock!",
+                },
+            },
+        )
+
+        # Make sure request prior to the rate limit is good
+        if index == create_edit_limit - 1:
+            assert response.status_code == status.HTTP_200_OK
+            assert "code" not in response.json()
+
+        # Check the rate limit
+        if index == create_edit_limit:
+            assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+            assert response.json()["code"] == "edit:rate_limit"

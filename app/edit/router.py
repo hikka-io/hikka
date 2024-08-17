@@ -29,6 +29,8 @@ from app.utils import (
 )
 
 from .dependencies import (
+    validate_edit_update_rate_limit,
+    validate_edit_create_rate_limit,
     validate_edit_search_args,
     validate_edit_update_args,
     validate_edit_id_pending,
@@ -85,12 +87,7 @@ async def create_edit(
         validate_content
     ),
     args: EditArgs = Depends(validate_edit_create),
-    author: User = Depends(
-        auth_required(
-            permissions=[constants.PERMISSION_EDIT_CREATE],
-            scope=[constants.SCOPE_CREATE_EDIT],
-        )
-    ),
+    author: User = Depends(validate_edit_create_rate_limit),
     _: bool = Depends(check_captcha),
 ):
     return await service.create_pending_edit(
@@ -103,12 +100,7 @@ async def update_edit(
     session: AsyncSession = Depends(get_session),
     args: EditArgs = Depends(validate_edit_update_args),
     edit: Edit = Depends(validate_edit_update),
-    user: User = Depends(
-        auth_required(
-            permissions=[constants.PERMISSION_EDIT_UPDATE],
-            scope=[constants.SCOPE_UPDATE_EDIT],
-        )
-    ),
+    user: User = Depends(validate_edit_update_rate_limit),
     _: bool = Depends(check_captcha),
 ):
     return await service.update_pending_edit(session, edit, user, args)

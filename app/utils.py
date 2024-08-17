@@ -1,13 +1,13 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from dateutil.relativedelta import relativedelta
 from fastapi.responses import JSONResponse
+from datetime import timezone, timedelta
 from fastapi import FastAPI, Request
 from datetime import datetime, UTC
 from app.models import AuthToken
 from functools import lru_cache
 from urllib.parse import quote
 from dynaconf import Dynaconf
-from datetime import timezone
 from app.models import User
 from app import constants
 from uuid import UUID
@@ -50,6 +50,18 @@ def utcnow():
 # Replacement for deprecated datetime's utcfromtimestamp
 def utcfromtimestamp(timestamp: int):
     return datetime.fromtimestamp(timestamp, UTC).replace(tzinfo=None)
+
+
+# Helper function to round a datetime object to the nearest hour/minute/second
+def round_datettime(
+    date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
+):
+    return date - timedelta(
+        hours=date.hour % hours,
+        minutes=date.minute % minutes,
+        seconds=date.second % seconds,
+        microseconds=date.microsecond,
+    )
 
 
 # Simple check for permissions
