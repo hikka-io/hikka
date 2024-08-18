@@ -11,12 +11,13 @@ from sqlalchemy import select, text
 from app.utils import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from app import create_app
+from datetime import datetime
 from app import aggregator
-from unittest import mock
+from app import create_app
 from app import constants
-import helpers
+from unittest import mock
 import asyncio
+import helpers
 import pytest
 
 
@@ -89,13 +90,37 @@ async def test_session():
 
 
 @pytest.fixture
-async def create_test_user(test_session):
+async def test_user(test_session):
     return await helpers.create_user(test_session)
+
+
+@pytest.fixture
+async def create_test_user(test_user):
+    return test_user
 
 
 @pytest.fixture
 async def create_test_user_oauth(test_session):
     return await helpers.create_user(test_session, email="testuser@mail.com")
+
+
+@pytest.fixture
+async def moderator_user(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="moderator",
+        email="moderator@mail.com",
+        role=constants.ROLE_MODERATOR,
+    )
+
+
+@pytest.fixture
+async def moderator_token(test_session, moderator_user):
+    return (
+        await helpers.create_token(
+            test_session, moderator_user.email, "moderator-token"
+        )
+    ).secret
 
 
 @pytest.fixture
@@ -135,12 +160,17 @@ async def create_test_user_with_oauth(test_session):
 
 
 @pytest.fixture
-async def get_test_token(test_session):
+async def test_token(test_user, test_session):
     token = await helpers.create_token(
-        test_session, "user@mail.com", "SECRET_TOKEN"
+        test_session, test_user.email, "SECRET_TOKEN"
     )
 
     return token.secret
+
+
+@pytest.fixture
+async def get_test_token(test_token):
+    return test_token
 
 
 @pytest.fixture
@@ -176,6 +206,14 @@ def mock_oauth_invalid_data():
 def mock_s3_upload_file():
     with mock.patch("app.upload.service.s3_upload_file") as mocked:
         mocked.return_value = True
+        yield mocked
+
+
+# Fix utcnow() datetime for tests that rely on it not changing within the duration of the test
+@pytest.fixture(autouse=False)
+def mock_utcnow():
+    with mock.patch("app.utils.utcnow") as mocked:
+        mocked.return_value = datetime(2024, 2, 17, 10, 23, 29, 305502)
         yield mocked
 
 
@@ -341,3 +379,24 @@ async def aggregator_anime_franchises(test_session):
     data = await helpers.load_json("tests/data/anime_franchises.json")
 
     await aggregator.save_franchises_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def test_thirdparty_client(test_session, test_user):
+    return await helpers.create_client(
+        test_session, test_user, "test-thirdparty-client"
+    )
+
+
+@pytest.fixture
+async def test_thirdparty_token(
+    test_session, test_user, test_thirdparty_client
+):
+    return (
+        await helpers.create_token(
+            test_session,
+            test_user.email,
+            "thirdparty-token-secret",
+            test_thirdparty_client,
+        )
+    ).secret

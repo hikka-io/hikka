@@ -1,9 +1,22 @@
+from .auth import request_list_thirdparty_tokens
+from .auth import request_auth_token_request
 from .auth import request_activation_resend
 from .auth import request_password_confirm
+from .auth import request_auth_token_info
 from .auth import request_password_reset
+from .auth import request_revoke_token
 from .auth import request_activation
+from .auth import request_auth_token
 from .auth import request_signup
 from .auth import request_login
+
+from .client import request_client_full_info
+from .client import request_client_create
+from .client import request_client_update
+from .client import request_client_verify
+from .client import request_client_delete
+from .client import request_list_clients
+from .client import request_client_info
 
 from .oauth import request_oauth_post
 from .oauth import request_oauth_url
@@ -106,12 +119,24 @@ from .upload import request_upload
 from .system import request_backup_images
 
 __all__ = [
+    "request_list_thirdparty_tokens",
+    "request_auth_token_request",
     "request_activation_resend",
     "request_password_confirm",
+    "request_auth_token_info",
     "request_password_reset",
+    "request_revoke_token",
     "request_activation",
+    "request_auth_token",
     "request_signup",
     "request_login",
+    "request_client_full_info",
+    "request_client_create",
+    "request_client_update",
+    "request_client_verify",
+    "request_client_delete",
+    "request_list_clients",
+    "request_client_info",
     "request_oauth_post",
     "request_oauth_url",
     "request_profile",

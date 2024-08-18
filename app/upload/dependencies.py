@@ -17,7 +17,7 @@ import imagesize
 async def validate_upload_rate_limit(
     upload_type: UploadTypeEnum,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_UPLOAD])),
 ):
     upload_permissions = None
 

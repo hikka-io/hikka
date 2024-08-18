@@ -6,6 +6,7 @@ from app.service import get_anime_watch
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
+from app import constants
 from typing import Tuple
 from . import service
 

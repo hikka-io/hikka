@@ -144,7 +144,7 @@ async def get_auth_token(
     return await session.scalar(
         select(AuthToken)
         .filter(AuthToken.secret == secret)
-        .options(selectinload(AuthToken.user))
+        .options(selectinload(AuthToken.user), selectinload(AuthToken.client))
     )
 
 

@@ -32,6 +32,7 @@ def create_app(init_db: bool = True) -> FastAPI:
         version="0.4.0",
         openapi_tags=[
             {"name": "Auth"},
+            {"name": "Client"},
             {"name": "User"},
             {"name": "Follow"},
             {"name": "Anime"},
@@ -95,6 +96,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .people import router as people_router
     from .follow import router as follow_router
     from .system import router as system_router
+    from .client import router as client_router
     from .anime import router as anime_router
     from .manga import router as manga_router
     from .novel import router as novel_router
@@ -122,6 +124,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(people_router)
     app.include_router(follow_router)
     app.include_router(system_router)
+    app.include_router(client_router)
     app.include_router(anime_router)
     app.include_router(manga_router)
     app.include_router(novel_router)

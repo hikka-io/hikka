@@ -26,7 +26,11 @@ router = APIRouter(prefix="/user", tags=["User"])
     response_model=UserResponse,
     summary="Current user profile",
 )
-async def profile(user: User = Depends(auth_required())):
+async def profile(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
     return user
 
 

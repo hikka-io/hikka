@@ -1,13 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc, func
-from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
+from app.utils import round_datettime
 from sqlalchemy.orm import joinedload
 from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
-from uuid import UUID, uuid4
+from .utils import uuid_to_path
 from app.utils import utcnow
+from uuid import UUID, uuid4
 from app import constants
 from app import utils
 import copy
@@ -216,7 +217,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     return await session.scalar(
         select(func.count(Comment.id)).filter(
             Comment.author == author,
-            Comment.created > round_hour(utcnow()),
+            Comment.created > round_datettime(utcnow(), hours=1),
             Comment.deleted == False,  # noqa: E712
         )
     )

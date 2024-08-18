@@ -4,9 +4,12 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from app.utils import round_datettime
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
+from app.errors import Abort
 from app.utils import utcnow
+from app.models import Log
 from app import constants
 import copy
 
@@ -493,4 +496,34 @@ async def content_todo(
         .options(*load_options)
         .limit(limit)
         .offset(offset)
+    )
+
+
+async def count_created_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_CREATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.user == user)
+    )
+
+
+async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_UPDATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.user == user)
     )

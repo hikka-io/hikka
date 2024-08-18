@@ -1,12 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import check_user_permissions
-from app.dependencies import auth_required
 from app.database import get_session
+from fastapi import Depends, Header
+from app.models import AuthToken
 from app.errors import Abort
-from fastapi import Depends
 from app import constants
 from . import service
 from . import utils
+
+from app.dependencies import (
+    check_captcha as _check_captcha,
+    auth_token_optional,
+    auth_required,
+)
 
 from app.service import (
     get_user_by_username,
@@ -94,7 +100,10 @@ async def validate_edit_update(
 async def validate_edit_close(
     edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_CLOSE])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CLOSE],
+            scope=[constants.SCOPE_CLOSE_EDIT],
+        )
     ),
 ):
     """Check if user which is trying to close edit it the author"""
@@ -182,3 +191,65 @@ async def validate_edit_create(
         raise Abort("permission", "denied")
 
     return args
+
+
+async def check_captcha(
+    captcha: str | None = Header(None, alias="captcha"),
+    auth_token: AuthToken | None = Depends(auth_token_optional),
+):
+    # If authorized through third-party client - disable captcha validation
+    if auth_token is not None and auth_token.client is not None:
+        return True
+
+    return await _check_captcha(captcha)
+
+
+# Todo: perhaps the log based rate limiting logic could be abstracted in the future?
+async def validate_edit_create_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CREATE],
+            scope=[constants.SCOPE_CREATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_created_edit_limit(session, user)
+    create_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= create_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user
+
+
+async def validate_edit_update_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_UPDATE],
+            scope=[constants.SCOPE_UPDATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_update_edit_limit(session, user)
+    update_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= update_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user
