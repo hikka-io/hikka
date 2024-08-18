@@ -16,6 +16,7 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
 COPY sync.py .
 COPY aggregator.py .
+COPY alembic ./alembic
 COPY app ./app
 
-CMD poetry run gunicorn "app:create_app()" --workers 4 --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+CMD poetry run alembic upgrade head && poetry run gunicorn "app:create_app()" --workers 4 --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
