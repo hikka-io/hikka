@@ -7,12 +7,12 @@ from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
 from app import constants
-import random
 
 from app.service import (
     get_comments_count_subquery,
     build_anime_order_by,
     anime_search_filter,
+    random_entity_offset,
 )
 
 from app.models import (
@@ -275,10 +275,10 @@ async def anime_meilisearch_watch(
 
 
 async def random_anime(session: AsyncSession):
-    anime_ids = await session.scalars(select(Anime.id))
+    random_offset = await random_entity_offset(session, Anime)
 
     anime = await session.scalar(
-        select(Anime).filter(Anime.id == random.choice(anime_ids.all()))
+        select(Anime).offset(random_offset).limit(1)
     )
 
     return await get_anime_info_by_slug(session,anime.slug)

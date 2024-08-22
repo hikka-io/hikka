@@ -77,8 +77,7 @@ async def random_collection(
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(auth_required(optional=True)),
 ):
-    collection = await service.random_collection(session)
-    return await service.get_collection_display(session, collection, request_user)
+    return await service.random_collection(session, request_user)
 
 
 @router.put("/{reference}", response_model=CollectionResponse)

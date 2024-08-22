@@ -5,7 +5,6 @@ from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
 from app import constants
 from uuid import UUID
-import random
 
 from .schemas import (
     CollectionsListArgs,
@@ -17,6 +16,7 @@ from app.service import (
     collections_load_options,
     get_user_by_username,
     create_log,
+    random_entity_offset,
 )
 
 from app.models import (
@@ -463,13 +463,13 @@ async def content_compare(
     return collection_compare == args_compare
 
 
-async def random_collection(session: AsyncSession):
-    collection_ids = await session.scalars(select(Collection.id).filter(
+async def random_collection(session: AsyncSession, request_user:User):
+
+    random_offset = await random_entity_offset(session, Collection)
+
+    collection = await session.scalar(
+        select(Collection).offset(random_offset).limit(1).filter(
             Collection.deleted == False,
             Collection.visibility == constants.COLLECTION_PUBLIC))
 
-    collection = await session.scalar(
-        select(Collection).filter(Collection.id == random.choice(collection_ids.all()))
-    )
-
-    return collection
+    return await get_collection_display(session, collection, request_user)

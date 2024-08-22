@@ -7,12 +7,12 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
-import random
 
 from app.service import (
     get_comments_count_subquery,
     build_novel_order_by,
     novel_search_filter,
+    random_entity_offset,
 )
 
 from app.models import (
@@ -157,10 +157,10 @@ async def novel_search_query(
 
 
 async def random_novel(session: AsyncSession):
-    novel_ids = await session.scalars(select(Novel.id))
+    random_offset = await random_entity_offset(session, Novel)
 
     novel = await session.scalar(
-        select(Novel).filter(Novel.id == random.choice(novel_ids.all()))
+        select(Novel).offset(random_offset).limit(1)
     )
 
     return await get_novel_info_by_slug(session, novel.slug)

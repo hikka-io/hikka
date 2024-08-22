@@ -1,3 +1,6 @@
+import random
+from functools import lru_cache
+
 from sqlalchemy import select, asc, desc, and_, or_, func
 from app.utils import new_token, is_int, is_uuid, utcnow
 from sqlalchemy.orm import with_loader_criteria
@@ -630,3 +633,9 @@ def novel_search_filter(
         )
 
     return query
+
+
+@lru_cache(maxsize=64)
+async def random_entity_offset(session: AsyncSession, model):
+    count = await session.scalar(select(func.count(model.id)))
+    return random.randint(0, count - 1)
