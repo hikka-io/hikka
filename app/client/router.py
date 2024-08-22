@@ -26,7 +26,7 @@ router = APIRouter(prefix="/client", tags=["Client"])
 
 
 @router.get(
-    "/", summary="List user clients", response_model=ClientPaginationResponse
+    "", summary="List user clients", response_model=ClientPaginationResponse
 )
 async def list_user_clients(
     page: int = Depends(get_page),
@@ -67,7 +67,7 @@ async def get_user_client(client: Client = Depends(validate_user_client)):
 
 
 @router.post(
-    "/", summary="Create new user client", response_model=ClientFullResponse
+    "", summary="Create new user client", response_model=ClientFullResponse
 )
 async def create_user_client(
     create: ClientCreate = Depends(validate_client_create),
