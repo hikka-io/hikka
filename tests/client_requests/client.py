@@ -1,6 +1,6 @@
 def request_client_create(client, token: str, name: str, description: str, endpoint: str):
     return client.post(
-        "/client/",
+        "/client",
         headers={"Auth": token},
         json={
             "name": name,
@@ -53,7 +53,7 @@ def request_client_delete(
 
 def request_list_clients(client, token: str):
     return client.get(
-        "/client/",
+        "/client",
         headers={"Auth": token},
     )
 
