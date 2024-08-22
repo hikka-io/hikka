@@ -3,6 +3,7 @@ import uuid
 from starlette import status
 
 from tests.client_requests import request_client_create, request_client_update
+from app import constants
 
 
 async def test_client_update(client, test_token):
@@ -52,3 +53,59 @@ async def test_client_update_nonexistent(client, test_token):
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
     assert response.json()["code"] == "client:not_found"
+
+
+async def test_too_long_fields(client, test_token):
+    error_message_format = "Invalid field {field} in request body"
+    error_code = "system:validation_error"
+
+    name = "test-client"
+    description = "test client description"
+    endpoint = "http://localhost/"
+
+    response = await request_client_create(
+        client, test_token, name, description, endpoint
+    )
+    assert response.status_code == status.HTTP_200_OK
+
+    client_reference = response.json()["reference"]
+
+    response = await request_client_update(
+        client,
+        test_token,
+        client_reference,
+        name="a" * (constants.MAX_CLIENT_NAME_LENGTH + 1),
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == error_code
+    assert response.json()["message"] == error_message_format.format(
+        field="name"
+    )
+
+    response = await request_client_update(
+        client,
+        test_token,
+        client_reference,
+        description="a" * (constants.MAX_CLIENT_DESCRIPTION_LENGTH + 1),
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == error_code
+    assert response.json()["message"] == error_message_format.format(
+        field="description"
+    )
+
+    response = await request_client_update(
+        client,
+        test_token,
+        client_reference,
+        endpoint="http://localhost/"
+        + "a" * (constants.MAX_CLIENT_ENDPOINT_LENGTH + 1),
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == error_code
+    assert response.json()["message"] == error_message_format.format(
+        field="endpoint"
+    )
