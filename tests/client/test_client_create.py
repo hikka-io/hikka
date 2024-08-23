@@ -99,3 +99,36 @@ async def test_too_long_fields(client, test_token):
     assert response.json()["message"] == error_message_format.format(
         field="endpoint"
     )
+
+
+async def test_too_short_fields(client, test_token):
+    error_message_format = "Invalid field {field} in request body"
+    error_code = "system:validation_error"
+
+    response = await request_client_create(
+        client,
+        test_token,
+        "a",
+        "description",
+        "http://localhost/",
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    assert response.json()["code"] == error_code
+    assert response.json()["message"] == error_message_format.format(
+        field="name"
+    )
+
+    response = await request_client_create(
+        client,
+        test_token,
+        "name",
+        "a",
+        "http://localhost/",
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    assert response.json()["code"] == error_code
+    assert response.json()["message"] == error_message_format.format(
+        field="description"
+    )
