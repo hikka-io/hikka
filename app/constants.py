@@ -320,7 +320,7 @@ SCOPE_GROUPS = {
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
-ROLE_BANNED = "banned"
+ROLE_RESTRICTED = "restricted"
 ROLE_NOT_ACTIVATED = "not_activated"
 ROLE_DELETED = "deleted"
 
@@ -394,7 +394,7 @@ ROLES = {
         PERMISSION_UPLOAD_AVATAR,
         PERMISSION_UPLOAD_COVER,
     ],
-    ROLE_BANNED: [],
+    ROLE_RESTRICTED: [],
     ROLE_DELETED: [],
 }
 
