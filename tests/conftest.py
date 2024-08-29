@@ -139,12 +139,12 @@ async def create_dummy_user(test_session):
 
 
 @pytest.fixture
-async def create_dummy_user_banned(test_session):
+async def create_dummy_user_restricted(test_session):
     return await helpers.create_user(
         test_session,
         username="dummy",
         email="dummy@mail.com",
-        role=constants.ROLE_BANNED,
+        role=constants.ROLE_RESTRICTED,
     )
 
 

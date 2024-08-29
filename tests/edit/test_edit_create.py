@@ -149,7 +149,7 @@ async def test_edit_create_bad_permission(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_dummy_user_banned,
+    create_dummy_user_restricted,
     get_dummy_token,
     test_session,
 ):

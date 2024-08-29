@@ -101,6 +101,10 @@ SEARCH_RESULT_SIZE = 15
 
 MAX_USER_CLIENTS = 10
 
+MAX_CLIENT_NAME_LENGTH = 128
+MAX_CLIENT_DESCRIPTION_LENGTH = 512
+MAX_CLIENT_ENDPOINT_LENGTH = 128
+
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"
@@ -316,7 +320,7 @@ SCOPE_GROUPS = {
 ROLE_USER = "user"
 ROLE_MODERATOR = "moderator"
 ROLE_ADMIN = "admin"
-ROLE_BANNED = "banned"
+ROLE_RESTRICTED = "restricted"
 ROLE_NOT_ACTIVATED = "not_activated"
 ROLE_DELETED = "deleted"
 
@@ -390,7 +394,7 @@ ROLES = {
         PERMISSION_UPLOAD_AVATAR,
         PERMISSION_UPLOAD_COVER,
     ],
-    ROLE_BANNED: [],
+    ROLE_RESTRICTED: [],
     ROLE_DELETED: [],
 }
 

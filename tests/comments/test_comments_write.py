@@ -115,3 +115,18 @@ async def test_comments_write_empty_markdown(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
+
+
+async def test_comments_write_bad_permission(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_dummy_user_restricted,
+    get_dummy_token,
+):
+    response = await request_comments_write(
+        client, get_dummy_token, "edit", "17", "First comment, yay!"
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["code"] == "permission:denied"
