@@ -31,9 +31,13 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 WORKDIR /project
 
+# app source files
 COPY sync.py .
 COPY aggregator.py .
-COPY alembic ./alembic
 COPY app ./app
+
+# db migrations files
+COPY alembic ./alembic
+COPY docs/alembic.example.ini ./alembic.ini
 
 CMD uvicorn app:create_app --host 0.0.0.0 --port 8000
