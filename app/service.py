@@ -32,6 +32,7 @@ from app.models import (
     Magazine,
     Company,
     Comment,
+    Client,
     Person,
     Genre,
     Anime,
@@ -144,7 +145,10 @@ async def get_auth_token(
     return await session.scalar(
         select(AuthToken)
         .filter(AuthToken.secret == secret)
-        .options(selectinload(AuthToken.user), selectinload(AuthToken.client))
+        .options(
+            selectinload(AuthToken.user),
+            selectinload(AuthToken.client).selectinload(Client.user),
+        )
     )
 
 

@@ -288,7 +288,7 @@ async def list_user_thirdparty_auth_tokens(
 ) -> ScalarResult[AuthToken]:
     return await session.scalars(
         select(AuthToken)
-        .options(selectinload(AuthToken.client))
+        .options(selectinload(AuthToken.client).selectinload(Client.user))
         .filter(
             AuthToken.user_id == user.id,
             AuthToken.client_id.is_not(None),
@@ -305,7 +305,10 @@ async def get_auth_token(
     return await session.scalar(
         select(AuthToken)
         .filter(AuthToken.id == reference)
-        .options(selectinload(AuthToken.client), selectinload(AuthToken.user))
+        .options(
+            selectinload(AuthToken.client).selectinload(Client.user),
+            selectinload(AuthToken.user),
+        )
     )
 
 
