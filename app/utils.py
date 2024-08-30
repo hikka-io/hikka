@@ -334,6 +334,8 @@ async def check_cloudflare_captcha(response, secret):
 
 
 def is_protected_username(username: str):
+    username = username.strip().lower()
+
     usernames = [
         ["admin", "blog", "dev", "ftp", "mail", "pop", "pop3", "imap", "smtp"],
         ["stage", "stats", "status", "www", "beta", "about", "access"],
@@ -395,7 +397,7 @@ def is_protected_username(username: str):
 
 
 def remove_bad_characters(text):
-    text.replace("\ufff4", "")
+    text = text.replace("\ufff4", "")
     return text
 
 
