@@ -26,7 +26,7 @@ In order to get Hikka up and running on your local machine you must follow this 
 
 This guide assumes you already have PostgreSQL installed and database named `hikka` created. For development you would also need [Poetry](https://python-poetry.org).
 
-Optionally you also need to install Meilisearch [1.4.2](https://github.com/meilisearch/meilisearch/releases/tag/v1.4.2) installed for working with. Please node this specific version must be installed because newer versions most likely contain API breaking changes.
+Optionally you also need to install Meilisearch [1.4.2](https://github.com/meilisearch/meilisearch/releases/tag/v1.4.2) to work with search. Please note this exact version must be installed because newer versions most likely contain API breaking changes.
 
 ### Installation
 
