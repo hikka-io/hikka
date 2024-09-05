@@ -87,7 +87,7 @@ class EditSearchArgs(CustomModel):
 
 
 class EditArgs(CustomModel):
-    description: str | None = Field(None, examples=["..."], max_length=420)
+    description: str | None = Field(None, examples=["..."], max_length=2048)
     auto: bool = Field(default=False)
     after: dict
 
