@@ -1,18 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import check_user_permissions
+from app.dependencies import auth_required
 from app.database import get_session
-from fastapi import Depends, Header
-from app.models import AuthToken
 from app.errors import Abort
+from fastapi import Depends
 from app import constants
 from . import service
 from . import utils
-
-from app.dependencies import (
-    check_captcha as _check_captcha,
-    auth_token_optional,
-    auth_required,
-)
 
 from app.service import (
     get_user_by_username,
@@ -191,17 +185,6 @@ async def validate_edit_create(
         raise Abort("permission", "denied")
 
     return args
-
-
-async def check_captcha(
-    captcha: str | None = Header(None, alias="captcha"),
-    auth_token: AuthToken | None = Depends(auth_token_optional),
-):
-    # If authorized through third-party client - disable captcha validation
-    if auth_token is not None and auth_token.client is not None:
-        return True
-
-    return await _check_captcha(captcha)
 
 
 # Todo: perhaps the log based rate limiting logic could be abstracted in the future?

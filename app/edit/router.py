@@ -40,7 +40,6 @@ from .dependencies import (
     validate_edit_close,
     validate_content,
     validate_edit_id,
-    check_captcha,
 )
 
 from .schemas import (
@@ -88,7 +87,6 @@ async def create_edit(
     ),
     args: EditArgs = Depends(validate_edit_create),
     author: User = Depends(validate_edit_create_rate_limit),
-    _: bool = Depends(check_captcha),
 ):
     return await service.create_pending_edit(
         session, content_type, content, args, author
@@ -101,7 +99,6 @@ async def update_edit(
     args: EditArgs = Depends(validate_edit_update_args),
     edit: Edit = Depends(validate_edit_update),
     user: User = Depends(validate_edit_update_rate_limit),
-    _: bool = Depends(check_captcha),
 ):
     return await service.update_pending_edit(session, edit, user, args)
 
