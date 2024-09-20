@@ -23,6 +23,8 @@ from .ranking import update_ranking
 
 from .history import update_history
 
+from .moderation import update_moderation
+
 from .weights import update_weights
 
 from .sitemap import update_sitemap
@@ -51,6 +53,7 @@ __all__ = [
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
+    "update_moderation",
     "aggregator_anime",
     "aggregator_manga",
     "aggregator_novel",
