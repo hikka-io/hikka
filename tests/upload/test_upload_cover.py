@@ -34,7 +34,7 @@ async def test_upload_cover(
 
 async def test_upload_cover_bad_permission(
     client,
-    create_dummy_user_banned,
+    create_dummy_user_restricted,
     get_dummy_token,
     mock_s3_upload_file,
 ):

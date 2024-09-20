@@ -1,3 +1,5 @@
+from .token_requests import delete_expired_token_requests
+
 from .aggregator.franchises import aggregator_franchises
 from .aggregator.characters import aggregator_characters
 from .aggregator.info.anime import aggregator_anime_info
@@ -36,7 +38,9 @@ from .content import update_content
 
 from .email import send_emails
 
+
 __all__ = [
+    "delete_expired_token_requests",
     "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",

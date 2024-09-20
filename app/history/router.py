@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
+from app import constants
 from . import service
 
 
@@ -32,7 +33,11 @@ router = APIRouter(prefix="/history", tags=["History"])
 )
 async def following_history(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_HISTORY, constants.SCOPE_READ_FOLLOW]
+        )
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

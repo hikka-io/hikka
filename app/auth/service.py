@@ -1,11 +1,15 @@
-from app.models import User, AuthToken, UserOAuth
+import uuid
+
+from starlette.datastructures import URL
+
+from app.models import User, AuthToken, UserOAuth, AuthTokenRequest, Client
+from sqlalchemy import select, func, ScalarResult
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
+from datetime import timedelta, datetime
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
-from datetime import timedelta
-from sqlalchemy import select
 from app import constants
 import secrets
 
@@ -151,6 +155,7 @@ async def create_auth_token(session: AsyncSession, user: User) -> AuthToken:
             "expiration": now + timedelta(minutes=30),
             "secret": new_token(),
             "created": now,
+            "used": now,
             "user": user,
         }
     )
@@ -198,3 +203,117 @@ async def change_password(session: AsyncSession, user: User, new_password: str):
     await session.commit()
 
     return user
+
+
+async def create_auth_token_request(
+    session: AsyncSession, user: User, client: Client, scope: list[str]
+) -> dict:
+
+    # Remove duplicates in scope (just in case)
+    scope = list(set(scope))
+
+    now = utcnow()
+
+    request = AuthTokenRequest(
+        **{
+            "expiration": now + timedelta(minutes=1),
+            "created": now,
+            "user": user,
+            "client": client,
+            "scope": scope,
+        }
+    )
+    session.add(request)
+    await session.commit()
+
+    return {
+        "reference": request.reference,
+        "expiration": request.expiration,
+        "redirect_url": str(
+            URL(client.endpoint).replace_query_params(
+                reference=request.reference
+            )
+        ),
+    }
+
+
+async def get_auth_token_request(
+    session: AsyncSession, reference: str | uuid.UUID
+) -> AuthTokenRequest:
+    return await session.scalar(
+        select(AuthTokenRequest)
+        .filter(AuthTokenRequest.id == reference)
+        .options(
+            selectinload(AuthTokenRequest.user),
+            selectinload(AuthTokenRequest.client),
+        )
+    )
+
+
+async def create_auth_token_from_request(
+    session: AsyncSession, request: AuthTokenRequest
+):
+    token = await create_auth_token(session, request.user)
+
+    # Add client and scope to just created token
+    token.client = request.client
+    token.scope = request.scope
+
+    # Expire token request
+    request.expiration = utcnow() - timedelta(minutes=1)
+
+    await session.commit()
+
+    return token
+
+
+async def count_user_thirdparty_auth_tokens(
+    session: AsyncSession, user: User, now: datetime
+) -> int:
+    return await session.scalar(
+        select(func.count(AuthToken.id)).filter(
+            AuthToken.user_id == user.id,
+            AuthToken.client_id.is_not(None),
+            AuthToken.expiration >= now,
+        )
+    )
+
+
+async def list_user_thirdparty_auth_tokens(
+    session: AsyncSession,
+    user: User,
+    offset: int,
+    limit: int,
+    now: datetime,
+) -> ScalarResult[AuthToken]:
+    return await session.scalars(
+        select(AuthToken)
+        .options(selectinload(AuthToken.client).selectinload(Client.user))
+        .filter(
+            AuthToken.user_id == user.id,
+            AuthToken.client_id.is_not(None),
+            AuthToken.expiration >= now,
+        )
+        .offset(offset)
+        .limit(limit)
+    )
+
+
+async def get_auth_token(
+    session: AsyncSession, reference: str | uuid.UUID
+) -> AuthToken:
+    return await session.scalar(
+        select(AuthToken)
+        .filter(AuthToken.id == reference)
+        .options(
+            selectinload(AuthToken.client).selectinload(Client.user),
+            selectinload(AuthToken.user),
+        )
+    )
+
+
+async def revoke_auth_token(session: AsyncSession, token: AuthToken):
+    await session.delete(token)
+    await session.commit()
+
+    return token

@@ -1,13 +1,15 @@
+from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from app.utils import round_datettime
 from sqlalchemy.orm import joinedload
-
-from app.models.list.read import MangaRead, NovelRead
 from .utils import calculate_before
+from app.errors import Abort
 from app.utils import utcnow
+from app.models import Log
 from app import constants
 import copy
 
@@ -19,9 +21,9 @@ from app.service import (
 )
 
 from .schemas import (
-    ContentToDoEnum,
     EditContentToDoEnum,
     EditContentTypeEnum,
+    ContentToDoEnum,
     EditSearchArgs,
     EditArgs,
 )
@@ -253,6 +255,12 @@ async def update_pending_edit(
         },
     )
 
+    # If user marked edit as auto accept we should do that
+    if args.auto:
+        await accept_pending_edit(
+            session, edit, user, constants.LOG_EDIT_UPDATE_ACCEPT_AUTO
+        )
+
     return edit
 
 
@@ -284,7 +292,7 @@ async def accept_pending_edit(
     session: AsyncSession,
     edit: Edit,
     moderator: User,
-    auto: bool = False,
+    log_type: str = constants.LOG_EDIT_ACCEPT,
 ) -> Edit:
     """Accept pending edit"""
 
@@ -322,7 +330,7 @@ async def accept_pending_edit(
 
     await create_log(
         session,
-        constants.LOG_EDIT_ACCEPT_AUTO if auto else constants.LOG_EDIT_ACCEPT,
+        log_type,
         moderator,
         edit.id,
     )
@@ -367,7 +375,9 @@ async def create_pending_edit(
     # If user marked edit as auto accept we should do that
     if args.auto:
         await session.refresh(edit)
-        await accept_pending_edit(session, edit, author, True)
+        await accept_pending_edit(
+            session, edit, author, constants.LOG_EDIT_ACCEPT_AUTO
+        )
 
     else:
         await create_log(
@@ -486,4 +496,34 @@ async def content_todo(
         .options(*load_options)
         .limit(limit)
         .offset(offset)
+    )
+
+
+async def count_created_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_CREATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.user == user)
+    )
+
+
+async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_UPDATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.user == user)
     )

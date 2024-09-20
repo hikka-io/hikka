@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User, Novel
+from app import constants
 from . import service
 
 from .dependencies import (
@@ -42,7 +43,9 @@ router = APIRouter(prefix="/novel", tags=["Novel"])
 )
 async def search_novel(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     search: NovelSearchArgs = Depends(validate_search_novel),
     page: int = Depends(get_page),
     size: int = Depends(get_size),

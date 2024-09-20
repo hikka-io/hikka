@@ -1,5 +1,7 @@
+from .auth.auth_token_request import AuthTokenRequest
 from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
+from .auth.client import Client
 
 
 from .user.history import FavouriteAnimeRemoveHistory
@@ -98,8 +100,10 @@ from .schedule.anime import AnimeSchedule
 from .base import Base
 
 __all__ = [
+    "AuthTokenRequest",
     "EmailMessage",
     "AuthToken",
+    "Client",
     "FavouriteAnimeRemoveHistory",
     "FavouriteMangaRemoveHistory",
     "FavouriteNovelRemoveHistory",

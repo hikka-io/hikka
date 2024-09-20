@@ -14,9 +14,13 @@ errors = {
     "auth": {
         "activation-valid": ["Previous activation token still valid", 400],
         "reset-valid": ["Previous password reset token still valid", 400],
+        "invalid-client-credentials": ["Invalid client credentials", 400],
         "email-exists": ["User with that email already exists", 400],
         "activation-expired": ["Activation token has expired", 400],
+        "token-request-expired": ["Token request has expired", 400],
         "activation-invalid": ["Activation token is invalid", 400],
+        "invalid-token-request": ["Invalid token request", 400],
+        "not-token-owner": ["User is not token owner", 400],
         "oauth-code-required": ["OAuth code required", 400],
         "invalid-provider": ["Invalid OAuth provider", 400],
         "username-taken": ["Username already taken", 400],
@@ -27,13 +31,16 @@ errors = {
         "missing-token": ["Auth token is missing", 400],
         "invalid-password": ["Invalid password", 400],
         "username-set": ["Username already set", 400],
+        "client-not-found": ["Client not found", 404],
         "token-expired": ["Token has expired", 400],
         "invalid-code": ["Invalid OAuth code", 400],
         "oauth-error": ["Error during OAuth", 400],
         "user-not-found": ["User not found", 404],
+        "invalid-scope": ["Invalid scope", 400],
         "email-set": ["Email already set", 400],
-        "not-available": ["Signup not available ", 400],
+        "not-available": ["Signup not available", 400],
         "invalid-username": ["Invalid username", 400],
+        "scope-empty": ["Scope empty", 400],
     },
     "settings": {
         "username-cooldown": ["Username can be changed once per hour", 400],
@@ -63,6 +70,7 @@ errors = {
         "not-found": ["Manga not found", 404],
     },
     "edit": {
+        "rate-limit": ["You have reached the edit rate limit, try later", 429],
         "missing-content-type": ["You must specify content type", 400],
         "not-pending": ["Only pending edit can be changed", 400],
         "moderator-not-found": ["Moderator not found", 404],
@@ -76,7 +84,7 @@ errors = {
         "empty-edit": ["Empty edit", 400],
     },
     "comment": {
-        "rate-limit": ["You have reached comment rate limit, try later", 400],
+        "rate-limit": ["You have reached comment rate limit, try later", 429],
         "not-editable": ["This comment can't be edited anymore", 400],
         "parent-not-found": ["Parent comment not found", 404],
         "already-hidden": ["Comment is already hidden", 400],
@@ -136,8 +144,8 @@ errors = {
         "not-found": ["Person not found", 404],
     },
     "upload": {
-        "rate-limit": ["You have reached upload rate limit, try later", 400],
-        "not-square": ["Image shoudld be square", 400],
+        "rate-limit": ["You have reached upload rate limit, try later", 429],
+        "not-square": ["Image should be square", 400],
         "bad-resolution": ["Bad resolution", 400],
         "bad-mime": ["Don't be bad mime", 400],
         "bad-size": ["Bad file size", 400],
@@ -155,10 +163,10 @@ errors = {
         "bad-order-not-consecutive": ["Order must be consecutive", 400],
         "bad-order-duplicated": ["You can't set duplicated order", 400],
         "empty-content-type": ["Content type is not specified", 400],
-        "content-limit": ["Collectio content limit violation", 400],
+        "content-limit": ["Collection content limit violation", 400],
         "limit": ["You have reached collections limit", 400],
         "bad-order-start": ["Order must start from 1", 400],
-        "unlabled-content": ["Unlabled content", 400],
+        "unlabled-content": ["Unlabeled content", 400],
         "bad-labels-order": ["Bad labels order", 400],
         "author-not-found": ["Author not found", 404],
         "not-found": ["Collection not found", 404],
@@ -185,7 +193,13 @@ errors = {
         "bad-backup-token": ["Bad backup token", 401],
     },
     "moderation-log": {
-        "no-access": ["You do not have permission to access", 400]
+        "no-access": ["You do not have permission to access", 400],
+    },
+    "client": {
+        "already-verified": ["Client is already verified", 400],
+        "not-owner": ["User not owner of the client", 400],
+        "max-clients": ["Maximum clients reached", 400],
+        "not-found": ["Client not found", 404],
     },
 }
 

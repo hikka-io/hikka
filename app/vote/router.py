@@ -22,7 +22,11 @@ from .dependencies import (
 router = APIRouter(prefix="/vote", tags=["Vote"])
 
 
-@router.get("/{content_type}/{slug}", response_model=VoteResponse)
+@router.get(
+    "/{content_type}/{slug}",
+    response_model=VoteResponse,
+    dependencies=[Depends(auth_required(scope=[constants.SCOPE_READ_VOTE]))],
+)
 async def get_vote(vote: Vote = Depends(validate_get_vote)):
     return vote
 
@@ -34,7 +38,10 @@ async def set_vote(
     content: Collection | Comment = Depends(validate_content),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_VOTE_SET])
+        auth_required(
+            permissions=[constants.PERMISSION_VOTE_SET],
+            scope=[constants.SCOPE_SET_VOTE],
+        )
     ),
 ):
     return await service.set_vote(

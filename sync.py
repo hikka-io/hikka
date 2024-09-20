@@ -4,6 +4,7 @@ from app.utils import get_settings
 import asyncio
 
 from app.sync import (
+    delete_expired_token_requests,
     update_notifications,
     update_ranking_all,
     update_moderation,
@@ -22,6 +23,7 @@ def init_scheduler():
     settings = get_settings()
     sessionmanager.init(settings.database.endpoint)
 
+    scheduler.add_job(delete_expired_token_requests, "interval", seconds=30)
     scheduler.add_job(update_notifications, "interval", seconds=10)
     scheduler.add_job(update_moderation, "interval", seconds=10)
     scheduler.add_job(update_ranking_all, "interval", hours=1)

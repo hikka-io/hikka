@@ -94,7 +94,10 @@ async def validate_edit_update(
 async def validate_edit_close(
     edit: Edit = Depends(validate_edit_id_pending),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_EDIT_CLOSE])
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CLOSE],
+            scope=[constants.SCOPE_CLOSE_EDIT],
+        )
     ),
 ):
     """Check if user which is trying to close edit it the author"""
@@ -148,6 +151,7 @@ async def validate_edit_create_args(
 async def validate_edit_update_args(
     args: EditArgs,
     edit: Edit = Depends(validate_edit_update),
+    author: User = Depends(auth_required()),
 ) -> EditArgs:
     """Validate update edit args"""
 
@@ -157,6 +161,11 @@ async def validate_edit_update_args(
     args.after = utils.check_after(args.after, edit.content)
     if len(args.after) == 0:
         raise Abort("edit", "empty-edit")
+
+    if args.auto and not check_user_permissions(
+        author, [constants.PERMISSION_EDIT_AUTO]
+    ):
+        raise Abort("permission", "denied")
 
     return args
 
@@ -176,3 +185,54 @@ async def validate_edit_create(
         raise Abort("permission", "denied")
 
     return args
+
+
+# Todo: perhaps the log based rate limiting logic could be abstracted in the future?
+async def validate_edit_create_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_CREATE],
+            scope=[constants.SCOPE_CREATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_created_edit_limit(session, user)
+    create_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= create_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user
+
+
+async def validate_edit_update_rate_limit(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_EDIT_UPDATE],
+            scope=[constants.SCOPE_UPDATE_EDIT],
+        )
+    ),
+):
+    count = await service.count_update_edit_limit(session, user)
+    update_edit_limit = 25
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and count >= update_edit_limit
+    ):
+        raise Abort("edit", "rate-limit")
+
+    return user
