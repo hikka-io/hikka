@@ -508,3 +508,11 @@ INTERVAL_DAY = "day"
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+# Moderation types
+MODERATION_EDIT_ACCEPTED = "edit_accepted"
+MODERATION_EDIT_DENIED = "edit_denied"
+MODERATION_EDIT_UPDATED = "edit_updated"
+MODERATION_COMMENT_HIDDEN = "comment_hidden"
+MODERATION_COLLECTION_DELETED = "collection_deleted"
+MODERATION_COLLECTION_UPDATED = "collection_updated"
