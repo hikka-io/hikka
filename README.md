@@ -2,6 +2,12 @@
 
 Backend service for [hikka.io](https://hikka.io) - Ukrainian anime tracker.
 
+[Frontend](https://github.com/hikka-io/hikka-next)
+·
+[Request Feature](https://github.com/hikka-io/hikka/issues)
+·
+[Report Bug](https://github.com/hikka-io/hikka/issues)
+
 ## About The Project
 
 ### Built With
