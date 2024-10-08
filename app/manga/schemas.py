@@ -1,4 +1,5 @@
 from app.schemas import datetime_pd
+from app import constants
 
 from app.schemas import (
     ContentAuthorResponse,
@@ -48,3 +49,24 @@ class MangaInfoResponse(CustomModel, DataTypeMixin):
     mal_id: int
     nsfw: bool
     slug: str
+
+    @field_validator("external")
+    def external_ordering(cls, value):
+        def read_sort(item):
+            order = {"Dengeki": 0}
+            return order.get(item.text, 2)
+
+        def reorder_read(input_list):
+            return sorted(input_list, key=read_sort)
+
+        general = []
+        read = []
+
+        for entry in value:
+            if entry.type == constants.EXTERNAL_GENERAL:
+                general.append(entry)
+
+            if entry.type == constants.EXTERNAL_READ:
+                read.append(entry)
+
+        return general + reorder_read(read)
