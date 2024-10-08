@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from app.schemas import datetime_pd
 from app import constants
 
