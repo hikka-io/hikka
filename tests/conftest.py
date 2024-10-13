@@ -210,11 +210,16 @@ def mock_s3_upload_file():
 
 
 # Fix utcnow() datetime for tests that rely on it not changing within the duration of the test
+# https://docs.pytest.org/en/stable/how-to/monkeypatch.html
 @pytest.fixture(autouse=False)
-def mock_utcnow():
-    with mock.patch("app.utils.utcnow") as mocked:
-        mocked.return_value = datetime(2024, 2, 17, 10, 23, 29, 305502)
-        yield mocked
+def mock_utcnow(monkeypatch):
+    fixed_time = datetime(2024, 2, 17, 10, 23, 29, 305502)
+
+    # When a function is imported, it becomes a part of the namespace of the
+    # module that imported it. We need to patch the specific function reference
+    # in the module we're testing
+    monkeypatch.setattr("app.edit.service.utcnow", lambda: fixed_time)
+    monkeypatch.setattr("app.comments.service.utcnow", lambda: fixed_time)
 
 
 # Aggregator fixtures
