@@ -12,6 +12,7 @@ from app.service import (
     get_comments_count_subquery,
     build_novel_order_by,
     novel_search_filter,
+    random_entity_offset,
 )
 
 from app.models import (
@@ -153,3 +154,13 @@ async def novel_search_query(
     )
 
     return meilisearch_result
+
+
+async def random_novel(session: AsyncSession):
+    random_offset = await random_entity_offset(session, Novel)
+
+    novel = await session.scalar(
+        select(Novel).offset(random_offset).limit(1)
+    )
+
+    return await get_novel_info_by_slug(session, novel.slug)
