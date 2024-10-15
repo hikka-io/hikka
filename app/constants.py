@@ -402,7 +402,6 @@ ROLES = {
 # Upload types
 UPLOAD_AVATAR = "avatar"
 UPLOAD_COVER = "cover"
-UPLOAD_COLLECTION_COVER = "collection_cover"
 
 # Todo types
 TODO_SYNOPSIS_UA = "synopsis_ua"

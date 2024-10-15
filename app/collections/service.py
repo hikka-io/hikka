@@ -3,7 +3,7 @@ from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
-from app import constants
+from app import constants, meilisearch
 from uuid import UUID
 
 from .schemas import (
@@ -460,3 +460,36 @@ async def content_compare(
     ]
 
     return collection_compare == args_compare
+
+
+async def collections_search_query(
+    session: AsyncSession,
+    search: CollectionArgs,
+    request_user: User | None,
+    page: int,
+    size: int,
+):
+    meilisearch_result = await meilisearch.search(
+        constants.SEARCH_INDEX_COLLECTION,
+        query=search.query,
+        sort=search.sort,
+        page=page,
+        size=size,
+    )
+
+    ids = [collection["reference"] for collection in meilisearch_result["list"]]
+
+    query = select(Collection).filter(Collection.id.in_(ids)).options(*load_options)
+
+    if len(search.sort) > 0:
+        query = query.order_by(*build_collection_order_by(search.sort))
+
+    collection_list = await session.scalars(query)
+    meilisearch_result["list"] = collection_list.unique().all()
+
+    # Results must be sorted here to ensure same order as Meilisearch results
+    meilisearch_result["list"] = sorted(
+        meilisearch_result["list"], key=lambda x: ids.index(x.slug)
+    )
+
+    return meilisearch_result

@@ -533,7 +533,6 @@ class CollectionBaseResponse(CustomModel, DataTypeMixin):
     entries: int
     title: str
     nsfw: bool
-    cover: str | None
 
 
 class CollectionResponse(CollectionBaseResponse):
