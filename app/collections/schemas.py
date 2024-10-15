@@ -6,7 +6,9 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
+    QuerySearchArgs,
     CollectionVisibilityEnum,
+    CollectionBaseResponse,
     CollectionResponse,
     PaginationResponse,
     CustomModel,
@@ -30,7 +32,7 @@ class CollectionContentArgs(CustomModel):
     slug: str
 
 
-class CollectionsListArgs(CustomModel):
+class CollectionsListArgs(QuerySearchArgs, CustomModel):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
     content: list[str] = Field([], max_length=1)
     content_type: ContentTypeEnum | None = None
@@ -84,4 +86,4 @@ class CollectionArgs(CustomModel):
 # Responses
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[CollectionResponse]
+    list: list[CollectionBaseResponse]

@@ -113,6 +113,7 @@ SEARCH_INDEX_ANIME = "content_anime"
 SEARCH_INDEX_MANGA = "content_manga"
 SEARCH_INDEX_NOVEL = "content_novel"
 SEARCH_INDEX_USERS = "content_users"
+SEARCH_INDEX_COLLECTION = "content_collections"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
@@ -401,6 +402,7 @@ ROLES = {
 # Upload types
 UPLOAD_AVATAR = "avatar"
 UPLOAD_COVER = "cover"
+UPLOAD_COLLECTION_COVER = "collection_cover"
 
 # Todo types
 TODO_SYNOPSIS_UA = "synopsis_ua"

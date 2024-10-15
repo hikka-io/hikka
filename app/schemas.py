@@ -516,24 +516,27 @@ class CollectionContentResponse(CustomModel):
     )
 
 
-class CollectionResponse(CustomModel, DataTypeMixin):
+class CollectionBaseResponse(CustomModel, DataTypeMixin):
     visibility: CollectionVisibilityEnum
     labels_order: list[str]
     author: UserResponse
     created: datetime_pd
     updated: datetime_pd
-    comments_count: int
+    comments_count: int | None
     content_type: str
     description: str
     vote_score: int
     tags: list[str]
     reference: str
-    my_score: int
+    my_score: int | None
     spoiler: bool
     entries: int
     title: str
     nsfw: bool
+    cover: str | None
 
+
+class CollectionResponse(CollectionBaseResponse):
     collection: list[CollectionContentResponse]
 
     @field_validator("collection")
