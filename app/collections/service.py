@@ -479,7 +479,11 @@ async def collections_search_query(
 
     ids = [collection["reference"] for collection in meilisearch_result["list"]]
 
-    query = select(Collection).filter(Collection.id.in_(ids))
+    query = select(Collection).filter(Collection.deleted == False,
+                                      Collection.visibility == constants.COLLECTION_PUBLIC,
+                                      Collection.id.in_(ids))
+
+    query = collections_load_options(query, request_user, True)
 
     if len(search.sort) > 0:
         query = query.order_by(*build_collection_order_by(search.sort))

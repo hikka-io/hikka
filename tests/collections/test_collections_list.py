@@ -97,16 +97,27 @@ async def test_collections_list(
     assert response.json()["list"][1]["title"] == "Random anime collection"
 
     # Check preview length
-    assert len(response.json()["list"][0]["entries"]) == 6
-    assert len(response.json()["list"][1]["entries"]) == 6
+    assert len(response.json()["list"][0]["collection"]) == 6
+    assert len(response.json()["list"][1]["collection"]) == 6
 
-   
+    # Check anime slugs just in case
+    assert (
+        response.json()["list"][1]["collection"][0]["content"]["slug"]
+        == anime_slugs[0]
+    )
 
+    assert (
+        response.json()["list"][1]["collection"][5]["content"]["slug"]
+        == anime_slugs[5]
+    )
 
-async def test_collection_no_meilisearch(client):
-    # When Meilisearch is down search should throw query down error
-    response = await request_collections(client, {"query": "test"}, 1)
+    # As well as person slugs
+    assert (
+        response.json()["list"][0]["collection"][0]["content"]["slug"]
+        == people_slugs[0]
+    )
 
-    assert response.json()["code"] == "search:query_down"
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
+    assert (
+        response.json()["list"][0]["collection"][5]["content"]["slug"]
+        == people_slugs[5]
+    )

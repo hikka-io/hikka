@@ -35,7 +35,7 @@ from app.dependencies import (
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
-@router.post("",response_model=CollectionsListResponse)
+@router.post("", response_model=CollectionsListResponse)
 async def get_collections(
     args: CollectionsListArgs = Depends(validate_collections_list_args),
     request_user: User | None = Depends(

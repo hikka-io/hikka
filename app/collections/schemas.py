@@ -86,4 +86,4 @@ class CollectionArgs(CustomModel):
 # Responses
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[CollectionBaseResponse]
+    list: list[CollectionResponse]
