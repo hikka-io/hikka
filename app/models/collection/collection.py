@@ -12,6 +12,7 @@ from ..base import Base
 from ..mixins import (
     CreatedMixin,
     UpdatedMixin,
+    NeedsSearchUpdateMixin,
 )
 
 
@@ -19,6 +20,7 @@ class Collection(
     Base,
     CreatedMixin,
     UpdatedMixin,
+    NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_collections"
 
