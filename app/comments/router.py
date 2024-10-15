@@ -9,6 +9,7 @@ from app import constants
 from . import service
 
 from .dependencies import (
+    validate_comment_get,
     validate_comment_not_hidden,
     validate_comment_edit,
     validate_content_slug,
@@ -122,6 +123,20 @@ async def get_contents_list(
         "pagination": pagination_dict(total, page, limit),
         "list": result,
     }
+
+
+@router.get("/{comment_reference}", response_model=CommentResponse)
+async def get_comment(
+    session: AsyncSession = Depends(get_session),
+    comment: Comment = Depends(validate_comment_get),
+    user: User = Depends(auth_required(optional=True)),
+):
+    comment = await service.get_comment(session, comment.id, user)
+
+    sub_comments = await service.get_sub_comments(session, comment, user)
+
+    comment = await service.generate_preview(session, comment)
+    return build_comments(comment, sub_comments)
 
 
 @router.put("/{comment_reference}", response_model=CommentResponse)
