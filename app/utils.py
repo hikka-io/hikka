@@ -99,6 +99,7 @@ def resolve_scope_groups(scopes: list[str]) -> list[str]:
             group = resolve_scope_groups(group)
 
             plain_scopes.extend(group)
+
         else:
             plain_scopes.append(scope)
 
