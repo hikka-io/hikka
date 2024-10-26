@@ -1,7 +1,7 @@
 from tests.client_requests import request_list_all_clients
 
 
-async def test_normal(client, moderator_token, test_thirdparty_client):
+async def test_client_list_all(client, moderator_token, test_thirdparty_client):
     response = await request_list_all_clients(client, moderator_token)
     print(response.json())
     assert response.status_code == 200
@@ -18,7 +18,7 @@ async def test_normal(client, moderator_token, test_thirdparty_client):
     assert response_client["name"] == test_thirdparty_client.name
 
 
-async def test_no_permission(client, test_token):
+async def test_client_list_all_no_permission(client, test_token):
     response = await request_list_all_clients(client, test_token)
     print(response.json())
     assert response.status_code == 403
