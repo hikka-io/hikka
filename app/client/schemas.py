@@ -90,3 +90,7 @@ class ClientUpdate(CustomModel):
             )
 
         return v
+
+
+class ListAllClientsArgs(CustomModel):
+    query: str | None = Field(None, description="Search by name")

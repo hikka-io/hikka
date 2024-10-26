@@ -58,6 +58,16 @@ def request_list_clients(client, token: str):
     )
 
 
+def request_list_all_clients(client, token: str, query: str | None = None):
+    return client.post(
+        "/client/all",
+        headers={"Auth": token},
+        json={
+            "query": query
+        }
+    )
+
+
 def request_client_verify(client, token: str, client_reference: str):
     return client.post(
         f"/client/{client_reference}/verify",
