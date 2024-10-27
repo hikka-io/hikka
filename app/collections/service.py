@@ -1,4 +1,13 @@
-from sqlalchemy import select, desc, asc, delete, update, and_, func
+from sqlalchemy import (
+    select,
+    desc,
+    asc,
+    delete,
+    update,
+    and_,
+    func,
+    ScalarResult,
+)
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
@@ -163,7 +172,7 @@ async def get_collections(
     args: CollectionsListArgs,
     limit: int,
     offset: int,
-) -> list[Collection]:
+) -> ScalarResult[Collection]:
     query = await collections_list_filter(
         collections_load_options(
             select(Collection),
