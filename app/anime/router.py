@@ -170,7 +170,9 @@ async def anime_recommendations(
         session, anime, request_user, limit, offset
     )
 
-    paginated_response(recommendations.unique().all(), total, page, limit)
+    return paginated_response(
+        recommendations.unique().all(), total, page, limit
+    )
 
 
 # TODO: remove me!
