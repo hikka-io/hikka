@@ -1,13 +1,3 @@
-from sqlalchemy import (
-    select,
-    desc,
-    asc,
-    delete,
-    update,
-    and_,
-    func,
-    ScalarResult,
-)
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
@@ -15,17 +5,24 @@ from app.utils import utcnow
 from app import constants
 from uuid import UUID
 
-from .schemas import (
-    CollectionsListArgs,
-    CollectionArgs,
-)
-
 from app.service import (
     collection_comments_load_options,
     collections_load_options,
     get_user_by_username,
     create_log,
 )
+
+from sqlalchemy import (
+    ScalarResult,
+    select,
+    delete,
+    update,
+    func,
+    desc,
+    and_,
+    asc,
+)
+
 
 from app.models import (
     CharacterCollectionContent,
@@ -37,6 +34,11 @@ from app.models import (
     CollectionComment,
     Collection,
     User,
+)
+
+from .schemas import (
+    CollectionsListArgs,
+    CollectionArgs,
 )
 
 
