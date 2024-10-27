@@ -19,7 +19,7 @@ async def test_client_full_info_nonexistent(client, test_token):
 async def test_client_full_info(client, test_token, test_user):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint
@@ -43,7 +43,7 @@ async def test_client_full_info(client, test_token, test_user):
 async def test_client_info_by_reference(client, test_token, test_user):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     response = await request_client_create(
         client, test_token, name, description, endpoint
     )

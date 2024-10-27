@@ -1,4 +1,4 @@
-from pydantic import Field, HttpUrl, field_validator
+from pydantic import AnyUrl, Field, field_validator
 
 from app.schemas import CustomModel, ClientResponse, PaginationResponse
 from app import constants, utils
@@ -27,8 +27,8 @@ class ClientCreate(CustomModel):
         min_length=3,
         max_length=constants.MAX_CLIENT_DESCRIPTION_LENGTH,
     )
-    endpoint: HttpUrl = Field(
-        examples=["https://example.com", "http://localhost/auth/confirm"],
+    endpoint: AnyUrl = Field(
+        examples=["https://example.com", "http://localhost/auth/confirm", "hikka://auth"],
         description="Endpoint of the client. "
         "User will be redirected to that endpoint after successful "
         "authorization",
@@ -43,7 +43,7 @@ class ClientCreate(CustomModel):
         return utils.remove_bad_characters(v).strip()
 
     @field_validator("endpoint")
-    def validate_endpoint(cls, v: HttpUrl) -> HttpUrl:
+    def validate_endpoint(cls, v: AnyUrl) -> AnyUrl:
         if len(str(v)) > constants.MAX_CLIENT_ENDPOINT_LENGTH:
             raise ValueError(
                 f"Endpoint length should be less than {constants.MAX_CLIENT_ENDPOINT_LENGTH}"
@@ -65,7 +65,7 @@ class ClientUpdate(CustomModel):
         max_length=constants.MAX_CLIENT_DESCRIPTION_LENGTH,
         min_length=3,
     )
-    endpoint: HttpUrl | None = Field(
+    endpoint: AnyUrl | None = Field(
         None,
         description="Endpoint of the client",
         max_length=constants.MAX_CLIENT_ENDPOINT_LENGTH,
@@ -83,7 +83,7 @@ class ClientUpdate(CustomModel):
         return utils.remove_bad_characters(v).strip()
 
     @field_validator("endpoint")
-    def validate_endpoint(cls, v: HttpUrl | None) -> HttpUrl | None:
+    def validate_endpoint(cls, v: AnyUrl | None) -> AnyUrl | None:
         if len(str(v)) > constants.MAX_CLIENT_ENDPOINT_LENGTH:
             raise ValueError(
                 f"Endpoint length should be less than {constants.MAX_CLIENT_ENDPOINT_LENGTH}"
