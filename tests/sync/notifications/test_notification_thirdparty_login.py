@@ -15,7 +15,7 @@ from tests.client_requests import (
 async def test_notification_thirdparty_login(client, test_token, test_session):
     name = "thirdparty-client"
     description = "Third-party client"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     scope = [constants.SCOPE_READ_USER_DETAILS]
 
     response = await request_client_create(
