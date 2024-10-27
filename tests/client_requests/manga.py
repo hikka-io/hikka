@@ -9,3 +9,7 @@ def request_manga_search(client, filters={}, page=1, size=15, token=None):
 
 def request_manga_info(client, slug):
     return client.get(f"/manga/{slug}")
+
+
+def request_manga_random(client):
+    return client.get("/manga/random")
