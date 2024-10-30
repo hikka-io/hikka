@@ -42,6 +42,14 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
             )
 
 
+def is_valid_tag(tag):
+    # Special check for bad characters
+    if any(bad_character in tag for bad_character in list("ёъыэ")):
+        return False
+
+    return re.compile(r"^[a-zа-яіїґ]{3,16}$").match(tag) is not None
+
+
 # Replacement for deprecated datetime's utcnow
 def utcnow():
     return datetime.now(UTC).replace(tzinfo=None)

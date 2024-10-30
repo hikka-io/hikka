@@ -23,6 +23,7 @@ class Article(
 
     category: Mapped[str] = mapped_column(String(32), index=True)
     tags: Mapped[list] = mapped_column(JSONB, default=[])
+    draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]
     text: Mapped[str]

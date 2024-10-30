@@ -25,7 +25,9 @@ def create_app(init_db: bool = True) -> FastAPI:
             if sessionmanager._engine is not None:
                 await sessionmanager.close()
 
-    fu.validation_error_response_definition = errors.ErrorResponse.model_json_schema()
+    fu.validation_error_response_definition = (
+        errors.ErrorResponse.model_json_schema()
+    )
 
     app = FastAPI(
         title="Hikka API",
@@ -89,6 +91,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
+    from .articles import router as articles_router
     from .related import router as related_router
     from .history import router as history_router
     from .genres import router as genres_router
@@ -117,6 +120,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
+    app.include_router(articles_router)
     app.include_router(related_router)
     app.include_router(history_router)
     app.include_router(genres_router)

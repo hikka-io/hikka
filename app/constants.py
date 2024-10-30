@@ -162,6 +162,8 @@ SCOPE_CREATE_COLLECTION = "create:collection"
 SCOPE_UPDATE_COLLECTION = "update:collection"
 SCOPE_DELETE_COLLECTION = "delete:collection"
 
+SCOPE_CREATE_ARTICLE = "create:article"
+
 SCOPE_READ_COMMENT_SCORE = "read:comment:score"
 SCOPE_CREATE_COMMENT = "create:comment"
 SCOPE_UPDATE_COMMENT = "update:comment"
@@ -349,6 +351,7 @@ PERMISSION_CLIENT_UPDATE = "client:update"
 PERMISSION_CLIENT_DELETE = "client:delete"
 PERMISSION_CLIENT_VERIFY = "client:verify"
 PERMISSION_CLIENT_DELETE_ADMIN = "client:delete_admin"
+PERMISSION_ARTICLE_CREATE = "article:create"
 
 USER_PERMISSIONS = [
     PERMISSION_EDIT_CREATE,
@@ -366,6 +369,7 @@ USER_PERMISSIONS = [
     PERMISSION_CLIENT_CREATE,
     PERMISSION_CLIENT_UPDATE,
     PERMISSION_CLIENT_DELETE,
+    PERMISSION_ARTICLE_CREATE,
 ]
 
 MODERATOR_PERMISSIONS = [
@@ -453,6 +457,7 @@ LOG_VOTE_SET = "vote_set"
 LOG_SCHEDULE_ANIME = "schedule_anime"
 LOG_SCHEDULE_ANIME_ROLLBACK = "schedule_anime_rollback"
 LOG_CONTENT_DELETED = "content_deleted"
+LOG_ARTICLE_CREATE = "article_create"
 
 # History types
 HISTORY_WATCH = "watch"
@@ -508,3 +513,6 @@ INTERVAL_DAY = "day"
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+# Articles
+ARTICLE_NEWS = "news"
