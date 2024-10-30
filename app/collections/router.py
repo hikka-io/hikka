@@ -32,7 +32,6 @@ from app.dependencies import (
     get_size,
 )
 
-
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 
@@ -46,14 +45,23 @@ async def get_collections(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    limit, offset = pagination(page, size)
-    total = await service.get_collections_count(session, request_user, args)
-    collections = await service.get_collections(
-        session, request_user, args, limit, offset
+    if not args.query:
+        limit, offset = pagination(page, size)
+        total = await service.get_collections_count(session, request_user, args)
+        collections = await service.get_collections(
+            session, request_user, args, limit, offset
+        )
+
+        return paginated_response(collections.unique().all(), total, page, limit)
+
+    return await service.collections_search_query(
+        session,
+        args,
+        request_user,
+        page,
+        size,
     )
-
-    return paginated_response(collections.unique().all(), total, page, limit)
-
+  
 
 @router.post("/create", response_model=CollectionResponse)
 async def create_collection(
