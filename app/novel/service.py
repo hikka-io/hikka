@@ -1,10 +1,10 @@
+from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
 from .utils import build_novel_filters_ms
 from app.schemas import NovelSearchArgs
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
 
@@ -102,7 +102,7 @@ async def novel_characters_count(session: AsyncSession, novel: Novel) -> int:
 
 async def novel_characters(
     session: AsyncSession, novel: Novel, limit: int, offset: int
-) -> list[NovelCharacter]:
+) -> ScalarResult[NovelCharacter]:
     return await session.scalars(
         select(NovelCharacter)
         .filter(NovelCharacter.novel == novel)

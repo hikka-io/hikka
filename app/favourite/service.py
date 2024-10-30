@@ -1,8 +1,8 @@
+from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from .schemas import FavouriteContentTypeEnum
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
@@ -105,7 +105,7 @@ async def get_user_favourite_list(
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[Favourite]:
+) -> ScalarResult[Favourite]:
     # At some point I decided that best approach for favourite would be
     # to return list of content with some extra metadata (created/order)
     # instead of returning list of favourite entries with content loaded.

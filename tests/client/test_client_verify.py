@@ -5,7 +5,7 @@ from starlette import status
 async def test_client_verify(client, test_token, test_user, moderator_token):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     response = await request_client_create(
         client,
         test_token,

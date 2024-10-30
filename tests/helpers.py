@@ -92,7 +92,7 @@ async def create_client(
     secret: str,
     name: str = "TestClient",
     description: str = "Test client",
-    endpoint: str = "http://localhost/",
+    endpoint: str = "hikka://auth/",
     verified: bool = False,
 ):
     now = utcnow()

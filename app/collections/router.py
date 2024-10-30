@@ -22,7 +22,7 @@ from .dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -52,10 +52,7 @@ async def get_collections(
             session, request_user, args, limit, offset
         )
 
-        return {
-            "pagination": pagination_dict(total, page, limit),
-            "list": collections.unique().all(),
-        }
+        return paginated_response(collections.unique().all(), total, page, limit)
 
     return await service.collections_search_query(
         session,
@@ -64,7 +61,7 @@ async def get_collections(
         page,
         size,
     )
-
+  
 
 @router.post("/create", response_model=CollectionResponse)
 async def create_collection(

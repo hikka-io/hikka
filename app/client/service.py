@@ -1,11 +1,11 @@
 import secrets
 import uuid
 
+from sqlalchemy import select, func, ScalarResult, Select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func, ScalarResult
 
-from app.client.schemas import ClientCreate, ClientUpdate
+from app.client.schemas import ClientCreate, ClientUpdate, ListAllClientsArgs
 from app.models import User, Client
 from app.utils import utcnow
 
@@ -122,3 +122,35 @@ async def verify_client(session: AsyncSession, client: Client) -> Client:
     client.verified = True
     await session.commit()
     return client
+
+
+def apply_all_clients_filters(
+    query: Select, args: ListAllClientsArgs
+) -> Select:
+    if args.query is not None:
+        query = query.filter(Client.name.ilike(f"%{args.query}%"))
+
+    return query
+
+
+async def count_all_clients(
+    session: AsyncSession, args: ListAllClientsArgs
+) -> int:
+    return await session.scalar(
+        apply_all_clients_filters(select(func.count(Client.id)), args)
+    )
+
+
+async def list_all_clients(
+    session: AsyncSession, args: ListAllClientsArgs, offset: int, limit: int
+) -> ScalarResult[Client]:
+    return await session.scalars(
+        apply_all_clients_filters(
+            select(Client)
+            .options(joinedload(Client.user))
+            .order_by(Client.created.desc())
+            .offset(offset)
+            .limit(limit),
+            args,
+        )
+    )

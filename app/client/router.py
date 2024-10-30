@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 
 from app.dependencies import auth_required, get_page, get_size
-from app.utils import pagination, pagination_dict
+from app.utils import pagination, paginated_response
 from app.schemas import ClientResponse
 from app.database import get_session
 from app.models import Client, User
@@ -10,14 +10,15 @@ from app.client import service
 from app import constants
 
 from app.client.dependencies import (
+    validate_unverified_client,
     validate_client_create,
     validate_user_client,
     validate_client,
-    validate_unverified_client,
 )
 from app.client.schemas import (
     ClientPaginationResponse,
     ClientFullResponse,
+    ListAllClientsArgs,
     ClientCreate,
     ClientUpdate,
 )
@@ -41,10 +42,34 @@ async def list_user_clients(
     total = await service.count_user_clients(session, user, offset, limit)
     clients = await service.list_user_clients(session, user, offset, limit)
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": clients.all(),
-    }
+    return paginated_response(clients.all(), total, page, limit)
+
+
+@router.post(
+    "/all",
+    summary="List all clients",
+    response_model=ClientPaginationResponse,
+    dependencies=[
+        Depends(
+            auth_required(
+                scope=[constants.SCOPE_READ_CLIENT_LIST],
+                permissions=[constants.PERMISSION_CLIENT_LIST_ALL],
+            )
+        )
+    ],
+)
+async def list_all_clients(
+    args: ListAllClientsArgs,
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+    session: AsyncSession = Depends(get_session),
+):
+    limit, offset = pagination(page, size)
+
+    total = await service.count_all_clients(session, args)
+    clients = await service.list_all_clients(session, args, offset, limit)
+
+    return paginated_response(clients.all(), total, page, limit)
 
 
 @router.get(

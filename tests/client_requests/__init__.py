@@ -11,6 +11,7 @@ from .auth import request_signup
 from .auth import request_login
 
 from .client import request_client_full_info
+from .client import request_list_all_clients
 from .client import request_client_create
 from .client import request_client_update
 from .client import request_client_verify
@@ -131,6 +132,7 @@ __all__ = [
     "request_signup",
     "request_login",
     "request_client_full_info",
+    "request_list_all_clients",
     "request_client_create",
     "request_client_update",
     "request_client_verify",

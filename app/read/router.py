@@ -15,7 +15,7 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -100,10 +100,7 @@ async def get_read_following(
         session, user, content_type, content, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": read.unique().all(),
-    }
+    return paginated_response(read.unique().all(), total, page, limit)
 
 
 @router.get(
@@ -162,7 +159,4 @@ async def user_read_list(
         session, search, content_type, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": read.all(),
-    }
+    return paginated_response(read.all(), total, page, limit)

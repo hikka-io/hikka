@@ -6,7 +6,7 @@ from tests.client_requests import request_list_clients, request_client_create
 async def test_client_create(client, test_token, test_user):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     response = await request_client_create(
         client,
         test_token,

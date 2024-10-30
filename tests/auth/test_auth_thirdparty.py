@@ -13,7 +13,7 @@ from tests.client_requests import (
 async def test_auth_thirdparty(client, test_token):
     name = "thirdparty-client"
     description = "Third-party client"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint
