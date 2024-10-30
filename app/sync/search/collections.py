@@ -1,5 +1,3 @@
-import json
-
 from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from meilisearch_python_sdk import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -72,7 +70,6 @@ async def collection_documents(session: AsyncSession, limit: int, offset: int):
 
     for collection in collections_list:
         col_dict = collection_to_document(collection)
-        print(json.dumps(col_dict))
         documents.append(col_dict)
         collection.needs_search_update = False
         session.add(collection)
