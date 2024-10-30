@@ -274,7 +274,9 @@ def pagination_dict(total, page, limit):
 
 
 def paginated_response(
-    items: Sequence[typing.Union[DeclarativeBase, "CustomModel"]],
+    items: Sequence[
+        typing.Union[DeclarativeBase, "CustomModel", dict[str, typing.Any]]
+    ],
     total: int,
     page: int,
     limit: int,

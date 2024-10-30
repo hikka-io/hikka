@@ -20,7 +20,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -40,22 +40,20 @@ async def search_characters(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    if not search.query:
-        limit, offset = pagination(page, size)
-        total = await service.search_total(session)
-        characters = await service.characters_search(session, limit, offset)
-        return {
-            "pagination": pagination_dict(total, page, limit),
-            "list": characters.all(),
-        }
+    if search.query:
+        return await meilisearch.search(
+            constants.SEARCH_INDEX_CHARACTERS,
+            sort=["favorites:desc"],
+            query=search.query,
+            page=page,
+            size=size,
+        )
 
-    return await meilisearch.search(
-        constants.SEARCH_INDEX_CHARACTERS,
-        sort=["favorites:desc"],
-        query=search.query,
-        page=page,
-        size=size,
-    )
+    limit, offset = pagination(page, size)
+    total = await service.search_total(session)
+    characters = await service.characters_search(session, limit, offset)
+
+    return paginated_response(characters.all(), total, page, limit)
 
 
 @router.get("/{slug}/anime", response_model=CharacterAnimePaginationResponse)
@@ -72,10 +70,7 @@ async def character_anime(
         session, character, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
-    }
+    return paginated_response(anime.unique().all(), total, page, limit)
 
 
 @router.get("/{slug}/manga", response_model=CharacterMangaPaginationResponse)
@@ -94,10 +89,7 @@ async def character_manga(
         session, character, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": manga.unique().all(),
-    }
+    return paginated_response(manga.unique().all(), total, page, limit)
 
 
 @router.get("/{slug}/novel", response_model=CharacterNovelPaginationResponse)
@@ -116,10 +108,7 @@ async def character_novel(
         session, character, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": novel.unique().all(),
-    }
+    return paginated_response(novel.unique().all(), total, page, limit)
 
 
 @router.get("/{slug}/voices", response_model=CharacterVoicesPaginationResponse)
@@ -138,7 +127,4 @@ async def character_voices(
         session, character, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.unique().all(),
-    }
+    return paginated_response(anime.unique().all(), total, page, limit)
