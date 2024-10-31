@@ -26,7 +26,7 @@ async def create_user(
     user = User(
         **{
             "activation_expire": utcnow() + timedelta(hours=3),
-            "password_hash": hashpwd("password"),
+            "password_hash": "$2b$12$PHjOVmEP7LwdR76lRrRlnOlBd1/jUYeALVbsbLXYU6cyWPUoSeasq",
             "activation_token": new_token(),
             "email_confirmed": activated,
             "username": username,
