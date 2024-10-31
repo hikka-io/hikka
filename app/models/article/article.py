@@ -10,6 +10,7 @@ from ..mixins import (
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    SlugMixin,
 )
 
 
@@ -18,6 +19,7 @@ class Article(
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    SlugMixin,
 ):
     __tablename__ = "service_articles"
 

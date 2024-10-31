@@ -226,7 +226,7 @@ def slugify(
 
     # Add content id part if specified
     if content_id:
-        text += word_separator + content_id[:6]
+        text += word_separator + str(content_id)[:6]
 
     # Remove trailing word separator
     text = text.strip(word_separator)

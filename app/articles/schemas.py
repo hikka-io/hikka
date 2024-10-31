@@ -41,3 +41,4 @@ class ArticleResponse(CustomModel):
     draft: bool
     title: str
     text: str
+    slug: str

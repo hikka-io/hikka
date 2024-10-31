@@ -25,7 +25,7 @@ async def validate_rate_limit(
     logs_count = await count_logs(
         session,
         constants.LOG_ARTICLE_CREATE,
-        autor,
+        author,
         start_time=round_datetime(utcnow(), hours=1),
     )
 

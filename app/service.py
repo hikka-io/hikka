@@ -217,7 +217,7 @@ async def count_logs(
     Purpose of this function is to mainly count log to enforce rate limit.
     """
 
-    query = select(func.count(Log)).filter(Log.log_type == log_type)
+    query = select(func.count(Log.id)).filter(Log.log_type == log_type)
 
     if user:
         query = query.filter(Log.user == user)
