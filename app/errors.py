@@ -190,6 +190,7 @@ errors = {
         "content-not-found": ["Content not found", 404],
     },
     "system": {
+        "rate-limit": ["You have reached the rate limit, try later", 429],
         "bad-backup-token": ["Bad backup token", 401],
     },
     "client": {
@@ -199,7 +200,8 @@ errors = {
         "not-found": ["Client not found", 404],
     },
     "articles": {
-        "rate-limit": ["You have reached article rate limit, try later", 429],
+        "bad-category": ["You can't use this category", 400],
+        "not-found": ["Article not found", 404],
     },
 }
 

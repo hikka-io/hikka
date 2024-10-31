@@ -72,3 +72,39 @@ async def create_article(
     )
 
     return article
+
+
+async def update_article(
+    session: AsyncSession,
+    article: Article,
+    args: ArticleArgs,
+    user: User,
+):
+    before = {}
+    after = {}
+
+    for key in ["category", "draft", "title", "text", "tags"]:
+        old_value = getattr(article, key)
+        new_value = getattr(args, key)
+
+        if old_value != new_value:
+            before[key] = old_value
+            setattr(article, key, new_value)
+            after[key] = new_value
+
+    article.updated = utcnow()
+    session.add(article)
+
+    if before != {} and after != {}:
+        await create_log(
+            session,
+            constants.LOG_ARTICLE_UPDATE,
+            user,
+            article.id,
+            {
+                "before": before,
+                "after": after,
+            },
+        )
+
+    return article

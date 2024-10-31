@@ -36,6 +36,7 @@ class ArticleArgs(CustomModel):
 
 # Responses
 class ArticleResponse(CustomModel):
+    cover: str | None
     tags: list[str]
     category: str
     draft: bool
