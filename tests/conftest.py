@@ -64,11 +64,12 @@ async def connection_test(test_db, event_loop):
         sessionmanager.init(settings.database.endpoint)
 
         async with sessionmanager.connect() as connection:
-            await connection.run_sync(Base.metadata.drop_all)
-            await connection.run_sync(Base.metadata.create_all)
             await connection.execute(
                 text("CREATE EXTENSION IF NOT EXISTS ltree;")
             )
+
+            await connection.run_sync(Base.metadata.drop_all)
+            await connection.run_sync(Base.metadata.create_all)
 
         yield
 
