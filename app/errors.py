@@ -198,6 +198,9 @@ errors = {
         "max-clients": ["Maximum clients reached", 400],
         "not-found": ["Client not found", 404],
     },
+    "articles": {
+        "rate-limit": ["You have reached article rate limit, try later", 429],
+    },
 }
 
 

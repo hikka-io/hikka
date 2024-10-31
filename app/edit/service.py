@@ -4,10 +4,9 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
-from app.utils import round_datettime
+from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
-from app.errors import Abort
 from app.utils import utcnow
 from app.models import Log
 from app import constants
@@ -509,7 +508,7 @@ async def count_created_edit_limit(session: AsyncSession, user: User) -> int:
                 ]
             )
         )
-        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
         .filter(Log.user == user)
     )
 
@@ -524,6 +523,6 @@ async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
                 ]
             )
         )
-        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
         .filter(Log.user == user)
     )

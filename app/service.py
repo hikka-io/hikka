@@ -4,9 +4,9 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
-from datetime import timedelta
 from app import constants
 from uuid import UUID
 
@@ -204,6 +204,31 @@ async def create_log(
     await session.commit()
 
     return log
+
+
+async def count_logs(
+    session: AsyncSession,
+    log_type: str,
+    user: User | None = None,
+    target_id: UUID | None = None,
+    start_time: datetime | None = None,
+):
+    """
+    Purpose of this function is to mainly count log to enforce rate limit.
+    """
+
+    query = select(func.count(Log)).filter(Log.log_type == log_type)
+
+    if user:
+        query = query.filter(Log.user == user)
+
+    if target_id:
+        query = query.filter(Log.target_id == target_id)
+
+    if start_time:
+        query = query.filter(Log.created > start_time)
+
+    return await session.scalar(query)
 
 
 def anime_loadonly(statement):

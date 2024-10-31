@@ -61,7 +61,7 @@ def utcfromtimestamp(timestamp: int):
 
 
 # Helper function to round a datetime object to the nearest hour/minute/second
-def round_datettime(
+def round_datetime(
     date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
 ):
     return date - timedelta(
