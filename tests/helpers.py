@@ -1,6 +1,6 @@
 from app.models import User, UserOAuth, AuthToken, Client
-from app.utils import new_token, hashpwd, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import new_token, utcnow
 from datetime import timedelta
 from sqlalchemy import select
 from app import constants
