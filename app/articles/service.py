@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
 from app.models import User, Article
 from app.service import create_log
@@ -9,7 +10,12 @@ from uuid import uuid4
 
 
 async def get_article_by_slug(session: AsyncSession, slug: str):
-    return await session.scalar(select(Article).filter(Article.slug == slug))
+    return await session.scalar(
+        select(Article)
+        .filter(Article.slug == slug)
+        .filter(Article.deleted == False)  # noqa: E712
+        .options(joinedload(Article.author))
+    )
 
 
 async def create_article(
@@ -108,3 +114,19 @@ async def update_article(
         )
 
     return article
+
+
+async def delete_article(session: AsyncSession, article: Article, user: User):
+    article.deleted = True
+    session.add(article)
+
+    await session.commit()
+
+    await create_log(
+        session,
+        constants.LOG_ARTICLE_DELETE,
+        user,
+        article.id,
+    )
+
+    return True

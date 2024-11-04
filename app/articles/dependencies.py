@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.utils import round_datetime, utcnow
 from app.dependencies import auth_required
 from app.database import get_session
 from app.models import User, Article
@@ -10,10 +9,14 @@ from fastapi import Depends
 from app import constants
 from . import service
 
+from app.utils import (
+    check_user_permissions,
+    round_datetime,
+    utcnow,
+)
+
 
 # TODO: check permissions for article categories
-
-
 def can_use_category(user: User, category: str):
     available_categories = {
         constants.ROLE_MODERATOR: [constants.ARTICLE_NEWS],
@@ -111,3 +114,15 @@ async def validate_article_create(
         raise Abort("articles", "bad-category")
 
     return author
+
+
+async def validate_article_delete(
+    article: Article = Depends(validate_article),
+    user: User = Depends(auth_required()),
+):
+    if article.author != user and not check_user_permissions(
+        user, [constants.PERMISSION_ARTICLE_DELETE_MODERATOR]
+    ):
+        raise Abort("permission", "denied")
+
+    return article
