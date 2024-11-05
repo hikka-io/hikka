@@ -1,5 +1,6 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
+from app.schemas import UserResponse
 from app.schemas import CustomModel
 from app.utils import is_valid_tag
 from app import constants
@@ -36,6 +37,7 @@ class ArticleArgs(CustomModel):
 
 # Responses
 class ArticleResponse(CustomModel):
+    author: UserResponse
     cover: str | None
     tags: list[str]
     category: str

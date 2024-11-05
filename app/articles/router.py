@@ -12,6 +12,7 @@ from .dependencies import (
     validate_article_create,
     validate_article_update,
     validate_article_delete,
+    validate_article,
 )
 
 
@@ -50,3 +51,8 @@ async def delete_article(
 ):
     await service.delete_article(session, article, user)
     return {"success": True}
+
+
+@router.get("/{slug}", response_model=ArticleResponse)
+async def get_article(article: Article = Depends(validate_article)):
+    return article
