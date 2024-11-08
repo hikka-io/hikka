@@ -201,6 +201,7 @@ errors = {
     },
     "articles": {
         "bad-category": ["You can't use this category", 400],
+        "author-not-found": ["Author not found", 404],
         "not-found": ["Article not found", 404],
     },
 }

@@ -1,4 +1,5 @@
 from pydantic import Field, field_validator
+from app.schemas import PaginationResponse
 from app.utils import is_empty_markdown
 from app.schemas import UserResponse
 from app.schemas import CustomModel
@@ -35,6 +36,13 @@ class ArticleArgs(CustomModel):
         return text
 
 
+class ArticlesListArgs(CustomModel):
+    # content_type: ContentTypeEnum | None = None
+    sort: list[str] = ["created:desc"]
+    author: str | None = None
+    draft: bool = False
+
+
 # Responses
 class ArticleResponse(CustomModel):
     author: UserResponse
@@ -45,3 +53,8 @@ class ArticleResponse(CustomModel):
     title: str
     text: str
     slug: str
+
+
+class ArticlesListResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[ArticleResponse]

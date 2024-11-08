@@ -1,6 +1,4 @@
-from .schemas import ArticleArgs, ArticleResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import auth_required
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -8,11 +6,30 @@ from app.models import User, Article
 from app import constants
 from . import service
 
+from app.utils import (
+    pagination_dict,
+    pagination,
+)
+
+from .schemas import (
+    ArticlesListResponse,
+    ArticlesListArgs,
+    ArticleResponse,
+    ArticleArgs,
+)
+
 from .dependencies import (
+    validate_articles_list_args,
     validate_article_create,
     validate_article_update,
     validate_article_delete,
     validate_article,
+)
+
+from app.dependencies import (
+    auth_required,
+    get_page,
+    get_size,
 )
 
 
@@ -56,3 +73,28 @@ async def delete_article(
 @router.get("/{slug}", response_model=ArticleResponse)
 async def get_article(article: Article = Depends(validate_article)):
     return article
+
+
+@router.post("", response_model=ArticlesListResponse)
+async def get_articles(
+    args: ArticlesListArgs = Depends(validate_articles_list_args),
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+    request_user: User | None = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COLLECTIONS],
+            optional=True,
+        )
+    ),
+):
+    limit, offset = pagination(page, size)
+    total = await service.get_articles_count(session, request_user, args)
+    articles = await service.get_articles(
+        session, request_user, args, limit, offset
+    )
+
+    return {
+        "pagination": pagination_dict(total, page, limit),
+        "list": articles.unique().all(),
+    }

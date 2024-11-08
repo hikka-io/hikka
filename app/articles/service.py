@@ -1,12 +1,39 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.selectable import Select
+from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
 from app.models import User, Article
-from app.service import create_log
-from .schemas import ArticleArgs
-from sqlalchemy import select
 from app import constants
 from uuid import uuid4
+
+from app.service import (
+    get_user_by_username,
+    create_log,
+)
+
+from .schemas import (
+    ArticlesListArgs,
+    ArticleArgs,
+)
+
+
+def build_articles_order_by(sort: list[str]):
+    # TODO: Unified function for this stuff
+    order_mapping = {
+        "created": Article.created,
+    }
+
+    order_by = [
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
+        for field, order in (entry.split(":") for entry in sort)
+    ]
+
+    return order_by
 
 
 async def get_article_by_slug(session: AsyncSession, slug: str):
@@ -130,3 +157,60 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
     )
 
     return True
+
+
+async def articles_list_filter(
+    query: Select,
+    request_user: User | None,
+    args: ArticlesListArgs,
+    session: AsyncSession,
+):
+    if args.author:
+        author = await get_user_by_username(session, args.author)
+        query = query.filter(Article.author == author)
+
+    if args.draft and request_user:
+        query = query.filter(
+            Article.author == request_user,
+            Article.draft == True,  # noqa: E712
+        )
+
+    query = query.filter(
+        Article.deleted == False,  # noqa: E712
+    )
+
+    return query
+
+
+async def get_articles_count(
+    session: AsyncSession, request_user: User | None, args: ArticlesListArgs
+) -> int:
+    query = await articles_list_filter(
+        select(func.count(Article.id)),
+        request_user,
+        args,
+        session,
+    )
+
+    return await session.scalar(query)
+
+
+async def get_articles(
+    session: AsyncSession,
+    request_user: User | None,
+    args: ArticlesListArgs,
+    limit: int,
+    offset: int,
+) -> list[Article]:
+    query = await articles_list_filter(
+        select(Article).options(joinedload(Article.author)),
+        request_user,
+        args,
+        session,
+    )
+
+    return await session.scalars(
+        query.order_by(*build_articles_order_by(args.sort))
+        .limit(limit)
+        .offset(offset)
+    )

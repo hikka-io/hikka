@@ -2,12 +2,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
 from app.models import User, Article
-from app.service import count_logs
-from .schemas import ArticleArgs
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import service
+
+from .schemas import (
+    ArticlesListArgs,
+    ArticleArgs,
+)
+
+from app.service import (
+    get_user_by_username,
+    count_logs,
+)
 
 from app.utils import (
     check_user_permissions,
@@ -126,3 +134,13 @@ async def validate_article_delete(
         raise Abort("permission", "denied")
 
     return article
+
+
+async def validate_articles_list_args(
+    args: ArticlesListArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    if args.author and not await get_user_by_username(session, args.author):
+        raise Abort("articles", "author-not-found")
+
+    return args
