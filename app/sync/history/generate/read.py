@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import History, Log
-from datetime import timedelta
 from app import constants
 from .. import service
 import copy
@@ -9,23 +8,22 @@ import copy
 async def generate_read(
     session: AsyncSession,
     log: Log,
-    read_delta: timedelta,
 ):
-    threshold = log.created - read_delta
-
     history_type = (
         constants.HISTORY_READ_MANGA
         if log.data["content_type"] == constants.CONTENT_MANGA
         else constants.HISTORY_READ_NOVEL
     )
 
-    history = await service.get_history(
-        session,
-        history_type,
-        log.target_id,
-        log.user_id,
-        threshold,
-    )
+    latest_history = await service.get_latest_history(session, log.user_id)
+
+    history = latest_history
+    # If latest user history record not related to this content
+    if latest_history is not None and (
+        latest_history.target_id != log.target_id
+        or latest_history.history_type != history_type
+    ):
+        history = None
 
     if not history:
         new_read = log.log_type == constants.LOG_READ_CREATE
@@ -43,6 +41,8 @@ async def generate_read(
                 },
             }
         )
+
+    assert history is not None
 
     if str(log.id) in history.used_logs:
         return

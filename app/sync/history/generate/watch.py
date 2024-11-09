@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import History, Log
-from datetime import timedelta
 from app import constants
 from .. import service
 import copy
@@ -9,23 +8,24 @@ import copy
 async def generate_watch(
     session: AsyncSession,
     log: Log,
-    watch_delta: timedelta,
 ):
-    threshold = log.created - watch_delta
+    history_type = constants.HISTORY_WATCH
 
-    history = await service.get_history(
-        session,
-        constants.HISTORY_WATCH,
-        log.target_id,
-        log.user_id,
-        threshold,
-    )
+    latest_history = await service.get_latest_history(session, log.user_id)
+
+    history = latest_history
+    # If latest user history record not related to this content
+    if latest_history is not None and (
+        latest_history.target_id != log.target_id
+        or latest_history.history_type != history_type
+    ):
+        history = None
 
     if not history:
         new_watch = log.log_type == constants.LOG_WATCH_CREATE
         history = History(
             **{
-                "history_type": constants.HISTORY_WATCH,
+                "history_type": history_type,
                 "target_id": log.target_id,
                 "user_id": log.user_id,
                 "created": log.created,
@@ -37,6 +37,8 @@ async def generate_watch(
                 },
             }
         )
+
+    assert history is not None
 
     if str(log.id) in history.used_logs:
         return
