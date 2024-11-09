@@ -66,13 +66,13 @@ async def generate_history(session: AsyncSession):
             constants.LOG_WATCH_UPDATE,
             constants.LOG_WATCH_CREATE,
         ]:
-            await generate_watch(session, log)
+            await generate_watch(session, log, watch_delta)
 
         if log.log_type in [
             constants.LOG_READ_UPDATE,
             constants.LOG_READ_CREATE,
         ]:
-            await generate_read(session, log)
+            await generate_read(session, log, read_delta)
 
         if log.log_type == constants.LOG_WATCH_DELETE:
             await generate_watch_delete(session, log, watch_delta)
