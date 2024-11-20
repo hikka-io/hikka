@@ -13,10 +13,22 @@ class ArticleCategoryEnum(str, Enum):
     article_news = constants.ARTICLE_NEWS
 
 
+class ArticleContentEnum(str, Enum):
+    anime = constants.CONTENT_ANIME
+    manga = constants.CONTENT_MANGA
+    novel = constants.CONTENT_NOVEL
+
+
 # Args
+class ArticleContentArgs(CustomModel):
+    content_type: ArticleContentEnum
+    slug: str
+
+
 class ArticleArgs(CustomModel):
     text: str = Field(min_length=3, max_length=65536)
     title: str = Field(min_length=3, max_length=255)
+    content: ArticleContentArgs | None = None
     tags: list[str] = Field(max_length=3)
     draft: bool = Field(default=True)
     category: ArticleCategoryEnum

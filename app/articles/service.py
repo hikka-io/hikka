@@ -3,9 +3,17 @@ from sqlalchemy.sql.selectable import Select
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
-from app.models import User, Article
 from app import constants
 from uuid import uuid4
+
+from app.models import (
+    ArticleContent,
+    Article,
+    Anime,
+    Manga,
+    Novel,
+    User,
+)
 
 from app.service import (
     get_user_by_username,
@@ -49,6 +57,7 @@ async def create_article(
     session: AsyncSession,
     args: ArticleArgs,
     user: User,
+    content: Anime | Manga | Novel | None = None,
 ):
     now = utcnow()
 
@@ -88,6 +97,17 @@ async def create_article(
 
     session.add(article)
 
+    if content:
+        article_content = ArticleContent(
+            **{
+                "content_type": args.content.content_type,
+                "content_id": content.id,
+                "article": article,
+            }
+        )
+
+        session.add(article_content)
+
     await session.commit()
 
     await create_log(
@@ -101,6 +121,14 @@ async def create_article(
             "title": args.title,
             "text": args.text,
             "tags": args.tags,
+            "content": (
+                {
+                    "content_type": args.content.content_type,
+                    "content_id": content.reference,
+                }
+                if content
+                else None
+            ),
         },
     )
 

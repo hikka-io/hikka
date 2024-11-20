@@ -2,13 +2,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import User, Article
 from app import constants
 from . import service
 
 from app.utils import (
     pagination_dict,
     pagination,
+)
+
+from app.models import (
+    Article,
+    Anime,
+    Manga,
+    Novel,
+    User,
 )
 
 from .schemas import (
@@ -20,6 +27,7 @@ from .schemas import (
 
 from .dependencies import (
     validate_articles_list_args,
+    validate_article_content,
     validate_article_create,
     validate_article_update,
     validate_article_delete,
@@ -41,8 +49,9 @@ async def create_article(
     args: ArticleArgs,
     session: AsyncSession = Depends(get_session),
     author: User = Depends(validate_article_create),
+    content: Anime | Manga | Novel | None = Depends(validate_article_content),
 ):
-    return await service.create_article(session, args, author)
+    return await service.create_article(session, args, author, content)
 
 
 @router.put("/{slug}", response_model=ArticleResponse)

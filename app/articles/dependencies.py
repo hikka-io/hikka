@@ -14,6 +14,7 @@ from .schemas import (
 
 from app.service import (
     get_user_by_username,
+    get_content_by_slug,
     count_logs,
 )
 
@@ -85,6 +86,22 @@ async def validate_article_update(
         raise Abort("articles", "bad-category")
 
     return article
+
+
+async def validate_article_content(
+    args: ArticleArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    content = None
+
+    if args.content and not (
+        content := await get_content_by_slug(
+            session, args.content.content_type, args.content.slug
+        )
+    ):
+        raise Abort("content", "not-found")
+
+    return content
 
 
 async def validate_article_create(

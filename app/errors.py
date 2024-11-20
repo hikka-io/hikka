@@ -204,6 +204,9 @@ errors = {
         "author-not-found": ["Author not found", 404],
         "not-found": ["Article not found", 404],
     },
+    "content": {
+        "not-found": ["Content not found", 404],
+    },
 }
 
 
