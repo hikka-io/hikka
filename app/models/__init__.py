@@ -90,6 +90,7 @@ from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
+from .article.content import ArticleContent
 from .article.article import Article
 
 from .stats.edits import UserEditStats
@@ -177,6 +178,7 @@ __all__ = [
     "NovelCollectionContent",
     "CollectionContent",
     "Collection",
+    "ArticleContent",
     "Article",
     "UserEditStats",
     "AnimeSchedule",
