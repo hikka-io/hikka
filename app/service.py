@@ -106,6 +106,40 @@ async def get_content_by_slug(
     return await session.scalar(query)
 
 
+async def get_content_by_id(
+    session: AsyncSession, content_type: str, content_id: UUID
+):
+    """Return content by content_type and content_id"""
+
+    # Just in case
+    if not is_uuid(content_id):
+        return None
+
+    content_model = content_type_to_content_class[content_type]
+    query = select(content_model)
+
+    # Special case for edit
+    if content_type == constants.CONTENT_SYSTEM_EDIT:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for collection
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COLLECTION:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for comment
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COMMENT:
+        query = query.filter(content_model.id == content_id)
+        query = query.filter(content_model.hidden == False)  # noqa: E712
+
+    # Everything else is handled here
+    else:
+        query = query.filter(content_model.id == content_id)
+
+    return await session.scalar(query)
+
+
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(

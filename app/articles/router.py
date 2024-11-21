@@ -60,8 +60,9 @@ async def update_article(
     article: Article = Depends(validate_article_update),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(auth_required()),
+    content: Anime | Manga | Novel | None = Depends(validate_article_content),
 ):
-    return await service.update_article(session, article, args, user)
+    return await service.update_article(session, article, args, user, content)
 
 
 @router.delete("/{slug}", response_model=SuccessResponse)

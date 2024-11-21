@@ -33,6 +33,7 @@ class Article(
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(foreign_keys=[author_id])
 
+    # TODO: cascade delete
     content = relationship("ArticleContent", back_populates="article")
 
     cover_image_id = mapped_column(

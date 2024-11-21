@@ -140,6 +140,7 @@ async def update_article(
     article: Article,
     args: ArticleArgs,
     user: User,
+    content: Anime | Manga | Novel | None = None,
 ):
     before = {}
     after = {}
@@ -153,8 +154,60 @@ async def update_article(
             setattr(article, key, new_value)
             after[key] = new_value
 
+    delete_old_content = False
+    add_new_content = False
+
+    # Get old content
+    # TODO: find better way to handle this
+    old_article_content = await session.scalar(
+        select(ArticleContent).filter(ArticleContent.article_id == article.id)
+    )
+
+    if old_article_content:
+        if content:
+            if old_article_content.content_id != content.id:
+                delete_old_content = True
+                add_new_content = True
+
+        else:
+            delete_old_content = True
+
+    if not old_article_content and content:
+        add_new_content = True
+
+    if delete_old_content:
+        before["content"] = {
+            "content_type": old_article_content.content_type,
+            "content_id": str(old_article_content.content_id),
+        }
+
+        # Here we set after content to none
+        # If add_new_content is False it will stay this way
+        after["content"] = None
+
+        # Delete old article content to keep things clean
+        await session.delete(old_article_content)
+
+    # And create new content if needed
+    if add_new_content:
+        article_content = ArticleContent(
+            **{
+                "content_type": args.content.content_type,
+                "content_id": content.id,
+                "article": article,
+            }
+        )
+
+        after["content"] = {
+            "content_type": args.content.content_type,
+            "content_id": content.reference,
+        }
+
+        session.add(article_content)
+
     article.updated = utcnow()
     session.add(article)
+    await session.commit()
 
     if before != {} and after != {}:
         await create_log(
