@@ -2,6 +2,7 @@ from app.sync.history import generate_history
 from sqlalchemy import select, desc, func
 from app.models import Log, History
 from datetime import datetime
+from typing import Iterator
 from app import constants
 from uuid import uuid4
 
@@ -16,6 +17,18 @@ async def test_history_read(test_session, create_test_user):
             "created": datetime(2024, 2, 1, 0, 0, 0),
             "log_type": constants.LOG_READ_CREATE,
             "target_id": fake_manga_id,
+            "user_id": user_id,
+            "data": {
+                "content_type": "manga",
+                "before": {"status": None},
+                "after": {"status": constants.READ_PLANNED},
+            },
+        },
+        # After that user set as planned another manga
+        {
+            "created": datetime(2024, 2, 1, 0, 0, 1),
+            "log_type": constants.LOG_READ_CREATE,
+            "target_id": uuid4(),
             "user_id": user_id,
             "data": {
                 "content_type": "manga",
@@ -56,7 +69,7 @@ async def test_history_read(test_session, create_test_user):
             },
         },
         {
-            # Couple hours went by and user caves in in his binge
+            # Couple hours went by and user caves in his binge
             "created": datetime(2024, 2, 1, 5, 10, 0),
             "log_type": constants.LOG_READ_UPDATE,
             "target_id": fake_manga_id,
@@ -69,8 +82,7 @@ async def test_history_read(test_session, create_test_user):
         },
         {
             # Finally manga is finished and status changed
-            # Everythign under 6 hours (wow)
-            "created": datetime(2024, 2, 1, 5, 50, 0),
+            "created": datetime(2024, 2, 2, 5, 50, 0),
             "log_type": constants.LOG_READ_UPDATE,
             "target_id": fake_manga_id,
             "user_id": user_id,
@@ -96,30 +108,49 @@ async def test_history_read(test_session, create_test_user):
 
     # Count them (just in case)
     logs_count = await test_session.scalar(select(func.count(Log.id)))
-    assert logs_count == 5
+    assert logs_count == len(test_logs)
 
     # Generate history
     await generate_history(test_session)
 
     # Count history
     history_count = await test_session.scalar(select(func.count(History.id)))
-    assert history_count == 2
+    assert history_count == 4
 
     # And how get history entry
-    history = await test_session.scalars(
+    result = await test_session.scalars(
         select(History).order_by(desc(History.created))
     )
-    history = history.all()
 
-    assert len(history[0].used_logs) == 4
-    assert history[0].data == {
+    history: Iterator[History] = iter(result.all())
+
+    record = next(history)
+    assert len(record.used_logs) == 1
+    assert record.data == {
+        "before": {"volumes": 9, "score": 5, "status": "reading"},
         "after": {"volumes": 12, "score": 7, "status": "completed"},
-        "before": {"volumes": 0, "score": 0, "status": "planned"},
         "new_read": False,
     }
 
-    assert len(history[1].used_logs) == 1
-    assert history[1].data == {
+    record = next(history)
+    assert len(record.used_logs) == 3
+    assert record.data == {
+        "before": {"volumes": 0, "score": 0, "status": "planned"},
+        "after": {"volumes": 9, "score": 5, "status": "reading"},
+        "new_read": False,
+    }
+
+    record = next(history)
+    assert len(record.used_logs) == 1
+    assert record.data == {
+        "after": {"status": "planned"},
+        "before": {"status": None},
+        "new_read": True,
+    }
+
+    record = next(history)
+    assert len(record.used_logs) == 1
+    assert record.data == {
         "after": {"status": "planned"},
         "before": {"status": None},
         "new_read": True,
