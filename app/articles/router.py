@@ -93,7 +93,7 @@ async def get_articles(
     size: int = Depends(get_size),
     request_user: User | None = Depends(
         auth_required(
-            scope=[constants.SCOPE_READ_COLLECTIONS],
+            scope=[constants.SCOPE_READ_ARTICLES],
             optional=True,
         )
     ),

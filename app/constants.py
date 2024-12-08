@@ -165,7 +165,7 @@ SCOPE_DELETE_COLLECTION = "delete:collection"
 SCOPE_CREATE_ARTICLE = "create:article"
 SCOPE_UPDATE_ARTICLE = "update:article"
 SCOPE_DELETE_ARTICLE = "delete:article"
-SCOPE_READ_COLLECTIONS = "read:articles"
+SCOPE_READ_ARTICLES = "read:articles"
 
 SCOPE_READ_COMMENT_SCORE = "read:comment:score"
 SCOPE_CREATE_COMMENT = "create:comment"
