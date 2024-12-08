@@ -21,18 +21,23 @@ class ClientCreate(CustomModel):
         min_length=3,
         max_length=constants.MAX_CLIENT_NAME_LENGTH,
     )
+
     description: str = Field(
         examples=["Client that imports watchlist from third-party services"],
         description="Short clear description of the client",
         min_length=3,
         max_length=constants.MAX_CLIENT_DESCRIPTION_LENGTH,
     )
+
     endpoint: AnyUrl = Field(
-        examples=["https://example.com", "http://localhost/auth/confirm", "hikka://auth"],
+        examples=[
+            "https://example.com",
+            "http://localhost/auth/confirm",
+            "hikka://auth",
+        ],
         description="Endpoint of the client. "
         "User will be redirected to that endpoint after successful "
         "authorization",
-        max_length=constants.MAX_CLIENT_ENDPOINT_LENGTH,
     )
 
     @field_validator("name", "description", mode="before")
@@ -59,17 +64,16 @@ class ClientUpdate(CustomModel):
         max_length=constants.MAX_CLIENT_NAME_LENGTH,
         min_length=3,
     )
+
     description: str | None = Field(
         None,
         description="Short clear description of the client",
         max_length=constants.MAX_CLIENT_DESCRIPTION_LENGTH,
         min_length=3,
     )
-    endpoint: AnyUrl | None = Field(
-        None,
-        description="Endpoint of the client",
-        max_length=constants.MAX_CLIENT_ENDPOINT_LENGTH,
-    )
+
+    endpoint: AnyUrl | None = Field(None, description="Endpoint of the client")
+
     revoke_secret: bool = Field(
         False,
         description="Create new client secret and revoke previous",
