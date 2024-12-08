@@ -1,6 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import get_user_by_username
-from app.utils import check_user_permissions
 from app.dependencies import auth_required
 from app.models import Collection, User
 from app.database import get_session
@@ -10,6 +8,17 @@ from fastapi import Depends
 from app import constants
 from uuid import UUID
 from . import service
+
+from app.utils import (
+    check_user_permissions,
+    round_datetime,
+    utcnow,
+)
+
+from app.service import (
+    get_user_by_username,
+    count_logs,
+)
 
 from .schemas import (
     CollectionsListArgs,
@@ -144,7 +153,24 @@ async def validate_collection_update(
         if not await service.content_compare(session, collection, args):
             raise Abort("collections", "moderator-content-update")
 
-    # TODO: log based rate limit
+    # 1000 collection updates per hour should be sensible limit
+    updates_limit = 1000
+    logs_count = await count_logs(
+        session,
+        constants.LOG_COLLECTION_UPDATE,
+        user,
+        start_time=round_datetime(utcnow(), hours=1),
+    )
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and logs_count > updates_limit
+    ):
+        raise Abort("system", "rate-limit")
 
     return args
 
@@ -153,10 +179,9 @@ async def validate_collection_delete(
     collection: Collection = Depends(validate_collection),
     user: User = Depends(auth_required()),
 ):
-    if collection.author != user:
-        if user != collection.author and not check_user_permissions(
-            user, [constants.PERMISSION_COLLECTION_DELETE_MODERATOR]
-        ):
-            raise Abort("permission", "denied")
+    if collection.author != user and not check_user_permissions(
+        user, [constants.PERMISSION_COLLECTION_DELETE_MODERATOR]
+    ):
+        raise Abort("permission", "denied")
 
     return collection

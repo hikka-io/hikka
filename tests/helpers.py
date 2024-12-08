@@ -1,6 +1,6 @@
 from app.models import User, UserOAuth, AuthToken, Client
-from app.utils import new_token, hashpwd, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import new_token, utcnow
 from datetime import timedelta
 from sqlalchemy import select
 from app import constants
@@ -25,8 +25,9 @@ async def create_user(
 
     user = User(
         **{
+            # Hash for "password"
+            "password_hash": "$2b$12$ToufGsZOS/P0SfV.KzJCku/87/7q99Ls6HUZuL0/s2wiXqNJBEoRi",
             "activation_expire": utcnow() + timedelta(hours=3),
-            "password_hash": hashpwd("password"),
             "activation_token": new_token(),
             "email_confirmed": activated,
             "username": username,

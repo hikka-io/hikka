@@ -62,16 +62,30 @@ async def connection_test(test_db, event_loop):
         pg_user, pg_host, pg_port, pg_db, test_db.version, pg_password
     ):
         sessionmanager.init(settings.database.endpoint)
+
+        async with sessionmanager.connect() as connection:
+            await connection.execute(
+                text("CREATE EXTENSION IF NOT EXISTS ltree;")
+            )
+
+            await connection.run_sync(Base.metadata.drop_all)
+            await connection.run_sync(Base.metadata.create_all)
+
         yield
+
         await sessionmanager.close()
 
 
 @pytest.fixture(scope="function", autouse=True)
 async def create_tables(connection_test):
     async with sessionmanager.connect() as connection:
-        await connection.execute(text("CREATE EXTENSION IF NOT EXISTS ltree;"))
-        await connection.run_sync(Base.metadata.drop_all)
-        await connection.run_sync(Base.metadata.create_all)
+        tables = ",".join(
+            table.name for table in reversed(Base.metadata.sorted_tables)
+        )
+
+        await connection.execute(
+            text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE;")
+        )
 
 
 @pytest.fixture(scope="function", autouse=True)

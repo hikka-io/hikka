@@ -23,7 +23,7 @@ class ContentMixin:
 
 
 class SlugMixin:
-    slug: Mapped[str] = mapped_column(String(255), index=True)
+    slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
 
 
 class UpdatedMixin:

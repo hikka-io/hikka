@@ -162,6 +162,11 @@ SCOPE_CREATE_COLLECTION = "create:collection"
 SCOPE_UPDATE_COLLECTION = "update:collection"
 SCOPE_DELETE_COLLECTION = "delete:collection"
 
+SCOPE_CREATE_ARTICLE = "create:article"
+SCOPE_UPDATE_ARTICLE = "update:article"
+SCOPE_DELETE_ARTICLE = "delete:article"
+SCOPE_READ_ARTICLES = "read:articles"
+
 SCOPE_READ_COMMENT_SCORE = "read:comment:score"
 SCOPE_CREATE_COMMENT = "create:comment"
 SCOPE_UPDATE_COMMENT = "update:comment"
@@ -236,6 +241,8 @@ ALL_SCOPES = [
     SCOPE_SET_VOTE,
     SCOPE_READ_VOTE,
     SCOPE_UPLOAD,
+    SCOPE_CREATE_ARTICLE,
+    SCOPE_UPDATE_ARTICLE,
 ]
 
 # Not real scopes - will be replaced with simple versions on each scope check
@@ -349,6 +356,13 @@ PERMISSION_CLIENT_UPDATE = "client:update"
 PERMISSION_CLIENT_DELETE = "client:delete"
 PERMISSION_CLIENT_VERIFY = "client:verify"
 PERMISSION_CLIENT_DELETE_ADMIN = "client:delete_admin"
+
+PERMISSION_ARTICLE_CREATE = "article:create"
+PERMISSION_ARTICLE_UPDATE = "article:update"
+PERMISSION_ARTICLE_DELETE = "article:delete"
+PERMISSION_ARTICLE_UPDATE_MODERATOR = "article:update_moderator"
+PERMISSION_ARTICLE_DELETE_MODERATOR = "article:delete_moderator"
+
 PERMISSION_CLIENT_LIST_ALL = "client:list_all"
 
 USER_PERMISSIONS = [
@@ -367,6 +381,9 @@ USER_PERMISSIONS = [
     PERMISSION_CLIENT_CREATE,
     PERMISSION_CLIENT_UPDATE,
     PERMISSION_CLIENT_DELETE,
+    PERMISSION_ARTICLE_CREATE,
+    PERMISSION_ARTICLE_UPDATE,
+    PERMISSION_ARTICLE_DELETE,
 ]
 
 MODERATOR_PERMISSIONS = [
@@ -379,6 +396,7 @@ MODERATOR_PERMISSIONS = [
     PERMISSION_COLLECTION_DELETE_MODERATOR,
     PERMISSION_EDIT_UPDATE_MODERATOR,
     PERMISSION_CLIENT_VERIFY,
+    PERMISSION_ARTICLE_UPDATE_MODERATOR,
     PERMISSION_CLIENT_LIST_ALL,
 ]
 
@@ -455,6 +473,9 @@ LOG_VOTE_SET = "vote_set"
 LOG_SCHEDULE_ANIME = "schedule_anime"
 LOG_SCHEDULE_ANIME_ROLLBACK = "schedule_anime_rollback"
 LOG_CONTENT_DELETED = "content_deleted"
+LOG_ARTICLE_CREATE = "article_create"
+LOG_ARTICLE_UPDATE = "article_update"
+LOG_ARTICLE_DELETE = "article_delete"
 
 # History types
 HISTORY_WATCH = "watch"
@@ -510,3 +531,6 @@ INTERVAL_DAY = "day"
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+# Articles
+ARTICLE_NEWS = "news"

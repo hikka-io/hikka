@@ -49,6 +49,14 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
             )
 
 
+def is_valid_tag(tag):
+    # Special check for bad characters
+    if any(bad_character in tag for bad_character in list("ёъыэ")):
+        return False
+
+    return re.compile(r"^[a-zа-яіїґ]{3,16}$").match(tag) is not None
+
+
 # Replacement for deprecated datetime's utcnow
 def utcnow():
     return datetime.now(UTC).replace(tzinfo=None)
@@ -60,7 +68,7 @@ def utcfromtimestamp(timestamp: int):
 
 
 # Helper function to round a datetime object to the nearest hour/minute/second
-def round_datettime(
+def round_datetime(
     date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
 ):
     return date - timedelta(
@@ -106,6 +114,7 @@ def resolve_scope_groups(scopes: list[str]) -> list[str]:
             group = resolve_scope_groups(group)
 
             plain_scopes.extend(group)
+
         else:
             plain_scopes.append(scope)
 
@@ -224,7 +233,7 @@ def slugify(
 
     # Add content id part if specified
     if content_id:
-        text += word_separator + content_id[:6]
+        text += word_separator + str(content_id)[:6]
 
     # Remove trailing word separator
     text = text.strip(word_separator)

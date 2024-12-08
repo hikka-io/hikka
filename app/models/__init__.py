@@ -3,7 +3,6 @@ from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
 from .auth.client import Client
 
-
 from .user.history import FavouriteAnimeRemoveHistory
 from .user.history import FavouriteMangaRemoveHistory
 from .user.history import FavouriteNovelRemoveHistory
@@ -91,6 +90,9 @@ from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
+from .article.content import ArticleContent
+from .article.article import Article
+
 from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
@@ -176,6 +178,8 @@ __all__ = [
     "NovelCollectionContent",
     "CollectionContent",
     "Collection",
+    "ArticleContent",
+    "Article",
     "UserEditStats",
     "AnimeSchedule",
     "Base",

@@ -22,6 +22,7 @@ async def validate_content(
     session: AsyncSession = Depends(get_session),
 ) -> Edit:
     if not (content := await get_content_by_slug(session, content_type, slug)):
+        # TODO: use single error message for content not found
         raise Abort("comment", "content-not-found")
 
     return content
