@@ -1,10 +1,10 @@
+from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
 from .utils import build_manga_filters_ms
 from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
 
@@ -102,7 +102,7 @@ async def manga_characters_count(session: AsyncSession, manga: Manga) -> int:
 
 async def manga_characters(
     session: AsyncSession, manga: Manga, limit: int, offset: int
-) -> list[MangaCharacter]:
+) -> ScalarResult[MangaCharacter]:
     return await session.scalars(
         select(MangaCharacter)
         .filter(MangaCharacter.manga == manga)

@@ -15,7 +15,7 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -39,7 +39,4 @@ async def anime_schedule(
         session, args, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": schedule.unique().all(),
-    }
+    return paginated_response(schedule.unique().all(), total, page, limit)

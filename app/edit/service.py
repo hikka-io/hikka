@@ -1,7 +1,7 @@
+from sqlalchemy import select, asc, desc, func, ScalarResult
 from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from app.utils import round_datetime
@@ -166,7 +166,7 @@ async def get_edits(
     args: EditSearchArgs,
     limit: int,
     offset: int,
-) -> list[Edit]:
+) -> ScalarResult[Edit]:
     """Return all edits"""
 
     query = await edits_search_filter(session, args, select(Edit))
@@ -447,7 +447,7 @@ async def content_todo_total(
 
 async def content_todo(
     session: AsyncSession,
-    content_type: EditContentTypeEnum,
+    content_type: EditContentToDoEnum,
     todo_type: ContentToDoEnum,
     request_user: User | None,
     limit: int,

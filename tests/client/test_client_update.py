@@ -9,7 +9,7 @@ from app import constants
 async def test_client_update(client, test_token):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint
@@ -61,7 +61,7 @@ async def test_too_long_fields(client, test_token):
 
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint
@@ -100,7 +100,7 @@ async def test_too_long_fields(client, test_token):
         client,
         test_token,
         client_reference,
-        endpoint="http://localhost/"
+        endpoint="hikka://auth/"
         + "a" * (constants.MAX_CLIENT_ENDPOINT_LENGTH + 1),
     )
 
@@ -117,7 +117,7 @@ async def test_too_short_fields(client, test_token):
 
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint

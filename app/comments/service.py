@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc, func
+from sqlalchemy import select, desc, asc, func, ScalarResult
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from app.utils import round_datetime
@@ -43,7 +43,7 @@ from app.models import (
 )
 
 
-content_type_to_comment_class = {
+content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_COLLECTION: CollectionComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ANIME: AnimeComment,
@@ -164,7 +164,7 @@ async def get_comments_by_content_id(
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[Edit]:
+) -> ScalarResult[Comment]:
     """Return comemnts for given content"""
 
     return await session.scalars(

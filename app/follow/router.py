@@ -1,4 +1,4 @@
-from app.utils import pagination_dict, pagination
+from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -106,10 +106,7 @@ async def following_list(
         session, request_user, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": following.all(),
-    }
+    return paginated_response(following.all(), total, page, limit)
 
 
 @router.get(
@@ -132,7 +129,4 @@ async def followers_list(
         session, request_user, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": followers.all(),
-    }
+    return paginated_response(followers.all(), total, page, limit)

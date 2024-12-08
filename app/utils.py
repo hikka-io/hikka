@@ -1,8 +1,10 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from dateutil.relativedelta import relativedelta
 from fastapi.responses import JSONResponse
+from sqlalchemy.orm import DeclarativeBase
 from datetime import timezone, timedelta
 from fastapi import FastAPI, Request
+from collections.abc import Sequence
 from datetime import datetime, UTC
 from app.models import AuthToken
 from functools import lru_cache
@@ -16,8 +18,13 @@ import aiohttp
 import asyncio
 import secrets
 import bcrypt
+import typing
 import math
 import re
+
+
+if typing.TYPE_CHECKING:
+    from app.schemas import CustomModel
 
 
 # Timeout middleware (class name is pretty self explanatory)
@@ -272,6 +279,20 @@ def pagination_dict(total, page, limit):
         "pages": math.ceil(total / limit),
         "total": total,
         "page": page,
+    }
+
+
+def paginated_response(
+    items: Sequence[
+        typing.Union[DeclarativeBase, "CustomModel", dict[str, typing.Any]]
+    ],
+    total: int,
+    page: int,
+    limit: int,
+) -> dict[str, dict[str, int] | list]:
+    return {
+        "list": items,
+        "pagination": pagination_dict(total, page, limit),
     }
 
 

@@ -13,7 +13,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -46,10 +46,7 @@ async def notifications(
         session, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": notifications.all(),
-    }
+    return paginated_response(notifications.all(), total, page, limit)
 
 
 @router.get(
