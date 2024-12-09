@@ -46,8 +46,8 @@ async def main():
         print("Press Ctrl+{} to exit".format("Break" if os.name == "nt" else "C"))
         while True:
             await asyncio.sleep(1000)
-
-    except (KeyboardInterrupt, SystemExit):
+    
+    finally:
         await sessionmanager.close()
 
 
