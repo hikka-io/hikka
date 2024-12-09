@@ -4,6 +4,7 @@ version = "0.3.0"
 description = "Backend service for hikka.io - Ukrainian anime tracker"
 authors = ["Hikka Team"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"

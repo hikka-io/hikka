@@ -43,14 +43,15 @@ async def main():
     try:
         scheduler.start()
 
-        print("Press Ctrl+{} to exit".format("Break" if os.name == "nt" else "C"))
         while True:
             await asyncio.sleep(1000)
-    
+
     finally:
         await sessionmanager.close()
 
 
 if __name__ == "__main__":
-    # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        print("Stopped Hikka sync")
