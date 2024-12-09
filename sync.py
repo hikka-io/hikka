@@ -19,8 +19,6 @@ from app.sync import (
 
 def init_scheduler():
     scheduler = AsyncIOScheduler()
-    settings = get_settings()
-    sessionmanager.init(settings.database.endpoint)
 
     scheduler.add_job(delete_expired_token_requests, "interval", seconds=30)
     scheduler.add_job(update_notifications, "interval", seconds=10)
@@ -32,15 +30,27 @@ def init_scheduler():
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
-    scheduler.start()
+
+    return scheduler
+
+
+async def main():
+    settings = get_settings()
+    sessionmanager.init(settings.database.endpoint)
+
+    scheduler = init_scheduler()
 
     try:
-        loop = asyncio.get_event_loop()
-        loop.run_forever()
-    except (KeyboardInterrupt, SystemExit):
-        loop.run_until_complete(sessionmanager.close())
-        loop.close()
+        scheduler.start()
+
+        print("Press Ctrl+{} to exit".format("Break" if os.name == "nt" else "C"))
+        while True:
+            await asyncio.sleep(1000)
+    
+    finally:
+        await sessionmanager.close()
 
 
 if __name__ == "__main__":
-    init_scheduler()
+    # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
+    asyncio.run(main())
