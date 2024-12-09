@@ -32,15 +32,22 @@ def init_scheduler():
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
-    scheduler.start()
 
-    try:
-        loop = asyncio.get_event_loop()
-        loop.run_forever()
-    except (KeyboardInterrupt, SystemExit):
-        loop.run_until_complete(sessionmanager.close())
-        loop.close()
+    return scheduler
+
+
+async def main():
+    scheduler = init_scheduler()
+    scheduler.start()
+    
+    print("Press Ctrl+{} to exit".format("Break" if os.name == "nt" else "C"))
+    while True:
+        await asyncio.sleep(1000)
 
 
 if __name__ == "__main__":
-    init_scheduler()
+    # Execution will block here until Ctrl+C (Ctrl+Break on Windows) is pressed.
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        pass
