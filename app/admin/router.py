@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 
-from app.admin.dependencies import require_user, validate_update_user
+from app.admin.dependencies import validate_update_user
+from app.dependencies import auth_required, get_user
 from app.admin.schemas import UpdateUserBody
-from app.dependencies import auth_required
 from app.database import get_session
 from app.schemas import UserResponse
 from app.admin import service
@@ -27,7 +27,7 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
 async def update_user(
     body: UpdateUserBody = Depends(validate_update_user),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(require_user),
+    user: User = Depends(get_user),
 ):
     return await service.update_user(session, user, body)
 

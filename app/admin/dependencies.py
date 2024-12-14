@@ -1,27 +1,14 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
-from app.service import get_user_by_username
 from app.admin.schemas import UpdateUserBody
-from app.database import get_session
+from app.dependencies import get_user
 from app.errors import Abort
 from app.models import User
 
 
-async def require_user(
-    username: str, session: AsyncSession = Depends(get_session)
-):
-    user = await get_user_by_username(session, username)
-
-    if user is None:
-        raise Abort("admin", "user-not-found")
-
-    return user
-
-
 async def validate_update_user(
     body: UpdateUserBody,
-    user: User = Depends(require_user),
+    user: User = Depends(get_user),
 ):
     """
     Validate body of the update user request.
