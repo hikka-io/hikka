@@ -86,6 +86,8 @@ def check_user_permissions(user: User, permissions: list):
 
     has_permission = all(
         permission in role_permissions for permission in permissions
+    ) and not any(
+        forbidden in permissions for forbidden in user.forbidden_actions
     )
 
     return has_permission

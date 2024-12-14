@@ -33,6 +33,7 @@ def create_app(init_db: bool = True) -> FastAPI:
         title="Hikka API",
         version="0.4.1",
         openapi_tags=[
+            {"name": "Admin"},
             {"name": "Auth"},
             {"name": "Client"},
             {"name": "User"},
@@ -105,6 +106,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .novel import router as novel_router
     from .watch import router as watch_router
     from .stats import router as stats_router
+    from .admin import router as admin_router
     from .read import router as read_router
     from .user import router as user_router
     from .auth import router as auth_router
@@ -129,6 +131,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(follow_router)
     app.include_router(system_router)
     app.include_router(client_router)
+    app.include_router(admin_router)
     app.include_router(anime_router)
     app.include_router(manga_router)
     app.include_router(novel_router)

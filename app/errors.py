@@ -11,6 +11,10 @@ class ErrorResponse(CustomModel):
 
 
 errors = {
+    "admin": {
+        "nothing-to-update": ["Nothing to update", 400],
+        "user-not-found": ["User not found", 404],
+    },
     "auth": {
         "activation-valid": ["Previous activation token still valid", 400],
         "reset-valid": ["Previous password reset token still valid", 400],

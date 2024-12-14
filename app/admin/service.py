@@ -1,5 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func
+
+from app.admin.schemas import UpdateUserBody
 from app.models import Notification, User
 from app.utils import utcnow
 from app import constants
@@ -70,3 +72,31 @@ async def count_hikka_update_notifications(
             Notification.data.op("->>")("update_name") == update_name
         )
     )
+
+
+async def update_user(session: AsyncSession, user: User, body: UpdateUserBody):
+    if body.forbid_actions is not None:
+        if body.forbid_actions_merge:
+            user.forbidden_actions = list(
+                set(user.forbidden_actions + body.forbid_actions)
+            )
+        else:
+            user.forbidden_actions = body.forbid_actions
+
+    if body.remove_avatar:
+        user.avatar_image_relation.deletion_request = True
+        user.avatar_image_relation = None
+        user.avatar_image_id = None
+
+    if body.description:
+        user.description = body.description
+
+    if body.remove_description:
+        user.description = None
+
+    if body.banned is not None:
+        user.banned = body.banned
+
+    await session.commit()
+
+    return user
