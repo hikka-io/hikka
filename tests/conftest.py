@@ -104,6 +104,16 @@ async def test_session():
 
 
 @pytest.fixture
+async def user_admin(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="admin",
+        email="admin@mail.com",
+        role=constants.ROLE_ADMIN,
+    )
+
+
+@pytest.fixture
 async def test_user(test_session):
     return await helpers.create_user(test_session)
 
@@ -180,6 +190,15 @@ async def test_token(test_user, test_session):
     )
 
     return token.secret
+
+
+@pytest.fixture
+async def token_admin(user_admin, test_session):
+    return (
+        await helpers.create_token(
+            test_session, user_admin.email, "ADMIN_TOKEN_SECRET"
+        )
+    ).secret
 
 
 @pytest.fixture
