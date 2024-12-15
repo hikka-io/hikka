@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 
 from app.models import (
@@ -17,7 +17,7 @@ async def get_user_history_count(session: AsyncSession, user: User) -> int:
 
 async def get_user_history(
     session: AsyncSession, user: User, limit: int, offset: int
-) -> User:
+) -> ScalarResult[History]:
     """Get user history"""
 
     return await session.scalars(
@@ -51,7 +51,7 @@ async def get_following_history_count(
 
 async def get_following_history(
     session: AsyncSession, user_ids: list, limit: int, offset: int
-) -> User:
+) -> ScalarResult[History]:
     """Get following history"""
 
     return await session.scalars(

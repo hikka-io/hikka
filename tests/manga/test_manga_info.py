@@ -24,7 +24,7 @@ async def test_manga_info(
     assert len(response.json()["external"]) == 4
     assert len(response.json()["genres"]) == 6
 
-    assert response.json()["translated_ua"] is False
+    assert response.json()["translated_ua"] is True
     assert response.json()["stats"] == {
         "dropped": 6393,
         "on_hold": 16941,

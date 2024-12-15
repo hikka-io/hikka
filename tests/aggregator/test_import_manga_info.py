@@ -54,6 +54,7 @@ async def test_import_manga_info(
         "external": [],
         "synonyms": [],
         "synopsis_en": None,
+        "translated_ua": False,
     }
 
     assert edit.after == {
@@ -103,4 +104,5 @@ async def test_import_manga_info(
         "bodies with its power. However, their quest for the fated stone "
         "also leads them to unravel far darker secrets than they could ever "
         "imagine.\n\n[Written by MAL Rewrite]",
+        "translated_ua": True,
     }

@@ -107,7 +107,6 @@ async def novel_documents(session: AsyncSession, limit: int, offset: int):
 async def novel_document_ids_delete(session: AsyncSession):
     novel_list = await session.scalars(
         select(Novel)
-        .filter(Novel.media_type != None)  # noqa: E711
         .filter(Novel.deleted == True)  # noqa: E712
         .filter(Novel.needs_search_update == True)  # noqa: E712
     )
@@ -124,9 +123,9 @@ async def novel_document_ids_delete(session: AsyncSession):
 
 async def novel_documents_total(session: AsyncSession):
     return await session.scalar(
-        select(func.count(Novel.id))
-        .filter(Novel.media_type != None)  # noqa: E711
-        .filter(Novel.needs_search_update == True)  # noqa: E712
+        select(func.count(Novel.id)).filter(
+            Novel.needs_search_update == True  # noqa: E712
+        )
     )
 
 

@@ -46,7 +46,9 @@ router = APIRouter(prefix="/settings", tags=["Settings"])
 async def change_description(
     args: DescriptionArgs,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_DESCRIPTION])
+    ),
 ):
     return await service.change_description(session, user, args.description)
 
@@ -59,7 +61,9 @@ async def change_description(
 async def change_password(
     args: PasswordArgs,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_PASSWORD])
+    ),
 ):
     return await service.set_password(session, user, args.password)
 
@@ -72,7 +76,9 @@ async def change_password(
 async def change_username(
     session: AsyncSession = Depends(get_session),
     args: UsernameArgs = Depends(validate_set_username),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_USERNAME])
+    ),
 ):
     return await service.set_username(session, user, args.username)
 
@@ -85,7 +91,9 @@ async def change_username(
 async def change_email(
     session: AsyncSession = Depends(get_session),
     args: EmailArgs = Depends(validate_set_email),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_EMAIL])
+    ),
 ):
     user = await service.set_email(session, user, args.email)
     user = await create_activation_token(session, user)
@@ -110,7 +118,9 @@ async def import_watch(
     args: ImportWatchListArgs,
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
+    ),
 ):
     # Run watch list import in background
     # This task may block event loop so we should keep that in mind
@@ -134,7 +144,9 @@ async def import_read(
     args: ImportReadListArgs,
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
+    ),
 ):
     # Run watch list import in background
     # This task may block event loop so we should keep that in mind
@@ -157,7 +169,9 @@ async def import_read(
 async def change_ignored_notifications(
     args: IgnoredNotificationsArgs,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+    ),
 ):
     return await service.set_ignored_notifications(
         session, user, args.ignored_notifications
@@ -169,7 +183,11 @@ async def change_ignored_notifications(
     response_model=IgnoredNotificationsResponse,
     summary="Get ignored notification types",
 )
-async def get_ignored_notifications(user: User = Depends(auth_required())):
+async def get_ignored_notifications(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
     return user
 
 
@@ -181,7 +199,9 @@ async def get_ignored_notifications(user: User = Depends(auth_required())):
 async def delete_user_image(
     image_type: ImageTypeEnum,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+    ),
 ):
     return await service.delete_user_image(session, user, image_type)
 
@@ -194,7 +214,9 @@ async def delete_user_image(
 async def delete_user_watch(
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
+    ),
 ):
     # Run watch list import in background
     # This task may block event loop so we should keep that in mind
@@ -217,7 +239,9 @@ async def delete_user_read(
     content_type: ReadDeleteContenType,
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
+    ),
 ):
     # Run watch list import in background
     # This task may block event loop so we should keep that in mind

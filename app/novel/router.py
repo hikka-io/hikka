@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User, Novel
+from app import constants
 from . import service
 
 from .dependencies import (
@@ -27,7 +28,7 @@ from app.schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -42,30 +43,29 @@ router = APIRouter(prefix="/novel", tags=["Novel"])
 )
 async def search_novel(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     search: NovelSearchArgs = Depends(validate_search_novel),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    if not search.query:
-        limit, offset = pagination(page, size)
-        total = await service.novel_search_total(session, search)
-        novel = await service.novel_search(
-            session, search, request_user, limit, offset
+    if search.query:
+        return await service.novel_search_query(
+            session,
+            search,
+            request_user,
+            page,
+            size,
         )
 
-        return {
-            "pagination": pagination_dict(total, page, limit),
-            "list": novel.unique().all(),
-        }
-
-    return await service.novel_search_query(
-        session,
-        search,
-        request_user,
-        page,
-        size,
+    limit, offset = pagination(page, size)
+    total = await service.novel_search_total(session, search)
+    novel = await service.novel_search(
+        session, search, request_user, limit, offset
     )
+
+    return paginated_response(novel.unique().all(), total, page, limit)
 
 
 @router.get(
@@ -92,7 +92,4 @@ async def novel_characters(
     total = await service.novel_characters_count(session, novel)
     characters = await service.novel_characters(session, novel, limit, offset)
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": characters.all(),
-    }
+    return paginated_response(characters.all(), total, page, limit)

@@ -1,7 +1,7 @@
+from sqlalchemy import select, desc, asc, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
@@ -35,7 +35,7 @@ async def get_anime_info_by_slug(
     return await session.scalar(
         select(Anime)
         .filter(
-            func.lower(Anime.slug) == slug.lower(),
+            func.lower(Anime.slug) == slug.lower(),  # type: ignore
             Anime.deleted == False,  # noqa: E712
         )
         .options(
@@ -53,7 +53,7 @@ async def get_anime_info_by_slug(
 
 async def anime_characters(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeCharacter]:
+) -> ScalarResult[AnimeCharacter]:
     return await session.scalars(
         select(AnimeCharacter)
         .filter(AnimeCharacter.anime == anime)
@@ -65,7 +65,7 @@ async def anime_characters(
 
 async def anime_staff(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeStaff]:
+) -> ScalarResult[AnimeStaff]:
     return await session.scalars(
         select(AnimeStaff)
         .join(Person, AnimeStaff.person)
@@ -86,7 +86,7 @@ async def anime_episodes_count(session: AsyncSession, anime: Anime) -> int:
 
 async def anime_episodes(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeStaff]:
+) -> ScalarResult[AnimeEpisode]:
     return await session.scalars(
         select(AnimeEpisode)
         .filter(AnimeEpisode.anime == anime)
@@ -146,7 +146,7 @@ async def anime_recommendations(
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[AnimeRecommendation]:
+) -> ScalarResult[Anime]:
     # Load request user watch statuses here
     load_options = [
         joinedload(Anime.watch),

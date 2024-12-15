@@ -1,6 +1,7 @@
+from .auth.auth_token_request import AuthTokenRequest
 from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
-
+from .auth.client import Client
 
 from .user.history import FavouriteAnimeRemoveHistory
 from .user.history import FavouriteMangaRemoveHistory
@@ -89,6 +90,9 @@ from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
+from .article.content import ArticleContent
+from .article.article import Article
+
 from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
@@ -96,8 +100,10 @@ from .schedule.anime import AnimeSchedule
 from .base import Base
 
 __all__ = [
+    "AuthTokenRequest",
     "EmailMessage",
     "AuthToken",
+    "Client",
     "FavouriteAnimeRemoveHistory",
     "FavouriteMangaRemoveHistory",
     "FavouriteNovelRemoveHistory",
@@ -172,6 +178,8 @@ __all__ = [
     "NovelCollectionContent",
     "CollectionContent",
     "Collection",
+    "ArticleContent",
+    "Article",
     "UserEditStats",
     "AnimeSchedule",
     "Base",

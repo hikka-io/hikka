@@ -24,7 +24,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -51,10 +51,7 @@ async def search_companies(
             session, search.type, limit, offset
         )
 
-        return {
-            "pagination": pagination_dict(total, page, limit),
-            "list": companies.all(),
-        }
+        return paginated_response(companies.all(), total, page, limit)
 
     search_filter = []
 
@@ -88,7 +85,4 @@ async def company_anime(
         session, company, args.type, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.all(),
-    }
+    return paginated_response(anime.all(), total, page, limit)

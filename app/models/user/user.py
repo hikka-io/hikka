@@ -39,6 +39,10 @@ class User(Base, NeedsSearchUpdateMixin):
 
     is_followed: Mapped[bool] = query_expression()
 
+    forbidden_actions: Mapped[list[str]] = mapped_column(
+        JSONB, server_default="[]"
+    )
+
     email_messages: Mapped[list["EmailMessage"]] = relationship(
         back_populates="user",
     )

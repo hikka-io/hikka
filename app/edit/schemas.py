@@ -16,9 +16,15 @@ from app.schemas import (
 
 
 # Enums
-class AnimeToDoEnum(str, Enum):
-    synopsis_ua = constants.TODO_ANIME_SYNOPSIS_UA
-    title_ua = constants.TODO_ANIME_TITLE_UA
+class ContentToDoEnum(str, Enum):
+    synopsis_ua = constants.TODO_SYNOPSIS_UA
+    title_ua = constants.TODO_TITLE_UA
+
+
+class EditContentToDoEnum(str, Enum):
+    content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
 
 
 class EditContentTypeEnum(str, Enum):
@@ -81,7 +87,7 @@ class EditSearchArgs(CustomModel):
 
 
 class EditArgs(CustomModel):
-    description: str | None = Field(None, examples=["..."], max_length=420)
+    description: str | None = Field(None, examples=["..."], max_length=2048)
     auto: bool = Field(default=False)
     after: dict
 

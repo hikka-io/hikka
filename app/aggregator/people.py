@@ -21,6 +21,8 @@ async def save_people(session, data):
     add_people = []
 
     for person_data in data:
+        new_image = False
+
         if not (image := image_cache.get(person_data["image"])):
             if person_data["image"]:
                 image = Image(
@@ -33,6 +35,7 @@ async def save_people(session, data):
                 )
 
                 image_cache[person_data["image"]] = image
+                new_image = True
 
         updated = utils.from_timestamp(person_data["updated"])
         slug = utils.slugify(person_data["name_en"], person_data["content_id"])
@@ -40,10 +43,14 @@ async def save_people(session, data):
         if person_data["content_id"] in people_cache:
             person = people_cache[person_data["content_id"]]
 
-            if person.updated == updated:
-                continue
-
-            if person.favorites == person_data["favorites"]:
+            # We only skip if there is nothing to update
+            if all(
+                [
+                    person.updated == updated,
+                    person.favorites == person_data["favorites"],
+                    new_image is False,
+                ]
+            ):
                 continue
 
             person.favorites = person_data["favorites"]

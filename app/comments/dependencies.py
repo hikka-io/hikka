@@ -22,6 +22,7 @@ async def validate_content(
     session: AsyncSession = Depends(get_session),
 ) -> Edit:
     if not (content := await get_content_by_slug(session, content_type, slug)):
+        # TODO: use single error message for content not found
         raise Abort("comment", "content-not-found")
 
     return content
@@ -59,7 +60,10 @@ async def validate_parent(
 async def validate_rate_limit(
     session: AsyncSession = Depends(get_session),
     author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COMMENT_WRITE])
+        auth_required(
+            permissions=[constants.PERMISSION_COMMENT_WRITE],
+            scope=[constants.SCOPE_CREATE_COMMENT],
+        )
     ),
 ):
     comments_limit = 100
@@ -98,7 +102,10 @@ async def validate_comment_not_hidden(
 async def validate_comment_edit(
     comment: Comment = Depends(validate_comment_not_hidden),
     author: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COMMENT_EDIT])
+        auth_required(
+            permissions=[constants.PERMISSION_COMMENT_EDIT],
+            scope=[constants.SCOPE_UPDATE_COMMENT],
+        )
     ),
 ):
     if comment.author != author:
@@ -112,7 +119,7 @@ async def validate_comment_edit(
 
 async def validate_hide(
     comment: Comment = Depends(validate_comment),
-    user: User = Depends(auth_required()),
+    user: User = Depends(auth_required(scope=constants.SCOPE_DELETE_COMMENT)),
 ):
     if comment.hidden:
         raise Abort("comment", "already-hidden")

@@ -12,6 +12,7 @@ from ..base import Base
 from ..mixins import (
     CreatedMixin,
     UpdatedMixin,
+    DeletedMixin,
 )
 
 
@@ -19,6 +20,7 @@ class Collection(
     Base,
     CreatedMixin,
     UpdatedMixin,
+    DeletedMixin,
 ):
     __tablename__ = "service_collections"
 
@@ -37,7 +39,6 @@ class Collection(
     nsfw: Mapped[bool] = mapped_column(default=False)
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]
-    deleted: Mapped[bool]
     entries: Mapped[int]
 
     author_id = mapped_column(ForeignKey("service_users.id"))

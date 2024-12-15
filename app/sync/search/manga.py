@@ -107,7 +107,6 @@ async def manga_documents(session: AsyncSession, limit: int, offset: int):
 async def manga_document_ids_delete(session: AsyncSession):
     manga_list = await session.scalars(
         select(Manga)
-        .filter(Manga.media_type != None)  # noqa: E711
         .filter(Manga.deleted == True)  # noqa: E712
         .filter(Manga.needs_search_update == True)  # noqa: E712
     )
@@ -124,9 +123,9 @@ async def manga_document_ids_delete(session: AsyncSession):
 
 async def manga_documents_total(session: AsyncSession):
     return await session.scalar(
-        select(func.count(Manga.id))
-        .filter(Manga.media_type != None)  # noqa: E711
-        .filter(Manga.needs_search_update == True)  # noqa: E712
+        select(func.count(Manga.id)).filter(
+            Manga.needs_search_update == True  # noqa: E712
+        )
     )
 
 

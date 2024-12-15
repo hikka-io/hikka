@@ -4,9 +4,9 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
-from datetime import timedelta
 from app import constants
 from uuid import UUID
 
@@ -17,6 +17,7 @@ from .schemas import (
 )
 
 from app.models import (
+    CharacterCollectionContent,
     AnimeCollectionContent,
     MangaCollectionContent,
     NovelCollectionContent,
@@ -31,6 +32,7 @@ from app.models import (
     Magazine,
     Company,
     Comment,
+    Client,
     Person,
     Genre,
     Anime,
@@ -104,6 +106,40 @@ async def get_content_by_slug(
     return await session.scalar(query)
 
 
+async def get_content_by_id(
+    session: AsyncSession, content_type: str, content_id: UUID
+):
+    """Return content by content_type and content_id"""
+
+    # Just in case
+    if not is_uuid(content_id):
+        return None
+
+    content_model = content_type_to_content_class[content_type]
+    query = select(content_model)
+
+    # Special case for edit
+    if content_type == constants.CONTENT_SYSTEM_EDIT:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for collection
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COLLECTION:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for comment
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COMMENT:
+        query = query.filter(content_model.id == content_id)
+        query = query.filter(content_model.hidden == False)  # noqa: E712
+
+    # Everything else is handled here
+    else:
+        query = query.filter(content_model.id == content_id)
+
+    return await session.scalar(query)
+
+
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
@@ -143,7 +179,10 @@ async def get_auth_token(
     return await session.scalar(
         select(AuthToken)
         .filter(AuthToken.secret == secret)
-        .options(selectinload(AuthToken.user))
+        .options(
+            selectinload(AuthToken.user),
+            selectinload(AuthToken.client).selectinload(Client.user),
+        )
     )
 
 
@@ -199,6 +238,31 @@ async def create_log(
     await session.commit()
 
     return log
+
+
+async def count_logs(
+    session: AsyncSession,
+    log_type: str,
+    user: User | None = None,
+    target_id: UUID | None = None,
+    start_time: datetime | None = None,
+):
+    """
+    Purpose of this function is to mainly count log to enforce rate limit.
+    """
+
+    query = select(func.count(Log.id)).filter(Log.log_type == log_type)
+
+    if user:
+        query = query.filter(Log.user == user)
+
+    if target_id:
+        query = query.filter(Log.target_id == target_id)
+
+    if start_time:
+        query = query.filter(Log.created > start_time)
+
+    return await session.scalar(query)
 
 
 def anime_loadonly(statement):
@@ -427,6 +491,9 @@ def collections_load_options(
                 NovelRead,
                 NovelRead.user_id == request_user.id if request_user else None,
             ),
+            joinedload(
+                Collection.collection.of_type(CharacterCollectionContent)
+            ).joinedload(CharacterCollectionContent.content),
         )
     )
 

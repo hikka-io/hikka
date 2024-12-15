@@ -1,6 +1,6 @@
+from .schemas import ActivityResponse, UserWithEmailResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
-from .schemas import ActivityResponse
 from app.database import get_session
 from app import meilisearch
 from app.models import User
@@ -23,10 +23,14 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 @router.get(
     "/me",
-    response_model=UserResponse,
+    response_model=UserWithEmailResponse,
     summary="Current user profile",
 )
-async def profile(user: User = Depends(auth_required())):
+async def profile(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
     return user
 
 

@@ -34,7 +34,10 @@ async def process_genres(session, novel, data):
 
 
 def process_translated_ua(data):
-    return False
+    honey_count = len(data["honey"]) if "honey" in data else 0
+    baka_count = len(data["baka"]) if "baka" in data else 0
+
+    return baka_count > 0 or honey_count > 0
 
 
 def process_external(data):
@@ -46,6 +49,23 @@ def process_external(data):
         }
         for entry in data["external"]
     ]
+
+    for source in ["baka", "honey"]:
+        website_name = {
+            "honey": "Honey Manga",
+            "baka": "Бака",
+        }.get(source)
+
+        result.extend(
+            [
+                {
+                    "type": constants.EXTERNAL_READ,
+                    "text": website_name,
+                    "url": entry["url"],
+                }
+                for entry in data.get(source, [])
+            ]
+        )
 
     return result
 

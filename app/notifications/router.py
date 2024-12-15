@@ -3,6 +3,7 @@ from .dependencies import validate_notification
 from app.models import Notification, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import constants
 from . import service
 
 from .schemas import (
@@ -12,7 +13,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -33,7 +34,9 @@ router = APIRouter(prefix="/notifications", tags=["Notifications"])
 )
 async def notifications(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_NOTIFICATION])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -43,10 +46,7 @@ async def notifications(
         session, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": notifications.all(),
-    }
+    return paginated_response(notifications.all(), total, page, limit)
 
 
 @router.get(
@@ -56,7 +56,9 @@ async def notifications(
 )
 async def unseen_notifications_count(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_NOTIFICATION])
+    ),
 ):
     return {"unseen": await service.get_unseen_count(session, user)}
 
@@ -65,6 +67,9 @@ async def unseen_notifications_count(
     "/{notification_reference}/seen",
     response_model=NotificationResponse,
     summary="Mark notification as seen",
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_SEEN_NOTIFICATION])),
+    ],
 )
 async def notification_seen(
     notification: Notification = Depends(validate_notification),

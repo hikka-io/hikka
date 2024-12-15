@@ -1,6 +1,5 @@
 from app.utils import path_to_uuid
 from .schemas import CommentNode
-from datetime import timedelta
 
 
 # Convert uuid reference to comment path
@@ -50,12 +49,3 @@ def build_comments(base_comment, sub_comments):
     calculate_total_replies(tree)
 
     return tree
-
-
-def round_hour(date):
-    return date - timedelta(
-        hours=date.hour % 1,
-        minutes=date.minute,
-        seconds=date.second,
-        microseconds=date.microsecond,
-    )

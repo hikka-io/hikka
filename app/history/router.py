@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User
+from app import constants
 from . import service
 
 
@@ -10,7 +11,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -32,7 +33,11 @@ router = APIRouter(prefix="/history", tags=["History"])
 )
 async def following_history(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_HISTORY, constants.SCOPE_READ_FOLLOW]
+        )
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -43,10 +48,8 @@ async def following_history(
     history = await service.get_following_history(
         session, user_ids, limit, offset
     )
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": history.all(),
-    }
+
+    return paginated_response(history.all(), total, page, limit)
 
 
 @router.get(
@@ -63,7 +66,5 @@ async def user_history(
     limit, offset = pagination(page, size)
     total = await service.get_user_history_count(session, user)
     history = await service.get_user_history(session, user, limit, offset)
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": history.all(),
-    }
+
+    return paginated_response(history.all(), total, page, limit)

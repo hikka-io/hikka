@@ -29,4 +29,5 @@ async def test_me(client, create_test_user, get_test_token):
     # Get own profile
     response = await request_me(client, get_test_token)
     assert response.json()["username"] == "testuser"
+    assert response.json()["email"] == create_test_user.email
     assert response.status_code == status.HTTP_200_OK

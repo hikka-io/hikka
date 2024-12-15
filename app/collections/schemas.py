@@ -1,7 +1,7 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
+from app.utils import is_valid_tag
 from app.utils import check_sort
-from .utils import is_valid_tag
 from app import constants
 from enum import Enum
 
