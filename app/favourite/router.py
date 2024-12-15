@@ -1,4 +1,4 @@
-from app.utils import pagination, pagination_dict
+from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
@@ -109,7 +109,4 @@ async def favourite_list(
         session, content_type, user, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": content.unique().all(),
-    }
+    return paginated_response(content.unique().all(), total, page, limit)

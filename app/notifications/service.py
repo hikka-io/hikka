@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, update, func
+from sqlalchemy import select, desc, update, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import utcnow
 from uuid import UUID
@@ -33,7 +33,7 @@ async def get_user_notifications_count(
 
 async def get_user_notifications(
     session: AsyncSession, user: User, limit: int, offset: int
-) -> User:
+) -> ScalarResult[Notification]:
     """Get user notifications"""
 
     return await session.scalars(

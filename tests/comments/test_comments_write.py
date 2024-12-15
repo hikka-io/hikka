@@ -89,17 +89,23 @@ async def test_comments_write_rate_limit(
     aggregator_anime_info,
     create_test_user,
     get_test_token,
+    mock_utcnow,
 ):
     comments_limit = 100
 
-    for index, _ in enumerate(range(0, comments_limit)):
+    for index, _ in enumerate(range(0, comments_limit + 1)):
         response = await request_comments_write(
             client, get_test_token, "edit", "17", f"{index} comment, yay!"
         )
 
+        # Make sure request prior to the rate limit is good
+        if index == comments_limit - 1:
+            assert response.status_code == status.HTTP_200_OK
+            assert "code" not in response.json()
+
         if index == comments_limit:
-            assert response.status_code == status.HTTP_400_BAD_REQUEST
-            assert response.json()["code"] == "comment:rate-limit"
+            assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+            assert response.json()["code"] == "comment:rate_limit"
 
 
 async def test_comments_write_empty_markdown(

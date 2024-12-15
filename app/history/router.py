@@ -11,7 +11,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -48,10 +48,8 @@ async def following_history(
     history = await service.get_following_history(
         session, user_ids, limit, offset
     )
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": history.all(),
-    }
+
+    return paginated_response(history.all(), total, page, limit)
 
 
 @router.get(
@@ -68,7 +66,5 @@ async def user_history(
     limit, offset = pagination(page, size)
     total = await service.get_user_history_count(session, user)
     history = await service.get_user_history(session, user, limit, offset)
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": history.all(),
-    }
+
+    return paginated_response(history.all(), total, page, limit)

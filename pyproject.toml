@@ -4,10 +4,11 @@ version = "0.3.0"
 description = "Backend service for hikka.io - Ukrainian anime tracker"
 authors = ["Hikka Team"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "0.111.0"
+fastapi = "0.115.6"
 uvicorn = "0.30.6"
 sqlalchemy = "^2.0.20"
 dynaconf = "^3.2.1"
@@ -19,12 +20,12 @@ pytest = "^7.4.0"
 pytest-postgresql = "^5.0.0"
 async-asgi-testclient = "^1.4.11"
 pytest-asyncio = "^0.21.1"
-aiohttp = "3.9.5"
-apscheduler = "^3.10.4"
+aiohttp = "3.10.11"
+apscheduler = "^3.11.0"
 alembic = "^1.11.3"
 greenlet = "^3.0.1"
 aioboto3 = "^12.1.0"
-python-multipart = "0.0.9"
+python-multipart = "0.0.18"
 puremagic = "^1.15"
 imagesize = "^1.4.1"
 sqlalchemy-utils = "^0.41.1"
@@ -34,6 +35,7 @@ gunicorn = "^22.0.0"
 prometheus-fastapi-instrumentator = "^7.0.0"
 pyinstrument = "^4.6.2"
 certifi = "2024.07.04"
+starlette = "0.41.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -25,3 +25,15 @@ async def get_history(
             desc(History.created),
         )
     )
+
+
+async def get_latest_history(
+    session: AsyncSession,
+    user_id: UUID,
+):
+    return await session.scalar(
+        select(History)
+        .filter(History.user_id == user_id)
+        .order_by(desc(History.updated))
+        .limit(1)
+    )

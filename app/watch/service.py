@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow
@@ -186,7 +186,7 @@ async def get_user_watch_list(
     user: User,
     limit: int,
     offset: int,
-) -> list[AnimeWatch]:
+) -> ScalarResult[AnimeWatch]:
     query = select(AnimeWatch).filter(
         AnimeWatch.deleted == False,  # noqa: E712
         AnimeWatch.user == user,

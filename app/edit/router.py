@@ -24,7 +24,7 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -67,10 +67,7 @@ async def get_edits(
     total = await service.count_edits(session, args)
     edits = await service.get_edits(session, args, limit, offset)
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": edits.all(),
-    }
+    return paginated_response(edits.all(), total, page, limit)
 
 
 @router.get("/{edit_id}", response_model=EditResponse)
@@ -167,7 +164,4 @@ async def get_content_edit_todo(
         session, content_type, todo_type, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": content.unique().all(),
-    }
+    return paginated_response(content.unique().all(), total, page, limit)

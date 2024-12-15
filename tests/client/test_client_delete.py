@@ -12,7 +12,7 @@ from tests.client_requests import (
 async def test_client_delete(client, test_token):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
 
     response = await request_client_create(
         client, test_token, name, description, endpoint

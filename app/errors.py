@@ -11,6 +11,10 @@ class ErrorResponse(CustomModel):
 
 
 errors = {
+    "admin": {
+        "nothing-to-update": ["Nothing to update", 400],
+        "user-not-found": ["User not found", 404],
+    },
     "auth": {
         "activation-valid": ["Previous activation token still valid", 400],
         "reset-valid": ["Previous password reset token still valid", 400],
@@ -190,6 +194,7 @@ errors = {
         "content-not-found": ["Content not found", 404],
     },
     "system": {
+        "rate-limit": ["You have reached the rate limit, try later", 429],
         "bad-backup-token": ["Bad backup token", 401],
     },
     "moderation-log": {
@@ -200,6 +205,14 @@ errors = {
         "not-owner": ["User not owner of the client", 400],
         "max-clients": ["Maximum clients reached", 400],
         "not-found": ["Client not found", 404],
+    },
+    "articles": {
+        "bad-category": ["You can't use this category", 400],
+        "author-not-found": ["Author not found", 404],
+        "not-found": ["Article not found", 404],
+    },
+    "content": {
+        "not-found": ["Content not found", 404],
     },
 }
 
