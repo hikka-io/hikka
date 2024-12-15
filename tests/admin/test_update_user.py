@@ -9,7 +9,6 @@ async def test_nothing_to_update(client, test_user, token_admin):
     response = await request_admin_update_user(
         client, token_admin, test_user.username
     )
-    print(response.json())
     assert response.status_code == 400
     assert response.json()["code"] == "admin:nothing_to_update"
 
@@ -19,13 +18,13 @@ async def test_forbid_action(client, test_user, test_token, token_admin):
     response = await request_admin_update_user(
         client, token_admin, test_user.username, forbid_actions
     )
-    print("Admin user update:", response.json())
+
     assert response.status_code == 200
 
     response = await request_client_create(
         client, test_token, "test-client", "test-client", "http://localhost"
     )
-    print("User client create:", response.json())
+
     assert response.status_code == 403
 
 
@@ -44,7 +43,7 @@ async def test_forbid_action_merge(
         forbid_actions,
         forbid_actions_merge=True,
     )
-    print(response.json())
+
     assert response.status_code == 200
 
     await test_session.refresh(test_user)
@@ -64,7 +63,7 @@ async def test_remove_description(client, test_user, token_admin, test_session):
     response = await request_admin_update_user(
         client, token_admin, test_user.username, remove_description=True
     )
-    print(response.json())
+
     assert response.status_code == 200
 
     await test_session.refresh(test_user)
@@ -79,7 +78,7 @@ async def test_ban(client, test_user, token_admin, test_session):
     response = await request_admin_update_user(
         client, token_admin, test_user.username, banned=True
     )
-    print(response.json())
+
     assert response.status_code == 200
 
     await test_session.refresh(test_user)
