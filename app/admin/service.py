@@ -88,6 +88,11 @@ async def update_user(session: AsyncSession, user: User, body: UpdateUserBody):
         user.avatar_image_relation = None
         user.avatar_image_id = None
 
+    if body.remove_cover:
+        user.cover_image_relation.deletion_request = True
+        user.cover_image_relation = None
+        user.cover_image_id = None
+
     if body.description:
         user.description = body.description
 

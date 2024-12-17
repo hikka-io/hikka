@@ -31,6 +31,9 @@ async def validate_update_user(
     if body.remove_avatar and user.avatar_image_id is not None:
         return body
 
+    if body.remove_cover and user.cover_image_id is not None:
+        return body
+
     if body.description is not None and body.description != user.description:
         return body
 
