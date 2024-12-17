@@ -168,7 +168,7 @@ async def create_dummy_user_restricted(test_session):
         test_session,
         username="dummy",
         email="dummy@mail.com",
-        role=constants.ROLE_RESTRICTED,
+        role=constants.ROLE_NOT_ACTIVATED,
     )
 
 
