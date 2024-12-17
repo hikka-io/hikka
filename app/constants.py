@@ -537,4 +537,5 @@ COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
 
 # Articles
+ARTICLE_SYSTEM = "system"
 ARTICLE_NEWS = "news"
