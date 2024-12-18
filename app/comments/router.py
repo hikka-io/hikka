@@ -13,8 +13,9 @@ from .dependencies import (
     validate_comment_edit,
     validate_content_slug,
     validate_rate_limit,
-    validate_parent,
     validate_comment,
+    validate_content,
+    validate_parent,
     validate_hide,
 )
 
@@ -25,6 +26,7 @@ from app.dependencies import (
 )
 
 from .schemas import (
+    CommentableType,
     CommentListResponse,
     CommentResponse,
     ContentTypeEnum,
@@ -38,7 +40,6 @@ router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
 @router.get("/latest", response_model=list[CommentResponse])
-@router.get("/latest/new", response_model=list[CommentResponse])
 async def latest_comments(session: AsyncSession = Depends(get_session)):
     comments = await service.latest_comments(session)
     return [
@@ -48,7 +49,6 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
 
 
 @router.get("/list", response_model=CommentListResponse)
-@router.get("/list/new", response_model=CommentListResponse)
 async def comments_list(
     request_user: User = Depends(
         auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
@@ -77,12 +77,12 @@ async def write_comment(
     args: CommentArgs,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content_id: str = Depends(validate_content_slug),
     parent: Comment | None = Depends(validate_parent),
     author: User = Depends(validate_rate_limit),
+    content: CommentableType = Depends(validate_content),
 ):
     comment = await service.create_comment(
-        session, content_type, content_id, author, args.text, parent
+        session, content_type, content, author, args.text, parent
     )
 
     comment = await service.generate_preview(session, comment)

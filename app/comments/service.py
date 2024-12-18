@@ -1,10 +1,10 @@
+from sqlalchemy import ScalarResult, select, desc, asc, func
+from .schemas import ContentTypeEnum, CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc, func, ScalarResult
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
-from .schemas import ContentTypeEnum
 from sqlalchemy_utils import Ltree
 from .utils import uuid_to_path
 from app.utils import utcnow
@@ -77,7 +77,7 @@ async def get_comment(
 async def create_comment(
     session: AsyncSession,
     content_type: ContentTypeEnum,
-    content_id: str,
+    content: CommentableType,
     author: User,
     text: str,
     parent: Comment | None = None,
@@ -89,7 +89,7 @@ async def create_comment(
     comment = comment_model(
         **{
             "content_type": content_type,
-            "content_id": content_id,
+            "content_id": content.id,
             "text": cleaned_text,
             "private": False,
             "author": author,
@@ -104,7 +104,7 @@ async def create_comment(
     # Here we handle comments for private collections
     if content_type == constants.CONTENT_COLLECTION:
         visibility = await session.scalar(
-            select(Collection.visibility).filter(Collection.id == content_id)
+            select(Collection.visibility).filter(Collection.id == content.id)
         )
 
         if visibility == constants.COLLECTION_PRIVATE:

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_content_by_slug
 from app.dependencies import auth_required
-from app.models import Comment, Edit, User
+from app.models import Comment, User
 from app.database import get_session
 from app.errors import Abort
 from fastapi import Depends
@@ -11,6 +11,7 @@ from app import utils
 from . import service
 
 from .schemas import (
+    CommentableType,
     ContentTypeEnum,
     CommentArgs,
 )
@@ -20,7 +21,7 @@ async def validate_content(
     slug: str,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-) -> Edit:
+) -> CommentableType:
     if not (content := await get_content_by_slug(session, content_type, slug)):
         # TODO: use single error message for content not found
         raise Abort("comment", "content-not-found")
@@ -29,7 +30,7 @@ async def validate_content(
 
 
 async def validate_content_slug(
-    content: Edit = Depends(validate_content),
+    content: CommentableType = Depends(validate_content),
 ) -> str:
     return content.reference
 
@@ -37,7 +38,7 @@ async def validate_content_slug(
 async def validate_parent(
     args: CommentArgs,
     content_type: ContentTypeEnum,
-    content_id: Edit = Depends(validate_content_slug),
+    content_id: str = Depends(validate_content_slug),
     session: AsyncSession = Depends(get_session),
 ) -> Comment | None:
     if not args.parent:
