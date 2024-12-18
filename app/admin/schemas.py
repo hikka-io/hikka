@@ -18,6 +18,9 @@ class UpdateUserBody(DescriptionArgs):
     remove_avatar: bool = Field(
         False, description="Whether to remove user's avatar", examples=[True]
     )
+    remove_cover: bool = Field(
+        False, description="Whether to remove user's cover", examples=[True]
+    )
     remove_description: bool = Field(
         False,
         description="Whether to remove user's description",
