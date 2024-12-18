@@ -8,6 +8,7 @@ from enum import Enum
 class ContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
     content_comment = constants.CONTENT_COMMENT
+    content_article = constants.CONTENT_ARTICLE
 
 
 # Args

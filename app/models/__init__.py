@@ -26,7 +26,6 @@ from .edit.edit import NovelEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
-from .comments.vote import CommentVoteLegacy
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
 from .comments.comment import NovelComment
@@ -80,6 +79,7 @@ from .system.log import Log
 
 from .vote.vote import CollectionVote
 from .vote.vote import CommentVote
+from .vote.vote import ArticleVote
 from .vote.vote import Vote
 
 from .collection.content import CharacterCollectionContent
@@ -129,7 +129,6 @@ __all__ = [
     "MangaComment",
     "NovelComment",
     "EditComment",
-    "CommentVoteLegacy",
     "Comment",
     "CollectionFavourite",
     "CharacterFavourite",
@@ -170,6 +169,7 @@ __all__ = [
     "Log",
     "CollectionVote",
     "CommentVote",
+    "ArticleVote",
     "Vote",
     "CharacterCollectionContent",
     "PersonCollectionContent",
