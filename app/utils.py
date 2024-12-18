@@ -462,7 +462,7 @@ def is_int(string):
 
 def is_uuid(string):
     try:
-        UUID(string)
+        UUID(str(string))
         return True
     except ValueError:
         return False

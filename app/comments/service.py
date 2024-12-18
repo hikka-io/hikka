@@ -3,8 +3,8 @@ from .schemas import ContentTypeEnum, CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
-from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
+from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
 from .utils import uuid_to_path
 from app.utils import utcnow
@@ -15,9 +15,9 @@ import copy
 
 from app.service import (
     get_my_score_subquery,
+    get_content_by_id,
     create_log,
 )
-
 
 from app.models import (
     CollectionContent,
@@ -74,6 +74,12 @@ async def get_comment(
     )
 
 
+async def get_comments_count(session: AsyncSession, content: CommentableType):
+    return await session.scalar(
+        select(func.count(Comment.id).filter(Comment.content_id == content.id))
+    )
+
+
 async def create_comment(
     session: AsyncSession,
     content_type: ContentTypeEnum,
@@ -116,6 +122,11 @@ async def create_comment(
     session.add(comment)
     await session.commit()
 
+    # Update comments count here
+    content.comments_count = await get_comments_count(session, content)
+    session.add(content)
+    await session.commit()
+
     await create_log(
         session,
         constants.LOG_COMMENT_WRITE,
@@ -143,21 +154,6 @@ async def get_comment_by_content(
     )
 
 
-async def count_comments_by_content_id(
-    session: AsyncSession, content_id: str
-) -> int:
-    """Count comments for given content"""
-
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.content_id == content_id,
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
-        )
-    )
-
-
 async def get_comments_by_content_id(
     session: AsyncSession,
     content_id: str,
@@ -165,7 +161,7 @@ async def get_comments_by_content_id(
     limit: int,
     offset: int,
 ) -> ScalarResult[Comment]:
-    """Return comemnts for given content"""
+    """Return comments for given content"""
 
     return await session.scalars(
         select(Comment)
@@ -268,6 +264,15 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     comment.hidden = True
 
     session.add(comment)
+    await session.commit()
+
+    # Update comments count here
+    content = await get_content_by_id(
+        session, comment.content_type, comment.content_id
+    )
+
+    content.comments_count = await get_comments_count(session, content)
+    session.add(content)
     await session.commit()
 
     await create_log(

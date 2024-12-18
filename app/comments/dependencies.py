@@ -29,16 +29,10 @@ async def validate_content(
     return content
 
 
-async def validate_content_slug(
-    content: CommentableType = Depends(validate_content),
-) -> str:
-    return content.reference
-
-
 async def validate_parent(
     args: CommentArgs,
     content_type: ContentTypeEnum,
-    content_id: str = Depends(validate_content_slug),
+    content: CommentableType = Depends(validate_content),
     session: AsyncSession = Depends(get_session),
 ) -> Comment | None:
     if not args.parent:
@@ -46,7 +40,7 @@ async def validate_parent(
 
     if not (
         parent_comment := await service.get_comment_by_content(
-            session, content_type, content_id, args.parent
+            session, content_type, content.id, args.parent
         )
     ):
         raise Abort("comment", "parent-not-found")

@@ -6,7 +6,6 @@ from app import constants
 from uuid import UUID
 
 from app.service import (
-    collection_comments_load_options,
     collections_load_options,
     get_user_by_username,
     create_log,
@@ -210,11 +209,9 @@ async def get_collection(
     request_user: User,
 ):
     collection = await session.scalar(
-        collection_comments_load_options(
-            select(Collection).filter(
-                Collection.deleted == False,  # noqa: E712
-                Collection.id == reference,
-            )
+        select(Collection).filter(
+            Collection.deleted == False,  # noqa: E712
+            Collection.id == reference,
         )
     )
 

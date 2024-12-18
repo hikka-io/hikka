@@ -442,61 +442,35 @@ def build_anime_order_by(sort: list[str]):
 
 
 # Collections stuff
-def get_comments_count_subquery(content_id, content_type):
-    return (
-        select(func.count(Comment.id))
-        .filter(
-            Comment.content_id == content_id,
-            Comment.content_type == content_type,
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
-        )
-        .scalar_subquery()
-    )
-
-
-def collection_comments_load_options(query: Select):
-    return query.options(
-        with_expression(
-            Collection.comments_count,
-            get_comments_count_subquery(
-                Collection.id, constants.CONTENT_COLLECTION
-            ),
-        )
-    )
-
-
 def collections_load_options(
     query: Select, request_user: User | None, preview: bool = False
 ):
     # Yeah, I like it but not sure about performance
-    query = collection_comments_load_options(
-        query.options(
-            joinedload(Collection.collection.of_type(AnimeCollectionContent))
-            .joinedload(AnimeCollectionContent.content)
-            .joinedload(Anime.watch),
-            with_loader_criteria(
-                AnimeWatch,
-                AnimeWatch.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(Collection.collection.of_type(MangaCollectionContent))
-            .joinedload(MangaCollectionContent.content)
-            .joinedload(Manga.read),
-            with_loader_criteria(
-                MangaRead,
-                MangaRead.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(Collection.collection.of_type(NovelCollectionContent))
-            .joinedload(NovelCollectionContent.content)
-            .joinedload(Novel.read),
-            with_loader_criteria(
-                NovelRead,
-                NovelRead.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(
-                Collection.collection.of_type(CharacterCollectionContent)
-            ).joinedload(CharacterCollectionContent.content),
-        )
+    query = query.options(
+        joinedload(Collection.collection.of_type(AnimeCollectionContent))
+        .joinedload(AnimeCollectionContent.content)
+        .joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(Collection.collection.of_type(MangaCollectionContent))
+        .joinedload(MangaCollectionContent.content)
+        .joinedload(Manga.read),
+        with_loader_criteria(
+            MangaRead,
+            MangaRead.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(Collection.collection.of_type(NovelCollectionContent))
+        .joinedload(NovelCollectionContent.content)
+        .joinedload(Novel.read),
+        with_loader_criteria(
+            NovelRead,
+            NovelRead.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(
+            Collection.collection.of_type(CharacterCollectionContent)
+        ).joinedload(CharacterCollectionContent.content),
     )
 
     # Here we load user vote score for collection

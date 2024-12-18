@@ -11,7 +11,6 @@ from . import service
 from .dependencies import (
     validate_comment_not_hidden,
     validate_comment_edit,
-    validate_content_slug,
     validate_rate_limit,
     validate_comment,
     validate_content,
@@ -50,12 +49,12 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
 
 @router.get("/list", response_model=CommentListResponse)
 async def comments_list(
-    request_user: User = Depends(
-        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
-    ),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
 ):
     limit, offset = pagination(page, size)
     total = await service.count_comments(session)
@@ -93,17 +92,17 @@ async def write_comment(
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
 async def get_contents_list(
     session: AsyncSession = Depends(get_session),
-    content_id: str = Depends(validate_content_slug),
+    content: CommentableType = Depends(validate_content),
     request_user: User = Depends(
         auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
     ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
+    total = content.comments_count
     limit, offset = pagination(page, size)
-    total = await service.count_comments_by_content_id(session, content_id)
     base_comments = await service.get_comments_by_content_id(
-        session, content_id, request_user, limit, offset
+        session, content.id, request_user, limit, offset
     )
 
     result = []

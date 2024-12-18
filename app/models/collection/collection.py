@@ -26,8 +26,9 @@ class Collection(
 
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
-    comments_count: Mapped[int] = query_expression()
     my_score: Mapped[int] = query_expression()
+
+    comments_count: Mapped[int] = mapped_column(default=0)
 
     system_ranking: Mapped[float] = mapped_column(index=True, default=0)
     visibility: Mapped[str] = mapped_column(String(16), index=True)
