@@ -341,6 +341,7 @@ PERMISSION_EDIT_CLOSE = "edit:close"
 PERMISSION_EDIT_AUTO = "edit:auto"
 PERMISSION_UPLOAD_AVATAR = "upload:avatar"
 PERMISSION_UPLOAD_COVER = "upload:cover"
+PERMISSION_UPLOAD_ARTICLE_COVER = "upload:article_cover"
 PERMISSION_COMMENT_WRITE = "comment:write"
 PERMISSION_COMMENT_EDIT = "comment:edit"
 PERMISSION_COMMENT_HIDE = "comment:hide"
@@ -426,6 +427,7 @@ ROLES = {
 # Upload types
 UPLOAD_AVATAR = "avatar"
 UPLOAD_COVER = "cover"
+UPLOAD_ARTICLE_COVER = "article_cover"
 
 # Todo types
 TODO_SYNOPSIS_UA = "synopsis_ua"

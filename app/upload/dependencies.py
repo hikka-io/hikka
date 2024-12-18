@@ -27,6 +27,9 @@ async def validate_upload_rate_limit(
     if upload_type == constants.UPLOAD_COVER:
         upload_permissions = [constants.PERMISSION_UPLOAD_COVER]
 
+    if upload_type == constants.UPLOAD_ARTICLE_COVER:
+        upload_permissions = [constants.PERMISSION_UPLOAD_ARTICLE_COVER]
+
     if not upload_permissions:
         raise Abort("upload", "missconfigured-permission")
 
@@ -81,6 +84,10 @@ async def validate_upload_file(
 
     if upload_type == constants.UPLOAD_COVER:
         if width != 1500 or height != 500:
+            raise Abort("upload", "bad-resolution")
+
+    if upload_type == constants.UPLOAD_ARTICLE_COVER:
+        if width != 1260 or height != 300:
             raise Abort("upload", "bad-resolution")
 
     # TODO: add file hash check (?)

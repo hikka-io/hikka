@@ -3,6 +3,7 @@ from app.schemas import PaginationResponse
 from app.utils import is_empty_markdown
 from app.schemas import UserResponse
 from app.schemas import CustomModel
+from app.schemas import datetime_pd
 from app.utils import is_valid_tag
 from app import constants
 from enum import Enum
@@ -57,6 +58,8 @@ class ArticlesListArgs(CustomModel):
 
 # Responses
 class ArticleResponse(CustomModel):
+    created: datetime_pd
+    updated: datetime_pd
     author: UserResponse
     cover: str | None
     tags: list[str]
