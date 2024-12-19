@@ -197,6 +197,9 @@ errors = {
         "rate-limit": ["You have reached the rate limit, try later", 429],
         "bad-backup-token": ["Bad backup token", 401],
     },
+    "moderation-log": {
+        "no-access": ["You do not have permission to access", 400],
+    },
     "client": {
         "already-verified": ["Client is already verified", 400],
         "not-owner": ["User not owner of the client", 400],

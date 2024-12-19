@@ -25,6 +25,8 @@ from .edit.edit import MangaEdit
 from .edit.edit import NovelEdit
 from .edit.edit import Edit
 
+from .moderation.moderation import Moderation
+
 from .comments.comment import CollectionComment
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
@@ -115,6 +117,7 @@ __all__ = [
     "ReadImportHistory",
     "WatchHistory",
     "History",
+    "Moderation",
     "UserOAuth",
     "Follow",
     "User",
