@@ -11,6 +11,7 @@ from enum import Enum
 
 # Enums
 class ArticleCategoryEnum(str, Enum):
+    article_system = constants.ARTICLE_SYSTEM
     article_news = constants.ARTICLE_NEWS
 
 
@@ -61,8 +62,11 @@ class ArticleResponse(CustomModel):
     created: datetime_pd
     updated: datetime_pd
     author: UserResponse
+    comments_count: int
     cover: str | None
     tags: list[str]
+    vote_score: int
+    my_score: int
     category: str
     draft: bool
     title: str

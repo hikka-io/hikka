@@ -25,7 +25,6 @@ from app.utils import (
 )
 
 
-# TODO: check permissions for article categories
 def can_use_category(user: User, category: str):
     available_categories = {
         constants.ROLE_USER: [],
@@ -41,9 +40,14 @@ def can_use_category(user: User, category: str):
 
 async def validate_article(
     slug: str,
+    request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
 ):
-    if not (article := await service.get_article_by_slug(session, slug)):
+    if not (
+        article := await service.get_article_by_slug(
+            session, slug, request_user
+        )
+    ):
         raise Abort("articles", "not-found")
 
     return article

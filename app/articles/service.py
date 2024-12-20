@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import with_expression
 from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
@@ -16,6 +17,7 @@ from app.models import (
 )
 
 from app.service import (
+    get_my_score_subquery,
     get_user_by_username,
     create_log,
 )
@@ -44,12 +46,22 @@ def build_articles_order_by(sort: list[str]):
     return order_by
 
 
-async def get_article_by_slug(session: AsyncSession, slug: str):
+async def get_article_by_slug(
+    session: AsyncSession, slug: str, request_user: User
+):
     return await session.scalar(
         select(Article)
         .filter(Article.slug == slug)
         .filter(Article.deleted == False)  # noqa: E712
         .options(joinedload(Article.author))
+        .options(
+            with_expression(
+                Article.my_score,
+                get_my_score_subquery(
+                    Article, constants.CONTENT_ARTICLE, request_user
+                ),
+            )
+        )
     )
 
 
@@ -284,7 +296,16 @@ async def get_articles(
     offset: int,
 ) -> list[Article]:
     query = await articles_list_filter(
-        select(Article).options(joinedload(Article.author)),
+        select(Article)
+        .options(joinedload(Article.author))
+        .options(
+            with_expression(
+                Article.my_score,
+                get_my_score_subquery(
+                    Article, constants.CONTENT_ARTICLE, request_user
+                ),
+            )
+        ),
         request_user,
         args,
         session,
