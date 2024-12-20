@@ -10,14 +10,14 @@ async def send_system_notification():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        update_name = "hikka_manga_update"
+        update_name = "hikka_snow"
 
         await create_hikka_update_notification(
             session,
             update_name,
-            "Розповідаємо про нові розділи сайту з манґою та ранобе",
-            "Манґа, ранобе та список читання",
-            "https://t.me/hikka_io/25",
+            "Якщо вам не вистачає святкового настрою, то в налаштуваннях кастомізації можна ввімкнути сніжинки!",
+            "Святковий настрій ❄️",
+            "https://hikka.io/settings/customization",
         )
 
     await sessionmanager.close()
