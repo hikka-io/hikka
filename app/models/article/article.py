@@ -1,6 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import query_expression
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -8,6 +7,7 @@ from sqlalchemy.orm import Mapped
 from ..base import Base
 
 from ..mixins import (
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
@@ -20,12 +20,12 @@ class Article(
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    MyScoreMixin,
     SlugMixin,
 ):
     __tablename__ = "service_articles"
 
     comments_count: Mapped[int] = mapped_column(default=0)
-    my_score: Mapped[int] = query_expression()
 
     category: Mapped[str] = mapped_column(String(32), index=True)
     tags: Mapped[list] = mapped_column(JSONB, default=[])

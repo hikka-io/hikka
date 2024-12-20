@@ -98,7 +98,6 @@ from .stats.edits import UserEditStats
 from .schedule.anime import AnimeSchedule
 
 from .base import Base
-from . import events
 
 __all__ = [
     "AuthTokenRequest",
@@ -184,5 +183,4 @@ __all__ = [
     "UserEditStats",
     "AnimeSchedule",
     "Base",
-    "events",
 ]

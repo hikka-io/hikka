@@ -10,6 +10,7 @@ from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
@@ -17,16 +18,16 @@ from ..mixins import (
 
 
 class Collection(
-    Base,
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    Base,
 ):
     __tablename__ = "service_collections"
 
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
-    my_score: Mapped[int] = query_expression()
 
     comments_count: Mapped[int] = mapped_column(default=0)
 
