@@ -1,6 +1,6 @@
-from app.admin.service import create_hikka_update_notification
 from app.database import sessionmanager
 from app.utils import get_settings
+from app.admin import service
 import asyncio
 
 
@@ -12,10 +12,12 @@ async def send_system_notification():
     async with sessionmanager.session() as session:
         update_name = "hikka_snow"
 
-        await create_hikka_update_notification(
+        # await service.delete_hikka_update_notification(session, update_name)
+
+        await service.create_hikka_update_notification(
             session,
             update_name,
-            "Якщо вам не вистачає святкового настрою, то в налаштуваннях кастомізації можна ввімкнути сніжинки!",
+            "В налаштуваннях кастомізації можна ввімкнути сніжинки!",
             "Святковий настрій ❄️",
             "https://hikka.io/settings/customization",
         )

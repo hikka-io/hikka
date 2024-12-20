@@ -62,3 +62,7 @@ class Article(
             return None
 
         return self.cover_image_relation.url
+
+    @hybrid_property
+    def data_type(self):
+        return "article"

@@ -1,6 +1,7 @@
 from pydantic import Field, field_validator
 from app.schemas import PaginationResponse
 from app.utils import is_empty_markdown
+from app.schemas import DataTypeMixin
 from app.schemas import UserResponse
 from app.schemas import CustomModel
 from app.schemas import datetime_pd
@@ -58,7 +59,7 @@ class ArticlesListArgs(CustomModel):
 
 
 # Responses
-class ArticleResponse(CustomModel):
+class ArticleResponse(CustomModel, DataTypeMixin):
     created: datetime_pd
     updated: datetime_pd
     author: UserResponse
