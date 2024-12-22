@@ -86,7 +86,7 @@ async def create_article(
             slug = str(uuid4())
             break
 
-        if not await get_article_by_slug(session, slug):
+        if not await get_article_by_slug(session, slug, user):
             break
 
         attempts += 1
@@ -143,6 +143,9 @@ async def create_article(
             ),
         },
     )
+
+    # Simple hack to init my_score with 0
+    await session.refresh(article)
 
     return article
 
