@@ -15,6 +15,7 @@ from .schemas import (
 from app.service import (
     get_user_by_username,
     get_content_by_slug,
+    get_upload_by_url,
     count_logs,
 )
 
@@ -49,54 +50,6 @@ async def validate_article(
         )
     ):
         raise Abort("articles", "not-found")
-
-    return article
-
-
-async def validate_article_update(
-    args: ArticleArgs,
-    session: AsyncSession = Depends(get_session),
-    article: Article = Depends(validate_article),
-    user: User = Depends(
-        auth_required(
-            permissions=[constants.PERMISSION_ARTICLE_UPDATE],
-            scope=[constants.SCOPE_UPDATE_ARTICLE],
-        )
-    ),
-):
-    if article.author != user:
-        if not check_user_permissions(
-            user, [constants.PERMISSION_ARTICLE_UPDATE_MODERATOR]
-        ):
-            raise Abort("permission", "denied")
-
-    # 1000 article updates per hour should be sensible limit
-    updates_limit = 1000
-    logs_count = await count_logs(
-        session,
-        constants.LOG_ARTICLE_UPDATE,
-        user,
-        start_time=round_datetime(utcnow(), hours=1),
-    )
-
-    if (
-        user.role
-        not in [
-            constants.ROLE_ADMIN,
-            constants.ROLE_MODERATOR,
-        ]
-        and logs_count > updates_limit
-    ):
-        raise Abort("system", "rate-limit")
-
-    # We leave it here for now, maybe change in the future
-    if args.category != article.category:
-        raise Abort("articles", "bad-category")
-
-    # Yeah, this check is pointless considering previous one
-    # But we keep it here just in case
-    if not can_use_category(user, args.category):
-        raise Abort("articles", "bad-category")
 
     return article
 
@@ -151,7 +104,93 @@ async def validate_article_create(
     if not can_use_category(author, args.category):
         raise Abort("articles", "bad-category")
 
+    if args.cover is not None:
+        if not (upload := await get_upload_by_url(session, args.cover)):
+            raise Abort("articles", "cover-not-found")
+
+        if (
+            not upload.image.uploaded
+            or upload.type != constants.UPLOAD_ATTACHMENT
+            or upload.image.deletion_request
+            or upload.user_id != author.id
+            or upload.image.used
+        ):
+            raise Abort("articles", "bad-cover")
+
     return author
+
+
+async def validate_article_update(
+    args: ArticleArgs,
+    session: AsyncSession = Depends(get_session),
+    article: Article = Depends(validate_article),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_ARTICLE_UPDATE],
+            scope=[constants.SCOPE_UPDATE_ARTICLE],
+        )
+    ),
+):
+    # Special flag in case article is being updated by moderator
+    is_moderator = False
+
+    if article.author != user:
+        if not check_user_permissions(
+            user, [constants.PERMISSION_ARTICLE_UPDATE_MODERATOR]
+        ):
+            raise Abort("permission", "denied")
+
+        is_moderator = True
+
+    # 1000 article updates per hour should be sensible limit
+    updates_limit = 1000
+    logs_count = await count_logs(
+        session,
+        constants.LOG_ARTICLE_UPDATE,
+        user,
+        start_time=round_datetime(utcnow(), hours=1),
+    )
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and logs_count > updates_limit
+    ):
+        raise Abort("system", "rate-limit")
+
+    # We leave it here for now, maybe change in the future
+    if args.category != article.category:
+        raise Abort("articles", "bad-category")
+
+    # Yeah, this check is pointless considering previous one
+    # But we keep it here just in case
+    if not can_use_category(user, args.category):
+        raise Abort("articles", "bad-category")
+
+    if args.cover is not None:
+        print(args.cover)
+        if not (upload := await get_upload_by_url(session, args.cover)):
+            raise Abort("articles", "cover-not-found")
+
+        if (
+            not upload.image.uploaded
+            or upload.image.deletion_request
+            or upload.type != constants.UPLOAD_ATTACHMENT
+        ):
+            raise Abort("articles", "bad-cover")
+
+        # Check to allow moderator to change image
+        if not is_moderator and upload.user_id != user.id:
+            raise Abort("articles", "bad-cover")
+
+        # Make sure we let user update his article with same image
+        if upload.image.used and upload.image != article.cover_image:
+            raise Abort("articles", "bad-cover")
+
+    return article
 
 
 async def validate_article_delete(

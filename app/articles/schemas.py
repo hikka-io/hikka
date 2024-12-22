@@ -35,6 +35,7 @@ class ArticleArgs(CustomModel):
     tags: list[str] = Field(max_length=3)
     draft: bool = Field(default=True)
     category: ArticleCategoryEnum
+    cover: str | None = None
 
     @field_validator("tags")
     def validate_tags(cls, tags):

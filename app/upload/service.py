@@ -89,19 +89,19 @@ async def process_upload_file(
     if image.uploaded:
         if upload_type == constants.UPLOAD_AVATAR:
             # Mark old image to be deleted
-            if user.avatar_image_relation:
-                user.avatar_image_relation.deletion_request = True
+            if user.avatar_image:
+                user.avatar_image.deletion_request = True
 
             # Only update image relation if file has been uploaded
-            user.avatar_image_relation = image
+            user.avatar_image = image
 
         if upload_type == constants.UPLOAD_COVER:
             # Mark old image to be deleted
-            if user.cover_image_relation:
-                user.cover_image_relation.deletion_request = True
+            if user.cover_image:
+                user.cover_image.deletion_request = True
 
             # Only update image relation if file has been uploaded
-            user.cover_image_relation = image
+            user.cover_image = image
 
         if upload_type == constants.UPLOAD_ATTACHMENT:
             image.used = False
