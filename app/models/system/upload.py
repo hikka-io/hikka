@@ -10,9 +10,9 @@ from ..base import Base
 class Upload(Base, CreatedMixin):
     __tablename__ = "service_uploads"
 
+    path: Mapped[str] = mapped_column(index=True)
     type: Mapped[str] = mapped_column(String(32))
     mime_type: Mapped[str]
-    path: Mapped[str]
     size: Mapped[int]
 
     user_id = mapped_column(ForeignKey("service_users.id"))

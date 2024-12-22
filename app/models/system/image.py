@@ -10,10 +10,11 @@ class Image(Base, CreatedMixin):
     __tablename__ = "service_images"
 
     deletion_request: Mapped[bool] = mapped_column(default=False)
+    path: Mapped[str] = mapped_column(unique=True, index=True)
     deleted: Mapped[datetime] = mapped_column(nullable=True)
     uploaded: Mapped[bool] = mapped_column(default=False)
     ignore: Mapped[bool] = mapped_column(default=False)
-    path: Mapped[str] = mapped_column(unique=True)
+    used: Mapped[bool] = mapped_column(default=True)
 
     @hybrid_property
     def url(self):

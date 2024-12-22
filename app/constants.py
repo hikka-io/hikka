@@ -428,6 +428,7 @@ ROLES = {
 UPLOAD_AVATAR = "avatar"
 UPLOAD_COVER = "cover"
 UPLOAD_ARTICLE_COVER = "article_cover"
+UPLOAD_ATTACHMENT = "attachment"
 
 # Todo types
 TODO_SYNOPSIS_UA = "synopsis_ua"

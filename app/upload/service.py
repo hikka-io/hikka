@@ -103,6 +103,9 @@ async def process_upload_file(
             # Only update image relation if file has been uploaded
             user.cover_image_relation = image
 
+        if upload_type == constants.UPLOAD_ATTACHMENT:
+            image.used = False
+
     session.add_all([image, upload])
     await session.commit()
 
