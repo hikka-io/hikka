@@ -89,6 +89,12 @@ async def validate_article_update(
     ):
         raise Abort("system", "rate-limit")
 
+    # We leave it here for now, maybe change in the future
+    if args.category != article.category:
+        raise Abort("articles", "bad-category")
+
+    # Yeah, this check is pointless considering previous one
+    # But we keep it here just in case
     if not can_use_category(user, args.category):
         raise Abort("articles", "bad-category")
 
