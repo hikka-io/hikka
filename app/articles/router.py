@@ -81,8 +81,11 @@ async def delete_article(
 
 
 @router.get("/{slug}", response_model=ArticleResponse)
-async def get_article(article: Article = Depends(validate_article)):
-    return article
+async def get_article(
+    article: Article = Depends(validate_article),
+    session: AsyncSession = Depends(get_session),
+):
+    return await service.load_articles_content(session, article)
 
 
 @router.post("", response_model=ArticlesListResponse)
@@ -100,11 +103,14 @@ async def get_articles(
 ):
     limit, offset = pagination(page, size)
     total = await service.get_articles_count(session, request_user, args)
+
     articles = await service.get_articles(
         session, request_user, args, limit, offset
     )
 
+    articles = await service.load_articles_content(session, articles.all())
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": articles.unique().all(),
+        "list": articles,
     }
