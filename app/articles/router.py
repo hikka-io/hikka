@@ -20,6 +20,7 @@ from app.models import (
 
 from .schemas import (
     ArticlesListResponse,
+    ArticleCategoryEnum,
     ArticlesListArgs,
     ArticleResponse,
     ArticleArgs,
@@ -85,8 +86,9 @@ async def get_article(article: Article = Depends(validate_article)):
     return article
 
 
-@router.post("", response_model=ArticlesListResponse)
+@router.post("/{category}", response_model=ArticlesListResponse)
 async def get_articles(
+    category: ArticleCategoryEnum,
     args: ArticlesListArgs = Depends(validate_articles_list_args),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
@@ -99,10 +101,12 @@ async def get_articles(
     ),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_articles_count(session, request_user, args)
+    total = await service.get_articles_count(
+        session, request_user, args, category
+    )
 
     articles = await service.get_articles(
-        session, request_user, args, limit, offset
+        session, request_user, args, category, limit, offset
     )
 
     articles = await service.load_articles_content(session, articles.all())

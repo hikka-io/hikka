@@ -19,6 +19,7 @@ from app.models import (
 from app.service import (
     get_my_score_subquery,
     get_user_by_username,
+    get_content_by_slug,
     get_upload_by_url,
     create_log,
 )
@@ -32,6 +33,7 @@ from .schemas import (
 def build_articles_order_by(sort: list[str]):
     # TODO: Unified function for this stuff
     order_mapping = {
+        "vote_score": Article.vote_score,
         "created": Article.created,
     }
 
@@ -141,6 +143,8 @@ async def create_article(
 
     # Simple hack to init my_score with 0
     await session.refresh(article)
+
+    await load_articles_content(session, article)
 
     return article
 
@@ -256,9 +260,25 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
 async def articles_list_filter(
     query: Select,
     request_user: User | None,
+    category: str,
     args: ArticlesListArgs,
     session: AsyncSession,
 ):
+    query = query.filter(Article.category == category)
+
+    if len(args.tags) > 0:
+        query = query.filter(Article.tags.contains(args.tags))
+
+    if args.content_type:
+        query = query.filter(Article.content_type == args.content_type)
+
+    if args.content_slug:
+        content = await get_content_by_slug(
+            session, args.content_type, args.content_slug
+        )
+
+        query = query.filter(Article.content_id == content.id)
+
     if args.author:
         author = await get_user_by_username(session, args.author)
         query = query.filter(Article.author == author)
@@ -269,6 +289,9 @@ async def articles_list_filter(
             Article.draft == True,  # noqa: E712
         )
 
+    else:
+        query = query.filter(Article.draft == False)  # noqa: E712
+
     query = query.filter(
         Article.deleted == False,  # noqa: E712
     )
@@ -277,11 +300,15 @@ async def articles_list_filter(
 
 
 async def get_articles_count(
-    session: AsyncSession, request_user: User | None, args: ArticlesListArgs
+    session: AsyncSession,
+    request_user: User | None,
+    args: ArticlesListArgs,
+    category: str,
 ) -> int:
     query = await articles_list_filter(
         select(func.count(Article.id)),
         request_user,
+        category,
         args,
         session,
     )
@@ -293,6 +320,7 @@ async def get_articles(
     session: AsyncSession,
     request_user: User | None,
     args: ArticlesListArgs,
+    category: str,
     limit: int,
     offset: int,
 ) -> list[Article]:
@@ -308,6 +336,7 @@ async def get_articles(
             )
         ),
         request_user,
+        category,
         args,
         session,
     )

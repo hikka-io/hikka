@@ -1,6 +1,7 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
 from app.utils import is_valid_tag
+from app.utils import check_sort
 from app import constants
 from enum import Enum
 
@@ -59,10 +60,22 @@ class ArticleArgs(CustomModel):
 
 
 class ArticlesListArgs(CustomModel):
-    # content_type: ContentTypeEnum | None = None
+    content_type: ArticleContentEnum | None = None
+    tags: list[str] = Field([], max_length=3)  # TODO: tags mixin
     sort: list[str] = ["created:desc"]
+    content_slug: str | None = None
     author: str | None = None
     draft: bool = False
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return check_sort(
+            sort_list,
+            [
+                "vote_score",
+                "created",
+            ],
+        )
 
 
 # Responses

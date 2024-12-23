@@ -212,4 +212,9 @@ async def validate_articles_list_args(
     if args.author and not await get_user_by_username(session, args.author):
         raise Abort("articles", "author-not-found")
 
+    if args.content_slug and not await get_content_by_slug(
+        session, args.content_type, args.content_slug
+    ):
+        raise Abort("content", "not-found")
+
     return args
