@@ -42,6 +42,9 @@ class ArticleArgs(CustomModel):
 
     @field_validator("tags")
     def validate_tags(cls, tags):
+        # Removing duplicates
+        tags = list(set(tags))
+
         if not all([is_valid_tag(tag) for tag in tags]):
             raise ValueError("Invalid tag")
 
