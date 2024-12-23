@@ -8,7 +8,6 @@ from app import constants
 from uuid import uuid4
 
 from app.models import (
-    ArticleContent,
     Article,
     Anime,
     Manga,
@@ -112,18 +111,11 @@ async def create_article(
         }
     )
 
-    session.add(article)
-
     if content:
-        article_content = ArticleContent(
-            **{
-                "content_type": args.content.content_type,
-                "content_id": content.id,
-                "article": article,
-            }
-        )
+        article.content_type = args.content.content_type
+        article.content_id = content.id
 
-        session.add(article_content)
+    session.add(article)
 
     await session.commit()
 
@@ -133,20 +125,14 @@ async def create_article(
         user,
         article.id,
         {
-            "cover": upload_image.path if upload_image else None,
-            "category": args.category,
-            "draft": args.draft,
-            "title": args.title,
-            "text": args.text,
-            "tags": args.tags,
-            "content": (
-                {
-                    "content_type": args.content.content_type,
-                    "content_id": content.reference,
-                }
-                if content
-                else None
-            ),
+            "cover": upload.image.path if upload else None,
+            "content_type": article.content_type,
+            "content_id": article.reference,
+            "category": article.category,
+            "draft": article.draft,
+            "title": article.title,
+            "text": article.text,
+            "tags": article.tags,
         },
     )
 
@@ -175,56 +161,33 @@ async def update_article(
             setattr(article, key, new_value)
             after[key] = new_value
 
-    delete_old_content = False
-    add_new_content = False
+    # Content being removed from the article
+    if content is None and article.content_id is not None:
+        before["content_type"] = article.content_type
+        before["content_id"] = str(article.content_id)
 
-    # Get old content
-    # TODO: find better way to handle this
-    old_article_content = await session.scalar(
-        select(ArticleContent).filter(ArticleContent.article_id == article.id)
-    )
+        article.content_type = None
+        article.content_id = None
 
-    if old_article_content:
-        if content:
-            if old_article_content.content_id != content.id:
-                delete_old_content = True
-                add_new_content = True
+        after["content_type"] = None
+        after["content_id"] = None
 
+    if content:
+        # New content being added to article
+        if article.content_id is None:
+            before["content_type"] = None
+            before["content_id"] = None
+
+        # Convent being replaced in article
         else:
-            delete_old_content = True
+            before["content_type"] = article.content_type
+            before["content_id"] = str(article.content_id)
 
-    if not old_article_content and content:
-        add_new_content = True
+        article.content_type = args.content.content_type
+        article.content_id = content.id
 
-    if delete_old_content:
-        before["content"] = {
-            "content_type": old_article_content.content_type,
-            "content_id": str(old_article_content.content_id),
-        }
-
-        # Here we set after content to none
-        # If add_new_content is False it will stay this way
-        after["content"] = None
-
-        # Delete old article content to keep things clean
-        await session.delete(old_article_content)
-
-    # And create new content if needed
-    if add_new_content:
-        article_content = ArticleContent(
-            **{
-                "content_type": args.content.content_type,
-                "content_id": content.id,
-                "article": article,
-            }
-        )
-
-        after["content"] = {
-            "content_type": args.content.content_type,
-            "content_id": content.reference,
-        }
-
-        session.add(article_content)
+        after["content_type"] = article.content_type
+        after["content_id"] = str(article.content_id)
 
     # If used decided to delete cover, we handle it here
     if args.cover is None and article.cover_image:

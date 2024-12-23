@@ -5,6 +5,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from ..base import Base
+from uuid import UUID
 
 from ..mixins import (
     MyScoreMixin,
@@ -37,8 +38,8 @@ class Article(
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(foreign_keys=[author_id])
 
-    # TODO: cascade delete
-    content = relationship("ArticleContent", back_populates="article")
+    content_type: Mapped[str] = mapped_column(index=True, nullable=True)
+    content_id: Mapped[UUID] = mapped_column(index=True, nullable=True)
 
     cover_image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"),
