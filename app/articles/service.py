@@ -50,7 +50,7 @@ def build_articles_order_by(sort: list[str]):
 async def get_article_by_slug(
     session: AsyncSession, slug: str, request_user: User
 ):
-    return await session.scalar(
+    article = await session.scalar(
         select(Article)
         .filter(Article.slug == slug)
         .filter(Article.deleted == False)  # noqa: E712
@@ -64,6 +64,8 @@ async def get_article_by_slug(
             )
         )
     )
+
+    return await load_articles_content(session, article)
 
 
 async def create_article(

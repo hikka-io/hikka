@@ -81,11 +81,8 @@ async def delete_article(
 
 
 @router.get("/{slug}", response_model=ArticleResponse)
-async def get_article(
-    article: Article = Depends(validate_article),
-    session: AsyncSession = Depends(get_session),
-):
-    return await service.load_articles_content(session, article)
+async def get_article(article: Article = Depends(validate_article)):
+    return article
 
 
 @router.post("", response_model=ArticlesListResponse)
