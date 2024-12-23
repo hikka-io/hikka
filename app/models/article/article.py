@@ -1,6 +1,6 @@
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy import String, ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import ForeignKey, String, Index
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -25,11 +25,18 @@ class Article(
     SlugMixin,
 ):
     __tablename__ = "service_articles"
+    __table_args__ = (
+        Index(
+            "idx_article_tags_gin",
+            "tags",
+            postgresql_using="gin",
+        ),
+    )
 
     comments_count: Mapped[int] = mapped_column(default=0)
 
     category: Mapped[str] = mapped_column(String(32), index=True)
-    tags: Mapped[list] = mapped_column(JSONB, default=[])
+    tags: Mapped[list[str]] = mapped_column(ARRAY(String))
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]

@@ -1,11 +1,10 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import ForeignKey, String, Index
 from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
 from datetime import datetime
 from ..base import Base
 
@@ -25,6 +24,13 @@ class Collection(
     Base,
 ):
     __tablename__ = "service_collections"
+    __table_args__ = (
+        Index(
+            "idx_collection_tags_gin",
+            "tags",
+            postgresql_using="gin",
+        ),
+    )
 
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
