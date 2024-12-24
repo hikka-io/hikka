@@ -24,6 +24,7 @@ from .schemas import (
     ArticlesListArgs,
     ArticleResponse,
     ArticleArgs,
+    TagResponse,
 )
 
 from .dependencies import (
@@ -79,6 +80,11 @@ async def delete_article(
 ):
     await service.delete_article(session, article, user)
     return {"success": True}
+
+
+@router.get("/tags", response_model=list[TagResponse])
+async def get_article_tags(session: AsyncSession = Depends(get_session)):
+    return await service.get_article_tags(session)
 
 
 @router.get("/{slug}", response_model=ArticleResponse)

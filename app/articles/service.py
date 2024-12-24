@@ -471,3 +471,12 @@ async def load_articles_content(
                 article.content = None
 
     return articles[0] if single_input else articles
+
+
+async def get_article_tags(session: AsyncSession):
+    return await session.scalars(
+        select(ArticleTag)
+        .filter(ArticleTag.content_count > 0)
+        .order_by(ArticleTag.content_count, ArticleTag.name.asc())
+        .limit(10)
+    )
