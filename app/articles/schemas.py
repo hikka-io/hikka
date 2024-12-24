@@ -79,6 +79,11 @@ class ArticlesListArgs(CustomModel):
 
 
 # Responses
+class TagResponse(CustomModel):
+    content_count: int
+    name: str
+
+
 class ArticleContentResponse(CustomModel, DataTypeMixin):
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     title_ja: str | None
@@ -89,12 +94,13 @@ class ArticleContentResponse(CustomModel, DataTypeMixin):
 
 class ArticleResponse(CustomModel, DataTypeMixin):
     content: ArticleContentResponse | None
+    tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
     author: UserResponse
     comments_count: int
     cover: str | None
-    tags: list[str]
+    # tags: list[str]
     vote_score: int
     my_score: int
     category: str

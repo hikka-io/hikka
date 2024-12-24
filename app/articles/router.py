@@ -109,7 +109,9 @@ async def get_articles(
         session, request_user, args, category, limit, offset
     )
 
-    articles = await service.load_articles_content(session, articles.all())
+    articles = await service.load_articles_content(
+        session, articles.unique().all()
+    )
 
     return {
         "pagination": pagination_dict(total, page, limit),

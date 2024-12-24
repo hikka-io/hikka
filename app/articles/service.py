@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, asc, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc, func
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
@@ -9,6 +9,7 @@ from app import constants
 from uuid import uuid4
 
 from app.models import (
+    ArticleTag,
     Article,
     Anime,
     Manga,
@@ -28,6 +29,23 @@ from .schemas import (
     ArticlesListArgs,
     ArticleArgs,
 )
+
+
+async def get_or_create_tag(session: AsyncSession, name: str):
+    if not (
+        tag := await session.scalar(
+            select(ArticleTag).filter(ArticleTag.name == name)
+        )
+    ):
+        tag = ArticleTag(
+            **{
+                "content_count": 0,
+                "name": name,
+            }
+        )
+        session.add(tag)
+
+    return tag
 
 
 def build_articles_order_by(sort: list[str]):
@@ -57,6 +75,7 @@ async def get_article_by_slug(
         .filter(Article.slug == slug)
         .filter(Article.deleted == False)  # noqa: E712
         .options(joinedload(Article.author))
+        .options(joinedload(Article.tags))
         .options(
             with_expression(
                 Article.my_score,
@@ -99,6 +118,15 @@ async def create_article(
     if upload := await get_upload_by_url(session, args.cover):
         upload.image.used = True
 
+    tags = []
+
+    for name in args.tags:
+        tag = await get_or_create_tag(session, name)
+        tag.content_count += 1
+        tags.append(tag)
+
+    await update_tag_content_counts(session)
+
     article = Article(
         **{
             "cover_image": upload.image if upload else None,
@@ -106,12 +134,12 @@ async def create_article(
             "draft": args.draft,
             "title": args.title,
             "text": args.text,
-            "tags": args.tags,
             "deleted": False,
             "vote_score": 0,
             "author": user,
             "created": now,
             "updated": now,
+            "tags": tags,
             "slug": slug,
         }
     )
@@ -137,7 +165,7 @@ async def create_article(
             "draft": article.draft,
             "title": article.title,
             "text": article.text,
-            "tags": article.tags,
+            "tags": args.tags,
         },
     )
 
@@ -159,7 +187,7 @@ async def update_article(
     before = {}
     after = {}
 
-    for key in ["category", "draft", "title", "text", "tags"]:
+    for key in ["category", "draft", "title", "text"]:
         old_value = getattr(article, key)
         new_value = getattr(args, key)
 
@@ -222,6 +250,29 @@ async def update_article(
             article.cover_image = upload.image
             upload.image.used = True
 
+    # Update tags
+    # TODO: we probably should do that in sync to prevent inconsistencies
+    old_tags = article.tags
+    new_tags = []
+
+    for name in args.tags:
+        tag = await get_or_create_tag(session, name)
+        new_tags.append(tag)
+
+    old_tag_names = set([tag.name for tag in old_tags])
+    new_tag_names = set([tag.name for tag in new_tags])
+
+    if old_tag_names != new_tag_names:
+        before["tags"] = list(old_tag_names)
+        after["tags"] = list(new_tag_names)
+        article.tags = new_tags
+
+        for tag in old_tags:
+            tag.content_count -= 1
+
+        for tag in new_tags:
+            tag.content_count += 1
+
     article.updated = utcnow()
     session.add(article)
     await session.commit()
@@ -267,7 +318,14 @@ async def articles_list_filter(
     query = query.filter(Article.category == category)
 
     if len(args.tags) > 0:
-        query = query.filter(Article.tags.contains(args.tags))
+        query = query.filter(
+            and_(
+                *[
+                    Article.tags.any(ArticleTag.name == name)
+                    for name in args.tags
+                ]
+            )
+        )
 
     if args.content_type:
         query = query.filter(Article.content_type == args.content_type)
