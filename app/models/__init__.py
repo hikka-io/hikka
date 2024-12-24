@@ -96,6 +96,9 @@ from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
 
+from .tag.tag import ArticleTag
+from .tag.tag import Tag
+
 from .base import Base
 
 __all__ = [
@@ -180,5 +183,7 @@ __all__ = [
     "Article",
     "UserEditStats",
     "AnimeSchedule",
+    "ArticleTag",
+    "Tag",
     "Base",
 ]
