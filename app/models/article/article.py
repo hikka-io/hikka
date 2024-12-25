@@ -28,6 +28,9 @@ class Article(
 
     comments_count: Mapped[int] = mapped_column(default=0)
 
+    # In community we trust (but it's nice to have some control)
+    trusted: Mapped[bool] = mapped_column(default=False)
+
     category: Mapped[str] = mapped_column(String(32), index=True)
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
