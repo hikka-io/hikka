@@ -61,9 +61,11 @@ class ArticleArgs(CustomModel):
 
 class ArticlesListArgs(CustomModel):
     content_type: ArticleContentEnum | None = None
-    tags: list[str] = Field([], max_length=3)  # TODO: tags mixin
+    tags: list[str] = Field([], max_length=3)  # TODO: tags mixin (?)
+    min_vote_score: int | None = Field(0, min=0)
     sort: list[str] = ["created:desc"]
     content_slug: str | None = None
+    show_trusted: bool = True
     author: str | None = None
     draft: bool = False
 
@@ -100,10 +102,10 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     author: UserResponse
     comments_count: int
     cover: str | None
-    # tags: list[str]
     vote_score: int
     my_score: int
     category: str
+    trusted: bool
     draft: bool
     title: str
     text: str

@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, asc, and_, func
+from sqlalchemy import select, desc, asc, and_, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -319,6 +319,17 @@ async def articles_list_filter(
     session: AsyncSession,
 ):
     query = query.filter(Article.category == category)
+
+    if args.show_trusted is True and args.min_vote_score is not None:
+        query = query.filter(
+            or_(
+                Article.vote_score >= args.min_vote_score,
+                Article.trusted == True,  # noqa: E712
+            )
+        )
+
+    if args.show_trusted is False and args.min_vote_score is not None:
+        query = query.filter(Article.vote_score >= args.min_vote_score)
 
     if len(args.tags) > 0:
         query = query.filter(
