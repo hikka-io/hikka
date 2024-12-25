@@ -117,6 +117,11 @@ async def validate_article_create(
         ):
             raise Abort("articles", "bad-cover")
 
+    if args.trusted and not check_user_permissions(
+        author, [constants.PERMISSION_ARTICLE_TRUSTED]
+    ):
+        raise Abort("articles", "not-trusted")
+
     return author
 
 
@@ -189,6 +194,11 @@ async def validate_article_update(
         # Make sure we let user update his article with same image
         if upload.image.used and upload.image != article.cover_image:
             raise Abort("articles", "bad-cover")
+
+    if args.trusted and not check_user_permissions(
+        user, [constants.PERMISSION_ARTICLE_TRUSTED]
+    ):
+        raise Abort("articles", "not-trusted")
 
     return article
 

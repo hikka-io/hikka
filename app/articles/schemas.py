@@ -40,6 +40,7 @@ class ArticleArgs(CustomModel):
     draft: bool = Field(default=True)
     category: ArticleCategoryEnum
     cover: str | None = None
+    trusted: bool = False
 
     @field_validator("tags")
     def validate_tags(cls, tags):
