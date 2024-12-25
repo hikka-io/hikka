@@ -63,7 +63,7 @@ class ArticleArgs(CustomModel):
 class ArticlesListArgs(CustomModel):
     content_type: ArticleContentEnum | None = None
     tags: list[str] = Field([], max_length=3)  # TODO: tags mixin (?)
-    min_vote_score: int | None = Field(0, min=0)
+    min_vote_score: int | None = Field(0, ge=0)
     sort: list[str] = ["created:desc"]
     content_slug: str | None = None
     show_trusted: bool = True
