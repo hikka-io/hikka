@@ -11,7 +11,7 @@ from datetime import datetime
 class MyScoreMixin:
     @declared_attr
     def my_score(cls):
-        return query_expression(default_expr=0, expire_on_flush=False)
+        return query_expression(expire_on_flush=False)
 
 
 class DeletedMixin:
