@@ -82,9 +82,11 @@ async def delete_article(
     return {"success": True}
 
 
-@router.get("/tags", response_model=list[TagResponse])
-async def get_article_tags(session: AsyncSession = Depends(get_session)):
-    return await service.get_article_tags(session)
+@router.get("/tags/{category}", response_model=list[TagResponse])
+async def get_article_tags(
+    category: str, session: AsyncSession = Depends(get_session)
+):
+    return await service.get_article_tags(session, category)
 
 
 @router.get("/{slug}", response_model=ArticleResponse)

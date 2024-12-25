@@ -31,15 +31,19 @@ from .schemas import (
 )
 
 
-async def get_or_create_tag(session: AsyncSession, name: str):
+async def get_or_create_tag(session: AsyncSession, name: str, category: str):
     if not (
         tag := await session.scalar(
-            select(ArticleTag).filter(ArticleTag.name == name)
+            select(ArticleTag).filter(
+                ArticleTag.name == name,
+                ArticleTag.category == category,
+            )
         )
     ):
         tag = ArticleTag(
             **{
                 "content_count": 0,
+                "category": category,
                 "name": name,
             }
         )
@@ -121,11 +125,9 @@ async def create_article(
     tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name)
+        tag = await get_or_create_tag(session, name, args.category)
         tag.content_count += 1
         tags.append(tag)
-
-    await update_tag_content_counts(session)
 
     article = Article(
         **{
@@ -256,7 +258,7 @@ async def update_article(
     new_tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name)
+        tag = await get_or_create_tag(session, name, article.category)
         new_tags.append(tag)
 
     old_tag_names = set([tag.name for tag in old_tags])
@@ -473,10 +475,13 @@ async def load_articles_content(
     return articles[0] if single_input else articles
 
 
-async def get_article_tags(session: AsyncSession):
+async def get_article_tags(session: AsyncSession, category: str):
     return await session.scalars(
         select(ArticleTag)
-        .filter(ArticleTag.content_count > 0)
+        .filter(
+            ArticleTag.content_count > 0,
+            ArticleTag.category == category,
+        )
         .order_by(ArticleTag.content_count, ArticleTag.name.asc())
         .limit(10)
     )

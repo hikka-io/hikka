@@ -13,6 +13,7 @@ class Tag(Base):
     }
 
     content_count: Mapped[int] = mapped_column(default=0, index=True)
+    category: Mapped[str] = mapped_column(index=True)
     name: Mapped[str] = mapped_column(index=True)
     content_type: Mapped[str]
 
