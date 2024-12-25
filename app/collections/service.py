@@ -228,7 +228,6 @@ async def get_collection(
 async def get_collection_display(
     session: AsyncSession, collection: Collection, request_user: User
 ):
-    print(collection.my_score)
     query = select(Collection).filter(Collection.id == collection.id)
     return await session.scalar(
         collections_load_options(query, request_user).order_by(
