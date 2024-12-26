@@ -186,6 +186,7 @@ async def create_article(
 
     # Simple hack to init my_score with 0
     # TODO: fixme!!!
+    article.author.is_followed = False
     article.my_score = 0
 
     await load_articles_content(session, article)

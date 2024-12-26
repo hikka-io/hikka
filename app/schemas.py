@@ -522,8 +522,8 @@ class CollectionContentResponse(CustomModel):
 
 class CollectionResponse(CustomModel, DataTypeMixin):
     visibility: CollectionVisibilityEnum
+    author: FollowUserResponse
     labels_order: list[str]
-    author: UserResponse
     created: datetime_pd
     updated: datetime_pd
     comments_count: int

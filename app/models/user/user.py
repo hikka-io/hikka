@@ -37,7 +37,7 @@ class User(Base, NeedsSearchUpdateMixin):
     created: Mapped[datetime]
     login: Mapped[datetime]
 
-    is_followed: Mapped[bool] = query_expression()
+    is_followed: Mapped[bool] = query_expression(expire_on_flush=False)
 
     forbidden_actions: Mapped[list[str]] = mapped_column(
         JSONB, server_default="[]"

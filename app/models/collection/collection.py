@@ -52,7 +52,6 @@ class Collection(
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
         foreign_keys=[author_id],
-        lazy="joined",
     )
 
     collection: Mapped[list["CollectionContent"]] = relationship(
