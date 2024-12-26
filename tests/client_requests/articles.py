@@ -19,3 +19,16 @@ def request_delete_article(client, slug, token):
         f"/articles/{slug}",
         headers={"Auth": token},
     )
+
+
+def request_articles(client, category, filters={}, page=1, size=15, token=None):
+    headers = {"Auth": token} if token else {}
+    return client.post(
+        f"/articles/{category}?page={page}&size={size}",
+        json=filters,
+        headers=headers,
+    )
+
+
+def request_article_tags(client, category):
+    return client.get(f"/articles/tags/{category}")

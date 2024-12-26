@@ -358,7 +358,7 @@ async def articles_list_filter(
         author = await get_user_by_username(session, args.author)
         query = query.filter(Article.author == author)
 
-    if args.draft and request_user:
+    if args.draft:
         query = query.filter(
             Article.author == request_user,
             Article.draft == True,  # noqa: E712
@@ -497,6 +497,6 @@ async def get_article_tags(session: AsyncSession, category: str):
             ArticleTag.content_count > 0,
             ArticleTag.category == category,
         )
-        .order_by(ArticleTag.content_count, ArticleTag.name.asc())
+        .order_by(ArticleTag.content_count.desc(), ArticleTag.name.asc())
         .limit(10)
     )
