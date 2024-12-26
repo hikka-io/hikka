@@ -16,6 +16,8 @@ from .aggregator.roles import aggregator_roles
 
 from .notifications import update_notifications
 
+from .stats import update_stats
+
 from .activity import update_activity
 
 from .ranking import update_ranking_all
@@ -35,7 +37,6 @@ from .schedule import update_schedule
 from .content import update_content
 
 from .email import send_emails
-
 
 __all__ = [
     "delete_expired_token_requests",
@@ -63,5 +64,6 @@ __all__ = [
     "update_weights",
     "update_sitemap",
     "update_search",
+    "update_stats",
     "send_emails",
 ]
