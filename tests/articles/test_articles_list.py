@@ -1,5 +1,5 @@
 from client_requests import request_create_article
-from client_requests import request_article_tags
+from client_requests import request_article_top
 from client_requests import request_articles
 from app.models import Article
 from sqlalchemy import select
@@ -144,15 +144,16 @@ async def test_articles_list(
     assert response.json()["pagination"]["total"] == 1
 
     # Check tags top
-    response = await request_article_tags(client, "news")
+    response = await request_article_top(client, "news")
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 5
+    tags = response.json()["tags"]
+    assert len(tags) == 5
 
-    assert response.json()[0]["name"] == "tag"
-    assert response.json()[0]["content_count"] == 3
+    assert tags[0]["name"] == "tag"
+    assert tags[0]["content_count"] == 3
 
-    assert response.json()[1]["name"] == "interesting"
-    assert response.json()[1]["content_count"] == 2
+    assert tags[1]["name"] == "interesting"
+    assert tags[1]["content_count"] == 2
 
-    assert response.json()[2]["name"] == "blah"
-    assert response.json()[2]["content_count"] == 1
+    assert tags[2]["name"] == "blah"
+    assert tags[2]["content_count"] == 1

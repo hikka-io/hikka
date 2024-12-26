@@ -30,5 +30,5 @@ def request_articles(client, category, filters={}, page=1, size=15, token=None):
     )
 
 
-def request_article_tags(client, category):
-    return client.get(f"/articles/tags/{category}")
+def request_article_top(client, category):
+    return client.get(f"/articles/top/{category}")

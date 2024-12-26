@@ -113,7 +113,7 @@ from .collections import request_collections
 from .articles import request_create_article
 from .articles import request_update_article
 from .articles import request_delete_article
-from .articles import request_article_tags
+from .articles import request_article_top
 from .articles import request_articles
 
 from .notifications import request_notifications_count
@@ -244,7 +244,7 @@ __all__ = [
     "request_create_article",
     "request_update_article",
     "request_delete_article",
-    "request_article_tags",
+    "request_article_top",
     "request_articles",
     # =========== notifications ===========
     "request_notifications_count",
