@@ -169,6 +169,7 @@ async def create_article(
             "draft": article.draft,
             "title": article.title,
             "text": article.text,
+            "slug": article.slug,
             "tags": args.tags,
         },
     )

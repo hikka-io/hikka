@@ -28,7 +28,7 @@ from app.utils import (
 
 def can_use_category(user: User, category: str):
     available_categories = {
-        constants.ROLE_USER: [],
+        constants.ROLE_USER: [constants.ARTICLE_NEWS],
         constants.ROLE_MODERATOR: [constants.ARTICLE_NEWS],
         constants.ROLE_ADMIN: [
             constants.ARTICLE_NEWS,
