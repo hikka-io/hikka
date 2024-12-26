@@ -12,3 +12,10 @@ def request_update_article(client, slug, token, data={}):
         headers={"Auth": token},
         json=data,
     )
+
+
+def request_delete_article(client, slug, token):
+    return client.delete(
+        f"/articles/{slug}",
+        headers={"Auth": token},
+    )
