@@ -176,7 +176,6 @@ async def validate_article_update(
         raise Abort("articles", "bad-category")
 
     if args.cover is not None:
-        print(args.cover)
         if not (upload := await get_upload_by_url(session, args.cover)):
             raise Abort("articles", "cover-not-found")
 

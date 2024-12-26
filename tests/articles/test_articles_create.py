@@ -37,6 +37,8 @@ async def test_articles_create(
     r_data = response.json()
 
     assert r_data["slug"].startswith("interesting-title-")
+    assert r_data["text"] == "Lorem ipsum dor sit amet."
+    assert r_data["title"] == "Interesting title"
     assert len(r_data["tags"]) == 2
 
     # Check log

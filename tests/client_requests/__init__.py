@@ -111,6 +111,7 @@ from .collections import request_collection_info
 from .collections import request_collections
 
 from .articles import request_create_article
+from .articles import request_update_article
 
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
@@ -238,6 +239,7 @@ __all__ = [
     "request_collections",
     # =========== articles ===========
     "request_create_article",
+    "request_update_article",
     # =========== notifications ===========
     "request_notifications_count",
     "request_notification_seen",
