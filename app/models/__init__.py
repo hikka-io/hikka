@@ -92,6 +92,7 @@ from .collection.collection import Collection
 
 from .article.article import Article
 
+from .stats.articles import UserArticleStats
 from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
@@ -181,6 +182,7 @@ __all__ = [
     "CollectionContent",
     "Collection",
     "Article",
+    "UserArticleStats",
     "UserEditStats",
     "AnimeSchedule",
     "ArticleTag",
