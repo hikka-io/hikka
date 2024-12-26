@@ -487,6 +487,10 @@ class UserResponse(CustomModel):
     role: str
 
 
+class FollowUserResponse(UserResponse):
+    is_followed: bool
+
+
 class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])

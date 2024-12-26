@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, asc, and_, or_, func
+from sqlalchemy import select, desc, asc, case, and_, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -18,6 +18,7 @@ from app.models import (
 )
 
 from app.service import (
+    get_followed_user_ids,
     get_my_score_subquery,
     get_user_by_username,
     get_content_by_slug,
@@ -74,11 +75,20 @@ def build_articles_order_by(sort: list[str]):
 async def get_article_by_slug(
     session: AsyncSession, slug: str, request_user: User
 ):
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
     article = await session.scalar(
         select(Article)
         .filter(Article.slug == slug)
         .filter(Article.deleted == False)  # noqa: E712
-        .options(joinedload(Article.author))
+        .options(
+            joinedload(Article.author).options(
+                with_expression(
+                    User.is_followed,
+                    case((User.id.in_(followed_user_ids), True), else_=False),
+                )
+            )
+        )
         .options(joinedload(Article.tags))
         .options(
             with_expression(
@@ -399,9 +409,18 @@ async def get_articles(
     limit: int,
     offset: int,
 ) -> list[Article]:
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
     query = await articles_list_filter(
         select(Article)
-        .options(joinedload(Article.author))
+        .options(
+            joinedload(Article.author).options(
+                with_expression(
+                    User.is_followed,
+                    case((User.id.in_(followed_user_ids), True), else_=False),
+                )
+            )
+        )
         .options(
             with_expression(
                 Article.my_score,

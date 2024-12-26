@@ -7,8 +7,8 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    FollowUserResponse,
     DataTypeMixin,
-    UserResponse,
     CustomModel,
     datetime_pd,
 )
@@ -97,10 +97,10 @@ class ArticleContentResponse(CustomModel, DataTypeMixin):
 
 class ArticleResponse(CustomModel, DataTypeMixin):
     content: ArticleContentResponse | None
+    author: FollowUserResponse
     tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
-    author: UserResponse
     comments_count: int
     cover: str | None
     vote_score: int

@@ -36,6 +36,7 @@ from app.models import (
     Client,
     Person,
     Upload,
+    Follow,
     Genre,
     Anime,
     Manga,
@@ -67,6 +68,15 @@ read_order_mapping = {
     "read_created": Read.created,
     "read_score": Read.score,
 }
+
+
+async def get_followed_user_ids(session: AsyncSession, user: User | None):
+    if not user:
+        return []
+
+    return await session.scalars(
+        select(Follow.followed_user_id).filter(Follow.user_id == user.id)
+    )
 
 
 # We use this code mainly with system based on polymorphic identity
