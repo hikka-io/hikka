@@ -17,6 +17,7 @@ from app.schemas import (
 # Enums
 class ArticleCategoryEnum(str, Enum):
     article_system = constants.ARTICLE_SYSTEM
+    article_reviews = constants.ARTICLE_REVIEWS
     article_news = constants.ARTICLE_NEWS
 
 

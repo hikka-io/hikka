@@ -556,4 +556,5 @@ COLLECTION_PRIVATE = "private"
 
 # Articles
 ARTICLE_SYSTEM = "system"
+ARTICLE_REVIEWS = "reviews"
 ARTICLE_NEWS = "news"

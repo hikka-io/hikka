@@ -27,12 +27,21 @@ from app.utils import (
 
 
 def can_use_category(user: User, category: str):
+    # TODO: I don't really like using roles
+    # we should check permissions instead
     available_categories = {
-        constants.ROLE_USER: [constants.ARTICLE_NEWS],
-        constants.ROLE_MODERATOR: [constants.ARTICLE_NEWS],
+        constants.ROLE_USER: [
+            constants.ARTICLE_NEWS,
+            constants.ARTICLE_REVIEWS,
+        ],
+        constants.ROLE_MODERATOR: [
+            constants.ARTICLE_NEWS,
+            constants.ARTICLE_REVIEWS,
+        ],
         constants.ROLE_ADMIN: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_SYSTEM,
+            constants.ARTICLE_REVIEWS,
         ],
     }.get(user.role, [])
 
