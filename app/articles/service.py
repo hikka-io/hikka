@@ -9,6 +9,7 @@ from app import constants
 from uuid import uuid4
 
 from app.models import (
+    UserArticleStats,
     ArticleTag,
     Article,
     Anime,
@@ -519,4 +520,24 @@ async def get_article_tags(session: AsyncSession, category: str):
         )
         .order_by(ArticleTag.content_count.desc(), ArticleTag.name.asc())
         .limit(10)
+    )
+
+
+async def get_article_authors(
+    session: AsyncSession, category: str, request_user: User
+):
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
+    return await session.scalars(
+        select(UserArticleStats)
+        .options(
+            joinedload(UserArticleStats.user).options(
+                with_expression(
+                    User.is_followed,
+                    case((User.id.in_(followed_user_ids), True), else_=False),
+                )
+            )
+        )
+        .order_by(getattr(UserArticleStats, category).desc())
+        .limit(3)
     )

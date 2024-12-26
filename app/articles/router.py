@@ -21,10 +21,10 @@ from app.models import (
 from .schemas import (
     ArticlesListResponse,
     ArticleCategoryEnum,
+    ArticlesTopResponse,
     ArticlesListArgs,
     ArticleResponse,
     ArticleArgs,
-    TagResponse,
 )
 
 from .dependencies import (
@@ -82,11 +82,24 @@ async def delete_article(
     return {"success": True}
 
 
-@router.get("/tags/{category}", response_model=list[TagResponse])
-async def get_article_tags(
-    category: str, session: AsyncSession = Depends(get_session)
+# To be honest I really hate how this endpoint turned out
+@router.get("/top/{category}", response_model=ArticlesTopResponse)
+async def get_article_top(
+    category: ArticleCategoryEnum,
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_ARTICLES_TOP],
+            optional=True,
+        )
+    ),
 ):
-    return await service.get_article_tags(session, category)
+    return {
+        "tags": await service.get_article_tags(session, category),
+        "authors": await service.get_article_authors(
+            session, category, request_user
+        ),
+    }
 
 
 @router.get("/{slug}", response_model=ArticleResponse)

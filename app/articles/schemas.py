@@ -117,3 +117,14 @@ class ArticleResponse(CustomModel, DataTypeMixin):
 class ArticlesListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[ArticleResponse]
+
+
+class UserArticleStatsResponse(CustomModel):
+    user: FollowUserResponse
+    reviews: int
+    news: int
+
+
+class ArticlesTopResponse(CustomModel):
+    authors: list[UserArticleStatsResponse]
+    tags: list[TagResponse]
