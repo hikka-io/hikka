@@ -42,6 +42,8 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
         user.username,
         notification_type,
         timedelta(hours=6),
+        comment.content.slug,
+        comment.content_type,
     ):
         return
 

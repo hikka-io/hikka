@@ -41,6 +41,7 @@ async def generate_collection_vote(session: AsyncSession, log: Log):
         user.username,
         notification_type,
         timedelta(hours=6),
+        collection.reference,
     ):
         return
 

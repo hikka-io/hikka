@@ -1,10 +1,8 @@
+from app.models.system.notification import Notification
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app import constants
 from app.client.service import get_client
 from app.models import Log
-from app.models.system.notification import Notification
-from app.utils import utcnow
+from app import constants
 
 
 async def generate_thirdparty_login(session: AsyncSession, log: Log):
