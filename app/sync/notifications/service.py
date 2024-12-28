@@ -83,10 +83,12 @@ async def get_edit(session, content_id):
 
 async def get_collection(session, content_id):
     return await session.scalar(
-        select(Collection).filter(
+        select(Collection)
+        .filter(
             Collection.id == content_id,
             Collection.deleted == False,  # noqa: E712
         )
+        .options(joinedload(Collection.author))
     )
 
 
