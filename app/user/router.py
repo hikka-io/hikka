@@ -1,11 +1,17 @@
-from .schemas import ActivityResponse, UserWithEmailResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import meilisearch
 from app.models import User
 from app import constants
 from . import service
+
+from .schemas import (
+    UserWithEmailResponse,
+    UserResponseFollowed,
+    ActivityResponse,
+)
 
 from app.schemas import (
     QuerySearchRequiredArgs,
@@ -36,10 +42,10 @@ async def profile(
 
 @router.get(
     "/{username}",
-    response_model=UserResponse,
+    response_model=UserResponseFollowed,
     summary="User profile",
 )
-async def user_profile(user: User = Depends(get_user)):
+async def user_profile(user: User = Depends(get_user_followed)):
     return user
 
 
