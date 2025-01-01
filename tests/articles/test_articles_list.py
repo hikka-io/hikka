@@ -1,5 +1,5 @@
 from client_requests import request_create_article
-from client_requests import request_article_top
+from client_requests import request_article_stats
 from client_requests import request_articles
 from app.models import Article
 from sqlalchemy import select
@@ -74,7 +74,7 @@ async def test_articles_list(
         assert response.status_code == status.HTTP_200_OK
 
     # Test whether drafts are hidden from general list
-    response = await request_articles(client, "news")
+    response = await request_articles(client, filters={"categories": ["news"]})
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 3
 
@@ -89,20 +89,22 @@ async def test_articles_list(
     await test_session.commit()
 
     # Request drafts without auth
-    response = await request_articles(client, "news", {"draft": True})
+    response = await request_articles(
+        client, {"draft": True, "categories": ["news"]}
+    )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 0
 
     # Request drafts while not having any
     response = await request_articles(
-        client, "news", {"draft": True}, token=get_dummy_token
+        client, {"draft": True, "categories": ["news"]}, token=get_dummy_token
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 0
 
     # Request drafts
     response = await request_articles(
-        client, "news", {"draft": True}, token=get_test_token
+        client, {"draft": True, "categories": ["news"]}, token=get_test_token
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 1
@@ -110,8 +112,7 @@ async def test_articles_list(
     # Vote score without trusted
     response = await request_articles(
         client,
-        "news",
-        {"min_vote_score": 4, "show_trusted": False},
+        {"min_vote_score": 4, "show_trusted": False, "categories": ["news"]},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -120,15 +121,16 @@ async def test_articles_list(
     # Vote score with trusted
     response = await request_articles(
         client,
-        "news",
-        {"min_vote_score": 4, "show_trusted": True},
+        {"min_vote_score": 4, "show_trusted": True, "categories": ["news"]},
     )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 3
 
     # List anime related articles
-    response = await request_articles(client, "news", {"content_type": "anime"})
+    response = await request_articles(
+        client, {"content_type": "anime", "categories": ["news"]}
+    )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 2
@@ -136,15 +138,18 @@ async def test_articles_list(
     # List articles related to Bocchi
     response = await request_articles(
         client,
-        "news",
-        {"content_type": "anime", "content_slug": "bocchi-the-rock-9e172d"},
+        {
+            "content_type": "anime",
+            "content_slug": "bocchi-the-rock-9e172d",
+            "categories": ["news"],
+        },
     )
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 1
 
     # Check tags top
-    response = await request_article_top(client, "news")
+    response = await request_article_stats(client)
     assert response.status_code == status.HTTP_200_OK
     tags = response.json()["tags"]
     assert len(tags) == 5

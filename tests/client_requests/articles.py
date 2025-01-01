@@ -21,14 +21,14 @@ def request_delete_article(client, slug, token):
     )
 
 
-def request_articles(client, category, filters={}, page=1, size=15, token=None):
+def request_articles(client, filters={}, page=1, size=15, token=None):
     headers = {"Auth": token} if token else {}
     return client.post(
-        f"/articles/{category}?page={page}&size={size}",
+        f"/articles?page={page}&size={size}",
         json=filters,
         headers=headers,
     )
 
 
-def request_article_top(client, category):
-    return client.get(f"/articles/top/{category}")
+def request_article_stats(client):
+    return client.get("/articles/stats")
