@@ -64,16 +64,15 @@ async def generate_stats(session: AsyncSession):
             )
 
             # TODO: This is horrybly inefficient and we should fix it one day
-            for category in [constants.ARTICLE_REVIEWS, constants.ARTICLE_NEWS]:
-                articles_count = await session.scalar(
-                    select(func.count(Article.id)).filter(
-                        Article.category == category,
-                        Article.deleted == False,  # noqa: E712
-                        Article.draft == False,  # noqa: E712
-                    )
+            stats.total = await session.scalar(
+                select(func.count(Article.id)).filter(
+                    Article.category.in_(
+                        [constants.ARTICLE_REVIEWS, constants.ARTICLE_NEWS]
+                    ),
+                    Article.deleted == False,  # noqa: E712
+                    Article.draft == False,  # noqa: E712
                 )
-
-                setattr(stats, category, articles_count)
+            )
 
     session.add(system_timestamp)
     await session.commit()

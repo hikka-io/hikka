@@ -329,11 +329,11 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
 async def articles_list_filter(
     query: Select,
     request_user: User | None,
-    category: str,
     args: ArticlesListArgs,
     session: AsyncSession,
 ):
-    query = query.filter(Article.category == category)
+    if len(args.categories) > 0:
+        query = query.filter(Article.category.in_(args.categories))
 
     if args.show_trusted is True and args.min_vote_score is not None:
         query = query.filter(
@@ -390,12 +390,10 @@ async def get_articles_count(
     session: AsyncSession,
     request_user: User | None,
     args: ArticlesListArgs,
-    category: str,
 ) -> int:
     query = await articles_list_filter(
         select(func.count(Article.id)),
         request_user,
-        category,
         args,
         session,
     )
@@ -407,7 +405,6 @@ async def get_articles(
     session: AsyncSession,
     request_user: User | None,
     args: ArticlesListArgs,
-    category: str,
     limit: int,
     offset: int,
 ) -> list[Article]:
@@ -432,7 +429,6 @@ async def get_articles(
             )
         ),
         request_user,
-        category,
         args,
         session,
     )
@@ -511,21 +507,16 @@ async def load_articles_content(
     return articles[0] if single_input else articles
 
 
-async def get_article_tags(session: AsyncSession, category: str):
+async def get_article_tags(session: AsyncSession):
     return await session.scalars(
         select(ArticleTag)
-        .filter(
-            ArticleTag.content_count > 0,
-            ArticleTag.category == category,
-        )
+        .filter(ArticleTag.content_count > 0)
         .order_by(ArticleTag.content_count.desc(), ArticleTag.name.asc())
         .limit(10)
     )
 
 
-async def get_article_authors(
-    session: AsyncSession, category: str, request_user: User
-):
+async def get_article_authors(session: AsyncSession, request_user: User):
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
     return await session.scalars(
@@ -538,6 +529,6 @@ async def get_article_authors(
                 )
             )
         )
-        .order_by(getattr(UserArticleStats, category).desc())
+        .order_by(UserArticleStats.total.desc())
         .limit(3)
     )

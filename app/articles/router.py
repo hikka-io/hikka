@@ -20,7 +20,6 @@ from app.models import (
 
 from .schemas import (
     ArticlesListResponse,
-    ArticleCategoryEnum,
     ArticlesTopResponse,
     ArticlesListArgs,
     ArticleResponse,
@@ -83,9 +82,8 @@ async def delete_article(
 
 
 # To be honest I really hate how this endpoint turned out
-@router.get("/top/{category}", response_model=ArticlesTopResponse)
+@router.get("/stats", response_model=ArticlesTopResponse)
 async def get_article_top(
-    category: ArticleCategoryEnum,
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(
         auth_required(
@@ -95,10 +93,8 @@ async def get_article_top(
     ),
 ):
     return {
-        "tags": await service.get_article_tags(session, category),
-        "authors": await service.get_article_authors(
-            session, category, request_user
-        ),
+        "tags": await service.get_article_tags(session),
+        "authors": await service.get_article_authors(session, request_user),
     }
 
 
@@ -107,9 +103,8 @@ async def get_article(article: Article = Depends(validate_article)):
     return article
 
 
-@router.post("/{category}", response_model=ArticlesListResponse)
+@router.post("", response_model=ArticlesListResponse)
 async def get_articles(
-    category: ArticleCategoryEnum,
     args: ArticlesListArgs = Depends(validate_articles_list_args),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
@@ -122,12 +117,10 @@ async def get_articles(
     ),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_articles_count(
-        session, request_user, args, category
-    )
+    total = await service.get_articles_count(session, request_user, args)
 
     articles = await service.get_articles(
-        session, request_user, args, category, limit, offset
+        session, request_user, args, limit, offset
     )
 
     articles = await service.load_articles_content(

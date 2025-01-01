@@ -16,8 +16,8 @@ from app.schemas import (
 
 # Enums
 class ArticleCategoryEnum(str, Enum):
-    article_system = constants.ARTICLE_SYSTEM
     article_reviews = constants.ARTICLE_REVIEWS
+    article_system = constants.ARTICLE_SYSTEM
     article_news = constants.ARTICLE_NEWS
 
 
@@ -64,6 +64,7 @@ class ArticleArgs(CustomModel):
 class ArticlesListArgs(CustomModel):
     content_type: ArticleContentEnum | None = None
     min_vote_score: int | None = Field(0, ge=0)
+    categories: list[ArticleCategoryEnum] = []
     tags: list[str] = Field([], max_length=3)  # TODO: tags mixin (?)
     sort: list[str] = ["created:desc"]
     content_slug: str | None = None
@@ -121,8 +122,7 @@ class ArticlesListResponse(CustomModel):
 
 class UserArticleStatsResponse(CustomModel):
     user: FollowUserResponse
-    reviews: int
-    news: int
+    total: int
 
 
 class ArticlesTopResponse(CustomModel):

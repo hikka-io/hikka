@@ -8,8 +8,8 @@ from ..base import Base
 class UserArticleStats(Base):
     __tablename__ = "service_stats_articles"
 
-    reviews: Mapped[int] = mapped_column(default=0)
-    news: Mapped[int] = mapped_column(default=0)
+    # TODO: Moved to unified model (?)
+    total: Mapped[int] = mapped_column(default=0)
 
     user_id = mapped_column(ForeignKey("service_users.id"))
 
