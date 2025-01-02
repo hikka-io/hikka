@@ -331,10 +331,10 @@ def days_until_next_month(date):
 
 # Get list of seasons anime aired in for provided range of dates
 def get_airing_seasons(start_date: datetime, end_date: datetime | None):
-    end_date = utcnow() if not end_date else end_date
+    end_date = utcnow() if end_date is None else end_date
 
-    airing_seasons = []
     date = start_date
+    airing_seasons = [[get_season(date), date.year]]
 
     if days_until_next_month(date) < 7:
         date = get_next_month(date)
