@@ -482,16 +482,12 @@ async def update_anime_info(session, anime, data):
 
         year = start_date.year
         season = utils.get_season(start_date)
-        airing_seasons = []
+        airing_seasons = [f"{season}_{year}"]
 
-        if anime.start_date:
-            if (
-                anime.status == constants.RELEASE_STATUS_ONGOING
-                or anime.end_date is not None
-            ):
-                airing_seasons = utils.get_airing_seasons(
-                    anime.start_date, anime.end_date
-                )
+        if anime.end_date is not None:
+            airing_seasons = utils.get_airing_seasons(
+                anime.start_date, anime.end_date
+            )
 
     else:
         year = None

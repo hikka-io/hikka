@@ -143,6 +143,10 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(edit_router)
     app.include_router(vote_router)
 
+    from .testing import router as testing_router
+
+    app.include_router(testing_router)
+
     @app.get("/ping")
     async def ping_pong():
         return "pong"

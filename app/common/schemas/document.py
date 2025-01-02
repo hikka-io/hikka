@@ -30,14 +30,32 @@ class DocumentSpoiler(CustomModel):
     type: Literal["spoiler"]
 
 
+class DocumentLic(CustomModel):
+    children: list["DocumentElement"]
+    type: Literal["lic"]
+
+
+class DocumentLi(CustomModel):
+    children: list[DocumentLic]
+    type: Literal["li"]
+
+
+class DocumentUl(CustomModel):
+    children: list[DocumentLi]
+    type: Literal["ul"]
+
+
+class DocumentOl(CustomModel):
+    children: list[DocumentLi]
+    type: Literal["ol"]
+
+
 DocumentElement = (
     DocumentParagraph
     | DocumentBlockquote
     | DocumentSpoiler
     | DocumentLink
     | DocumentText
+    | DocumentUl
+    | DocumentOl
 )
-
-
-class DocumentArgs(CustomModel):
-    document: list[DocumentElement]

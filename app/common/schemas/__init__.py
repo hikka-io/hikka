@@ -1,5 +1,7 @@
-from .document import DocumentArgs
+from .document import DocumentElement
+from .document import DocumentText
 
 __all__ = [
-    "DocumentArgs",
+    "DocumentElement",
+    "DocumentText",
 ]
