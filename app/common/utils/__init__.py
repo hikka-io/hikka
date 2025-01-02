@@ -1,5 +1,5 @@
-from .document import calculate_text_length
+from .document import calculate_document_length
 
 __all__ = [
-    "calculate_text_length",
+    "calculate_document_length",
 ]

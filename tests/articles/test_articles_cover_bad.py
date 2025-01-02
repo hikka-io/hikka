@@ -18,7 +18,7 @@ async def test_articles_create_cover_bad_url(
         get_test_token,
         {
             "cover": bad_attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -50,7 +50,7 @@ async def test_articles_create_cover_bad_image(
         get_test_token,
         {
             "cover": bad_attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -87,7 +87,7 @@ async def test_articles_cover_bad_reuse(
         get_test_token,
         {
             "cover": attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -104,7 +104,7 @@ async def test_articles_cover_bad_reuse(
         get_test_token,
         {
             "cover": attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Article with reused image",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -143,7 +143,7 @@ async def test_articles_cover_bad_author(
         get_test_token,
         {
             "cover": attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",

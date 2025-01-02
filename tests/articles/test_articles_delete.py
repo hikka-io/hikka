@@ -17,7 +17,7 @@ async def test_articles_delete(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -58,7 +58,7 @@ async def test_articles_delete_moderator(
         get_dummy_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",

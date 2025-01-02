@@ -1,5 +1,6 @@
 from ..association import tags_articles_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -32,10 +33,10 @@ class Article(
     trusted: Mapped[bool] = mapped_column(default=False)
 
     category: Mapped[str] = mapped_column(String(32), index=True)
+    document: Mapped[list] = mapped_column(JSONB, default=[])
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]
-    text: Mapped[str]
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(foreign_keys=[author_id])

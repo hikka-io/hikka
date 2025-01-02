@@ -18,7 +18,7 @@ async def test_articles_create(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -37,7 +37,7 @@ async def test_articles_create(
     r_data = response.json()
 
     assert r_data["slug"].startswith("interesting-title-")
-    assert r_data["text"] == "Lorem ipsum dor sit amet."
+    assert r_data["document"] == [{"text": "Lorem ipsum dor sit amet."}]
     assert r_data["title"] == "Interesting title"
     assert len(r_data["tags"]) == 2
 
@@ -46,7 +46,7 @@ async def test_articles_create(
     assert log.log_type == constants.LOG_ARTICLE_CREATE
     assert log.user == create_test_user
 
-    assert log.data["text"] == "Lorem ipsum dor sit amet."
+    assert log.data["document"] == [{"text": "Lorem ipsum dor sit amet."}]
     assert log.data["title"] == "Interesting title"
     assert log.data["content_type"] == "anime"
     assert log.data["slug"] == r_data["slug"]

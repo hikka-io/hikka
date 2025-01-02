@@ -13,7 +13,7 @@ async def test_articles_create_bad_category(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "system",
@@ -39,7 +39,7 @@ async def test_articles_create_bad_cover(
         get_test_token,
         {
             "cover": "https://cdn.hikka.io/bad.jpg",
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -65,7 +65,7 @@ async def test_articles_create_bad_trusted(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",

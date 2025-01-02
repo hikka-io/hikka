@@ -144,10 +144,10 @@ async def create_article(
         **{
             "cover_image": upload.image if upload else None,
             "category": args.category,
+            "document": args.document,
             "trusted": args.trusted,
             "draft": args.draft,
             "title": args.title,
-            "text": args.text,
             "deleted": False,
             "vote_score": 0,
             "author": user,
@@ -175,11 +175,11 @@ async def create_article(
             "cover": upload.image.path if upload else None,
             "content_type": article.content_type,
             "content_id": article.reference,
+            "document": article.document,
             "category": article.category,
             "trusted": article.trusted,
             "draft": article.draft,
             "title": article.title,
-            "text": article.text,
             "slug": article.slug,
             "tags": args.tags,
         },
@@ -205,7 +205,7 @@ async def update_article(
     before = {}
     after = {}
 
-    for key in ["category", "draft", "title", "text", "trusted"]:
+    for key in ["category", "draft", "title", "document", "trusted"]:
         old_value = getattr(article, key)
         new_value = getattr(args, key)
 

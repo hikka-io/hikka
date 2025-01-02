@@ -1,5 +1,6 @@
-from pydantic import Field, field_validator
-from app.utils import is_empty_markdown
+from pydantic import ValidationError, Field, field_validator
+from app.common.utils import calculate_document_length
+from app.common.schemas import Document
 from app.utils import is_valid_tag
 from app.utils import check_sort
 from app import constants
@@ -34,14 +35,30 @@ class ArticleContentArgs(CustomModel):
 
 
 class ArticleArgs(CustomModel):
-    text: str = Field(min_length=3, max_length=65536)
     title: str = Field(min_length=3, max_length=255)
+    document: list[dict] = Field(min_length=1)
     content: ArticleContentArgs | None = None
     tags: list[str] = Field(max_length=3)
     draft: bool = Field(default=True)
     category: ArticleCategoryEnum
     cover: str | None = None
     trusted: bool = False
+
+    @field_validator("document")
+    def validate_document_length(cls, document: list[dict]):
+        try:
+            Document(nodes=document)
+        except ValidationError as e:
+            raise ValueError(f"Invalid document structure: {e}") from e
+
+        max_length = 65536
+
+        if calculate_document_length(document) > max_length:
+            raise ValueError(
+                f"Total document length exceeds {max_length} characters"
+            )
+
+        return document
 
     @field_validator("tags")
     def validate_tags(cls, tags):
@@ -52,13 +69,6 @@ class ArticleArgs(CustomModel):
             raise ValueError("Invalid tag")
 
         return tags
-
-    @field_validator("text")
-    def validate_text(cls, text):
-        if is_empty_markdown(text):
-            raise ValueError("Field text consists of empty markdown")
-
-        return text
 
 
 class ArticlesListArgs(CustomModel):
@@ -103,6 +113,7 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
+    document: list[dict]
     comments_count: int
     cover: str | None
     vote_score: int
@@ -111,7 +122,6 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     trusted: bool
     draft: bool
     title: str
-    text: str
     slug: str
 
 

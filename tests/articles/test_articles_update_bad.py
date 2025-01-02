@@ -16,7 +16,7 @@ async def test_articles_update_bad_user(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -37,7 +37,7 @@ async def test_articles_update_bad_user(
         get_dummy_token,
         {
             "cover": None,
-            "text": "Amet sit dor ipsum lorem.",
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",
@@ -63,7 +63,7 @@ async def test_articles_update_bad_category(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -84,7 +84,7 @@ async def test_articles_update_bad_category(
         get_test_token,
         {
             "cover": None,
-            "text": "Amet sit dor ipsum lorem.",
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "system",
@@ -110,7 +110,7 @@ async def test_articles_update_bad_trusted(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -131,7 +131,7 @@ async def test_articles_update_bad_trusted(
         get_test_token,
         {
             "cover": None,
-            "text": "Amet sit dor ipsum lorem.",
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",

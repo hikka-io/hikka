@@ -19,7 +19,7 @@ async def test_articles_update(
         get_test_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -43,7 +43,7 @@ async def test_articles_update(
         get_test_token,
         {
             "cover": None,
-            "text": "Amet sit dor ipsum lorem.",
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",
@@ -61,7 +61,7 @@ async def test_articles_update(
 
     r_data = response.json()
 
-    assert r_data["text"] == "Amet sit dor ipsum lorem."
+    assert r_data["document"] == [{"text": "Amet sit dor ipsum lorem."}]
     assert r_data["title"] == "Amazing title"
 
     # Check log
@@ -73,7 +73,7 @@ async def test_articles_update(
     assert log.data["before"]["content_id"] != log.data["after"]["content_id"]
     assert log.data["before"]["title"] != log.data["after"]["title"]
     assert log.data["before"]["draft"] != log.data["after"]["draft"]
-    assert log.data["before"]["text"] != log.data["after"]["text"]
+    assert log.data["before"]["document"] != log.data["after"]["document"]
 
 
 async def test_articles_update_moderator(
@@ -89,7 +89,7 @@ async def test_articles_update_moderator(
         get_dummy_token,
         {
             "cover": None,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -110,7 +110,7 @@ async def test_articles_update_moderator(
         get_test_token,
         {
             "cover": None,
-            "text": "Amet sit dor ipsum lorem.",
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",

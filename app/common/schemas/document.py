@@ -59,3 +59,7 @@ DocumentElement = (
     | DocumentUl
     | DocumentOl
 )
+
+
+class Document(CustomModel):
+    nodes: list[DocumentElement]

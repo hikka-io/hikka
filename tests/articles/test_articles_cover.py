@@ -26,7 +26,7 @@ async def test_articles_cover(
         get_test_token,
         {
             "cover": attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -61,7 +61,7 @@ async def test_articles_cover(
         get_test_token,
         {
             "cover": new_attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -100,7 +100,7 @@ async def test_articles_cover_moderator(
         get_dummy_token,
         {
             "cover": attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -135,7 +135,7 @@ async def test_articles_cover_moderator(
         get_test_token,
         {
             "cover": new_attachment_url,
-            "text": "Lorem ipsum dor sit amet.",
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
