@@ -16,9 +16,8 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
-    pagination,
     paginated_response,
+    pagination,
 )
 
 from .schemas import (
