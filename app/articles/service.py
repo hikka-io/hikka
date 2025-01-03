@@ -23,7 +23,6 @@ from app.service import (
     get_my_score_subquery,
     get_user_by_username,
     get_content_by_slug,
-    get_upload_by_url,
     create_log,
 )
 
@@ -130,9 +129,6 @@ async def create_article(
 
         attempts += 1
 
-    if upload := await get_upload_by_url(session, args.cover):
-        upload.image.used = True
-
     tags = []
 
     for name in args.tags:
@@ -142,7 +138,6 @@ async def create_article(
 
     article = Article(
         **{
-            "cover_image": upload.image if upload else None,
             "category": args.category,
             "document": args.document,
             "trusted": args.trusted,
@@ -172,7 +167,6 @@ async def create_article(
         user,
         article.id,
         {
-            "cover": upload.image.path if upload else None,
             "content_type": article.content_type,
             "content_id": article.reference,
             "document": article.document,
@@ -241,32 +235,6 @@ async def update_article(
 
         after["content_type"] = article.content_type
         after["content_id"] = str(article.content_id)
-
-    # If used decided to delete cover, we handle it here
-    if args.cover is None and article.cover_image:
-        before["cover"] = article.cover_image.path
-        after["cover"] = None
-
-        # Add image deletion request and clear cover
-        article.cover_image.deletion_request = True
-        article.cover_image = None
-
-    # If user uploads new cover
-    if upload := await get_upload_by_url(session, args.cover):
-        if upload.image != article.cover_image:
-            # Mark old image to be deleted if needed
-            if article.cover_image is not None:
-                article.cover_image.deletion_request = True
-                before["cover"] = article.cover_image.path
-
-            else:
-                before["cover"] = None
-
-            after["cover"] = upload.image.path
-
-            # Set new cover and mark image as used
-            article.cover_image = upload.image
-            upload.image.used = True
 
     # Update tags
     # TODO: we probably should do that in sync to prevent inconsistencies

@@ -15,7 +15,6 @@ from .schemas import (
 from app.service import (
     get_user_by_username,
     get_content_by_slug,
-    get_upload_by_url,
     count_logs,
 )
 
@@ -113,19 +112,6 @@ async def validate_article_create(
     if not can_use_category(author, args.category):
         raise Abort("articles", "bad-category")
 
-    if args.cover is not None:
-        if not (upload := await get_upload_by_url(session, args.cover)):
-            raise Abort("articles", "cover-not-found")
-
-        if (
-            not upload.image.uploaded
-            or upload.type != constants.UPLOAD_ATTACHMENT
-            or upload.image.deletion_request
-            or upload.user_id != author.id
-            or upload.image.used
-        ):
-            raise Abort("articles", "bad-cover")
-
     if args.trusted and not check_user_permissions(
         author, [constants.PERMISSION_ARTICLE_TRUSTED]
     ):
@@ -145,16 +131,11 @@ async def validate_article_update(
         )
     ),
 ):
-    # Special flag in case article is being updated by moderator
-    is_moderator = False
-
     if article.author != user:
         if not check_user_permissions(
             user, [constants.PERMISSION_ARTICLE_UPDATE_MODERATOR]
         ):
             raise Abort("permission", "denied")
-
-        is_moderator = True
 
     # 1000 article updates per hour should be sensible limit
     updates_limit = 1000
@@ -183,25 +164,6 @@ async def validate_article_update(
     # But we keep it here just in case
     if not can_use_category(user, args.category):
         raise Abort("articles", "bad-category")
-
-    if args.cover is not None:
-        if not (upload := await get_upload_by_url(session, args.cover)):
-            raise Abort("articles", "cover-not-found")
-
-        if (
-            not upload.image.uploaded
-            or upload.image.deletion_request
-            or upload.type != constants.UPLOAD_ATTACHMENT
-        ):
-            raise Abort("articles", "bad-cover")
-
-        # Check to allow moderator to change image
-        if not is_moderator and upload.user_id != user.id:
-            raise Abort("articles", "bad-cover")
-
-        # Make sure we let user update his article with same image
-        if upload.image.used and upload.image != article.cover_image:
-            raise Abort("articles", "bad-cover")
 
     if args.trusted and not check_user_permissions(
         user, [constants.PERMISSION_ARTICLE_TRUSTED]

@@ -15,7 +15,6 @@ async def test_articles_delete_bad(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],

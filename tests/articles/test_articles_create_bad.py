@@ -12,7 +12,6 @@ async def test_articles_create_bad_category(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
@@ -28,32 +27,6 @@ async def test_articles_create_bad_category(
     assert response.json()["code"] == "articles:bad_category"
 
 
-async def test_articles_create_bad_cover(
-    client,
-    create_test_user,
-    get_test_token,
-    test_session,
-):
-    response = await request_create_article(
-        client,
-        get_test_token,
-        {
-            "cover": "https://cdn.hikka.io/bad.jpg",
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
-            "title": "Interesting title",
-            "tags": ["interesting", "tag"],
-            "category": "news",
-            "content": None,
-            "draft": False,
-            "trusted": False,
-        },
-    )
-
-    # Now check error
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "articles:cover_not_found"
-
-
 async def test_articles_create_bad_trusted(
     client,
     create_test_user,
@@ -64,7 +37,6 @@ async def test_articles_create_bad_trusted(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],

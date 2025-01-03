@@ -206,7 +206,6 @@ errors = {
     "articles": {
         "not-trusted": ["You can't make this article trusted", 403],
         "bad-category": ["You can't use this category", 400],
-        "bad-cover": ["Can't use this image as cover", 400],
         "author-not-found": ["Author not found", 404],
         "not-found": ["Article not found", 404],
     },

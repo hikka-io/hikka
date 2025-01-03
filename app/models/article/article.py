@@ -50,26 +50,6 @@ class Article(
         lazy="joined",
     )
 
-    cover_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
-        nullable=True,
-        index=True,
-    )
-
-    cover_image: Mapped["Image"] = relationship(
-        foreign_keys=[cover_image_id], lazy="joined"
-    )
-
-    @hybrid_property
-    def cover(self):
-        if not self.cover_image:
-            return None
-
-        if self.cover_image.ignore or not self.cover_image.uploaded:
-            return None
-
-        return self.cover_image.url
-
     @hybrid_property
     def data_type(self):
         return "article"

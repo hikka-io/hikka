@@ -18,7 +18,6 @@ async def test_articles_list(
 ):
     articles = [
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["first", "tag"],
@@ -31,7 +30,6 @@ async def test_articles_list(
             "trusted": True,
         },
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet. 1"}],
             "title": "Interesting title 1",
             "tags": ["interesting", "tag"],
@@ -44,7 +42,6 @@ async def test_articles_list(
             "trusted": True,
         },
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet. 2"}],
             "title": "Interesting title 2",
             "tags": ["interesting", "meh"],
@@ -54,7 +51,6 @@ async def test_articles_list(
             "trusted": False,
         },
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet. 3"}],
             "title": "Interesting title 3",
             "tags": ["blah", "tag"],

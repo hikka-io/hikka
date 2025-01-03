@@ -41,7 +41,6 @@ class ArticleArgs(CustomModel):
     tags: list[str] = Field(max_length=3)
     draft: bool = Field(default=True)
     category: ArticleCategoryEnum
-    cover: str | None = None
     trusted: bool = False
 
     @field_validator("document")
@@ -115,7 +114,6 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     updated: datetime_pd
     document: list[dict]
     comments_count: int
-    cover: str | None
     vote_score: int
     my_score: int
     category: str

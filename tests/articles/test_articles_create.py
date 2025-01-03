@@ -17,7 +17,6 @@ async def test_articles_create(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
@@ -55,4 +54,3 @@ async def test_articles_create(
     assert log.data["trusted"] is False
     assert log.data["draft"] is False
     assert len(log.data["tags"]) == 2
-    assert log.data["cover"] is None

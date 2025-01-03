@@ -15,7 +15,6 @@ async def test_articles_update_bad_user(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
@@ -36,7 +35,6 @@ async def test_articles_update_bad_user(
         article_slug,
         get_dummy_token,
         {
-            "cover": None,
             "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
@@ -62,7 +60,6 @@ async def test_articles_update_bad_category(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
@@ -83,7 +80,6 @@ async def test_articles_update_bad_category(
         article_slug,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
@@ -109,7 +105,6 @@ async def test_articles_update_bad_trusted(
         client,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
@@ -130,7 +125,6 @@ async def test_articles_update_bad_trusted(
         article_slug,
         get_test_token,
         {
-            "cover": None,
             "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
