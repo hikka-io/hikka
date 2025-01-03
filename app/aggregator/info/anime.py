@@ -368,7 +368,7 @@ async def process_poster(session, anime, data):
         )
 
     session.add(image)
-    anime.poster_relation = image
+    anime.image_relation = image
 
 
 def process_external(data):

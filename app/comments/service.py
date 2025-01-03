@@ -367,7 +367,7 @@ async def generate_preview(
     image = None
 
     if isinstance(comment, AnimeComment):
-        image = comment.content.poster
+        image = comment.content.image
         title = (
             comment.content.title_ua
             or comment.content.title_en
@@ -391,7 +391,7 @@ async def generate_preview(
             select(Edit)
             .filter(Edit.id == comment.content_id)
             .options(
-                joinedload(AnimeEdit.content).joinedload(Anime.poster_relation),
+                joinedload(AnimeEdit.content).joinedload(Anime.image_relation),
                 joinedload(MangaEdit.content).joinedload(Manga.image_relation),
                 joinedload(NovelEdit.content).joinedload(Novel.image_relation),
                 joinedload(CharacterEdit.content).joinedload(
@@ -405,7 +405,7 @@ async def generate_preview(
 
         if edit:
             image = (
-                edit.content.poster
+                edit.content.image
                 if isinstance(comment.content.content, Anime)
                 else edit.content.image
             )
@@ -421,7 +421,7 @@ async def generate_preview(
         content = collection_content.content
 
         image = (
-            content.poster
+            content.image
             if comment.content.content_type == constants.CONTENT_ANIME
             else content.image
         )

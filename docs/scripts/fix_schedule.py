@@ -18,7 +18,7 @@ async def fix_airing_seasons():
             .filter(
                 Anime.airing_seasons == [],
                 Anime.start_date != None,  # noqa: E711
-                Anime.end_date != None,  # noqa: E711
+                # Anime.end_date != None,  # noqa: E711
             )
             .order_by(Anime.id.desc())
         )
