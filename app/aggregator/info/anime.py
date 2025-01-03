@@ -346,7 +346,7 @@ async def process_staff(session, anime, data):
     return update_staff
 
 
-async def process_poster(session, anime, data):
+async def process_image(session, anime, data):
     if not data.get("poster"):
         return
 
@@ -517,7 +517,7 @@ async def update_anime_info(session, anime, data):
     anime.needs_update = False
     anime.updated = now
 
-    await process_poster(session, anime, data)
+    await process_image(session, anime, data)
 
     genres_add = await process_genres(session, anime, data)
     companies_anime = await process_companies_anime(session, anime, data)

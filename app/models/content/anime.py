@@ -110,7 +110,7 @@ class Anime(
         back_populates="anime",
     )
 
-    poster_id = mapped_column(
+    image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 

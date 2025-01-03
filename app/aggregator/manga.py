@@ -8,7 +8,7 @@ from app import utils
 
 async def save_manga_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
-    posters = [entry["poster"] for entry in data]
+    images = [entry["poster"] for entry in data]
 
     cache = await session.scalars(
         select(Manga).filter(Manga.content_id.in_(content_ids))
@@ -16,7 +16,7 @@ async def save_manga_list(session, data):
 
     manga_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(posters)))
+    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
 
     image_cache = {entry.path: entry for entry in cache}
 
