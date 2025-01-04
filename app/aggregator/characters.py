@@ -31,6 +31,7 @@ async def save_characters(session, data):
                         "created": utcnow(),
                         "uploaded": True,
                         "ignore": False,
+                        "system": True,
                     }
                 )
 

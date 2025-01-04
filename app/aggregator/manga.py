@@ -70,6 +70,7 @@ async def save_manga_list(session, data):
                             "created": utcnow(),
                             "uploaded": True,
                             "ignore": False,
+                            "system": True,
                         }
                     )
 

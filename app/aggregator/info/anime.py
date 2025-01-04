@@ -364,6 +364,7 @@ async def process_image(session, anime, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 

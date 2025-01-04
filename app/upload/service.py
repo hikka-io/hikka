@@ -1,9 +1,9 @@
 from .schemas import UploadMetadata, UploadTypeEnum
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import User, Image, Upload
 from app.utils import get_settings, utcnow
 from sqlalchemy import select, func
 from app.service import create_log
+from app.models import User, Image
 from app import constants
 from uuid import uuid4
 from . import utils
@@ -42,11 +42,12 @@ async def count_uploads_last_day(
     session: AsyncSession, user: User, upload_type: UploadTypeEnum
 ):
     today = utils.round_day(utcnow())
+
     return await session.scalar(
-        select(func.count(Upload.id)).filter(
-            Upload.user == user,
-            Upload.created > today,
-            Upload.type == upload_type,
+        select(func.count(Image.id)).filter(
+            Image.user == user,
+            Image.created > today,
+            Image.type == upload_type,
         )
     )
 
@@ -65,22 +66,15 @@ async def process_upload_file(
 
     image = Image(
         **{
-            "path": file_path,
-            "uploaded": False,
-            "ignore": False,
-            "created": now,
-        }
-    )
-
-    upload = Upload(
-        **{
             "mime_type": upload_metadata.mime_type,
             "size": upload_metadata.size,
             "type": upload_type,
+            "user_id": user.id,
             "path": file_path,
+            "uploaded": False,
+            "ignore": False,
+            "system": False,
             "created": now,
-            "image": image,
-            "user": user,
         }
     )
 
@@ -106,14 +100,14 @@ async def process_upload_file(
         if upload_type == constants.UPLOAD_ATTACHMENT:
             image.used = False
 
-    session.add_all([image, upload])
+    session.add_all([image])
     await session.commit()
 
     await create_log(
         session,
         constants.LOG_UPLOAD,
         user,
-        upload.id,
+        image.id,
         data={"upload_type": upload_type},
     )
 

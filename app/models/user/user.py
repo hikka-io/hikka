@@ -81,13 +81,13 @@ class User(Base, NeedsSearchUpdateMixin):
     )
 
     avatar_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )
 
     cover_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )

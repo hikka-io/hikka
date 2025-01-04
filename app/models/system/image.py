@@ -1,5 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import relationship
 from ..mixins import CreatedMixin
 from datetime import datetime
 from app import constants
@@ -15,6 +17,14 @@ class Image(Base, CreatedMixin):
     uploaded: Mapped[bool] = mapped_column(default=False)
     ignore: Mapped[bool] = mapped_column(default=False)
     used: Mapped[bool] = mapped_column(default=True)
+
+    type: Mapped[str] = mapped_column(String(32), nullable=True)
+    mime_type: Mapped[str] = mapped_column(nullable=True)
+    system: Mapped[bool] = mapped_column(default=False)
+    size: Mapped[int] = mapped_column(nullable=True)
+
+    user_id = mapped_column(ForeignKey("service_users.id", use_alter=True))
+    user: Mapped["User"] = relationship(foreign_keys=[user_id])
 
     @hybrid_property
     def url(self):

@@ -35,7 +35,6 @@ from app.models import (
     Article,
     Client,
     Person,
-    Upload,
     Follow,
     Genre,
     Anime,
@@ -680,18 +679,3 @@ def novel_search_filter(
         )
 
     return query
-
-
-# Upload stuff
-async def get_upload_by_url(
-    session: AsyncSession, url: str | None
-) -> Upload | None:
-    # I know this is lazy solution but I'm lazy
-    if not url:
-        return None
-
-    return await session.scalar(
-        select(Upload)
-        .filter(Upload.path == url.replace(constants.CDN_ENDPOINT, ""))
-        .options(joinedload(Upload.image))
-    )
