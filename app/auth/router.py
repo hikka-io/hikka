@@ -16,6 +16,7 @@ from app.dependencies import (
     get_page,
     get_size,
 )
+
 from app.service import (
     create_activation_token,
     create_email,

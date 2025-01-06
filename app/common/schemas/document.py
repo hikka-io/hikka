@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from app.schemas import CustomModel
 from typing import Literal
 
@@ -63,3 +64,20 @@ DocumentElement = (
 
 class Document(CustomModel):
     nodes: list[DocumentElement]
+
+    # Credit: https://github.com/hikka-io/hikka/pull/358
+    @field_validator("nodes", mode="before")
+    def validate_raw(cls, document: list[dict]) -> list[dict]:
+        if not isinstance(document, list):
+            return document
+
+        children = [document]
+        while children:
+            child = children.pop(0)
+            for element in child.copy():
+                assert isinstance(element, dict), "Invalid children element"
+
+                if "children" in element:
+                    children.append(element["children"])
+
+        return document
