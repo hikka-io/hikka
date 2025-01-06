@@ -1,7 +1,6 @@
+from app.testing.schemas import DocumentArgs
 from pydantic import ValidationError
 import pytest
-
-from app.testing.schemas import DocumentArgs
 
 
 def test_document_args_validation():

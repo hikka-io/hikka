@@ -1,7 +1,6 @@
-from pydantic import Field, field_validator
-
-from app.common.schemas import DocumentElement
 from app.common.utils import calculate_document_length
+from app.common.schemas import DocumentElement
+from pydantic import Field, field_validator
 from app.schemas import CustomModel
 
 
