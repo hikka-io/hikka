@@ -1,5 +1,6 @@
 from pydantic import field_validator
 from app.schemas import CustomModel
+from pydantic import Field, AnyUrl
 from typing import Literal
 
 
@@ -51,6 +52,16 @@ class DocumentOl(CustomModel):
     type: Literal["ol"]
 
 
+class DocumentImage(CustomModel):
+    type: Literal["image"]
+    url: AnyUrl
+
+
+class DocumentMedia(CustomModel):
+    children: list[DocumentImage] = Field(max_length=4)
+    type: Literal["media"]
+
+
 DocumentElement = (
     DocumentParagraph
     | DocumentBlockquote
@@ -59,6 +70,7 @@ DocumentElement = (
     | DocumentText
     | DocumentUl
     | DocumentOl
+    | DocumentMedia
 )
 
 
@@ -68,16 +80,34 @@ class Document(CustomModel):
     # Credit: https://github.com/hikka-io/hikka/pull/358
     @field_validator("nodes", mode="before")
     def validate_raw(cls, document: list[dict]) -> list[dict]:
+        total_elements = 0
+
+        max_elements = 1000
+        max_depth = 10
+
         if not isinstance(document, list):
             return document
 
-        children = [document]
-        while children:
-            child = children.pop(0)
-            for element in child.copy():
-                assert isinstance(element, dict), "Invalid children element"
+        def validate_children(children, current_depth=1):
+            nonlocal total_elements
+            total_elements += len(children)
+
+            if total_elements > max_elements:
+                raise ValueError(
+                    f"Document structure exceeds maximum number of {max_elements} elements"
+                )
+
+            if current_depth > max_depth:
+                raise ValueError(
+                    f"Document structure exceeds maximum depth of {max_depth}"
+                )
+
+            for element in children:
+                if not isinstance(element, dict):
+                    raise ValueError("Invalid children element")
 
                 if "children" in element:
-                    children.append(element["children"])
+                    validate_children(element["children"], current_depth + 1)
 
+        validate_children(document)
         return document
