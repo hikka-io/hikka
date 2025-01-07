@@ -1,6 +1,7 @@
 from pydantic import field_validator
 from app.schemas import CustomModel
 from pydantic import Field, AnyUrl
+from urllib.parse import urlparse
 from typing import Literal
 
 
@@ -55,6 +56,23 @@ class DocumentOl(CustomModel):
 class DocumentImage(CustomModel):
     type: Literal["image"]
     url: AnyUrl
+
+
+class DocumentVideo(CustomModel):
+    type: Literal["video"]
+    url: AnyUrl
+
+    @field_validator("url")
+    @classmethod
+    def check_url(cls, url: AnyUrl) -> AnyUrl:
+        hostname = urlparse(str(url)).hostname
+
+        if not hostname or not any(
+            endpoint in hostname for endpoint in ["youtube.com"]
+        ):
+            raise ValueError("Invalid video url")
+
+        return url
 
 
 class DocumentMedia(CustomModel):
