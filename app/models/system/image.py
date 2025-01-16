@@ -6,6 +6,7 @@ from ..mixins import CreatedMixin
 from datetime import datetime
 from app import constants
 from ..base import Base
+from uuid import UUID
 
 
 class Image(Base, CreatedMixin):
@@ -25,6 +26,14 @@ class Image(Base, CreatedMixin):
 
     user_id = mapped_column(ForeignKey("service_users.id", use_alter=True))
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
+
+    attachment_content_type: Mapped[str] = mapped_column(
+        nullable=True, index=True
+    )
+
+    attachment_content_id: Mapped[UUID] = mapped_column(
+        nullable=True, index=True
+    )
 
     @hybrid_property
     def url(self):

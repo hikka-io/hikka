@@ -1,3 +1,4 @@
+from app.common.utils import find_document_images
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
@@ -116,6 +117,17 @@ async def validate_article_create(
         author, [constants.PERMISSION_ARTICLE_TRUSTED]
     ):
         raise Abort("articles", "not-trusted")
+
+    # TODO: validate images here
+    image_nodes = find_document_images(args.document)
+
+    if len(image_nodes) > 0:
+        images = list(set([entry["url"] for entry in image_nodes]))
+
+        if not len(image_nodes) == len(images):
+            raise Abort("articles", "reused")
+
+        print(images)
 
     return author
 
