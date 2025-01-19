@@ -48,6 +48,13 @@
     path = ".profile_info"
     profiling_secret = "secret"
 
+    [default.aggregator]
+    telegram_notifications = true
+    telegram_message_thread_id = "117779"
+    telegram_chat_id = "-1002142457586"
+    telegram_bot_token = "token"
+
+
 [testing]
     [testing.database]
     endpoint = "postgresql+asyncpg://user:password@localhost:5432/database-tests"
@@ -85,3 +92,6 @@
     trigger = "query"  # [query/all]
     path = ".profile_info"
     profiling_secret = "secret"
+
+    [testing.aggregator]
+    telegram_notifications = false

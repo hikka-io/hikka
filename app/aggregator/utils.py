@@ -12,6 +12,8 @@ async def send_telegram_notification(text):
     bot_token = settings.aggregator.telegram_bot_token
     chat_id = settings.aggregator.telegram_chat_id
 
+    print(bot_token)
+
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
     payload = {
@@ -22,8 +24,6 @@ async def send_telegram_notification(text):
 
     async with aiohttp.ClientSession() as session:
         async with session.post(url, data=payload) as response:
-            if response.status == 200:
-                print("Message sent successfully:", text)
-
-            else:
-                print("Failed to send message:", text)
+            if response.status != 200:
+                response_data = await response.json()
+                print("Failed to send message:", response_data)
