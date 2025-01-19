@@ -52,14 +52,13 @@ async def connection_test(test_db, event_loop):
 
     db_url = make_url(settings.database.endpoint)
 
-    pg_password = db_url.password
-    pg_user = db_url.username
-    pg_db = db_url.database
-    pg_host = db_url.host
-    pg_port = db_url.port
-
     with DatabaseJanitor(
-        pg_user, pg_host, pg_port, pg_db, test_db.version, pg_password
+        user=db_url.username,
+        host=db_url.host,
+        port=db_url.port,
+        version=test_db.version,
+        dbname=db_url.database,
+        password=db_url.password,
     ):
         sessionmanager.init(settings.database.endpoint)
 
