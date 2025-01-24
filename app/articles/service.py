@@ -1,7 +1,9 @@
 from sqlalchemy import select, desc, asc, case, and_, or_, func
+from app.common.utils import find_document_images
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from app.common.service import get_images
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
 from collections import defaultdict
@@ -160,6 +162,14 @@ async def create_article(
     session.add(article)
 
     await session.commit()
+
+    image_nodes = find_document_images(args.document)
+    urls = list(set([entry["url"] for entry in image_nodes]))
+    images = await get_images(session, urls)
+
+    for image in images:
+        image.attachment_content_type = constants.CONTENT_ARTICLE
+        image.attachment_content_id = article.id
 
     await create_log(
         session,

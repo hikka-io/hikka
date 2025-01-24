@@ -84,6 +84,9 @@ async def get_content_by_slug(
 ):
     """Return content by content_type and slug"""
 
+    if content_type not in content_type_to_content_class:
+        return None
+
     content_model = content_type_to_content_class[content_type]
     query = select(content_model)
 
@@ -122,6 +125,11 @@ async def get_content_by_id(
     session: AsyncSession, content_type: str, content_id: UUID
 ):
     """Return content by content_type and content_id"""
+
+    # TODO: merge with get_content_by_slug
+
+    if content_type not in content_type_to_content_class:
+        return None
 
     # Just in case
     if not is_uuid(content_id):

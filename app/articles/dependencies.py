@@ -1,6 +1,7 @@
 from app.common.utils import find_document_images
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
+from app.common.service import get_images
 from app.database import get_session
 from app.models import User, Article
 from app.errors import Abort
@@ -122,12 +123,29 @@ async def validate_article_create(
     image_nodes = find_document_images(args.document)
 
     if len(image_nodes) > 0:
-        images = list(set([entry["url"] for entry in image_nodes]))
+        urls = list(set([entry["url"] for entry in image_nodes]))
 
-        if not len(image_nodes) == len(images):
-            raise Abort("articles", "reused")
+        if not len(image_nodes) == len(urls):
+            raise Abort("articles", "duplicate-image-url")
 
-        print(images)
+        images = await get_images(session, urls)
+        images = images.all()
+
+        if len(images) != len(urls):
+            raise Abort("articles", "bad-image-url")
+
+        for image in images:
+            if image.attachment_content_id is not None:
+                raise Abort("articles", "bad-image-url")
+
+            if image.type != constants.UPLOAD_ATTACHMENT:
+                raise Abort("articles", "bad-image-url")
+
+            if image.user_id != author.id:
+                raise Abort("articles", "bad-image-url")
+
+            if image.deletion_request:
+                raise Abort("articles", "bad-image-url")
 
     return author
 
