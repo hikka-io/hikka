@@ -1,4 +1,6 @@
 from app.aggregator.utils import send_telegram_notification
+from app.aggregator.utils import update_telegram_message
+from app.aggregator.utils import SyncTracker
 from app.database import sessionmanager
 from app.utils import get_settings
 import asyncio
@@ -29,66 +31,96 @@ async def import_aggregator():
 
     sessionmanager.init(settings.database.endpoint)
 
-    await send_telegram_notification("Починаю синхронізацію з агрегатором")
+    tracker = SyncTracker()
 
     print("Genres")
-    await send_telegram_notification("Синхронізую жанри...")
+    tracker.add_task(["Синхронізую жанри", "Синхронізувала жанри"])
+    message_id = await send_telegram_notification(tracker.get_status_message())
     await aggregator_genres()
 
     print("Roles")
-    await send_telegram_notification("Синхронізую ролі...")
+    tracker.add_task(["Синхронізую ролі", "Синхронізувала ролі"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_roles()
 
     print("Characters")
-    await send_telegram_notification("Синхронізую персонажів...")
+    tracker.add_task(["Синхронізую персонажів", "Синхронізувала персонажів"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_characters()
 
     print("Companies")
-    await send_telegram_notification("Синхронізую компанії...")
+    tracker.add_task(["Синхронізую компанії", "Синхронізувала компанії"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_companies()
 
     print("Magazines")
-    await send_telegram_notification("Синхронізую журнали...")
+    tracker.add_task(["Синхронізую журнали", "Синхронізувала журнали"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_magazines()
 
     print("People")
-    await send_telegram_notification("Синхронізую людей...")
+    tracker.add_task(["Синхронізую людей", "Синхронізувала людей"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_people()
 
     print("Anime")
-    await send_telegram_notification("Синхронізую аніме...")
+    tracker.add_task(["Синхронізую аніме", "Синхронізувала аніме"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_anime()
 
     print("Manga")
-    await send_telegram_notification("Синхронізую манґу...")
+    tracker.add_task(["Синхронізую манґу", "Синхронізувала манґу"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_manga()
 
     print("Novel")
-    await send_telegram_notification("Синхронізую ранобе...")
+    tracker.add_task(["Синхронізую ранобе", "Синхронізувала ранобе"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_novel()
 
     print("Anime info")
-    await send_telegram_notification("Синхронізую інформацію про аніме...")
+    tracker.add_task(
+        [
+            "Синхронізую інформацію про аніме",
+            "Синхронізувала інформацію про аніме",
+        ]
+    )
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_anime_info()
 
     print("Manga info")
-    await send_telegram_notification("Синхронізую інформацію про манґу...")
+    tracker.add_task(
+        [
+            "Синхронізую інформацію про манґу",
+            "Синхронізувала інформацію про манґу",
+        ]
+    )
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_manga_info()
 
     print("Novel info")
-    await send_telegram_notification("Синхронізую інформацію про ранобе...")
+    tracker.add_task(
+        [
+            "Синхронізую інформацію про ранобе",
+            "Синхронізувала інформацію про ранобе",
+        ]
+    )
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_novel_info()
 
     print("Franchises")
-    await send_telegram_notification("Синхронізую франшизи...")
+    tracker.add_task(["Синхронізую франшизи", "Синхронізувала франшизи"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await aggregator_franchises()
 
     print("Schedule")
-    await send_telegram_notification("Синхронізую календар...")
+    tracker.add_task(["Синхронізую календар", "Синхронізувала календар"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await update_schedule_build()
 
     print("Search")
-    await send_telegram_notification("Оновлюю пошук...")
+    tracker.add_task(["Оновлюю пошук", "Оновила пошук"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await update_search()
 
     # TODO: figure out what to do with deleted content
@@ -97,10 +129,11 @@ async def import_aggregator():
 
     # TODO: improve performance
     print("Weights")
-    await send_telegram_notification("Перераховую ваги...")
+    tracker.add_task(["Перераховую ваги", "Перерахувала ваги"])
+    await update_telegram_message(message_id, tracker.get_status_message())
     await update_weights()
 
-    await send_telegram_notification("Готово!")
+    await update_telegram_message(message_id, tracker.get_final_message())
 
     await sessionmanager.close()
 
