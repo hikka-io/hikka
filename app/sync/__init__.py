@@ -13,6 +13,9 @@ from .aggregator.anime import aggregator_anime
 from .aggregator.manga import aggregator_manga
 from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
+from .aggregator.weights import update_weights
+
+from .aggregator import update_aggregator
 
 from .notifications import update_notifications
 
@@ -24,8 +27,6 @@ from .ranking import update_ranking_all
 from .ranking import update_ranking
 
 from .history import update_history
-
-from .weights import update_weights
 
 from .sitemap import update_sitemap
 
@@ -52,6 +53,7 @@ __all__ = [
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
+    "update_aggregator",
     "aggregator_anime",
     "aggregator_manga",
     "aggregator_novel",
