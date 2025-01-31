@@ -32,8 +32,8 @@ from .sitemap import update_sitemap
 
 from .search import update_search
 
-from .schedule import update_schedule_build
-from .schedule import update_schedule
+from .aggregator.schedule import update_schedule_build
+from .aggregator.schedule import update_schedule
 
 from .content import update_content
 

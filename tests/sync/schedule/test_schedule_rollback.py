@@ -1,4 +1,4 @@
-from app.sync.schedule import build_schedule
+from app.sync.aggregator.schedule import build_schedule
 from sqlalchemy import select
 from app.models import Anime
 

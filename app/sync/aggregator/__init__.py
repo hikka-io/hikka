@@ -5,6 +5,7 @@ from .info.manga import aggregator_manga_info
 from .info.novel import aggregator_novel_info
 from .companies import aggregator_companies
 from .magazines import aggregator_magazines
+from .schedule import update_schedule_build
 from .people import aggregator_people
 from .genres import aggregator_genres
 from .anime import aggregator_anime
