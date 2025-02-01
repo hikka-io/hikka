@@ -119,7 +119,6 @@ async def validate_article_create(
     ):
         raise Abort("articles", "not-trusted")
 
-    # TODO: validate images here
     image_nodes = find_document_images(args.document)
 
     if len(image_nodes) > 0:
@@ -199,6 +198,37 @@ async def validate_article_update(
         user, [constants.PERMISSION_ARTICLE_TRUSTED]
     ):
         raise Abort("articles", "not-trusted")
+
+    image_nodes = find_document_images(args.document)
+
+    if len(image_nodes) > 0:
+        urls = list(set([entry["url"] for entry in image_nodes]))
+
+        if not len(image_nodes) == len(urls):
+            raise Abort("articles", "duplicate-image-url")
+
+        images = await get_images(session, urls)
+        images = images.all()
+
+        if len(images) != len(urls):
+            raise Abort("articles", "bad-image-url")
+
+        for image in images:
+            if image.attachment_content_id is not None:
+                if (
+                    image.attachment_content_type != constants.CONTENT_ARTICLE
+                    or image.attachment_content_id != article.id
+                ):
+                    raise Abort("articles", "bad-image-url")
+
+            if image.type != constants.UPLOAD_ATTACHMENT:
+                raise Abort("articles", "bad-image-url")
+
+            if image.user_id != author.id:
+                raise Abort("articles", "bad-image-url")
+
+            if image.deletion_request:
+                raise Abort("articles", "bad-image-url")
 
     return article
 

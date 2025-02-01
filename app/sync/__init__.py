@@ -13,7 +13,6 @@ from .aggregator.anime import aggregator_anime
 from .aggregator.manga import aggregator_manga
 from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
-from .aggregator.weights import update_weights
 
 from .aggregator import update_aggregator
 
@@ -30,10 +29,12 @@ from .history import update_history
 
 from .sitemap import update_sitemap
 
+from .weights import update_weights
+
 from .search import update_search
 
-from .aggregator.schedule import update_schedule_build
-from .aggregator.schedule import update_schedule
+from .schedule import update_schedule_build
+from .schedule import update_schedule
 
 from .content import update_content
 

@@ -3,16 +3,17 @@ from .characters import aggregator_characters
 from .info.anime import aggregator_anime_info
 from .info.manga import aggregator_manga_info
 from .info.novel import aggregator_novel_info
+from ..schedule import update_schedule_build
 from .companies import aggregator_companies
 from .magazines import aggregator_magazines
-from .schedule import update_schedule_build
+from app.sync.weights import update_weights
+from app.sync.search import update_search
 from .people import aggregator_people
 from .genres import aggregator_genres
 from .anime import aggregator_anime
 from .manga import aggregator_manga
 from .novel import aggregator_novel
 from .roles import aggregator_roles
-from .weights import update_weights
 
 from app.aggregator.utils import (
     send_telegram_notification,
