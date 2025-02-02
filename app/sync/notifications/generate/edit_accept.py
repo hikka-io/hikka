@@ -46,6 +46,7 @@ async def generate_edit_accept(session: AsyncSession, log: Log):
                 "username": log.user.username,
                 "avatar": log.user.avatar,
             },
+            "initiator_user_id": log.user_id,
         }
     )
 

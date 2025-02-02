@@ -1,5 +1,6 @@
 from sqlalchemy import select, desc, update, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from app.utils import utcnow
 from uuid import UUID
 
@@ -39,6 +40,7 @@ async def get_user_notifications(
     return await session.scalars(
         select(Notification)
         .filter(Notification.user_id == user.id)
+        .options(selectinload(Notification.initiator_user))
         .order_by(desc(Notification.created))
         .limit(limit)
         .offset(offset)

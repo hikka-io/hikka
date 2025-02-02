@@ -54,6 +54,7 @@ async def generate_follow(session: AsyncSession, log: Log):
                 "username": user.username,
                 "avatar": user.avatar,
             },
+            "initiator_user_id": log.user_id,
         }
     )
 
