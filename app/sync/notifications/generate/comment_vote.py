@@ -71,6 +71,7 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
                 "username": user.username,
                 "avatar": user.avatar,
             },
+            "initiator_user_id": user.id,
         }
     )
 

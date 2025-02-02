@@ -48,6 +48,7 @@ async def generate_edit_update(session: AsyncSession, log: Log):
                 "avatar": log.user.avatar,
                 "edit_id": edit.edit_id,
             },
+            "initiator_user_id": log.user_id,
         }
     )
 
