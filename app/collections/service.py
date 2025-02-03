@@ -1,15 +1,9 @@
-from sqlalchemy import select, desc, asc, delete, update, and_, func
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from app.utils import utcnow
-from app import constants
+from app import constants, meilisearch
 from uuid import UUID
-
-from .schemas import (
-    CollectionsListArgs,
-    CollectionArgs,
-)
 
 from app.service import (
     collection_comments_load_options,
@@ -17,6 +11,18 @@ from app.service import (
     get_user_by_username,
     create_log,
 )
+
+from sqlalchemy import (
+    ScalarResult,
+    select,
+    delete,
+    update,
+    func,
+    desc,
+    and_,
+    asc,
+)
+
 
 from app.models import (
     CharacterCollectionContent,
@@ -28,6 +34,11 @@ from app.models import (
     CollectionComment,
     Collection,
     User,
+)
+
+from .schemas import (
+    CollectionsListArgs,
+    CollectionArgs,
 )
 
 
@@ -163,7 +174,7 @@ async def get_collections(
     args: CollectionsListArgs,
     limit: int,
     offset: int,
-) -> list[Collection]:
+) -> ScalarResult[Collection]:
     query = await collections_list_filter(
         collections_load_options(
             select(Collection),
@@ -460,3 +471,40 @@ async def content_compare(
     ]
 
     return collection_compare == args_compare
+
+
+async def collections_search_query(
+    session: AsyncSession,
+    search: CollectionArgs,
+    request_user: User | None,
+    page: int,
+    size: int,
+):
+    meilisearch_result = await meilisearch.search(
+        constants.SEARCH_INDEX_COLLECTION,
+        query=search.query,
+        sort=search.sort,
+        page=page,
+        size=size,
+    )
+
+    ids = [collection["reference"] for collection in meilisearch_result["list"]]
+
+    query = select(Collection).filter(Collection.deleted == False,
+                                      Collection.visibility == constants.COLLECTION_PUBLIC,
+                                      Collection.id.in_(ids))
+
+    query = collections_load_options(query, request_user, True)
+
+    if len(search.sort) > 0:
+        query = query.order_by(*build_collection_order_by(search.sort))
+
+    collection_list = await session.scalars(query)
+    meilisearch_result["list"] = collection_list.unique().all()
+
+    # Results must be sorted here to ensure same order as Meilisearch results
+    meilisearch_result["list"] = sorted(
+        meilisearch_result["list"], key=lambda x: ids.index(x.slug)
+    )
+
+    return meilisearch_result

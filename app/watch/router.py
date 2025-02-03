@@ -18,6 +18,7 @@ from app.dependencies import (
 from app.utils import (
     pagination_dict,
     pagination,
+    paginated_response,
 )
 
 from .schemas import (
@@ -90,10 +91,7 @@ async def get_watch_following(
         session, user, anime, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": watch.unique().all(),
-    }
+    return paginated_response(watch.unique().all(), total, page, limit)
 
 
 @router.get(
@@ -128,7 +126,4 @@ async def user_watch_list(
         session, search, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": anime.all(),
-    }
+    return paginated_response(anime.all(), total, page, limit)

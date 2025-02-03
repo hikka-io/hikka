@@ -7,7 +7,7 @@ from app import constants
 async def test_client_create(client, test_token, test_user):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     response = await request_client_create(
         client,
         test_token,
@@ -41,7 +41,7 @@ async def test_client_create_invalid_endpoint(client, test_token):
 async def test_client_create_double(client, test_token):
     name = "test-client"
     description = "test client description"
-    endpoint = "http://localhost/"
+    endpoint = "hikka://auth/"
     response = await request_client_create(
         client, test_token, name, description, endpoint
     )
@@ -63,7 +63,7 @@ async def test_too_long_fields(client, test_token):
         test_token,
         "a" * (constants.MAX_CLIENT_NAME_LENGTH + 1),
         "description",
-        "http://localhost/",
+        "hikka://auth/",
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -77,7 +77,7 @@ async def test_too_long_fields(client, test_token):
         test_token,
         "name",
         "a" * (constants.MAX_CLIENT_DESCRIPTION_LENGTH + 1),
-        "http://localhost/",
+        "hikka://auth/",
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -91,7 +91,7 @@ async def test_too_long_fields(client, test_token):
         test_token,
         "name",
         "description",
-        "http://localhost/" + "a" * (constants.MAX_CLIENT_ENDPOINT_LENGTH + 1),
+        "hikka://auth/" + "a" * (constants.MAX_CLIENT_ENDPOINT_LENGTH + 1),
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -110,7 +110,7 @@ async def test_too_short_fields(client, test_token):
         test_token,
         "a",
         "description",
-        "http://localhost/",
+        "hikka://auth/",
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
@@ -124,7 +124,7 @@ async def test_too_short_fields(client, test_token):
         test_token,
         "name",
         "a",
-        "http://localhost/",
+        "hikka://auth/",
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 

@@ -1,6 +1,6 @@
 from meilisearch_python_sdk.errors import MeilisearchError
 from meilisearch_python_sdk import AsyncClient
-from app.utils import pagination_dict
+from app.utils import paginated_response
 from app.utils import get_settings
 from app.errors import Abort
 from app import constants
@@ -28,12 +28,12 @@ async def search(
                 page=page,
             )
 
-            return {
-                "pagination": pagination_dict(
-                    result.total_hits, result.page, result.hits_per_page
-                ),
-                "list": result.hits,
-            }
+            return paginated_response(
+                result.hits,
+                result.total_hits,
+                result.page,
+                result.hits_per_page,
+            )
 
     except MeilisearchError:
         raise Abort("search", "query-down")

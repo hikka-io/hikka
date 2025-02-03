@@ -73,7 +73,9 @@ async def _auth_token_or_abort(
     if not token:
         return Abort("auth", "missing-token")
 
-    if not (token := await get_auth_token(session, token)):
+    token = await get_auth_token(session, token)
+
+    if not token:
         return Abort("auth", "invalid-token")
 
     if not token.user:
@@ -90,6 +92,7 @@ async def _auth_token_or_abort(
 
     return token
 
+
 async def auth_token_required(
     token: AuthToken | Abort = Depends(_auth_token_or_abort),
 ) -> AuthToken:
@@ -100,7 +103,7 @@ async def auth_token_required(
 
 
 async def auth_token_optional(
-    token: AuthToken | Abort = Depends(_auth_token_or_abort)
+    token: AuthToken | Abort = Depends(_auth_token_or_abort),
 ) -> AuthToken | None:
     if isinstance(token, Abort):
         return None

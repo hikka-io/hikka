@@ -1,5 +1,5 @@
 from app.models import User, UserOAuth, AuthToken, Client, AuthTokenRequest
-from app.utils import pagination, pagination_dict, utcnow
+from app.utils import pagination, utcnow, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.schemas import UserResponse
@@ -262,10 +262,7 @@ async def third_party_auth_tokens(
         session, user, offset, limit, now
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": tokens.all(),
-    }
+    return paginated_response(tokens.all(), total, page, limit)
 
 
 @router.delete(

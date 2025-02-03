@@ -5,6 +5,7 @@ from .anime import update_search_anime
 from .manga import update_search_manga
 from .novel import update_search_novel
 from .users import update_search_users
+from .collections import update_search_collections
 
 
 async def update_search():
@@ -17,3 +18,4 @@ async def update_search():
     await update_search_manga()
     await update_search_novel()
     await update_search_users()
+    await update_search_collections()
