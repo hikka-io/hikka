@@ -8,7 +8,7 @@ from app import utils
 
 async def save_anime_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
-    posters = [entry["poster"] for entry in data]
+    images = [entry["poster"] for entry in data]
 
     cache = await session.scalars(
         select(Anime).filter(Anime.content_id.in_(content_ids))
@@ -16,9 +16,9 @@ async def save_anime_list(session, data):
 
     anime_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(posters)))
+    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
 
-    poster_cache = {entry.path: entry for entry in cache}
+    image_cache = {entry.path: entry for entry in cache}
 
     add_anime = []
 
@@ -62,7 +62,7 @@ async def save_anime_list(session, data):
             if anime_data["deleted"] is True:
                 continue
 
-            if not (image := poster_cache.get(anime_data["poster"])):
+            if not (image := image_cache.get(anime_data["poster"])):
                 if anime_data["poster"]:
                     image = Image(
                         **{
@@ -70,10 +70,11 @@ async def save_anime_list(session, data):
                             "created": utcnow(),
                             "uploaded": True,
                             "ignore": False,
+                            "system": True,
                         }
                     )
 
-                    poster_cache[anime_data["poster"]] = image
+                    image_cache[anime_data["poster"]] = image
 
             start_date = utils.from_timestamp(anime_data["start_date"])
             end_date = utils.from_timestamp(anime_data["end_date"])
@@ -95,8 +96,8 @@ async def save_anime_list(session, data):
                     "season": anime_data["season"],
                     "score": anime_data["score"],
                     "nsfw": anime_data["nsfw"],
-                    "poster_relation": image,
                     "start_date": start_date,
+                    "image_relation": image,
                     "needs_update": True,
                     "end_date": end_date,
                     "updated": updated,

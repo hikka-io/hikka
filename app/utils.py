@@ -49,6 +49,14 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
             )
 
 
+def is_valid_tag(tag):
+    # Special check for bad characters
+    if any(bad_character in tag for bad_character in list("ёъыэ")):
+        return False
+
+    return re.compile(r"^[a-zа-яіїґ]{3,16}$").match(tag) is not None
+
+
 # Replacement for deprecated datetime's utcnow
 def utcnow():
     return datetime.now(UTC).replace(tzinfo=None)
@@ -60,7 +68,7 @@ def utcfromtimestamp(timestamp: int):
 
 
 # Helper function to round a datetime object to the nearest hour/minute/second
-def round_datettime(
+def round_datetime(
     date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
 ):
     return date - timedelta(
@@ -78,6 +86,8 @@ def check_user_permissions(user: User, permissions: list):
 
     has_permission = all(
         permission in role_permissions for permission in permissions
+    ) and not any(
+        forbidden in permissions for forbidden in user.forbidden_actions
     )
 
     return has_permission
@@ -106,6 +116,7 @@ def resolve_scope_groups(scopes: list[str]) -> list[str]:
             group = resolve_scope_groups(group)
 
             plain_scopes.extend(group)
+
         else:
             plain_scopes.append(scope)
 
@@ -224,7 +235,7 @@ def slugify(
 
     # Add content id part if specified
     if content_id:
-        text += word_separator + content_id[:6]
+        text += word_separator + str(content_id)[:6]
 
     # Remove trailing word separator
     text = text.strip(word_separator)
@@ -320,10 +331,10 @@ def days_until_next_month(date):
 
 # Get list of seasons anime aired in for provided range of dates
 def get_airing_seasons(start_date: datetime, end_date: datetime | None):
-    end_date = utcnow() if not end_date else end_date
+    end_date = utcnow() if end_date is None else end_date
 
-    airing_seasons = []
     date = start_date
+    airing_seasons = [[get_season(date), date.year]]
 
     if days_until_next_month(date) < 7:
         date = get_next_month(date)
@@ -451,7 +462,7 @@ def is_int(string):
 
 def is_uuid(string):
     try:
-        UUID(string)
+        UUID(str(string))
         return True
     except ValueError:
         return False

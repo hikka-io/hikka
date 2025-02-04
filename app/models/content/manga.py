@@ -35,7 +35,8 @@ class Manga(
     __tablename__ = "service_content_manga"
 
     favourite_created: Mapped[datetime] = query_expression()
-    comments_count: Mapped[int] = query_expression()
+
+    comments_count: Mapped[int] = mapped_column(default=0)
 
     # Multilang fields
     title_original: Mapped[str] = mapped_column(nullable=True)

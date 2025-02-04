@@ -1,9 +1,17 @@
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.mutable import MutableList
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import declared_attr
 from sqlalchemy.orm import Mapped
 from sqlalchemy import String
 from datetime import datetime
+
+
+class MyScoreMixin:
+    @declared_attr
+    def my_score(cls):
+        return query_expression(expire_on_flush=False)
 
 
 class DeletedMixin:
@@ -23,7 +31,7 @@ class ContentMixin:
 
 
 class SlugMixin:
-    slug: Mapped[str] = mapped_column(String(255), index=True)
+    slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
 
 
 class UpdatedMixin:

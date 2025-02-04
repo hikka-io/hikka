@@ -186,15 +186,8 @@ class EditResponse(EditResponseBase):
         | CharacterResponse
     )
 
-    comments_count: int | None
+    comments_count: int
     reference: str
-
-    @field_validator("comments_count")
-    def validate_after(cls, comments_count):
-        if not comments_count:
-            comments_count = 0
-
-        return comments_count
 
 
 class EditSimpleAnimeResponse(CustomModel):

@@ -2,16 +2,12 @@ from app.schemas import PaginationResponse
 from pydantic import Field
 
 from app.schemas import (
+    FollowUserResponse,
     CustomModel,
-    UserResponse,
 )
 
 
 # Responses
-class FollowUserResponse(UserResponse):
-    is_followed: bool
-
-
 class FollowUserPaginationResponse(CustomModel):
     pagination: PaginationResponse
     list: list[FollowUserResponse]

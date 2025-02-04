@@ -14,7 +14,11 @@ from .aggregator.manga import aggregator_manga
 from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
 
+from .aggregator import update_aggregator
+
 from .notifications import update_notifications
+
+from .stats import update_stats
 
 from .activity import update_activity
 
@@ -23,9 +27,9 @@ from .ranking import update_ranking
 
 from .history import update_history
 
-from .weights import update_weights
-
 from .sitemap import update_sitemap
+
+from .weights import update_weights
 
 from .search import update_search
 
@@ -35,7 +39,6 @@ from .schedule import update_schedule
 from .content import update_content
 
 from .email import send_emails
-
 
 __all__ = [
     "delete_expired_token_requests",
@@ -51,6 +54,7 @@ __all__ = [
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
+    "update_aggregator",
     "aggregator_anime",
     "aggregator_manga",
     "aggregator_novel",
@@ -63,5 +67,6 @@ __all__ = [
     "update_weights",
     "update_sitemap",
     "update_search",
+    "update_stats",
     "send_emails",
 ]

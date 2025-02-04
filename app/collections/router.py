@@ -38,12 +38,15 @@ router = APIRouter(prefix="/collections", tags=["Collections"])
 @router.post("", response_model=CollectionsListResponse)
 async def get_collections(
     args: CollectionsListArgs = Depends(validate_collections_list_args),
-    request_user: User | None = Depends(
-        auth_required(optional=True, scope=[constants.SCOPE_READ_COLLECTIONS])
-    ),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
+    request_user: User | None = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COLLECTIONS],
+            optional=True,
+        )
+    ),
 ):
     if not args.query:
         limit, offset = pagination(page, size)
@@ -114,6 +117,8 @@ async def delete_collection(
 
 @router.get("/{reference}", response_model=CollectionResponse)
 async def get_collection(
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(
         auth_required(
             optional=True,
@@ -123,8 +128,6 @@ async def get_collection(
             ],
         )
     ),
-    collection: Collection = Depends(validate_collection),
-    session: AsyncSession = Depends(get_session),
 ):
     return await service.get_collection_display(
         session, collection, request_user

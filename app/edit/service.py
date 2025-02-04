@@ -3,8 +3,7 @@ from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy.orm import with_expression
-from app.utils import round_datettime
+from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
 from app.utils import utcnow
@@ -13,7 +12,6 @@ from app import constants
 import copy
 
 from app.service import (
-    get_comments_count_subquery,
     get_user_by_username,
     get_content_by_slug,
     create_log,
@@ -89,12 +87,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
             joinedload(AnimeEdit.content),
             joinedload(MangaEdit.content),
             joinedload(NovelEdit.content),
-            with_expression(
-                Edit.comments_count,
-                get_comments_count_subquery(
-                    Edit.id, constants.CONTENT_SYSTEM_EDIT
-                ),
-            ),
         )
     )
 
@@ -170,13 +162,6 @@ async def get_edits(
     """Return all edits"""
 
     query = await edits_search_filter(session, args, select(Edit))
-
-    query = query.options(
-        with_expression(
-            Edit.comments_count,
-            get_comments_count_subquery(Edit.id, constants.CONTENT_SYSTEM_EDIT),
-        )
-    )
 
     query = query.options(
         joinedload(AnimeEdit.content).load_only(
@@ -508,7 +493,7 @@ async def count_created_edit_limit(session: AsyncSession, user: User) -> int:
                 ]
             )
         )
-        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
         .filter(Log.user == user)
     )
 
@@ -523,6 +508,6 @@ async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
                 ]
             )
         )
-        .filter(Log.created > round_datettime(utcnow(), minutes=5))
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
         .filter(Log.user == user)
     )

@@ -35,6 +35,9 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
     ):
         return
 
+    # Fetch content in order to get slug
+    await session.refresh(comment, attribute_names=["content"])
+
     # Prevent comment vote notifications spam
     if await service.count_notifications_spam(
         session,
@@ -42,11 +45,10 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
         user.username,
         notification_type,
         timedelta(hours=6),
+        comment.content.slug,
+        comment.content_type,
     ):
         return
-
-    # Fetch content in order to get slug
-    await session.refresh(comment, attribute_names=["content"])
 
     notification = Notification(
         **{

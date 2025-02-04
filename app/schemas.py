@@ -367,8 +367,6 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     )
     episodes_released: int | None = Field(examples=["10"])
     episodes_total: int | None = Field(examples=["10"])
-    # TODO: Remove me!
-    poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
     scored_by: int = Field(examples=[1210150])
@@ -487,6 +485,10 @@ class UserResponse(CustomModel):
     role: str
 
 
+class FollowUserResponse(UserResponse):
+    is_followed: bool
+
+
 class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
@@ -518,8 +520,8 @@ class CollectionContentResponse(CustomModel):
 
 class CollectionBaseResponse(CustomModel, DataTypeMixin):
     visibility: CollectionVisibilityEnum
+    author: FollowUserResponse
     labels_order: list[str]
-    author: UserResponse
     created: datetime_pd
     updated: datetime_pd
     comments_count: int | None
