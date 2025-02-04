@@ -4,9 +4,9 @@ from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
+from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
-from datetime import timedelta
 from app import constants
 from uuid import UUID
 
@@ -32,8 +32,10 @@ from app.models import (
     Magazine,
     Company,
     Comment,
+    Article,
     Client,
     Person,
+    Follow,
     Genre,
     Anime,
     Manga,
@@ -51,6 +53,7 @@ content_type_to_content_class = {
     constants.CONTENT_CHARACTER: Character,
     constants.CONTENT_SYSTEM_EDIT: Edit,
     constants.CONTENT_COMMENT: Comment,
+    constants.CONTENT_ARTICLE: Article,
     constants.CONTENT_PERSON: Person,
     constants.CONTENT_ANIME: Anime,
     constants.CONTENT_MANGA: Manga,
@@ -66,11 +69,23 @@ read_order_mapping = {
 }
 
 
+async def get_followed_user_ids(session: AsyncSession, user: User | None):
+    if not user:
+        return []
+
+    return await session.scalars(
+        select(Follow.followed_user_id).filter(Follow.user_id == user.id)
+    )
+
+
 # We use this code mainly with system based on polymorphic identity
 async def get_content_by_slug(
     session: AsyncSession, content_type: str, slug: str
 ):
     """Return content by content_type and slug"""
+
+    if content_type not in content_type_to_content_class:
+        return None
 
     content_model = content_type_to_content_class[content_type]
     query = select(content_model)
@@ -102,6 +117,45 @@ async def get_content_by_slug(
     # Everything else is handled here
     else:
         query = query.filter(content_model.slug == slug)
+
+    return await session.scalar(query)
+
+
+async def get_content_by_id(
+    session: AsyncSession, content_type: str, content_id: UUID
+):
+    """Return content by content_type and content_id"""
+
+    # TODO: merge with get_content_by_slug
+
+    if content_type not in content_type_to_content_class:
+        return None
+
+    # Just in case
+    if not is_uuid(content_id):
+        return None
+
+    content_model = content_type_to_content_class[content_type]
+    query = select(content_model)
+
+    # Special case for edit
+    if content_type == constants.CONTENT_SYSTEM_EDIT:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for collection
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COLLECTION:
+        query = query.filter(content_model.id == content_id)
+
+    # Special case for comment
+    # Since collections don't have slugs we use their id instead
+    elif content_type == constants.CONTENT_COMMENT:
+        query = query.filter(content_model.id == content_id)
+        query = query.filter(content_model.hidden == False)  # noqa: E712
+
+    # Everything else is handled here
+    else:
+        query = query.filter(content_model.id == content_id)
 
     return await session.scalar(query)
 
@@ -204,6 +258,31 @@ async def create_log(
     await session.commit()
 
     return log
+
+
+async def count_logs(
+    session: AsyncSession,
+    log_type: str,
+    user: User | None = None,
+    target_id: UUID | None = None,
+    start_time: datetime | None = None,
+):
+    """
+    Purpose of this function is to mainly count log to enforce rate limit.
+    """
+
+    query = select(func.count(Log.id)).filter(Log.log_type == log_type)
+
+    if user:
+        query = query.filter(Log.user == user)
+
+    if target_id:
+        query = query.filter(Log.target_id == target_id)
+
+    if start_time:
+        query = query.filter(Log.created > start_time)
+
+    return await session.scalar(query)
 
 
 def anime_loadonly(statement):
@@ -381,61 +460,35 @@ def build_anime_order_by(sort: list[str]):
 
 
 # Collections stuff
-def get_comments_count_subquery(content_id, content_type):
-    return (
-        select(func.count(Comment.id))
-        .filter(
-            Comment.content_id == content_id,
-            Comment.content_type == content_type,
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
-        )
-        .scalar_subquery()
-    )
-
-
-def collection_comments_load_options(query: Select):
-    return query.options(
-        with_expression(
-            Collection.comments_count,
-            get_comments_count_subquery(
-                Collection.id, constants.CONTENT_COLLECTION
-            ),
-        )
-    )
-
-
 def collections_load_options(
     query: Select, request_user: User | None, preview: bool = False
 ):
     # Yeah, I like it but not sure about performance
-    query = collection_comments_load_options(
-        query.options(
-            joinedload(Collection.collection.of_type(AnimeCollectionContent))
-            .joinedload(AnimeCollectionContent.content)
-            .joinedload(Anime.watch),
-            with_loader_criteria(
-                AnimeWatch,
-                AnimeWatch.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(Collection.collection.of_type(MangaCollectionContent))
-            .joinedload(MangaCollectionContent.content)
-            .joinedload(Manga.read),
-            with_loader_criteria(
-                MangaRead,
-                MangaRead.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(Collection.collection.of_type(NovelCollectionContent))
-            .joinedload(NovelCollectionContent.content)
-            .joinedload(Novel.read),
-            with_loader_criteria(
-                NovelRead,
-                NovelRead.user_id == request_user.id if request_user else None,
-            ),
-            joinedload(
-                Collection.collection.of_type(CharacterCollectionContent)
-            ).joinedload(CharacterCollectionContent.content),
-        )
+    query = query.options(
+        joinedload(Collection.collection.of_type(AnimeCollectionContent))
+        .joinedload(AnimeCollectionContent.content)
+        .joinedload(Anime.watch),
+        with_loader_criteria(
+            AnimeWatch,
+            AnimeWatch.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(Collection.collection.of_type(MangaCollectionContent))
+        .joinedload(MangaCollectionContent.content)
+        .joinedload(Manga.read),
+        with_loader_criteria(
+            MangaRead,
+            MangaRead.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(Collection.collection.of_type(NovelCollectionContent))
+        .joinedload(NovelCollectionContent.content)
+        .joinedload(Novel.read),
+        with_loader_criteria(
+            NovelRead,
+            NovelRead.user_id == request_user.id if request_user else None,
+        ),
+        joinedload(
+            Collection.collection.of_type(CharacterCollectionContent)
+        ).joinedload(CharacterCollectionContent.content),
     )
 
     # Here we load user vote score for collection

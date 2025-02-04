@@ -1,7 +1,6 @@
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import with_expression
 from .utils import build_novel_filters_ms
 from app.schemas import NovelSearchArgs
 from sqlalchemy.orm import joinedload
@@ -9,7 +8,6 @@ from app import meilisearch
 from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
     build_novel_order_by,
     novel_search_filter,
 )
@@ -36,12 +34,6 @@ async def get_novel_info_by_slug(
             joinedload(Novel.authors).joinedload(NovelAuthor.person),
             joinedload(Novel.magazines),
             joinedload(Novel.genres),
-        )
-        .options(
-            with_expression(
-                Novel.comments_count,
-                get_comments_count_subquery(Novel.id, constants.CONTENT_NOVEL),
-            )
         )
     )
 

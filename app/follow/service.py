@@ -2,9 +2,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func, case
 from sqlalchemy.orm import with_expression
 from app.models import User, Follow
-from app.service import create_log
 from app.utils import utcnow
 from app import constants
+
+from app.service import (
+    get_followed_user_ids,
+    create_log,
+)
 
 
 async def count_followers(session: AsyncSession, user: User):
@@ -77,14 +81,7 @@ async def list_following(
     limit: int,
     offset: int,
 ):
-    followed_user_ids = []
-
-    if request_user:
-        followed_user_ids = await session.scalars(
-            select(Follow.followed_user_id).filter(
-                Follow.user_id == request_user.id
-            )
-        )
+    followed_user_ids = await get_followed_user_ids(session, request_user)
 
     return await session.scalars(
         select(User)
@@ -109,14 +106,7 @@ async def list_followers(
     limit: int,
     offset: int,
 ):
-    followed_user_ids = []
-
-    if request_user:
-        followed_user_ids = await session.scalars(
-            select(Follow.followed_user_id).filter(
-                Follow.user_id == request_user.id
-            )
-        )
+    followed_user_ids = await get_followed_user_ids(session, request_user)
 
     return await session.scalars(
         select(User)

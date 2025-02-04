@@ -200,7 +200,12 @@ async def delete_user_image(
     image_type: ImageTypeEnum,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(
+            scope=[
+                constants.SCOPE_DELETE_USER_IMAGE,
+                constants.SCOPE_DELETE_USER_COVER,
+            ]
+        )
     ),
 ):
     return await service.delete_user_image(session, user, image_type)

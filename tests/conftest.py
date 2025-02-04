@@ -52,26 +52,39 @@ async def connection_test(test_db, event_loop):
 
     db_url = make_url(settings.database.endpoint)
 
-    pg_password = db_url.password
-    pg_user = db_url.username
-    pg_db = db_url.database
-    pg_host = db_url.host
-    pg_port = db_url.port
-
     with DatabaseJanitor(
-        pg_user, pg_host, pg_port, pg_db, test_db.version, pg_password
+        user=db_url.username,
+        host=db_url.host,
+        port=db_url.port,
+        version=test_db.version,
+        dbname=db_url.database,
+        password=db_url.password,
     ):
         sessionmanager.init(settings.database.endpoint)
+
+        async with sessionmanager.connect() as connection:
+            await connection.execute(
+                text("CREATE EXTENSION IF NOT EXISTS ltree;")
+            )
+
+            await connection.run_sync(Base.metadata.drop_all)
+            await connection.run_sync(Base.metadata.create_all)
+
         yield
+
         await sessionmanager.close()
 
 
 @pytest.fixture(scope="function", autouse=True)
 async def create_tables(connection_test):
     async with sessionmanager.connect() as connection:
-        await connection.execute(text("CREATE EXTENSION IF NOT EXISTS ltree;"))
-        await connection.run_sync(Base.metadata.drop_all)
-        await connection.run_sync(Base.metadata.create_all)
+        tables = ",".join(
+            table.name for table in reversed(Base.metadata.sorted_tables)
+        )
+
+        await connection.execute(
+            text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE;")
+        )
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -87,6 +100,16 @@ async def session_override(app, connection_test):
 async def test_session():
     async with sessionmanager.session() as session:
         yield session
+
+
+@pytest.fixture
+async def user_admin(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="admin",
+        email="admin@mail.com",
+        role=constants.ROLE_ADMIN,
+    )
 
 
 @pytest.fixture
@@ -144,7 +167,7 @@ async def create_dummy_user_restricted(test_session):
         test_session,
         username="dummy",
         email="dummy@mail.com",
-        role=constants.ROLE_RESTRICTED,
+        role=constants.ROLE_NOT_ACTIVATED,
     )
 
 
@@ -166,6 +189,15 @@ async def test_token(test_user, test_session):
     )
 
     return token.secret
+
+
+@pytest.fixture
+async def token_admin(user_admin, test_session):
+    return (
+        await helpers.create_token(
+            test_session, user_admin.email, "ADMIN_TOKEN_SECRET"
+        )
+    ).secret
 
 
 @pytest.fixture

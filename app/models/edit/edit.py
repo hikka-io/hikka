@@ -1,6 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -26,7 +25,7 @@ class Edit(
         "with_polymorphic": "*",
     }
 
-    comments_count: Mapped[int] = query_expression()
+    comments_count: Mapped[int] = mapped_column(default=0)
 
     system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)

@@ -346,7 +346,7 @@ async def process_staff(session, anime, data):
     return update_staff
 
 
-async def process_poster(session, anime, data):
+async def process_image(session, anime, data):
     if not data.get("poster"):
         return
 
@@ -364,11 +364,12 @@ async def process_poster(session, anime, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 
     session.add(image)
-    anime.poster_relation = image
+    anime.image_relation = image
 
 
 def process_external(data):
@@ -482,16 +483,12 @@ async def update_anime_info(session, anime, data):
 
         year = start_date.year
         season = utils.get_season(start_date)
-        airing_seasons = []
+        airing_seasons = [f"{season}_{year}"]
 
-        if anime.start_date:
-            if (
-                anime.status == constants.RELEASE_STATUS_ONGOING
-                or anime.end_date is not None
-            ):
-                airing_seasons = utils.get_airing_seasons(
-                    anime.start_date, anime.end_date
-                )
+        if anime.end_date is not None:
+            airing_seasons = utils.get_airing_seasons(
+                anime.start_date, anime.end_date
+            )
 
     else:
         year = None
@@ -521,7 +518,7 @@ async def update_anime_info(session, anime, data):
     anime.needs_update = False
     anime.updated = now
 
-    await process_poster(session, anime, data)
+    await process_image(session, anime, data)
 
     genres_add = await process_genres(session, anime, data)
     companies_anime = await process_companies_anime(session, anime, data)

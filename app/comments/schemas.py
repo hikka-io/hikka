@@ -17,11 +17,25 @@ from app.schemas import (
     CustomModel,
 )
 
+from app.models import (
+    Collection,
+    Article,
+    Anime,
+    Manga,
+    Novel,
+    Edit,
+)
+
+
+# Types
+CommentableType = Collection | Edit | Article | Anime | Manga | Novel
+
 
 # Enums
 class ContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
     content_edit = constants.CONTENT_SYSTEM_EDIT
+    content_article = constants.CONTENT_ARTICLE
     content_anime = constants.CONTENT_ANIME
     content_manga = constants.CONTENT_MANGA
     content_novel = constants.CONTENT_NOVEL

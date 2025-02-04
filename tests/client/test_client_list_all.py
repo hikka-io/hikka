@@ -3,7 +3,6 @@ from tests.client_requests import request_list_all_clients
 
 async def test_client_list_all(client, moderator_token, test_thirdparty_client):
     response = await request_list_all_clients(client, moderator_token)
-    print(response.json())
     assert response.status_code == 200
 
     assert response.json()["pagination"] == {
@@ -20,5 +19,4 @@ async def test_client_list_all(client, moderator_token, test_thirdparty_client):
 
 async def test_client_list_all_no_permission(client, test_token):
     response = await request_list_all_clients(client, test_token)
-    print(response.json())
     assert response.status_code == 403

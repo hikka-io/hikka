@@ -1,3 +1,5 @@
+from .admin import request_admin_update_user
+
 from .auth import request_list_thirdparty_tokens
 from .auth import request_auth_token_request
 from .auth import request_activation_resend
@@ -108,6 +110,12 @@ from .collections import request_delete_collection
 from .collections import request_collection_info
 from .collections import request_collections
 
+from .articles import request_create_article
+from .articles import request_update_article
+from .articles import request_delete_article
+from .articles import request_article_stats
+from .articles import request_articles
+
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
@@ -120,6 +128,9 @@ from .upload import request_upload
 from .system import request_backup_images
 
 __all__ = [
+    # =========== admin ===========
+    "request_admin_update_user",
+    # =========== auth ===========
     "request_list_thirdparty_tokens",
     "request_auth_token_request",
     "request_activation_resend",
@@ -131,6 +142,7 @@ __all__ = [
     "request_auth_token",
     "request_signup",
     "request_login",
+    # =========== client ===========
     "request_client_full_info",
     "request_list_all_clients",
     "request_client_create",
@@ -139,16 +151,20 @@ __all__ = [
     "request_client_delete",
     "request_list_clients",
     "request_client_info",
+    # =========== oauth ===========
     "request_oauth_post",
     "request_oauth_url",
+    # =========== user ===========
     "request_profile",
     "request_me",
+    # =========== follow ===========
     "request_follow_stats",
     "request_follow_check",
     "request_followers",
     "request_following",
     "request_unfollow",
     "request_follow",
+    # =========== anime ===========
     "request_anime_recommendations",
     "request_anime_characters",
     "request_anime_franchise",
@@ -157,35 +173,44 @@ __all__ = [
     "request_anime_genres",
     "request_anime_staff",
     "request_anime_info",
+    # =========== manga ===========
     "request_manga_search",
     "request_manga_info",
+    # =========== novel ===========
     "request_novel_search",
     "request_novel_info",
+    # =========== characters ===========
     "request_characters_search",
     "request_characters_anime",
     "request_characters_info",
+    # =========== companies ===========
     "request_companies_search",
     "request_companies_anime",
     "request_companies_info",
+    # =========== people ===========
     "request_people_search",
     "request_people_anime",
     "request_people_info",
+    # =========== favourite ===========
     "request_favourite_delete",
     "request_favourite_list",
     "request_favourite_add",
     "request_favourite",
+    # =========== watch ===========
     "request_watch_random",
     "request_watch_delete",
     "request_watch_stats",
     "request_watch_list",
     "request_watch_add",
     "request_watch",
+    # =========== read ===========
     "request_read_random",
     "request_read_delete",
     "request_read_stats",
     "request_read_list",
     "request_read_add",
     "request_read",
+    # =========== edit ===========
     "request_accept_edit",
     "request_create_edit",
     "request_update_edit",
@@ -193,11 +218,13 @@ __all__ = [
     "request_deny_edit",
     "request_edit_list",
     "request_edit",
+    # =========== comments ===========
     "request_comments_latest",
     "request_comments_write",
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
+    # =========== settings ===========
     "request_settings_delete_watch",
     "request_settings_delete_image",
     "request_settings_import_watch",
@@ -207,16 +234,27 @@ __all__ = [
     "request_settings_username",
     "request_settings_password",
     "request_settings_email",
+    # =========== collection ===========
     "request_create_collection",
     "request_update_collection",
     "request_delete_collection",
     "request_collection_info",
     "request_collections",
+    # =========== articles ===========
+    "request_create_article",
+    "request_update_article",
+    "request_delete_article",
+    "request_article_stats",
+    "request_articles",
+    # =========== notifications ===========
     "request_notifications_count",
     "request_notification_seen",
     "request_notifications",
+    # =========== vote ===========
     "request_vote_status",
     "request_vote",
+    # =========== upload ===========
     "request_upload",
+    # =========== system ===========
     "request_backup_images",
 ]

@@ -1,7 +1,6 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime, timedelta, UTC
-from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import LtreeType
@@ -12,13 +11,20 @@ from ..base import Base
 from uuid import UUID
 
 from ..mixins import (
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
 )
 
 
-class Comment(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
+class Comment(
+    MyScoreMixin,
+    CreatedMixin,
+    UpdatedMixin,
+    DeletedMixin,
+    Base,
+):
     __tablename__ = "service_comments"
     __mapper_args__ = {
         "polymorphic_identity": "default",
@@ -27,7 +33,6 @@ class Comment(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
 
     # This field is used for comment visibility for private content
     private: Mapped[bool] = mapped_column(default=False)
-    my_score: Mapped[int] = query_expression()
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
     preview: Mapped[dict] = mapped_column(JSONB, default={})

@@ -1,15 +1,12 @@
 from sqlalchemy import select, desc, asc, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
-from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
     build_anime_order_by,
     anime_search_filter,
 )
@@ -41,12 +38,6 @@ async def get_anime_info_by_slug(
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
-        )
-        .options(
-            with_expression(
-                Anime.comments_count,
-                get_comments_count_subquery(Anime.id, constants.CONTENT_ANIME),
-            )
         )
     )
 

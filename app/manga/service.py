@@ -1,7 +1,6 @@
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import with_expression
 from .utils import build_manga_filters_ms
 from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
@@ -9,7 +8,6 @@ from app import meilisearch
 from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
     build_manga_order_by,
     manga_search_filter,
 )
@@ -36,12 +34,6 @@ async def get_manga_info_by_slug(
             joinedload(Manga.authors).joinedload(MangaAuthor.person),
             joinedload(Manga.magazines),
             joinedload(Manga.genres),
-        )
-        .options(
-            with_expression(
-                Manga.comments_count,
-                get_comments_count_subquery(Manga.id, constants.CONTENT_MANGA),
-            )
         )
     )
 
