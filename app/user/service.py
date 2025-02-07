@@ -1,10 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, exists, desc
 from datetime import timedelta
 from app.utils import utcnow
 
 from app.models import (
     Activity,
+    Follow,
     User,
 )
 
@@ -40,3 +41,18 @@ async def users_meilisearch(
         .filter(User.username.in_(usernames))
         .order_by(desc(User.last_active))
     )
+
+
+async def load_is_followed(
+    session: AsyncSession, user: User, request_user: User
+) -> User | None:
+    user.is_followed = await session.scalar(
+        select(
+            exists().where(
+                Follow.followed_user == user,
+                Follow.user == request_user,
+            )
+        )
+    )
+
+    return user

@@ -88,6 +88,7 @@ async def process_image(session, novel, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 

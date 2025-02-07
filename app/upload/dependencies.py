@@ -27,6 +27,9 @@ async def validate_upload_rate_limit(
     if upload_type == constants.UPLOAD_COVER:
         upload_permissions = [constants.PERMISSION_UPLOAD_COVER]
 
+    if upload_type == constants.UPLOAD_ATTACHMENT:
+        upload_permissions = [constants.PERMISSION_UPLOAD_ATTACHMENT]
+
     if not upload_permissions:
         raise Abort("upload", "missconfigured-permission")
 
@@ -39,6 +42,7 @@ async def validate_upload_rate_limit(
     count = await service.count_uploads_last_day(session, user, upload_type)
 
     # TODO: make this dynamic based on upload type (?)
+    # TODO: especially for attachments!
     max_daily_uploads = 10
 
     if (
@@ -81,6 +85,13 @@ async def validate_upload_file(
 
     if upload_type == constants.UPLOAD_COVER:
         if width != 1500 or height != 500:
+            raise Abort("upload", "bad-resolution")
+
+    if upload_type == constants.UPLOAD_ATTACHMENT:
+        if width < 200 or height < 200:
+            raise Abort("upload", "bad-resolution")
+
+        if width > 2000 or height > 2000:
             raise Abort("upload", "bad-resolution")
 
     # TODO: add file hash check (?)

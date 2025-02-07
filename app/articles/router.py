@@ -20,6 +20,7 @@ from app.models import (
 
 from .schemas import (
     ArticlesListResponse,
+    ArticlesTopResponse,
     ArticlesListArgs,
     ArticleResponse,
     ArticleArgs,
@@ -80,6 +81,23 @@ async def delete_article(
     return {"success": True}
 
 
+# To be honest I really hate how this endpoint turned out
+@router.get("/stats", response_model=ArticlesTopResponse)
+async def get_article_top(
+    session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_ARTICLES_TOP],
+            optional=True,
+        )
+    ),
+):
+    return {
+        "tags": await service.get_article_tags(session),
+        "authors": await service.get_article_authors(session, request_user),
+    }
+
+
 @router.get("/{slug}", response_model=ArticleResponse)
 async def get_article(article: Article = Depends(validate_article)):
     return article
@@ -100,11 +118,16 @@ async def get_articles(
 ):
     limit, offset = pagination(page, size)
     total = await service.get_articles_count(session, request_user, args)
+
     articles = await service.get_articles(
         session, request_user, args, limit, offset
     )
 
+    articles = await service.load_articles_content(
+        session, articles.unique().all()
+    )
+
     return {
         "pagination": pagination_dict(total, page, limit),
-        "list": articles.unique().all(),
+        "list": articles,
     }

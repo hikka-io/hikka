@@ -66,6 +66,13 @@ async def update_schedule_aired(session: AsyncSession):
         before = {}
         after = {}
 
+        # Anilist bad schedule fix
+        if (
+            anime.episodes_total is not None
+            and schedule.episode > anime.episodes_total
+        ):
+            continue
+
         # Update episodes released for anime
         if (
             not anime.episodes_released
@@ -135,6 +142,23 @@ async def update_schedule_aired(session: AsyncSession):
             await session.commit()
 
     session.add(system_timestamp)
+    await session.commit()
+
+    # Fix for unupdated ongoing status
+    # TODO: figure out why this is happening
+    anime_list = await session.scalars(
+        select(Anime)
+        .filter(
+            Anime.episodes_total > 1,
+            Anime.episodes_released == Anime.episodes_total,
+            Anime.status == constants.RELEASE_STATUS_ONGOING,
+        )
+        .order_by(Anime.id.desc())
+    )
+
+    for anime in anime_list:
+        anime.status = constants.RELEASE_STATUS_FINISHED
+
     await session.commit()
 
 
@@ -213,6 +237,13 @@ async def build_schedule(session: AsyncSession):
 
         for episode_data in anime.schedule:
             airing_at = utcfromtimestamp(episode_data["airing_at"])
+
+            # Sometimes Anilist returns more episodes than it should
+            if (
+                anime.episodes_total is not None
+                and episode_data["episode"] > anime.episodes_total
+            ):
+                continue
 
             if not (episode := cache.get(episode_data["episode"])):
                 episode = AnimeSchedule(

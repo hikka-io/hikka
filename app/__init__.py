@@ -31,7 +31,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app = FastAPI(
         title="Hikka API",
-        version="0.4.1",
+        version="0.4.2",
         openapi_tags=[
             {"name": "Admin"},
             {"name": "Auth"},
@@ -145,6 +145,10 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(edit_router)
     app.include_router(vote_router)
+
+    from .testing import router as testing_router
+
+    app.include_router(testing_router)
 
     @app.get("/ping")
     async def ping_pong():

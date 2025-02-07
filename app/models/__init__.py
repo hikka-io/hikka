@@ -28,7 +28,6 @@ from .edit.edit import Edit
 from .moderation.moderation import Moderation
 
 from .comments.comment import CollectionComment
-from .comments.vote import CommentVoteLegacy
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
 from .comments.comment import NovelComment
@@ -76,12 +75,12 @@ from .content.author import AuthorRole
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
-from .system.upload import Upload
 from .system.image import Image
 from .system.log import Log
 
 from .vote.vote import CollectionVote
 from .vote.vote import CommentVote
+from .vote.vote import ArticleVote
 from .vote.vote import Vote
 
 from .collection.content import CharacterCollectionContent
@@ -92,12 +91,15 @@ from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
-from .article.content import ArticleContent
 from .article.article import Article
 
+from .stats.articles import UserArticleStats
 from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
+
+from .tag.tag import ArticleTag
+from .tag.tag import Tag
 
 from .base import Base
 
@@ -132,7 +134,6 @@ __all__ = [
     "MangaComment",
     "NovelComment",
     "EditComment",
-    "CommentVoteLegacy",
     "Comment",
     "CollectionFavourite",
     "CharacterFavourite",
@@ -168,11 +169,11 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
-    "Upload",
     "Image",
     "Log",
     "CollectionVote",
     "CommentVote",
+    "ArticleVote",
     "Vote",
     "CharacterCollectionContent",
     "PersonCollectionContent",
@@ -181,9 +182,11 @@ __all__ = [
     "NovelCollectionContent",
     "CollectionContent",
     "Collection",
-    "ArticleContent",
     "Article",
+    "UserArticleStats",
     "UserEditStats",
     "AnimeSchedule",
+    "ArticleTag",
+    "Tag",
     "Base",
 ]

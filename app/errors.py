@@ -207,8 +207,12 @@ errors = {
         "not-found": ["Client not found", 404],
     },
     "articles": {
+        "not-trusted": ["You can't make this article trusted", 403],
         "bad-category": ["You can't use this category", 400],
+        "duplicate-image-url": ["Duplicate image url", 400],
+        "used-image": ["This image already been used", 400],
         "author-not-found": ["Author not found", 404],
+        "bad-image-url": ["Bad image url", 400],
         "not-found": ["Article not found", 404],
     },
     "content": {

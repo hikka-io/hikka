@@ -1,12 +1,15 @@
+from ..association import tags_articles_association_table
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from ..base import Base
+from uuid import UUID
 
 from ..mixins import (
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
@@ -19,42 +22,34 @@ class Article(
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    MyScoreMixin,
     SlugMixin,
 ):
     __tablename__ = "service_articles"
 
+    comments_count: Mapped[int] = mapped_column(default=0)
+
+    # In community we trust (but it's nice to have some control)
+    trusted: Mapped[bool] = mapped_column(default=False)
+
     category: Mapped[str] = mapped_column(String(32), index=True)
-    tags: Mapped[list] = mapped_column(JSONB, default=[])
+    document: Mapped[list] = mapped_column(JSONB, default=[])
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
     vote_score: Mapped[int]
-    text: Mapped[str]
 
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(foreign_keys=[author_id])
 
-    # TODO: cascade delete
-    content = relationship("ArticleContent", back_populates="article")
+    content_type: Mapped[str] = mapped_column(index=True, nullable=True)
+    content_id: Mapped[UUID] = mapped_column(index=True, nullable=True)
 
-    cover_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
-        nullable=True,
-        index=True,
-    )
-
-    cover_image_relation: Mapped["Image"] = relationship(
-        foreign_keys=[cover_image_id], lazy="joined"
+    tags: Mapped[list["ArticleTag"]] = relationship(
+        secondary=tags_articles_association_table,
+        back_populates="articles",
+        lazy="joined",
     )
 
     @hybrid_property
-    def cover(self):
-        if not self.cover_image_relation:
-            return None
-
-        if (
-            self.cover_image_relation.ignore
-            or not self.cover_image_relation.uploaded
-        ):
-            return None
-
-        return self.cover_image_relation.url
+    def data_type(self):
+        return "article"

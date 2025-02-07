@@ -36,19 +36,3 @@ def request_collection_info(client, reference, token=None):
         f"/collections/{reference}",
         headers=headers,
     )
-
-
-# def request_collections_list(client, page=1, token=None):
-#     headers = {"Auth": token} if token else {}
-#     return client.get(
-#         f"/collections?page={page}",
-#         headers=headers,
-#     )
-
-
-# def request_user_collections_list(client, username, page=1, token=None):
-#     headers = {"Auth": token} if token else {}
-#     return client.get(
-#         f"/collections/user/{username}?page={page}",
-#         headers=headers,
-#     )

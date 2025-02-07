@@ -1,4 +1,4 @@
-FROM python:3.12.5-alpine3.20 as base
+FROM python:3.13.1-alpine3.20 as base
 
 ENV VIRTUAL_ENV=/project/.venv \
     PATH="/project/.venv/bin:$PATH"

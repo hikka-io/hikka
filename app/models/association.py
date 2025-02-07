@@ -1,6 +1,21 @@
 from sqlalchemy import Table, Column, ForeignKey
 from .base import Base
 
+tags_articles_association_table = Table(
+    "service_relation_tags_articles",
+    Base.metadata,
+    Column(
+        "tag_id",
+        ForeignKey("service_tags.id"),
+        primary_key=True,
+    ),
+    Column(
+        "article_id",
+        ForeignKey("service_articles.id"),
+        primary_key=True,
+    ),
+)
+
 genres_anime_association_table = Table(
     "service_relation_genres_anime",
     Base.metadata,

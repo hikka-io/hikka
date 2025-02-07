@@ -33,7 +33,8 @@ class Anime(
     __tablename__ = "service_content_anime"
 
     favourite_created: Mapped[datetime] = query_expression()
-    comments_count: Mapped[int] = query_expression()
+
+    comments_count: Mapped[int] = mapped_column(default=0)
 
     # Multilang fields
     title_ja: Mapped[str] = mapped_column(String(255), nullable=True)
@@ -109,11 +110,11 @@ class Anime(
         back_populates="anime",
     )
 
-    poster_id = mapped_column(
+    image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )
 
-    poster_relation: Mapped["Image"] = relationship(lazy="joined")
+    image_relation: Mapped["Image"] = relationship(lazy="joined")
 
     franchise_id = mapped_column(
         ForeignKey("service_content_franchises.id", ondelete="SET NULL"),
@@ -159,26 +160,15 @@ class Anime(
     )
 
     # Very dirty hacks, but they do the trick
-    # TODO: Remove me!
-    @hybrid_property
-    def poster(self):
-        if not self.poster_relation:
-            return None
-
-        if self.poster_relation.ignore or not self.poster_relation.uploaded:
-            return None
-
-        return self.poster_relation.url
-
     @hybrid_property
     def image(self):
-        if not self.poster_relation:
+        if not self.image_relation:
             return None
 
-        if self.poster_relation.ignore or not self.poster_relation.uploaded:
+        if self.image_relation.ignore or not self.image_relation.uploaded:
             return None
 
-        return self.poster_relation.url
+        return self.image_relation.url
 
     @hybrid_property
     def has_franchise(self):

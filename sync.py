@@ -1,6 +1,8 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from app.database import sessionmanager
 from app.utils import get_settings
+from zoneinfo import ZoneInfo
 import asyncio
 
 from app.sync import (
@@ -8,12 +10,14 @@ from app.sync import (
     update_notifications,
     update_ranking_all,
     update_moderation,
+    update_aggregator,
     update_activity,
     update_schedule,
     update_ranking,
     update_history,
     update_sitemap,
     update_search,
+    update_stats,
     send_emails,
 )
 
@@ -30,8 +34,17 @@ def init_scheduler():
     scheduler.add_job(update_ranking, "interval", seconds=10)
     scheduler.add_job(update_history, "interval", seconds=10)
     scheduler.add_job(update_search, "interval", minutes=1)
+    scheduler.add_job(update_stats, "interval", seconds=10)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
+
+    scheduler.add_job(
+        update_aggregator,
+        trigger=CronTrigger(
+            timezone=ZoneInfo("Europe/Kyiv"),
+            hour=1,
+        ),
+    )
 
     return scheduler
 

@@ -1,6 +1,5 @@
 from app.schemas import datetime_pd, timedelta_pd
 from pydantic import field_validator
-from pydantic import PositiveInt
 
 from app.schemas import (
     AnimeResponseWithWatch,
@@ -14,7 +13,6 @@ from app.schemas import (
 
 # Args
 class AnimeScheduleArgs(CustomModel):
-    airing_range: list[PositiveInt | None] | None = None
     airing_season: list[SeasonEnum | int] | None = None
     rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
@@ -38,24 +36,6 @@ class AnimeScheduleArgs(CustomModel):
             raise ValueError("Please specify year beyond 2020")
 
         return airing_season
-
-    @field_validator("airing_range")
-    def validate_airing_range(cls, airing_range):
-        if not airing_range:
-            return None
-
-        if len(airing_range) != 2:
-            raise ValueError("Lenght of airing range list must be 2.")
-
-        if (
-            all(airing_at is not None for airing_at in airing_range)
-            and airing_range[0] > airing_range[1]
-        ):
-            raise ValueError(
-                "The first airing date must be less than the second date."
-            )
-
-        return airing_range
 
 
 # Responses

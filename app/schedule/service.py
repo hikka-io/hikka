@@ -6,11 +6,7 @@ from .schemas import AnimeScheduleArgs
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from datetime import timedelta
-
-from app.utils import (
-    utcfromtimestamp,
-    utcnow,
-)
+from app.utils import utcnow
 
 from app.models import (
     AnimeSchedule,
@@ -31,29 +27,10 @@ def anime_schedule_filters(
 
         query = query.filter(Anime.airing_seasons.op("?")(f"{season}_{year}"))
 
-    if args.airing_range:
-        airing_start = (
-            utcfromtimestamp(args.airing_range[0])
-            if args.airing_range[0]
-            else None
-        )
-
-        airing_end = (
-            utcfromtimestamp(args.airing_range[1])
-            if args.airing_range[1]
-            else None
-        )
-
-        if airing_start:
-            query = query.filter(AnimeSchedule.airing_at >= airing_start)
-
-        if airing_end:
-            query = query.filter(AnimeSchedule.airing_at <= airing_end)
-
-    else:
-        query = query.filter(
-            AnimeSchedule.airing_at >= utcnow() - timedelta(hours=6)
-        )
+    # TODO: do we need this?
+    query = query.filter(
+        AnimeSchedule.airing_at >= utcnow() - timedelta(hours=6)
+    )
 
     if len(args.status) > 0:
         query = query.filter(Anime.status.in_(args.status))

@@ -37,7 +37,7 @@ class User(Base, NeedsSearchUpdateMixin):
     created: Mapped[datetime]
     login: Mapped[datetime]
 
-    is_followed: Mapped[bool] = query_expression()
+    is_followed: Mapped[bool] = query_expression(expire_on_flush=False)
 
     forbidden_actions: Mapped[list[str]] = mapped_column(
         JSONB, server_default="[]"
@@ -81,22 +81,22 @@ class User(Base, NeedsSearchUpdateMixin):
     )
 
     avatar_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )
 
     cover_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )
 
-    avatar_image_relation: Mapped["Image"] = relationship(
+    avatar_image: Mapped["Image"] = relationship(
         foreign_keys=[avatar_image_id], lazy="joined"
     )
 
-    cover_image_relation: Mapped["Image"] = relationship(
+    cover_image: Mapped["Image"] = relationship(
         foreign_keys=[cover_image_id], lazy="joined"
     )
 
@@ -138,29 +138,23 @@ class User(Base, NeedsSearchUpdateMixin):
 
     @hybrid_property
     def avatar(self):
-        if not self.avatar_image_relation:
+        if not self.avatar_image:
             return "https://cdn.hikka.io/avatar.jpg"
 
-        if (
-            self.avatar_image_relation.ignore
-            or not self.avatar_image_relation.uploaded
-        ):
+        if self.avatar_image.ignore or not self.avatar_image.uploaded:
             return "https://cdn.hikka.io/avatar.jpg"
 
-        return self.avatar_image_relation.url
+        return self.avatar_image.url
 
     @hybrid_property
     def cover(self):
-        if not self.cover_image_relation:
+        if not self.cover_image:
             return None
 
-        if (
-            self.cover_image_relation.ignore
-            or not self.cover_image_relation.uploaded
-        ):
+        if self.cover_image.ignore or not self.cover_image.uploaded:
             return None
 
-        return self.cover_image_relation.url
+        return self.cover_image.url
 
     @hybrid_property
     def active(self):

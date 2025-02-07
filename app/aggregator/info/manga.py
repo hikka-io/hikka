@@ -94,6 +94,7 @@ async def process_image(session, manga, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 

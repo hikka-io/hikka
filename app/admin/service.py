@@ -84,9 +84,14 @@ async def update_user(session: AsyncSession, user: User, body: UpdateUserBody):
             user.forbidden_actions = body.forbid_actions
 
     if body.remove_avatar:
-        user.avatar_image_relation.deletion_request = True
-        user.avatar_image_relation = None
+        user.avatar_image.deletion_request = True
+        user.avatar_image = None
         user.avatar_image_id = None
+
+    if body.remove_cover:
+        user.cover_image.deletion_request = True
+        user.cover_image = None
+        user.cover_image_id = None
 
     if body.description:
         user.description = body.description

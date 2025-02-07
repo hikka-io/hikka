@@ -132,8 +132,6 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
         examples=["Kono Subarashii Sekai ni Shukufuku wo!"]
     )
     duration: int | None = Field(examples=[23])
-    # TODO: Remove me!
-    poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
     source: str | None = Field(examples=["light_novel"])

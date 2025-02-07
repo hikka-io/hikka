@@ -6,6 +6,7 @@ from enum import Enum
 
 # Enums
 class UploadTypeEnum(str, Enum):
+    attachment = constants.UPLOAD_ATTACHMENT
     avatar = constants.UPLOAD_AVATAR
     cover = constants.UPLOAD_COVER
 

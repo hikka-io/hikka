@@ -1,15 +1,15 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import ForeignKey, String, Index
 from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
 from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
@@ -17,17 +17,25 @@ from ..mixins import (
 
 
 class Collection(
-    Base,
+    MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
     DeletedMixin,
+    Base,
 ):
     __tablename__ = "service_collections"
+    __table_args__ = (
+        Index(
+            "idx_collection_tags_gin",
+            "tags",
+            postgresql_using="gin",
+        ),
+    )
 
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
-    comments_count: Mapped[int] = query_expression()
-    my_score: Mapped[int] = query_expression()
+
+    comments_count: Mapped[int] = mapped_column(default=0)
 
     system_ranking: Mapped[float] = mapped_column(index=True, default=0)
     visibility: Mapped[str] = mapped_column(String(16), index=True)
@@ -44,7 +52,6 @@ class Collection(
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
         foreign_keys=[author_id],
-        lazy="joined",
     )
 
     collection: Mapped[list["CollectionContent"]] = relationship(
