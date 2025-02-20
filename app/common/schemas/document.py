@@ -58,6 +58,11 @@ class DocumentImage(CustomModel):
     url: AnyUrl
 
 
+class DocumentPreview(CustomModel):
+    children: list["DocumentElement"]
+    type: Literal["preview"]
+
+
 class DocumentVideo(CustomModel):
     type: Literal["video"]
     url: AnyUrl
@@ -88,6 +93,8 @@ DocumentElement = (
     | DocumentText
     | DocumentUl
     | DocumentOl
+    | DocumentPreview
+    | DocumentVideo
     | DocumentImageGroup
 )
 
@@ -99,15 +106,28 @@ class Document(CustomModel):
     @field_validator("nodes", mode="before")
     def validate_raw(cls, document: list[dict]) -> list[dict]:
         total_elements = 0
-
+        preview_found = False
         max_elements = 1000
         max_depth = 10
 
         if not isinstance(document, list):
             return document
 
-        def validate_children(children, current_depth=1):
-            nonlocal total_elements
+        def validate_children(children, current_depth=1, is_root=False):
+            nonlocal total_elements, preview_found
+
+            if is_root:
+                # Ensure the first element is a preview if it exists at all
+                if children and children[0].get("type") == "preview":
+                    preview_found = True
+                else:
+                    if any(
+                        child.get("type") == "preview" for child in children
+                    ):
+                        raise ValueError(
+                            "DocumentPreview must be the first element in the document"
+                        )
+
             total_elements += len(children)
 
             if total_elements > max_elements:
@@ -120,12 +140,29 @@ class Document(CustomModel):
                     f"Document structure exceeds maximum depth of {max_depth}"
                 )
 
-            for element in children:
+            for index, element in enumerate(children):
                 if not isinstance(element, dict):
                     raise ValueError("Invalid children element")
+
+                if element.get("type") == "preview":
+                    if not is_root:
+                        raise ValueError(
+                            "DocumentPreview must be at the top level"
+                        )
+
+                    if index != 0:
+                        raise ValueError(
+                            "DocumentPreview must be the first element"
+                        )
 
                 if "children" in element:
                     validate_children(element["children"], current_depth + 1)
 
-        validate_children(document)
+        validate_children(document, is_root=True)
+
+        # TODO: if we decide to make preview optional
+        # we just need to remove this check
+        if not preview_found:
+            raise ValueError("DocumentPreview must be present")
+
         return document

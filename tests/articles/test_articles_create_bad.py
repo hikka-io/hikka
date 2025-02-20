@@ -12,7 +12,12 @@ async def test_articles_create_bad_category(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "system",
@@ -37,7 +42,12 @@ async def test_articles_create_bad_trusted(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",

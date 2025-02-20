@@ -15,7 +15,12 @@ async def test_articles_update_bad_user(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -35,7 +40,12 @@ async def test_articles_update_bad_user(
         article_slug,
         get_dummy_token,
         {
-            "document": [{"text": "Amet sit dor ipsum lorem."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Amet sit dor ipsum lorem."}],
+                }
+            ],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",
@@ -60,7 +70,12 @@ async def test_articles_update_bad_category(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -80,7 +95,12 @@ async def test_articles_update_bad_category(
         article_slug,
         get_test_token,
         {
-            "document": [{"text": "Amet sit dor ipsum lorem."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Amet sit dor ipsum lorem."}],
+                }
+            ],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "system",
@@ -105,7 +125,12 @@ async def test_articles_update_bad_trusted(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -125,7 +150,12 @@ async def test_articles_update_bad_trusted(
         article_slug,
         get_test_token,
         {
-            "document": [{"text": "Amet sit dor ipsum lorem."}],
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Amet sit dor ipsum lorem."}],
+                }
+            ],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",

@@ -30,7 +30,10 @@ async def test_articles_create(
         get_test_token,
         {
             "document": [
-                {"text": "Lorem ipsum dor sit amet."},
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                },
                 {
                     "type": "image_group",
                     "children": [
@@ -60,7 +63,10 @@ async def test_articles_create(
 
     assert r_data["slug"].startswith("interesting-title-")
     assert r_data["document"] == [
-        {"text": "Lorem ipsum dor sit amet."},
+        {
+            "type": "preview",
+            "children": [{"text": "Lorem ipsum dor sit amet."}],
+        },
         {
             "type": "image_group",
             "children": [
@@ -81,7 +87,10 @@ async def test_articles_create(
     assert log.user == create_test_user
 
     assert log.data["document"] == [
-        {"text": "Lorem ipsum dor sit amet."},
+        {
+            "type": "preview",
+            "children": [{"text": "Lorem ipsum dor sit amet."}],
+        },
         {
             "type": "image_group",
             "children": [
