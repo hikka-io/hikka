@@ -224,7 +224,7 @@ async def validate_article_update(
             if image.type != constants.UPLOAD_ATTACHMENT:
                 raise Abort("articles", "bad-image-url")
 
-            if image.user_id != author.id:
+            if image.user_id != article.author_id:
                 raise Abort("articles", "bad-image-url")
 
             if image.deletion_request:

@@ -209,6 +209,8 @@ async def update_article(
     before = {}
     after = {}
 
+    old_document = article.document
+
     for key in ["category", "draft", "title", "document", "trusted"]:
         old_value = getattr(article, key)
         new_value = getattr(args, key)
@@ -217,6 +219,25 @@ async def update_article(
             before[key] = old_value
             setattr(article, key, new_value)
             after[key] = new_value
+
+    # Here we mark old images as delted and new as used
+    old_image_nodes = find_document_images(old_document)
+    old_urls = set([entry["url"] for entry in old_image_nodes])
+
+    new_image_nodes = find_document_images(args.document)
+    new_urls = set([entry["url"] for entry in new_image_nodes])
+
+    old_images = await get_images(session, list(old_urls - new_urls))
+    new_images = await get_images(session, list(new_urls - old_urls))
+
+    for image in old_images:
+        image.attachment_content_type = None
+        image.attachment_content_id = None
+        image.deletion_request = True
+
+    for image in new_images:
+        image.attachment_content_type = constants.CONTENT_ARTICLE
+        image.attachment_content_id = article.id
 
     # Content being removed from the article
     if content is None and article.content_id is not None:
