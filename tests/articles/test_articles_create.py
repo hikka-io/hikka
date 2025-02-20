@@ -32,7 +32,7 @@ async def test_articles_create(
             "document": [
                 {"text": "Lorem ipsum dor sit amet."},
                 {
-                    "type": "media",
+                    "type": "image_group",
                     "children": [
                         {
                             "type": "image",
@@ -62,7 +62,7 @@ async def test_articles_create(
     assert r_data["document"] == [
         {"text": "Lorem ipsum dor sit amet."},
         {
-            "type": "media",
+            "type": "image_group",
             "children": [
                 {
                     "type": "image",
@@ -83,7 +83,7 @@ async def test_articles_create(
     assert log.data["document"] == [
         {"text": "Lorem ipsum dor sit amet."},
         {
-            "type": "media",
+            "type": "image_group",
             "children": [
                 {
                     "type": "image",

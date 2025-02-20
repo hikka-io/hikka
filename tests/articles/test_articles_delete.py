@@ -31,7 +31,7 @@ async def test_articles_delete(
             "document": [
                 {"text": "Lorem ipsum dor sit amet."},
                 {
-                    "type": "media",
+                    "type": "image_group",
                     "children": [
                         {
                             "type": "image",

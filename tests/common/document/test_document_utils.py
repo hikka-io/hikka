@@ -6,7 +6,7 @@ async def test_document_utils():
         [
             {"text": "Text node"},
             {
-                "type": "media",
+                "type": "image_group",
                 "children": [
                     {"type": "image", "url": "https://cdn.hikka.io/image1.jpg"},
                     {"type": "image", "url": "https://cdn.hikka.io/image2.jpg"},

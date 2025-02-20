@@ -75,9 +75,9 @@ class DocumentVideo(CustomModel):
         return url
 
 
-class DocumentMedia(CustomModel):
+class DocumentImageGroup(CustomModel):
     children: list[DocumentImage] = Field(max_length=4)
-    type: Literal["media"]
+    type: Literal["image_group"]
 
 
 DocumentElement = (
@@ -88,7 +88,7 @@ DocumentElement = (
     | DocumentText
     | DocumentUl
     | DocumentOl
-    | DocumentMedia
+    | DocumentImageGroup
 )
 
 
