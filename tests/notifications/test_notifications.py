@@ -112,7 +112,6 @@ async def test_notification_initiator(
     await test_session.commit()
 
     response = await request_notifications(client, test_token)
-    print(response.json())
     assert response.status_code == status.HTTP_200_OK
 
     initiator_user = response.json()["list"][0]["initiator_user"]

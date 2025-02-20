@@ -4,9 +4,9 @@ from app.schemas import datetime_pd
 
 # Responses
 class NotificationResponse(CustomModel):
+    initiator_user: UserResponse | None
     notification_type: str
     created: datetime_pd
-    initiator_user: UserResponse | None
     reference: str
     seen: bool
     data: dict

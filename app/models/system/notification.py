@@ -23,6 +23,7 @@ class Notification(Base, CreatedMixin, UpdatedMixin):
     initiator_user_id = mapped_column(
         ForeignKey("service_users.id"), nullable=True
     )
+
     initiator_user: Mapped["User"] = relationship(
         foreign_keys=[initiator_user_id]
     )
