@@ -1,22 +1,45 @@
 from client_requests import request_create_article
 from client_requests import request_delete_article
+from client_requests import request_upload
 from sqlalchemy import select, desc
-from app.models import Log
+from app.models import Log, Image
 from fastapi import status
 from app import constants
 
 
 async def test_articles_delete(
     client,
+    mock_s3_upload_file,
     create_test_user,
     get_test_token,
     test_session,
 ):
+    with open("tests/data/upload/test.jpg", mode="rb") as file:
+        response = await request_upload(
+            client, "attachment", get_test_token, file
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        assert "url" in response.json()
+
+        new_attachment_url = response.json()["url"]
+
     response = await request_create_article(
         client,
         get_test_token,
         {
-            "document": [{"text": "Lorem ipsum dor sit amet."}],
+            "document": [
+                {"text": "Lorem ipsum dor sit amet."},
+                {
+                    "type": "media",
+                    "children": [
+                        {
+                            "type": "image",
+                            "url": new_attachment_url,
+                        }
+                    ],
+                },
+            ],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -37,6 +60,16 @@ async def test_articles_delete(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["success"] is True
+
+    image = await test_session.scalar(
+        select(Image).filter(
+            Image.path == new_attachment_url.replace(constants.CDN_ENDPOINT, "")
+        )
+    )
+
+    assert image.attachment_content_type == None
+    assert image.attachment_content_id == None
+    assert image.deletion_request is True
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))

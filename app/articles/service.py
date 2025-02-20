@@ -310,6 +310,17 @@ async def update_article(
 
 
 async def delete_article(session: AsyncSession, article: Article, user: User):
+    # Here we mark old images as delted and new as used
+    image_nodes = find_document_images(article.document)
+    image_urls = set([entry["url"] for entry in image_nodes])
+
+    images = await get_images(session, image_urls)
+
+    for image in images:
+        image.attachment_content_type = None
+        image.attachment_content_id = None
+        image.deletion_request = True
+
     article.deleted = True
     session.add(article)
 
