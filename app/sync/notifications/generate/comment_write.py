@@ -60,6 +60,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                     "username": comment.author.username,
                     "avatar": comment.author.avatar,
                 },
+                "initiator_user_id": comment.author.id,
             }
         )
 
@@ -116,6 +117,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                     "username": comment.author.username,
                     "avatar": comment.author.avatar,
                 },
+                "initiator_user_id": comment.author.id,
             }
         )
 
@@ -176,6 +178,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                     "username": comment.author.username,
                     "avatar": comment.author.avatar,
                 },
+                "initiator_user_id": comment.author.id,
             }
         )
 
@@ -231,6 +234,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
                     "username": comment.author.username,
                     "avatar": comment.author.avatar,
                 },
+                "initiator_user_id": comment.author.id,
             }
         )
 
