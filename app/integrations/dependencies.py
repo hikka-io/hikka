@@ -13,3 +13,12 @@ async def validate_mal_anime(
         raise Abort("anime", "not-found")
 
     return anime
+
+
+async def validate_anitube_anime(
+    anitube_id: int, session: AsyncSession = Depends(get_session)
+) -> Anime:
+    if not (anime := await service.get_anime_by_anitube(session, anitube_id)):
+        raise Abort("anime", "not-found")
+
+    return anime

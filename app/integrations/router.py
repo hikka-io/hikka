@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dependencies import validate_mal_anime
 from fastapi import APIRouter, Depends
 from app.schemas import AnimeResponse
 from app.database import get_session
@@ -7,8 +6,18 @@ from .schemas import MALAnimeArgs
 from app.models import Anime
 from . import service
 
+from .dependencies import (
+    validate_anitube_anime,
+    validate_mal_anime,
+)
+
 
 router = APIRouter(prefix="/integrations", tags=["Integrations"])
+
+
+@router.get("/anitube/anime/{anitube_id}", response_model=AnimeResponse)
+async def anitube_anime(anime: Anime = Depends(validate_anitube_anime)):
+    return anime
 
 
 @router.get("/mal/anime/{mal_id}", response_model=AnimeResponse)

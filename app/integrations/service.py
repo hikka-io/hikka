@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
 from .schemas import MALAnimeArgs
+from sqlalchemy import text
 
 from app.models import (
     AnimeCharacter,
@@ -64,3 +65,23 @@ async def get_by_mal_ids(
     anime = await session.scalars(query)
     anime_cache = {entry.mal_id: entry for entry in anime}
     return [anime_cache.get(mal_id) for mal_id in args.mal_ids]
+
+
+async def get_anime_by_anitube(session: AsyncSession, anitube_id: int):
+    anitube_url = f"https://anitube.in.ua/{anitube_id}-"
+
+    return await session.scalar(
+        select(Anime)
+        .filter(
+            # RIP performance (?)
+            Anime.external.op("@?")(
+                text(f"'$[*].url ? (@ starts with \"{anitube_url}\")'")
+            ),
+            Anime.deleted == False,  # noqa: E712
+        )
+        .order_by(
+            desc(Anime.score),
+            desc(Anime.scored_by),
+            desc(Anime.content_id),
+        )
+    )
