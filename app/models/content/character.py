@@ -30,8 +30,11 @@ class Character(
 ):
     __tablename__ = "service_content_characters"
 
-    voices_count: Mapped[int] = query_expression()
-    anime_count: Mapped[int] = query_expression()
+    needs_count_update: Mapped[bool] = mapped_column(default=True)
+    voices_count: Mapped[int] = mapped_column(default=0)
+    anime_count: Mapped[int] = mapped_column(default=0)
+    manga_count: Mapped[int] = mapped_column(default=0)
+    novel_count: Mapped[int] = mapped_column(default=0)
 
     favourite_created: Mapped[datetime] = query_expression()
 

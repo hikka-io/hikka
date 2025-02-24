@@ -31,6 +31,8 @@ from .sitemap import update_sitemap
 
 from .weights import update_weights
 
+from .counts import update_counts
+
 from .search import update_search
 
 from .schedule import update_schedule_build
@@ -66,6 +68,7 @@ __all__ = [
     "update_history",
     "update_weights",
     "update_sitemap",
+    "update_counts",
     "update_search",
     "update_stats",
     "send_emails",

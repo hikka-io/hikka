@@ -1,6 +1,5 @@
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import with_expression
 from app.service import anime_loadonly
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, desc
@@ -22,32 +21,12 @@ from app.models import (
 )
 
 
+# TODO: optimize anime_count and voices_count
 async def get_character_by_slug(
     session: AsyncSession, slug: str
 ) -> Character | None:
     return await session.scalar(
-        select(Character)
-        .filter(func.lower(Character.slug) == slug.lower())
-        .options(
-            with_expression(
-                Character.anime_count,
-                select(func.count(AnimeCharacter.id))
-                .filter(AnimeCharacter.character_id == Character.id)
-                .join(Anime)
-                .filter(Anime.deleted == False)  # noqa: E712
-                .scalar_subquery(),
-            )
-        )
-        .options(
-            with_expression(
-                Character.voices_count,
-                select(func.count(AnimeVoice.id))
-                .filter(AnimeVoice.character_id == Character.id)
-                .join(Anime)
-                .filter(Anime.deleted == False)  # noqa: E712
-                .scalar_subquery(),
-            )
-        )
+        select(Character).filter(func.lower(Character.slug) == slug.lower())
     )
 
 
@@ -65,15 +44,6 @@ async def characters_search(
         .order_by(desc("favorites"), desc("content_id"))
         .limit(limit)
         .offset(offset)
-    )
-
-
-async def character_anime_total(session: AsyncSession, character: Character):
-    return await session.scalar(
-        select(func.count(AnimeCharacter.id))
-        .filter(AnimeCharacter.character == character)
-        .join(Anime)
-        .filter(Anime.deleted == False)  # noqa: E712
     )
 
 
@@ -106,15 +76,6 @@ async def character_anime(
     )
 
 
-async def character_manga_total(session: AsyncSession, character: Character):
-    return await session.scalar(
-        select(func.count(MangaCharacter.id))
-        .filter(MangaCharacter.character == character)
-        .join(Manga)
-        .filter(Manga.deleted == False)  # noqa: E712
-    )
-
-
 async def character_manga(
     session: AsyncSession,
     character: Character,
@@ -142,15 +103,6 @@ async def character_manga(
     )
 
 
-async def character_novel_total(session: AsyncSession, character: Character):
-    return await session.scalar(
-        select(func.count(NovelCharacter.id))
-        .filter(NovelCharacter.character == character)
-        .join(Novel)
-        .filter(Novel.deleted == False)  # noqa: E712
-    )
-
-
 async def character_novel(
     session: AsyncSession,
     character: Character,
@@ -175,15 +127,6 @@ async def character_novel(
         )
         .limit(limit)
         .offset(offset)
-    )
-
-
-async def character_voices_total(session: AsyncSession, character: Character):
-    return await session.scalar(
-        select(func.count(AnimeVoice.id))
-        .filter(AnimeVoice.character == character)
-        .join(Anime)
-        .filter(Anime.deleted == False)  # noqa: E712
     )
 
 

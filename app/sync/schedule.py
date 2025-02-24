@@ -172,7 +172,11 @@ async def rollback_episodes_released(
 
     # Stop if anime episodes_released haven't been updated yet
     # Or episode haven't aired yet
-    if anime.episodes_released < episode.episode or episode.airing_at < now:
+    if (
+        anime.episodes_released is not None
+        and anime.episodes_released < episode.episode
+        or episode.airing_at < now
+    ):
         return
 
     before = {}

@@ -15,7 +15,7 @@ class MyScoreMixin:
 
 
 class DeletedMixin:
-    deleted: Mapped[bool] = mapped_column(default=False)
+    deleted: Mapped[bool] = mapped_column(default=False, index=True)
 
 
 class SynonymsMixin:

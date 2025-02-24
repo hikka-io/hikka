@@ -7,6 +7,7 @@ from ..schedule import update_schedule_build
 from .companies import aggregator_companies
 from .magazines import aggregator_magazines
 from app.sync.weights import update_weights
+from app.sync.counts import update_counts
 from app.sync.search import update_search
 from .people import aggregator_people
 from .genres import aggregator_genres
@@ -124,5 +125,13 @@ async def update_aggregator():
     tracker.add_task(["Перераховую ваги", "Перерахувала ваги"])
     await update_telegram_message(message_id, tracker.get_status_message())
     await update_weights()
+
+    print("Counts")
+    tracker.add_task(
+        ["Перераховую кількості записів", "Перерахувала кількості записів"]
+    )
+
+    await update_telegram_message(message_id, tracker.get_status_message())
+    await update_counts()
 
     await update_telegram_message(message_id, tracker.get_final_message())

@@ -233,6 +233,8 @@ async def process_characters(session, manga, data):
 
             characters.append(character_role)
 
+            character.needs_count_update = True
+
     return characters
 
 
