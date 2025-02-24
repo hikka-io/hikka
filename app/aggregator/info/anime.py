@@ -185,6 +185,7 @@ async def process_characters_and_voices(session, anime, data):
             characters_and_voices.append(voice)
 
             character.needs_count_update = True
+            person.needs_count_update = True
 
     return characters_and_voices
 

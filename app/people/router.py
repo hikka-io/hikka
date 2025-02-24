@@ -71,7 +71,7 @@ async def person_anime(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.person_anime_total(session, person)
+    total = person.anime_count
     anime = await service.person_anime(
         session, person, request_user, limit, offset
     )
@@ -90,7 +90,7 @@ async def person_manga(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.person_manga_total(session, person)
+    total = person.manga_count
     manga = await service.person_manga(
         session, person, request_user, limit, offset
     )
@@ -109,7 +109,7 @@ async def person_novel(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.person_novel_total(session, person)
+    total = person.novel_count
     novel = await service.person_novel(
         session, person, request_user, limit, offset
     )
@@ -130,7 +130,7 @@ async def person_voices(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.person_voices_total(session, person)
+    total = person.characters_count
     voices = await service.person_voices(
         session, person, request_user, limit, offset
     )

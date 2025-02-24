@@ -175,6 +175,8 @@ async def process_authors(session, manga, data):
                 }
             )
 
+            person.needs_count_update = True
+
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)
 

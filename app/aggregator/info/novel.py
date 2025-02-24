@@ -53,6 +53,7 @@ def process_external(data):
     for source in ["baka", "honey"]:
         website_name = {
             "honey": "Honey Manga",
+            "zenko": "Zenko",
             "baka": "Бака",
         }.get(source)
 
@@ -168,6 +169,8 @@ async def process_authors(session, novel, data):
                     "novel": novel,
                 }
             )
+
+            person.needs_count_update = True
 
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)

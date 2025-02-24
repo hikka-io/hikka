@@ -13,6 +13,8 @@ from app.schemas import (
 class PersonCountResponse(PersonResponse, CustomModel):
     characters_count: int
     anime_count: int
+    manga_count: int
+    novel_count: int
 
 
 class RoleResponse(CustomModel):
