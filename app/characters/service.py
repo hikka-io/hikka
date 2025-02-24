@@ -21,7 +21,6 @@ from app.models import (
 )
 
 
-# TODO: optimize anime_count and voices_count
 async def get_character_by_slug(
     session: AsyncSession, slug: str
 ) -> Character | None:
