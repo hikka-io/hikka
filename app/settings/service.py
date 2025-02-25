@@ -23,6 +23,7 @@ from app.service import (
 )
 
 from app.models import (
+    UserExport,
     AnimeWatch,
     Anime,
     Manga,
@@ -441,3 +442,25 @@ async def import_read_list(
 
         if imported_novel > 0:
             await generate_read_stats(session, user, constants.CONTENT_NOVEL)
+
+
+async def get_export_list(session: AsyncSession, user: User):
+    if not (
+        export := await session.scalar(
+            select(UserExport).filter(UserExport.user == user)
+        )
+    ):
+        now = utcnow()
+
+        export = UserExport(
+            **{
+                "created": now,
+                "updated": now,
+                "user": user,
+            }
+        )
+
+        session.add(export)
+        await session.commit()
+
+    return export

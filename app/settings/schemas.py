@@ -1,4 +1,4 @@
-from app.schemas import CustomModel, CustomModelExtraIgnore
+from app.schemas import CustomModel, CustomModelExtraIgnore, datetime_pd
 from pydantic import Field, field_validator, AliasChoices
 from app import constants
 from enum import Enum
@@ -93,3 +93,36 @@ class ImportReadListArgs(CustomModelExtraIgnore):
 # Responses
 class IgnoredNotificationsResponse(CustomModel):
     ignored_notifications: list[str]
+
+
+class UserExportWatchResponse(CustomModel):
+    note: str | None
+    hikka_slug: str
+    rewatches: int
+    episodes: int
+    created: int
+    updated: int
+    mal_id: int
+    status: str
+    score: int
+
+
+class UserExportReadResponse(CustomModel):
+    note: str | None
+    hikka_slug: str
+    chapters: int
+    rereads: int
+    volumes: int
+    created: int
+    updated: int
+    mal_id: int
+    status: str
+    score: int
+
+
+class UserExportResponse(CustomModel):
+    anime: list[UserExportWatchResponse]
+    manga: list[UserExportReadResponse]
+    novel: list[UserExportReadResponse]
+    created: datetime_pd
+    updated: datetime_pd

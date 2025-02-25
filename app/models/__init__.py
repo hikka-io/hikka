@@ -13,6 +13,7 @@ from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
 from .user.history import ReadImportHistory
 from .user.history import WatchHistory
+from .user.export import UserExport
 from .user.history import History
 from .user.oauth import UserOAuth
 from .user.follow import Follow
@@ -116,6 +117,7 @@ __all__ = [
     "WatchDeleteHistory",
     "ReadImportHistory",
     "WatchHistory",
+    "UserExport",
     "History",
     "UserOAuth",
     "Follow",

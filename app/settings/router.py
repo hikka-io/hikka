@@ -25,6 +25,7 @@ from .schemas import (
     ReadDeleteContenType,
     ImportWatchListArgs,
     ImportReadListArgs,
+    UserExportResponse,
     DescriptionArgs,
     ImageTypeEnum,
 )
@@ -159,6 +160,18 @@ async def import_read(
     )
 
     return {"success": True}
+
+
+@router.post(
+    "/export",
+    response_model=UserExportResponse,
+    summary="Export list",
+)
+async def export_list(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_EXPORT_LIST])),
+):
+    return await service.get_export_list(session, user)
 
 
 @router.put(

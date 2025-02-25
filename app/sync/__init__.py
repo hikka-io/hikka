@@ -42,6 +42,8 @@ from .content import update_content
 
 from .email import send_emails
 
+from .export import update_export
+
 __all__ = [
     "delete_expired_token_requests",
     "aggregator_franchises",
@@ -68,6 +70,7 @@ __all__ = [
     "update_history",
     "update_weights",
     "update_sitemap",
+    "update_export",
     "update_counts",
     "update_search",
     "update_stats",
