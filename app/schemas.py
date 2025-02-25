@@ -377,6 +377,7 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     source: str | None
     rating: str | None
     year: int | None
+    start_date: datetime_pd | None
 
 
 class MangaResponse(CustomModel, DataTypeMixin):
@@ -390,6 +391,7 @@ class MangaResponse(CustomModel, DataTypeMixin):
     status: str | None
     image: str | None
     year: int | None
+    start_date: datetime_pd | None
     scored_by: int
     score: float
     slug: str
@@ -406,6 +408,7 @@ class NovelResponse(CustomModel, DataTypeMixin):
     status: str | None
     image: str | None
     year: int | None
+    start_date: datetime_pd | None
     scored_by: int
     score: float
     slug: str
