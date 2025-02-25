@@ -372,6 +372,8 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
     translated_ua: bool
     season: str | None
     source: str | None
@@ -380,6 +382,8 @@ class AnimeResponse(CustomModel, DataTypeMixin):
 
 
 class MangaResponse(CustomModel, DataTypeMixin):
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
     title_original: str | None
     media_type: str | None
     title_ua: str | None
@@ -396,6 +400,8 @@ class MangaResponse(CustomModel, DataTypeMixin):
 
 
 class NovelResponse(CustomModel, DataTypeMixin):
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
     title_original: str | None
     media_type: str | None
     title_ua: str | None
