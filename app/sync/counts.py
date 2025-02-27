@@ -162,12 +162,12 @@ async def people_count(session: AsyncSession):
         .group_by(NovelAuthor.person_id)
     )
 
-    people_voices_counts = await session.execute(
+    people_characters_counts = await session.execute(
         select(
             AnimeVoice.person_id,
             func.count()
             .filter(Anime.deleted == False)  # noqa: E712
-            .label("voices_count"),
+            .label("characters_count"),
         )
         .join(Anime)
         .join(Person, Person.id == AnimeVoice.person_id)
@@ -187,8 +187,8 @@ async def people_count(session: AsyncSession):
         person_id: count for person_id, count in people_novel_counts
     }
 
-    people_voices_count_dict = {
-        character_id: count for character_id, count in people_voices_counts
+    people_characters_count_dict = {
+        character_id: count for character_id, count in people_characters_counts
     }
 
     for person in people:
@@ -198,7 +198,7 @@ async def people_count(session: AsyncSession):
 
         person.novel_count = people_novel_count_dict.get(person.id, 0)
 
-        person.voices_count = people_voices_count_dict.get(person.id, 0)
+        person.characters_count = people_characters_count_dict.get(person.id, 0)
 
         person.needs_count_update = False
 
