@@ -27,7 +27,7 @@ class Person(
     __tablename__ = "service_content_people"
 
     needs_count_update: Mapped[bool] = mapped_column(default=True)
-    characters_count: Mapped[bool] = mapped_column(default=True)
+    characters_count: Mapped[int] = mapped_column(default=0)
     anime_count: Mapped[int] = mapped_column(default=0)
     manga_count: Mapped[int] = mapped_column(default=0)
     novel_count: Mapped[int] = mapped_column(default=0)

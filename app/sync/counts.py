@@ -188,7 +188,7 @@ async def people_count(session: AsyncSession):
     }
 
     people_characters_count_dict = {
-        character_id: count for character_id, count in people_characters_counts
+        person_id: count for person_id, count in people_characters_counts
     }
 
     for person in people:
@@ -205,7 +205,7 @@ async def people_count(session: AsyncSession):
         print(
             f"Updated counts for person {person.name_en} ("
             f"{person.anime_count} / {person.manga_count} / "
-            f"{person.novel_count} / {person.voices_count})"
+            f"{person.novel_count} / {person.characters_count})"
         )
 
     await session.commit()
