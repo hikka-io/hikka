@@ -39,6 +39,7 @@ async def test_articles_delete(
                         {
                             "type": "image",
                             "url": new_attachment_url,
+                            "children": [],
                         }
                     ],
                 },
@@ -70,8 +71,8 @@ async def test_articles_delete(
         )
     )
 
-    assert image.attachment_content_type == None
-    assert image.attachment_content_id == None
+    assert image.attachment_content_type == None  # noqa: E711
+    assert image.attachment_content_id == None  # noqa: E711
     assert image.deletion_request is True
 
     # Check log

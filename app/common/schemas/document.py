@@ -3,6 +3,15 @@ from app.schemas import CustomModel
 from pydantic import Field, AnyUrl
 from urllib.parse import urlparse
 from typing import Literal
+from enum import Enum
+
+
+# Enums
+class DocumentLinkTargetEnum(str, Enum):
+    _parent = "_parent"
+    _blank = "_blank"
+    _self = "_self"
+    _top = "_top"
 
 
 # Args
@@ -13,6 +22,7 @@ class DocumentText(CustomModel):
 
 
 class DocumentLink(CustomModel):
+    target: DocumentLinkTargetEnum = Field(default=None)
     children: list["DocumentElement"]
     type: Literal["a"]
     url: str
@@ -54,6 +64,7 @@ class DocumentOl(CustomModel):
 
 
 class DocumentImage(CustomModel):
+    children: list[DocumentText] = Field(max_length=1)
     type: Literal["image"]
     url: AnyUrl
 
@@ -64,6 +75,7 @@ class DocumentPreview(CustomModel):
 
 
 class DocumentVideo(CustomModel):
+    children: list[DocumentText] = Field(max_length=1)
     type: Literal["video"]
     url: AnyUrl
 

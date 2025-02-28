@@ -40,6 +40,7 @@ async def test_articles_create(
                         {
                             "type": "image",
                             "url": new_attachment_url,
+                            "children": [],
                         }
                     ],
                 },
@@ -73,6 +74,7 @@ async def test_articles_create(
                 {
                     "type": "image",
                     "url": new_attachment_url,
+                    "children": [],
                 }
             ],
         },
@@ -97,6 +99,7 @@ async def test_articles_create(
                 {
                     "type": "image",
                     "url": new_attachment_url,
+                    "children": [],
                 }
             ],
         },

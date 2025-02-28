@@ -47,6 +47,7 @@ async def test_articles_update(
                         {
                             "type": "image",
                             "url": original_attachment_url,
+                            "children": [],
                         }
                     ],
                 },
@@ -112,6 +113,7 @@ async def test_articles_update(
                         {
                             "type": "image",
                             "url": updated_attachment_url,
+                            "children": [],
                         }
                     ],
                 },
@@ -145,8 +147,8 @@ async def test_articles_update(
 
     await test_session.refresh(original_image)
 
-    assert original_image.attachment_content_type == None
-    assert original_image.attachment_content_id == None
+    assert original_image.attachment_content_type == None  # noqa: E711
+    assert original_image.attachment_content_id == None  # noqa: E711
     assert original_image.deletion_request is True
 
     r_data = response.json()
@@ -162,6 +164,7 @@ async def test_articles_update(
                 {
                     "type": "image",
                     "url": updated_attachment_url,
+                    "children": [],
                 }
             ],
         },
