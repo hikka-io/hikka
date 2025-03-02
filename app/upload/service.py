@@ -67,6 +67,8 @@ async def process_upload_file(
     image = Image(
         **{
             "mime_type": upload_metadata.mime_type,
+            "height": upload_metadata.height,
+            "width": upload_metadata.width,
             "size": upload_metadata.size,
             "type": upload_type,
             "user_id": user.id,

@@ -19,6 +19,9 @@ class Image(Base, CreatedMixin):
     ignore: Mapped[bool] = mapped_column(default=False)
     used: Mapped[bool] = mapped_column(default=True)
 
+    height: Mapped[int] = mapped_column(default=None, nullable=True)
+    width: Mapped[int] = mapped_column(default=None, nullable=True)
+
     type: Mapped[str] = mapped_column(String(32), nullable=True)
     mime_type: Mapped[str] = mapped_column(nullable=True)
     system: Mapped[bool] = mapped_column(default=False)

@@ -67,7 +67,14 @@ async def validate_upload_file(
 
     mime_type = get_mime_type(file)
 
-    if mime_type not in ["image/jpeg"]:
+    # Different upload types support different mimes
+    match upload_type:
+        case constants.UPLOAD_ATTACHMENT:
+            supported_mimes = ["image/jpeg", "image/webp", "image/gif"]
+        case _:
+            supported_mimes = ["image/jpeg"]
+
+    if mime_type not in supported_mimes:
         raise Abort("upload", "bad-mime")
 
     width, height = imagesize.get(BytesIO(file.file.read()))
