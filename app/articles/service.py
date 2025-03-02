@@ -342,6 +342,9 @@ async def articles_list_filter(
     args: ArticlesListArgs,
     session: AsyncSession,
 ):
+    # We don't want to display system articles in global list
+    query = query.filter(Article.category != constants.ARTICLE_SYSTEM)
+
     if len(args.categories) > 0:
         query = query.filter(Article.category.in_(args.categories))
 
