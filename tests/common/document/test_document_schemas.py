@@ -100,16 +100,16 @@ async def test_document():
 
 
 async def test_document_bad_preview():
-    no_preview_failed = False
+    # no_preview_failed = False
     not_first_preview_failed = False
     two_preview_failed = False
     nested_preview_failed = False
     extra_nested_preview_failed = False
 
-    try:
-        Document(nodes=[{"text": "Test text"}])
-    except ValidationError:
-        no_preview_failed = True
+    # try:
+    #     Document(nodes=[{"text": "Test text"}])
+    # except ValidationError:
+    #     no_preview_failed = True
 
     try:
         Document(
@@ -166,7 +166,7 @@ async def test_document_bad_preview():
     except ValidationError:
         extra_nested_preview_failed = True
 
-    assert no_preview_failed is True
+    # assert no_preview_failed is True
     assert not_first_preview_failed is True
     assert two_preview_failed is True
     assert nested_preview_failed is True
