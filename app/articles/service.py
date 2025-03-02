@@ -539,6 +539,5 @@ async def get_article_authors(session: AsyncSession, request_user: User):
                 )
             )
         )
-        .order_by(UserArticleStats.total.desc())
-        .limit(3)
+        .order_by(UserArticleStats.author_score.desc())
     )

@@ -18,10 +18,9 @@ from .aggregator import update_aggregator
 
 from .notifications import update_notifications
 
-from .stats import update_stats
-
 from .activity import update_activity
 
+from .ranking import update_article_stats
 from .ranking import update_ranking_all
 from .ranking import update_ranking
 
@@ -55,6 +54,7 @@ __all__ = [
     "aggregator_companies",
     "aggregator_magazines",
     "update_notifications",
+    "update_article_stats",
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
@@ -73,6 +73,5 @@ __all__ = [
     "update_export",
     "update_counts",
     "update_search",
-    "update_stats",
     "send_emails",
 ]

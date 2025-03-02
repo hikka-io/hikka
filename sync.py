@@ -8,6 +8,7 @@ import asyncio
 from app.sync import (
     delete_expired_token_requests,
     update_notifications,
+    update_article_stats,
     update_ranking_all,
     update_aggregator,
     update_activity,
@@ -17,7 +18,6 @@ from app.sync import (
     update_sitemap,
     update_search,
     update_export,
-    update_stats,
     send_emails,
 )
 
@@ -27,6 +27,7 @@ def init_scheduler():
 
     scheduler.add_job(delete_expired_token_requests, "interval", seconds=30)
     scheduler.add_job(update_notifications, "interval", seconds=10)
+    scheduler.add_job(update_article_stats, "interval", minutes=1)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
     scheduler.add_job(update_activity, "interval", seconds=10)
     scheduler.add_job(update_schedule, "interval", minutes=5)
@@ -34,7 +35,6 @@ def init_scheduler():
     scheduler.add_job(update_history, "interval", seconds=10)
     scheduler.add_job(update_export, "interval", minutes=1)
     scheduler.add_job(update_search, "interval", minutes=1)
-    scheduler.add_job(update_stats, "interval", seconds=10)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
 

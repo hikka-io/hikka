@@ -130,7 +130,10 @@ class ArticlesListResponse(CustomModel):
 
 class UserArticleStatsResponse(CustomModel):
     user: FollowUserResponse
-    total: int
+    total_articles: int
+    total_comments: int
+    author_score: int
+    total_likes: int
 
 
 class ArticlesTopResponse(CustomModel):

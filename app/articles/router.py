@@ -93,8 +93,8 @@ async def get_article_top(
     ),
 ):
     return {
-        "tags": await service.get_article_tags(session),
         "authors": await service.get_article_authors(session, request_user),
+        "tags": await service.get_article_tags(session),
     }
 
 
