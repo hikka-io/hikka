@@ -384,6 +384,7 @@ async def generate_preview(
         select(Comment)
         .filter(Comment.id == original_comment.id)
         .options(immediateload(CollectionComment.content))
+        .options(immediateload(ArticleComment.content))
         .options(immediateload(AnimeComment.content))
         .options(immediateload(MangaComment.content))
         .options(immediateload(NovelComment.content))
@@ -410,6 +411,9 @@ async def generate_preview(
             or comment.content.title_en
             or comment.content.title_original
         )
+
+    if isinstance(comment, ArticleComment):
+        title = comment.content.title
 
     if isinstance(comment, EditComment):
         # This is horrible hack, but we need this to prevent SQLAlchemy bug
