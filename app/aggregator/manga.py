@@ -1,8 +1,6 @@
 from app.models import Manga, Image
 from sqlalchemy import select
 from app.utils import utcnow
-from app import constants
-from app import service
 from app import utils
 
 
@@ -29,22 +27,23 @@ async def save_manga_list(session, data):
         if manga_data["content_id"] in manga_cache:
             manga = manga_cache[manga_data["content_id"]]
 
-            if manga.deleted is False and manga_data["deleted"] is True:
-                manga.needs_search_update = True
-                manga.deleted = True
-                session.add(manga)
+            # TODO: this is temporary solution, eventually we shoud fix that
+            # if manga.deleted is False and manga_data["deleted"] is True:
+            #     manga.needs_search_update = True
+            #     manga.deleted = True
+            #     session.add(manga)
 
-                await service.create_log(
-                    session,
-                    constants.LOG_CONTENT_DELETED,
-                    None,
-                    manga.id,
-                    {
-                        "content_type": constants.CONTENT_MANGA,
-                    },
-                )
+            #     await service.create_log(
+            #         session,
+            #         constants.LOG_CONTENT_DELETED,
+            #         None,
+            #         manga.id,
+            #         {
+            #             "content_type": constants.CONTENT_MANGA,
+            #         },
+            #     )
 
-                continue
+            #     continue
 
             if updated == manga.aggregator_updated:
                 continue
@@ -59,8 +58,8 @@ async def save_manga_list(session, data):
             # print(f"Manga needs update: {manga.title_original}")
 
         else:
-            if manga_data["deleted"] is True:
-                continue
+            # if manga_data["deleted"] is True:
+            #     continue
 
             if not (image := image_cache.get(manga_data["poster"])):
                 if manga_data["poster"]:
