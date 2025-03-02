@@ -34,22 +34,13 @@ from .schemas import (
 )
 
 
-async def get_or_create_tag(session: AsyncSession, name: str, category: str):
+async def get_or_create_tag(session: AsyncSession, name: str):
     if not (
         tag := await session.scalar(
-            select(ArticleTag).filter(
-                ArticleTag.name == name,
-                ArticleTag.category == category,
-            )
+            select(ArticleTag).filter(ArticleTag.name == name)
         )
     ):
-        tag = ArticleTag(
-            **{
-                "content_count": 0,
-                "category": category,
-                "name": name,
-            }
-        )
+        tag = ArticleTag(**{"content_count": 0, "name": name})
         session.add(tag)
 
     return tag
@@ -134,7 +125,7 @@ async def create_article(
     tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name, args.category)
+        tag = await get_or_create_tag(session, name)
         tag.content_count += 1
         tags.append(tag)
 
@@ -276,7 +267,7 @@ async def update_article(
     new_tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name, article.category)
+        tag = await get_or_create_tag(session, name)
         new_tags.append(tag)
 
     old_tag_names = set([tag.name for tag in old_tags])
@@ -328,6 +319,9 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
         image.attachment_content_type = None
         image.attachment_content_id = None
         image.deletion_request = True
+
+    for tag in article.tags:
+        tag.content_count -= 1
 
     article.deleted = True
     session.add(article)

@@ -191,8 +191,8 @@ async def validate_article_update(
     if article.draft is False and args.draft is True:
         raise Abort("articles", "bad-draft")
 
-    # We leave it here for now, maybe change in the future
-    if args.category != article.category:
+    # We allow changing category for article drafts
+    if article.draft is False and args.category != article.category:
         raise Abort("articles", "bad-category")
 
     # Yeah, this check is pointless considering previous one
