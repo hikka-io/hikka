@@ -34,6 +34,7 @@ class Anime(
 
     favourite_created: Mapped[datetime] = query_expression()
 
+    comments_count_pagination: Mapped[int] = mapped_column(default=0)
     comments_count: Mapped[int] = mapped_column(default=0)
 
     # Multilang fields

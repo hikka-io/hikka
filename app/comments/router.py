@@ -99,7 +99,7 @@ async def get_contents_list(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    total = content.comments_count
+    total = content.comments_count_pagination
     limit, offset = pagination(page, size)
     base_comments = await service.get_comments_by_content_id(
         session, content.id, request_user, limit, offset

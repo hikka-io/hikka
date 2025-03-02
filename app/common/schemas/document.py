@@ -190,9 +190,9 @@ class Document(CustomModel):
 
         validate_children(document, is_root=True)
 
-        # TODO: if we decide to make preview optional
-        # we just need to remove this check
-        if not preview_found:
-            raise ValueError("DocumentPreview must be present")
+        # TODO: if we decide to make preview required
+        # we just need to enable this check
+        # if not preview_found:
+        #     raise ValueError("DocumentPreview must be present")
 
         return document

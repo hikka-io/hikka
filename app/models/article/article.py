@@ -27,6 +27,7 @@ class Article(
 ):
     __tablename__ = "service_articles"
 
+    comments_count_pagination: Mapped[int] = mapped_column(default=0)
     comments_count: Mapped[int] = mapped_column(default=0)
 
     # In community we trust (but it's nice to have some control)

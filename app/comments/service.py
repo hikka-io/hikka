@@ -74,10 +74,23 @@ async def get_comment(
     )
 
 
-async def get_comments_count(session: AsyncSession, content: CommentableType):
-    return await session.scalar(
-        select(func.count(Comment.id).filter(Comment.content_id == content.id))
+async def get_comments_count(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content: CommentableType,
+    first_level_only: bool = False,
+):
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.content_type == content_type,
+            Comment.content_id == content.id,
+        )
     )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    return await session.scalar(query)
 
 
 async def create_comment(
@@ -123,7 +136,14 @@ async def create_comment(
     await session.commit()
 
     # Update comments count here
-    content.comments_count = await get_comments_count(session, content)
+    content.comments_count = await get_comments_count(
+        session, content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, content_type, content, True
+    )
+
     session.add(content)
     await session.commit()
 
@@ -271,7 +291,14 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         session, comment.content_type, comment.content_id
     )
 
-    content.comments_count = await get_comments_count(session, content)
+    content.comments_count = await get_comments_count(
+        session, comment.content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, comment.content_type, content, True
+    )
+
     session.add(content)
     await session.commit()
 

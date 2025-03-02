@@ -25,6 +25,7 @@ class Edit(
         "with_polymorphic": "*",
     }
 
+    comments_count_pagination: Mapped[int] = mapped_column(default=0)
     comments_count: Mapped[int] = mapped_column(default=0)
 
     system_edit: Mapped[bool] = mapped_column(default=False)

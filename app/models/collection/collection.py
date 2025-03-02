@@ -35,6 +35,7 @@ class Collection(
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
 
+    comments_count_pagination: Mapped[int] = mapped_column(default=0)
     comments_count: Mapped[int] = mapped_column(default=0)
 
     system_ranking: Mapped[float] = mapped_column(index=True, default=0)
