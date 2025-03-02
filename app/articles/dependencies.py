@@ -34,15 +34,18 @@ def can_use_category(user: User, category: str):
         constants.ROLE_USER: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
         constants.ROLE_MODERATOR: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
         constants.ROLE_ADMIN: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_SYSTEM,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
     }.get(user.role, [])
 
