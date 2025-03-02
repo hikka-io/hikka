@@ -164,3 +164,20 @@ class NovelComment(Comment):
         primaryjoin="Novel.id == NovelComment.content_id",
         foreign_keys=[content_id],
     )
+
+
+class ArticleComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "article",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_articles.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Article"] = relationship(
+        primaryjoin="Article.id == ArticleComment.content_id",
+        foreign_keys=[content_id],
+    )

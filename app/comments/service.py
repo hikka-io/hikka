@@ -22,6 +22,7 @@ from app.service import (
 from app.models import (
     CollectionContent,
     CollectionComment,
+    ArticleComment,
     CharacterEdit,
     AnimeComment,
     MangaComment,
@@ -46,6 +47,7 @@ from app.models import (
 content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_COLLECTION: CollectionComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
+    constants.CONTENT_ARTICLE: ArticleComment,
     constants.CONTENT_ANIME: AnimeComment,
     constants.CONTENT_MANGA: MangaComment,
     constants.CONTENT_NOVEL: NovelComment,
