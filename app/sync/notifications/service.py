@@ -11,6 +11,7 @@ from app.models import (
     Collection,
     AnimeWatch,
     Comment,
+    Article,
     Anime,
     Edit,
     User,
@@ -99,6 +100,17 @@ async def get_collection(session, content_id):
             Collection.deleted == False,  # noqa: E712
         )
         .options(joinedload(Collection.author))
+    )
+
+
+async def get_article(session, content_id):
+    return await session.scalar(
+        select(Article)
+        .filter(
+            Article.id == content_id,
+            Article.deleted == False,  # noqa: E712
+        )
+        .options(joinedload(Article.author))
     )
 
 
