@@ -25,7 +25,7 @@ async def test_articles_update_bad_user(
             "tags": ["interesting", "tag"],
             "category": "news",
             "content": None,
-            "draft": False,
+            "draft": True,
             "trusted": False,
         },
     )
@@ -50,7 +50,7 @@ async def test_articles_update_bad_user(
             "tags": ["wow", "tag"],
             "category": "news",
             "content": None,
-            "draft": True,
+            "draft": False,
             "trusted": False,
         },
     )
@@ -80,7 +80,7 @@ async def test_articles_update_bad_category(
             "tags": ["interesting", "tag"],
             "category": "news",
             "content": None,
-            "draft": False,
+            "draft": True,
             "trusted": False,
         },
     )
@@ -105,7 +105,7 @@ async def test_articles_update_bad_category(
             "tags": ["wow", "tag"],
             "category": "system",
             "content": None,
-            "draft": True,
+            "draft": False,
             "trusted": False,
         },
     )
@@ -116,6 +116,61 @@ async def test_articles_update_bad_category(
 
 
 async def test_articles_update_bad_trusted(
+    client,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    response = await request_create_article(
+        client,
+        get_test_token,
+        {
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Lorem ipsum dor sit amet."}],
+                }
+            ],
+            "title": "Interesting title",
+            "tags": ["interesting", "tag"],
+            "category": "news",
+            "content": None,
+            "draft": True,
+            "trusted": False,
+        },
+    )
+
+    # Make sure we got correct response code
+    assert response.status_code == status.HTTP_200_OK
+
+    article_slug = response.json()["slug"]
+
+    response = await request_update_article(
+        client,
+        article_slug,
+        get_test_token,
+        {
+            "document": [
+                {
+                    "type": "preview",
+                    "children": [{"text": "Amet sit dor ipsum lorem."}],
+                }
+            ],
+            "title": "Amazing title",
+            "tags": ["wow", "tag"],
+            "category": "news",
+            "content": None,
+            "draft": False,
+            "trusted": True,
+        },
+    )
+
+    # Now check error
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["code"] == "articles:not_trusted"
+
+
+async def test_articles_update_bad_draft(
     client,
     create_test_user,
     get_test_token,
@@ -161,10 +216,10 @@ async def test_articles_update_bad_trusted(
             "category": "news",
             "content": None,
             "draft": True,
-            "trusted": True,
+            "trusted": False,
         },
     )
 
     # Now check error
-    assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert response.json()["code"] == "articles:not_trusted"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "articles:bad_draft"

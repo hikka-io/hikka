@@ -59,7 +59,7 @@ async def test_articles_update(
                 "content_type": "anime",
                 "slug": "fullmetal-alchemist-brotherhood-fc524a",
             },
-            "draft": False,
+            "draft": True,
             "trusted": False,
         },
     )
@@ -125,7 +125,7 @@ async def test_articles_update(
                 "content_type": "anime",
                 "slug": "bocchi-the-rock-9e172d",
             },
-            "draft": True,
+            "draft": False,
             "trusted": False,
         },
     )
@@ -206,7 +206,7 @@ async def test_articles_update_moderator(
             "tags": ["interesting", "tag"],
             "category": "news",
             "content": None,
-            "draft": False,
+            "draft": True,
             "trusted": False,
         },
     )
@@ -231,7 +231,7 @@ async def test_articles_update_moderator(
             "tags": ["wow", "tag"],
             "category": "news",
             "content": None,
-            "draft": True,
+            "draft": False,
             "trusted": False,
         },
     )

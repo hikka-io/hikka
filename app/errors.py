@@ -204,6 +204,7 @@ errors = {
         "not-found": ["Client not found", 404],
     },
     "articles": {
+        "bad-draft": ["You can't set published article to draft", 400],
         "not-trusted": ["You can't make this article trusted", 403],
         "bad-category": ["You can't use this category", 400],
         "duplicate-image-url": ["Duplicate image url", 400],

@@ -109,6 +109,8 @@ async def validate_upload_file(
         **{
             "mime_type": mime_type,
             "size": file.size,
+            "height": height,
+            "width": width,
             "file": file,
         }
     )

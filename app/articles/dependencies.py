@@ -185,6 +185,9 @@ async def validate_article_update(
     ):
         raise Abort("system", "rate-limit")
 
+    if article.draft is False and args.draft is True:
+        raise Abort("articles", "bad-draft")
+
     # We leave it here for now, maybe change in the future
     if args.category != article.category:
         raise Abort("articles", "bad-category")

@@ -211,6 +211,9 @@ async def update_article(
 
     old_document = article.document
 
+    # If article draft changed to false we shall update creation time
+    update_created = article.draft is True and args.draft is False
+
     for key in ["category", "draft", "title", "document", "trusted"]:
         old_value = getattr(article, key)
         new_value = getattr(args, key)
@@ -290,7 +293,12 @@ async def update_article(
         for tag in new_tags:
             tag.content_count += 1
 
-    article.updated = utcnow()
+    now = utcnow()
+    article.updated = now
+
+    if update_created:
+        article.created = now
+
     session.add(article)
     await session.commit()
 
