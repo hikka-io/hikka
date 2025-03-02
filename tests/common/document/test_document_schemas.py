@@ -32,18 +32,15 @@ async def test_document():
                 "children": [
                     {
                         "type": "h3",
-                        "title": "H3 Title",
-                        "children": [{"text": ""}],
+                        "children": [{"text": "H3 Title"}],
                     },
                     {
                         "type": "h4",
-                        "title": "H4 Title",
-                        "children": [{"text": ""}],
+                        "children": [{"text": "H4 Title"}],
                     },
                     {
                         "type": "h5",
-                        "title": "H5 Title",
-                        "children": [{"text": ""}],
+                        "children": [{"text": "H5 Title"}],
                     },
                 ],
             },
