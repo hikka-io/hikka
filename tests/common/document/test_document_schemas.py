@@ -27,6 +27,26 @@ async def test_document():
                     {"children": [{"text": ""}], "type": "p"},
                 ],
             },
+            {
+                "type": "p",
+                "children": [
+                    {
+                        "type": "h3",
+                        "title": "H3 Title",
+                        "children": [{"text": ""}],
+                    },
+                    {
+                        "type": "h4",
+                        "title": "H4 Title",
+                        "children": [{"text": ""}],
+                    },
+                    {
+                        "type": "h5",
+                        "title": "H5 Title",
+                        "children": [{"text": ""}],
+                    },
+                ],
+            },
             {"type": "p", "children": [{"text": ""}]},
             {"type": "blockquote", "children": [{"text": "testsstt"}]},
             {

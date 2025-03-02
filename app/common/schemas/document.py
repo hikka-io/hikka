@@ -63,6 +63,24 @@ class DocumentOl(CustomModel):
     type: Literal["ol"]
 
 
+class DocumentH3(CustomModel):
+    children: list[DocumentText] = Field(max_length=1)
+    type: Literal["h3"]
+    title: str
+
+
+class DocumentH4(CustomModel):
+    children: list[DocumentText] = Field(max_length=1)
+    type: Literal["h4"]
+    title: str
+
+
+class DocumentH5(CustomModel):
+    children: list[DocumentText] = Field(max_length=1)
+    type: Literal["h5"]
+    title: str
+
+
 class DocumentImage(CustomModel):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["image"]
@@ -103,6 +121,9 @@ DocumentElement = (
     | DocumentSpoiler
     | DocumentLink
     | DocumentText
+    | DocumentH3
+    | DocumentH4
+    | DocumentH5
     | DocumentUl
     | DocumentOl
     | DocumentPreview
