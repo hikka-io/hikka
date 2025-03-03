@@ -1,15 +1,11 @@
-from app.utils import get_settings, chunkify
 from app.database import sessionmanager
 from app.models import Article
+from app.utils import chunkify
 from sqlalchemy import select
 import aiohttp
 
 
 async def update_article_views():
-    settings = get_settings()
-
-    sessionmanager.init(settings.database.endpoint)
-
     async with sessionmanager.session() as session:
         slugs = await session.scalars(
             select(Article.slug).filter(
@@ -67,5 +63,3 @@ async def update_article_views():
                         )
 
                     await session.commit()
-
-    await sessionmanager.close()
