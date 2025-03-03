@@ -99,16 +99,22 @@ class TagResponse(CustomModel):
     name: str
 
 
-class ArticleContentResponse(CustomModel, DataTypeMixin):
+class ArticleContentResponseBase(CustomModel, DataTypeMixin):
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
-    title_ja: str | None
     title_en: str | None
     title_ua: str | None
     slug: str
 
 
+class ArticleAnimeContentResponse(ArticleContentResponseBase):
+    title_ja: str | None
+
+
+class ArticleMangaNovelContentResponse(ArticleContentResponseBase):
+    title_original: str | None
+
+
 class ArticleResponse(CustomModel, DataTypeMixin):
-    content: ArticleContentResponse | None
     author: FollowUserResponse
     tags: list[TagResponse]
     created: datetime_pd
@@ -123,6 +129,10 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     views: int
     title: str
     slug: str
+
+    content: (
+        ArticleAnimeContentResponse | ArticleMangaNovelContentResponse | None
+    )
 
 
 class ArticlesListResponse(CustomModel):
