@@ -41,9 +41,12 @@ async def validate_upload_rate_limit(
     # Count uploads by given upload type
     count = await service.count_uploads_last_day(session, user, upload_type)
 
-    # TODO: make this dynamic based on upload type (?)
-    # TODO: especially for attachments!
-    max_daily_uploads = 10
+    # Here we handle daily uploads limit for each upload type
+    match upload_type:
+        case constants.UPLOAD_ATTACHMENT:
+            max_daily_uploads = 100
+        case _:
+            max_daily_uploads = 10
 
     if (
         user.role
