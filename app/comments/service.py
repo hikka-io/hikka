@@ -84,6 +84,8 @@ async def get_comments_count(
 ):
     query = select(
         func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
             Comment.content_type == content_type,
             Comment.content_id == content.id,
         )

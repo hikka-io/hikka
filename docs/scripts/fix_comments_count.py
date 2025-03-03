@@ -38,7 +38,6 @@ async def fix_comments_count():
             )
             .filter(
                 Comment.hidden == False,  # noqa: E712
-                Comment.private == False,  # noqa: E712
                 Comment.deleted == False,  # noqa: E712
             )
             .group_by(
@@ -70,7 +69,6 @@ async def fix_comments_count():
             .filter(
                 func.nlevel(Comment.path) == 1,
                 Comment.hidden == False,  # noqa: E712
-                Comment.private == False,  # noqa: E712
                 Comment.deleted == False,  # noqa: E712
             )
             .group_by(
