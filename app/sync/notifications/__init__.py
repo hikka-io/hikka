@@ -10,6 +10,7 @@ from .generate import (
     generate_collection_vote,
     generate_anime_schedule,
     generate_comment_write,
+    generate_article_vote,
     generate_comment_vote,
     generate_edit_update,
     generate_edit_accept,
@@ -65,6 +66,9 @@ async def generate_notifications(session: AsyncSession):
 
             if log.data["content_type"] == constants.CONTENT_COLLECTION:
                 await generate_collection_vote(session, log)
+
+            if log.data["content_type"] == constants.CONTENT_ARTICLE:
+                await generate_article_vote(session, log)
 
         if log.log_type == constants.LOG_COMMENT_WRITE:
             await generate_comment_write(session, log)
