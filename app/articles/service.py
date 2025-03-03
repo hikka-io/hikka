@@ -1,4 +1,4 @@
-from sqlalchemy import select, desc, asc, case, and_, or_, func
+from sqlalchemy import select, update, desc, asc, case, and_, or_, func
 from app.common.utils import find_document_images
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
