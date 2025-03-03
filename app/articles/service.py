@@ -12,6 +12,7 @@ from uuid import uuid4
 
 from app.models import (
     UserArticleStats,
+    ArticleComment,
     ArticleTag,
     Article,
     Anime,
@@ -325,6 +326,13 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
 
     article.deleted = True
     session.add(article)
+
+    # Mark comments for deleted article as private
+    await session.execute(
+        update(ArticleComment)
+        .filter(ArticleComment.content == article)
+        .values(private=True)
+    )
 
     await session.commit()
 
