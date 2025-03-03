@@ -43,6 +43,8 @@ from .email import send_emails
 
 from .export import update_export
 
+from .views import update_article_views
+
 __all__ = [
     "delete_expired_token_requests",
     "aggregator_franchises",
@@ -55,6 +57,7 @@ __all__ = [
     "aggregator_magazines",
     "update_notifications",
     "update_article_stats",
+    "update_article_views",
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",

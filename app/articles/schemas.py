@@ -120,6 +120,7 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     category: str
     trusted: bool
     draft: bool
+    views: int
     title: str
     slug: str
 
