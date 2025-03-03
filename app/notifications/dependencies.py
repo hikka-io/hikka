@@ -15,13 +15,10 @@ async def validate_notification(
     user: User = Depends(auth_required()),
 ) -> Anime:
     if not (
-        notification := await service.get_unseen_notification(
+        notification := await service.get_notification(
             session, notification_reference, user
         )
     ):
         raise Abort("notification", "not-found")
-
-    if notification.seen:
-        raise Abort("notification", "seen")
 
     return notification

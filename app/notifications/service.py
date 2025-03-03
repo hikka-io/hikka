@@ -10,15 +10,16 @@ from app.models import (
 )
 
 
-async def get_unseen_notification(
+async def get_notification(
     session: AsyncSession, notification_reference: UUID, user: User
 ) -> Notification | None:
     return await session.scalar(
-        select(Notification).filter(
+        select(Notification)
+        .filter(
             Notification.id == notification_reference,
-            Notification.seen == False,  # noqa: E712
             Notification.user == user,
         )
+        .options(selectinload(Notification.initiator_user))
     )
 
 
