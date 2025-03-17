@@ -232,7 +232,7 @@ async def import_watch_list(
     imported = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits
-    for anime_chunk in chunkify(args.anime, 20000):
+    for anime_chunk in chunkify(args.anime, constants.ALCHEMY_CHUNK_LIMIT):
         # Get list of mal_ids for optimized db query
         mal_ids = [entry.series_animedb_id for entry in anime_chunk]
 
@@ -336,7 +336,7 @@ async def import_read_list(
     imported_novel = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits
-    for read_chunk in chunkify(args.content, 20000):
+    for read_chunk in chunkify(args.content, constants.ALCHEMY_CHUNK_LIMIT):
         # Get list of mal_ids for optimized db query
         mal_ids = [entry.manga_mangadb_id for entry in read_chunk]
 

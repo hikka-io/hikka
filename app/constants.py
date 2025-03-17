@@ -1,3 +1,6 @@
+# Misc
+ALCHEMY_CHUNK_LIMIT = 5000
+
 # Email types
 EMAIL_ACTIVATION = "activation"
 EMAIL_PASSWORD_RESET = "password_reset"

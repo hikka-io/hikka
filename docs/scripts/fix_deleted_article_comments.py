@@ -15,7 +15,7 @@ async def fix_deleted_article_comments():
             select(Article).filter(Article.deleted == True)  # noqa: E712
         )
 
-        for article in articles:
+        for article in articles.unique():
             await session.execute(
                 update(ArticleComment)
                 .filter(ArticleComment.content == article)
@@ -30,4 +30,4 @@ async def fix_deleted_article_comments():
 
 
 if __name__ == "__main__":
-    asyncio.run(fix_deleted_collection_comments())
+    asyncio.run(fix_deleted_article_comments())
