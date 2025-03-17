@@ -37,6 +37,11 @@ async def update_article_views():
                 ) as response:
                     content = await response.json()
 
+                    # Sometimes Plausible don't return result
+                    # so we need to handle it
+                    if "results" not in content:
+                        continue
+
                     plausible_slugs = []
                     plausible_views = {}
 
