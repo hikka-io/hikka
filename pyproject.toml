@@ -36,6 +36,7 @@ prometheus-fastapi-instrumentator = "^7.0.0"
 pyinstrument = "^4.6.2"
 certifi = "2024.07.04"
 starlette = "0.41.3"
+h11 = "0.16.0"
 
 [build-system]
 requires = ["poetry-core"]
