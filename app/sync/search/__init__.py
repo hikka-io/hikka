@@ -1,4 +1,5 @@
 from meilisearch_python_sdk.errors import MeilisearchCommunicationError
+from .collections import update_search_collections
 from .characters import update_search_characters
 from .companies import update_search_companies
 from .people import update_search_people
@@ -12,6 +13,7 @@ async def update_search():
     """Update Meilisearch with new data"""
 
     try:
+        await update_search_collections()
         await update_search_characters()
         await update_search_companies()
         await update_search_people()
