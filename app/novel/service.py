@@ -27,7 +27,7 @@ async def get_novel_info_by_slug(
     return await session.scalar(
         select(Novel)
         .filter(
-            func.lower(Novel.slug) == slug.lower(),
+            Novel.slug == slug.lower(),
             Novel.deleted == False,  # noqa: E712
         )
         .options(
@@ -41,7 +41,7 @@ async def get_novel_info_by_slug(
 async def get_novel_by_slug(session: AsyncSession, slug: str) -> Novel | None:
     return await session.scalar(
         select(Novel).filter(
-            func.lower(Novel.slug) == slug.lower(),
+            Novel.slug == slug.lower(),
             Novel.deleted == False,  # noqa: E712
         )
     )

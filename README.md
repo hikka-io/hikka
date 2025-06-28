@@ -41,19 +41,19 @@ Optionally you also need to install Meilisearch [1.4.2](https://github.com/meili
    poetry install
    ```
 3. Create `alembic.ini` and `settings.toml` files in project root directory, example configs can be found in [docs/](docs/). Make sure to update database endpoint since this is crucial for moving forward. We also suggest creating empty database for runnign tests and specifying it in `settings.toml` testing section.
-4. Update database to latest migration (keep in mind that migraiton id here might be outdated by now and you should always check [alembic/versions/](alembic/versions/) for latest migration):
+4. Update database to latest migration:
    ```sh
-   alembic upgrade 0c8a96ac77c9
+   alembic upgrade head
    ```
-6. Enable ltree extension in PostgreSQL by running (we need it for comments logic):
+5. Enable ltree extension in PostgreSQL by running (we need it for comments logic):
    ```sql
    CREATE EXTENSION IF NOT EXISTS ltree;
    ```
-7. Now let's run tests to make sure everything is setup properly:
+6. Now let's run tests to make sure everything is setup properly:
    ```sh
    pytest
    ```
-8. If tests from previous step completed without any issues - congrats, now you can launch Hikka backend locally:
+7. If tests from previous step completed without any issues - congrats, now you can launch Hikka backend locally:
    ```sh
    uvicorn run:app --reload --port=8888
    ```
@@ -71,6 +71,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 Here is couple suggestions which would ensure smooth cooperation:
+
 - Write clean and concise code, we recommend using tools like [ruff](https://docs.astral.sh) to ensure code quality. Here is how we usually check code quality `ruff check app/`.
 - Always write tests for your code, this would help us to review and accept your code faster.
 - When creating pull request please write detailed explanation. This would make our work easier ;)

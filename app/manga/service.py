@@ -27,7 +27,7 @@ async def get_manga_info_by_slug(
     return await session.scalar(
         select(Manga)
         .filter(
-            func.lower(Manga.slug) == slug.lower(),
+            Manga.slug == slug.lower(),
             Manga.deleted == False,  # noqa: E712
         )
         .options(
@@ -41,7 +41,7 @@ async def get_manga_info_by_slug(
 async def get_manga_by_slug(session: AsyncSession, slug: str) -> Manga | None:
     return await session.scalar(
         select(Manga).filter(
-            func.lower(Manga.slug) == slug.lower(),
+            Manga.slug == slug.lower(),
             Manga.deleted == False,  # noqa: E712
         )
     )

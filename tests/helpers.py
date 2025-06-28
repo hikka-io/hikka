@@ -1,5 +1,7 @@
 from app.models import User, UserOAuth, AuthToken, Client
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.inspection import inspect
 from app.utils import new_token, utcnow
 from datetime import timedelta
 from sqlalchemy import select
@@ -114,3 +116,10 @@ async def create_client(
     await session.commit()
 
     return client
+
+
+def model_to_dict(model: DeclarativeBase) -> dict:
+    return {
+        col.key: getattr(model, col.key)
+        for col in inspect(model).mapper.column_attrs
+    }

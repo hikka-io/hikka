@@ -3,6 +3,7 @@ from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import declared_attr
+from sqlalchemy.orm import validates
 from sqlalchemy.orm import Mapped
 from sqlalchemy import String
 from datetime import datetime
@@ -32,6 +33,10 @@ class ContentMixin:
 
 class SlugMixin:
     slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+
+    @validates("slug")
+    def ensure_lowercase(self, key, value):
+        return value.lower()
 
 
 class UpdatedMixin:

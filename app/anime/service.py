@@ -32,7 +32,7 @@ async def get_anime_info_by_slug(
     return await session.scalar(
         select(Anime)
         .filter(
-            func.lower(Anime.slug) == slug.lower(),  # type: ignore
+            Anime.slug == slug.lower(),  # type: ignore
             Anime.deleted == False,  # noqa: E712
         )
         .options(
