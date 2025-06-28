@@ -187,7 +187,7 @@ async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
     return await session.scalar(
         select(Anime).filter(
-            func.lower(Anime.slug) == slug.lower(),
+            Anime.slug == slug.lower(),
             Anime.deleted == False,  # noqa: E712
         )
     )

@@ -23,7 +23,7 @@ from app.models import (
 
 async def get_person_by_slug(session: AsyncSession, slug: str) -> Person | None:
     return await session.scalar(
-        select(Person).filter(func.lower(Person.slug) == slug.lower())
+        select(Person).filter(Person.slug == slug.lower())
     )
 
 
