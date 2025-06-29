@@ -87,7 +87,9 @@ async def _auth_token_or_abort(
     if now > token.expiration:
         return Abort("auth", "token-expired")
 
-    token.used = now
+    if now - token.used >= timedelta(minutes=5):
+        token.used = now
+
     await session.commit()
 
     return token
@@ -162,10 +164,12 @@ def auth_required(
             raise Abort("user", "deleted")
 
         # After each authenticated request token expiration will be reset
-        token.expiration = now + timedelta(days=7)
-        token.user.last_active = now
 
-        session.add(token)
+        if now - token.user.last_active >= timedelta(minutes=5):
+            token.expiration = now + timedelta(days=7)
+            token.user.last_active = now
+            session.add(token)
+
         await session.commit()
 
         return token.user
