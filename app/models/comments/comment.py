@@ -7,6 +7,7 @@ from sqlalchemy_utils import LtreeType
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 from uuid import UUID
 
@@ -59,6 +60,13 @@ class Comment(
             "ix_comments_path",
             path,
             postgresql_using="gist",
+        ),
+        Index(
+            "ix_comment_latest",
+            text("created DESC"),
+            postgresql_where=text(
+                "nlevel(path) = 1 AND NOT hidden AND NOT private AND NOT deleted"
+            ),
         ),
     )
 
