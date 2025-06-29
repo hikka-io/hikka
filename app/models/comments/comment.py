@@ -1,3 +1,4 @@
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime, timedelta, UTC
@@ -7,6 +8,7 @@ from sqlalchemy_utils import LtreeType
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
+from sqlalchemy import func
 from ..base import Base
 from uuid import UUID
 
@@ -54,13 +56,28 @@ class Comment(
         foreign_keys=[author_id], lazy="selectin"
     )
 
-    __table_args__ = (
-        Index(
-            "ix_comments_path",
-            path,
-            postgresql_using="gist",
-        ),
-    )
+    # We want to create a partial index to optimize latest comments queries
+    # We can't create an index directly, because mixin fields are funky, so we have to put it in this wrapper
+    # https://docs.sqlalchemy.org/en/20/orm/declarative_mixins.html#creating-indexes-and-constraints-with-naming-conventions-on-mixins
+    @declared_attr.directive
+    def __table_args__(cls):
+        return (
+            Index(
+                "ix_comments_path",
+                cls.path,
+                postgresql_using="gist",
+            ),
+            Index(
+                "ix_comment_latest",
+                cls.created.desc(),
+                postgresql_where=(
+                    (func.nlevel(cls.path) == 1)
+                    & (cls.hidden == False)
+                    & (cls.private == False)
+                    & (cls.deleted == False)
+                ),
+            ),
+        )
 
     @hybrid_property
     def slug(self):

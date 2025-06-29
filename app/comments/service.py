@@ -326,7 +326,6 @@ async def latest_comments(session: AsyncSession):
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
         )
-        .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
         .limit(3)
     )
