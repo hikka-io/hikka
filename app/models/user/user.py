@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy import Index
+from sqlalchemy import func
 from ..base import Base
 
 
@@ -134,6 +136,10 @@ class User(Base, NeedsSearchUpdateMixin):
             "on_hold": 0,
             "dropped": 0,
         },
+    )
+
+    __table_args__ = (
+        Index("ix_lower_username", func.lower(username), unique=True),
     )
 
     @hybrid_property

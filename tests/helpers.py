@@ -25,24 +25,29 @@ async def create_user(
 ):
     now = utcnow()
 
-    user = User(
-        **{
-            # Hash for "password"
-            "password_hash": "$2b$12$ToufGsZOS/P0SfV.KzJCku/87/7q99Ls6HUZuL0/s2wiXqNJBEoRi",
-            "activation_expire": utcnow() + timedelta(hours=3),
-            "activation_token": new_token(),
-            "email_confirmed": activated,
-            "username": username,
-            "last_active": now,
-            "created": now,
-            "email": email,
-            "role": role,
-            "login": now,
-        }
-    )
+    if not (
+        user := await test_session.scalar(
+            select(User).filter(User.username == username)
+        )
+    ):
+        user = User(
+            **{
+                # Hash for "password"
+                "password_hash": "$2b$12$ToufGsZOS/P0SfV.KzJCku/87/7q99Ls6HUZuL0/s2wiXqNJBEoRi",
+                "activation_expire": utcnow() + timedelta(hours=3),
+                "activation_token": new_token(),
+                "email_confirmed": activated,
+                "username": username,
+                "last_active": now,
+                "created": now,
+                "email": email,
+                "role": role,
+                "login": now,
+            }
+        )
 
-    test_session.add(user)
-    await test_session.commit()
+        test_session.add(user)
+        await test_session.commit()
 
     return user
 
