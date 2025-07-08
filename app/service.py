@@ -384,16 +384,35 @@ def anime_search_filter(
             Company.slug.in_(search.studios)
         )
 
-    # All genres must be present in query result
     if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Anime.genres.any(Genre.slug == slug)
-                    for slug in search.genres
-                ]
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        Anime.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
-        )
+
+        if exclude_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        ~Anime.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
 
     airing_seasons_filters = []
     season_filters = []
