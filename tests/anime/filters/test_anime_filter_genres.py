@@ -16,8 +16,8 @@ async def test_anime_filter_genres(
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["list"]) == 7
 
-    # Check that providing genres that no single anime has returns an empty list
-    # This confirms the logic is AND, not OR.
+    # When we try to get anime with both adventure and comedy genres
+    # It should return empty list because both genres must be present
     response = await request_anime_search(
         client, {"genres": ["adventure", "comedy"]}
     )
