@@ -15,9 +15,9 @@ def build_novel_filters_ms(search: NovelSearchArgs):
 
     for genre in search.genres:
         if genre.startswith("-"):
-            exclude_genres.append(f'genres != "{genre[1:]}"')
+            exclude_genres.append(f"genres != {genre[1:]}")
         else:
-            include_genres.append(f'genres = "{genre}"')
+            include_genres.append(f"genres = {genre}")
 
     translated = []
     score = []
@@ -43,8 +43,8 @@ def build_novel_filters_ms(search: NovelSearchArgs):
         media_type,
         magazines,
         status,
-        include_genres,
-        exclude_genres,
+        *include_genres,
+        *exclude_genres,
         *score,
         *year,
     ]

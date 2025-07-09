@@ -19,9 +19,9 @@ def build_anime_filters(search: AnimeSearchArgs):
 
     for genre in search.genres:
         if genre.startswith("-"):
-            exclude_genres.append(f'genres != "{genre[1:]}"')
+            exclude_genres.append(f"genres != {genre[1:]}")
         else:
-            include_genres.append(f'genres = "{genre}"')
+            include_genres.append(f"genres = {genre}")
 
 
     translated = []
@@ -73,8 +73,8 @@ def build_anime_filters(search: AnimeSearchArgs):
         source,
         studios,
         *convoluted_filters,
-        include_genres,
-        exclude_genres,
+        *include_genres,
+        *exclude_genres,
         *score,
     ]
 
