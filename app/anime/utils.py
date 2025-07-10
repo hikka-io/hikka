@@ -13,7 +13,16 @@ def build_anime_filters(search: AnimeSearchArgs):
     season = [f"season = {season}" for season in search.season]
     producers = [f"producers = {producer}" for producer in search.producers]
     studios = [f"studios = {studio}" for studio in search.studios]
-    genres = [f"genres = {genre}" for genre in search.genres]
+
+    include_genres = []
+    exclude_genres = []
+
+    for genre in search.genres:
+        if genre.startswith("-"):
+            exclude_genres.append(f"genres != {genre[1:]}")
+        else:
+            include_genres.append(f"genres = {genre}")
+
 
     translated = []
     score = []
@@ -64,7 +73,8 @@ def build_anime_filters(search: AnimeSearchArgs):
         source,
         studios,
         *convoluted_filters,
-        *genres,
+        *include_genres,
+        *exclude_genres,
         *score,
     ]
 

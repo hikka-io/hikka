@@ -9,7 +9,15 @@ def build_manga_filters_ms(search: MangaSearchArgs):
     ]
 
     magazines = [f"magazines = {magazine}" for magazine in search.magazines]
-    genres = [f"genres = {genre}" for genre in search.genres]
+    
+    include_genres = []
+    exclude_genres = []
+
+    for genre in search.genres:
+        if genre.startswith("-"):
+            exclude_genres.append(f"genres != {genre[1:]}")
+        else:
+            include_genres.append(f"genres = {genre}")
 
     translated = []
     score = []
@@ -35,7 +43,8 @@ def build_manga_filters_ms(search: MangaSearchArgs):
         media_type,
         magazines,
         status,
-        *genres,
+        *include_genres,
+        *exclude_genres,
         *score,
         *year,
     ]
