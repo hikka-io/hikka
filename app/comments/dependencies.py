@@ -114,7 +114,7 @@ async def validate_comment_edit(
 
 async def validate_hide(
     comment: Comment = Depends(validate_comment),
-    user: User = Depends(auth_required(scope=constants.SCOPE_DELETE_COMMENT)),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_DELETE_COMMENT])),
 ):
     if comment.hidden:
         raise Abort("comment", "already-hidden")
