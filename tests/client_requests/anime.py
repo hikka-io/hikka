@@ -7,10 +7,6 @@ def request_anime_search(client, filters={}, page=1, size=15, token=None):
     )
 
 
-def request_anime_genres(client):
-    return client.get("/anime/genres")
-
-
 def request_anime_info(client, slug):
     return client.get(f"/anime/{slug}")
 

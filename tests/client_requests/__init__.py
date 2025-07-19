@@ -39,7 +39,6 @@ from .anime import request_anime_characters
 from .anime import request_anime_franchise
 from .anime import request_anime_episodes
 from .anime import request_anime_search
-from .anime import request_anime_genres
 from .anime import request_anime_staff
 from .anime import request_anime_info
 
@@ -122,6 +121,8 @@ from .notifications import request_notifications
 
 from .vote import request_vote_status
 from .vote import request_vote
+
+from .genres import request_genres
 
 from .upload import request_upload
 
@@ -253,6 +254,8 @@ __all__ = [
     # =========== vote ===========
     "request_vote_status",
     "request_vote",
+    # =========== genres ===========
+    "request_genres",
     # =========== upload ===========
     "request_upload",
     # =========== system ===========

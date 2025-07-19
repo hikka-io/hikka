@@ -22,7 +22,6 @@ from .dependencies import (
 from app.schemas import (
     ContentCharacterPaginationResponse,
     AnimePaginationResponse,
-    GenreListResponse,
 )
 
 from .schemas import (
@@ -74,19 +73,6 @@ async def search_anime(
     return await service.anime_meilisearch_watch(
         session, search, request_user, meilisearch_result
     )
-
-
-# TODO: remove me!
-@router.get(
-    "/genres",
-    response_model=GenreListResponse,
-    summary="Genres list",
-)
-async def anime_genres(
-    session: AsyncSession = Depends(get_session),
-):
-    genres = await service.anime_genres(session)
-    return {"list": genres.all()}
 
 
 @router.get(
