@@ -44,7 +44,7 @@ def init_scheduler():
         update_aggregator,
         trigger=CronTrigger(
             timezone=ZoneInfo("Europe/Kyiv"),
-            hour=1,
+            hour=2,
         ),
     )
 
