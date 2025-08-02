@@ -12,7 +12,7 @@ from .dependencies import (
     validate_anitube_anime,
     validate_mal_content,
 )
-from .schemas import MALAnimeArgs, MALContentTypeEnum
+from .schemas import MALContentArgs, MALContentTypeEnum
 
 router = APIRouter(prefix="/integrations", tags=["Integrations"])
 
@@ -37,7 +37,7 @@ async def mal_content(
     response_model=list[AnimeResponse | MangaResponse | NovelResponse | None],
 )
 async def mal_content_list(
-    args: MALAnimeArgs,
+    args: MALContentArgs,
     content_type: MALContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ):

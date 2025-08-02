@@ -14,7 +14,7 @@ class MALContentTypeEnum(str, Enum):
 
 
 # Args
-class MALAnimeArgs(CustomModel):
+class MALContentArgs(CustomModel):
     mal_ids: list[int] = Field(min_length=1, max_length=500)
 
     @field_validator("mal_ids")

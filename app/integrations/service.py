@@ -13,7 +13,7 @@ from app.models import (
 from app.models.content.manga import Manga
 from app.models.content.novel import Novel
 
-from .schemas import MALAnimeArgs, MALContentTypeEnum
+from .schemas import MALContentArgs, MALContentTypeEnum
 
 
 def _get_model_class(content_type: MALContentTypeEnum):
@@ -71,7 +71,9 @@ async def get_anime_main_staff(
 
 
 async def get_by_mal_ids(
-    session: AsyncSession, content_type: MALContentTypeEnum, args: MALAnimeArgs
+    session: AsyncSession,
+    content_type: MALContentTypeEnum,
+    args: MALContentArgs,
 ) -> list[Anime | Manga | Novel | None]:
     model_class = _get_model_class(content_type)
 
