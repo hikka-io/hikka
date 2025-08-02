@@ -1,25 +1,36 @@
+from sqlalchemy import asc, desc, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import joinedload
-from .schemas import MALAnimeArgs
-from sqlalchemy import text
 
+from app import constants
 from app.models import (
+    Anime,
     AnimeCharacter,
     AnimeStaff,
     Character,
     Person,
-    Anime,
 )
+from app.models.content.manga import Manga
+from app.models.content.novel import Novel
+
+from .schemas import MALAnimeArgs, MALContentTypeEnum
 
 
-async def get_anime_by_mal_id(
-    session: AsyncSession, mal_id: int
-) -> Anime | None:
+async def get_content_by_mal_id(
+    session: AsyncSession, content_type: MALContentTypeEnum, mal_id: int
+) -> Anime | Manga | Novel | None:
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+
     return await session.scalar(
-        select(Anime).filter(
-            Anime.mal_id == mal_id,
-            Anime.deleted == False,  # noqa: E712
+        select(content_type).filter(
+            content_type.mal_id == mal_id,
+            content_type.deleted == False,  # noqa: E712
         )
     )
 
@@ -56,15 +67,23 @@ async def get_anime_main_staff(
 
 
 async def get_by_mal_ids(
-    session: AsyncSession, args: MALAnimeArgs
-) -> list[Anime | None]:
-    query = select(Anime).filter(
-        Anime.mal_id.in_(args.mal_ids),
-        Anime.deleted == False,  # noqa: E712
+    session: AsyncSession, content_type: MALContentTypeEnum, args: MALAnimeArgs
+) -> list[Anime | Manga | Novel | None]:
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+
+    query = select(content_type).filter(
+        content_type.mal_id.in_(args.mal_ids),
+        content_type.deleted == False,  # noqa: E712
     )
-    anime = await session.scalars(query)
-    anime_cache = {entry.mal_id: entry for entry in anime}
-    return [anime_cache.get(mal_id) for mal_id in args.mal_ids]
+    content = await session.scalars(query)
+    content_cache = {entry.mal_id: entry for entry in content}
+    return [content_cache.get(mal_id) for mal_id in args.mal_ids]
 
 
 async def get_anime_by_anitube(session: AsyncSession, anitube_id: int):
