@@ -16,21 +16,25 @@ from app.models.content.novel import Novel
 from .schemas import MALAnimeArgs, MALContentTypeEnum
 
 
+def _get_model_class(content_type: MALContentTypeEnum):
+    match content_type:
+        case constants.CONTENT_ANIME:
+            return Anime
+        case constants.CONTENT_MANGA:
+            return Manga
+        case constants.CONTENT_NOVEL:
+            return Novel
+
+
 async def get_content_by_mal_id(
     session: AsyncSession, content_type: MALContentTypeEnum, mal_id: int
 ) -> Anime | Manga | Novel | None:
-    match content_type:
-        case constants.CONTENT_ANIME:
-            content_type = Anime
-        case constants.CONTENT_MANGA:
-            content_type = Manga
-        case constants.CONTENT_NOVEL:
-            content_type = Novel
+    model_class = _get_model_class(content_type)
 
     return await session.scalar(
-        select(content_type).filter(
-            content_type.mal_id == mal_id,
-            content_type.deleted == False,  # noqa: E712
+        select(model_class).filter(
+            model_class.mal_id == mal_id,
+            model_class.deleted == False,  # noqa: E712
         )
     )
 
@@ -69,17 +73,11 @@ async def get_anime_main_staff(
 async def get_by_mal_ids(
     session: AsyncSession, content_type: MALContentTypeEnum, args: MALAnimeArgs
 ) -> list[Anime | Manga | Novel | None]:
-    match content_type:
-        case constants.CONTENT_ANIME:
-            content_type = Anime
-        case constants.CONTENT_MANGA:
-            content_type = Manga
-        case constants.CONTENT_NOVEL:
-            content_type = Novel
+    model_class = _get_model_class(content_type)
 
-    query = select(content_type).filter(
-        content_type.mal_id.in_(args.mal_ids),
-        content_type.deleted == False,  # noqa: E712
+    query = select(model_class).filter(
+        model_class.mal_id.in_(args.mal_ids),
+        model_class.deleted == False,  # noqa: E712
     )
     content = await session.scalars(query)
     content_cache = {entry.mal_id: entry for entry in content}

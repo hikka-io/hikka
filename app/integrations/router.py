@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
 from app.models import Anime
+from app.models.content.manga import Manga
+from app.models.content.novel import Novel
 from app.schemas import AnimeResponse, MangaResponse, NovelResponse
 
 from . import service
@@ -25,7 +27,7 @@ async def anitube_anime(anime: Anime = Depends(validate_anitube_anime)):
     response_model=AnimeResponse | MangaResponse | NovelResponse,
 )
 async def mal_content(
-    content: Anime = Depends(validate_mal_content),
+    content: Anime | Manga | Novel = Depends(validate_mal_content),
 ):
     return content
 
