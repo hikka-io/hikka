@@ -1,18 +1,21 @@
-from fastapi import APIRouter, Depends
+from .schemas import MALContentArgs, MALContentTypeEnum
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.models import Anime, Manga, Novel
+from fastapi import APIRouter, Depends
 from app.database import get_session
-from app.models import Anime
-from app.models.content.manga import Manga
-from app.models.content.novel import Novel
-from app.schemas import AnimeResponse, MangaResponse, NovelResponse
-
 from . import service
+
+from app.schemas import (
+    AnimeResponse,
+    MangaResponse,
+    NovelResponse,
+)
+
 from .dependencies import (
     validate_anitube_anime,
     validate_mal_content,
 )
-from .schemas import MALContentArgs, MALContentTypeEnum
+
 
 router = APIRouter(prefix="/integrations", tags=["Integrations"])
 

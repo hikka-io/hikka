@@ -1,9 +1,7 @@
-from enum import Enum
-
 from pydantic import Field, field_validator
-
-from app import constants
 from app.schemas import CustomModel
+from app import constants
+from enum import Enum
 
 
 # Enums

@@ -1,13 +1,9 @@
-from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.models import Anime, Manga, Novel
+from .schemas import MALContentTypeEnum
 from app.database import get_session
 from app.errors import Abort
-from app.integrations.schemas import MALContentTypeEnum
-from app.models import Anime
-from app.models.content.manga import Manga
-from app.models.content.novel import Novel
-
+from fastapi import Depends
 from . import service
 
 
