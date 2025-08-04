@@ -387,10 +387,11 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["anitube", "toloka"]:
+    for source in ["anitube", "toloka", "mikai"]:
         website_name = {
             "anitube": "Anitube",
             "toloka": "Toloka",
+            "mikai": "Mikai",
         }.get(source)
 
         result.extend(
@@ -408,7 +409,12 @@ def process_external(data):
 
 
 def process_translated_ua(data):
-    return len(data["anitube"]) > 0 or len(data["toloka"]) > 0
+    # Ideally we should make some loop here or something like that
+    # Not this
+    anitube_len = len(data["anitube"]) if "anitube" in data else 0
+    toloka_len = len(data["toloka"]) if "toloka" in data else 0
+    mikai_len = len(data["mikai"]) if "mikai" in data else 0
+    return anitube_len > 0 or toloka_len > 0 or mikai_len > 0
 
 
 async def update_anime_info(session, anime, data):
