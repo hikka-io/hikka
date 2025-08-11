@@ -80,9 +80,11 @@ class Comment(
 
     @hybrid_property
     def is_editable(self):
+        # TODO: this is bad place for such limits
+        # We shold move them somewhere more sensible
         now = datetime.now(UTC).replace(tzinfo=None)
-        time_limit = timedelta(hours=1)
-        max_edits = 5
+        time_limit = timedelta(hours=24)
+        max_edits = 500
 
         if len(self.history) >= max_edits:
             return False
