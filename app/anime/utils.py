@@ -1,3 +1,4 @@
+from app.utils import enumerate_seasons
 from .schemas import AnimeSearchArgs
 
 
@@ -23,7 +24,6 @@ def build_anime_filters(search: AnimeSearchArgs):
         else:
             include_genres.append(f"genres = {genre}")
 
-
     translated = []
     score = []
     year = []
@@ -37,24 +37,38 @@ def build_anime_filters(search: AnimeSearchArgs):
     if search.only_translated:
         translated = ["translated_ua = true"]
 
-    if search.years[0]:
-        year.append(f"year>={search.years[0]}")
-
-    if search.years[1]:
-        year.append(f"year<={search.years[1]}")
-
     # Special filter for multi season titles
     airing_seasons = []
-    if (
-        search.include_multiseason
-        and search.years[0] is not None
-        and search.years[1] is not None
-    ):
-        for year_tmp in range(search.years[0], search.years[1] + 1):
-            for season_tmp in search.season:
-                airing_seasons.append(
-                    f"airing_seasons = {season_tmp}_{year_tmp}"
+
+    if search.years[0] is not None and search.years[1] is not None:
+        # Special filter for multi season titles
+        if (
+            search.include_multiseason
+            and isinstance(search.years[0], int)
+            and isinstance(search.years[1], int)
+        ):
+            for year_tmp in range(search.years[0], search.years[1] + 1):
+                for season_tmp in search.season:
+                    airing_seasons.append(
+                        f"airing_seasons = {season_tmp}_{year_tmp}"
+                    )
+
+        # If user passed 2 complex year filters we build it here
+        if isinstance(search.years[0], tuple) and isinstance(
+            search.years[1], tuple
+        ):
+            airing_seasons += [
+                f"airing_seasons = {airing_season}"
+                for airing_season in enumerate_seasons(
+                    search.years[0], search.years[1]
                 )
+            ]
+
+    if search.years[0] and isinstance(search.years[0], int):
+        year.append(f"year>={search.years[0]}")
+
+    if search.years[1] and isinstance(search.years[1], int):
+        year.append(f"year<={search.years[1]}")
 
     # I really hate this but we need it for multiseason titles
     # https://www.meilisearch.com/docs/reference/api/search#filter

@@ -1,5 +1,4 @@
 from sqlalchemy import select, asc, desc, and_, or_, func
-from app.utils import new_token, is_int, is_uuid, utcnow
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
@@ -9,6 +8,14 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
+
+from app.utils import (
+    enumerate_seasons,
+    new_token,
+    is_uuid,
+    utcnow,
+    is_int,
+)
 
 from .schemas import (
     AnimeSearchArgsBase,
@@ -417,22 +424,35 @@ def anime_search_filter(
     airing_seasons_filters = []
     season_filters = []
 
-    # Special filter for multi season titles
-    if (
-        search.include_multiseason
-        and search.years[0] is not None
-        and search.years[1] is not None
-    ):
-        for year in range(search.years[0], search.years[1] + 1):
-            for season in search.season:
-                airing_seasons_filters.append(
-                    Anime.airing_seasons.op("?")(f"{season}_{year}")
-                )
+    if search.years[0] is not None and search.years[1] is not None:
+        # Special filter for multi season titles
+        if (
+            search.include_multiseason
+            and isinstance(search.years[0], int)
+            and isinstance(search.years[1], int)
+        ):
+            for year in range(search.years[0], search.years[1] + 1):
+                for season in search.season:
+                    airing_seasons_filters.append(
+                        Anime.airing_seasons.op("?")(f"{season}_{year}")
+                    )
 
-    if search.years[0]:
+        # If user passed 2 complex year filters we build it here
+        if isinstance(search.years[0], tuple) and isinstance(
+            search.years[1], tuple
+        ):
+            airing_seasons_filters += [
+                Anime.airing_seasons.op("?")(airing_season)
+                for airing_season in enumerate_seasons(
+                    search.years[0], search.years[1]
+                )
+            ]
+
+    # Here we build filters for int years
+    if search.years[0] and isinstance(search.years[0], int):
         season_filters.append(Anime.year >= search.years[0])
 
-    if search.years[1]:
+    if search.years[1] and isinstance(search.years[1], int):
         season_filters.append(Anime.year <= search.years[1])
 
     if len(search.season) > 0:

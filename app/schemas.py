@@ -159,6 +159,46 @@ class YearsMixin:
         return years
 
 
+class YearsSeasonsMixin:
+    years: list[tuple[SeasonEnum, PositiveInt]] | list[PositiveInt | None] = (
+        Field(
+            default=[None, None],
+            examples=[
+                [2014, 2024],
+                [["summer", 2014], ["winter", 2024]],
+            ],
+        )
+    )
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if not years or len(years) == 0:
+            return [None, None]
+
+        if len(years) != 2:
+            raise ValueError("Length of years list must be 2.")
+
+        def extract_year(elem):
+            """Return the numeric year from either a SimpleYear or ComplexFilter."""
+
+            if isinstance(elem, tuple):
+                if len(elem) != 2:
+                    raise ValueError("Complex filter must be ['season', year].")
+
+                return elem[1]
+
+            return elem
+
+        first, second = years
+        y1 = extract_year(first)
+        y2 = extract_year(second)
+
+        if isinstance(y1, int) and isinstance(y2, int) and y1 > y2:
+            raise ValueError("The first year must be ≤ the second year.")
+
+        return years
+
+
 class MangaSearchBaseMixin:
     media_type: list[MangaMediaEnum] = []
     status: list[ContentStatusEnum] = []
@@ -228,7 +268,7 @@ class PasswordArgs(CustomModel):
     password: str = Field(min_length=8, max_length=256, examples=["password"])
 
 
-class AnimeSearchArgsBase(CustomModel, YearsMixin):
+class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
     include_multiseason: bool = False
     only_translated: bool = False
 
@@ -248,24 +288,6 @@ class AnimeSearchArgsBase(CustomModel, YearsMixin):
     producers: list[str] = []
     studios: list[str] = []
     genres: list[str] = []
-
-    @field_validator("years")
-    def validate_years(cls, years):
-        if not years:
-            return [None, None]
-
-        if len(years) == 0:
-            return [None, None]
-
-        if len(years) != 2:
-            raise ValueError("Lenght of years list must be 2.")
-
-        if all(year is not None for year in years) and years[0] > years[1]:
-            raise ValueError(
-                "The first year must be less than the second year."
-            )
-
-        return years
 
     @field_validator("score")
     def validate_score(cls, scores):

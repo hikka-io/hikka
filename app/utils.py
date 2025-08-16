@@ -515,3 +515,38 @@ def check_sort(sort_list, valid_fields):
             raise ValueError(f"Invalid sort value: {sort_item}")
 
     return sort_list
+
+
+def enumerate_seasons(start, end):
+    SEASONS_ORDER = [
+        constants.SEASON_WINTER,
+        constants.SEASON_SPRING,
+        constants.SEASON_SUMMER,
+        constants.SEASON_FALL,
+    ]
+
+    start_season, start_year = start[0], start[1]
+    end_season, end_year = end[0], end[1]
+
+    if start_year is None or end_year is None:
+        return []
+
+    result = []
+
+    for year in range(start_year, end_year + 1):
+        for season in SEASONS_ORDER:
+            if year == start_year and start_season:
+                if SEASONS_ORDER.index(season) < SEASONS_ORDER.index(
+                    start_season
+                ):
+                    continue
+
+            if year == end_year and end_season:
+                if SEASONS_ORDER.index(season) > SEASONS_ORDER.index(
+                    end_season
+                ):
+                    continue
+
+            result.append(f"{season}_{year}")
+
+    return result
