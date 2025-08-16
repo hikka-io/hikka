@@ -2,6 +2,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from app.middlewares import register_profiling_middleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from contextlib import asynccontextmanager
 from app.database import sessionmanager
 from app.utils import TimeoutMiddleware
@@ -142,6 +143,10 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(edit_router)
     app.include_router(vote_router)
+
+    @app.get("/")
+    async def documentation_redirect():
+        return RedirectResponse("/docs")
 
     @app.get("/ping")
     async def ping_pong():
