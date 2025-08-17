@@ -27,6 +27,12 @@ class NeedsSearchUpdateMixin:
     needs_search_update: Mapped[bool] = mapped_column(default=True)
 
 
+# Our own calculated score
+class NativeScoreMixin:
+    native_scored_by: Mapped[int] = mapped_column(default=0)
+    native_score: Mapped[float] = mapped_column(default=0)
+
+
 class ContentMixin:
     content_id: Mapped[str] = mapped_column(String(36), unique=True, index=True)
 

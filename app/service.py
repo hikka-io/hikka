@@ -295,8 +295,10 @@ async def count_logs(
 def anime_loadonly(statement):
     return statement.load_only(
         Anime.episodes_released,
+        Anime.native_scored_by,
         Anime.episodes_total,
         Anime.translated_ua,
+        Anime.native_score,
         Anime.synopsis_en,
         Anime.synopsis_ua,
         Anime.content_id,

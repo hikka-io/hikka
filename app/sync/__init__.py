@@ -45,6 +45,8 @@ from .export import update_export
 
 from .views import update_article_views
 
+from .score import update_scores
+
 __all__ = [
     "delete_expired_token_requests",
     "aggregator_franchises",
@@ -76,5 +78,6 @@ __all__ = [
     "update_export",
     "update_counts",
     "update_search",
+    "update_scores",
     "send_emails",
 ]

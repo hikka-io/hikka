@@ -18,6 +18,7 @@ from app.sync import (
     update_history,
     update_sitemap,
     update_search,
+    update_scores,
     update_export,
     send_emails,
 )
@@ -35,6 +36,7 @@ def init_scheduler():
     scheduler.add_job(update_schedule, "interval", minutes=5)
     scheduler.add_job(update_ranking, "interval", seconds=10)
     scheduler.add_job(update_history, "interval", seconds=10)
+    scheduler.add_job(update_scores, "interval", minutes=10)
     scheduler.add_job(update_export, "interval", minutes=1)
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)

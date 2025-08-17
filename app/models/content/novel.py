@@ -14,6 +14,7 @@ from ..base import Base
 from ..mixins import (
     NeedsSearchUpdateMixin,
     IgnoredFieldsMixin,
+    NativeScoreMixin,
     SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
@@ -29,6 +30,7 @@ class Novel(
     UpdatedMixin,
     DeletedMixin,
     SynonymsMixin,
+    NativeScoreMixin,
     IgnoredFieldsMixin,
     NeedsSearchUpdateMixin,
 ):

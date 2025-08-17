@@ -12,6 +12,7 @@ from ..base import Base
 from ..mixins import (
     NeedsSearchUpdateMixin,
     IgnoredFieldsMixin,
+    NativeScoreMixin,
     SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
@@ -27,6 +28,7 @@ class Anime(
     UpdatedMixin,
     DeletedMixin,
     SynonymsMixin,
+    NativeScoreMixin,
     IgnoredFieldsMixin,
     NeedsSearchUpdateMixin,
 ):

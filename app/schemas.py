@@ -391,6 +391,8 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     episodes_total: int | None = Field(examples=["10"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
+    native_scored_by: int = Field(examples=[1210150])
+    native_score: float = Field(examples=[8.11])
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
@@ -408,11 +410,13 @@ class MangaResponse(CustomModel, DataTypeMixin):
     end_date: datetime_pd | None
     title_original: str | None
     media_type: str | None
+    native_scored_by: int
     title_ua: str | None
     title_en: str | None
     chapters: int | None
     volumes: int | None
     translated_ua: bool
+    native_score: float
     status: str | None
     image: str | None
     year: int | None
@@ -426,11 +430,13 @@ class NovelResponse(CustomModel, DataTypeMixin):
     end_date: datetime_pd | None
     title_original: str | None
     media_type: str | None
+    native_scored_by: int
     title_ua: str | None
     title_en: str | None
     chapters: int | None
     volumes: int | None
     translated_ua: bool
+    native_score: float
     status: str | None
     image: str | None
     year: int | None
