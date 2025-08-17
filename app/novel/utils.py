@@ -9,7 +9,7 @@ def build_novel_filters_ms(search: NovelSearchArgs):
     ]
 
     magazines = [f"magazines = {magazine}" for magazine in search.magazines]
-    
+
     include_genres = []
     exclude_genres = []
 
@@ -23,11 +23,19 @@ def build_novel_filters_ms(search: NovelSearchArgs):
     score = []
     year = []
 
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         score.append([f"score>={search.score[0]}"])
 
     if search.score[1]:
         score.append([f"score<={search.score[1]}"])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        score.append([f"native_score>={search.native_score[0]}"])
+
+    if search.native_score[1]:
+        score.append([f"native_score<={search.native_score[1]}"])
 
     if search.only_translated:
         translated = ["translated_ua = true"]

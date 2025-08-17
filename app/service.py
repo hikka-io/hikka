@@ -343,11 +343,19 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Anime.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Anime.native_score >= search.native_score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Anime.native_score <= search.native_score[1])
 
     if len(search.rating) > 0:
         query = query.filter(Anime.rating.in_(search.rating))
@@ -609,11 +617,19 @@ def manga_search_filter(
     query: Select,
     hide_nsfw=True,
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Manga.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Manga.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Manga.score >= search.score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Manga.native_score <= search.native_score[1])
 
     if len(search.status) > 0:
         query = query.filter(Manga.status.in_(search.status))
@@ -706,11 +722,19 @@ def novel_search_filter(
     query: Select,
     hide_nsfw=True,
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Novel.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Novel.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Novel.native_score >= search.native_score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Novel.native_score <= search.native_score[1])
 
     if len(search.status) > 0:
         query = query.filter(Novel.status.in_(search.status))
