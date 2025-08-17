@@ -25,6 +25,8 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
     def validate_sort(cls, sort_list):
         valid_orders = ["asc", "desc"]
         valid_fields = [
+            "native_scored_by",
+            "native_score",
             "media_type",
             "start_date",
             "scored_by",

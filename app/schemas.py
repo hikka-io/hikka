@@ -213,6 +213,13 @@ class MangaSearchBaseMixin:
         examples=[[0, 10]],
     )
 
+    native_score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
 
 class NovelSearchBaseMixin:
     media_type: list[NovelMediaEnum] = []
@@ -222,6 +229,13 @@ class NovelSearchBaseMixin:
     genres: list[str] = []
 
     score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
+    native_score: list[int | None] = Field(
         default=[None, None],
         min_length=2,
         max_length=2,
@@ -279,6 +293,13 @@ class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
         examples=[[0, 10]],
     )
 
+    native_score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
     media_type: list[AnimeMediaEnum] = []
     rating: list[AnimeAgeRatingEnum] = []
     status: list[AnimeStatusEnum] = []
@@ -289,7 +310,7 @@ class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
     studios: list[str] = []
     genres: list[str] = []
 
-    @field_validator("score")
+    @field_validator("score", "native_score")
     def validate_score(cls, scores):
         if all(score is not None for score in scores) and scores[0] > scores[1]:
             raise ValueError(
@@ -317,12 +338,29 @@ class MangaSearchArgs(
         return utils.check_sort(
             sort_list,
             [
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
                 "score",
             ],
         )
+
+    @field_validator("score", "native_score")
+    def validate_score(cls, scores):
+        if all(score is not None for score in scores) and scores[0] > scores[1]:
+            raise ValueError(
+                "The first score must be less than the second score."
+            )
+
+        if scores[0] and scores[0] < 0:
+            raise ValueError("Score can't be less than 0.")
+
+        if scores[1] and scores[1] > 10:
+            raise ValueError("Score can't be more than 10.")
+
+        return scores
 
 
 class NovelSearchArgs(
@@ -337,12 +375,29 @@ class NovelSearchArgs(
         return utils.check_sort(
             sort_list,
             [
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
                 "score",
             ],
         )
+
+    @field_validator("score", "native_score")
+    def validate_score(cls, scores):
+        if all(score is not None for score in scores) and scores[0] > scores[1]:
+            raise ValueError(
+                "The first score must be less than the second score."
+            )
+
+        if scores[0] and scores[0] < 0:
+            raise ValueError("Score can't be less than 0.")
+
+        if scores[1] and scores[1] > 10:
+            raise ValueError("Score can't be more than 10.")
+
+        return scores
 
 
 # Responses
