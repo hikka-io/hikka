@@ -31,6 +31,7 @@ class NovelInfoResponse(CustomModel, DataTypeMixin):
     synopsis_en: str | None
     synopsis_ua: str | None
     media_type: str | None
+    native_scored_by: int
     chapters: int | None
     title_en: str | None
     title_ua: str | None
@@ -40,6 +41,7 @@ class NovelInfoResponse(CustomModel, DataTypeMixin):
     has_franchise: bool
     translated_ua: bool
     volumes: int | None
+    native_score: float
     status: str | None
     image: str | None
     year: int | None

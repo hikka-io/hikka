@@ -16,6 +16,7 @@ async def update_novel_settings(index):
         MeilisearchSettings(
             filterable_attributes=[
                 "translated_ua",
+                "native_score",
                 "media_type",
                 "magazines",
                 "genres",
@@ -33,6 +34,8 @@ async def update_novel_settings(index):
                 "slug",
             ],
             sortable_attributes=[
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
@@ -62,8 +65,10 @@ def novel_to_document(novel: Novel):
         "year": novel.start_date.year if novel.start_date else None,
         "genres": [genre.slug for genre in novel.genres],
         "start_date": to_timestamp(novel.start_date),
+        "native_scored_by": novel.native_scored_by,
         "title_original": novel.title_original,
         "translated_ua": novel.translated_ua,
+        "native_score": novel.native_score,
         "media_type": novel.media_type,
         "scored_by": novel.scored_by,
         "synonyms": novel.synonyms,

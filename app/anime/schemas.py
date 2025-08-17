@@ -137,6 +137,8 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     source: str | None = Field(examples=["light_novel"])
     rating: str | None = Field(examples=["pg_13"])
     has_franchise: bool = Field(examples=[True])
+    native_scored_by: int = Field(examples=[1210150])
+    native_score: float = Field(examples=[8.11])
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     nsfw: bool = Field(examples=[False])
