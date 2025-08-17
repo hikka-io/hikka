@@ -479,10 +479,12 @@ def anime_search_filter(
 
 def build_anime_order_by(sort: list[str]):
     order_mapping = {
+        "native_scored_by": Anime.native_scored_by,
         "episodes_total": Anime.episodes_total,
         "watch_episodes": AnimeWatch.episodes,
         "watch_updated": AnimeWatch.updated,
         "watch_created": AnimeWatch.created,
+        "native_score": Anime.native_score,
         "watch_score": AnimeWatch.score,
         "media_type": Anime.media_type,
         "start_date": Anime.start_date,
@@ -582,6 +584,8 @@ async def magazines_count(session: AsyncSession, slugs: list[str]):
 
 def build_manga_order_by(sort: list[str]):
     order_mapping = read_order_mapping | {
+        "native_scored_by": Manga.native_scored_by,
+        "native_score": Manga.native_score,
         "media_type": Manga.media_type,
         "start_date": Manga.start_date,
         "scored_by": Manga.scored_by,
@@ -677,6 +681,8 @@ def manga_search_filter(
 
 def build_novel_order_by(sort: list[str]):
     order_mapping = read_order_mapping | {
+        "native_scored_by": Novel.native_scored_by,
+        "native_score": Novel.native_score,
         "media_type": Novel.media_type,
         "start_date": Novel.start_date,
         "scored_by": Novel.scored_by,
