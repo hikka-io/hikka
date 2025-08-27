@@ -31,15 +31,14 @@ from .service import (
 )
 
 from .schemas import (
+    UsernameLoginArgs,
     ComfirmResetArgs,
     TokenRequestArgs,
     TokenProceedArgs,
     EmailLoginArgs,
-    UsernameArgs,
     SignupArgs,
     TokenArgs,
     CodeArgs,
-    UsernameLoginArgs,
 )
 
 
