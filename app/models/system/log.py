@@ -7,6 +7,7 @@ from sqlalchemy import String
 from datetime import datetime
 from ..base import Base
 from uuid import UUID
+import typing
 
 
 class Log(Base):
@@ -15,7 +16,7 @@ class Log(Base):
     log_type: Mapped[str] = mapped_column(String(64), index=True)
     target_id: Mapped[UUID] = mapped_column(nullable=True)
     created: Mapped[datetime] = mapped_column(index=True)
-    data: Mapped[dict] = mapped_column(JSONB, default={})
+    data: Mapped[dict[str, typing.Any]] = mapped_column(JSONB, default={})
 
     user_id = mapped_column(ForeignKey("service_users.id"))
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
