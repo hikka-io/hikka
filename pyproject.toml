@@ -1,47 +1,48 @@
-[tool.poetry]
+[project]
 name = "hikka"
 version = "0.3.0"
 description = "Backend service for hikka.io - Ukrainian anime tracker"
-authors = ["Hikka Team"]
+authors = [
+  { name = "Hikka Team" }
+]
 readme = "README.md"
+requires-python=">=3.11,<4.0"
+
+dependencies = [
+  "fastapi==0.116.1",
+  "uvicorn==0.30.6",
+  "sqlalchemy==2.0.37",
+  "dynaconf==3.2.1",
+  "asyncpg==0.30.0",
+  "meilisearch-python-sdk==2.9.0",
+  "bcrypt==4.0.1",
+  "email-validator==2.0.0.post2",
+  "pytest==7.4.0",
+  "pytest-postgresql==6.1.1",
+  "async-asgi-testclient==1.4.11",
+  "pytest-asyncio==0.21.1",
+  "aiohttp==3.12.14",
+  "apscheduler==3.11.0",
+  "alembic==1.11.3",
+  "aioboto3==12.1.0",
+  "python-multipart==0.0.20",
+  "puremagic==1.15",
+  "imagesize==1.4.1",
+  "sqlalchemy-utils==0.41.1",
+  "requests==2.32.4",
+  "gunicorn==23.0.0",
+  "prometheus-fastapi-instrumentator==7.0.0",
+  "pyinstrument==4.6.2",
+  "certifi==2024.07.04",
+  "starlette==0.47.2",
+  "h11==0.16.0",
+  "setuptools==78.1.1",
+]
+
+[tool.poetry]
 package-mode = false
 
-[tool.poetry.dependencies]
-python = "^3.13"
-fastapi = "0.116.1"
-uvicorn = "0.30.6"
-sqlalchemy = "^2.0.20"
-dynaconf = "^3.2.1"
-asyncpg = "^0.30.0"
-meilisearch-python-sdk = "2.9.0"
-bcrypt = "^4.0.1"
-email-validator = "2.0.0.post2"
-pytest = "^7.4.0"
-pytest-postgresql = "^6.1.1"
-async-asgi-testclient = "^1.4.11"
-pytest-asyncio = "^0.21.1"
-aiohttp = "3.12.14"
-apscheduler = "^3.11.0"
-alembic = "^1.11.3"
-greenlet = "^3.0.1"
-aioboto3 = "^12.1.0"
-python-multipart = "0.0.20"
-puremagic = "^1.15"
-imagesize = "^1.4.1"
-sqlalchemy-utils = "^0.41.1"
-requests = "2.32.4"
-urllib3 = "2.5.0"
-gunicorn = "23.0.0"
-prometheus-fastapi-instrumentator = "^7.0.0"
-pyinstrument = "^4.6.2"
-certifi = "2024.07.04"
-starlette = "0.47.2"
-h11 = "0.16.0"
-setuptools = "78.1.1"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 python_functions = "test_*"
@@ -58,3 +59,10 @@ exclude = [".venv", "venv", "alembic"]
 extend-ignore = [
     "F821",  # Disable checks for annotated SQLAlchemy relations 
 ]
+
+[tool.pyright]
+reportUninitializedInstanceVariable = false
+reportUnannotatedClassAttribute = false
+reportCallInDefaultInitializer = false
+reportUnusedCallResult = false
+reportAny = false
