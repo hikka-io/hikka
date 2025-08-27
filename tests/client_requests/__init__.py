@@ -6,6 +6,7 @@ from .auth import request_activation_resend
 from .auth import request_password_confirm
 from .auth import request_auth_token_info
 from .auth import request_password_reset
+from .auth import request_login_username
 from .auth import request_revoke_token
 from .auth import request_activation
 from .auth import request_auth_token
@@ -138,6 +139,7 @@ __all__ = [
     "request_password_confirm",
     "request_auth_token_info",
     "request_password_reset",
+    "request_login_username",
     "request_revoke_token",
     "request_activation",
     "request_auth_token",
