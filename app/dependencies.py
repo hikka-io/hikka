@@ -164,14 +164,17 @@ def auth_required(
             raise Abort("user", "deleted")
 
         # After each authenticated request token expiration will be reset
-
         if (
             not token.user.last_active
             or now - token.user.last_active >= timedelta(minutes=5)
         ):
-            token.expiration = now + timedelta(days=7)
             token.user.last_active = now
-            session.add(token)
+
+        # We need to update token expiraion once in a while
+        # 3 days before expiration is arbitrary
+        # we may need to update it later on
+        if now - token.expiration <= timedelta(days=3):
+            token.expiration = now + timedelta(days=7)
 
         await session.commit()
 
@@ -182,7 +185,7 @@ def auth_required(
 
 # Validate captcha
 async def check_captcha(
-    captcha: Annotated[str, Header(alias="captcha")]
+    captcha: Annotated[str, Header(alias="captcha")],
 ) -> bool:
     settings = get_settings()
 

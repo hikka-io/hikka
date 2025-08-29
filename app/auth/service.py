@@ -1,17 +1,15 @@
-import uuid
-
-from starlette.datastructures import URL
-
 from app.models import User, AuthToken, UserOAuth, AuthTokenRequest, Client
 from sqlalchemy import select, func, ScalarResult
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
 from datetime import timedelta, datetime
+from starlette.datastructures import URL
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
 from app import constants
 import secrets
+import uuid
 
 
 async def get_user_by_activation(
