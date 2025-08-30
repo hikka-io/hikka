@@ -28,5 +28,5 @@ async def aggregator_anime():
 
     data = [item for sublist in result for item in sublist]
 
-    for data_chunk in utils.chunkify(data, constants.ALCHEMY_CHUNK_LIMIT):
+    for data_chunk in utils.chunkify(data, constants.ALCHEMY_CHUNK_LIMIT_ALT):
         await save_anime_list(data_chunk)
