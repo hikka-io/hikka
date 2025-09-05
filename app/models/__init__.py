@@ -27,7 +27,9 @@ from .edit.edit import NovelEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
+from .comments.comment import CharacterComment
 from .comments.comment import ArticleComment
+from .comments.comment import PersonComment
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
 from .comments.comment import NovelComment
@@ -130,7 +132,9 @@ __all__ = [
     "NovelEdit",
     "Edit",
     "CollectionComment",
+    "CharacterComment",
     "ArticleComment",
+    "PersonComment",
     "AnimeComment",
     "MangaComment",
     "NovelComment",

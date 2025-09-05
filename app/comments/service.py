@@ -22,7 +22,9 @@ from app.service import (
 from app.models import (
     CollectionContent,
     CollectionComment,
+    CharacterComment,
     ArticleComment,
+    PersonComment,
     CharacterEdit,
     AnimeComment,
     MangaComment,
@@ -46,8 +48,10 @@ from app.models import (
 
 content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_COLLECTION: CollectionComment,
+    constants.CONTENT_CHARACTER: CharacterComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
     constants.CONTENT_ARTICLE: ArticleComment,
+    constants.CONTENT_PERSON: PersonComment,
     constants.CONTENT_ANIME: AnimeComment,
     constants.CONTENT_MANGA: MangaComment,
     constants.CONTENT_NOVEL: NovelComment,
@@ -385,7 +389,9 @@ async def generate_preview(
         select(Comment)
         .filter(Comment.id == original_comment.id)
         .options(immediateload(CollectionComment.content))
+        .options(immediateload(CharacterComment.content))
         .options(immediateload(ArticleComment.content))
+        .options(immediateload(PersonComment.content))
         .options(immediateload(AnimeComment.content))
         .options(immediateload(MangaComment.content))
         .options(immediateload(NovelComment.content))
@@ -403,6 +409,22 @@ async def generate_preview(
             comment.content.title_ua
             or comment.content.title_en
             or comment.content.title_ja
+        )
+
+    if isinstance(comment, PersonComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_native
+        )
+
+    if isinstance(comment, CharacterComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_ja
         )
 
     if isinstance(comment, MangaComment) or isinstance(comment, NovelComment):

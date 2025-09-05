@@ -176,6 +176,40 @@ class NovelComment(Comment):
     )
 
 
+class PersonComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "person",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Person"] = relationship(
+        primaryjoin="Person.id == PersonComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
+class CharacterComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "character",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Character"] = relationship(
+        primaryjoin="Character.id == CharacterComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
 class ArticleComment(Comment):
     __mapper_args__ = {
         "polymorphic_identity": "article",
