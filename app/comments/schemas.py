@@ -19,7 +19,9 @@ from app.schemas import (
 
 from app.models import (
     Collection,
+    Character,
     Article,
+    Person,
     Anime,
     Manga,
     Novel,
@@ -28,7 +30,9 @@ from app.models import (
 
 
 # Types
-CommentableType = Collection | Edit | Article | Anime | Manga | Novel
+CommentableType = (
+    Collection | Character | Article | Person | Anime | Manga | Novel | Edit
+)
 
 
 # Enums
