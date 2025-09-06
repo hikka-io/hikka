@@ -7,6 +7,7 @@ from ..base import Base
 
 from ..mixins import (
     NeedsSearchUpdateMixin,
+    CommentContentMixin,
     FavoritesMixin,
     SynonymsMixin,
     ContentMixin,
@@ -22,6 +23,7 @@ class Person(
     UpdatedMixin,
     SynonymsMixin,
     FavoritesMixin,
+    CommentContentMixin,
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_people"

@@ -9,6 +9,7 @@ from ..base import Base
 from uuid import UUID
 
 from ..mixins import (
+    CommentContentMixin,
     MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
@@ -23,12 +24,10 @@ class Article(
     UpdatedMixin,
     DeletedMixin,
     MyScoreMixin,
+    CommentContentMixin,
     SlugMixin,
 ):
     __tablename__ = "service_articles"
-
-    comments_count_pagination: Mapped[int] = mapped_column(default=0)
-    comments_count: Mapped[int] = mapped_column(default=0)
 
     # In community we trust (but it's nice to have some control)
     trusted: Mapped[bool] = mapped_column(default=False)

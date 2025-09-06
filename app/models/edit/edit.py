@@ -8,6 +8,7 @@ from ..base import Base
 from uuid import UUID
 
 from ..mixins import (
+    CommentContentMixin,
     CreatedMixin,
     UpdatedMixin,
 )
@@ -17,6 +18,7 @@ class Edit(
     Base,
     CreatedMixin,
     UpdatedMixin,
+    CommentContentMixin,
 ):
     __tablename__ = "service_edits"
     __mapper_args__ = {
@@ -24,9 +26,6 @@ class Edit(
         "polymorphic_on": "content_type",
         "with_polymorphic": "*",
     }
-
-    comments_count_pagination: Mapped[int] = mapped_column(default=0)
-    comments_count: Mapped[int] = mapped_column(default=0)
 
     system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)

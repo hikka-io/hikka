@@ -69,6 +69,11 @@ class TitlesMixin:
     title_ua: Mapped[str] = mapped_column(nullable=True)
 
 
+class CommentContentMixin:
+    comments_count_pagination: Mapped[int] = mapped_column(default=0)
+    comments_count: Mapped[int] = mapped_column(default=0)
+
+
 # https://amercader.net/blog/beware-of-json-fields-in-sqlalchemy/
 # no longer using a JSON here but the mutability bit still applies
 class IgnoredFieldsMixin:

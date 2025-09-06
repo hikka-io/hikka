@@ -13,6 +13,7 @@ from ..base import Base
 
 from ..mixins import (
     NeedsSearchUpdateMixin,
+    CommentContentMixin,
     IgnoredFieldsMixin,
     NativeScoreMixin,
     SynonymsMixin,
@@ -32,14 +33,12 @@ class Novel(
     SynonymsMixin,
     NativeScoreMixin,
     IgnoredFieldsMixin,
+    CommentContentMixin,
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_novel"
 
     favourite_created: Mapped[datetime] = query_expression()
-
-    comments_count_pagination: Mapped[int] = mapped_column(default=0)
-    comments_count: Mapped[int] = mapped_column(default=0)
 
     # Multilang fields
     title_original: Mapped[str] = mapped_column(nullable=True)
