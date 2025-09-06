@@ -34,8 +34,10 @@ CommentableType = Collection | Edit | Article | Anime | Manga | Novel
 # Enums
 class ContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
+    content_character = constants.CONTENT_CHARACTER
     content_edit = constants.CONTENT_SYSTEM_EDIT
     content_article = constants.CONTENT_ARTICLE
+    content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
     content_manga = constants.CONTENT_MANGA
     content_novel = constants.CONTENT_NOVEL
