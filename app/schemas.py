@@ -523,7 +523,6 @@ class CharacterResponse(CustomModel, DataTypeMixin):
     name_ja: str | None = Field(examples=["めぐみん"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["megumin-123456"])
-    comments_count: int
     synonyms: list[str]
 
 
@@ -534,7 +533,6 @@ class PersonResponse(CustomModel, DataTypeMixin):
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     slug: str = Field(examples=["rie-takahashi-123456"])
     description_ua: str | None
-    comments_count: int
     synonyms: list[str]
 
 
