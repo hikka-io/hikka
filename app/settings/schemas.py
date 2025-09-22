@@ -54,6 +54,10 @@ class DescriptionArgs(CustomModel):
         default=None, max_length=140, examples=["Hikka"]
     )
 
+    @field_validator("description")
+    def validate_description(cls, description):
+        return description.strip("\n") if description else description
+
 
 class ImportWatchArgs(CustomModelExtraIgnore):
     series_animedb_id: int = Field(ge=0, le=1000000)

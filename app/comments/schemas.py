@@ -53,6 +53,8 @@ class CommentTextArgs(CustomModel):
 
     @field_validator("text")
     def validate_text(cls, text):
+        text = text.strip("\n")
+
         if is_empty_markdown(text):
             raise ValueError("Field text consists of empty markdown")
 

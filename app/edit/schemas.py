@@ -98,6 +98,10 @@ class EditArgs(CustomModel):
 
         return after
 
+    @field_validator("description")
+    def validate_description(cls, description):
+        return description.strip("\n") if description else description
+
 
 class AnimeEditArgs(CustomModel):
     synopsis_en: str | None = Field(None, examples=["..."])

@@ -75,6 +75,8 @@ class CollectionArgs(CustomModel):
 
     @field_validator("description")
     def validate_description(cls, description):
+        description = description.strip("\n")
+
         if is_empty_markdown(description):
             raise ValueError("Field description consists of empty markdown")
 
