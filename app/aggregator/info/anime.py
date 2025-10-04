@@ -478,6 +478,19 @@ async def update_anime_info(session, anime, data):
         # And add it to after dict
         after[field] = getattr(anime, field)
 
+    # Special case (awful hack) for situations when
+    # schedule logic don't update episodes_released field properly
+    # while holding it hostage in ignored fields
+    if (
+        anime.status == constants.RELEASE_STATUS_FINISHED
+        and anime.episodes_total is not None
+        and (
+            anime.episodes_released is None
+            or anime.episodes_released < anime.episodes_total
+        )
+    ):
+        anime.episodes_released = anime.episodes_total
+
     # Extract and convert date fields
     date_fields = ["start_date", "end_date"]
     for field in date_fields:
