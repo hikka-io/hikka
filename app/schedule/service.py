@@ -55,7 +55,7 @@ async def get_schedule_anime_count(
             select(func.count(AnimeSchedule.id)).join(AnimeSchedule.anime),
             args,
             request_user,
-        )
+        ).filter(Anime.nsfw == False)
     )
 
 
@@ -72,6 +72,7 @@ async def get_schedule_anime(
             args,
             request_user,
         )
+        .filter(Anime.nsfw == False)
         .options(
             anime_loadonly(joinedload(AnimeSchedule.anime)).joinedload(
                 Anime.watch
