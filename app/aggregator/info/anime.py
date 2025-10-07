@@ -491,6 +491,16 @@ async def update_anime_info(session, anime, data):
     ):
         anime.episodes_released = anime.episodes_total
 
+    # Yet another special case (abhorent hack) for handling schedule bugs
+    if (
+        anime.status != constants.RELEASE_STATUS_FINISHED
+        and data["status"] == constants.RELEASE_STATUS_FINISHED
+    ):
+        anime.status = constants.RELEASE_STATUS_FINISHED
+
+        if anime.episodes_total is not None:
+            anime.episodes_released = anime.episodes_total
+
     # Extract and convert date fields
     date_fields = ["start_date", "end_date"]
     for field in date_fields:
