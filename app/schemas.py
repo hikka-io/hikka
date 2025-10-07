@@ -249,7 +249,7 @@ class PaginationArgs(CustomModel):
 
 
 class QuerySearchArgs(CustomModel):
-    query: str | None = Field(default=None, min_length=3, max_length=255)
+    query: str | None = Field(default=None, min_length=2, max_length=255)
 
 
 class QuerySearchRequiredArgs(CustomModel):
