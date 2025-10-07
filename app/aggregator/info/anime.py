@@ -501,6 +501,14 @@ async def update_anime_info(session, anime, data):
         if anime.episodes_total is not None:
             anime.episodes_released = anime.episodes_total
 
+    # At this point I just hate schedule subsystem with my whole heart
+    if anime.episodes_total is not None:
+        anime.schedule = [
+            entry
+            for entry in anime.schedule
+            if entry["episode"] <= anime.episodes_total
+        ]
+
     # Extract and convert date fields
     date_fields = ["start_date", "end_date"]
     for field in date_fields:

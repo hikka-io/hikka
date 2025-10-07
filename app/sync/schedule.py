@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, delete, asc
 from app.database import sessionmanager
-from sqlalchemy import select, asc
 from datetime import datetime
 from app import constants
 import copy
@@ -238,6 +238,29 @@ async def build_schedule(session: AsyncSession):
         )
 
         cache = {entry.episode: entry for entry in schedule}
+
+        # One more awful hack to handle bad schedules from Anilist
+        if anime.episodes_total is not None:
+            purge_after = False
+
+            for episode_data in anime.schedule:
+                if (
+                    episode_data["episode"] > anime.episodes_total
+                    and episode_data["episode"] in cache
+                ):
+                    purge_after = True
+                    break
+
+            if purge_after:
+                await session.execute(
+                    delete(AnimeSchedule).filter(
+                        AnimeSchedule.anime == anime,
+                        AnimeSchedule.episode > anime.episodes_total,
+                    )
+                )
+
+                await session.commit()
+                continue
 
         for episode_data in anime.schedule:
             airing_at = utcfromtimestamp(episode_data["airing_at"])
