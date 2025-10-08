@@ -38,6 +38,7 @@ from app.models import (
     Anime,
     Manga,
     Novel,
+    Genre,
     Edit,
     User,
 )
@@ -290,6 +291,23 @@ async def accept_pending_edit(
     # Just in case, let's hope it won't happen on production
     # TODO: find better way to handle this behaviour
     before = {}
+
+    if "genres" in edit.after:
+        new_genre_slugs = edit.after.pop("genres")
+        
+        before["genres"] = [genre.slug for genre in content.genres]
+        
+        new_genres = await session.scalars(
+            select(Genre).filter(Genre.slug.in_(new_genre_slugs))
+        )
+        
+        # Replace the relationship list. SQLAlchemy handles the M2M update.
+        content.genres = new_genres.all()
+        
+        # Add 'genres' to ignored_fields to prevent aggregator overwrites
+        if hasattr(content, "ignored_fields"):
+            if "genres" not in content.ignored_fields:
+                content.ignored_fields.append("genres")
 
     for key, value in edit.after.items():
         before[key] = getattr(content, key)
