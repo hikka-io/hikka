@@ -33,7 +33,7 @@ async def validate_edit_genres(
 ) -> EditArgs:
     """Validate genres if they are present in the 'after' payload"""
 
-    if "genres" in args.after and args.after["genres"] is not None:
+    if args.after.get("genres") is not None:
         submitted_genres = list(set(args.after["genres"]))
         if len(submitted_genres) > 0:
             valid_genres_count = await genres_count(session, submitted_genres)
