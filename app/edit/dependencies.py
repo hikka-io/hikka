@@ -27,6 +27,20 @@ from .schemas import (
     EditArgs,
 )
 
+async def validate_edit_genres(
+    args: EditArgs,
+    session: AsyncSession = Depends(get_session),
+) -> EditArgs:
+    """Validate genres if they are present in the 'after' payload"""
+
+    if "genres" in args.after and args.after["genres"] is not None:
+        submitted_genres = list(set(args.after["genres"]))
+        if len(submitted_genres) > 0:
+            valid_genres_count = await genres_count(session, submitted_genres)
+            if valid_genres_count != len(submitted_genres):
+                raise Abort("edit", "invalid-genre")
+
+    return args
 
 async def validate_edit_search_args(
     args: EditSearchArgs,
@@ -139,43 +153,25 @@ async def validate_content(
 
 async def validate_edit_create_args(
     content_type: EditContentTypeEnum,
-    args: EditArgs,
-    session: AsyncSession = Depends(get_session), 
+    args: EditArgs = Depends(validate_edit_genres), 
 ) -> EditArgs:
     """Validate create edit args"""
 
     if not utils.check_edit_schema(content_type, args):
         raise Abort("edit", "bad-edit")
 
-    # Validate genres if they are present in the 'after' payload
-    if "genres" in args.after and args.after["genres"] is not None:
-        submitted_genres = list(set(args.after["genres"]))
-        if len(submitted_genres) > 0:
-            valid_genres_count = await genres_count(session, submitted_genres)
-            if valid_genres_count != len(submitted_genres):
-                raise Abort("edit", "invalid-genre")
-
     return args
 
 
 async def validate_edit_update_args(
-    args: EditArgs,
+    args: EditArgs = Depends(validate_edit_genres),
     edit: Edit = Depends(validate_edit_update),
     author: User = Depends(auth_required()),
-    session: AsyncSession = Depends(get_session),
 ) -> EditArgs:
     """Validate update edit args"""
 
     if not utils.check_edit_schema(edit.content_type, args):
         raise Abort("edit", "bad-edit")
-        
-    # Validate genres if they are present in the 'after' payload
-    if "genres" in args.after and args.after["genres"] is not None:
-        submitted_genres = list(set(args.after["genres"]))
-        if len(submitted_genres) > 0:
-            valid_genres_count = await genres_count(session, submitted_genres)
-            if valid_genres_count != len(submitted_genres):
-                raise Abort("edit", "invalid-genre")
 
     args.after = utils.check_after(args.after, edit.content)
     if len(args.after) == 0:
