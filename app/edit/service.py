@@ -293,7 +293,7 @@ async def accept_pending_edit(
     before = {}
 
     if "genres" in edit.after:
-        new_genre_slugs = edit.after.pop("genres")
+        new_genre_slugs = edit.after["genres"]
         
         before["genres"] = [genre.slug for genre in content.genres]
         
@@ -310,6 +310,9 @@ async def accept_pending_edit(
                 content.ignored_fields.append("genres")
 
     for key, value in edit.after.items():
+        if key == "genres":
+            continue
+
         before[key] = getattr(content, key)
         setattr(content, key, value)
 
