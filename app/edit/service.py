@@ -85,9 +85,9 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
         .options(
             joinedload(CharacterEdit.content),
             joinedload(PersonEdit.content),
-            joinedload(AnimeEdit.content),
-            joinedload(MangaEdit.content),
-            joinedload(NovelEdit.content),
+            joinedload(AnimeEdit.content).joinedload(Anime.genres),
+            joinedload(MangaEdit.content).joinedload(Manga.genres),
+            joinedload(NovelEdit.content).joinedload(Novel.genres),
         )
     )
 
