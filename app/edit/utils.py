@@ -55,6 +55,13 @@ def check_after(after, content):
     pop_list = []
 
     for key, value in after.items():
+        # Add special handling for genres
+        if key == "genres":
+            current_genres = sorted([genre.slug for genre in content.genres])
+            if current_genres == sorted(value):
+                pop_list.append(key)
+            continue # Continue to next item in loop
+
         if getattr(content, key) == value:
             pop_list.append(key)
 
@@ -68,6 +75,11 @@ def calculate_before(content, after):
     before = {}
 
     for key, _ in after.items():
+        # Add special handling for genres
+        if key == "genres":
+            before[key] = [genre.slug for genre in content.genres]
+            continue # Continue to next item in loop
+            
         before[key] = getattr(content, key)
 
     return before

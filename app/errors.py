@@ -76,6 +76,7 @@ errors = {
     "edit": {
         "rate-limit": ["You have reached the edit rate limit, try later", 429],
         "missing-content-type": ["You must specify content type", 400],
+        "invalid-genre": ["One or more genres are invalid", 400],
         "not-pending": ["Only pending edit can be changed", 400],
         "moderator-not-found": ["Moderator not found", 404],
         "not-author": ["Only author can modify edit", 400],

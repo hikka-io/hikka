@@ -107,6 +107,7 @@ class AnimeEditArgs(CustomModel):
     synopsis_en: str | None = Field(None, examples=["..."])
     synopsis_ua: str | None = Field(None, examples=["..."])
     synonyms: list[str] | None = None
+    genres: list[str] | None = None
 
     title_ja: str | None = Field(
         None,
@@ -131,6 +132,7 @@ class MangaEditArgs(CustomModel):
     synopsis_en: str | None = Field(None, examples=["..."])
     synopsis_ua: str | None = Field(None, examples=["..."])
     synonyms: list[str] | None = None
+    genres: list[str] | None = None
     title_original: str | None = None
     title_en: str | None = None
     title_ua: str | None = None
@@ -140,6 +142,7 @@ class NovelEditArgs(CustomModel):
     synopsis_en: str | None = Field(None, examples=["..."])
     synopsis_ua: str | None = Field(None, examples=["..."])
     synonyms: list[str] | None = None
+    genres: list[str] | None = None
     title_original: str | None = None
     title_en: str | None = None
     title_ua: str | None = None

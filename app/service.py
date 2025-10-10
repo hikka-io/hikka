@@ -125,6 +125,13 @@ async def get_content_by_slug(
     else:
         query = query.filter(content_model.slug == slug)
 
+    if content_type in [
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
+        query = query.options(selectinload(content_model.genres))
+
     return await session.scalar(query)
 
 
