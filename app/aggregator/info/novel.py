@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -8,7 +9,6 @@ from app.models import (
     NovelCharacter,
     NovelAuthor,
     AuthorRole,
-    Character,
     Magazine,
     Person,
     Image,
@@ -194,13 +194,9 @@ async def process_characters(session, novel, data):
         set([entry["character"]["content_id"] for entry in data["characters"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["characters"]:
         if not (

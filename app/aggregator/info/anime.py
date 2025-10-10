@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -12,7 +13,6 @@ from app.models import (
     CompanyAnime,
     AnimeStaff,
     AnimeVoice,
-    Character,
     Company,
     Person,
     Genre,
@@ -89,13 +89,9 @@ async def process_characters_and_voices(session, anime, data):
         set([entry["person"]["content_id"] for entry in data["voices"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
         select(Person).filter(Person.content_id.in_(people_content_ids))
