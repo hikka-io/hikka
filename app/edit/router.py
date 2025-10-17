@@ -7,6 +7,8 @@ from app.database import get_session
 from app import constants
 from . import service
 
+from fastapi import Query
+
 from app.models import (
     Character,
     Person,
@@ -56,11 +58,15 @@ from .schemas import (
 router = APIRouter(prefix="/edit", tags=["Edit"])
 
 
+async def get_page_hack(page: int = Query(gt=0, le=100, default=1)):
+    return page
+
+
 @router.post("/list", response_model=EditListResponse)
 async def get_edits(
     args: EditSearchArgs = Depends(validate_edit_search_args),
     session: AsyncSession = Depends(get_session),
-    page: int = Depends(get_page),
+    page: int = Depends(get_page_hack),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)

@@ -4,7 +4,7 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
-    PaginationResponse,
+    # PaginationResponse,
     CharacterResponse,
     PersonResponse,
     AnimeResponse,
@@ -13,6 +13,12 @@ from app.schemas import (
     UserResponse,
     CustomModel,
 )
+
+
+class PaginationResponseHack(CustomModel):
+    total: int = Field(examples=[20])
+    pages: int = Field(examples=[2])
+    page: int = Field(examples=[1], le=100)
 
 
 # Enums
@@ -240,5 +246,5 @@ class EditSimpleResponse(EditResponseBase):
 
 
 class EditListResponse(CustomModel):
-    pagination: PaginationResponse
+    pagination: PaginationResponseHack
     list: list[EditSimpleResponse]
