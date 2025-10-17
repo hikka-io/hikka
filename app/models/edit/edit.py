@@ -27,6 +27,8 @@ class Edit(
         "with_polymorphic": "*",
     }
 
+    content_preview: Mapped[dict] = mapped_column(JSONB, default={})
+
     system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)
     hidden: Mapped[bool] = mapped_column(default=False)
