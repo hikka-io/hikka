@@ -1,9 +1,9 @@
+from app.edit.service import generate_content_preview
 from app.database import sessionmanager
 from sqlalchemy.orm import joinedload
 from sqlalchemy import select, func
 from app.utils import get_settings
 from app.utils import pagination
-from app import constants
 import asyncio
 import math
 
@@ -20,44 +20,6 @@ from app.models import (
     Anime,
     Edit,
 )
-
-
-def generate_content_preview(edit: Edit) -> dict:
-    match edit.content_type:
-        case constants.CONTENT_ANIME:
-            return {
-                "title_ja": edit.content.title_ja,
-                "title_en": edit.content.title_en,
-                "title_ua": edit.content.title_ua,
-                "slug": edit.content.slug,
-            }
-
-        case constants.CONTENT_MANGA | constants.CONTENT_NOVEL:
-            return {
-                "title_original": edit.content.title_original,
-                "title_en": edit.content.title_en,
-                "title_ua": edit.content.title_ua,
-                "slug": edit.content.slug,
-            }
-
-        case constants.CONTENT_PERSON:
-            return {
-                "name_ja": edit.content.name_native,
-                "name_en": edit.content.name_en,
-                "name_ua": edit.content.name_ua,
-                "slug": edit.content.slug,
-            }
-
-        case constants.CONTENT_CHARACTER:
-            return {
-                "name_ja": edit.content.name_ja,
-                "name_en": edit.content.name_en,
-                "name_ua": edit.content.name_ua,
-                "slug": edit.content.slug,
-            }
-
-        case _:
-            return {}
 
 
 async def fix_edit_content_preview():
@@ -121,7 +83,9 @@ async def fix_edit_content_preview():
             edits = await session.scalars(query)
 
             for edit in edits:
-                edit.content_preview = generate_content_preview(edit)
+                edit.content_preview = generate_content_preview(
+                    edit.content_type, edit.content
+                )
                 print(
                     f"Updated preview for {edit.content_type} {edit.content.slug}"
                 )

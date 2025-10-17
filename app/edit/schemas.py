@@ -4,7 +4,7 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
-    # PaginationResponse,
+    PaginationResponse,
     CharacterResponse,
     PersonResponse,
     AnimeResponse,
@@ -13,12 +13,6 @@ from app.schemas import (
     UserResponse,
     CustomModel,
 )
-
-
-class PaginationResponseHack(CustomModel):
-    total: int = Field(examples=[20])
-    pages: int = Field(examples=[2])
-    page: int = Field(examples=[1], le=100)
 
 
 # Enums
@@ -200,51 +194,10 @@ class EditResponse(EditResponseBase):
     reference: str
 
 
-class EditSimpleAnimeResponse(CustomModel):
-    title_ja: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleMangaResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleNovelResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimplePersonResponse(CustomModel):
-    name_native: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
-
-
-class EditSimpleCharacterResponse(CustomModel):
-    name_ja: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
-
-
 class EditSimpleResponse(EditResponseBase):
-    content: (
-        EditSimpleAnimeResponse
-        | EditSimpleMangaResponse
-        | EditSimpleNovelResponse
-        | EditSimplePersonResponse
-        | EditSimpleCharacterResponse
-    )
+    content: dict = Field(validation_alias="content_preview")
 
 
 class EditListResponse(CustomModel):
-    pagination: PaginationResponseHack
+    pagination: PaginationResponse
     list: list[EditSimpleResponse]

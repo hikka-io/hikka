@@ -52,6 +52,48 @@ content_type_to_edit_class = {
 }
 
 
+# This would introduce some headache in the future
+# But this is proble for future me
+# TODO: system edits currently don't have preview
+# since we don't show them
+def generate_content_preview(content_type: str, content) -> dict:
+    match content_type:
+        case constants.CONTENT_ANIME:
+            return {
+                "title_ja": content.title_ja,
+                "title_en": content.title_en,
+                "title_ua": content.title_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_MANGA | constants.CONTENT_NOVEL:
+            return {
+                "title_original": content.title_original,
+                "title_en": content.title_en,
+                "title_ua": content.title_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_PERSON:
+            return {
+                "name_ja": content.name_native,
+                "name_en": content.name_en,
+                "name_ua": content.name_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_CHARACTER:
+            return {
+                "name_ja": content.name_ja,
+                "name_en": content.name_en,
+                "name_ua": content.name_ua,
+                "slug": content.slug,
+            }
+
+        case _:
+            return {}
+
+
 async def update_edit_stats(session: AsyncSession, edit: Edit):
     if not (
         stats := await session.scalar(
@@ -162,40 +204,6 @@ async def get_edits(
     """Return all edits"""
 
     query = await edits_search_filter(session, args, select(Edit))
-
-    query = query.options(
-        joinedload(AnimeEdit.content).load_only(
-            Anime.title_ja,
-            Anime.title_en,
-            Anime.title_ua,
-            Anime.slug,
-        ),
-        joinedload(MangaEdit.content).load_only(
-            Manga.title_original,
-            Manga.title_en,
-            Manga.title_ua,
-            Manga.slug,
-        ),
-        joinedload(NovelEdit.content).load_only(
-            Novel.title_original,
-            Novel.title_en,
-            Novel.title_ua,
-            Novel.slug,
-        ),
-        joinedload(PersonEdit.content).load_only(
-            Person.name_native,
-            Person.name_en,
-            Person.name_ua,
-            Person.slug,
-        ),
-        joinedload(CharacterEdit.content).load_only(
-            Character.name_ja,
-            Character.name_en,
-            Character.name_ua,
-            Character.slug,
-        ),
-    )
-
     query = query.order_by(*build_edit_order_by(args.sort))
     query = query.limit(limit).offset(offset)
 
@@ -308,8 +316,11 @@ async def accept_pending_edit(
     edit.updated = utcnow()
     edit.before = before
 
-    session.add(edit)
-    session.add(content)
+    edit.content_preview = generate_content_preview(
+        edit.content_type,
+        content,
+    )
+
     await session.commit()
 
     await create_log(
@@ -351,6 +362,11 @@ async def create_pending_edit(
             "created": now,
             "updated": now,
         }
+    )
+
+    edit.content_preview = generate_content_preview(
+        content_type,
+        content,
     )
 
     session.add(edit)
