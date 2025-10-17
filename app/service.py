@@ -170,7 +170,9 @@ async def get_content_by_id(
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # TODO: We would need to get rid of delete eventually
+            # Or handle it in some other manner when anime gets deleted
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.user == user,
         )
