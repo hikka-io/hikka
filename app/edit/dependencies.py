@@ -11,6 +11,7 @@ from . import utils
 from app.service import (
     get_user_by_username,
     get_content_by_slug,
+    genres_count,
 )
 
 from app.models import (
@@ -26,6 +27,20 @@ from .schemas import (
     EditArgs,
 )
 
+async def validate_edit_genres(
+    args: EditArgs,
+    session: AsyncSession = Depends(get_session),
+) -> EditArgs:
+    """Validate genres if they are present in the 'after' payload"""
+
+    if args.after.get("genres") is not None:
+        submitted_genres = list(set(args.after["genres"]))
+        if len(submitted_genres) > 0:
+            valid_genres_count = await genres_count(session, submitted_genres)
+            if valid_genres_count != len(submitted_genres):
+                raise Abort("edit", "invalid-genre")
+
+    return args
 
 async def validate_edit_search_args(
     args: EditSearchArgs,
@@ -138,7 +153,7 @@ async def validate_content(
 
 async def validate_edit_create_args(
     content_type: EditContentTypeEnum,
-    args: EditArgs,
+    args: EditArgs = Depends(validate_edit_genres), 
 ) -> EditArgs:
     """Validate create edit args"""
 
@@ -149,7 +164,7 @@ async def validate_edit_create_args(
 
 
 async def validate_edit_update_args(
-    args: EditArgs,
+    args: EditArgs = Depends(validate_edit_genres),
     edit: Edit = Depends(validate_edit_update),
     author: User = Depends(auth_required()),
 ) -> EditArgs:
