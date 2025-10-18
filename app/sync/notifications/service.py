@@ -127,7 +127,7 @@ async def get_anime_watch(session: AsyncSession, anime: Anime):
     return await session.scalars(
         select(AnimeWatch)
         .filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.status.in_(
                 [
