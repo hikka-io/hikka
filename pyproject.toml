@@ -4,7 +4,7 @@ version = "0.3.0"
 description = "Backend service for hikka.io - Ukrainian anime tracker"
 authors = [{ name = "Hikka Team" }]
 readme = "README.md"
-requires-python = ">=3.13,<4.0"
+requires-python = ">=3.13,<3.14"
 
 dependencies = [
   "aioboto3==12.4.0",
