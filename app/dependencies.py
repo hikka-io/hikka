@@ -41,7 +41,7 @@ async def get_size(
         ge=1,
         le=100,
         default=constants.SEARCH_RESULT_SIZE,
-    )
+    ),
 ):
     return size
 
@@ -174,7 +174,7 @@ def auth_required(
         # 3 days before expiration is arbitrary
         # we may need to update it later on
         if now - token.expiration <= timedelta(days=3):
-            token.expiration = now + timedelta(days=7)
+            token.expiration = now + timedelta(days=30)
 
         await session.commit()
 

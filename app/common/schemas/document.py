@@ -136,7 +136,6 @@ class Document(CustomModel):
     @field_validator("nodes", mode="before")
     def validate_raw(cls, document: list[dict]) -> list[dict]:
         total_elements = 0
-        preview_found = False
         max_elements = 1000
         max_depth = 10
 
@@ -144,19 +143,7 @@ class Document(CustomModel):
             return document
 
         def validate_children(children, current_depth=1, is_root=False):
-            nonlocal total_elements, preview_found
-
-            if is_root:
-                # Ensure the first element is a preview if it exists at all
-                if children and children[0].get("type") == "preview":
-                    preview_found = True
-                else:
-                    if any(
-                        child.get("type") == "preview" for child in children
-                    ):
-                        raise ValueError(
-                            "DocumentPreview must be the first element in the document"
-                        )
+            nonlocal total_elements
 
             total_elements += len(children)
 
@@ -189,10 +176,5 @@ class Document(CustomModel):
                     validate_children(element["children"], current_depth + 1)
 
         validate_children(document, is_root=True)
-
-        # TODO: if we decide to make preview required
-        # we just need to enable this check
-        # if not preview_found:
-        #     raise ValueError("DocumentPreview must be present")
 
         return document
