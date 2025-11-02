@@ -14,7 +14,7 @@ ENV POETRY_NO_INTERACTION=1 \
 
 RUN apk add gcc python3-dev musl-dev linux-headers
 
-RUN pip install poetry==1.8.3
+RUN pip install poetry==2.1.3
 
 WORKDIR /project
 
