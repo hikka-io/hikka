@@ -144,20 +144,24 @@ class User(Base, NeedsSearchUpdateMixin):
 
     @hybrid_property
     def avatar(self):
-        if not self.avatar_image:
-            return "https://cdn.hikka.io/avatar.jpg"
-
-        if self.avatar_image.ignore or not self.avatar_image.uploaded:
+        if (
+            not self.avatar_image
+            or self.avatar_image.ignore
+            or not self.avatar_image.uploaded
+            or self.role == "deleted"
+        ):
             return "https://cdn.hikka.io/avatar.jpg"
 
         return self.avatar_image.url
 
     @hybrid_property
     def cover(self):
-        if not self.cover_image:
-            return None
-
-        if self.cover_image.ignore or not self.cover_image.uploaded:
+        if (
+            not self.cover_image
+            or self.cover_image.ignore
+            or not self.cover_image.uploaded
+            or self.role == "deleted"
+        ):
             return None
 
         return self.cover_image.url
