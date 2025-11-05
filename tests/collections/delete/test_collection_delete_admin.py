@@ -6,11 +6,11 @@ from fastapi import status
 from app import constants
 
 
-async def test_collections_delete_moderator(
+async def test_collections_delete_admin(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user_admin,
     create_dummy_user,
     get_dummy_token,
     get_test_token,
@@ -60,4 +60,4 @@ async def test_collections_delete_moderator(
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COLLECTION_DELETE
-    assert log.user == create_test_user_moderator
+    assert log.user == create_test_user_admin

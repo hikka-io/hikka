@@ -184,9 +184,9 @@ async def test_articles_update(
     assert log.data["before"]["document"] != log.data["after"]["document"]
 
 
-async def test_articles_update_moderator(
+async def test_articles_update_admin(
     client: TestClient,
-    create_test_user_moderator: User,
+    create_test_user_admin: User,
     create_dummy_user: User,
     get_test_token: Any,
     get_dummy_token: str,
@@ -242,4 +242,4 @@ async def test_articles_update_moderator(
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_ARTICLE_UPDATE
-    assert log.user == create_test_user_moderator
+    assert log.user == create_test_user_admin

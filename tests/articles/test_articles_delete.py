@@ -81,9 +81,9 @@ async def test_articles_delete(
     assert log.user == create_test_user
 
 
-async def test_articles_delete_moderator(
+async def test_articles_delete_admin(
     client,
-    create_test_user_moderator,
+    create_test_user_admin,
     create_dummy_user,
     get_test_token,
     get_dummy_token,
@@ -123,4 +123,4 @@ async def test_articles_delete_moderator(
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_ARTICLE_DELETE
-    assert log.user == create_test_user_moderator
+    assert log.user == create_test_user_admin

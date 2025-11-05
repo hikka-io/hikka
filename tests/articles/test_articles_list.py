@@ -10,7 +10,7 @@ async def test_articles_list(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user_admin,
     create_dummy_user,
     get_test_token,
     get_dummy_token,
