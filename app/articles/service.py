@@ -1,5 +1,5 @@
 from sqlalchemy import select, update, desc, asc, case, and_, or_, func
-from app.common.utils import find_document_images
+from app.common.utils import find_document_images, generate_preview
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -132,6 +132,7 @@ async def create_article(
 
     article = Article(
         **{
+            "preview": generate_preview(args.document),
             "category": args.category,
             "document": args.document,
             "trusted": args.trusted,
@@ -286,12 +287,13 @@ async def update_article(
             tag.content_count += 1
 
     now = utcnow()
+
+    article.preview = generate_preview(article.document)
     article.updated = now
 
     if update_created:
         article.created = now
 
-    session.add(article)
     await session.commit()
 
     if before != {} and after != {}:
@@ -463,6 +465,8 @@ async def get_articles(
     )
 
 
+# WFT is this?
+# TODO: rework and remove this function
 async def load_articles_content(
     session: AsyncSession,
     article_or_articles: Article | list[Article],

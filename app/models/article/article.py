@@ -34,6 +34,7 @@ class Article(
 
     category: Mapped[str] = mapped_column(String(32), index=True)
     document: Mapped[list] = mapped_column(JSONB, default=[])
+    preview: Mapped[list] = mapped_column(JSONB, default=[])
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
     views: Mapped[int] = mapped_column(default=0)

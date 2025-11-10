@@ -114,12 +114,14 @@ class ArticleMangaNovelContentResponse(ArticleContentResponseBase):
     title_original: str | None
 
 
+# TODO: Make separate responses for catalog and article info
 class ArticleResponse(CustomModel, DataTypeMixin):
     author: FollowUserResponse
     tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
     document: list[dict]
+    preview: list[dict]
     comments_count: int
     vote_score: int
     my_score: int
