@@ -28,7 +28,7 @@ def generate_preview(article_document, max_length=300):
         result = []
 
         for node in document:
-            if total_characters > max_length:
+            if total_characters >= max_length:
                 break
 
             if "children" in node:

@@ -22,6 +22,14 @@ async def fix_preview():
 
         await session.commit()
 
+        # from pprint import pprint
+        # import json
+
+        # with open("test.json", "r") as file:
+        #     data = json.load(file)
+
+        #     pprint(generate_preview(data["document"]))
+
     await sessionmanager.close()
 
 
