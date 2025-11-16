@@ -120,8 +120,6 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
-    document: list[dict]
-    preview: list[dict]
     comments_count: int
     vote_score: int
     my_score: int
@@ -137,9 +135,17 @@ class ArticleResponse(CustomModel, DataTypeMixin):
     )
 
 
+class ArticlePreviewResponse(ArticleResponse):
+    preview: list[dict]
+
+
+class ArticleDocumentResponse(ArticleResponse):
+    document: list[dict]
+
+
 class ArticlesListResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[ArticleResponse]
+    list: list[ArticlePreviewResponse]
 
 
 class UserArticleStatsResponse(CustomModel):
