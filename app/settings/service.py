@@ -84,9 +84,8 @@ async def set_email(session: AsyncSession, user: User, email: str):
 
     log_before = user.email
     user.last_email_change = utcnow()
-    user.email_confirmed = False
-    user.email = email
-    log_after = user.email
+    user.new_email = email
+    log_after = user.new_email
 
     session.add(user)
     await session.commit()

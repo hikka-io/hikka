@@ -3,6 +3,7 @@ from sqlalchemy import select, func, ScalarResult
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
+from app.service import get_user_by_email
 from datetime import timedelta, datetime
 from starlette.datastructures import URL
 from sqlalchemy.orm import selectinload
@@ -176,16 +177,28 @@ async def create_password_token(session: AsyncSession, user: User) -> User:
 
 
 async def activate_user(session: AsyncSession, user: User) -> User:
+    success = True
+
+    # Special case for email change
+    if user.new_email is not None:
+        if not await get_user_by_email(session, user.new_email):
+            user.email = user.new_email
+            user.new_email = None
+
+        else:
+            success = False
+
     # Activate user and delete token
     user.activation_expire = None
     user.activation_token = None
-    user.email_confirmed = True
 
-    # Only set user role if it's not activated
-    if user.role == constants.ROLE_NOT_ACTIVATED:
-        user.role = constants.ROLE_USER
+    if success:
+        user.email_confirmed = True
 
-    session.add(user)
+        # Only set user role if it's not activated
+        if user.role == constants.ROLE_NOT_ACTIVATED:
+            user.role = constants.ROLE_USER
+
     await session.commit()
 
     return user
@@ -206,7 +219,6 @@ async def change_password(session: AsyncSession, user: User, new_password: str):
 async def create_auth_token_request(
     session: AsyncSession, user: User, client: Client, scope: list[str]
 ) -> dict:
-
     # Remove duplicates in scope (just in case)
     scope = list(set(scope))
 

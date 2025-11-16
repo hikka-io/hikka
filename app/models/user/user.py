@@ -27,6 +27,11 @@ class User(Base, NeedsSearchUpdateMixin):
     activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
     activation_expire: Mapped[datetime] = mapped_column(nullable=True)
 
+    # Field for email change flow
+    new_email: Mapped[str] = mapped_column(
+        String(255), index=True, nullable=True
+    )
+
     password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True)
     password_reset_expire: Mapped[datetime] = mapped_column(nullable=True)
 
