@@ -37,10 +37,7 @@ async def test_articles_update(
         get_test_token,
         {
             "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet."}],
-                },
+                {"text": "Lorem ipsum dor sit amet."},
                 {
                     "type": "image_group",
                     "children": [
@@ -103,10 +100,7 @@ async def test_articles_update(
         get_test_token,
         {
             "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Amet sit dor ipsum lorem."}],
-                },
+                {"text": "Amet sit dor ipsum lorem."},
                 {
                     "type": "image_group",
                     "children": [
@@ -154,10 +148,7 @@ async def test_articles_update(
     r_data = response.json()
 
     assert r_data["document"] == [
-        {
-            "type": "preview",
-            "children": [{"text": "Amet sit dor ipsum lorem."}],
-        },
+        {"text": "Amet sit dor ipsum lorem."},
         {
             "type": "image_group",
             "children": [
@@ -196,12 +187,7 @@ async def test_articles_update_admin(
         client,
         get_dummy_token,
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet."}],
-                },
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -221,12 +207,7 @@ async def test_articles_update_admin(
         article_slug,
         get_test_token,
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Amet sit dor ipsum lorem."}],
-                },
-            ],
+            "document": [{"text": "Amet sit dor ipsum lorem."}],
             "title": "Amazing title",
             "tags": ["wow", "tag"],
             "category": "news",

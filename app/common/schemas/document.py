@@ -84,11 +84,6 @@ class DocumentImage(CustomModel):
     url: AnyUrl
 
 
-class DocumentPreview(CustomModel):
-    children: list["DocumentElement"]
-    type: Literal["preview"]
-
-
 class DocumentVideo(CustomModel):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["video"]
@@ -123,7 +118,6 @@ DocumentElement = (
     | DocumentH5
     | DocumentUl
     | DocumentOl
-    | DocumentPreview
     | DocumentVideo
     | DocumentImageGroup
 )
@@ -160,17 +154,6 @@ class Document(CustomModel):
             for index, element in enumerate(children):
                 if not isinstance(element, dict):
                     raise ValueError("Invalid children element")
-
-                if element.get("type") == "preview":
-                    if not is_root:
-                        raise ValueError(
-                            "DocumentPreview must be at the top level"
-                        )
-
-                    if index != 0:
-                        raise ValueError(
-                            "DocumentPreview must be the first element"
-                        )
 
                 if "children" in element:
                     validate_children(element["children"], current_depth + 1)

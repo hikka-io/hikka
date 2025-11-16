@@ -29,10 +29,7 @@ async def test_articles_delete(
         get_test_token,
         {
             "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet."}],
-                },
+                {"text": "Lorem ipsum dor sit amet."},
                 {
                     "type": "image_group",
                     "children": [
@@ -93,12 +90,7 @@ async def test_articles_delete_admin(
         client,
         get_dummy_token,
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet."}],
-                }
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["interesting", "tag"],
             "category": "news",

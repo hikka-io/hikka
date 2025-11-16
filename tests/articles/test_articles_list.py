@@ -18,12 +18,7 @@ async def test_articles_list(
 ):
     articles = [
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet."}],
-                }
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet."}],
             "title": "Interesting title",
             "tags": ["first", "tag"],
             "category": "news",
@@ -35,12 +30,7 @@ async def test_articles_list(
             "trusted": True,
         },
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet. 1"}],
-                }
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet. 1"}],
             "title": "Interesting title 1",
             "tags": ["interesting", "tag"],
             "category": "news",
@@ -52,12 +42,7 @@ async def test_articles_list(
             "trusted": True,
         },
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet. 2"}],
-                }
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet. 2"}],
             "title": "Interesting title 2",
             "tags": ["interesting", "meh"],
             "category": "news",
@@ -66,12 +51,7 @@ async def test_articles_list(
             "trusted": False,
         },
         {
-            "document": [
-                {
-                    "type": "preview",
-                    "children": [{"text": "Lorem ipsum dor sit amet. 3"}],
-                }
-            ],
+            "document": [{"text": "Lorem ipsum dor sit amet. 3"}],
             "title": "Interesting title 3",
             "tags": ["blah", "tag"],
             "category": "news",
