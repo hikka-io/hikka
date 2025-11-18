@@ -429,7 +429,14 @@ def is_protected_username(username: str):
 
 
 def remove_bad_characters(text):
-    text = text.replace("\ufff4", "")
+    bad_characters = [
+        "\u2800",  # Braille Pattern Blank
+        "\ufff4",
+    ]
+
+    for bad_character in bad_characters:
+        text = text.replace(bad_character, "")
+
     return text
 
 
