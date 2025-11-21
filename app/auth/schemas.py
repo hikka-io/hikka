@@ -17,8 +17,10 @@ class SignupArgs(UsernameArgs, PasswordArgs, EmailArgs):
     pass
 
 
-class LoginArgs(PasswordArgs, EmailArgs):
-    pass
+class EmailLoginArgs(PasswordArgs, EmailArgs): ...
+
+
+class UsernameLoginArgs(PasswordArgs, UsernameArgs): ...
 
 
 class ComfirmResetArgs(PasswordArgs, TokenArgs):
@@ -37,9 +39,7 @@ class ProviderUrlResponse(CustomModel):
 class TokenResponse(CustomModel):
     expiration: datetime_pd = Field(examples=[1686088809])
     created: datetime_pd = Field(examples=[1686088809])
-    secret: str = Field(
-        examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"]
-    )
+    secret: str = Field(examples=["CQE-CTXVFCYoUpxz_6VKrHhzHaUZv68XvxV-3AvQbnA"])
 
 
 class AuthTokenInfoResponse(CustomModel):
