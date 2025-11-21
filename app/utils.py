@@ -35,7 +35,9 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         try:
-            return await asyncio.wait_for(call_next(request), timeout=self.timeout)
+            return await asyncio.wait_for(
+                call_next(request), timeout=self.timeout
+            )
 
         except asyncio.TimeoutError:
             return JSONResponse(
@@ -66,7 +68,9 @@ def utcfromtimestamp(timestamp: int):
 
 
 # Helper function to round a datetime object to the nearest hour/minute/second
-def round_datetime(date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1):
+def round_datetime(
+    date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
+):
     return date - timedelta(
         hours=date.hour % hours,
         minutes=date.minute % minutes,
@@ -82,7 +86,9 @@ def check_user_permissions(user: User, permissions: list):
 
     has_permission = all(
         permission in role_permissions for permission in permissions
-    ) and not any(forbidden in permissions for forbidden in user.forbidden_actions)
+    ) and not any(
+        forbidden in permissions for forbidden in user.forbidden_actions
+    )
 
     return has_permission
 
@@ -202,12 +208,20 @@ def slugify(
     # Pass trough text and replace cyrillic characters according to
     # official Ukrainian transliteration
     text = "".join(
-        (transliterate[letter.lower()] if letter.lower() in transliterate else letter)
+        (
+            transliterate[letter.lower()]
+            if letter.lower() in transliterate
+            else letter
+        )
         for letter in text
     )
 
     # Remove any diacritics (accents) from the text
-    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("utf-8")
+    text = (
+        unicodedata.normalize("NFKD", text)
+        .encode("ascii", "ignore")
+        .decode("utf-8")
+    )
 
     # Convert the text to lowercase and replace spaces with the word separator
     text = re.sub(r"\s+", word_separator, text.lower())
@@ -529,11 +543,15 @@ def enumerate_seasons(start, end):
     for year in range(start_year, end_year + 1):
         for season in SEASONS_ORDER:
             if year == start_year and start_season:
-                if SEASONS_ORDER.index(season) < SEASONS_ORDER.index(start_season):
+                if SEASONS_ORDER.index(season) < SEASONS_ORDER.index(
+                    start_season
+                ):
                     continue
 
             if year == end_year and end_season:
-                if SEASONS_ORDER.index(season) > SEASONS_ORDER.index(end_season):
+                if SEASONS_ORDER.index(season) > SEASONS_ORDER.index(
+                    end_season
+                ):
                     continue
 
             result.append(f"{season}_{year}")
