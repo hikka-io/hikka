@@ -1,4 +1,3 @@
-from prometheus_fastapi_instrumentator import Instrumentator
 from app.middlewares import register_profiling_middleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from contextlib import asynccontextmanager
 from app.database import sessionmanager
 from app.utils import TimeoutMiddleware
+from fastapi.routing import APIRoute
 from app.utils import get_settings
 import fastapi.openapi.utils as fu
 from fastapi import FastAPI
@@ -32,7 +32,7 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app = FastAPI(
         title="Hikka API",
-        version="0.4.3",
+        version="0.4.4",
         openapi_tags=[
             {"name": "Admin"},
             {"name": "Auth"},
@@ -152,6 +152,13 @@ def create_app(init_db: bool = True) -> FastAPI:
     async def ping_pong():
         return "pong"
 
-    Instrumentator().instrument(app).expose(app)
+    # Simple hack to add operation_id to each route based on
+    # https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/
+    def use_route_names_as_operation_ids(app: FastAPI) -> None:
+        for route in app.routes:
+            if isinstance(route, APIRoute):
+                route.operation_id = route.name
+
+    use_route_names_as_operation_ids(app)
 
     return app
