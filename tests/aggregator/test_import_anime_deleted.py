@@ -1,9 +1,9 @@
-from sqlalchemy import select, desc
-from app.models import Anime, Log
-from sqlalchemy import func
-from app import aggregator
-from app import constants
-import helpers
+# from sqlalchemy import select, desc
+# from app.models import Anime, Log
+# from sqlalchemy import func
+# from app import aggregator
+# from app import constants
+# import helpers
 
 
 async def test_import_anime_deleted(test_session, aggregator_anime):

@@ -1,7 +1,6 @@
 from app.models import Anime, Manga, Character, Person, Comment
 from app.database import sessionmanager
 from app.utils import get_settings
-from app.comments import service
 from sqlalchemy import select
 import asyncio
 

@@ -91,8 +91,6 @@ async def test_comments_edit_count_limit(
         client, get_test_token, "edit", "17", "Old text"
     )
 
-    comment_reference = response.json()["reference"]
-
     comment = await test_session.scalar(
         select(Comment).filter(Comment.id == response.json()["reference"])
     )

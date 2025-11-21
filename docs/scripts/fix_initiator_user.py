@@ -14,7 +14,7 @@ async def fix_initiator_user():
     async with sessionmanager.session() as session:
         notifications = await session.scalars(
             select(Notification).filter(
-                Notification.initiator_user == None,
+                Notification.initiator_user == None,  # noqa: E711
                 Notification.notification_type.in_(
                     [
                         constants.NOTIFICATION_COMMENT_REPLY,

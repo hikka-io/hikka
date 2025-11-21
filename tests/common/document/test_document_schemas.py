@@ -1,5 +1,4 @@
 from app.common.schemas import Document
-from pydantic import ValidationError
 
 
 async def test_document():
