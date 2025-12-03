@@ -1,8 +1,13 @@
 from app.common.schemas import DocumentText, DocumentElement
 import string
+import copy
 
 
-def generate_preview(article_document, max_length=300):
+def generate_preview(raw_document, max_length=300):
+    # If we don't do a deep copy here raw article document will
+    # be botched somewhere down the line
+    article_document = copy.deepcopy(raw_document)
+
     total_characters = 0
     media_found = False
     END = "..."
