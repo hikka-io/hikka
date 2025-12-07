@@ -1,6 +1,7 @@
 from fastapi import status
 
 from app.models import User
+
 from client_requests import (
     request_profile,
     request_me,

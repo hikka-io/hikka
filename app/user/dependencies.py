@@ -1,9 +1,9 @@
-from typing import Literal
 from app.dependencies import auth_required, get_user, get_user_by_reference
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_session
 from app.models import User
 from fastapi import Depends
+from typing import Literal
 from app import constants
 from . import service
 

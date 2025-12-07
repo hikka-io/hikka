@@ -1,4 +1,3 @@
-from uuid import UUID
 from fastapi import Header, Cookie, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Anime, AuthToken
@@ -10,6 +9,7 @@ from app.errors import Abort
 from app.utils import utcnow
 from app import constants
 from app import utils
+from uuid import UUID
 
 from .service import (
     get_user_by_id,
