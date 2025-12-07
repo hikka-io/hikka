@@ -45,7 +45,7 @@ async def profile(
 
 
 @router.get(
-    "/{reference:uuid}",
+    "/reference/{reference}",
     response_model=UserResponseFollowed,
     summary="User profile by id",
 )
