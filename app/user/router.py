@@ -33,7 +33,9 @@ router = APIRouter(prefix="/user", tags=["User"])
     summary="Current user profile",
 )
 async def profile(
-    user: User = Depends(auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
 ):
     return user
 
@@ -43,7 +45,9 @@ async def profile(
     response_model=UserResponseFollowed,
     summary="User profile by id",
 )
-async def user_profile_by_id(user: User = Depends(get_user_followed("reference"))):
+async def user_profile_by_id(
+    user: User = Depends(get_user_followed("reference")),
+):
     return user
 
 
@@ -52,7 +56,9 @@ async def user_profile_by_id(user: User = Depends(get_user_followed("reference")
     response_model=UserResponseFollowed,
     summary="User profile",
 )
-async def user_profile_by_username(user: User = Depends(get_user_followed("username"))):
+async def user_profile_by_username(
+    user: User = Depends(get_user_followed("username")),
+):
     return user
 
 

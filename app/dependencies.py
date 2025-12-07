@@ -20,7 +20,9 @@ from .service import (
 
 
 # Get user by username
-async def get_user(username: str, session: AsyncSession = Depends(get_session)) -> User:
+async def get_user(
+    username: str, session: AsyncSession = Depends(get_session)
+) -> User:
     if not (user := await get_user_by_username(session, username)):
         raise Abort("user", "not-found")
 
@@ -60,7 +62,9 @@ async def get_size(
 
 
 # Get anime by slug
-async def get_anime(slug: str, session: AsyncSession = Depends(get_session)) -> Anime:
+async def get_anime(
+    slug: str, session: AsyncSession = Depends(get_session)
+) -> Anime:
     if not (anime := await get_anime_by_slug(session, slug)):
         raise Abort("anime", "not-found")
 
@@ -175,8 +179,9 @@ def auth_required(
             raise Abort("user", "deleted")
 
         # After each authenticated request token expiration will be reset
-        if not token.user.last_active or now - token.user.last_active >= timedelta(
-            minutes=5
+        if (
+            not token.user.last_active
+            or now - token.user.last_active >= timedelta(minutes=5)
         ):
             token.user.last_active = now
 

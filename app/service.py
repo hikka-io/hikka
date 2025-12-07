@@ -86,7 +86,9 @@ async def get_followed_user_ids(session: AsyncSession, user: User | None):
 
 
 # We use this code mainly with system based on polymorphic identity
-async def get_content_by_slug(session: AsyncSession, content_type: str, slug: str):
+async def get_content_by_slug(
+    session: AsyncSession, content_type: str, slug: str
+):
     """Return content by content_type and slug"""
 
     if content_type not in content_type_to_content_class:
@@ -126,7 +128,9 @@ async def get_content_by_slug(session: AsyncSession, content_type: str, slug: st
     return await session.scalar(query)
 
 
-async def get_content_by_id(session: AsyncSession, content_type: str, content_id: UUID):
+async def get_content_by_id(
+    session: AsyncSession, content_type: str, content_id: UUID
+):
     """Return content by content_type and content_id"""
 
     # TODO: merge with get_content_by_slug
@@ -175,7 +179,9 @@ async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     )
 
 
-async def get_user_by_username(session: AsyncSession, username: str) -> User | None:
+async def get_user_by_username(
+    session: AsyncSession, username: str
+) -> User | None:
     return await session.scalar(
         select(User).filter(func.lower(User.username) == username.lower())
     )
@@ -200,7 +206,9 @@ async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
     )
 
 
-async def get_auth_token(session: AsyncSession, secret: str) -> AuthToken | None:
+async def get_auth_token(
+    session: AsyncSession, secret: str
+) -> AuthToken | None:
     return await session.scalar(
         select(AuthToken)
         .filter(AuthToken.secret == secret)
@@ -330,13 +338,17 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
     )
 
     # Current watch duration is just episodes * duration
-    episodes_duration = watch.episodes * watch.anime.duration if watch.episodes else 0
+    episodes_duration = (
+        watch.episodes * watch.anime.duration if watch.episodes else 0
+    )
 
     return rewatches_duration + episodes_duration
 
 
 # Search stuff
-def anime_search_filter(search: AnimeSearchArgsBase, query: Select, hide_nsfw=True):
+def anime_search_filter(
+    search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
+):
     # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
@@ -386,10 +398,14 @@ def anime_search_filter(search: AnimeSearchArgsBase, query: Select, hide_nsfw=Tr
         query = query.filter(Anime.translated_ua == True)  # noqa: E712
 
     if len(search.producers) > 0:
-        query = query.join(Anime.producers).filter(Company.slug.in_(search.producers))
+        query = query.join(Anime.producers).filter(
+            Company.slug.in_(search.producers)
+        )
 
     if len(search.studios) > 0:
-        query = query.join(Anime.studios).filter(Company.slug.in_(search.studios))
+        query = query.join(Anime.studios).filter(
+            Company.slug.in_(search.studios)
+        )
 
     if len(search.genres) > 0:
         include_genres = []
@@ -403,13 +419,21 @@ def anime_search_filter(search: AnimeSearchArgsBase, query: Select, hide_nsfw=Tr
 
         if include_genres:
             query = query.filter(
-                and_(*[Anime.genres.any(Genre.slug == slug) for slug in include_genres])
+                and_(
+                    *[
+                        Anime.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
 
         if exclude_genres:
             query = query.filter(
                 and_(
-                    *[~Anime.genres.any(Genre.slug == slug) for slug in exclude_genres]
+                    *[
+                        ~Anime.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
                 )
             )
 
@@ -430,10 +454,14 @@ def anime_search_filter(search: AnimeSearchArgsBase, query: Select, hide_nsfw=Tr
                     )
 
         # If user passed 2 complex year filters we build it here
-        if isinstance(search.years[0], tuple) and isinstance(search.years[1], tuple):
+        if isinstance(search.years[0], tuple) and isinstance(
+            search.years[1], tuple
+        ):
             airing_seasons_filters += [
                 Anime.airing_seasons.op("?")(airing_season)
-                for airing_season in enumerate_seasons(search.years[0], search.years[1])
+                for airing_season in enumerate_seasons(
+                    search.years[0], search.years[1]
+                )
             ]
 
     # Here we build filters for int years
@@ -479,7 +507,11 @@ def build_anime_order_by(sort: list[str]):
     }
 
     order_by = [
-        (desc(order_mapping[field]) if order == "desc" else asc(order_mapping[field]))
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
         for field, order in (entry.split(":") for entry in sort)
     ] + [desc(Anime.content_id)]
 
@@ -530,7 +562,9 @@ def collections_load_options(
 
     if preview:
         query = query.options(
-            with_loader_criteria(CollectionContent, CollectionContent.order <= 6)
+            with_loader_criteria(
+                CollectionContent, CollectionContent.order <= 6
+            )
         )
 
     return query
@@ -573,7 +607,11 @@ def build_manga_order_by(sort: list[str]):
     }
 
     order_by = [
-        (desc(order_mapping[field]) if order == "desc" else asc(order_mapping[field]))
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
         for field, order in (entry.split(":") for entry in sort)
     ] + [desc(Manga.content_id)]
 
@@ -615,7 +653,9 @@ def manga_search_filter(
         query = query.filter(Manga.year <= search.years[1])
 
     if len(search.magazines) > 0:
-        query = query.join(Manga.magazines).filter(Magazine.slug.in_(search.magazines))
+        query = query.join(Manga.magazines).filter(
+            Magazine.slug.in_(search.magazines)
+        )
 
     # In some cases, like on front page, we would want to hide NSFW content
     if len(search.genres) == 0 and hide_nsfw:
@@ -640,13 +680,21 @@ def manga_search_filter(
 
         if include_genres:
             query = query.filter(
-                and_(*[Manga.genres.any(Genre.slug == slug) for slug in include_genres])
+                and_(
+                    *[
+                        Manga.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
 
         if exclude_genres:
             query = query.filter(
                 and_(
-                    *[~Manga.genres.any(Genre.slug == slug) for slug in exclude_genres]
+                    *[
+                        ~Manga.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
                 )
             )
 
@@ -664,7 +712,11 @@ def build_novel_order_by(sort: list[str]):
     }
 
     order_by = [
-        (desc(order_mapping[field]) if order == "desc" else asc(order_mapping[field]))
+        (
+            desc(order_mapping[field])
+            if order == "desc"
+            else asc(order_mapping[field])
+        )
         for field, order in (entry.split(":") for entry in sort)
     ] + [desc(Novel.content_id)]
 
@@ -706,7 +758,9 @@ def novel_search_filter(
         query = query.filter(Novel.year <= search.years[1])
 
     if len(search.magazines) > 0:
-        query = query.join(Novel.magazines).filter(Magazine.slug.in_(search.magazines))
+        query = query.join(Novel.magazines).filter(
+            Magazine.slug.in_(search.magazines)
+        )
 
     # In some cases, like on front page, we would want to hide NSFW content
     if len(search.genres) == 0 and hide_nsfw:
@@ -731,13 +785,21 @@ def novel_search_filter(
 
         if include_genres:
             query = query.filter(
-                and_(*[Novel.genres.any(Genre.slug == slug) for slug in include_genres])
+                and_(
+                    *[
+                        Novel.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
 
         if exclude_genres:
             query = query.filter(
                 and_(
-                    *[~Novel.genres.any(Genre.slug == slug) for slug in exclude_genres]
+                    *[
+                        ~Novel.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
                 )
             )
 
