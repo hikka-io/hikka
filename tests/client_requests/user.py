@@ -10,4 +10,4 @@ def request_profile(client, username):
 
 
 def request_profile_reference(client, reference):
-    return client.get(f"/user/{reference}")
+    return client.get(f"/user/reference/{reference}")
