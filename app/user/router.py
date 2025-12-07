@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import meilisearch
@@ -21,6 +20,11 @@ from app.schemas import (
 from app.dependencies import (
     auth_required,
     get_user,
+)
+
+from .dependencies import (
+    get_user_followed_reference,
+    get_user_followed_username,
 )
 
 
@@ -45,9 +49,7 @@ async def profile(
     response_model=UserResponseFollowed,
     summary="User profile by id",
 )
-async def user_profile_by_id(
-    user: User = Depends(get_user_followed("reference")),
-):
+async def user_profile_by_id(user: User = Depends(get_user_followed_reference)):
     return user
 
 
@@ -57,7 +59,7 @@ async def user_profile_by_id(
     summary="User profile",
 )
 async def user_profile_by_username(
-    user: User = Depends(get_user_followed("username")),
+    user: User = Depends(get_user_followed_username),
 ):
     return user
 

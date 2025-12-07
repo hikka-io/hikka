@@ -44,7 +44,7 @@ async def users_meilisearch(
 
 
 async def load_is_followed(
-    session: AsyncSession, user: User, request_user: User
+    session: AsyncSession, user: User, request_user: User | None
 ) -> User | None:
     user.is_followed = await session.scalar(
         select(
