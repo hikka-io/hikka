@@ -143,6 +143,85 @@ class User(Base, NeedsSearchUpdateMixin):
         },
     )
 
+    styles: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "light": {
+                "colors": {
+                    "background": None,
+                    "foreground": None,
+                    "primary": None,
+                    "primary_foreground": None,
+                    "primary_border": None,
+                    "secondary": None,
+                    "secondary_foreground": None,
+                    "muted": None,
+                    "muted_foreground": None,
+                    "accent_foreground": None,
+                    "border": None,
+                    "ring": None,
+                    "popover": None,
+                    "popover_foreground": None,
+                    "sidebar_background": None,
+                    "sidebar_foreground": None,
+                    "sidebar_primary": None,
+                    "sidebar_primary_foreground": None,
+                    "sidebar_accent": None,
+                    "sidebar_accent_foreground": None,
+                    "sidebar_border": None,
+                    "sidebar_ring": None,
+                },
+            },
+            "dark": {
+                "colors": {
+                    "background": None,
+                    "foreground": None,
+                    "primary": None,
+                    "primary_foreground": None,
+                    "primary_border": None,
+                    "secondary": None,
+                    "secondary_foreground": None,
+                    "muted": None,
+                    "muted_foreground": None,
+                    "accent_foreground": None,
+                    "border": None,
+                    "ring": None,
+                    "popover": None,
+                    "popover_foreground": None,
+                    "sidebar_background": None,
+                    "sidebar_foreground": None,
+                    "sidebar_primary": None,
+                    "sidebar_primary_foreground": None,
+                    "sidebar_accent": None,
+                    "sidebar_accent_foreground": None,
+                    "sidebar_border": None,
+                    "sidebar_ring": None,
+                },
+                "body": {
+                    "background_image": None,
+                },
+            },
+            "radius": None,
+            "typography": {
+                "h1": None,
+                "h2": None,
+                "h3": None,
+                "h4": None,
+                "h5": None,
+                "p": None,
+            },
+        },
+    )
+
+    preferences: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "title_language": None,
+            "name_language": None,
+            "effects": None,
+        },
+    )
+
     __table_args__ = (
         Index("ix_lower_username", func.lower(username), unique=True),
     )

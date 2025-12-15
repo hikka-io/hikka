@@ -6,6 +6,11 @@ from app.models import User
 from app import constants
 from . import service
 
+from app.common.schemas import (
+    UserCustomizationResponse,
+    UserCustomizationArgs,
+)
+
 from app.schemas import (
     SuccessResponse,
     UserResponse,
@@ -52,6 +57,20 @@ async def change_description(
     ),
 ):
     return await service.change_description(session, user, args.description)
+
+
+@router.put(
+    "/ui",
+    response_model=UserCustomizationResponse,
+)
+async def change_ui(
+    args: UserCustomizationArgs,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_CUSTOMIZATION])
+    ),
+):
+    return await service.set_customization(session, user, args)
 
 
 @router.put(

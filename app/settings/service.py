@@ -1,3 +1,4 @@
+from app.common.schemas import UserCustomizationArgs
 from app.watch.service import generate_watch_stats
 from app.read.service import generate_read_stats
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -42,7 +43,6 @@ async def change_description(
     user.description = description if description else None
     log_after = user.description
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -56,8 +56,33 @@ async def change_description(
     return user
 
 
+async def set_customization(
+    session: AsyncSession, user: User, args: UserCustomizationArgs
+) -> User:
+    """Change customization"""
+
+    data = args.model_dump()
+    log_before = {"preferences": user.preferences, "styles": user.styles}
+
+    user.preferneces = data["preferences"]
+    user.styles = data["styles"]
+
+    log_after = {"preferences": user.preferences, "styles": user.styles}
+    await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_CUSTOMIZATION,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
+
+    return user
+
+
 async def set_username(session: AsyncSession, user: User, username: str):
-    """Changed username"""
+    """Change username"""
 
     log_before = user.username
     user.last_username_change = utcnow()
@@ -65,7 +90,6 @@ async def set_username(session: AsyncSession, user: User, username: str):
     user.username = username
     log_after = user.username
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -87,7 +111,6 @@ async def set_email(session: AsyncSession, user: User, email: str):
     user.new_email = email
     log_after = user.new_email
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -106,7 +129,6 @@ async def set_password(session: AsyncSession, user: User, password: str):
 
     user.password_hash = hashpwd(password)
 
-    session.add(user)
     await session.commit()
 
     await create_log(session, constants.LOG_SETTINGS_PASSWORD, user)
@@ -123,7 +145,6 @@ async def set_ignored_notifications(
     user.ignored_notifications = ignored_notifications
     log_after = user.ignored_notifications
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -148,7 +169,6 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
         image_id = user.cover_image_id
         user.cover_image_id = None
 
-    session.add(user)
     await session.commit()
     await session.refresh(user)
 
