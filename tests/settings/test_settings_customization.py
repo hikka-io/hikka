@@ -1,4 +1,5 @@
 from client_requests import request_settings_customization
+from client_requests import request_me_ui
 from sqlalchemy import select, desc
 from app.models import Log
 from fastapi import status
@@ -89,9 +90,9 @@ async def test_settings_customization(
 
     # Check whether changes has been applied
     assert response.status_code == status.HTTP_200_OK
-
     test_hls = {"h": 10, "l": 20, "s": 30}
     base["styles"]["dark"]["colors"]["background"] = test_hls
+    base["preferences"]["title_language"] = "title_en"
 
     # Update customization once more
     response = await request_settings_customization(
@@ -100,7 +101,11 @@ async def test_settings_customization(
 
     # Check once more
     assert response.status_code == status.HTTP_200_OK
+
+    response = await request_me_ui(client, get_test_token)
+    assert response.status_code == status.HTTP_200_OK
     assert response.json()["styles"]["dark"]["colors"]["background"] == test_hls
+    assert response.json()["preferences"]["title_language"] == "title_en"
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))

@@ -1,15 +1,11 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
+from app.common.schemas import UserCustomizationArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
 from app.models import User
 from app import constants
 from . import service
-
-from app.common.schemas import (
-    UserCustomizationResponse,
-    UserCustomizationArgs,
-)
 
 from app.schemas import (
     SuccessResponse,
@@ -61,7 +57,7 @@ async def change_description(
 
 @router.put(
     "/ui",
-    response_model=UserCustomizationResponse,
+    response_model=SuccessResponse,
 )
 async def change_ui(
     args: UserCustomizationArgs,
@@ -70,7 +66,8 @@ async def change_ui(
         auth_required(scope=[constants.SCOPE_UPDATE_USER_CUSTOMIZATION])
     ),
 ):
-    return await service.set_customization(session, user, args)
+    await service.set_customization(session, user, args)
+    return {"success": True}
 
 
 @router.put(

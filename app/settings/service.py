@@ -64,7 +64,7 @@ async def set_customization(
     data = args.model_dump()
     log_before = {"preferences": user.preferences, "styles": user.styles}
 
-    user.preferneces = data["preferences"]
+    user.preferences = data["preferences"]
     user.styles = data["styles"]
 
     log_after = {"preferences": user.preferences, "styles": user.styles}

@@ -26,6 +26,7 @@ from .oauth import request_oauth_post
 from .oauth import request_oauth_url
 
 from .user import request_profile
+from .user import request_me_ui
 from .user import request_me
 
 from .follow import request_follow_stats
@@ -160,6 +161,7 @@ __all__ = [
     "request_oauth_url",
     # =========== user ===========
     "request_profile",
+    "request_me_ui",
     "request_me",
     # =========== follow ===========
     "request_follow_stats",

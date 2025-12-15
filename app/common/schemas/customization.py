@@ -122,4 +122,3 @@ class UserCustomizationArgs(CustomModel):
 class UserCustomizationResponse(CustomModel):
     preferences: UIPreferences
     styles: UIStyles
-    username: str
