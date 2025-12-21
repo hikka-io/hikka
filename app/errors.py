@@ -496,6 +496,9 @@ errors = {
     "content": {
         "not-found": ["Content not found", "Контент не знайдено", 404],
     },
+    "artifacts": {
+        "not-found": ["Artifact not found", "Артефакт не знайдено", 404],
+    },
 }
 
 

@@ -495,7 +495,7 @@ async def artifact_year_summary():
     async with sessionmanager.session() as session:
         start = kyiv_to_utc(datetime(2025, 1, 1))
         end = kyiv_to_utc(datetime(2026, 1, 1))
-        artifact_name = "year_summary_2025"
+        artifact_name = "year-summary-2025"
         now = utcnow()
 
         # We should stop generating after 1 day of end period

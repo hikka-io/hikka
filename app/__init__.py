@@ -35,6 +35,8 @@ def create_app(init_db: bool = True) -> FastAPI:
         version="0.4.4",
         openapi_tags=[
             {"name": "Admin"},
+            {"name": "Articles"},
+            {"name": "Artifacts"},
             {"name": "Auth"},
             {"name": "Client"},
             {"name": "User"},
@@ -90,6 +92,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .characters import router as characters_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
+    from .artifacts import router as artifacts_router
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
@@ -120,6 +123,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(characters_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
+    app.include_router(artifacts_router)
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
