@@ -13,8 +13,9 @@ from .aggregator.anime import aggregator_anime
 from .aggregator.manga import aggregator_manga
 from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
-
 from .aggregator import update_aggregator
+
+from .artifacts import artifact_year_summary
 
 from .notifications import update_notifications
 
@@ -49,6 +50,7 @@ from .score import update_scores
 
 __all__ = [
     "delete_expired_token_requests",
+    "artifact_year_summary",
     "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",

@@ -77,6 +77,7 @@ from .content.author import AuthorRole
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
+from .system.artifact import Artifact
 from .system.image import Image
 from .system.log import Log
 
@@ -174,6 +175,7 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
+    "Artifact",
     "Image",
     "Log",
     "CollectionVote",

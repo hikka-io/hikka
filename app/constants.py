@@ -13,6 +13,7 @@ CDN_ENDPOINT = "https://cdn.hikka.io"
 SORT_DESC = "desc"
 SORT_ASC = "asc"
 
+# TODO: Consider merging watch and read statuses
 # Read stuff
 READ_COMPLETED = "completed"
 READ_READING = "reading"
