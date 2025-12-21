@@ -19,6 +19,9 @@ import copy
 # Limit for top of completed titles
 TOP_LIMIT = 3
 
+# Limit genres stats to 6
+TOP_GENRES_LIMIT = 6
+
 # Limit of titles displayed per month
 MONTHLY_DISPLAY_LIMIT = 10
 
@@ -148,6 +151,7 @@ class YearStatsGenerator:
                 .filter(association_content_id.in_(content_ids))
                 .group_by(association_table.c.genre_id)
                 .order_by(desc("cnt"))
+                .limit(TOP_GENRES_LIMIT)
             )
 
             # Building top genres by titles stats

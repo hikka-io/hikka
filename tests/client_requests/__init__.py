@@ -118,6 +118,9 @@ from .articles import request_delete_article
 from .articles import request_article_stats
 from .articles import request_articles
 
+from .artifacts import request_artifact_privacy
+from .artifacts import request_artifact
+
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
@@ -253,6 +256,9 @@ __all__ = [
     "request_delete_article",
     "request_article_stats",
     "request_articles",
+    # =========== artifacts ===========
+    "request_artifact_privacy",
+    "request_artifact",
     # =========== notifications ===========
     "request_notifications_count",
     "request_notification_seen",

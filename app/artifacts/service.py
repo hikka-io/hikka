@@ -12,3 +12,9 @@ async def get_artifact(
             Artifact.name == name,
         )
     )
+
+
+async def set_privacy(session: AsyncSession, artifact: Artifact, private: bool):
+    artifact.private = private
+    await session.commit()
+    return artifact

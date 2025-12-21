@@ -1,0 +1,2048 @@
+{
+    "punpun": {
+        "first_record": 1735712622,
+        "last_record": 1765901762,
+        "records_total": 514,
+        "top": {
+            "anime": [
+                {
+                    "date": 1761393920,
+                    "score": 10,
+                    "title_ja": "Chainsaw Man Movie: Reze-hen",
+                    "title_en": "Chainsaw Man the Movie: Reze Arc",
+                    "title_ua": "Людина-бензопила: Арка Резе",
+                    "image": "https://cdn.hikka.io/content/anime/chainsaw-man-movie-reze-hen-c4febd/UfgfLlbLkAlsSy2ppbY8Vg.jpg",
+                    "slug": "chainsaw-man-movie-reze-hen-c4febd"
+                },
+                {
+                    "date": 1737813652,
+                    "score": 10,
+                    "title_ja": "Dandadan",
+                    "title_en": "Dan Da Dan",
+                    "title_ua": "Дандадан",
+                    "image": "https://cdn.hikka.io/content/anime/dandadan-cdd731/5DhvqTup8V_UqtgywU5gnw.jpg",
+                    "slug": "dandadan-cdd731"
+                },
+                {
+                    "date": 1752323162,
+                    "score": 10,
+                    "title_ja": "Hellsing Ultimate",
+                    "title_en": "Hellsing Ultimate",
+                    "title_ua": "Геллсінґ Ультимейт",
+                    "image": "https://cdn.hikka.io/content/anime/hellsing-ultimate-c6eaca/Oom0mDBukIB3bOfZOpShug.jpg",
+                    "slug": "hellsing-ultimate-c6eaca"
+                }
+            ],
+            "manga": [
+                {
+                    "date": 1756872677,
+                    "score": 9,
+                    "title_original": "Akuyaku Reijou no Naka no Hito: Danzai sareta Tenseisha no Tame Usotsuki Heroine ni Fukushuu Itashimasu",
+                    "title_en": "The One Within the Villainess",
+                    "title_ua": "Та, що всередині лиходійки",
+                    "image": "https://cdn.hikka.io/content/manga/akuyaku-reijou-no-naka-no-hito-danzai-sareta-tenseisha-no-tame-usotsuki-heroine-ni-fukushuu-itashimasu-e69827/GmbIfZ0-Hy4_3o2R_9el1Q.jpg",
+                    "slug": "akuyaku-reijou-no-naka-no-hito-danzai-sareta-tenseisha-no-tame-usotsuki-heroine-ni-fukushuu-itashimasu-e69827"
+                },
+                {
+                    "date": 1742575720,
+                    "score": 9,
+                    "title_original": "Fire Punch",
+                    "title_en": "Fire Punch",
+                    "title_ua": "Вогняний удар",
+                    "image": "https://cdn.hikka.io/content/manga/fire-punch-cbd77f/L3mxGav9HfvdZ3X10DZ_XA.jpg",
+                    "slug": "fire-punch-cbd77f"
+                },
+                {
+                    "date": 1752469938,
+                    "score": 9,
+                    "title_original": "Bleach: Gokui Meimei-hen",
+                    "title_en": "Bleach: Special One-shot",
+                    "title_ua": "Бліч: Жодних подихів з Пекла",
+                    "image": "https://cdn.hikka.io/content/manga/bleach-gokui-meimei-hen-2c4df1/qdacVv6z8jng5UpJ0tjaag.jpg",
+                    "slug": "bleach-gokui-meimei-hen-2c4df1"
+                }
+            ],
+            "novel": []
+        },
+        "genres": {
+            "anime": {
+                "comedy": 39,
+                "fantasy": 35,
+                "romance": 34,
+                "supernatural": 28,
+                "action": 28,
+                "school": 26,
+                "drama": 21,
+                "seinen": 18,
+                "shounen": 16,
+                "adult-cast": 12,
+                "isekai": 12,
+                "mystery": 11,
+                "horror": 11,
+                "vampire": 10,
+                "gore": 10,
+                "sci-fi": 8,
+                "adventure": 8,
+                "shoujo": 7,
+                "reincarnation": 6,
+                "music": 6,
+                "harem": 5,
+                "love-polygon": 5,
+                "slice-of-life": 5,
+                "historical": 4,
+                "ecchi": 4,
+                "award-winning": 4,
+                "gag-humor": 4,
+                "mythology": 4,
+                "super-power": 4,
+                "military": 3,
+                "psychological": 3,
+                "time-travel": 3,
+                "suspense": 3
+            },
+            "manga": {
+                "fantasy": 44,
+                "romance": 32,
+                "drama": 30,
+                "action": 20,
+                "comedy": 15,
+                "isekai": 15,
+                "supernatural": 12,
+                "shounen": 10,
+                "adventure": 9,
+                "erotica": 8,
+                "mystery": 7,
+                "shoujo": 7,
+                "slice-of-life": 6,
+                "horror": 5,
+                "villainess": 5,
+                "school": 4,
+                "psychological": 4,
+                "award-winning": 4,
+                "ecchi": 3
+            },
+            "novel": {}
+        },
+        "binges": [
+            {
+                "start_date": 1735682400,
+                "end_date": 1736114400,
+                "count": 6
+            },
+            {
+                "start_date": 1736287200,
+                "end_date": 1736460000,
+                "count": 3
+            },
+            {
+                "start_date": 1736805600,
+                "end_date": 1737064800,
+                "count": 4
+            },
+            {
+                "start_date": 1737496800,
+                "end_date": 1737756000,
+                "count": 4
+            },
+            {
+                "start_date": 1738015200,
+                "end_date": 1738274400,
+                "count": 4
+            },
+            {
+                "start_date": 1739656800,
+                "end_date": 1740520800,
+                "count": 11
+            },
+            {
+                "start_date": 1740866400,
+                "end_date": 1741298400,
+                "count": 6
+            },
+            {
+                "start_date": 1741471200,
+                "end_date": 1741730400,
+                "count": 4
+            },
+            {
+                "start_date": 1741903200,
+                "end_date": 1742335200,
+                "count": 6
+            },
+            {
+                "start_date": 1742508000,
+                "end_date": 1743541200,
+                "count": 13
+            },
+            {
+                "start_date": 1743886800,
+                "end_date": 1744318800,
+                "count": 6
+            },
+            {
+                "start_date": 1744750800,
+                "end_date": 1745010000,
+                "count": 4
+            },
+            {
+                "start_date": 1745787600,
+                "end_date": 1745960400,
+                "count": 3
+            },
+            {
+                "start_date": 1746306000,
+                "end_date": 1746824400,
+                "count": 7
+            },
+            {
+                "start_date": 1747170000,
+                "end_date": 1747602000,
+                "count": 6
+            },
+            {
+                "start_date": 1748379600,
+                "end_date": 1748725200,
+                "count": 5
+            },
+            {
+                "start_date": 1749243600,
+                "end_date": 1749589200,
+                "count": 5
+            },
+            {
+                "start_date": 1750194000,
+                "end_date": 1750453200,
+                "count": 4
+            },
+            {
+                "start_date": 1751403600,
+                "end_date": 1751835600,
+                "count": 6
+            },
+            {
+                "start_date": 1752008400,
+                "end_date": 1752440400,
+                "count": 6
+            },
+            {
+                "start_date": 1753390800,
+                "end_date": 1753563600,
+                "count": 3
+            },
+            {
+                "start_date": 1755205200,
+                "end_date": 1755378000,
+                "count": 3
+            },
+            {
+                "start_date": 1755550800,
+                "end_date": 1755723600,
+                "count": 3
+            },
+            {
+                "start_date": 1756328400,
+                "end_date": 1756846800,
+                "count": 7
+            },
+            {
+                "start_date": 1757019600,
+                "end_date": 1757192400,
+                "count": 3
+            },
+            {
+                "start_date": 1757710800,
+                "end_date": 1758142800,
+                "count": 6
+            },
+            {
+                "start_date": 1759611600,
+                "end_date": 1759784400,
+                "count": 3
+            },
+            {
+                "start_date": 1760043600,
+                "end_date": 1760216400,
+                "count": 3
+            },
+            {
+                "start_date": 1760475600,
+                "end_date": 1760994000,
+                "count": 7
+            },
+            {
+                "start_date": 1761253200,
+                "end_date": 1761861600,
+                "count": 8
+            },
+            {
+                "start_date": 1763071200,
+                "end_date": 1763416800,
+                "count": 5
+            },
+            {
+                "start_date": 1763589600,
+                "end_date": 1763848800,
+                "count": 4
+            },
+            {
+                "start_date": 1765404000,
+                "end_date": 1765836000,
+                "count": 6
+            }
+        ],
+        "status": {
+            "anime": {
+                "completed": 36,
+                "planned": 65,
+                "dropped": 0
+            },
+            "manga": {
+                "completed": 26,
+                "planned": 84,
+                "dropped": 0
+            },
+            "novel": {
+                "completed": 0,
+                "planned": 1,
+                "dropped": 0
+            }
+        },
+        "score": {
+            "anime": {
+                "min": 1,
+                "max": 10,
+                "avg": 7.03
+            },
+            "manga": {
+                "min": 1,
+                "max": 10,
+                "avg": 6.88
+            },
+            "novel": {
+                "min": 1,
+                "max": 10,
+                "avg": 6.88
+            }
+        },
+        "duration_total": 18372,
+        "duration_month": {
+            "january": 696,
+            "february": 396,
+            "march": 350,
+            "april": 756,
+            "may": 0,
+            "june": 158,
+            "july": 1594,
+            "august": 800,
+            "september": 11613,
+            "october": 2009,
+            "november": 0,
+            "december": 0
+        },
+        "completed": {
+            "anime": {
+                "january": [
+                    {
+                        "title_ja": "Cowboy Bebop",
+                        "title_en": "Cowboy Bebop",
+                        "title_ua": "Ковбой Бібоп",
+                        "date": 1735746148,
+                        "image": "https://cdn.hikka.io/content/anime/cowboy-bebop-d572ee/JUqRUSAttIeSq2anGTrTvQ.jpg",
+                        "slug": "cowboy-bebop-d572ee"
+                    },
+                    {
+                        "title_ja": "Dandadan",
+                        "title_en": "Dan Da Dan",
+                        "title_ua": "Дандадан",
+                        "date": 1737813652,
+                        "image": "https://cdn.hikka.io/content/anime/dandadan-cdd731/5DhvqTup8V_UqtgywU5gnw.jpg",
+                        "slug": "dandadan-cdd731"
+                    },
+                    {
+                        "title_ja": "Otome Game Sekai wa Mob ni Kibishii Sekai desu",
+                        "title_en": "Trapped in a Dating Sim: The World of Otome Games is Tough for Mobs",
+                        "title_ua": "У пастці симулятора побачень: Світ дівочої гри є важким для фонових персонажів",
+                        "date": 1738246523,
+                        "image": "https://cdn.hikka.io/content/anime/otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-a47d7e/1fmVyzAjSpAUFv4ogOvP2A.jpg",
+                        "slug": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-a47d7e"
+                    }
+                ],
+                "february": [
+                    {
+                        "title_ja": "Dorohedoro",
+                        "title_en": "Dorohedoro",
+                        "title_ua": "Дорохедоро",
+                        "date": 1740466925,
+                        "image": "https://cdn.hikka.io/content/anime/dorohedoro-898db6/V3vRSQLnolr7QnWbGy30SA.jpg",
+                        "slug": "dorohedoro-898db6"
+                    },
+                    {
+                        "title_ja": "Dorohedoro: Ma no Omake",
+                        "title_en": "Dorohedoro: Bonus Curse or Extra Evil",
+                        "title_ua": "Дорохедоро: Прокляття або Додаткове Зло",
+                        "date": 1740474284,
+                        "image": "https://cdn.hikka.io/content/anime/dorohedoro-ma-no-omake-29d004/5byABukdKamy4K6ytgEjyQ.jpg",
+                        "slug": "dorohedoro-ma-no-omake-29d004"
+                    }
+                ],
+                "march": [
+                    {
+                        "title_ja": "Akuyaku Reijou Tensei Ojisan",
+                        "title_en": "From Bureaucrat to Villainess: Dad's Been Reincarnated!",
+                        "title_ua": "Чоловік середнього віку, який перевтілився у лиходійку",
+                        "date": 1743393791,
+                        "image": "https://cdn.hikka.io/content/anime/akuyaku-reijou-tensei-ojisan-a23d84/tnneK1KpJNr_JAk9WJDL1A.jpg",
+                        "slug": "akuyaku-reijou-tensei-ojisan-a23d84"
+                    }
+                ],
+                "april": [
+                    {
+                        "title_ja": "Jibaku Shounen Hanako-kun 2",
+                        "title_en": "Toilet-Bound Hanako-kun Season 2",
+                        "title_ua": "Туалетний привид Ханако - 2 сезон",
+                        "date": 1743748108,
+                        "image": "https://cdn.hikka.io/content/anime/jibaku-shounen-hanako-kun-anime-shin-project-c331da/edBBFHo2BLw3T0hm07qiKw.jpg",
+                        "slug": "jibaku-shounen-hanako-kun-anime-shin-project-c331da"
+                    },
+                    {
+                        "title_ja": "Nichijou: Nichijou no 0-wa",
+                        "title_en": "Nichijou - My Ordinary Life Episode 0",
+                        "title_ua": "Повсякденнощі: Епізод 0",
+                        "date": 1744185206,
+                        "image": "https://cdn.hikka.io/content/anime/nichijou-nichijou-no-0-wa-ac2619/Y0JYslVtaAUrUd6z8qvEtA.jpg",
+                        "slug": "nichijou-nichijou-no-0-wa-ac2619"
+                    },
+                    {
+                        "title_ja": "Chiisana Penguin Lolo no Bouken",
+                        "title_en": "The Adventures of Scamper the Penguin",
+                        "title_ua": "Пригоди пінгвіненяти Лоло",
+                        "date": 1745893846,
+                        "image": "https://cdn.hikka.io/content/anime/chiisana-penguin-lolo-no-bouken-50738d/_xCrli0Vqs9Qem-ogyd9_g.jpg",
+                        "slug": "chiisana-penguin-lolo-no-bouken-50738d"
+                    },
+                    {
+                        "title_ja": "Nichijou",
+                        "title_en": "Nichijou - My Ordinary Life",
+                        "title_ua": "Повсякденнощі",
+                        "date": 1745983926,
+                        "image": "https://cdn.hikka.io/content/anime/nichijou-fad06c/jaHekODpaerz9p2M60NerA.jpg",
+                        "slug": "nichijou-fad06c"
+                    }
+                ],
+                "may": [],
+                "june": [
+                    {
+                        "title_ja": "Kimi no Iro",
+                        "title_en": "The Colors Within",
+                        "title_ua": "Кольори всередині",
+                        "date": 1751281711,
+                        "image": "https://cdn.hikka.io/content/anime/kimi-no-iro-bd9eaf/X0U4-PRZ8OBNi3tf-jnmmA.jpg",
+                        "slug": "kimi-no-iro-bd9eaf"
+                    }
+                ],
+                "july": [
+                    {
+                        "title_ja": "Ongaku",
+                        "title_en": "On-Gaku: Our Sound",
+                        "title_ua": "Музичка",
+                        "date": 1751560180,
+                        "image": "https://cdn.hikka.io/content/anime/ongaku-ff163f/814OZ5OBW7ivzxLXrkB1EA.jpg",
+                        "slug": "ongaku-ff163f"
+                    },
+                    {
+                        "title_ja": "Inu-Ou",
+                        "title_en": "Inu-Oh",
+                        "title_ua": "Іну-О",
+                        "date": 1751567399,
+                        "image": "https://cdn.hikka.io/content/anime/inu-ou-eb02f4/HAHNSCz921iZgMuL-iFM3A.jpg",
+                        "slug": "inu-ou-eb02f4"
+                    },
+                    {
+                        "title_ja": "Hellsing Ultimate",
+                        "title_en": "Hellsing Ultimate",
+                        "title_ua": "Геллсінґ Ультимейт",
+                        "date": 1752323162,
+                        "image": "https://cdn.hikka.io/content/anime/hellsing-ultimate-c6eaca/Oom0mDBukIB3bOfZOpShug.jpg",
+                        "slug": "hellsing-ultimate-c6eaca"
+                    },
+                    {
+                        "title_ja": "Hellsing: The Dawn",
+                        "title_en": null,
+                        "title_ua": "Геллсінґ: Світанок",
+                        "date": 1752324284,
+                        "image": "https://cdn.hikka.io/content/anime/hellsing-the-dawn-a84919/fhjjbuEHmAPX3fu_rKrU8g.jpg",
+                        "slug": "hellsing-the-dawn-a84919"
+                    },
+                    {
+                        "title_ja": "Hellsing: Digest for Freaks",
+                        "title_en": "Hellsing: Digest for Freaks",
+                        "title_ua": "Геллсінґ: Дайджест для фріків",
+                        "date": 1752327267,
+                        "image": "https://cdn.hikka.io/content/anime/hellsing-digest-for-freaks-c700f5/De1ra3d7kTWzTgmmv1k7Yg.jpg",
+                        "slug": "hellsing-digest-for-freaks-c700f5"
+                    },
+                    {
+                        "title_ja": "Hellsing: Psalm of the Darkness",
+                        "title_en": null,
+                        "title_ua": "Геллсінґ: Псалом пітьми",
+                        "date": 1752327636,
+                        "image": "https://cdn.hikka.io/content/anime/hellsing-psalm-of-the-darkness-918596/Cg5oup-VJymbKmUD3owjZg.jpg",
+                        "slug": "hellsing-psalm-of-the-darkness-918596"
+                    },
+                    {
+                        "title_ja": "Hellsing",
+                        "title_en": "Hellsing",
+                        "title_ua": "Геллсінґ",
+                        "date": 1752927088,
+                        "image": "https://cdn.hikka.io/content/anime/hellsing-a9873f/x3iXGgYwenoDlnEMlKozug.jpg",
+                        "slug": "hellsing-a9873f"
+                    },
+                    {
+                        "title_ja": "Kusuriya no Hitorigoto 2nd Season",
+                        "title_en": "The Apothecary Diaries Season 2",
+                        "title_ua": "Монолог травниці - 2 сезон",
+                        "date": 1753011405,
+                        "image": "https://cdn.hikka.io/content/anime/kusuriya-no-hitorigoto-2nd-season-d43023/TMe9cn9nCoV1x69sl5hbpw.jpg",
+                        "slug": "kusuriya-no-hitorigoto-2nd-season-d43023"
+                    }
+                ],
+                "august": [
+                    {
+                        "title_ja": "Takopii no Genzai",
+                        "title_en": "Takopi's Original Sin",
+                        "title_ua": "Первородний гріх Такопі",
+                        "date": 1755057100,
+                        "image": "https://cdn.hikka.io/content/anime/takopii-no-genzai-0d70f7/ohJLoZGc_zYz5RImDBPNrQ.jpg",
+                        "slug": "takopii-no-genzai-0d70f7"
+                    },
+                    {
+                        "title_ja": "Vampire Knight",
+                        "title_en": "Vampire Knight",
+                        "title_ua": "Лицар-вампір",
+                        "date": 1755427073,
+                        "image": "https://cdn.hikka.io/content/anime/vampire-knight-e7926f/1Wq3ilm1u9GE2s1M6r-YGA.jpg",
+                        "slug": "vampire-knight-e7926f"
+                    },
+                    {
+                        "title_ja": "Vampire Knight Guilty",
+                        "title_en": "Vampire Knight Guilty",
+                        "title_ua": "Лицар-вампір: Провина",
+                        "date": 1755750542,
+                        "image": "https://cdn.hikka.io/content/anime/vampire-knight-guilty-57054f/tby43dX50MsabBi9lM_rrg.jpg",
+                        "slug": "vampire-knight-guilty-57054f"
+                    }
+                ],
+                "september": [
+                    {
+                        "title_ja": "Kuzu no Honkai",
+                        "title_en": "Scum's Wish",
+                        "title_ua": "Палкі бажання негідників",
+                        "date": 1757237748,
+                        "image": "https://cdn.hikka.io/content/anime/kuzu-no-honkai-084339/BlkdB7SpzLDPhge6hq-EHg.jpg",
+                        "slug": "kuzu-no-honkai-084339"
+                    },
+                    {
+                        "title_ja": "Yoru wa Neko to Issho 3rd Season",
+                        "title_en": "Nights with a Cat Season 3",
+                        "title_ua": "Ночі з котом - 3 сезон",
+                        "date": 1757816782,
+                        "image": "https://cdn.hikka.io/content/anime/yoru-wa-neko-to-issho-season-3-9c0b4c/xoLMEiA41Ph7rJZmX_VZUg.jpg",
+                        "slug": "yoru-wa-neko-to-issho-season-3-9c0b4c"
+                    },
+                    {
+                        "title_ja": "Sono Bisque Doll wa Koi wo Suru 2nd Season",
+                        "title_en": "My Dress-Up Darling Season 2",
+                        "title_ua": "Ця порцелянова лялечка закохалася - 2 сезон",
+                        "date": 1758432929,
+                        "image": "https://cdn.hikka.io/content/anime/sono-bisque-doll-wa-koi-wo-suru-zoku-hen-789ae8/y5ENJs0TELvMMiCocV01fw.jpg",
+                        "slug": "sono-bisque-doll-wa-koi-wo-suru-zoku-hen-789ae8"
+                    },
+                    {
+                        "title_ja": "Ashita no Joe",
+                        "title_en": "Tomorrow's Joe",
+                        "title_ua": "Завтрашній Джо",
+                        "date": 1759042636,
+                        "image": "https://cdn.hikka.io/content/anime/ashita-no-joe-d468e6/m-8JTA-Hd9Qy7-Kfn4kOWQ.jpg",
+                        "slug": "ashita-no-joe-d468e6"
+                    },
+                    {
+                        "title_ja": "Bleach",
+                        "title_en": "Bleach",
+                        "title_ua": "Бліч",
+                        "date": 1759042735,
+                        "image": "https://cdn.hikka.io/content/anime/bleach-e87d16/qUub64he3rxrqxRoMyimIA.jpg",
+                        "slug": "bleach-e87d16"
+                    },
+                    {
+                        "title_ja": "Kaoru Hana wa Rin to Saku",
+                        "title_en": "The Fragrant Flower Blooms with Dignity",
+                        "title_ua": "Запашна квітка цвіте гідно",
+                        "date": 1759154657,
+                        "image": "https://cdn.hikka.io/content/anime/kaoru-hana-wa-rin-to-saku-226a44/m9Vfx2WbcT4l_q2vpetv0A.jpg",
+                        "slug": "kaoru-hana-wa-rin-to-saku-226a44"
+                    }
+                ],
+                "october": [
+                    {
+                        "title_ja": "Grand Blue Season 2",
+                        "title_en": "Grand Blue Dreaming Season 2",
+                        "title_ua": "Неосяжна блакить - 2 сезон",
+                        "date": 1759758968,
+                        "image": "https://cdn.hikka.io/content/anime/grand-blue-season-2-1e3b73/UvBHb0sGRgDvqv4npZacpg.jpg",
+                        "slug": "grand-blue-season-2-1e3b73"
+                    },
+                    {
+                        "title_ja": "Hikaru ga Shinda Natsu",
+                        "title_en": "The Summer Hikaru Died",
+                        "title_ua": "Літо, коли помер Хікару",
+                        "date": 1760242432,
+                        "image": "https://cdn.hikka.io/content/anime/hikaru-ga-shinda-natsu-bc2c0c/qK2OpNT5JQ_uvj6VRGbttQ.jpg",
+                        "slug": "hikaru-ga-shinda-natsu-bc2c0c"
+                    },
+                    {
+                        "title_ja": "Silent Witch: Chinmoku no Majo no Kakushigoto",
+                        "title_en": "Secrets of the Silent Witch",
+                        "title_ua": "Таємниці мовчазної відьми",
+                        "date": 1760771914,
+                        "image": "https://cdn.hikka.io/content/anime/silent-witch-chinmoku-no-majo-no-kakushigoto-003950/_vli2K6KWElsBaojBztDAA.jpg",
+                        "slug": "silent-witch-chinmoku-no-majo-no-kakushigoto-003950"
+                    },
+                    {
+                        "title_ja": "Chainsaw Man Movie: Reze-hen",
+                        "title_en": "Chainsaw Man the Movie: Reze Arc",
+                        "title_ua": "Людина-бензопила: Арка Резе",
+                        "date": 1761393920,
+                        "image": "https://cdn.hikka.io/content/anime/chainsaw-man-movie-reze-hen-c4febd/UfgfLlbLkAlsSy2ppbY8Vg.jpg",
+                        "slug": "chainsaw-man-movie-reze-hen-c4febd"
+                    },
+                    {
+                        "title_ja": "New Panty & Stocking with Garterbelt",
+                        "title_en": null,
+                        "title_ua": "Нові Трусяшка та Панчошка з Паском",
+                        "date": 1761481779,
+                        "image": "https://cdn.hikka.io/content/anime/new-panty-stocking-with-garterbelt-8bd228/VCdNdvY0uEMSTUoDFu8ltw.jpg",
+                        "slug": "new-panty-stocking-with-garterbelt-8bd228"
+                    },
+                    {
+                        "title_ja": "Zutaboro Reijou wa Ane no Moto Konyakusha ni Dekiai sareru",
+                        "title_en": "Loved by Her Sister's Former Fiancée",
+                        "title_ua": "Колишній наречений сестри закохується в знедолену леді",
+                        "date": 1761581392,
+                        "image": "https://cdn.hikka.io/content/anime/zutaboro-reijou-wa-ane-no-moto-konyakusha-ni-dekiai-sareru-a0d80c/vNPYyxsdHZsluaczi97Wsg.jpg",
+                        "slug": "zutaboro-reijou-wa-ane-no-moto-konyakusha-ni-dekiai-sareru-a0d80c"
+                    },
+                    {
+                        "title_ja": "Akuyaku Reijou Level 99: Watashi wa Ura-Boss desu ga Maou dewa Arimasen",
+                        "title_en": "Villainess Level 99: I May Be the Hidden Boss but I'm Not the Demon Lord",
+                        "title_ua": "Лиходійка 99-го рівня: Я можу бути прихованим босом, але не повелителем демонів",
+                        "date": 1761909635,
+                        "image": "https://cdn.hikka.io/content/anime/akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-5d8525/V5P3s52nNxmURQ_X_LKkuA.jpg",
+                        "slug": "akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-5d8525"
+                    },
+                    {
+                        "title_ja": "Kizu darake Seijo yori Houfuku wo Komete",
+                        "title_en": "The Holy Wound Became a Villain Vengeance from a Saint Full of Wounds",
+                        "title_ua": "Відплата святої, покритої рубцями",
+                        "date": 1761918509,
+                        "image": "https://cdn.hikka.io/content/anime/kizu-darake-seijo-yori-houfuku-wo-komete-af04bd/91Qo0SHfbLHC7deMa10NJA.jpg",
+                        "slug": "kizu-darake-seijo-yori-houfuku-wo-komete-af04bd"
+                    }
+                ],
+                "november": [],
+                "december": []
+            },
+            "manga": {
+                "january": [
+                    {
+                        "title_original": "Oyasumi Punpun",
+                        "title_en": "Goodnight Punpun",
+                        "title_ua": "Добраніч, Пунпуне",
+                        "date": 1735748949,
+                        "image": "https://cdn.hikka.io/content/manga/oyasumi-punpun-5bf670/d2aWJEnBmDMZrU0OpUcpZw.jpg",
+                        "slug": "oyasumi-punpun-5bf670"
+                    },
+                    {
+                        "title_original": "Sadistic Beauty: Side Story B",
+                        "title_en": null,
+                        "title_ua": "Принади садизму: Побічна історія Б",
+                        "date": 1737294190,
+                        "image": "https://cdn.hikka.io/content/manga/sadistic-beauty-side-story-b-42cbfa/9JXI523FhBazYi13ZwdkFQ.jpg",
+                        "slug": "sadistic-beauty-side-story-b-42cbfa"
+                    },
+                    {
+                        "title_original": "Under the Greenlight",
+                        "title_en": "Under the Greenlight",
+                        "title_ua": "Під зеленим світлом",
+                        "date": 1737701467,
+                        "image": "https://cdn.hikka.io/content/manga/under-the-greenlight-e30dd1/Lxw_vL7a4DtEVrYHJwOL-w.jpg",
+                        "slug": "under-the-greenlight-e30dd1"
+                    }
+                ],
+                "february": [
+                    {
+                        "title_original": "Undead Unluck",
+                        "title_en": "Undead Unluck",
+                        "title_ua": "Немертвий і Невдача",
+                        "date": 1740113951,
+                        "image": "https://cdn.hikka.io/content/manga/undead-unluck-971118/hRKHBAhkgyfu-ItsPpSsxA.jpg",
+                        "slug": "undead-unluck-971118"
+                    },
+                    {
+                        "title_original": "Undead + Unluck",
+                        "title_en": null,
+                        "title_ua": "Немертвий + Невдача",
+                        "date": 1740137208,
+                        "image": "https://cdn.hikka.io/content/manga/undead-unluck-d5bfb2/GMVc3ZWil70REe1_8Oq0lw.jpg",
+                        "slug": "undead-unluck-d5bfb2"
+                    }
+                ],
+                "march": [
+                    {
+                        "title_original": "Dorohedoro",
+                        "title_en": "Dorohedoro",
+                        "title_ua": "Дорохедоро",
+                        "date": 1741267386,
+                        "image": "https://cdn.hikka.io/content/manga/dorohedoro-5184dc/78JmQvxYwzJE7y0gEeSuIA.jpg",
+                        "slug": "dorohedoro-5184dc"
+                    },
+                    {
+                        "title_original": "Sachi-iro no One Room",
+                        "title_en": "One Room of Happiness",
+                        "title_ua": "Одна кімната щастя",
+                        "date": 1741356545,
+                        "image": "https://cdn.hikka.io/content/manga/sachi-iro-no-one-room-04fe14/1cF2JSv072Qq5ckOvqRT0Q.jpg",
+                        "slug": "sachi-iro-no-one-room-04fe14"
+                    },
+                    {
+                        "title_original": "Fire Punch",
+                        "title_en": "Fire Punch",
+                        "title_ua": "Вогняний удар",
+                        "date": 1742575720,
+                        "image": "https://cdn.hikka.io/content/manga/fire-punch-cbd77f/L3mxGav9HfvdZ3X10DZ_XA.jpg",
+                        "slug": "fire-punch-cbd77f"
+                    },
+                    {
+                        "title_original": "The Siren: Becoming the Villain's Family",
+                        "title_en": "The Siren: Becoming the Villain's Family",
+                        "title_ua": "Сирена: Як я стала дружиною лиходія за контрактом",
+                        "date": 1743330060,
+                        "image": "https://cdn.hikka.io/content/manga/the-siren-becoming-the-villains-family-1dc047/jN7LjPdm64L7tPM3NHQjIA.jpg",
+                        "slug": "the-siren-becoming-the-villains-family-1dc047"
+                    }
+                ],
+                "april": [
+                    {
+                        "title_original": "Homunculus",
+                        "title_en": "Homunculus",
+                        "title_ua": "Гомункул",
+                        "date": 1744349246,
+                        "image": "https://cdn.hikka.io/content/manga/homunculus-480ea9/h8W2NaMJwFCje1-080wXtw.jpg",
+                        "slug": "homunculus-480ea9"
+                    }
+                ],
+                "may": [
+                    {
+                        "title_original": "The Duchess's Contract Marriage",
+                        "title_en": "The Duchess's Contract Marriage",
+                        "title_ua": "Контрактний шлюб герцогині",
+                        "date": 1747626951,
+                        "image": "https://cdn.hikka.io/content/manga/the-duchesss-contract-marriage-7cad38/ACr9FrgHGVvUUqmxZ10ndw.jpg",
+                        "slug": "the-duchesss-contract-marriage-7cad38"
+                    }
+                ],
+                "june": [
+                    {
+                        "title_original": "Sadistic Beauty: Side Story A",
+                        "title_en": null,
+                        "title_ua": "Принади садизму: Інша історія А",
+                        "date": 1749522385,
+                        "image": "https://cdn.hikka.io/content/manga/sadistic-beauty-side-story-a-b3e578/MRac5zz5BImNiV9QuSIOgQ.jpg",
+                        "slug": "sadistic-beauty-side-story-a-b3e578"
+                    }
+                ],
+                "july": [
+                    {
+                        "title_original": "Bleach: Gokui Meimei-hen",
+                        "title_en": "Bleach: Special One-shot",
+                        "title_ua": "Бліч: Жодних подихів з Пекла",
+                        "date": 1752469938,
+                        "image": "https://cdn.hikka.io/content/manga/bleach-gokui-meimei-hen-2c4df1/qdacVv6z8jng5UpJ0tjaag.jpg",
+                        "slug": "bleach-gokui-meimei-hen-2c4df1"
+                    }
+                ],
+                "august": [
+                    {
+                        "title_original": "Watashi no Otto wa Reitouko ni Nemutteiru",
+                        "title_en": null,
+                        "title_ua": "Мій чоловік спить у морозильній камері",
+                        "date": 1756642349,
+                        "image": "https://cdn.hikka.io/content/manga/watashi-no-otto-wa-reitouko-ni-nemutteiru-4e7907/bjk9yjwqK8cvC5Z5zSoPEQ.jpg",
+                        "slug": "watashi-no-otto-wa-reitouko-ni-nemutteiru-4e7907"
+                    }
+                ],
+                "september": [
+                    {
+                        "title_original": "Akuyaku Reijou no Naka no Hito: Danzai sareta Tenseisha no Tame Usotsuki Heroine ni Fukushuu Itashimasu",
+                        "title_en": "The One Within the Villainess",
+                        "title_ua": "Та, що всередині лиходійки",
+                        "date": 1756872677,
+                        "image": "https://cdn.hikka.io/content/manga/akuyaku-reijou-no-naka-no-hito-danzai-sareta-tenseisha-no-tame-usotsuki-heroine-ni-fukushuu-itashimasu-e69827/GmbIfZ0-Hy4_3o2R_9el1Q.jpg",
+                        "slug": "akuyaku-reijou-no-naka-no-hito-danzai-sareta-tenseisha-no-tame-usotsuki-heroine-ni-fukushuu-itashimasu-e69827"
+                    },
+                    {
+                        "title_original": "Kinyoubi no Baby Violet",
+                        "title_en": "Friday Night Baby Violet",
+                        "title_ua": "П'ятнична ніч маленької фіалки",
+                        "date": 1757080659,
+                        "image": "https://cdn.hikka.io/content/manga/kinyoubi-no-baby-violet-10c155/KNmcZMpvikUAH6xjeCkFgQ.jpg",
+                        "slug": "kinyoubi-no-baby-violet-10c155"
+                    },
+                    {
+                        "title_original": "Nee, Boku ga Inai to Shinu tte Itte yo",
+                        "title_en": "Hey, Tell Me You Without Me",
+                        "title_ua": "Гей, скажи, що помреш без мене",
+                        "date": 1757159313,
+                        "image": "https://cdn.hikka.io/content/manga/nee-boku-ga-inai-to-shinu-tte-itte-yo-23b017/ZvQLxPJwkPLjKcrRx5Bccg.jpg",
+                        "slug": "nee-boku-ga-inai-to-shinu-tte-itte-yo-23b017"
+                    },
+                    {
+                        "title_original": "Ubunchu!",
+                        "title_en": null,
+                        "title_ua": "Убунчю!",
+                        "date": 1757822861,
+                        "image": "https://cdn.hikka.io/content/manga/ubunchu-f59a58/2R7NdRPCb6sWxjAgIVPYNg.jpg",
+                        "slug": "ubunchu-f59a58"
+                    },
+                    {
+                        "title_original": "Sabishisugite Lesbian Fuuzoku ni Ikimashita Report",
+                        "title_en": "My Lesbian Experience with Loneliness",
+                        "title_ua": "Мій лесбійський досвід самотности",
+                        "date": 1757824559,
+                        "image": "https://cdn.hikka.io/content/manga/sabishisugite-lesbian-fuuzoku-ni-ikimashita-report-508f8c/xzITXgN9Gs6lId2vHC6X4w.jpg",
+                        "slug": "sabishisugite-lesbian-fuuzoku-ni-ikimashita-report-508f8c"
+                    },
+                    {
+                        "title_original": "Hitori Koukan Nikki",
+                        "title_en": "My Solo Exchange Diary",
+                        "title_ua": "Щоденник стосунків самої із собою",
+                        "date": 1757940670,
+                        "image": "https://cdn.hikka.io/content/manga/hitori-koukan-nikki-eafae9/O8dG8T3sTB11X7CFhrhzlQ.jpg",
+                        "slug": "hitori-koukan-nikki-eafae9"
+                    },
+                    {
+                        "title_original": "Genjitsu Touhi shitetara Boroboro ni Natta Hanashi",
+                        "title_en": "My Alcoholic Escape from Reality",
+                        "title_ua": "Моя алковтеча від реальности",
+                        "date": 1757941467,
+                        "image": "https://cdn.hikka.io/content/manga/genjitsu-touhi-shitetara-boroboro-ni-natta-hanashi-e36e4a/6PgaCqsbj2rgOL-h7nr3ZQ.jpg",
+                        "slug": "genjitsu-touhi-shitetara-boroboro-ni-natta-hanashi-e36e4a"
+                    },
+                    {
+                        "title_original": "Meisou Senshi Nagata Kabi",
+                        "title_en": "My Wandering Warrior Existence",
+                        "title_ua": "Воїтелька-блукалиця Наґата Кабі",
+                        "date": 1758008981,
+                        "image": "https://cdn.hikka.io/content/manga/meisou-senshi-nagata-kabi-d6d54a/jg6VG78_J33XfEenJCL1BQ.jpg",
+                        "slug": "meisou-senshi-nagata-kabi-d6d54a"
+                    },
+                    {
+                        "title_original": "Meisou Senshi Nagata Kabi: Gourmet de Go!",
+                        "title_en": "My Twisted Eating Disorder",
+                        "title_ua": "Мій викривлений розлад харчування",
+                        "date": 1758079930,
+                        "image": "https://cdn.hikka.io/content/manga/meisou-senshi-nagata-kabi-gourmet-de-go-1eb792/QVU5wG_pL9P0XKzEAZrQWw.jpg",
+                        "slug": "meisou-senshi-nagata-kabi-gourmet-de-go-1eb792"
+                    },
+                    {
+                        "title_original": "Sono Bisque Doll wa Koi wo Suru",
+                        "title_en": "My Dress-Up Darling",
+                        "title_ua": "Ця порцелянова лялечка закохалася",
+                        "date": 1758449213,
+                        "image": "https://cdn.hikka.io/content/manga/sono-bisque-doll-wa-koi-wo-suru-653426/P1vIhv19gavz19gYqs6ifw.jpg",
+                        "slug": "sono-bisque-doll-wa-koi-wo-suru-653426"
+                    }
+                ],
+                "october": [],
+                "november": [
+                    {
+                        "title_original": "Asper Kanojo",
+                        "title_en": "That's My Atypical Girl",
+                        "title_ua": "Дівчина з Аспергером",
+                        "date": 1763889056,
+                        "image": "https://cdn.hikka.io/content/manga/asper-kanojo-256f99/i0zsfLw8M3AnmWRXiC__zA.jpg",
+                        "slug": "asper-kanojo-256f99"
+                    },
+                    {
+                        "title_original": "A Fairytale for the Demon Lord",
+                        "title_en": null,
+                        "title_ua": "Казка для Диявола",
+                        "date": 1764508308,
+                        "image": "https://cdn.hikka.io/content/manga/a-fairytale-for-the-demon-lord-301339/4rkCidNSfW7eQjMU3gsseQ.jpg",
+                        "slug": "a-fairytale-for-the-demon-lord-301339"
+                    }
+                ],
+                "december": []
+            },
+            "novel": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            }
+        }
+    },
+    "volbil": {
+        "first_record": 1736100875,
+        "last_record": 1765901193,
+        "records_total": 117,
+        "top": {
+            "anime": [
+                {
+                    "date": 1742502165,
+                    "score": 10,
+                    "title_ja": "Dungeon Meshi",
+                    "title_en": "Delicious in Dungeon",
+                    "title_ua": "Підземелля смакоти",
+                    "image": "https://cdn.hikka.io/content/anime/dungeon-meshi-fa86ef/ITpBdVvwpA7smyh4FVN-SA.jpg",
+                    "slug": "dungeon-meshi-fa86ef"
+                },
+                {
+                    "date": 1739997210,
+                    "score": 10,
+                    "title_ja": "Evangelion: 2.0 You Can (Not) Advance",
+                    "title_en": "Evangelion: 2.0 You Can (Not) Advance",
+                    "title_ua": "Євангеліон 2.22: Ти (Не) Пройдеш",
+                    "image": "https://cdn.hikka.io/content/anime/evangelion-20-you-can-not-advance-651d80/oIU2_xPGr5GBciDC3dRWiQ.jpg",
+                    "slug": "evangelion-20-you-can-not-advance-651d80"
+                },
+                {
+                    "date": 1760127056,
+                    "score": 10,
+                    "title_ja": "Silent Witch: Chinmoku no Majo no Kakushigoto",
+                    "title_en": "Secrets of the Silent Witch",
+                    "title_ua": "Таємниці мовчазної відьми",
+                    "image": "https://cdn.hikka.io/content/anime/silent-witch-chinmoku-no-majo-no-kakushigoto-003950/_vli2K6KWElsBaojBztDAA.jpg",
+                    "slug": "silent-witch-chinmoku-no-majo-no-kakushigoto-003950"
+                }
+            ],
+            "manga": [],
+            "novel": []
+        },
+        "genres": {
+            "anime": {
+                "fantasy": 24,
+                "comedy": 20,
+                "action": 17,
+                "shounen": 15,
+                "drama": 13,
+                "romance": 12,
+                "school": 10,
+                "sci-fi": 10,
+                "supernatural": 9,
+                "adventure": 8,
+                "seinen": 7,
+                "isekai": 6,
+                "adult-cast": 4,
+                "mythology": 3,
+                "horror": 3,
+                "girls-love": 3,
+                "suspense": 3,
+                "psychological": 3,
+                "vampire": 3
+            },
+            "manga": {},
+            "novel": {}
+        },
+        "binges": [
+            {
+                "start_date": 1736028000,
+                "end_date": 1736200800,
+                "count": 3
+            },
+            {
+                "start_date": 1740002400,
+                "end_date": 1740348000,
+                "count": 5
+            },
+            {
+                "start_date": 1740780000,
+                "end_date": 1741039200,
+                "count": 4
+            },
+            {
+                "start_date": 1742335200,
+                "end_date": 1742594400,
+                "count": 4
+            },
+            {
+                "start_date": 1744318800,
+                "end_date": 1744491600,
+                "count": 3
+            },
+            {
+                "start_date": 1753390800,
+                "end_date": 1753563600,
+                "count": 3
+            },
+            {
+                "start_date": 1755205200,
+                "end_date": 1755378000,
+                "count": 3
+            },
+            {
+                "start_date": 1763071200,
+                "end_date": 1763330400,
+                "count": 4
+            },
+            {
+                "start_date": 1765576800,
+                "end_date": 1765836000,
+                "count": 4
+            }
+        ],
+        "status": {
+            "anime": {
+                "completed": 12,
+                "planned": 43,
+                "dropped": 1
+            },
+            "manga": {
+                "completed": 0,
+                "planned": 5,
+                "dropped": 0
+            },
+            "novel": {
+                "completed": 0,
+                "planned": 0,
+                "dropped": 0
+            }
+        },
+        "score": {
+            "anime": {
+                "min": 7,
+                "max": 10,
+                "avg": 8.9
+            },
+            "manga": {
+                "min": 7,
+                "max": 10,
+                "avg": 8.9
+            },
+            "novel": {
+                "min": 7,
+                "max": 10,
+                "avg": 8.9
+            }
+        },
+        "duration_total": 4216,
+        "duration_month": {
+            "january": 186,
+            "february": 355,
+            "march": 590,
+            "april": 106,
+            "may": 50,
+            "june": 0,
+            "july": 258,
+            "august": 174,
+            "september": 86,
+            "october": 793,
+            "november": 770,
+            "december": 848
+        },
+        "completed": {
+            "anime": {
+                "january": [
+                    {
+                        "title_ja": "Dandadan",
+                        "title_en": "Dan Da Dan",
+                        "title_ua": "Дандадан",
+                        "date": 1736100875,
+                        "image": "https://cdn.hikka.io/content/anime/dandadan-cdd731/5DhvqTup8V_UqtgywU5gnw.jpg",
+                        "slug": "dandadan-cdd731"
+                    }
+                ],
+                "february": [
+                    {
+                        "title_ja": "Evangelion: 2.0 You Can (Not) Advance",
+                        "title_en": "Evangelion: 2.0 You Can (Not) Advance",
+                        "title_ua": "Євангеліон 2.22: Ти (Не) Пройдеш",
+                        "date": 1739997210,
+                        "image": "https://cdn.hikka.io/content/anime/evangelion-20-you-can-not-advance-651d80/oIU2_xPGr5GBciDC3dRWiQ.jpg",
+                        "slug": "evangelion-20-you-can-not-advance-651d80"
+                    }
+                ],
+                "march": [
+                    {
+                        "title_ja": "Dungeon Meshi",
+                        "title_en": "Delicious in Dungeon",
+                        "title_ua": "Підземелля смакоти",
+                        "date": 1742502165,
+                        "image": "https://cdn.hikka.io/content/anime/dungeon-meshi-fa86ef/ITpBdVvwpA7smyh4FVN-SA.jpg",
+                        "slug": "dungeon-meshi-fa86ef"
+                    }
+                ],
+                "april": [],
+                "may": [
+                    {
+                        "title_ja": "Kono Subarashii Sekai ni Shukufuku wo! 3 OVA",
+                        "title_en": "KonoSuba: God's Blessing on This Wonderful World! 3 OVA",
+                        "title_ua": "Цей прекрасний світ, благословенний Богом! - 3 сезон OVA",
+                        "date": 1747936480,
+                        "image": "https://cdn.hikka.io/content/anime/kono-subarashii-sekai-ni-shukufuku-wo-3-ova-b4d77b/qAOZXDwXea6xMH6kbto4Kw.jpg",
+                        "slug": "kono-subarashii-sekai-ni-shukufuku-wo-3-ova-b4d77b"
+                    }
+                ],
+                "june": [],
+                "july": [],
+                "august": [
+                    {
+                        "title_ja": "Milky☆Highway",
+                        "title_en": null,
+                        "title_ua": "Чумацька☆дорога",
+                        "date": 1755432260,
+                        "image": "https://cdn.hikka.io/content/anime/milkyhighway-a2f99b/0MK8R14F6z6sT4C8qRW--A.jpg",
+                        "slug": "milkyhighway-a2f99b"
+                    }
+                ],
+                "september": [
+                    {
+                        "title_ja": "Ginga Tokkyuu Milky☆Subway",
+                        "title_en": "Milky☆Subway: The Galactic Limited Express",
+                        "title_ua": "Галактичний експрес «Чумацьке☆метро»",
+                        "date": 1758211939,
+                        "image": "https://cdn.hikka.io/content/anime/ginga-tokkyuu-milkysubway-471485/o7hQCUemXcAIXE8OSD_Spg.jpg",
+                        "slug": "ginga-tokkyuu-milkysubway-471485"
+                    }
+                ],
+                "october": [
+                    {
+                        "title_ja": "Kaijuu 8-gou",
+                        "title_en": "Kaiju No. 8",
+                        "title_ua": "Кайджю №8",
+                        "date": 1759339594,
+                        "image": "https://cdn.hikka.io/content/anime/kaijuu-8-gou-fefba2/4OnY9aiNU2wHgzotcaDQzg.jpg",
+                        "slug": "kaijuu-8-gou-fefba2"
+                    },
+                    {
+                        "title_ja": "Kaijuu 8-gou 2nd Season",
+                        "title_en": "Kaiju No. 8 Season 2",
+                        "title_ua": "Кайджю №8 - 2 сезон",
+                        "date": 1759759206,
+                        "image": "https://cdn.hikka.io/content/anime/kaijuu-8-gou-zoku-hen-c25797/py2h71l7M4SRnVZ1KwTpPA.jpg",
+                        "slug": "kaijuu-8-gou-zoku-hen-c25797"
+                    },
+                    {
+                        "title_ja": "Dandadan 2nd Season",
+                        "title_en": "Dan Da Dan Season 2",
+                        "title_ua": "Дандадан - 2 сезон",
+                        "date": 1759759586,
+                        "image": "https://cdn.hikka.io/content/anime/dandadan-2nd-season-2278ab/dFqfbJafTNLYJZbSdvFRlQ.jpg",
+                        "slug": "dandadan-2nd-season-2278ab"
+                    },
+                    {
+                        "title_ja": "Silent Witch: Chinmoku no Majo no Kakushigoto",
+                        "title_en": "Secrets of the Silent Witch",
+                        "title_ua": "Таємниці мовчазної відьми",
+                        "date": 1760127056,
+                        "image": "https://cdn.hikka.io/content/anime/silent-witch-chinmoku-no-majo-no-kakushigoto-003950/_vli2K6KWElsBaojBztDAA.jpg",
+                        "slug": "silent-witch-chinmoku-no-majo-no-kakushigoto-003950"
+                    }
+                ],
+                "november": [
+                    {
+                        "title_ja": "Yofukashi no Uta",
+                        "title_en": "Call of the Night",
+                        "title_ua": "Поклик ночі",
+                        "date": 1763151176,
+                        "image": "https://cdn.hikka.io/content/anime/yofukashi-no-uta-eb2650/Z5IJ5N4nHdU-_WslIu4yOQ.jpg",
+                        "slug": "yofukashi-no-uta-eb2650"
+                    },
+                    {
+                        "title_ja": "Yofukashi no Uta 2nd Season",
+                        "title_en": "Call of the Night Season 2",
+                        "title_ua": "Поклик ночі - 2 сезон",
+                        "date": 1763329357,
+                        "image": "https://cdn.hikka.io/content/anime/yofukashi-no-uta-2nd-season-83e804/Gdyc702WHk0XjVlRpwc-0w.jpg",
+                        "slug": "yofukashi-no-uta-2nd-season-83e804"
+                    }
+                ],
+                "december": []
+            },
+            "manga": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            },
+            "novel": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            }
+        }
+    },
+    "Okashi": {
+        "first_record": 1736146342,
+        "last_record": 1765897461,
+        "records_total": 255,
+        "top": {
+            "anime": [
+                {
+                    "date": 1761389852,
+                    "score": 10,
+                    "title_ja": "AURA: Maryuuin Kouga Saigo no Tatakai",
+                    "title_en": "Aura: Koga Maryuin's Last War",
+                    "title_ua": "Аура: Остання битва Ікла світла, демона-обранця драконів",
+                    "image": "https://cdn.hikka.io/content/anime/aura-maryuuin-kouga-saigo-no-tatakai-743f17/lwj2AwR5x8iMfplSBDLX8g.jpg",
+                    "slug": "aura-maryuuin-kouga-saigo-no-tatakai-743f17"
+                },
+                {
+                    "date": 1751567248,
+                    "score": 8,
+                    "title_ja": "Inu-Ou",
+                    "title_en": "Inu-Oh",
+                    "title_ua": "Іну-О",
+                    "image": "https://cdn.hikka.io/content/anime/inu-ou-eb02f4/HAHNSCz921iZgMuL-iFM3A.jpg",
+                    "slug": "inu-ou-eb02f4"
+                },
+                {
+                    "date": 1751560110,
+                    "score": 8,
+                    "title_ja": "Ongaku",
+                    "title_en": "On-Gaku: Our Sound",
+                    "title_ua": "Музичка",
+                    "image": "https://cdn.hikka.io/content/anime/ongaku-ff163f/814OZ5OBW7ivzxLXrkB1EA.jpg",
+                    "slug": "ongaku-ff163f"
+                }
+            ],
+            "manga": [
+                {
+                    "date": 1751311163,
+                    "score": 10,
+                    "title_original": "YoRHa: Shinjuwan Kouka Sakusen Kiroku",
+                    "title_en": "YoRHa: Pearl Harbor Descent Record",
+                    "title_ua": "YoRHa: Протокол висадки в Перл-Гарбор",
+                    "image": "https://cdn.hikka.io/content/manga/yorha-shinjuwan-kouka-sakusen-kiroku-ff4414/hJaeTys2KDed_x6I97L8qQ.jpg",
+                    "slug": "yorha-shinjuwan-kouka-sakusen-kiroku-ff4414"
+                },
+                {
+                    "date": 1757675812,
+                    "score": 0,
+                    "title_original": "Cocoon",
+                    "title_en": null,
+                    "title_ua": "Кокон",
+                    "image": "https://cdn.hikka.io/content/manga/cocoon-3f57a8/EosxFIyfqXStzC1mcWcSIw.jpg",
+                    "slug": "cocoon-3f57a8"
+                }
+            ],
+            "novel": [
+                {
+                    "date": 1748973520,
+                    "score": 0,
+                    "title_original": "Mikkakan no Koufuku",
+                    "title_en": "Three Days of Happiness",
+                    "title_ua": "Три дні щастя",
+                    "image": "https://cdn.hikka.io/content/novel/mikkakan-no-koufuku-491076/riw1yv-UCw5il4_XUaXNvw.jpg",
+                    "slug": "mikkakan-no-koufuku-491076"
+                }
+            ]
+        },
+        "genres": {
+            "anime": {
+                "drama": 31,
+                "romance": 26,
+                "comedy": 24,
+                "school": 23,
+                "supernatural": 23,
+                "fantasy": 18,
+                "slice-of-life": 15,
+                "seinen": 14,
+                "sci-fi": 13,
+                "shounen": 11,
+                "action": 10,
+                "love-polygon": 9,
+                "shoujo": 7,
+                "music": 7,
+                "cgdct": 7,
+                "adult-cast": 7,
+                "historical": 6,
+                "ecchi": 6,
+                "psychological": 6,
+                "award-winning": 5,
+                "mystery": 5,
+                "adventure": 5,
+                "horror": 5,
+                "iyashikei": 5,
+                "suspense": 4,
+                "military": 4,
+                "otaku-culture": 4,
+                "mythology": 3,
+                "super-power": 3,
+                "space": 3,
+                "girls-love": 3
+            },
+            "manga": {
+                "drama": 6,
+                "shounen": 6,
+                "comedy": 5,
+                "award-winning": 4,
+                "slice-of-life": 4,
+                "sci-fi": 3,
+                "fantasy": 3
+            },
+            "novel": {}
+        },
+        "binges": [
+            {
+                "start_date": 1742076000,
+                "end_date": 1742421600,
+                "count": 5
+            },
+            {
+                "start_date": 1744232400,
+                "end_date": 1744405200,
+                "count": 3
+            },
+            {
+                "start_date": 1747170000,
+                "end_date": 1747688400,
+                "count": 7
+            },
+            {
+                "start_date": 1748725200,
+                "end_date": 1749070800,
+                "count": 5
+            },
+            {
+                "start_date": 1750539600,
+                "end_date": 1750712400,
+                "count": 3
+            },
+            {
+                "start_date": 1756846800,
+                "end_date": 1757019600,
+                "count": 3
+            },
+            {
+                "start_date": 1757624400,
+                "end_date": 1757883600,
+                "count": 4
+            },
+            {
+                "start_date": 1758315600,
+                "end_date": 1759006800,
+                "count": 9
+            },
+            {
+                "start_date": 1759784400,
+                "end_date": 1760043600,
+                "count": 4
+            },
+            {
+                "start_date": 1760475600,
+                "end_date": 1760648400,
+                "count": 3
+            },
+            {
+                "start_date": 1762293600,
+                "end_date": 1762466400,
+                "count": 3
+            },
+            {
+                "start_date": 1762898400,
+                "end_date": 1763589600,
+                "count": 9
+            },
+            {
+                "start_date": 1764108000,
+                "end_date": 1764280800,
+                "count": 3
+            },
+            {
+                "start_date": 1764885600,
+                "end_date": 1765058400,
+                "count": 3
+            },
+            {
+                "start_date": 1765663200,
+                "end_date": 1765836000,
+                "count": 3
+            }
+        ],
+        "status": {
+            "anime": {
+                "completed": 33,
+                "planned": 58,
+                "dropped": 0
+            },
+            "manga": {
+                "completed": 7,
+                "planned": 20,
+                "dropped": 0
+            },
+            "novel": {
+                "completed": 1,
+                "planned": 0,
+                "dropped": 0
+            }
+        },
+        "score": {
+            "anime": {
+                "min": 8,
+                "max": 10,
+                "avg": 8.75
+            },
+            "manga": {
+                "min": 8,
+                "max": 10,
+                "avg": 9.0
+            },
+            "novel": {
+                "min": 8,
+                "max": 10,
+                "avg": 9.0
+            }
+        },
+        "duration_total": 7853,
+        "duration_month": {
+            "january": 464,
+            "february": 558,
+            "march": 503,
+            "april": 328,
+            "may": 735,
+            "june": 1151,
+            "july": 616,
+            "august": 213,
+            "september": 348,
+            "october": 266,
+            "november": 1643,
+            "december": 1028
+        },
+        "completed": {
+            "anime": {
+                "january": [
+                    {
+                        "title_ja": "Zankoku Douwa: Utsukushi-hime",
+                        "title_en": "Monogatari Series: Off & Monster Season  - A Cruel Fairy Tale: The Beautiful Princess",
+                        "title_ua": "Цикл Історій: Міжсезоння та сезон монстрів - Жорстока казка про прекрасну принцесу",
+                        "date": 1736885025,
+                        "image": "https://cdn.hikka.io/content/anime/zankoku-douwa-utsukushi-hime-068132/yDT68So_etwFYvPv9aIxEQ.jpg",
+                        "slug": "zankoku-douwa-utsukushi-hime-068132"
+                    },
+                    {
+                        "title_ja": "Look Back",
+                        "title_en": null,
+                        "title_ua": "Озирнись",
+                        "date": 1737228977,
+                        "image": "https://cdn.hikka.io/content/anime/look-back-968446/W_O101ieu40LiALEp0w7eA.jpg",
+                        "slug": "look-back-968446"
+                    }
+                ],
+                "february": [
+                    {
+                        "title_ja": "Sword Art Online Alternative: Gun Gale Online II",
+                        "title_en": "Sword Art Online Alternative: Gun Gale Online II",
+                        "title_ua": "Альтернативне Мистецтво Меча Онлайн: Вогнепальний Шторм Онлайн - 2 сезон",
+                        "date": 1739431558,
+                        "image": "https://cdn.hikka.io/content/anime/sword-art-online-alternative-gun-gale-online-ii-c62867/8r3aM5ygeR7ocSZULpe-QA.jpg",
+                        "slug": "sword-art-online-alternative-gun-gale-online-ii-c62867"
+                    }
+                ],
+                "march": [
+                    {
+                        "title_ja": "Aku no Hana",
+                        "title_en": "Flowers of Evil",
+                        "title_ua": "Квіти зла",
+                        "date": 1742152784,
+                        "image": "https://cdn.hikka.io/content/anime/aku-no-hana-fdf9f1/NqD7BDvmA1rS9-xBVSg3hw.jpg",
+                        "slug": "aku-no-hana-fdf9f1"
+                    },
+                    {
+                        "title_ja": "Nihon e Youkoso Elf-san.",
+                        "title_en": "Welcome to Japan, Ms. Elf!",
+                        "title_ua": "Ласкаво просимо до Японії, пані Ельфійко",
+                        "date": 1743179554,
+                        "image": "https://cdn.hikka.io/content/anime/nihon-e-youkoso-elf-san-32b218/8PB9-VlLTfVXFPNyn6qU8g.jpg",
+                        "slug": "nihon-e-youkoso-elf-san-32b218"
+                    }
+                ],
+                "april": [
+                    {
+                        "title_ja": "Cocoon: Aru Natsu no Shoujo-tachi yori",
+                        "title_en": "Cocoon",
+                        "title_ua": "Кокон: Історія літніх дівчат",
+                        "date": 1744103556,
+                        "image": "https://cdn.hikka.io/content/anime/cocoon-46ccf7/TnalnSg5zKPgbTw2o6iBVw.jpg",
+                        "slug": "cocoon-46ccf7"
+                    },
+                    {
+                        "title_ja": "Make Heroine ga Oosugiru!",
+                        "title_en": "Makeine: Too Many Losing Heroines!",
+                        "title_ua": "Забагато героїнь, що програли!",
+                        "date": 1744305104,
+                        "image": "https://cdn.hikka.io/content/anime/make-heroine-ga-oosugiru-ab409a/KF_Ko8RE2_r0Ml7XQKsqyA.jpg",
+                        "slug": "make-heroine-ga-oosugiru-ab409a"
+                    }
+                ],
+                "may": [
+                    {
+                        "title_ja": "Kobayashi-san Chi no Maid Dragon",
+                        "title_en": "Miss Kobayashi's Dragon Maid",
+                        "title_ua": "Драконопокоївка в домі Кобаяші-сан",
+                        "date": 1747755900,
+                        "image": "https://cdn.hikka.io/content/anime/kobayashi-san-chi-no-maid-dragon-bc4fa3/IhokI42PpmhM5f3kqC5OYw.jpg",
+                        "slug": "kobayashi-san-chi-no-maid-dragon-bc4fa3"
+                    },
+                    {
+                        "title_ja": "Kobayashi-san Chi no Maid Dragon: Valentine, Soshite Onsen! - Amari Kitai Shinaide Kudasai",
+                        "title_en": "Miss Kobayashi's Dragon Maid: Valentine's, and Then Hot Springs! (Please Don't Get Your Hopes Up)",
+                        "title_ua": "Драконопокоївка в домі Кобаяші-сан Спешл",
+                        "date": 1747755920,
+                        "image": "https://cdn.hikka.io/content/anime/kobayashi-san-chi-no-maid-dragon-valentine-soshite-onsen-amari-kitai-shinaide-kudasai-2a30b1/kLYRln8q7FewMGBWkcXeEQ.jpg",
+                        "slug": "kobayashi-san-chi-no-maid-dragon-valentine-soshite-onsen-amari-kitai-shinaide-kudasai-2a30b1"
+                    },
+                    {
+                        "title_ja": "Uzumaki",
+                        "title_en": "Uzumaki: Spiral Into Horror",
+                        "title_ua": "Спіраль",
+                        "date": 1748178492,
+                        "image": "https://cdn.hikka.io/content/anime/uzumaki-ad2f63/vUhy4XGVBDnWD4jNi5xjVw.jpg",
+                        "slug": "uzumaki-ad2f63"
+                    }
+                ],
+                "june": [
+                    {
+                        "title_ja": "Cowboy Bebop",
+                        "title_en": "Cowboy Bebop",
+                        "title_ua": "Ковбой Бібоп",
+                        "date": 1748965269,
+                        "image": "https://cdn.hikka.io/content/anime/cowboy-bebop-d572ee/JUqRUSAttIeSq2anGTrTvQ.jpg",
+                        "slug": "cowboy-bebop-d572ee"
+                    },
+                    {
+                        "title_ja": "Cowboy Bebop: Ein no Natsuyasumi",
+                        "title_en": "Cowboy Bebop: Ein's Summer Vacation",
+                        "title_ua": "Ковбой Бібоп: Літня відпустка Ейна",
+                        "date": 1748971087,
+                        "image": "https://cdn.hikka.io/content/anime/cowboy-bebop-ein-no-natsuyasumi-53b839/U_GhXuh7Gj7UEsCygu4IcQ.jpg",
+                        "slug": "cowboy-bebop-ein-no-natsuyasumi-53b839"
+                    },
+                    {
+                        "title_ja": "Cowboy Bebop: Yose Atsume Blues",
+                        "title_en": "Cowboy Bebop: Session XX - Mish-Mash Blues",
+                        "title_ua": "Ковбой Бібоп Спешл",
+                        "date": 1748972643,
+                        "image": "https://cdn.hikka.io/content/anime/cowboy-bebop-yose-atsume-blues-722891/8KELWe9XNcZ_dy7Ry7gmWg.jpg",
+                        "slug": "cowboy-bebop-yose-atsume-blues-722891"
+                    },
+                    {
+                        "title_ja": "Cowboy Bebop: Tengoku no Tobira",
+                        "title_en": "Cowboy Bebop: The Movie",
+                        "title_ua": "Ковбой Бібоп: Двері до раю",
+                        "date": 1749141837,
+                        "image": "https://cdn.hikka.io/content/anime/cowboy-bebop-tengoku-no-tobira-f6de4f/ngn5iwnR7e71nW6ue7F_yg.jpg",
+                        "slug": "cowboy-bebop-tengoku-no-tobira-f6de4f"
+                    }
+                ],
+                "july": [
+                    {
+                        "title_ja": "Omoi, Omoware, Furi, Furare",
+                        "title_en": "Love Me, Love Me Not",
+                        "title_ua": "Кохає чи не кохає",
+                        "date": 1751307907,
+                        "image": "https://cdn.hikka.io/content/anime/omoi-omoware-furi-furare-914bd8/RdHUrV3NzgCgzRXaFTj3Jg.jpg",
+                        "slug": "omoi-omoware-furi-furare-914bd8"
+                    },
+                    {
+                        "title_ja": "Ongaku",
+                        "title_en": "On-Gaku: Our Sound",
+                        "title_ua": "Музичка",
+                        "date": 1751560110,
+                        "image": "https://cdn.hikka.io/content/anime/ongaku-ff163f/814OZ5OBW7ivzxLXrkB1EA.jpg",
+                        "slug": "ongaku-ff163f"
+                    },
+                    {
+                        "title_ja": "Inu-Ou",
+                        "title_en": "Inu-Oh",
+                        "title_ua": "Іну-О",
+                        "date": 1751567248,
+                        "image": "https://cdn.hikka.io/content/anime/inu-ou-eb02f4/HAHNSCz921iZgMuL-iFM3A.jpg",
+                        "slug": "inu-ou-eb02f4"
+                    },
+                    {
+                        "title_ja": "Absolute Duo",
+                        "title_en": "Absolute Duo",
+                        "title_ua": "Абсолютний дует",
+                        "date": 1751802623,
+                        "image": "https://cdn.hikka.io/content/anime/absolute-duo-28ea99/432fKgt2IhXa1gmy-f8ISw.jpg",
+                        "slug": "absolute-duo-28ea99"
+                    }
+                ],
+                "august": [
+                    {
+                        "title_ja": "Takopii no Genzai",
+                        "title_en": "Takopi's Original Sin",
+                        "title_ua": "Первородний гріх Такопі",
+                        "date": 1754070316,
+                        "image": "https://cdn.hikka.io/content/anime/takopii-no-genzai-0d70f7/ohJLoZGc_zYz5RImDBPNrQ.jpg",
+                        "slug": "takopii-no-genzai-0d70f7"
+                    }
+                ],
+                "september": [
+                    {
+                        "title_ja": "Kobayashi-san Chi no Maid Dragon S",
+                        "title_en": "Miss Kobayashi's Dragon Maid S",
+                        "title_ua": "Драконопокоївка в домі Кобаяші-сан S",
+                        "date": 1758212179,
+                        "image": "https://cdn.hikka.io/content/anime/kobayashi-san-chi-no-maid-dragon-s-53f14a/u-qiIqRSVEQtEuF-327_gA.jpg",
+                        "slug": "kobayashi-san-chi-no-maid-dragon-s-53f14a"
+                    },
+                    {
+                        "title_ja": "bâan: Otona no Kyoukai",
+                        "title_en": "Bâan: The Boundary of Adulthood",
+                        "title_ua": "Бâан: Межа зрілості",
+                        "date": 1758394850,
+                        "image": "https://cdn.hikka.io/content/anime/baan-otona-no-kyoukai-452f90/blR1WP_bLOf3BJt7KzryoA.jpg",
+                        "slug": "baan-otona-no-kyoukai-452f90"
+                    },
+                    {
+                        "title_ja": "Anne Shirley",
+                        "title_en": "Anne Shirley",
+                        "title_ua": "Енн Ширлі",
+                        "date": 1759000497,
+                        "image": "https://cdn.hikka.io/content/anime/anne-shirley-d4c259/POdTVzF6SeVztFEkMdLHKA.jpg",
+                        "slug": "anne-shirley-d4c259"
+                    }
+                ],
+                "october": [
+                    {
+                        "title_ja": "AURA: Maryuuin Kouga Saigo no Tatakai",
+                        "title_en": "Aura: Koga Maryuin's Last War",
+                        "title_ua": "Аура: Остання битва Ікла світла, демона-обранця драконів",
+                        "date": 1761389852,
+                        "image": "https://cdn.hikka.io/content/anime/aura-maryuuin-kouga-saigo-no-tatakai-743f17/lwj2AwR5x8iMfplSBDLX8g.jpg",
+                        "slug": "aura-maryuuin-kouga-saigo-no-tatakai-743f17"
+                    }
+                ],
+                "november": [
+                    {
+                        "title_ja": "Tenki no Ko",
+                        "title_en": "Weathering with You",
+                        "title_ua": "Дитя погоди",
+                        "date": 1761942047,
+                        "image": "https://cdn.hikka.io/content/anime/tenki-no-ko-4206fc/w0w7bye2SXdOTaG_YRqMbQ.jpg",
+                        "slug": "tenki-no-ko-4206fc"
+                    },
+                    {
+                        "title_ja": "Suzume no Tojimari",
+                        "title_en": "Suzume",
+                        "title_ua": "Судзуме, що зачиняє двері",
+                        "date": 1762462630,
+                        "image": "https://cdn.hikka.io/content/anime/suzume-no-tojimari-043f75/RCeU1ODaRY6y7JjgWhmvDg.jpg",
+                        "slug": "suzume-no-tojimari-043f75"
+                    },
+                    {
+                        "title_ja": "Oniisama e...",
+                        "title_en": "Dear Brother",
+                        "title_ua": "Любий брате...",
+                        "date": 1763076214,
+                        "image": "https://cdn.hikka.io/content/anime/oniisama-e-bb1a4f/reDeXWXmMLEH_ba4aNmkHw.jpg",
+                        "slug": "oniisama-e-bb1a4f"
+                    },
+                    {
+                        "title_ja": "Fujimoto Tatsuki 17-26",
+                        "title_en": "Tatsuki Fujimoto 17-26",
+                        "title_ua": "Фуджімото Тацукі 17-26",
+                        "date": 1764001717,
+                        "image": "https://cdn.hikka.io/content/anime/fujimoto-tatsuki-17-26-c764a2/eNp65V5d-ukLQQ6s5FNVEw.jpg",
+                        "slug": "fujimoto-tatsuki-17-26-c764a2"
+                    }
+                ],
+                "december": [
+                    {
+                        "title_ja": "Soredemo Machi wa Mawatteiru",
+                        "title_en": "And Yet the Town Moves",
+                        "title_ua": "А все ж таки місто обертається",
+                        "date": 1765411592,
+                        "image": "https://cdn.hikka.io/content/anime/soredemo-machi-wa-mawatteiru-9a3873/EI3L5IAQJhYwXrFU0WcJNQ.jpg",
+                        "slug": "soredemo-machi-wa-mawatteiru-9a3873"
+                    },
+                    {
+                        "title_ja": "Non Non Biyori Nonstop",
+                        "title_en": "Non Non Biyori Nonstop",
+                        "title_ua": "Безтурботні часи: Нонстоп",
+                        "date": 1765498371,
+                        "image": "https://cdn.hikka.io/content/anime/non-non-biyori-nonstop-97d873/IRx4BxFl4YmTBr3Bz1rEEQ.jpg",
+                        "slug": "non-non-biyori-nonstop-97d873"
+                    },
+                    {
+                        "title_ja": "Azumanga Daiou The Animation",
+                        "title_en": "Azumanga Daioh: The Animation",
+                        "title_ua": "Адзуманґа Дайо",
+                        "date": 1765680718,
+                        "image": "https://cdn.hikka.io/content/anime/azumanga-daiou-the-animation-b5a0ef/00fbTqMj2tnrfid3yqDDKQ.jpg",
+                        "slug": "azumanga-daiou-the-animation-b5a0ef"
+                    },
+                    {
+                        "title_ja": "Sankarea",
+                        "title_en": "Sankarea: Undying Love",
+                        "title_ua": "Санкареа",
+                        "date": 1765767071,
+                        "image": "https://cdn.hikka.io/content/anime/sankarea-627f31/G-cez6P-Pe2Nrwic2D8I8g.jpg",
+                        "slug": "sankarea-627f31"
+                    },
+                    {
+                        "title_ja": "Sankarea: Wagahai mo... Zombie de Aru...",
+                        "title_en": "Sankarea: I, Too, Am... A Zombie...",
+                        "title_ua": "Санкареа: Я теж... зомбі...",
+                        "date": 1765767104,
+                        "image": "https://cdn.hikka.io/content/anime/sankarea-wagahai-mo-zombie-de-aru-fb7580/NxbPoaeE6_SSBDt9MqJ_rg.jpg",
+                        "slug": "sankarea-wagahai-mo-zombie-de-aru-fb7580"
+                    },
+                    {
+                        "title_ja": "Sankarea OVA",
+                        "title_en": null,
+                        "title_ua": "Санкареа OVA",
+                        "date": 1765768169,
+                        "image": "https://cdn.hikka.io/content/anime/sankarea-ova-2a6f0e/Qv8cQJou5UVgpsaGmbthDw.jpg",
+                        "slug": "sankarea-ova-2a6f0e"
+                    }
+                ]
+            },
+            "manga": {
+                "january": [],
+                "february": [],
+                "march": [
+                    {
+                        "title_original": "Shimeji Simulation",
+                        "title_en": null,
+                        "title_ua": "Симуляція Шімеджі",
+                        "date": 1742367853,
+                        "image": "https://cdn.hikka.io/content/manga/shimeji-simulation-58a3fe/MKfj3tl0s1z9jSQnneUOtg.jpg",
+                        "slug": "shimeji-simulation-58a3fe"
+                    },
+                    {
+                        "title_original": "Dead Dead Demons Dededede Destruction",
+                        "title_en": "Dead Dead Demons Dededede Destruction",
+                        "title_ua": "Мертві Мертві Демони Дедедеде Деструкція",
+                        "date": 1742488682,
+                        "image": "https://cdn.hikka.io/content/manga/dead-dead-demons-dededede-destruction-c7ef63/xIpGqLrJPkhjgpQVrDs3dQ.jpg",
+                        "slug": "dead-dead-demons-dededede-destruction-c7ef63"
+                    }
+                ],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [
+                    {
+                        "title_original": "YoRHa: Shinjuwan Kouka Sakusen Kiroku",
+                        "title_en": "YoRHa: Pearl Harbor Descent Record",
+                        "title_ua": "YoRHa: Протокол висадки в Перл-Гарбор",
+                        "date": 1751311163,
+                        "image": "https://cdn.hikka.io/content/manga/yorha-shinjuwan-kouka-sakusen-kiroku-ff4414/hJaeTys2KDed_x6I97L8qQ.jpg",
+                        "slug": "yorha-shinjuwan-kouka-sakusen-kiroku-ff4414"
+                    },
+                    {
+                        "title_original": "Takopii no Genzai",
+                        "title_en": "Takopi's Original Sin",
+                        "title_ua": "Первородний гріх Такопі",
+                        "date": 1753642606,
+                        "image": "https://cdn.hikka.io/content/manga/takopii-no-genzai-9c7cf5/r46dp66dEOuaHQ9ryX3cTQ.jpg",
+                        "slug": "takopii-no-genzai-9c7cf5"
+                    }
+                ],
+                "august": [],
+                "september": [
+                    {
+                        "title_original": "Meisou Senshi Nagata Kabi",
+                        "title_en": "My Wandering Warrior Existence",
+                        "title_ua": "Воїтелька-блукалиця Наґата Кабі",
+                        "date": 1757421916,
+                        "image": "https://cdn.hikka.io/content/manga/meisou-senshi-nagata-kabi-d6d54a/jg6VG78_J33XfEenJCL1BQ.jpg",
+                        "slug": "meisou-senshi-nagata-kabi-d6d54a"
+                    },
+                    {
+                        "title_original": "Cocoon",
+                        "title_en": null,
+                        "title_ua": "Кокон",
+                        "date": 1757675812,
+                        "image": "https://cdn.hikka.io/content/manga/cocoon-3f57a8/EosxFIyfqXStzC1mcWcSIw.jpg",
+                        "slug": "cocoon-3f57a8"
+                    },
+                    {
+                        "title_original": "Komi-san wa, Comyushou desu.",
+                        "title_en": "Komi Can't Communicate",
+                        "title_ua": "Комі не вміє спілкуватися",
+                        "date": 1758827141,
+                        "image": "https://cdn.hikka.io/content/manga/komi-san-wa-comyushou-desu-37e74d/c-GtqE2YMCaK44cEcsWbzg.jpg",
+                        "slug": "komi-san-wa-comyushou-desu-37e74d"
+                    }
+                ],
+                "october": [],
+                "november": [],
+                "december": []
+            },
+            "novel": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [
+                    {
+                        "title_original": "Mikkakan no Koufuku",
+                        "title_en": "Three Days of Happiness",
+                        "title_ua": "Три дні щастя",
+                        "date": 1748973520,
+                        "image": "https://cdn.hikka.io/content/novel/mikkakan-no-koufuku-491076/riw1yv-UCw5il4_XUaXNvw.jpg",
+                        "slug": "mikkakan-no-koufuku-491076"
+                    }
+                ],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            }
+        }
+    },
+    "olexh": {
+        "first_record": 1737561940,
+        "last_record": 1762510519,
+        "records_total": 22,
+        "top": {
+            "anime": [
+                {
+                    "date": 1750969404,
+                    "score": 10,
+                    "title_ja": "Mushishi",
+                    "title_en": "Mushi-Shi",
+                    "title_ua": "Мушіші",
+                    "image": "https://cdn.hikka.io/content/anime/mushishi-003bf2/lTiZd60-TTx_8IEeUUvebw.jpg",
+                    "slug": "mushishi-003bf2"
+                },
+                {
+                    "date": 1761413572,
+                    "score": 9,
+                    "title_ja": "Chainsaw Man Movie: Reze-hen",
+                    "title_en": "Chainsaw Man the Movie: Reze Arc",
+                    "title_ua": "Людина-бензопила: Арка Резе",
+                    "image": "https://cdn.hikka.io/content/anime/chainsaw-man-movie-reze-hen-c4febd/UfgfLlbLkAlsSy2ppbY8Vg.jpg",
+                    "slug": "chainsaw-man-movie-reze-hen-c4febd"
+                },
+                {
+                    "date": 1760999229,
+                    "score": 9,
+                    "title_ja": "Hikaru ga Shinda Natsu",
+                    "title_en": "The Summer Hikaru Died",
+                    "title_ua": "Літо, коли помер Хікару",
+                    "image": "https://cdn.hikka.io/content/anime/hikaru-ga-shinda-natsu-bc2c0c/qK2OpNT5JQ_uvj6VRGbttQ.jpg",
+                    "slug": "hikaru-ga-shinda-natsu-bc2c0c"
+                }
+            ],
+            "manga": [],
+            "novel": []
+        },
+        "genres": {
+            "anime": {
+                "drama": 6,
+                "mystery": 4,
+                "adult-cast": 4,
+                "fantasy": 3,
+                "adventure": 3,
+                "action": 3,
+                "historical": 3,
+                "supernatural": 3,
+                "seinen": 3
+            },
+            "manga": {},
+            "novel": {}
+        },
+        "binges": [
+            {
+                "start_date": 1760821200,
+                "end_date": 1761080400,
+                "count": 4
+            }
+        ],
+        "status": {
+            "anime": {
+                "completed": 7,
+                "planned": 6,
+                "dropped": 0
+            },
+            "manga": {
+                "completed": 0,
+                "planned": 0,
+                "dropped": 0
+            },
+            "novel": {
+                "completed": 0,
+                "planned": 0,
+                "dropped": 0
+            }
+        },
+        "score": {
+            "anime": {
+                "min": 6,
+                "max": 10,
+                "avg": 8.25
+            },
+            "manga": {
+                "min": 6,
+                "max": 10,
+                "avg": 8.25
+            },
+            "novel": {
+                "min": 6,
+                "max": 10,
+                "avg": 8.25
+            }
+        },
+        "duration_total": 2294,
+        "duration_month": {
+            "january": 0,
+            "february": 0,
+            "march": 0,
+            "april": 0,
+            "may": 0,
+            "june": 345,
+            "july": 576,
+            "august": 0,
+            "september": 749,
+            "october": 509,
+            "november": 115,
+            "december": 0
+        },
+        "completed": {
+            "anime": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [
+                    {
+                        "title_ja": "Mushishi",
+                        "title_en": "Mushi-Shi",
+                        "title_ua": "Мушіші",
+                        "date": 1750969404,
+                        "image": "https://cdn.hikka.io/content/anime/mushishi-003bf2/lTiZd60-TTx_8IEeUUvebw.jpg",
+                        "slug": "mushishi-003bf2"
+                    }
+                ],
+                "july": [
+                    {
+                        "title_ja": "Kusuriya no Hitorigoto 2nd Season",
+                        "title_en": "The Apothecary Diaries Season 2",
+                        "title_ua": "Монолог травниці - 2 сезон",
+                        "date": 1751742538,
+                        "image": "https://cdn.hikka.io/content/anime/kusuriya-no-hitorigoto-2nd-season-d43023/TMe9cn9nCoV1x69sl5hbpw.jpg",
+                        "slug": "kusuriya-no-hitorigoto-2nd-season-d43023"
+                    }
+                ],
+                "august": [],
+                "september": [
+                    {
+                        "title_ja": "Ore dake Level Up na Ken Season 2: Arise from the Shadow",
+                        "title_en": "Solo Leveling Season 2: Arise from the Shadow",
+                        "title_ua": "Тільки я візьму новий рівень: Вихід із тіні",
+                        "date": 1758918564,
+                        "image": "https://cdn.hikka.io/content/anime/ore-dake-level-up-na-ken-season-2-arise-from-the-shadow-0f969d/pv4kCDpu5aQl67BAB48WYg.jpg",
+                        "slug": "ore-dake-level-up-na-ken-season-2-arise-from-the-shadow-0f969d"
+                    }
+                ],
+                "october": [
+                    {
+                        "title_ja": "Kotonoha no Niwa",
+                        "title_en": "The Garden of Words",
+                        "title_ua": "Сад слів",
+                        "date": 1760824760,
+                        "image": "https://cdn.hikka.io/content/anime/kotonoha-no-niwa-4be3ca/rByOO62Lpzwq2HXz_Q7ZOA.jpg",
+                        "slug": "kotonoha-no-niwa-4be3ca"
+                    },
+                    {
+                        "title_ja": "Hikaru ga Shinda Natsu",
+                        "title_en": "The Summer Hikaru Died",
+                        "title_ua": "Літо, коли помер Хікару",
+                        "date": 1760999229,
+                        "image": "https://cdn.hikka.io/content/anime/hikaru-ga-shinda-natsu-bc2c0c/qK2OpNT5JQ_uvj6VRGbttQ.jpg",
+                        "slug": "hikaru-ga-shinda-natsu-bc2c0c"
+                    },
+                    {
+                        "title_ja": "Chainsaw Man Movie: Reze-hen",
+                        "title_en": "Chainsaw Man the Movie: Reze Arc",
+                        "title_ua": "Людина-бензопила: Арка Резе",
+                        "date": 1761413572,
+                        "image": "https://cdn.hikka.io/content/anime/chainsaw-man-movie-reze-hen-c4febd/UfgfLlbLkAlsSy2ppbY8Vg.jpg",
+                        "slug": "chainsaw-man-movie-reze-hen-c4febd"
+                    },
+                    {
+                        "title_ja": "Sakasama no Patema",
+                        "title_en": "Patema Inverted",
+                        "title_ua": "Патема догори дриґом",
+                        "date": 1761560944,
+                        "image": "https://cdn.hikka.io/content/anime/sakasama-no-patema-2f390b/mBHqHnD3rpQn6CnaJOcdfg.jpg",
+                        "slug": "sakasama-no-patema-2f390b"
+                    }
+                ],
+                "november": [],
+                "december": []
+            },
+            "manga": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            },
+            "novel": {
+                "january": [],
+                "february": [],
+                "march": [],
+                "april": [],
+                "may": [],
+                "june": [],
+                "july": [],
+                "august": [],
+                "september": [],
+                "october": [],
+                "november": [],
+                "december": []
+            }
+        }
+    }
+}

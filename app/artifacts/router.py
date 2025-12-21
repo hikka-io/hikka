@@ -1,7 +1,11 @@
+from .schemas import ArtifactResponse, PrivateArgs
+from .dependencies import validate_artifact_owner
+from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import validate_artifact
 from fastapi import APIRouter, Depends
-from .schemas import ArtifactResponse
+from app.database import get_session
 from app.models import Artifact
+from . import service
 
 
 router = APIRouter(prefix="/artifacts", tags=["Artifacts"])
@@ -12,6 +16,11 @@ async def get_artifact(artifact: Artifact = Depends(validate_artifact)):
     return artifact
 
 
-# @router.post("/{username}/{name}/privacy")
-# async def update_artifact_privacy(artifact: Artifact):
-#     pass
+@router.post("/{name}/privacy")
+async def update_artifact_privacy(
+    args: PrivateArgs,
+    artifact: Artifact = Depends(validate_artifact_owner),
+    session: AsyncSession = Depends(get_session),
+):
+    await service.set_privacy(session, artifact, args.private)
+    return {"success": True}
