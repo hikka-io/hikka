@@ -191,13 +191,13 @@ class YearStatsGenerator:
                 )
 
     def _calculate_scores(self, user_ref):
-        min_score = None
-        max_score = None
-        avg_score = None
-        total_score = 0
-        score_count = 0
-
         for content_type in self.state_cache[user_ref]:
+            min_score = None
+            max_score = None
+            avg_score = None
+            total_score = 0
+            score_count = 0
+
             for content_ref in self.state_cache[user_ref][content_type]:
                 score = self.state_cache[user_ref][content_type][content_ref][
                     "score"
