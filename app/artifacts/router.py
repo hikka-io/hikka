@@ -21,7 +21,6 @@ router = APIRouter(prefix="/artifacts", tags=["Artifacts"])
 
 @router.get("/{name}/privacy", response_model=ArtifactPrivacyResponse)
 async def get_artifact_privacy(
-    args: PrivateArgs,
     artifact: Artifact = Depends(validate_artifact_owner),
     session: AsyncSession = Depends(get_session),
 ):
