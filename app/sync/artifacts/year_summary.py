@@ -23,7 +23,7 @@ TOP_LIMIT = 3
 TOP_GENRES_LIMIT = 6
 
 # Limit of titles displayed per month
-MONTHLY_DISPLAY_LIMIT = 10
+MONTHLY_DISPLAY_LIMIT = 20
 
 # Min genre titles count in show in stats
 MIN_GENRE_OCCURENCES = 3
@@ -287,6 +287,11 @@ class YearStatsGenerator:
                 "manga": {month: [] for month in MONTHS},
                 "novel": {month: [] for month in MONTHS},
             },
+            "completed_count": {
+                "anime": {month: 0 for month in MONTHS},
+                "manga": {month: 0 for month in MONTHS},
+                "novel": {month: 0 for month in MONTHS},
+            },
         }
 
         self.status_cache[user_ref] = {
@@ -374,25 +379,35 @@ class YearStatsGenerator:
                 and after["status"] == COMPLETED
                 and content.id
                 not in self.status_cache[user_ref][content_type][COMPLETED]
-                and len(self.stats[user_ref]["completed"][content_type][month])
-                < MONTHLY_DISPLAY_LIMIT
             ):
-                self.stats[user_ref]["completed"][content_type][month].append(
-                    {
-                        (
-                            "title_original" if title_original else "title_ja"
-                        ): content.title_original
-                        if title_original
-                        else content.title_ja,
-                        "title_en": content.title_en,
-                        "title_ua": content.title_ua,
-                        "image": content.image,
-                        "slug": content.slug,
-                        "date": created,
-                    }
-                )
+                self.stats[user_ref]["completed_count"][content_type][
+                    month
+                ] += 1
 
-                tmp_state["complete_time"] = created
+                if (
+                    len(self.stats[user_ref]["completed"][content_type][month])
+                    < MONTHLY_DISPLAY_LIMIT
+                ):
+                    self.stats[user_ref]["completed"][content_type][
+                        month
+                    ].append(
+                        {
+                            (
+                                "title_original"
+                                if title_original
+                                else "title_ja"
+                            ): content.title_original
+                            if title_original
+                            else content.title_ja,
+                            "title_en": content.title_en,
+                            "title_ua": content.title_ua,
+                            "image": content.image,
+                            "slug": content.slug,
+                            "date": created,
+                        }
+                    )
+
+                    tmp_state["complete_time"] = created
 
             tmp_state["status"] = after["status"]
 
