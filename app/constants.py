@@ -515,6 +515,7 @@ LOG_CONTENT_DELETED = "content_deleted"
 LOG_ARTICLE_CREATE = "article_create"
 LOG_ARTICLE_UPDATE = "article_update"
 LOG_ARTICLE_DELETE = "article_delete"
+LOG_ARTIFACT_PRIVACY = "artifact_privacy"
 
 # History types
 HISTORY_WATCH = "watch"
