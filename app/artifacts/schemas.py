@@ -8,9 +8,12 @@ class PrivateArgs(CustomModel):
 
 
 # Responses
-class ArtifactResponse(CustomModel):
+class ArtifactPrivacyResponse(CustomModel):
+    private: bool
+
+
+class ArtifactResponse(ArtifactPrivacyResponse):
     created: datetime_pd
     updated: datetime_pd
-    private: bool
     data: dict
     name: str

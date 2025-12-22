@@ -1,4 +1,3 @@
-from .schemas import ArtifactResponse, PrivateArgs
 from .dependencies import validate_artifact_owner
 from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import validate_artifact
@@ -10,16 +9,26 @@ from app.service import create_log
 from app import constants
 from . import service
 
+from .schemas import (
+    ArtifactPrivacyResponse,
+    ArtifactResponse,
+    PrivateArgs,
+)
+
 
 router = APIRouter(prefix="/artifacts", tags=["Artifacts"])
 
 
-@router.get("/{username}/{name}", response_model=ArtifactResponse)
-async def get_artifact(artifact: Artifact = Depends(validate_artifact)):
+@router.get("/{name}/privacy", response_model=ArtifactPrivacyResponse)
+async def get_artifact_privacy(
+    args: PrivateArgs,
+    artifact: Artifact = Depends(validate_artifact_owner),
+    session: AsyncSession = Depends(get_session),
+):
     return artifact
 
 
-@router.post("/{name}/privacy")
+@router.post("/{name}/privacy", response_model=ArtifactPrivacyResponse)
 async def update_artifact_privacy(
     args: PrivateArgs,
     artifact: Artifact = Depends(validate_artifact_owner),
@@ -35,4 +44,9 @@ async def update_artifact_privacy(
         {"private": args.private},
     )
 
-    return {"success": True}
+    return artifact
+
+
+@router.get("/{username}/{name}", response_model=ArtifactResponse)
+async def get_artifact(artifact: Artifact = Depends(validate_artifact)):
+    return artifact
