@@ -101,7 +101,7 @@ async def validate_article_create(
         session,
         constants.LOG_ARTICLE_CREATE,
         author,
-        start_time=round_datetime(utcnow(), hours=1),
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
     )
 
     if (
@@ -175,7 +175,7 @@ async def validate_article_update(
         session,
         constants.LOG_ARTICLE_UPDATE,
         user,
-        start_time=round_datetime(utcnow(), hours=1),
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
     )
 
     if (

@@ -241,7 +241,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     return await session.scalar(
         select(func.count(Comment.id)).filter(
             Comment.author == author,
-            Comment.created > round_datetime(utcnow(), hours=1),
+            Comment.created > round_datetime(utcnow(), minutes=60, seconds=60),
             Comment.deleted == False,  # noqa: E712
         )
     )
