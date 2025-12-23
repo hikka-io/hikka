@@ -72,7 +72,11 @@ async def profile_ui(
     return user
 
 
-@router.get("/{username}/ui", response_model=UserCustomizationResponse)
+@router.get(
+    "/{username}/ui",
+    response_model=UserCustomizationResponse,
+    response_model_exclude_none=True,
+)
 async def user_ui(user: User = Depends(get_user)):
     return user
 
