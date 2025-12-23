@@ -4,7 +4,6 @@ from app.models.association import genres_novel_association_table
 from app.common.utils import utc_to_kyiv, kyiv_to_utc, get_month
 from .utils import DateTimeEncoder, find_consecutive_days
 from sqlalchemy.dialects.postgresql import insert
-from app.models import Artifact, History, Genre
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import round_datetime, utcnow
 from sqlalchemy import select, func, desc
@@ -14,6 +13,16 @@ from sqlalchemy.orm import joinedload
 from app import constants
 import json
 import copy
+
+from app.models import (
+    Collection,
+    Artifact,
+    Article,
+    Comment,
+    History,
+    Genre,
+    Edit,
+)
 
 
 # Limit for top of completed titles
@@ -85,9 +94,13 @@ TRACKED_STATUSES = [
 
 
 class YearStatsGenerator:
-    def __init__(self, session: AsyncSession, history: list):
+    def __init__(self, session: AsyncSession, start: datetime, end: datetime):
         self.session = session
-        self.history = history
+        self.history = []
+
+        # Start/end range for building stats
+        self.start = start
+        self.end = end
 
         # Here we hold bunch of temporary stuff
         self.activity_days = {}
@@ -98,6 +111,7 @@ class YearStatsGenerator:
         self.stats = {}
 
     async def calculate(self):
+        await self._fetch_history()
         self._process_history()
 
         for user_ref in self.status_cache:
@@ -108,7 +122,162 @@ class YearStatsGenerator:
 
             await self._find_top_genres(user_ref)
 
+        await self._fetch_extra_stats()
+
         return self.stats
+
+    async def _fetch_extra_stats(self):
+        def categorize_percentile(percentile: float) -> float:
+            if percentile >= 0.999:
+                return 0.1
+            elif percentile >= 0.99:
+                return 1
+            elif percentile >= 0.90:
+                return 10
+            elif percentile >= 0.50:
+                return 50
+            return None
+
+        user_ids_subquery = select(History.user_id).filter(
+            History.created >= self.start,
+            History.created < self.end,
+            History.history_type.in_(
+                [
+                    constants.HISTORY_WATCH,
+                    constants.HISTORY_READ_MANGA,
+                    constants.HISTORY_READ_NOVEL,
+                ]
+            ),
+        )
+
+        comments = await self.session.execute(
+            select(
+                Comment.author_id,
+                func.count(Comment.id).label("cnt"),
+                func.percent_rank()
+                .over(order_by=func.count(Comment.id))
+                .label("percentile"),
+            )
+            .filter(
+                Comment.author_id.in_(user_ids_subquery),
+                Comment.created >= self.start,
+                Comment.created < self.end,
+                Comment.private == False,  # noqa: E712
+                Comment.hidden == False,  # noqa: E712
+            )
+            .group_by(Comment.author_id)
+        )
+
+        for entry in comments:
+            user_ref = str(entry.author_id)
+            if user_ref not in self.stats:
+                continue
+
+            self.stats[user_ref]["comments_count"] = entry.cnt
+            self.stats[user_ref]["comments_percentile"] = categorize_percentile(
+                entry.percentile
+            )
+
+        articles = await self.session.execute(
+            select(
+                Article.author_id,
+                func.count(Article.id).label("cnt"),
+                func.percent_rank()
+                .over(order_by=func.count(Article.id))
+                .label("percentile"),
+            )
+            .filter(
+                Article.author_id.in_(user_ids_subquery),
+                Article.created >= self.start,
+                Article.created < self.end,
+                Article.deleted == False,  # noqa: E712
+                Article.draft == False,  # noqa: E712
+            )
+            .group_by(Article.author_id)
+        )
+
+        for entry in articles:
+            user_ref = str(entry.author_id)
+            if user_ref not in self.stats:
+                continue
+
+            self.stats[user_ref]["articles_count"] = entry.cnt
+            self.stats[user_ref]["articles_percentile"] = categorize_percentile(
+                entry.percentile
+            )
+
+        collections = await self.session.execute(
+            select(
+                Collection.author_id,
+                func.count(Collection.id).label("cnt"),
+                func.percent_rank()
+                .over(order_by=func.count(Collection.id))
+                .label("percentile"),
+            )
+            .filter(
+                Collection.author_id.in_(user_ids_subquery),
+                Collection.visibility == constants.COLLECTION_PUBLIC,
+                Collection.created >= self.start,
+                Collection.created < self.end,
+                Collection.deleted == False,  # noqa: E712
+            )
+            .group_by(Collection.author_id)
+        )
+
+        for entry in collections:
+            user_ref = str(entry.author_id)
+            if user_ref not in self.stats:
+                continue
+
+            self.stats[user_ref]["collections_count"] = entry.cnt
+            self.stats[user_ref]["collections_percentile"] = (
+                categorize_percentile(entry.percentile)
+            )
+
+        edits = await self.session.execute(
+            select(
+                Edit.author_id,
+                func.count(Edit.id).label("cnt"),
+                func.percent_rank()
+                .over(order_by=func.count(Edit.id))
+                .label("percentile"),
+            )
+            .filter(
+                Edit.author_id.in_(user_ids_subquery),
+                Edit.status == constants.EDIT_ACCEPTED,
+                Edit.created >= self.start,
+                Edit.created < self.end,
+            )
+            .group_by(Edit.author_id)
+        )
+
+        for entry in edits:
+            user_ref = str(entry.author_id)
+            if user_ref not in self.stats:
+                continue
+
+            self.stats[user_ref]["edits_count"] = entry.cnt
+            self.stats[user_ref]["edits_percentile"] = categorize_percentile(
+                entry.percentile
+            )
+
+    async def _fetch_history(self):
+        self.history = await self.session.scalars(
+            select(History)
+            .filter(
+                History.created >= self.start,
+                History.created < self.end,
+                History.history_type.in_(
+                    [
+                        constants.HISTORY_WATCH,
+                        constants.HISTORY_READ_MANGA,
+                        constants.HISTORY_READ_NOVEL,
+                    ]
+                ),
+            )
+            .options(joinedload(History.user))
+            .order_by(History.created.asc())
+        )
 
     async def _find_top_genres(self, user_ref):
         # Building genses cache so we don't do unnecessary queries
@@ -280,6 +449,8 @@ class YearStatsGenerator:
                 "manga": {"min": None, "max": None, "avg": None},
                 "novel": {"min": None, "max": None, "avg": None},
             },
+            "volumes_total": 0,
+            "chapters_total": 0,
             "duration_total": 0,
             "duration_month": {month: 0 for month in MONTHS},
             "completed": {
@@ -292,6 +463,14 @@ class YearStatsGenerator:
                 "manga": {month: 0 for month in MONTHS},
                 "novel": {month: 0 for month in MONTHS},
             },
+            "comments_count": 0,
+            "comments_percentile": 0,
+            "articles_count": 0,
+            "articles_percentile": 0,
+            "collections_count": 0,
+            "collections_percentile": 0,
+            "edits_count": 0,
+            "edits_percentile": 0,
         }
 
         self.status_cache[user_ref] = {
@@ -466,6 +645,7 @@ class YearStatsGenerator:
             # Calculating new volumes in history entry
             new_volumes = current_vol - before_vol
             tmp_state["total_volumes"] += new_volumes
+            self.stats[user_ref]["volumes_total"] += new_volumes
 
         if "chapters" in after:
             current_ch = after["chapters"]
@@ -478,6 +658,7 @@ class YearStatsGenerator:
             # Calculating new chapters in history entry
             new_chapters = current_ch - before_ch
             tmp_state["total_chapters"] += new_chapters
+            self.stats[user_ref]["chapters_total"] += new_chapters
 
         if content_type == "anime":
             tmp_state["watch_count"] = 1 + tmp_state["rewatches"]
@@ -521,24 +702,7 @@ async def artifact_year_summary():
         if now > end + timedelta(days=1):
             return
 
-        history = await session.scalars(
-            select(History)
-            .filter(
-                History.created >= start,
-                History.created < end,
-                History.history_type.in_(
-                    [
-                        constants.HISTORY_WATCH,
-                        constants.HISTORY_READ_MANGA,
-                        constants.HISTORY_READ_NOVEL,
-                    ]
-                ),
-            )
-            .options(joinedload(History.user))
-            .order_by(History.created.asc())
-        )
-
-        generator = YearStatsGenerator(session, history)
+        generator = YearStatsGenerator(session, start, end)
         result = await generator.calculate()
 
         for user_id in result:
