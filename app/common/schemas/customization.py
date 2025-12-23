@@ -103,9 +103,10 @@ UIEffect = Literal["snowfall"]
 
 
 class UIPreferences(CustomModel):
+    effects: List[UIEffect] | None = None
     title_language: str | None = None
     name_language: str | None = None
-    effects: List[UIEffect] | None = None
+    overlay: bool = True
 
 
 class UserAppearance(CustomModel):
