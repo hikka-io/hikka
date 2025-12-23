@@ -1,6 +1,4 @@
-from .dependencies import validate_artifact_owner
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dependencies import validate_artifact
 from app.dependencies import auth_required
 from fastapi import APIRouter, Depends
 from app.models import Artifact, User
@@ -15,6 +13,11 @@ from .schemas import (
     PrivateArgs,
 )
 
+from .dependencies import (
+    validate_artifact_owner,
+    validate_artifact_info,
+    validate_artifact,
+)
 
 router = APIRouter(prefix="/artifacts", tags=["Artifacts"])
 
@@ -22,7 +25,15 @@ router = APIRouter(prefix="/artifacts", tags=["Artifacts"])
 @router.get("/{name}/privacy", response_model=ArtifactPrivacyResponse)
 async def get_artifact_privacy(
     artifact: Artifact = Depends(validate_artifact_owner),
-    session: AsyncSession = Depends(get_session),
+):
+    return artifact
+
+
+@router.get(
+    "/{username}/{name}/privacy", response_model=ArtifactPrivacyResponse
+)
+async def get_user_artifact_privacy(
+    artifact: Artifact = Depends(validate_artifact),
 ):
     return artifact
 
@@ -47,5 +58,5 @@ async def update_artifact_privacy(
 
 
 @router.get("/{username}/{name}", response_model=ArtifactResponse)
-async def get_artifact(artifact: Artifact = Depends(validate_artifact)):
+async def get_artifact(artifact: Artifact = Depends(validate_artifact_info)):
     return artifact
