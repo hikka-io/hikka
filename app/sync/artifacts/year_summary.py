@@ -338,7 +338,9 @@ class YearStatsGenerator:
             completed_records = {
                 k: v
                 for k, v in self.state_cache[user_ref][content_type].items()
-                if v["complete_time"] is not None and v["score"] is not None
+                if v["complete_time"] is not None
+                and v["score"] is not None
+                and v["score"] > 0
             }
 
             sorted_records = dict(
