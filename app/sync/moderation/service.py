@@ -28,7 +28,7 @@ async def get_moderation(
     return await session.scalar(query.order_by(desc(Moderation.created)))
 
 
-async def get_edit(session, content_id):
+async def get_edit(session: AsyncSession, content_id: UUID):
     return await session.scalar(
         select(Edit)
         .options(joinedload(Edit.author))
@@ -36,7 +36,7 @@ async def get_edit(session, content_id):
     )
 
 
-async def get_comment(session, content_id):
+async def get_comment(session: AsyncSession, content_id: UUID):
     return await session.scalar(
         select(Comment)
         .options(joinedload(Comment.author))
@@ -44,7 +44,7 @@ async def get_comment(session, content_id):
     )
 
 
-async def get_collection(session, content_id):
+async def get_collection(session: AsyncSession, content_id: UUID):
     return await session.scalar(
         select(Collection)
         .options(joinedload(Collection.author))
