@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -8,7 +9,6 @@ from app.models import (
     NovelCharacter,
     NovelAuthor,
     AuthorRole,
-    Character,
     Magazine,
     Person,
     Image,
@@ -34,7 +34,10 @@ async def process_genres(session, novel, data):
 
 
 def process_translated_ua(data):
-    return False
+    honey_count = len(data["honey"]) if "honey" in data else 0
+    baka_count = len(data["baka"]) if "baka" in data else 0
+
+    return baka_count > 0 or honey_count > 0
 
 
 def process_external(data):
@@ -46,6 +49,24 @@ def process_external(data):
         }
         for entry in data["external"]
     ]
+
+    for source in ["baka", "honey"]:
+        website_name = {
+            "honey": "Honey Manga",
+            "zenko": "Zenko",
+            "baka": "Бака",
+        }.get(source)
+
+        result.extend(
+            [
+                {
+                    "type": constants.EXTERNAL_READ,
+                    "text": website_name,
+                    "url": entry["url"],
+                }
+                for entry in data.get(source, [])
+            ]
+        )
 
     return result
 
@@ -68,6 +89,7 @@ async def process_image(session, novel, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 
@@ -148,6 +170,8 @@ async def process_authors(session, novel, data):
                 }
             )
 
+            person.needs_count_update = True
+
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)
 
@@ -170,13 +194,9 @@ async def process_characters(session, novel, data):
         set([entry["character"]["content_id"] for entry in data["characters"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["characters"]:
         if not (
@@ -205,6 +225,8 @@ async def process_characters(session, novel, data):
             )
 
             characters.append(character_role)
+
+            character.needs_count_update = True
 
     return characters
 

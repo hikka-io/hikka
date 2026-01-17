@@ -17,7 +17,7 @@ import imagesize
 async def validate_upload_rate_limit(
     upload_type: UploadTypeEnum,
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_UPLOAD])),
 ):
     upload_permissions = None
 
@@ -26,6 +26,9 @@ async def validate_upload_rate_limit(
 
     if upload_type == constants.UPLOAD_COVER:
         upload_permissions = [constants.PERMISSION_UPLOAD_COVER]
+
+    if upload_type == constants.UPLOAD_ATTACHMENT:
+        upload_permissions = [constants.PERMISSION_UPLOAD_ATTACHMENT]
 
     if not upload_permissions:
         raise Abort("upload", "missconfigured-permission")
@@ -38,8 +41,12 @@ async def validate_upload_rate_limit(
     # Count uploads by given upload type
     count = await service.count_uploads_last_day(session, user, upload_type)
 
-    # TODO: make this dynamic based on upload type (?)
-    max_daily_uploads = 10
+    # Here we handle daily uploads limit for each upload type
+    match upload_type:
+        case constants.UPLOAD_ATTACHMENT:
+            max_daily_uploads = 100
+        case _:
+            max_daily_uploads = 10
 
     if (
         user.role
@@ -63,7 +70,14 @@ async def validate_upload_file(
 
     mime_type = get_mime_type(file)
 
-    if mime_type not in ["image/jpeg"]:
+    # Different upload types support different mimes
+    match upload_type:
+        case constants.UPLOAD_ATTACHMENT:
+            supported_mimes = ["image/jpeg", "image/webp", "image/gif"]
+        case _:
+            supported_mimes = ["image/jpeg"]
+
+    if mime_type not in supported_mimes:
         raise Abort("upload", "bad-mime")
 
     width, height = imagesize.get(BytesIO(file.file.read()))
@@ -83,6 +97,13 @@ async def validate_upload_file(
         if width != 1500 or height != 500:
             raise Abort("upload", "bad-resolution")
 
+    if upload_type == constants.UPLOAD_ATTACHMENT:
+        if width < 200 or height < 200:
+            raise Abort("upload", "bad-resolution")
+
+        if width > 2000 or height > 2000:
+            raise Abort("upload", "bad-resolution")
+
     # TODO: add file hash check (?)
 
     await file.seek(0)
@@ -91,6 +112,8 @@ async def validate_upload_file(
         **{
             "mime_type": mime_type,
             "size": file.size,
+            "height": height,
+            "width": width,
             "file": file,
         }
     )

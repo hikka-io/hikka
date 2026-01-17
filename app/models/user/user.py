@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy import Index
+from sqlalchemy import func
 from ..base import Base
 
 
@@ -25,6 +27,11 @@ class User(Base, NeedsSearchUpdateMixin):
     activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
     activation_expire: Mapped[datetime] = mapped_column(nullable=True)
 
+    # Field for email change flow
+    new_email: Mapped[str] = mapped_column(
+        String(255), index=True, nullable=True
+    )
+
     password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True)
     password_reset_expire: Mapped[datetime] = mapped_column(nullable=True)
 
@@ -37,7 +44,11 @@ class User(Base, NeedsSearchUpdateMixin):
     created: Mapped[datetime]
     login: Mapped[datetime]
 
-    is_followed: Mapped[bool] = query_expression()
+    is_followed: Mapped[bool] = query_expression(expire_on_flush=False)
+
+    forbidden_actions: Mapped[list[str]] = mapped_column(
+        JSONB, server_default="[]"
+    )
 
     email_messages: Mapped[list["EmailMessage"]] = relationship(
         back_populates="user",
@@ -77,22 +88,22 @@ class User(Base, NeedsSearchUpdateMixin):
     )
 
     avatar_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )
 
     cover_image_id = mapped_column(
-        ForeignKey("service_images.id", ondelete="SET NULL"),
+        ForeignKey("service_images.id", ondelete="SET NULL", use_alter=True),
         nullable=True,
         index=True,
     )
 
-    avatar_image_relation: Mapped["Image"] = relationship(
+    avatar_image: Mapped["Image"] = relationship(
         foreign_keys=[avatar_image_id], lazy="joined"
     )
 
-    cover_image_relation: Mapped["Image"] = relationship(
+    cover_image: Mapped["Image"] = relationship(
         foreign_keys=[cover_image_id], lazy="joined"
     )
 
@@ -132,31 +143,52 @@ class User(Base, NeedsSearchUpdateMixin):
         },
     )
 
+    styles: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "light": None,
+            "dark": None,
+            "radius": None,
+            "typography": None,
+        },
+    )
+
+    preferences: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "title_language": None,
+            "name_language": None,
+            "effects": None,
+        },
+    )
+
+    __table_args__ = (
+        Index("ix_lower_username", func.lower(username), unique=True),
+    )
+
     @hybrid_property
     def avatar(self):
-        if not self.avatar_image_relation:
-            return "https://cdn.hikka.io/avatar.jpg"
-
         if (
-            self.avatar_image_relation.ignore
-            or not self.avatar_image_relation.uploaded
+            not self.avatar_image
+            or self.avatar_image.ignore
+            or not self.avatar_image.uploaded
+            or self.role == "deleted"
         ):
             return "https://cdn.hikka.io/avatar.jpg"
 
-        return self.avatar_image_relation.url
+        return self.avatar_image.url
 
     @hybrid_property
     def cover(self):
-        if not self.cover_image_relation:
-            return None
-
         if (
-            self.cover_image_relation.ignore
-            or not self.cover_image_relation.uploaded
+            not self.cover_image
+            or self.cover_image.ignore
+            or not self.cover_image.uploaded
+            or self.role == "deleted"
         ):
             return None
 
-        return self.cover_image_relation.url
+        return self.cover_image.url
 
     @hybrid_property
     def active(self):

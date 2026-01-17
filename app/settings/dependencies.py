@@ -26,8 +26,10 @@ async def validate_set_username(
     if is_protected_username(args.username):
         raise Abort("settings", "invalid-username")
 
-    if await get_user_by_username(session, args.username):
-        raise Abort("settings", "username-taken")
+    if username_owner := await get_user_by_username(session, args.username):
+        # If the username belongs to the user doing the request then it's fine
+        if username_owner.id != user.id:
+            raise Abort("settings", "username-taken")
 
     return args
 

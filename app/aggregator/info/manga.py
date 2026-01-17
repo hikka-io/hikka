@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -8,7 +9,6 @@ from app.models import (
     MangaCharacter,
     MangaAuthor,
     AuthorRole,
-    Character,
     Magazine,
     Person,
     Image,
@@ -34,8 +34,13 @@ async def process_genres(session, manga, data):
 
 
 def process_translated_ua(data):
+    dengeki_count = len(data["dengeki"]) if "dengeki" in data else 0
+    honey_count = len(data["honey"]) if "honey" in data else 0
+    zenko_count = len(data["zenko"]) if "zenko" in data else 0
+    miu_count = len(data["miu"]) if "miu" in data else 0
+
     return (
-        len(data["honey"]) > 0 or len(data["zenko"]) > 0 or len(data["miu"]) > 0
+        dengeki_count > 0 or honey_count > 0 or zenko_count > 0 or miu_count > 0
     )
 
 
@@ -49,8 +54,9 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["honey", "zenko", "miu"]:
+    for source in ["dengeki", "honey", "zenko", "miu"]:
         website_name = {
+            "dengeki": "Dengeki",
             "miu": "Manga.in.ua",
             "honey": "Honey Manga",
             "zenko": "Zenko",
@@ -88,6 +94,7 @@ async def process_image(session, manga, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 
@@ -168,6 +175,8 @@ async def process_authors(session, manga, data):
                 }
             )
 
+            person.needs_count_update = True
+
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)
 
@@ -190,13 +199,9 @@ async def process_characters(session, manga, data):
         set([entry["character"]["content_id"] for entry in data["characters"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["characters"]:
         if not (
@@ -225,6 +230,8 @@ async def process_characters(session, manga, data):
             )
 
             characters.append(character_role)
+
+            character.needs_count_update = True
 
     return characters
 

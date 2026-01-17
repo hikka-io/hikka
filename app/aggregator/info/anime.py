@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -12,7 +13,6 @@ from app.models import (
     CompanyAnime,
     AnimeStaff,
     AnimeVoice,
-    Character,
     Company,
     Person,
     Genre,
@@ -89,13 +89,9 @@ async def process_characters_and_voices(session, anime, data):
         set([entry["person"]["content_id"] for entry in data["voices"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     cache = await session.scalars(
         select(Person).filter(Person.content_id.in_(people_content_ids))
@@ -158,6 +154,8 @@ async def process_characters_and_voices(session, anime, data):
 
             characters_and_voices.append(character_role)
 
+            character.needs_count_update = True
+
         if character.content_id not in voices:
             continue
 
@@ -181,6 +179,9 @@ async def process_characters_and_voices(session, anime, data):
             )
 
             characters_and_voices.append(voice)
+
+            character.needs_count_update = True
+            person.needs_count_update = True
 
     return characters_and_voices
 
@@ -346,7 +347,7 @@ async def process_staff(session, anime, data):
     return update_staff
 
 
-async def process_poster(session, anime, data):
+async def process_image(session, anime, data):
     if not data.get("poster"):
         return
 
@@ -364,11 +365,12 @@ async def process_poster(session, anime, data):
                 "created": utcnow(),
                 "uploaded": True,
                 "ignore": False,
+                "system": True,
             }
         )
 
     session.add(image)
-    anime.poster_relation = image
+    anime.image_relation = image
 
 
 def process_external(data):
@@ -381,10 +383,11 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["anitube", "toloka"]:
+    for source in ["anitube", "toloka", "mikai"]:
         website_name = {
             "anitube": "Anitube",
             "toloka": "Toloka",
+            "mikai": "Mikai",
         }.get(source)
 
         result.extend(
@@ -402,7 +405,12 @@ def process_external(data):
 
 
 def process_translated_ua(data):
-    return len(data["anitube"]) > 0 or len(data["toloka"]) > 0
+    # Ideally we should make some loop here or something like that
+    # Not this
+    anitube_len = len(data["anitube"]) if "anitube" in data else 0
+    toloka_len = len(data["toloka"]) if "toloka" in data else 0
+    mikai_len = len(data["mikai"]) if "mikai" in data else 0
+    return anitube_len > 0 or toloka_len > 0 or mikai_len > 0
 
 
 async def update_anime_info(session, anime, data):
@@ -446,7 +454,11 @@ async def update_anime_info(session, anime, data):
         # Special checks to prevent overwriting
         # changes made by our anime schedule task
         if field == "episodes_released":
-            if not getattr(anime, field) or getattr(anime, field) > data[field]:
+            if (
+                data[field] is not None
+                and getattr(anime, field)
+                and getattr(anime, field) > data[field]
+            ):
                 continue
 
         if field == "status":
@@ -461,6 +473,37 @@ async def update_anime_info(session, anime, data):
 
         # And add it to after dict
         after[field] = getattr(anime, field)
+
+    # Special case (awful hack) for situations when
+    # schedule logic don't update episodes_released field properly
+    # while holding it hostage in ignored fields
+    if (
+        anime.status == constants.RELEASE_STATUS_FINISHED
+        and anime.episodes_total is not None
+        and (
+            anime.episodes_released is None
+            or anime.episodes_released < anime.episodes_total
+        )
+    ):
+        anime.episodes_released = anime.episodes_total
+
+    # Yet another special case (abhorent hack) for handling schedule bugs
+    if (
+        anime.status != constants.RELEASE_STATUS_FINISHED
+        and data["status"] == constants.RELEASE_STATUS_FINISHED
+    ):
+        anime.status = constants.RELEASE_STATUS_FINISHED
+
+        if anime.episodes_total is not None:
+            anime.episodes_released = anime.episodes_total
+
+    # At this point I just hate schedule subsystem with my whole heart
+    if anime.episodes_total is not None:
+        anime.schedule = [
+            entry
+            for entry in anime.schedule
+            if entry["episode"] <= anime.episodes_total
+        ]
 
     # Extract and convert date fields
     date_fields = ["start_date", "end_date"]
@@ -482,16 +525,12 @@ async def update_anime_info(session, anime, data):
 
         year = start_date.year
         season = utils.get_season(start_date)
-        airing_seasons = []
+        airing_seasons = [f"{season}_{year}"]
 
-        if anime.start_date:
-            if (
-                anime.status == constants.RELEASE_STATUS_ONGOING
-                or anime.end_date is not None
-            ):
-                airing_seasons = utils.get_airing_seasons(
-                    anime.start_date, anime.end_date
-                )
+        if anime.end_date is not None:
+            airing_seasons = utils.get_airing_seasons(
+                anime.start_date, anime.end_date
+            )
 
     else:
         year = None
@@ -521,7 +560,7 @@ async def update_anime_info(session, anime, data):
     anime.needs_update = False
     anime.updated = now
 
-    await process_poster(session, anime, data)
+    await process_image(session, anime, data)
 
     genres_add = await process_genres(session, anime, data)
     companies_anime = await process_companies_anime(session, anime, data)

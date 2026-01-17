@@ -19,6 +19,7 @@ async def update_anime_settings(index):
                 "episodes_total",
                 "airing_seasons",
                 "translated_ua",
+                "native_score",
                 "media_type",
                 "producers",
                 "studios",
@@ -38,14 +39,15 @@ async def update_anime_settings(index):
             ],
             displayed_attributes=[
                 "episodes_released",
+                "native_scored_by",
                 "episodes_total",
                 "translated_ua",
+                "native_score",
                 "media_type",
                 "scored_by",
                 "title_ua",
                 "title_en",
                 "title_ja",
-                "poster",
                 "status",
                 "season",
                 "source",
@@ -55,6 +57,8 @@ async def update_anime_settings(index):
                 "year",
             ],
             sortable_attributes=[
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
@@ -90,17 +94,18 @@ def anime_to_document(anime: Anime):
         "genres": [genre.slug for genre in anime.genres],
         "start_date": to_timestamp(anime.start_date),
         "episodes_released": anime.episodes_released,
+        "native_scored_by": anime.native_scored_by,
         "episodes_total": anime.episodes_total,
         "airing_seasons": anime.airing_seasons,
         "season": get_season(anime.start_date),
         "translated_ua": anime.translated_ua,
+        "native_score": anime.native_score,
         "media_type": anime.media_type,
         "scored_by": anime.scored_by,
         "synonyms": anime.synonyms,
         "title_ua": anime.title_ua,
         "title_en": anime.title_en,
         "title_ja": anime.title_ja,
-        "poster": anime.poster,
         "status": anime.status,
         "source": anime.source,
         "rating": anime.rating,
@@ -115,7 +120,6 @@ def anime_to_document(anime: Anime):
 async def anime_documents(session: AsyncSession, limit: int, offset: int):
     anime_list = await session.scalars(
         select(Anime)
-        .filter(Anime.media_type != None)  # noqa: E711
         .filter(Anime.deleted == False)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
         .options(
@@ -142,7 +146,6 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
 async def anime_document_ids_delete(session: AsyncSession):
     anime_list = await session.scalars(
         select(Anime)
-        .filter(Anime.media_type != None)  # noqa: E711
         .filter(Anime.deleted == True)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
     )
@@ -159,9 +162,9 @@ async def anime_document_ids_delete(session: AsyncSession):
 
 async def anime_documents_total(session: AsyncSession):
     return await session.scalar(
-        select(func.count(Anime.id))
-        .filter(Anime.media_type != None)  # noqa: E711
-        .filter(Anime.needs_search_update == True)  # noqa: E712
+        select(func.count(Anime.id)).filter(
+            Anime.needs_search_update == True  # noqa: E712
+        )
     )
 
 

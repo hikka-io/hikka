@@ -1,5 +1,6 @@
-from sqlalchemy import select, desc, update, func
+from sqlalchemy import select, desc, update, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from app.utils import utcnow
 from uuid import UUID
 
@@ -9,15 +10,16 @@ from app.models import (
 )
 
 
-async def get_unseen_notification(
+async def get_notification(
     session: AsyncSession, notification_reference: UUID, user: User
 ) -> Notification | None:
     return await session.scalar(
-        select(Notification).filter(
+        select(Notification)
+        .filter(
             Notification.id == notification_reference,
-            Notification.seen == False,  # noqa: E712
             Notification.user == user,
         )
+        .options(selectinload(Notification.initiator_user))
     )
 
 
@@ -33,12 +35,13 @@ async def get_user_notifications_count(
 
 async def get_user_notifications(
     session: AsyncSession, user: User, limit: int, offset: int
-) -> User:
+) -> ScalarResult[Notification]:
     """Get user notifications"""
 
     return await session.scalars(
         select(Notification)
         .filter(Notification.user_id == user.id)
+        .options(selectinload(Notification.initiator_user))
         .order_by(desc(Notification.created))
         .limit(limit)
         .offset(offset)

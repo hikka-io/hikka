@@ -19,6 +19,8 @@
 
     [default.backend]
     plausible = "http://127.0.0.1:8000"
+    plausible_token = "TOKEN"
+
     aggregator = "http://aggregator.local/database"
     sitemap_path = "/Users/user/Work/Hikka/sitemap"
     auth_emails = []
@@ -41,6 +43,19 @@
     secret = "s3_secret"
     endpoint = "https://endpoint.s3.provider.com"
     bucket = "hikka"
+
+    [default.profiling]
+    enabled = true
+    trigger = "query"  # [query/all]
+    path = ".profile_info"
+    profiling_secret = "secret"
+
+    [default.aggregator]
+    telegram_notifications = true
+    telegram_message_thread_id = "117779"
+    telegram_chat_id = "-1002142457586"
+    telegram_bot_token = "token"
+
 
 [testing]
     [testing.database]
@@ -73,3 +88,12 @@
     secret = "FAKE_SECRET"
     endpoint = "https://fake.s3.example.com"
     bucket = "hikka-test"
+
+    [testing.profiling]
+    enabled = false
+    trigger = "query"  # [query/all]
+    path = ".profile_info"
+    profiling_secret = "secret"
+
+    [testing.aggregator]
+    telegram_notifications = false

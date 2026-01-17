@@ -15,7 +15,7 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -52,7 +52,9 @@ async def read_add(
     content_type: ReadContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_add_read),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
+    ),
 ):
     return await service.save_read(
         session,
@@ -66,7 +68,9 @@ async def read_add(
 @router.delete("/{content_type}/{slug}", response_model=SuccessResponse)
 async def delete_read(
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
+    ),
     read: Read = Depends(verify_read),
 ):
     await service.delete_read(session, read, user)
@@ -81,7 +85,9 @@ async def get_read_following(
     content_type: ReadContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     content: Manga | Novel = Depends(verify_read_content),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
@@ -94,10 +100,7 @@ async def get_read_following(
         session, user, content_type, content, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": read.unique().all(),
-    }
+    return paginated_response(read.unique().all(), total, page, limit)
 
 
 @router.get(
@@ -156,7 +159,4 @@ async def user_read_list(
         session, search, content_type, user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": read.all(),
-    }
+    return paginated_response(read.all(), total, page, limit)

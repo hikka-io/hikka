@@ -11,6 +11,7 @@ from app.models import (
     Collection,
     AnimeWatch,
     Comment,
+    Article,
     Anime,
     Edit,
     User,
@@ -46,15 +47,25 @@ async def count_notifications_spam(
     username: str,
     notification_type: str,
     delta: timedelta,
+    slug: str = None,
+    content_type: str = None,
 ):
-    return await session.scalar(
-        select(func.count(Notification.id)).filter(
-            Notification.notification_type == notification_type,
-            Notification.data.op("->>")("username") == username,
-            Notification.created > utcnow() - delta,
-            Notification.user_id == user_id,
-        )
+    query = select(func.count(Notification.id)).filter(
+        Notification.notification_type == notification_type,
+        Notification.data.op("->>")("username") == username,
+        Notification.created > utcnow() - delta,
+        Notification.user_id == user_id,
     )
+
+    if slug is not None:
+        query = query.filter(Notification.data.op("->>")("slug") == slug)
+
+    if content_type is not None:
+        query = query.filter(
+            Notification.data.op("->>")("content_type") == content_type
+        )
+
+    return await session.scalar(query)
 
 
 async def get_comment(session, comment_id, hidden=False):
@@ -83,10 +94,23 @@ async def get_edit(session, content_id):
 
 async def get_collection(session, content_id):
     return await session.scalar(
-        select(Collection).filter(
+        select(Collection)
+        .filter(
             Collection.id == content_id,
             Collection.deleted == False,  # noqa: E712
         )
+        .options(joinedload(Collection.author))
+    )
+
+
+async def get_article(session, content_id):
+    return await session.scalar(
+        select(Article)
+        .filter(
+            Article.id == content_id,
+            Article.deleted == False,  # noqa: E712
+        )
+        .options(joinedload(Article.author))
     )
 
 
@@ -103,7 +127,7 @@ async def get_anime_watch(session: AsyncSession, anime: Anime):
     return await session.scalars(
         select(AnimeWatch)
         .filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.status.in_(
                 [

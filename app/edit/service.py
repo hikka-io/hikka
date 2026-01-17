@@ -1,25 +1,27 @@
+from sqlalchemy import select, asc, desc, func, ScalarResult
+from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy import select, asc, desc, func
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy.orm import with_expression
+from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
 from .utils import calculate_before
 from app.utils import utcnow
+from app.models import Log
 from app import constants
 import copy
 
 from app.service import (
-    get_comments_count_subquery,
     get_user_by_username,
     get_content_by_slug,
     create_log,
 )
 
 from .schemas import (
+    EditContentToDoEnum,
     EditContentTypeEnum,
+    ContentToDoEnum,
     EditSearchArgs,
-    AnimeToDoEnum,
     EditArgs,
 )
 
@@ -48,6 +50,48 @@ content_type_to_edit_class = {
     constants.CONTENT_MANGA: MangaEdit,
     constants.CONTENT_NOVEL: NovelEdit,
 }
+
+
+# This would introduce some headache in the future
+# But this is proble for future me
+# TODO: system edits currently don't have preview
+# since we don't show them
+def generate_content_preview(content_type: str, content) -> dict:
+    match content_type:
+        case constants.CONTENT_ANIME:
+            return {
+                "title_ja": content.title_ja,
+                "title_en": content.title_en,
+                "title_ua": content.title_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_MANGA | constants.CONTENT_NOVEL:
+            return {
+                "title_original": content.title_original,
+                "title_en": content.title_en,
+                "title_ua": content.title_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_PERSON:
+            return {
+                "name_ja": content.name_native,
+                "name_en": content.name_en,
+                "name_ua": content.name_ua,
+                "slug": content.slug,
+            }
+
+        case constants.CONTENT_CHARACTER:
+            return {
+                "name_ja": content.name_ja,
+                "name_en": content.name_en,
+                "name_ua": content.name_ua,
+                "slug": content.slug,
+            }
+
+        case _:
+            return {}
 
 
 async def update_edit_stats(session: AsyncSession, edit: Edit):
@@ -85,12 +129,6 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
             joinedload(AnimeEdit.content),
             joinedload(MangaEdit.content),
             joinedload(NovelEdit.content),
-            with_expression(
-                Edit.comments_count,
-                get_comments_count_subquery(
-                    Edit.id, constants.CONTENT_SYSTEM_EDIT
-                ),
-            ),
         )
     )
 
@@ -140,7 +178,8 @@ async def edits_search_filter(
         query = query.filter(Edit.status == args.status)
 
     query = query.filter(
-        Edit.system_edit == False, Edit.hidden == False  # noqa: E712
+        Edit.system_edit == False,  # noqa: E712
+        Edit.hidden == False,  # noqa: E712
     )
 
     return query
@@ -161,51 +200,10 @@ async def get_edits(
     args: EditSearchArgs,
     limit: int,
     offset: int,
-) -> list[Edit]:
+) -> ScalarResult[Edit]:
     """Return all edits"""
 
     query = await edits_search_filter(session, args, select(Edit))
-
-    query = query.options(
-        with_expression(
-            Edit.comments_count,
-            get_comments_count_subquery(Edit.id, constants.CONTENT_SYSTEM_EDIT),
-        )
-    )
-
-    query = query.options(
-        joinedload(AnimeEdit.content).load_only(
-            Anime.title_ja,
-            Anime.title_en,
-            Anime.title_ua,
-            Anime.slug,
-        ),
-        joinedload(MangaEdit.content).load_only(
-            Manga.title_original,
-            Manga.title_en,
-            Manga.title_ua,
-            Manga.slug,
-        ),
-        joinedload(NovelEdit.content).load_only(
-            Novel.title_original,
-            Novel.title_en,
-            Novel.title_ua,
-            Novel.slug,
-        ),
-        joinedload(PersonEdit.content).load_only(
-            Person.name_native,
-            Person.name_en,
-            Person.name_ua,
-            Person.slug,
-        ),
-        joinedload(CharacterEdit.content).load_only(
-            Character.name_ja,
-            Character.name_en,
-            Character.name_ua,
-            Character.slug,
-        ),
-    )
-
     query = query.order_by(*build_edit_order_by(args.sort))
     query = query.limit(limit).offset(offset)
 
@@ -249,6 +247,12 @@ async def update_pending_edit(
         },
     )
 
+    # If user marked edit as auto accept we should do that
+    if args.auto:
+        await accept_pending_edit(
+            session, edit, user, constants.LOG_EDIT_UPDATE_ACCEPT_AUTO
+        )
+
     return edit
 
 
@@ -280,7 +284,7 @@ async def accept_pending_edit(
     session: AsyncSession,
     edit: Edit,
     moderator: User,
-    auto: bool = False,
+    log_type: str = constants.LOG_EDIT_ACCEPT,
 ) -> Edit:
     """Accept pending edit"""
 
@@ -312,13 +316,16 @@ async def accept_pending_edit(
     edit.updated = utcnow()
     edit.before = before
 
-    session.add(edit)
-    session.add(content)
+    edit.content_preview = generate_content_preview(
+        edit.content_type,
+        content,
+    )
+
     await session.commit()
 
     await create_log(
         session,
-        constants.LOG_EDIT_ACCEPT_AUTO if auto else constants.LOG_EDIT_ACCEPT,
+        log_type,
         moderator,
         edit.id,
     )
@@ -357,13 +364,20 @@ async def create_pending_edit(
         }
     )
 
+    edit.content_preview = generate_content_preview(
+        content_type,
+        content,
+    )
+
     session.add(edit)
     await session.commit()
 
     # If user marked edit as auto accept we should do that
     if args.auto:
         await session.refresh(edit)
-        await accept_pending_edit(session, edit, author, True)
+        await accept_pending_edit(
+            session, edit, author, constants.LOG_EDIT_ACCEPT_AUTO
+        )
 
     else:
         await create_log(
@@ -405,56 +419,111 @@ async def deny_pending_edit(
     return edit
 
 
-async def anime_todo_total(
+async def content_todo_total(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    content_type: EditContentToDoEnum,
+    todo_type: ContentToDoEnum,
 ):
-    query = select(func.count(Anime.id)).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
-        Anime.deleted == False,  # noqa: E712
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+
+    query = select(func.count(content_type.id)).filter(
+        ~content_type.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        content_type.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
-        query = query.filter(Anime.title_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(content_type.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
-        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(content_type.synopsis_ua == None)  # noqa: E711
 
     return await session.scalar(query)
 
 
-async def anime_todo(
+async def content_todo(
     session: AsyncSession,
-    todo_type: AnimeToDoEnum,
+    content_type: EditContentToDoEnum,
+    todo_type: ContentToDoEnum,
     request_user: User | None,
     limit: int,
     offset: int,
 ):
+    match content_type:
+        case constants.CONTENT_ANIME:
+            content_type = Anime
+            option = AnimeWatch
+        case constants.CONTENT_MANGA:
+            content_type = Manga
+            option = MangaRead
+        case constants.CONTENT_NOVEL:
+            content_type = Novel
+            option = NovelRead
+
     # Load request user watch statuses here
     load_options = [
-        joinedload(Anime.watch),
+        joinedload(
+            content_type.read if content_type != Anime else content_type.watch
+        ),
         with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
+            option,
+            option.user_id == request_user.id if request_user else None,
         ),
     ]
 
-    query = select(Anime).filter(
-        ~Anime.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
-        Anime.deleted == False,  # noqa: E712
+    query = select(content_type).filter(
+        ~content_type.media_type.in_([constants.MEDIA_TYPE_MUSIC]),
+        content_type.deleted == False,  # noqa: E712
     )
 
-    if todo_type == constants.TODO_ANIME_TITLE_UA:
-        query = query.filter(Anime.title_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_TITLE_UA:
+        query = query.filter(content_type.title_ua == None)  # noqa: E711
 
-    if todo_type == constants.TODO_ANIME_SYNOPSIS_UA:
-        query = query.filter(Anime.synopsis_ua == None)  # noqa: E711
+    if todo_type == constants.TODO_SYNOPSIS_UA:
+        query = query.filter(content_type.synopsis_ua == None)  # noqa: E711
 
     return await session.scalars(
         query.order_by(
-            desc(Anime.score), desc(Anime.scored_by), desc(Anime.content_id)
+            desc(content_type.score),
+            desc(content_type.scored_by),
+            desc(content_type.content_id),
         )
         .options(*load_options)
         .limit(limit)
         .offset(offset)
+    )
+
+
+async def count_created_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_CREATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
+        .filter(Log.user == user)
+    )
+
+
+async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
+    return await session.scalar(
+        select(func.count())
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_EDIT_UPDATE,
+                ]
+            )
+        )
+        .filter(Log.created > round_datetime(utcnow(), minutes=5))
+        .filter(Log.user == user)
     )

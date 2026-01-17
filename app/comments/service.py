@@ -1,26 +1,30 @@
+from sqlalchemy import ScalarResult, select, desc, asc, func
+from .schemas import ContentTypeEnum, CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, asc, func
-from .utils import uuid_to_path, round_hour
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import joinedload
-from .schemas import ContentTypeEnum
+from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
-from uuid import UUID, uuid4
+from .utils import uuid_to_path
 from app.utils import utcnow
+from uuid import UUID, uuid4
 from app import constants
 from app import utils
 import copy
 
 from app.service import (
     get_my_score_subquery,
+    get_content_by_id,
     create_log,
 )
-
 
 from app.models import (
     CollectionContent,
     CollectionComment,
+    CharacterComment,
+    ArticleComment,
+    PersonComment,
     CharacterEdit,
     AnimeComment,
     MangaComment,
@@ -42,9 +46,12 @@ from app.models import (
 )
 
 
-content_type_to_comment_class = {
+content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_COLLECTION: CollectionComment,
+    constants.CONTENT_CHARACTER: CharacterComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
+    constants.CONTENT_ARTICLE: ArticleComment,
+    constants.CONTENT_PERSON: PersonComment,
     constants.CONTENT_ANIME: AnimeComment,
     constants.CONTENT_MANGA: MangaComment,
     constants.CONTENT_NOVEL: NovelComment,
@@ -73,10 +80,31 @@ async def get_comment(
     )
 
 
+async def get_comments_count(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content: CommentableType,
+    first_level_only: bool = False,
+):
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.content_type == content_type,
+            Comment.content_id == content.id,
+        )
+    )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    return await session.scalar(query)
+
+
 async def create_comment(
     session: AsyncSession,
     content_type: ContentTypeEnum,
-    content_id: str,
+    content: CommentableType,
     author: User,
     text: str,
     parent: Comment | None = None,
@@ -88,7 +116,7 @@ async def create_comment(
     comment = comment_model(
         **{
             "content_type": content_type,
-            "content_id": content_id,
+            "content_id": content.id,
             "text": cleaned_text,
             "private": False,
             "author": author,
@@ -103,7 +131,7 @@ async def create_comment(
     # Here we handle comments for private collections
     if content_type == constants.CONTENT_COLLECTION:
         visibility = await session.scalar(
-            select(Collection.visibility).filter(Collection.id == content_id)
+            select(Collection.visibility).filter(Collection.id == content.id)
         )
 
         if visibility == constants.COLLECTION_PRIVATE:
@@ -113,6 +141,18 @@ async def create_comment(
     comment.path = ltree_id if parent is None else parent.path + ltree_id
 
     session.add(comment)
+    await session.commit()
+
+    # Update comments count here
+    content.comments_count = await get_comments_count(
+        session, content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, content_type, content, True
+    )
+
+    session.add(content)
     await session.commit()
 
     await create_log(
@@ -142,29 +182,14 @@ async def get_comment_by_content(
     )
 
 
-async def count_comments_by_content_id(
-    session: AsyncSession, content_id: str
-) -> int:
-    """Count comments for given content"""
-
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.content_id == content_id,
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
-        )
-    )
-
-
 async def get_comments_by_content_id(
     session: AsyncSession,
     content_id: str,
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[Edit]:
-    """Return comemnts for given content"""
+) -> ScalarResult[Comment]:
+    """Return comments for given content"""
 
     return await session.scalars(
         select(Comment)
@@ -216,7 +241,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     return await session.scalar(
         select(func.count(Comment.id)).filter(
             Comment.author == author,
-            Comment.created > round_hour(utcnow()),
+            Comment.created > round_datetime(utcnow(), minutes=60, seconds=60),
             Comment.deleted == False,  # noqa: E712
         )
     )
@@ -269,6 +294,22 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     session.add(comment)
     await session.commit()
 
+    # Update comments count here
+    content = await get_content_by_id(
+        session, comment.content_type, comment.content_id
+    )
+
+    content.comments_count = await get_comments_count(
+        session, comment.content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, comment.content_type, content, True
+    )
+
+    session.add(content)
+    await session.commit()
+
     await create_log(
         session,
         constants.LOG_COMMENT_HIDE,
@@ -289,7 +330,6 @@ async def latest_comments(session: AsyncSession):
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
         )
-        .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
         .limit(3)
     )
@@ -349,6 +389,9 @@ async def generate_preview(
         select(Comment)
         .filter(Comment.id == original_comment.id)
         .options(immediateload(CollectionComment.content))
+        .options(immediateload(CharacterComment.content))
+        .options(immediateload(ArticleComment.content))
+        .options(immediateload(PersonComment.content))
         .options(immediateload(AnimeComment.content))
         .options(immediateload(MangaComment.content))
         .options(immediateload(NovelComment.content))
@@ -356,14 +399,44 @@ async def generate_preview(
         .order_by(desc(Comment.created))
     )
 
+    title = None
     slug = comment.content.slug
     image = None
 
     if isinstance(comment, AnimeComment):
-        image = comment.content.poster
+        image = comment.content.image
+        title = (
+            comment.content.title_ua
+            or comment.content.title_en
+            or comment.content.title_ja
+        )
+
+    if isinstance(comment, PersonComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_native
+        )
+
+    if isinstance(comment, CharacterComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_ja
+        )
 
     if isinstance(comment, MangaComment) or isinstance(comment, NovelComment):
         image = comment.content.image
+        title = (
+            comment.content.title_ua
+            or comment.content.title_en
+            or comment.content.title_original
+        )
+
+    if isinstance(comment, ArticleComment):
+        title = comment.content.title
 
     if isinstance(comment, EditComment):
         # This is horrible hack, but we need this to prevent SQLAlchemy bug
@@ -374,7 +447,7 @@ async def generate_preview(
             select(Edit)
             .filter(Edit.id == comment.content_id)
             .options(
-                joinedload(AnimeEdit.content).joinedload(Anime.poster_relation),
+                joinedload(AnimeEdit.content).joinedload(Anime.image_relation),
                 joinedload(MangaEdit.content).joinedload(Manga.image_relation),
                 joinedload(NovelEdit.content).joinedload(Novel.image_relation),
                 joinedload(CharacterEdit.content).joinedload(
@@ -388,7 +461,7 @@ async def generate_preview(
 
         if edit:
             image = (
-                edit.content.poster
+                edit.content.image
                 if isinstance(comment.content.content, Anime)
                 else edit.content.image
             )
@@ -404,14 +477,17 @@ async def generate_preview(
         content = collection_content.content
 
         image = (
-            content.poster
+            content.image
             if comment.content.content_type == constants.CONTENT_ANIME
             else content.image
         )
 
+        title = collection_content.collection.title
+
     original_comment.preview = {
         "image": image,
         "slug": slug,
+        "title": title,
     }
 
     session.add(original_comment)

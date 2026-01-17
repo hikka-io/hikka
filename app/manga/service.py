@@ -1,15 +1,13 @@
+from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import with_expression
 from .utils import build_manga_filters_ms
 from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func
 from app import meilisearch
 from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
     build_manga_order_by,
     manga_search_filter,
 )
@@ -29,7 +27,7 @@ async def get_manga_info_by_slug(
     return await session.scalar(
         select(Manga)
         .filter(
-            func.lower(Manga.slug) == slug.lower(),
+            Manga.slug == slug.lower(),
             Manga.deleted == False,  # noqa: E712
         )
         .options(
@@ -37,19 +35,13 @@ async def get_manga_info_by_slug(
             joinedload(Manga.magazines),
             joinedload(Manga.genres),
         )
-        .options(
-            with_expression(
-                Manga.comments_count,
-                get_comments_count_subquery(Manga.id, constants.CONTENT_MANGA),
-            )
-        )
     )
 
 
 async def get_manga_by_slug(session: AsyncSession, slug: str) -> Manga | None:
     return await session.scalar(
         select(Manga).filter(
-            func.lower(Manga.slug) == slug.lower(),
+            Manga.slug == slug.lower(),
             Manga.deleted == False,  # noqa: E712
         )
     )
@@ -102,7 +94,7 @@ async def manga_characters_count(session: AsyncSession, manga: Manga) -> int:
 
 async def manga_characters(
     session: AsyncSession, manga: Manga, limit: int, offset: int
-) -> list[MangaCharacter]:
+) -> ScalarResult[MangaCharacter]:
     return await session.scalars(
         select(MangaCharacter)
         .filter(MangaCharacter.manga == manga)

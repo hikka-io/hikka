@@ -24,3 +24,9 @@ pyrightconfig.json
 # VsCode
 .vscode/*
 
+.profile_info
+
+# Devenv
+.devenv*
+.direnv
+devenv.local.nix

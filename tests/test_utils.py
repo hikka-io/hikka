@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from app import constants
 from app import utils
 

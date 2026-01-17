@@ -12,8 +12,10 @@ def get_mime_type(file: UploadFile) -> str | None:
 
 def get_mime_extension(mime_type: str) -> str | None:
     return {
+        "image/webp": "webp",
         "image/jpeg": "jpg",
         "image/png": "png",
+        "image/gif": "gif",
     }.get(mime_type)
 
 

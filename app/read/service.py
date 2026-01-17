@@ -1,8 +1,8 @@
+from sqlalchemy import select, desc, func, ScalarResult
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ReadArgs, ReadSearchArgs
 from sqlalchemy.orm import contains_eager
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
@@ -293,7 +293,7 @@ async def get_user_read_list(
     user: User,
     limit: int,
     offset: int,
-) -> list[Read]:
+) -> ScalarResult[Read]:
     query = select(Read).filter(
         Read.content_type == content_type,
         Read.deleted == False,  # noqa: E712

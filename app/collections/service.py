@@ -1,22 +1,30 @@
-from sqlalchemy import select, desc, delete, update, and_, func
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
 from uuid import UUID
 
-from .schemas import (
-    CollectionsListArgs,
-    CollectionArgs,
-)
-
 from app.service import (
-    collection_comments_load_options,
     collections_load_options,
+    get_followed_user_ids,
     get_user_by_username,
     create_log,
 )
+
+from sqlalchemy import (
+    ScalarResult,
+    select,
+    delete,
+    update,
+    func,
+    case,
+    desc,
+    and_,
+    asc,
+)
+
 
 from app.models import (
     CharacterCollectionContent,
@@ -28,6 +36,11 @@ from app.models import (
     CollectionComment,
     Collection,
     User,
+)
+
+from .schemas import (
+    CollectionsListArgs,
+    CollectionArgs,
 )
 
 
@@ -163,10 +176,17 @@ async def get_collections(
     args: CollectionsListArgs,
     limit: int,
     offset: int,
-) -> list[Collection]:
+) -> ScalarResult[Collection]:
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
     query = await collections_list_filter(
         collections_load_options(
-            select(Collection),
+            select(Collection).options(
+                joinedload(Collection.author).with_expression(
+                    User.is_followed,
+                    case((User.id.in_(followed_user_ids), True), else_=False),
+                )
+            ),
             request_user,
             True,
         ),
@@ -199,9 +219,9 @@ async def get_collection(
     request_user: User,
 ):
     collection = await session.scalar(
-        collection_comments_load_options(
-            select(Collection).filter(Collection.id == reference)
-        )
+        select(Collection)
+        .options(joinedload(Collection.author))
+        .filter(Collection.id == reference),
     )
 
     if (
@@ -217,7 +237,19 @@ async def get_collection(
 async def get_collection_display(
     session: AsyncSession, collection: Collection, request_user: User
 ):
-    query = select(Collection).filter(Collection.id == collection.id)
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
+    query = (
+        select(Collection)
+        .options(
+            joinedload(Collection.author).with_expression(
+                User.is_followed,
+                case((User.id.in_(followed_user_ids), True), else_=False),
+            )
+        )
+        .filter(Collection.id == collection.id)
+    )
+
     return await session.scalar(
         collections_load_options(query, request_user).order_by(
             desc(Collection.created)

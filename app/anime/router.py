@@ -22,7 +22,6 @@ from .dependencies import (
 from app.schemas import (
     ContentCharacterPaginationResponse,
     AnimePaginationResponse,
-    GenreListResponse,
 )
 
 from .schemas import (
@@ -33,7 +32,7 @@ from .schemas import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -60,10 +59,7 @@ async def search_anime(
             session, search, request_user, limit, offset
         )
 
-        return {
-            "pagination": pagination_dict(total, page, limit),
-            "list": anime.unique().all(),
-        }
+        return paginated_response(anime.unique().all(), total, page, limit)
 
     meilisearch_result = await meilisearch.search(
         constants.SEARCH_INDEX_ANIME,
@@ -77,19 +73,6 @@ async def search_anime(
     return await service.anime_meilisearch_watch(
         session, search, request_user, meilisearch_result
     )
-
-
-# TODO: remove me!
-@router.get(
-    "/genres",
-    response_model=GenreListResponse,
-    summary="Genres list",
-)
-async def anime_genres(
-    session: AsyncSession = Depends(get_session),
-):
-    genres = await service.anime_genres(session)
-    return {"list": genres.all()}
 
 
 @router.get(
@@ -115,10 +98,8 @@ async def anime_characters(
     limit, offset = pagination(page, size)
     total = await service.anime_characters_count(session, anime)
     characters = await service.anime_characters(session, anime, limit, offset)
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": characters.all(),
-    }
+
+    return paginated_response(characters.all(), total, page, limit)
 
 
 @router.get(
@@ -135,10 +116,8 @@ async def anime_staff(
     limit, offset = pagination(page, size)
     total = await service.anime_staff_count(session, anime)
     staff = await service.anime_staff(session, anime, limit, offset)
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": staff.unique().all(),
-    }
+
+    return paginated_response(staff.unique().all(), total, page, limit)
 
 
 @router.get(
@@ -155,10 +134,8 @@ async def anime_episodes(
     limit, offset = pagination(page, size)
     total = await service.anime_episodes_count(session, anime)
     episodes = await service.anime_episodes(session, anime, limit, offset)
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": episodes.all(),
-    }
+
+    return paginated_response(episodes.all(), total, page, limit)
 
 
 @router.get(
@@ -179,10 +156,9 @@ async def anime_recommendations(
         session, anime, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": recommendations.unique().all(),
-    }
+    return paginated_response(
+        recommendations.unique().all(), total, page, limit
+    )
 
 
 # TODO: remove me!
@@ -204,7 +180,4 @@ async def anime_franchise(
         session, anime, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": franchise.unique().all(),
-    }
+    return paginated_response(franchise.unique().all(), total, page, limit)

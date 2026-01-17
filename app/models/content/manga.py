@@ -13,7 +13,9 @@ from ..base import Base
 
 from ..mixins import (
     NeedsSearchUpdateMixin,
+    CommentContentMixin,
     IgnoredFieldsMixin,
+    NativeScoreMixin,
     SynonymsMixin,
     ContentMixin,
     UpdatedMixin,
@@ -29,13 +31,14 @@ class Manga(
     UpdatedMixin,
     DeletedMixin,
     SynonymsMixin,
+    NativeScoreMixin,
     IgnoredFieldsMixin,
+    CommentContentMixin,
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_manga"
 
     favourite_created: Mapped[datetime] = query_expression()
-    comments_count: Mapped[int] = query_expression()
 
     # Multilang fields
     title_original: Mapped[str] = mapped_column(nullable=True)

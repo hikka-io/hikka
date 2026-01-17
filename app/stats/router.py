@@ -10,7 +10,7 @@ from app.dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -28,7 +28,4 @@ async def edits_top(
     total = await service.get_edits_top_count(session)
     top = await service.get_edits_top(session, limit, offset)
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": top.all(),
-    }
+    return paginated_response(top.all(), total, page, limit)

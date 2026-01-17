@@ -1,15 +1,12 @@
+from sqlalchemy import select, desc, asc, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, asc
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
-from app import constants
 
 from app.service import (
-    get_comments_count_subquery,
     build_anime_order_by,
     anime_search_filter,
 )
@@ -23,7 +20,6 @@ from app.models import (
     AnimeWatch,
     Company,
     Person,
-    Genre,
     Anime,
     User,
 )
@@ -35,25 +31,19 @@ async def get_anime_info_by_slug(
     return await session.scalar(
         select(Anime)
         .filter(
-            func.lower(Anime.slug) == slug.lower(),
+            Anime.slug == slug.lower(),  # type: ignore
             Anime.deleted == False,  # noqa: E712
         )
         .options(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
-        .options(
-            with_expression(
-                Anime.comments_count,
-                get_comments_count_subquery(Anime.id, constants.CONTENT_ANIME),
-            )
-        )
     )
 
 
 async def anime_characters(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeCharacter]:
+) -> ScalarResult[AnimeCharacter]:
     return await session.scalars(
         select(AnimeCharacter)
         .filter(AnimeCharacter.anime == anime)
@@ -65,7 +55,7 @@ async def anime_characters(
 
 async def anime_staff(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeStaff]:
+) -> ScalarResult[AnimeStaff]:
     return await session.scalars(
         select(AnimeStaff)
         .join(Person, AnimeStaff.person)
@@ -86,7 +76,7 @@ async def anime_episodes_count(session: AsyncSession, anime: Anime) -> int:
 
 async def anime_episodes(
     session: AsyncSession, anime: Anime, limit: int, offset: int
-) -> list[AnimeStaff]:
+) -> ScalarResult[AnimeEpisode]:
     return await session.scalars(
         select(AnimeEpisode)
         .filter(AnimeEpisode.anime == anime)
@@ -146,7 +136,7 @@ async def anime_recommendations(
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[AnimeRecommendation]:
+) -> ScalarResult[Anime]:
     # Load request user watch statuses here
     load_options = [
         joinedload(Anime.watch),
@@ -232,10 +222,6 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = anime_search_filter(search, query)
 
     return await session.scalar(query)
-
-
-async def anime_genres(session: AsyncSession):
-    return await session.scalars(select(Genre).order_by(Genre.slug))
 
 
 # I hate this function so much

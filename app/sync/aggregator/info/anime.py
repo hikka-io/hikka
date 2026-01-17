@@ -34,7 +34,7 @@ async def aggregator_anime_info():
             .order_by(desc("score"), desc("scored_by"))
         )
 
-    semaphore = asyncio.Semaphore(10)
+    semaphore = asyncio.Semaphore(5)
 
     tasks = [
         update_anime_info(semaphore, content_id) for content_id in anime_list

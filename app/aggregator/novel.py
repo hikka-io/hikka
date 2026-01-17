@@ -1,14 +1,12 @@
 from app.models import Novel, Image
 from sqlalchemy import select
 from app.utils import utcnow
-from app import constants
-from app import service
 from app import utils
 
 
 async def save_novel_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
-    posters = [entry["poster"] for entry in data]
+    images = [entry["poster"] for entry in data]
 
     cache = await session.scalars(
         select(Novel).filter(Novel.content_id.in_(content_ids))
@@ -16,7 +14,7 @@ async def save_novel_list(session, data):
 
     novel_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(posters)))
+    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
 
     image_cache = {entry.path: entry for entry in cache}
 
@@ -29,22 +27,23 @@ async def save_novel_list(session, data):
         if novel_data["content_id"] in novel_cache:
             novel = novel_cache[novel_data["content_id"]]
 
-            if novel.deleted is False and novel_data["deleted"] is True:
-                novel.needs_search_update = True
-                novel.deleted = True
-                session.add(novel)
+            # TODO: this is temporary solution, eventually we shoud fix that
+            # if novel.deleted is False and novel_data["deleted"] is True:
+            #     novel.needs_search_update = True
+            #     novel.deleted = True
+            #     session.add(novel)
 
-                await service.create_log(
-                    session,
-                    constants.LOG_CONTENT_DELETED,
-                    None,
-                    novel.id,
-                    {
-                        "content_type": constants.CONTENT_NOVEL,
-                    },
-                )
+            #     await service.create_log(
+            #         session,
+            #         constants.LOG_CONTENT_DELETED,
+            #         None,
+            #         novel.id,
+            #         {
+            #             "content_type": constants.CONTENT_NOVEL,
+            #         },
+            #     )
 
-                continue
+            #     continue
 
             if updated == novel.aggregator_updated:
                 continue
@@ -59,8 +58,8 @@ async def save_novel_list(session, data):
             # print(f"Novel needs update: {novel.title_original}")
 
         else:
-            if novel_data["deleted"] is True:
-                continue
+            # if novel_data["deleted"] is True:
+            #     continue
 
             if not (image := image_cache.get(novel_data["poster"])):
                 if novel_data["poster"]:
@@ -70,6 +69,7 @@ async def save_novel_list(session, data):
                             "created": utcnow(),
                             "uploaded": True,
                             "ignore": False,
+                            "system": True,
                         }
                     )
 

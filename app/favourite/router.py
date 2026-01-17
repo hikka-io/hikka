@@ -1,7 +1,8 @@
-from app.utils import pagination, pagination_dict
+from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import constants
 from . import service
 
 from app.models import (
@@ -40,7 +41,13 @@ from .dependencies import (
 router = APIRouter(prefix="/favourite", tags=["Favourite"])
 
 
-@router.get("/{content_type}/{slug}", response_model=FavouriteResponse)
+@router.get(
+    "/{content_type}/{slug}",
+    response_model=FavouriteResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_READ_FAVOURITE]))
+    ],
+)
 async def get_favourite(
     favourite: Favourite = Depends(validate_get_favourite),
 ):
@@ -54,12 +61,20 @@ async def favourite_add(
     content: Collection | Character | Anime | Manga | Novel = Depends(
         validate_add_favourite
     ),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_CREATE_FAVOURITE])
+    ),
 ):
     return await service.create_favourite(session, content_type, content, user)
 
 
-@router.delete("/{content_type}/{slug}", response_model=SuccessResponse)
+@router.delete(
+    "/{content_type}/{slug}",
+    response_model=SuccessResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_DELETE_FAVOURITE]))
+    ],
+)
 async def favourite_delete(
     session: AsyncSession = Depends(get_session),
     favourite: Favourite = Depends(validate_get_favourite),
@@ -75,7 +90,11 @@ async def favourite_delete(
 async def favourite_list(
     content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(
+            optional=True, scope=[constants.SCOPE_READ_FAVOURITE_LIST]
+        )
+    ),
     user: User = Depends(get_user),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -90,7 +109,4 @@ async def favourite_list(
         session, content_type, user, request_user, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": content.unique().all(),
-    }
+    return paginated_response(content.unique().all(), total, page, limit)

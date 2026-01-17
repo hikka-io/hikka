@@ -1,3 +1,4 @@
+from app.common.schemas import UserCustomizationArgs
 from app.watch.service import generate_watch_stats
 from app.read.service import generate_read_stats
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,6 +24,7 @@ from app.service import (
 )
 
 from app.models import (
+    UserExport,
     AnimeWatch,
     Anime,
     Manga,
@@ -41,7 +43,6 @@ async def change_description(
     user.description = description if description else None
     log_after = user.description
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -55,8 +56,33 @@ async def change_description(
     return user
 
 
+async def set_customization(
+    session: AsyncSession, user: User, args: UserCustomizationArgs
+) -> User:
+    """Change customization"""
+
+    data = args.model_dump()
+    log_before = {"preferences": user.preferences, "styles": user.styles}
+
+    user.preferences = data["preferences"]
+    user.styles = data["styles"]
+
+    log_after = {"preferences": user.preferences, "styles": user.styles}
+    await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_CUSTOMIZATION,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
+
+    return user
+
+
 async def set_username(session: AsyncSession, user: User, username: str):
-    """Changed username"""
+    """Change username"""
 
     log_before = user.username
     user.last_username_change = utcnow()
@@ -64,7 +90,6 @@ async def set_username(session: AsyncSession, user: User, username: str):
     user.username = username
     log_after = user.username
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -83,11 +108,9 @@ async def set_email(session: AsyncSession, user: User, email: str):
 
     log_before = user.email
     user.last_email_change = utcnow()
-    user.email_confirmed = False
-    user.email = email
-    log_after = user.email
+    user.new_email = email
+    log_after = user.new_email
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -106,7 +129,6 @@ async def set_password(session: AsyncSession, user: User, password: str):
 
     user.password_hash = hashpwd(password)
 
-    session.add(user)
     await session.commit()
 
     await create_log(session, constants.LOG_SETTINGS_PASSWORD, user)
@@ -123,7 +145,6 @@ async def set_ignored_notifications(
     user.ignored_notifications = ignored_notifications
     log_after = user.ignored_notifications
 
-    session.add(user)
     await session.commit()
 
     if log_before != log_after:
@@ -148,7 +169,6 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
         image_id = user.cover_image_id
         user.cover_image_id = None
 
-    session.add(user)
     await session.commit()
     await session.refresh(user)
 
@@ -169,7 +189,7 @@ async def delete_user_image(session: AsyncSession, user: User, image_type: str):
 async def delete_user_watch(session: AsyncSession, user: User):
     watch_count = await session.scalar(
         select(func.count(AnimeWatch.id)).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.user == user,
         )
     )
@@ -231,7 +251,7 @@ async def import_watch_list(
     imported = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits
-    for anime_chunk in chunkify(args.anime, 20000):
+    for anime_chunk in chunkify(args.anime, constants.ALCHEMY_CHUNK_LIMIT):
         # Get list of mal_ids for optimized db query
         mal_ids = [entry.series_animedb_id for entry in anime_chunk]
 
@@ -335,7 +355,7 @@ async def import_read_list(
     imported_novel = 0
 
     # We split list into 20k chunks here due to SQLAlchemy internal limits
-    for read_chunk in chunkify(args.content, 20000):
+    for read_chunk in chunkify(args.content, constants.ALCHEMY_CHUNK_LIMIT):
         # Get list of mal_ids for optimized db query
         mal_ids = [entry.manga_mangadb_id for entry in read_chunk]
 
@@ -441,3 +461,25 @@ async def import_read_list(
 
         if imported_novel > 0:
             await generate_read_stats(session, user, constants.CONTENT_NOVEL)
+
+
+async def get_export_list(session: AsyncSession, user: User):
+    if not (
+        export := await session.scalar(
+            select(UserExport).filter(UserExport.user == user)
+        )
+    ):
+        now = utcnow()
+
+        export = UserExport(
+            **{
+                "created": now,
+                "updated": now,
+                "user": user,
+            }
+        )
+
+        session.add(export)
+        await session.commit()
+
+    return export

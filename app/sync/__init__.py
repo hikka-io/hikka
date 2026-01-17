@@ -1,3 +1,5 @@
+from .token_requests import delete_expired_token_requests
+
 from .aggregator.franchises import aggregator_franchises
 from .aggregator.characters import aggregator_characters
 from .aggregator.info.anime import aggregator_anime_info
@@ -11,19 +13,25 @@ from .aggregator.anime import aggregator_anime
 from .aggregator.manga import aggregator_manga
 from .aggregator.novel import aggregator_novel
 from .aggregator.roles import aggregator_roles
+from .aggregator import update_aggregator
+
+from .artifacts import artifact_year_summary
 
 from .notifications import update_notifications
 
 from .activity import update_activity
 
+from .ranking import update_article_stats
 from .ranking import update_ranking_all
 from .ranking import update_ranking
 
 from .history import update_history
 
+from .sitemap import update_sitemap
+
 from .weights import update_weights
 
-from .sitemap import update_sitemap
+from .counts import update_counts
 
 from .search import update_search
 
@@ -34,7 +42,15 @@ from .content import update_content
 
 from .email import send_emails
 
+from .export import update_export
+
+from .views import update_article_views
+
+from .score import update_scores
+
 __all__ = [
+    "delete_expired_token_requests",
+    "artifact_year_summary",
     "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",
@@ -44,9 +60,12 @@ __all__ = [
     "aggregator_companies",
     "aggregator_magazines",
     "update_notifications",
+    "update_article_stats",
+    "update_article_views",
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
+    "update_aggregator",
     "aggregator_anime",
     "aggregator_manga",
     "aggregator_novel",
@@ -58,6 +77,9 @@ __all__ = [
     "update_history",
     "update_weights",
     "update_sitemap",
+    "update_export",
+    "update_counts",
     "update_search",
+    "update_scores",
     "send_emails",
 ]

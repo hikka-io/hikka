@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow
@@ -31,7 +31,7 @@ from app.service import (
 async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
     return await session.scalar(
         select(func.count(AnimeWatch.id)).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.status == status,
             AnimeWatch.user == user,
         )
@@ -186,9 +186,9 @@ async def get_user_watch_list(
     user: User,
     limit: int,
     offset: int,
-) -> list[AnimeWatch]:
+) -> ScalarResult[AnimeWatch]:
     query = select(AnimeWatch).filter(
-        AnimeWatch.deleted == False,  # noqa: E712
+        # AnimeWatch.deleted == False,  # noqa: E712
         AnimeWatch.user == user,
     )
 
@@ -208,7 +208,7 @@ async def get_user_watch_list_count(
     session: AsyncSession, search: AnimeWatchSearchArgs, user: User
 ) -> int:
     query = select(func.count(AnimeWatch.id)).filter(
-        AnimeWatch.deleted == False,  # noqa: E712
+        # AnimeWatch.deleted == False,  # noqa: E712
         AnimeWatch.user == user,
     )
 

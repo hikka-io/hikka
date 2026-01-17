@@ -1,8 +1,8 @@
+from sqlalchemy import select, desc, case, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from .schemas import FavouriteContentTypeEnum
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, desc, func
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow
 from app import constants
@@ -10,6 +10,7 @@ from app import constants
 from app.service import (
     content_type_to_content_class,
     collections_load_options,
+    get_followed_user_ids,
     create_log,
 )
 
@@ -105,7 +106,7 @@ async def get_user_favourite_list(
     request_user: User | None,
     limit: int,
     offset: int,
-) -> list[Favourite]:
+) -> ScalarResult[Favourite]:
     # At some point I decided that best approach for favourite would be
     # to return list of content with some extra metadata (created/order)
     # instead of returning list of favourite entries with content loaded.
@@ -179,6 +180,15 @@ async def get_user_favourite_list(
     if content_type == constants.CONTENT_COLLECTION:
         query = query.filter(
             Collection.deleted == False,  # noqa: E712
+        )
+
+        followed_user_ids = await get_followed_user_ids(session, request_user)
+
+        query = query.options(
+            joinedload(Collection.author).with_expression(
+                User.is_followed,
+                case((User.id.in_(followed_user_ids), True), else_=False),
+            )
         )
 
         if request_user != user:

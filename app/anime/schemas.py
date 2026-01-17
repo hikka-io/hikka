@@ -25,6 +25,8 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
     def validate_sort(cls, sort_list):
         valid_orders = ["asc", "desc"]
         valid_fields = [
+            "native_scored_by",
+            "native_score",
             "media_type",
             "start_date",
             "scored_by",
@@ -132,13 +134,13 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
         examples=["Kono Subarashii Sekai ni Shukufuku wo!"]
     )
     duration: int | None = Field(examples=[23])
-    # TODO: Remove me!
-    poster: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
     source: str | None = Field(examples=["light_novel"])
     rating: str | None = Field(examples=["pg_13"])
     has_franchise: bool = Field(examples=[True])
+    native_scored_by: int = Field(examples=[1210150])
+    native_score: float = Field(examples=[8.11])
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     nsfw: bool = Field(examples=[False])
@@ -158,7 +160,7 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     @field_validator("external")
     def external_ordering(cls, value):
         def watch_sort(item):
-            order = {"Anitube": 0}
+            order = {"Mikai": 0, "Anitube": 1}
             return order.get(item.text, 2)
 
         def reorder_watch(input_list):

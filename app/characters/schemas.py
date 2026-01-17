@@ -17,8 +17,11 @@ class CharacterFullResponse(CharacterResponse):
 
 
 class CharacterCountResponse(CharacterFullResponse, CustomModel):
+    comments_count: int
     voices_count: int
     anime_count: int
+    manga_count: int
+    novel_count: int
 
 
 class CharacterVoiceResponse(CustomModel):
