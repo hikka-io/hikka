@@ -8,6 +8,7 @@ from app import constants
 from app.models import (
     CollectionVote,
     CommentVote,
+    ArticleVote,
     Collection,
     Comment,
     User,
@@ -15,9 +16,10 @@ from app.models import (
 )
 
 
-content_type_to_favourite_class = {
+content_type_to_vote_class = {
     constants.CONTENT_COLLECTION: CollectionVote,
     constants.CONTENT_COMMENT: CommentVote,
+    constants.CONTENT_ARTICLE: ArticleVote,
 }
 
 
@@ -27,7 +29,7 @@ async def get_vote(
     content: Collection | Comment,
     user: User,
 ) -> Vote | None:
-    vote_model = content_type_to_favourite_class[content_type]
+    vote_model = content_type_to_vote_class[content_type]
     return await session.scalar(
         select(vote_model).filter(
             vote_model.content_id == content.id,
@@ -43,7 +45,7 @@ async def set_vote(
     user: User,
     user_score: int,
 ) -> CommentVote:
-    vote_model = content_type_to_favourite_class[content_type]
+    vote_model = content_type_to_vote_class[content_type]
     now = utcnow()
 
     # Create vote record if missing

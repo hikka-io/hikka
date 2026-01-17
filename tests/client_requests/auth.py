@@ -1,3 +1,6 @@
+from async_asgi_testclient import TestClient
+
+
 def request_signup(client, email, username, password, captcha="fake_captcha"):
     return client.post(
         "/auth/signup",
@@ -15,6 +18,19 @@ def request_login(client, email, password, captcha="fake_captcha"):
         "/auth/login",
         json={"email": email, "password": password},
         headers={"Captcha": captcha},
+    )
+
+
+def request_login_username(
+    client: TestClient, username: str, password: str, captcha: str = "fake_captcha"
+):
+    return client.post(
+        "/auth/login",
+        json={
+            "username": username,
+            "password": password,
+        },
+        headers={"captcha": captcha},
     )
 
 
@@ -43,4 +59,42 @@ def request_password_confirm(client, token, new_password):
     return client.post(
         "/auth/password/confirm",
         json={"token": token, "password": new_password},
+    )
+
+
+def request_auth_token_info(client, token: str):
+    return client.get(
+        "/auth/token/info",
+        headers={"Auth": token},
+    )
+
+
+def request_auth_token_request(
+    client, token: str, client_reference: str, scope: list[str]
+):
+    return client.post(
+        f"/auth/token/request/{client_reference}",
+        json={"scope": scope},
+        headers={"Auth": token},
+    )
+
+
+def request_auth_token(client, request_reference: str, client_secret: str):
+    return client.post(
+        "/auth/token",
+        json={"request_reference": request_reference, "client_secret": client_secret},
+    )
+
+
+def request_list_thirdparty_tokens(client, token: str):
+    return client.get(
+        "/auth/token/thirdparty",
+        headers={"Auth": token},
+    )
+
+
+def request_revoke_token(client, token: str, token_reference: str):
+    return client.delete(
+        f"/auth/token/{token_reference}",
+        headers={"Auth": token},
     )

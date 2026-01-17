@@ -78,7 +78,9 @@ async def test_edit_create(
     assert response.json()["list"][0]["edit_id"] == 20
     assert response.json()["list"][1]["edit_id"] == 19
     assert response.json()["list"][2]["edit_id"] == 18
+    from pprint import pprint
 
+    pprint(response.json())
     assert (
         response.json()["list"][0]["content"]["slug"] == "hitori-gotou-cadd70"
     )

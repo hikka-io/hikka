@@ -1,12 +1,15 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from dateutil.relativedelta import relativedelta
 from fastapi.responses import JSONResponse
+from sqlalchemy.orm import DeclarativeBase
+from datetime import timezone, timedelta
 from fastapi import FastAPI, Request
+from collections.abc import Sequence
 from datetime import datetime, UTC
+from app.models import AuthToken
 from functools import lru_cache
 from urllib.parse import quote
 from dynaconf import Dynaconf
-from datetime import timezone
 from app.models import User
 from app import constants
 from uuid import UUID
@@ -15,8 +18,13 @@ import aiohttp
 import asyncio
 import secrets
 import bcrypt
+import typing
 import math
 import re
+
+
+if typing.TYPE_CHECKING:
+    from app.schemas import CustomModel
 
 
 # Timeout middleware (class name is pretty self explanatory)
@@ -41,6 +49,14 @@ class TimeoutMiddleware(BaseHTTPMiddleware):
             )
 
 
+def is_valid_tag(tag):
+    # Special check for bad characters
+    if any(bad_character in tag for bad_character in list("ёъыэ")):
+        return False
+
+    return re.compile(r"^[a-zа-яіїґ]{3,16}$").match(tag) is not None
+
+
 # Replacement for deprecated datetime's utcnow
 def utcnow():
     return datetime.now(UTC).replace(tzinfo=None)
@@ -51,6 +67,18 @@ def utcfromtimestamp(timestamp: int):
     return datetime.fromtimestamp(timestamp, UTC).replace(tzinfo=None)
 
 
+# Helper function to round a datetime object to the nearest hour/minute/second
+def round_datetime(
+    date: datetime, hours: int = 1, minutes: int = 1, seconds: int = 1
+):
+    return date - timedelta(
+        hours=date.hour % hours,
+        minutes=date.minute % minutes,
+        seconds=date.second % seconds,
+        microseconds=date.microsecond,
+    )
+
+
 # Simple check for permissions
 # TODO: move to separate file with role logic
 def check_user_permissions(user: User, permissions: list):
@@ -58,9 +86,41 @@ def check_user_permissions(user: User, permissions: list):
 
     has_permission = all(
         permission in role_permissions for permission in permissions
+    ) and not any(
+        forbidden in permissions for forbidden in user.forbidden_actions
     )
 
     return has_permission
+
+
+def check_token_scope(token: AuthToken, scope: list[str]) -> bool:
+    token_scope = set(resolve_scope_groups(token.scope))
+
+    scope = set(scope)
+
+    if not token.scope and not token.client:
+        return True
+
+    return token_scope.issuperset(scope)
+
+
+def resolve_scope_groups(scopes: list[str]) -> list[str]:
+    plain_scopes = []
+
+    for scope in scopes:
+        if scope in constants.SCOPE_GROUPS:
+            group = constants.SCOPE_GROUPS[scope]
+
+            # In case of referencing other groups in this
+            # we need resolve them too
+            group = resolve_scope_groups(group)
+
+            plain_scopes.extend(group)
+
+        else:
+            plain_scopes.append(scope)
+
+    return plain_scopes
 
 
 # Get bcrypt hash of password
@@ -83,7 +143,7 @@ def new_token():
 
 
 @lru_cache()
-def get_settings():
+def get_settings() -> typing.Any:
     """Returns lru cached system settings"""
 
     return Dynaconf(
@@ -175,7 +235,7 @@ def slugify(
 
     # Add content id part if specified
     if content_id:
-        text += word_separator + content_id[:6]
+        text += word_separator + str(content_id)[:6]
 
     # Remove trailing word separator
     text = text.strip(word_separator)
@@ -224,6 +284,20 @@ def pagination_dict(total, page, limit):
     }
 
 
+def paginated_response(
+    items: Sequence[
+        typing.Union[DeclarativeBase, "CustomModel", dict[str, typing.Any]]
+    ],
+    total: int,
+    page: int,
+    limit: int,
+) -> dict[str, dict[str, int] | list]:
+    return {
+        "list": items,
+        "pagination": pagination_dict(total, page, limit),
+    }
+
+
 # Convert month to season str
 def get_season(date):
     # Anime seasons start from first month of the year
@@ -257,10 +331,10 @@ def days_until_next_month(date):
 
 # Get list of seasons anime aired in for provided range of dates
 def get_airing_seasons(start_date: datetime, end_date: datetime | None):
-    end_date = utcnow() if not end_date else end_date
+    end_date = utcnow() if end_date is None else end_date
 
-    airing_seasons = []
     date = start_date
+    airing_seasons = [[get_season(date), date.year]]
 
     if days_until_next_month(date) < 7:
         date = get_next_month(date)
@@ -292,6 +366,8 @@ async def check_cloudflare_captcha(response, secret):
 
 
 def is_protected_username(username: str):
+    username = username.strip().lower()
+
     usernames = [
         ["admin", "blog", "dev", "ftp", "mail", "pop", "pop3", "imap", "smtp"],
         ["stage", "stats", "status", "www", "beta", "about", "access"],
@@ -353,7 +429,14 @@ def is_protected_username(username: str):
 
 
 def remove_bad_characters(text):
-    text.replace("\ufff4", "")
+    bad_characters = [
+        "\u2800",  # Braille Pattern Blank
+        "\ufff4",
+    ]
+
+    for bad_character in bad_characters:
+        text = text.replace(bad_character, "")
+
     return text
 
 
@@ -386,7 +469,7 @@ def is_int(string):
 
 def is_uuid(string):
     try:
-        UUID(string)
+        UUID(str(string))
         return True
     except ValueError:
         return False
@@ -439,3 +522,38 @@ def check_sort(sort_list, valid_fields):
             raise ValueError(f"Invalid sort value: {sort_item}")
 
     return sort_list
+
+
+def enumerate_seasons(start, end):
+    SEASONS_ORDER = [
+        constants.SEASON_WINTER,
+        constants.SEASON_SPRING,
+        constants.SEASON_SUMMER,
+        constants.SEASON_FALL,
+    ]
+
+    start_season, start_year = start[0], start[1]
+    end_season, end_year = end[0], end[1]
+
+    if start_year is None or end_year is None:
+        return []
+
+    result = []
+
+    for year in range(start_year, end_year + 1):
+        for season in SEASONS_ORDER:
+            if year == start_year and start_season:
+                if SEASONS_ORDER.index(season) < SEASONS_ORDER.index(
+                    start_season
+                ):
+                    continue
+
+            if year == end_year and end_season:
+                if SEASONS_ORDER.index(season) > SEASONS_ORDER.index(
+                    end_season
+                ):
+                    continue
+
+            result.append(f"{season}_{year}")
+
+    return result

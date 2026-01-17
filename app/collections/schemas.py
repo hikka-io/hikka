@@ -1,7 +1,7 @@
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
+from app.utils import is_valid_tag
 from app.utils import check_sort
-from .utils import is_valid_tag
 from app import constants
 from enum import Enum
 
@@ -75,6 +75,8 @@ class CollectionArgs(CustomModel):
 
     @field_validator("description")
     def validate_description(cls, description):
+        description = description.strip("\n")
+
         if is_empty_markdown(description):
             raise ValueError("Field description consists of empty markdown")
 

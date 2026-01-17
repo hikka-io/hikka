@@ -1,12 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models import User, UserOAuth, Client
 from app.dependencies import auth_required
-from app.models import User, UserOAuth
+from app.client.service import get_client
 from app.database import get_session
 from app.schemas import EmailArgs
 from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import oauth
+import uuid
 
 from app.utils import (
     is_protected_username,
@@ -21,15 +23,20 @@ from app.service import (
 )
 
 from .service import (
+    get_auth_token_request,
     get_user_by_activation,
     get_user_by_reset,
     get_oauth_by_id,
+    get_auth_token,
 )
 
 from .schemas import (
+    UsernameLoginArgs,
     ComfirmResetArgs,
+    TokenRequestArgs,
+    TokenProceedArgs,
+    EmailLoginArgs,
     SignupArgs,
-    LoginArgs,
     TokenArgs,
     CodeArgs,
 )
@@ -74,10 +81,16 @@ async def validate_signup(
 
 
 async def validate_login(
-    login: LoginArgs, session: AsyncSession = Depends(get_session)
+    login: EmailLoginArgs | UsernameLoginArgs,
+    session: AsyncSession = Depends(get_session),
 ) -> User:
-    # Find user by email
-    if not (user := await get_user_by_email(session, login.email)):
+    # Find user by email or username
+    if isinstance(login, EmailLoginArgs):
+        user = await get_user_by_email(session, login.email)
+    else:
+        user = await get_user_by_username(session, login.username)
+
+    if user is None:
         raise Abort("auth", "user-not-found")
 
     if user.role == constants.ROLE_DELETED:
@@ -95,9 +108,7 @@ async def validate_provider(provider: str) -> str:
     settings = get_settings()
 
     enabled_providers = [
-        provider
-        for provider in settings.oauth
-        if settings.oauth[provider].enabled
+        provider for provider in settings.oauth if settings.oauth[provider].enabled
     ]
 
     if provider not in enabled_providers:
@@ -197,3 +208,59 @@ async def validate_password_confirm(
         raise Abort("auth", "reset-expired")
 
     return user, confirm.password
+
+
+async def validate_client(
+    client_reference: uuid.UUID, session: AsyncSession = Depends(get_session)
+) -> Client:
+    if not (client := await get_client(session, client_reference)):
+        raise Abort("auth", "client-not-found")
+
+    return client
+
+
+def validate_scope(request: TokenRequestArgs) -> list[str]:
+    for scope in request.scope:
+        if scope not in constants.ALL_SCOPES + list(constants.SCOPE_GROUPS):
+            raise Abort("auth", "invalid-scope")
+
+    if len(request.scope) == 0:
+        raise Abort("auth", "scope-empty")
+
+    return request.scope
+
+
+async def validate_auth_token_request(
+    args: TokenProceedArgs,
+    session: AsyncSession = Depends(get_session),
+):
+    now = utcnow()
+
+    if not (request := await get_auth_token_request(session, args.request_reference)):
+        raise Abort("auth", "invalid-token-request")
+
+    if now > request.expiration:
+        raise Abort("auth", "token-request-expired")
+
+    if request.client.secret != args.client_secret:
+        raise Abort("auth", "invalid-client-credentials")
+
+    return request
+
+
+async def validate_auth_token(
+    token_reference: uuid.UUID,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    now = utcnow()
+    if not (token := await get_auth_token(session, token_reference)):
+        raise Abort("auth", "invalid-token")
+
+    if now > token.expiration:
+        raise Abort("auth", "token-expired")
+
+    if token.user_id != user.id:
+        raise Abort("auth", "not-token-owner")
+
+    return token

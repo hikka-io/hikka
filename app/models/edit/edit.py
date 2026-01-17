@@ -1,6 +1,5 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -9,6 +8,7 @@ from ..base import Base
 from uuid import UUID
 
 from ..mixins import (
+    CommentContentMixin,
     CreatedMixin,
     UpdatedMixin,
 )
@@ -18,6 +18,7 @@ class Edit(
     Base,
     CreatedMixin,
     UpdatedMixin,
+    CommentContentMixin,
 ):
     __tablename__ = "service_edits"
     __mapper_args__ = {
@@ -26,7 +27,7 @@ class Edit(
         "with_polymorphic": "*",
     }
 
-    comments_count: Mapped[int] = query_expression()
+    content_preview: Mapped[dict] = mapped_column(JSONB, default={})
 
     system_edit: Mapped[bool] = mapped_column(default=False)
     description: Mapped[str] = mapped_column(nullable=True)

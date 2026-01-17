@@ -11,12 +11,13 @@ from sqlalchemy import select, text
 from app.utils import get_settings
 from contextlib import ExitStack
 from sqlalchemy import make_url
-from app import create_app
+from datetime import datetime
 from app import aggregator
-from unittest import mock
+from app import create_app
 from app import constants
-import helpers
+from unittest import mock
 import asyncio
+import helpers
 import pytest
 
 
@@ -51,26 +52,39 @@ async def connection_test(test_db, event_loop):
 
     db_url = make_url(settings.database.endpoint)
 
-    pg_password = db_url.password
-    pg_user = db_url.username
-    pg_db = db_url.database
-    pg_host = db_url.host
-    pg_port = db_url.port
-
     with DatabaseJanitor(
-        pg_user, pg_host, pg_port, pg_db, test_db.version, pg_password
+        user=db_url.username,
+        host=db_url.host,
+        port=db_url.port,
+        version=test_db.version,
+        dbname=db_url.database,
+        password=db_url.password,
     ):
         sessionmanager.init(settings.database.endpoint)
+
+        async with sessionmanager.connect() as connection:
+            await connection.execute(
+                text("CREATE EXTENSION IF NOT EXISTS ltree;")
+            )
+
+            await connection.run_sync(Base.metadata.drop_all)
+            await connection.run_sync(Base.metadata.create_all)
+
         yield
+
         await sessionmanager.close()
 
 
 @pytest.fixture(scope="function", autouse=True)
 async def create_tables(connection_test):
     async with sessionmanager.connect() as connection:
-        await connection.execute(text("CREATE EXTENSION IF NOT EXISTS ltree;"))
-        await connection.run_sync(Base.metadata.drop_all)
-        await connection.run_sync(Base.metadata.create_all)
+        tables = ",".join(
+            table.name for table in reversed(Base.metadata.sorted_tables)
+        )
+
+        await connection.execute(
+            text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE;")
+        )
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -89,13 +103,66 @@ async def test_session():
 
 
 @pytest.fixture
-async def create_test_user(test_session):
+async def user_admin(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="admin",
+        email="admin@mail.com",
+        role=constants.ROLE_ADMIN,
+    )
+
+
+@pytest.fixture
+async def test_user(test_session):
     return await helpers.create_user(test_session)
+
+
+@pytest.fixture
+async def create_test_user(test_user):
+    return test_user
 
 
 @pytest.fixture
 async def create_test_user_oauth(test_session):
     return await helpers.create_user(test_session, email="testuser@mail.com")
+
+
+@pytest.fixture
+async def moderator_user(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="moderator",
+        email="moderator@mail.com",
+        role=constants.ROLE_MODERATOR,
+    )
+
+
+@pytest.fixture
+async def admin_user(test_session):
+    return await helpers.create_user(
+        test_session,
+        username="admin",
+        email="admin@mail.com",
+        role=constants.ROLE_ADMIN,
+    )
+
+
+@pytest.fixture
+async def moderator_token(test_session, moderator_user):
+    return (
+        await helpers.create_token(
+            test_session, moderator_user.email, "moderator-token"
+        )
+    ).secret
+
+
+@pytest.fixture
+async def admin_token(test_session, admin_user):
+    return (
+        await helpers.create_token(
+            test_session, admin_user.email, "admin-token"
+        )
+    ).secret
 
 
 @pytest.fixture
@@ -107,6 +174,14 @@ async def create_test_user_moderator(test_session):
 
 
 @pytest.fixture
+async def create_test_user_admin(test_session):
+    return await helpers.create_user(
+        test_session,
+        role=constants.ROLE_ADMIN,
+    )
+
+
+@pytest.fixture
 async def create_dummy_user(test_session):
     return await helpers.create_user(
         test_session, username="dummy", email="dummy@mail.com"
@@ -114,12 +189,12 @@ async def create_dummy_user(test_session):
 
 
 @pytest.fixture
-async def create_dummy_user_banned(test_session):
+async def create_dummy_user_restricted(test_session):
     return await helpers.create_user(
         test_session,
         username="dummy",
         email="dummy@mail.com",
-        role=constants.ROLE_BANNED,
+        role=constants.ROLE_NOT_ACTIVATED,
     )
 
 
@@ -135,12 +210,26 @@ async def create_test_user_with_oauth(test_session):
 
 
 @pytest.fixture
-async def get_test_token(test_session):
+async def test_token(test_user, test_session):
     token = await helpers.create_token(
-        test_session, "user@mail.com", "SECRET_TOKEN"
+        test_session, test_user.email, "SECRET_TOKEN"
     )
 
     return token.secret
+
+
+@pytest.fixture
+async def token_admin(user_admin, test_session):
+    return (
+        await helpers.create_token(
+            test_session, user_admin.email, "ADMIN_TOKEN_SECRET"
+        )
+    ).secret
+
+
+@pytest.fixture
+async def get_test_token(test_token):
+    return test_token
 
 
 @pytest.fixture
@@ -177,6 +266,19 @@ def mock_s3_upload_file():
     with mock.patch("app.upload.service.s3_upload_file") as mocked:
         mocked.return_value = True
         yield mocked
+
+
+# Fix utcnow() datetime for tests that rely on it not changing within the duration of the test
+# https://docs.pytest.org/en/stable/how-to/monkeypatch.html
+@pytest.fixture(autouse=False)
+def mock_utcnow(monkeypatch):
+    fixed_time = datetime(2024, 2, 17, 10, 23, 29, 305502)
+
+    # When a function is imported, it becomes a part of the namespace of the
+    # module that imported it. We need to patch the specific function reference
+    # in the module we're testing
+    monkeypatch.setattr("app.edit.service.utcnow", lambda: fixed_time)
+    monkeypatch.setattr("app.comments.service.utcnow", lambda: fixed_time)
 
 
 # Aggregator fixtures
@@ -341,3 +443,24 @@ async def aggregator_anime_franchises(test_session):
     data = await helpers.load_json("tests/data/anime_franchises.json")
 
     await aggregator.save_franchises_list(test_session, data["list"])
+
+
+@pytest.fixture
+async def test_thirdparty_client(test_session, test_user):
+    return await helpers.create_client(
+        test_session, test_user, "test-thirdparty-client"
+    )
+
+
+@pytest.fixture
+async def test_thirdparty_token(
+    test_session, test_user, test_thirdparty_client
+):
+    return (
+        await helpers.create_token(
+            test_session,
+            test_user.email,
+            "thirdparty-token-secret",
+            test_thirdparty_client,
+        )
+    ).secret

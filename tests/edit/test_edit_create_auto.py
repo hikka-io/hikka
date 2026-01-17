@@ -1,15 +1,6 @@
 from client_requests import request_create_edit
-from sqlalchemy import select, desc, func
-from app.models import Log
 from fastapi import status
 from app import constants
-
-from app.models import (
-    CharacterEdit,
-    PersonEdit,
-    AnimeEdit,
-    Edit,
-)
 
 
 async def test_edit_create_auto(
@@ -40,7 +31,7 @@ async def test_edit_create_auto(
 
     # Check status and data
     assert response.status_code == status.HTTP_200_OK
-    # assert response.json()["status"] == constants.EDIT_ACCEPTED
+    assert response.json()["status"] == constants.EDIT_ACCEPTED
 
 
 async def test_edit_create_auto_bad_permission(

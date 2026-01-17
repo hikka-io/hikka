@@ -43,7 +43,6 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
                 "data": {
                     "slug": anime.slug,
                     "image": anime.image,
-                    "poster": anime.poster,  # TODO: Remove me!
                     "title_ja": anime.title_ja,
                     "title_en": anime.title_en,
                     "title_ua": anime.title_ua,

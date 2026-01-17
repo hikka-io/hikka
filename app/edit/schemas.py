@@ -16,9 +16,15 @@ from app.schemas import (
 
 
 # Enums
-class AnimeToDoEnum(str, Enum):
-    synopsis_ua = constants.TODO_ANIME_SYNOPSIS_UA
-    title_ua = constants.TODO_ANIME_TITLE_UA
+class ContentToDoEnum(str, Enum):
+    synopsis_ua = constants.TODO_SYNOPSIS_UA
+    title_ua = constants.TODO_TITLE_UA
+
+
+class EditContentToDoEnum(str, Enum):
+    content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
 
 
 class EditContentTypeEnum(str, Enum):
@@ -81,7 +87,7 @@ class EditSearchArgs(CustomModel):
 
 
 class EditArgs(CustomModel):
-    description: str | None = Field(None, examples=["..."], max_length=420)
+    description: str | None = Field(None, examples=["..."], max_length=2048)
     auto: bool = Field(default=False)
     after: dict
 
@@ -91,6 +97,10 @@ class EditArgs(CustomModel):
             raise ValueError("After field can't be empty")
 
         return after
+
+    @field_validator("description")
+    def validate_description(cls, description):
+        return description.strip("\n") if description else description
 
 
 class AnimeEditArgs(CustomModel):
@@ -180,60 +190,12 @@ class EditResponse(EditResponseBase):
         | CharacterResponse
     )
 
-    comments_count: int | None
+    comments_count: int
     reference: str
-
-    @field_validator("comments_count")
-    def validate_after(cls, comments_count):
-        if not comments_count:
-            comments_count = 0
-
-        return comments_count
-
-
-class EditSimpleAnimeResponse(CustomModel):
-    title_ja: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleMangaResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleNovelResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimplePersonResponse(CustomModel):
-    name_native: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
-
-
-class EditSimpleCharacterResponse(CustomModel):
-    name_ja: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
 
 
 class EditSimpleResponse(EditResponseBase):
-    content: (
-        EditSimpleAnimeResponse
-        | EditSimpleMangaResponse
-        | EditSimpleNovelResponse
-        | EditSimplePersonResponse
-        | EditSimpleCharacterResponse
-    )
+    content: dict = Field(validation_alias="content_preview")
 
 
 class EditListResponse(CustomModel):

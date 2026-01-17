@@ -21,6 +21,8 @@ async def save_characters(session, data):
     add_characters = []
 
     for character_data in data:
+        new_image = False
+
         if not (image := image_cache.get(character_data["image"])):
             if character_data["image"]:
                 image = Image(
@@ -29,10 +31,12 @@ async def save_characters(session, data):
                         "created": utcnow(),
                         "uploaded": True,
                         "ignore": False,
+                        "system": True,
                     }
                 )
 
                 image_cache[character_data["image"]] = image
+                new_image = True
 
         updated = utils.from_timestamp(character_data["updated"])
         slug = utils.slugify(
@@ -42,10 +46,14 @@ async def save_characters(session, data):
         if character_data["content_id"] in characters_cache:
             character = characters_cache[character_data["content_id"]]
 
-            if character.updated == updated:
-                continue
-
-            if character.favorites == character_data["favorites"]:
+            # We only skip if there is nothing to update
+            if all(
+                [
+                    character.updated == updated,
+                    character.favorites == character_data["favorites"],
+                    new_image is False,
+                ]
+            ):
                 continue
 
             character.favorites = character_data["favorites"]

@@ -89,3 +89,35 @@ async def test_notifications_count(
     # We used to had a bug which marked all notification of seen
     response = await request_notifications_count(client, get_dummy_token)
     assert response.json()["unseen"] == 1
+
+
+async def test_notification_initiator(
+    client, create_dummy_user, test_user, test_session, test_token
+):
+    now = utcnow()
+    test_session.add(
+        Notification(
+            **{
+                "notification_type": constants.NOTIFICATION_HIKKA_UPDATE,
+                "data": {},
+                "log_id": None,
+                "seen": False,
+                "user": test_user,
+                "initiator_user": create_dummy_user,
+                "created": now,
+                "updated": now,
+            }
+        )
+    )
+    await test_session.commit()
+
+    response = await request_notifications(client, test_token)
+    assert response.status_code == status.HTTP_200_OK
+
+    initiator_user = response.json()["list"][0]["initiator_user"]
+
+    assert initiator_user["reference"] == create_dummy_user.reference
+    assert initiator_user["username"] == create_dummy_user.username
+    assert initiator_user["role"] == create_dummy_user.role
+    assert initiator_user["avatar"] == create_dummy_user.avatar
+    assert initiator_user["cover"] == create_dummy_user.cover

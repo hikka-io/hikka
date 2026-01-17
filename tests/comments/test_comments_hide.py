@@ -57,7 +57,7 @@ async def test_comments_hide_admin(
     client,
     aggregator_anime,
     aggregator_anime_info,
-    create_test_user_moderator,
+    create_test_user_admin,
     create_dummy_user,
     get_dummy_token,
     get_test_token,
@@ -85,10 +85,10 @@ async def test_comments_hide_admin(
     assert comment.hidden is True
     assert comment.hidden_by.username == "testuser"
 
-    # Check comment hide log by moderator
+    # Check comment hide log by admin
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COMMENT_HIDE
-    assert log.user == create_test_user_moderator
+    assert log.user == create_test_user_admin
     assert log.data == {"content_type": "edit"}
     assert log.user != comment.author
 

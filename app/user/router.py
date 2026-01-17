@@ -1,11 +1,18 @@
+from app.common.schemas import UserCustomizationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
-from .schemas import ActivityResponse
 from app.database import get_session
 from app import meilisearch
 from app.models import User
 from app import constants
 from . import service
+
+from .schemas import (
+    UserWithEmailResponse,
+    UserResponseFollowed,
+    ActivityResponse,
+)
 
 from app.schemas import (
     QuerySearchRequiredArgs,
@@ -23,19 +30,23 @@ router = APIRouter(prefix="/user", tags=["User"])
 
 @router.get(
     "/me",
-    response_model=UserResponse,
+    response_model=UserWithEmailResponse,
     summary="Current user profile",
 )
-async def profile(user: User = Depends(auth_required())):
+async def profile(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
     return user
 
 
 @router.get(
     "/{username}",
-    response_model=UserResponse,
+    response_model=UserResponseFollowed,
     summary="User profile",
 )
-async def user_profile(user: User = Depends(get_user)):
+async def user_profile(user: User = Depends(get_user_followed)):
     return user
 
 
@@ -50,6 +61,24 @@ async def service_user_activity(
 ):
     activity = await service.get_user_activity(session, user)
     return activity.all()[::-1]
+
+
+@router.get("/me/ui", response_model=UserCustomizationResponse)
+async def profile_ui(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
+    return user
+
+
+@router.get(
+    "/{username}/ui",
+    response_model=UserCustomizationResponse,
+    response_model_exclude_none=True,
+)
+async def user_ui(user: User = Depends(get_user)):
+    return user
 
 
 @router.post("/list", response_model=list[UserResponse])

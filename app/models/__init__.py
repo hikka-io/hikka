@@ -1,6 +1,7 @@
+from .auth.auth_token_request import AuthTokenRequest
 from .auth.email_message import EmailMessage
 from .auth.auth_token import AuthToken
-
+from .auth.client import Client
 
 from .user.history import FavouriteAnimeRemoveHistory
 from .user.history import FavouriteMangaRemoveHistory
@@ -12,6 +13,7 @@ from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
 from .user.history import ReadImportHistory
 from .user.history import WatchHistory
+from .user.export import UserExport
 from .user.history import History
 from .user.oauth import UserOAuth
 from .user.follow import Follow
@@ -25,7 +27,9 @@ from .edit.edit import NovelEdit
 from .edit.edit import Edit
 
 from .comments.comment import CollectionComment
-from .comments.vote import CommentVoteLegacy
+from .comments.comment import CharacterComment
+from .comments.comment import ArticleComment
+from .comments.comment import PersonComment
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
 from .comments.comment import NovelComment
@@ -73,12 +77,13 @@ from .content.author import AuthorRole
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
-from .system.upload import Upload
+from .system.artifact import Artifact
 from .system.image import Image
 from .system.log import Log
 
 from .vote.vote import CollectionVote
 from .vote.vote import CommentVote
+from .vote.vote import ArticleVote
 from .vote.vote import Vote
 
 from .collection.content import CharacterCollectionContent
@@ -89,15 +94,23 @@ from .collection.content import NovelCollectionContent
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
+from .article.article import Article
+
+from .stats.articles import UserArticleStats
 from .stats.edits import UserEditStats
 
 from .schedule.anime import AnimeSchedule
 
+from .tag.tag import ArticleTag
+from .tag.tag import Tag
+
 from .base import Base
 
 __all__ = [
+    "AuthTokenRequest",
     "EmailMessage",
     "AuthToken",
+    "Client",
     "FavouriteAnimeRemoveHistory",
     "FavouriteMangaRemoveHistory",
     "FavouriteNovelRemoveHistory",
@@ -108,6 +121,7 @@ __all__ = [
     "WatchDeleteHistory",
     "ReadImportHistory",
     "WatchHistory",
+    "UserExport",
     "History",
     "UserOAuth",
     "Follow",
@@ -119,11 +133,13 @@ __all__ = [
     "NovelEdit",
     "Edit",
     "CollectionComment",
+    "CharacterComment",
+    "ArticleComment",
+    "PersonComment",
     "AnimeComment",
     "MangaComment",
     "NovelComment",
     "EditComment",
-    "CommentVoteLegacy",
     "Comment",
     "CollectionFavourite",
     "CharacterFavourite",
@@ -159,11 +175,12 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
-    "Upload",
+    "Artifact",
     "Image",
     "Log",
     "CollectionVote",
     "CommentVote",
+    "ArticleVote",
     "Vote",
     "CharacterCollectionContent",
     "PersonCollectionContent",
@@ -172,7 +189,11 @@ __all__ = [
     "NovelCollectionContent",
     "CollectionContent",
     "Collection",
+    "Article",
+    "UserArticleStats",
     "UserEditStats",
     "AnimeSchedule",
+    "ArticleTag",
+    "Tag",
     "Base",
 ]

@@ -79,7 +79,7 @@ async def test_comments_edit_empty_markdown(
     assert response.json()["code"] == "system:validation_error"
 
 
-async def test_comments_edit_rate_limit(
+async def test_comments_edit_count_limit(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -91,22 +91,42 @@ async def test_comments_edit_rate_limit(
         client, get_test_token, "edit", "17", "Old text"
     )
 
-    for index, _ in enumerate(range(0, 5)):
-        await request_comments_edit(
-            client, get_test_token, response.json()["reference"], "New text"
-        )
+    comment = await test_session.scalar(
+        select(Comment).filter(Comment.id == response.json()["reference"])
+    )
 
-        if index != 5:
-            continue
+    edit_count_limit = 500
 
-        comment = await test_session.scalar(
-            select(Comment).filter(Comment.id == response.json()["reference"])
-        )
+    # Fill up fake history
+    comment.history = list(range(edit_count_limit - 1))
+    test_session.add(comment)
+    await test_session.commit()
 
-        assert comment.is_editable is False
+    await test_session.refresh(comment)
+    assert comment.is_editable is True
 
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.json()["code"] == "comment:not_editable"
+    response = await request_comments_edit(
+        client,
+        get_test_token,
+        response.json()["reference"],
+        "New text editable",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "code" not in response.json()
+
+    await test_session.refresh(comment)
+    assert comment.is_editable is False
+
+    response = await request_comments_edit(
+        client,
+        get_test_token,
+        response.json()["reference"],
+        "New text uneditable",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:not_editable"
 
 
 async def test_comments_edit_time_limit(
@@ -126,7 +146,7 @@ async def test_comments_edit_time_limit(
     )
 
     # Send comment back in time to test time limit
-    comment.created = comment.created - timedelta(hours=1)
+    comment.created = comment.created - timedelta(hours=24)
     test_session.add(comment)
     await test_session.commit()
 

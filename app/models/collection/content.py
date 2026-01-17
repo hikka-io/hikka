@@ -19,7 +19,9 @@ class CollectionContent(Base):
     content_id: Mapped[UUID]
     order: Mapped[int]
 
-    collection_id = mapped_column(ForeignKey("service_collections.id"))
+    collection_id = mapped_column(
+        ForeignKey("service_collections.id"), index=True
+    )
     collection: Mapped["Collection"] = relationship(
         foreign_keys=[collection_id]
     )

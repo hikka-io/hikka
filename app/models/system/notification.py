@@ -17,5 +17,13 @@ class Notification(Base, CreatedMixin, UpdatedMixin):
     log_id: Mapped[UUID] = mapped_column(nullable=True)
     seen: Mapped[bool] = mapped_column(default=False)
 
-    user_id = mapped_column(ForeignKey("service_users.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"), index=True)
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
+
+    initiator_user_id = mapped_column(
+        ForeignKey("service_users.id"), nullable=True
+    )
+
+    initiator_user: Mapped["User"] = relationship(
+        foreign_keys=[initiator_user_id]
+    )

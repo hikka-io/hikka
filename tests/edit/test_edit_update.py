@@ -156,3 +156,52 @@ async def test_edit_update_moderator(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+
+async def test_edit_create_rate_limit(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+    mock_utcnow,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {"title_en": "Bocchi The Rock!"},
+        },
+    )
+
+    # Simulate delay between create/update
+    await asyncio.sleep(1)
+
+    update_edit_limit = 25
+
+    for index in range(0, update_edit_limit + 1):
+        # Update created edit
+        response = await request_update_edit(
+            client,
+            get_test_token,
+            18,
+            {
+                "description": "Brief description 2",
+                "after": {"title_en": "Bocchi The Rock!"},
+            },
+        )
+
+        # Make sure request prior to the rate limit is good
+        if index == update_edit_limit - 1:
+            assert response.status_code == status.HTTP_200_OK
+            assert "code" not in response.json()
+
+        # Check the rate limit
+        if index == update_edit_limit:
+            assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+            assert response.json()["code"] == "edit:rate_limit"

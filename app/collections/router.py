@@ -22,7 +22,7 @@ from .dependencies import (
 )
 
 from app.utils import (
-    pagination_dict,
+    paginated_response,
     pagination,
 )
 
@@ -39,10 +39,15 @@ router = APIRouter(prefix="/collections", tags=["Collections"])
 @router.post("", response_model=CollectionsListResponse)
 async def get_collections(
     args: CollectionsListArgs = Depends(validate_collections_list_args),
-    request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
+    request_user: User | None = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COLLECTIONS],
+            optional=True,
+        )
+    ),
 ):
     limit, offset = pagination(page, size)
     total = await service.get_collections_count(session, request_user, args)
@@ -50,10 +55,7 @@ async def get_collections(
         session, request_user, args, limit, offset
     )
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": collections.unique().all(),
-    }
+    return paginated_response(collections.unique().all(), total, page, limit)
 
 
 @router.post("/create", response_model=CollectionResponse)
@@ -61,7 +63,10 @@ async def create_collection(
     session: AsyncSession = Depends(get_session),
     args: CollectionArgs = Depends(validate_collection_create),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COLLECTION_CREATE])
+        auth_required(
+            permissions=[constants.PERMISSION_COLLECTION_CREATE],
+            scope=[constants.SCOPE_CREATE_COLLECTION],
+        )
     ),
 ):
     collection = await service.create_collection(session, args, user)
@@ -74,7 +79,10 @@ async def update_collection(
     collection: Collection = Depends(validate_collection),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COLLECTION_UPDATE])
+        auth_required(
+            permissions=[constants.PERMISSION_COLLECTION_UPDATE],
+            scope=[constants.SCOPE_UPDATE_COLLECTION],
+        )
     ),
 ):
     collection = await service.update_collection(
@@ -89,7 +97,10 @@ async def delete_collection(
     collection: Collection = Depends(validate_collection_delete),
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(permissions=[constants.PERMISSION_COLLECTION_DELETE])
+        auth_required(
+            permissions=[constants.PERMISSION_COLLECTION_DELETE],
+            scope=[constants.SCOPE_DELETE_COLLECTION],
+        )
     ),
 ):
     await service.delete_collection(session, collection, user)
@@ -98,9 +109,17 @@ async def delete_collection(
 
 @router.get("/{reference}", response_model=CollectionResponse)
 async def get_collection(
-    request_user: User | None = Depends(auth_required(optional=True)),
     collection: Collection = Depends(validate_collection),
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(
+        auth_required(
+            optional=True,
+            scope=[
+                constants.SCOPE_READ_WATCHLIST,
+                constants.SCOPE_READ_READLIST,
+            ],
+        )
+    ),
 ):
     return await service.get_collection_display(
         session, collection, request_user

@@ -16,6 +16,7 @@ async def update_manga_settings(index):
         MeilisearchSettings(
             filterable_attributes=[
                 "translated_ua",
+                "native_score",
                 "media_type",
                 "magazines",
                 "genres",
@@ -33,6 +34,8 @@ async def update_manga_settings(index):
                 "slug",
             ],
             sortable_attributes=[
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
@@ -62,8 +65,10 @@ def manga_to_document(manga: Manga):
         "year": manga.start_date.year if manga.start_date else None,
         "genres": [genre.slug for genre in manga.genres],
         "start_date": to_timestamp(manga.start_date),
+        "native_scored_by": manga.native_scored_by,
         "title_original": manga.title_original,
         "translated_ua": manga.translated_ua,
+        "native_score": manga.native_score,
         "media_type": manga.media_type,
         "scored_by": manga.scored_by,
         "synonyms": manga.synonyms,
@@ -107,7 +112,6 @@ async def manga_documents(session: AsyncSession, limit: int, offset: int):
 async def manga_document_ids_delete(session: AsyncSession):
     manga_list = await session.scalars(
         select(Manga)
-        .filter(Manga.media_type != None)  # noqa: E711
         .filter(Manga.deleted == True)  # noqa: E712
         .filter(Manga.needs_search_update == True)  # noqa: E712
     )
@@ -124,9 +128,9 @@ async def manga_document_ids_delete(session: AsyncSession):
 
 async def manga_documents_total(session: AsyncSession):
     return await session.scalar(
-        select(func.count(Manga.id))
-        .filter(Manga.media_type != None)  # noqa: E711
-        .filter(Manga.needs_search_update == True)  # noqa: E712
+        select(func.count(Manga.id)).filter(
+            Manga.needs_search_update == True  # noqa: E712
+        )
     )
 
 
