@@ -136,7 +136,9 @@ async def validate_collection_get(
     collection: Collection = Depends(validate_collection),
     user: User = Depends(auth_required(optional=True)),
 ) -> Collection:
-    if collection.deleted and user.role not in ["admin", "moderator"]:
+    if collection.deleted and not check_user_permissions(
+        user, [constants.PERMISSION_COLLECTION_READ_DELETED]
+    ):
         raise Abort("collections", "not-found")
 
     return collection
