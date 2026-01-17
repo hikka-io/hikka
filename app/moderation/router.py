@@ -12,7 +12,7 @@ from .schemas import (
 
 from .dependencies import (
     validate_moderation_search_args,
-    validate_moderation_role,
+    validate_moderation,
 )
 
 from app.utils import (
@@ -37,7 +37,7 @@ router = APIRouter(prefix="/moderation", tags=["Moderation"])
 async def moderation_log(
     args: ModerationSearchArgs = Depends(validate_moderation_search_args),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(validate_moderation_role),
+    user: User = Depends(validate_moderation),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):

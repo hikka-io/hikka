@@ -24,11 +24,10 @@ async def validate_moderation_search_args(
     return args
 
 
-async def validate_moderation_role(
+async def validate_moderation(
     author: User = Depends(
         auth_required(
-            optional=False,
-            scope=[constants.ROLE_MODERATOR, constants.ROLE_ADMIN],
+            optional=False, permissions=[constants.PERMISSION_MODERATION_READ]
         )
     ),
 ):
