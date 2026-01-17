@@ -7,6 +7,14 @@ from .. import service
 async def generate_collection_delete(session: AsyncSession, log: Log):
     target_type = constants.MODERATION_COLLECTION_DELETED
 
+    if await service.get_moderation(
+        session,
+        log.user_id,
+        log.id,
+        target_type,
+    ):
+        return
+
     if not (collection := await service.get_collection(session, log.target_id)):
         return
 
@@ -14,14 +22,6 @@ async def generate_collection_delete(session: AsyncSession, log: Log):
         return
 
     if collection.author_id == log.user_id:
-        return
-
-    if await service.get_moderation(
-        session,
-        log.user_id,
-        log.id,
-        target_type,
-    ):
         return
 
     await session.refresh(log, attribute_names=["user"])
@@ -33,8 +33,6 @@ async def generate_collection_delete(session: AsyncSession, log: Log):
             "created": log.created,
             "log_id": log.id,
             "data": {
-                "username": log.user.username,
-                "avatar": log.user.avatar,
                 "collection_id": str(collection.id),
             },
         }

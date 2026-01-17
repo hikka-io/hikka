@@ -441,9 +441,6 @@ errors = {
             401,
         ],
     },
-    "moderation-log": {
-        "no-access": ["You do not have permission to access", 400],
-    },
     "client": {
         "already-verified": [
             "Client is already verified",

@@ -1,16 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import get_session
-from app.dependencies import auth_required
-from app.errors import Abort
 from fastapi import Depends
 
+from app.dependencies import auth_required
 from app.models.user.user import User
-
-from .schemas import ModerationSearchArgs
-
+from app.database import get_session
+from app.errors import Abort
+from app import constants
 from app.service import (
     get_user_by_username,
 )
+
+from .schemas import ModerationSearchArgs
 
 
 async def validate_moderation_search_args(
@@ -25,9 +25,11 @@ async def validate_moderation_search_args(
 
 
 async def validate_moderation_role(
-    author: User = Depends(auth_required(optional=False)),
+    author: User = Depends(
+        auth_required(
+            optional=False,
+            scope=[constants.ROLE_MODERATOR, constants.ROLE_ADMIN],
+        )
+    ),
 ):
-    if author.role not in ["admin", "moderator"]:
-        raise Abort("moderation-log", "no-access")
-
     return author

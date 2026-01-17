@@ -35,8 +35,6 @@ async def generate_edit_update(session: AsyncSession, log: Log):
             "data": {
                 "updated_edit": log.data["updated_edit"],
                 "old_edit": log.data["old_edit"],
-                "username": log.user.username,
-                "avatar": log.user.avatar,
                 "edit_id": edit.edit_id,
             },
         }

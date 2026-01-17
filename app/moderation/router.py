@@ -1,6 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
-from app import constants
 from app.database import get_session
 from app.models import User
 from . import service
@@ -22,10 +21,8 @@ from app.utils import (
 )
 
 from app.dependencies import (
-    auth_required,
     get_page,
     get_size,
-    get_user,
 )
 
 

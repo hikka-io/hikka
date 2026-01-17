@@ -35,8 +35,6 @@ async def generate_collection_update(session: AsyncSession, log: Log):
             "data": {
                 "updated_collection": log.data["updated_collection"],
                 "old_collection": log.data["old_collection"],
-                "username": log.user.username,
-                "avatar": log.user.avatar,
                 "collection_id": str(collection.id),
             },
         }

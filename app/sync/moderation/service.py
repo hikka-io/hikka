@@ -1,6 +1,7 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
 from app.models import Moderation, Edit, Comment, Collection
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
+from sqlalchemy import select, desc
 from uuid import UUID
 
 
@@ -10,9 +11,13 @@ async def get_moderation(
     log_id: UUID,
     target_type: str | None = None,
 ):
-    query = select(Moderation).filter(
-        Moderation.user_id == user_id,
-        Moderation.log_id == log_id,
+    query = (
+        select(Moderation)
+        .options(joinedload(Moderation.user))
+        .filter(
+            Moderation.user_id == user_id,
+            Moderation.log_id == log_id,
+        )
     )
 
     if target_type:
@@ -24,16 +29,24 @@ async def get_moderation(
 
 
 async def get_edit(session, content_id):
-    return await session.scalar(select(Edit).filter(Edit.id == content_id))
+    return await session.scalar(
+        select(Edit)
+        .options(joinedload(Edit.author))
+        .filter(Edit.id == content_id)
+    )
 
 
 async def get_comment(session, content_id):
     return await session.scalar(
-        select(Comment).filter(Comment.id == content_id)
+        select(Comment)
+        .options(joinedload(Comment.author))
+        .filter(Comment.id == content_id)
     )
 
 
 async def get_collection(session, content_id):
     return await session.scalar(
-        select(Collection).filter(Collection.id == content_id)
+        select(Collection)
+        .options(joinedload(Collection.author))
+        .filter(Collection.id == content_id)
     )

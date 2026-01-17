@@ -49,23 +49,24 @@ async def generate_moderation(session: AsyncSession):
     for log in logs:
         system_timestamp.timestamp = log.created
 
-        if log.log_type == constants.LOG_EDIT_ACCEPT:
-            await generate_edit_accept(session, log)
+        match log.log_type:
+            case constants.LOG_EDIT_ACCEPT:
+                await generate_edit_accept(session, log)
 
-        if log.log_type == constants.LOG_EDIT_DENY:
-            await generate_edit_deny(session, log)
+            case constants.LOG_EDIT_DENY:
+                await generate_edit_deny(session, log)
 
-        if log.log_type == constants.LOG_EDIT_UPDATE:
-            await generate_edit_update(session, log)
+            case constants.LOG_EDIT_UPDATE:
+                await generate_edit_update(session, log)
 
-        if log.log_type == constants.LOG_COMMENT_HIDE:
-            await generate_comment_hide(session, log)
+            case constants.LOG_COMMENT_HIDE:
+                await generate_comment_hide(session, log)
 
-        if log.log_type == constants.LOG_COLLECTION_DELETE:
-            await generate_collection_delete(session, log)
+            case constants.LOG_COLLECTION_DELETE:
+                await generate_collection_delete(session, log)
 
-        if log.log_type == constants.LOG_COLLECTION_UPDATE:
-            await generate_collection_update(session, log)
+            case constants.LOG_COLLECTION_UPDATE:
+                await generate_collection_update(session, log)
 
     session.add(system_timestamp)
     await session.commit()
