@@ -7,6 +7,7 @@ from sqlalchemy_utils import LtreeType
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 from uuid import UUID
 
@@ -60,6 +61,13 @@ class Comment(
             path,
             postgresql_using="gist",
         ),
+        Index(
+            "ix_comment_latest",
+            text("created DESC"),
+            postgresql_where=text(
+                "nlevel(path) = 1 AND NOT hidden AND NOT private AND NOT deleted"
+            ),
+        ),
     )
 
     @hybrid_property
@@ -72,9 +80,11 @@ class Comment(
 
     @hybrid_property
     def is_editable(self):
+        # TODO: this is bad place for such limits
+        # We shold move them somewhere more sensible
         now = datetime.now(UTC).replace(tzinfo=None)
-        time_limit = timedelta(hours=1)
-        max_edits = 5
+        time_limit = timedelta(hours=24)
+        max_edits = 500
 
         if len(self.history) >= max_edits:
             return False
@@ -162,5 +172,56 @@ class NovelComment(Comment):
 
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
+class PersonComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "person",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Person"] = relationship(
+        primaryjoin="Person.id == PersonComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
+class CharacterComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "character",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Character"] = relationship(
+        primaryjoin="Character.id == CharacterComment.content_id",
+        foreign_keys=[content_id],
+    )
+
+
+class ArticleComment(Comment):
+    __mapper_args__ = {
+        "polymorphic_identity": "article",
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_articles.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Article"] = relationship(
+        primaryjoin="Article.id == ArticleComment.content_id",
         foreign_keys=[content_id],
     )

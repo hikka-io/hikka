@@ -22,6 +22,9 @@ from app.service import (
 from app.models import (
     CollectionContent,
     CollectionComment,
+    CharacterComment,
+    ArticleComment,
+    PersonComment,
     CharacterEdit,
     AnimeComment,
     MangaComment,
@@ -45,7 +48,10 @@ from app.models import (
 
 content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_COLLECTION: CollectionComment,
+    constants.CONTENT_CHARACTER: CharacterComment,
     constants.CONTENT_SYSTEM_EDIT: EditComment,
+    constants.CONTENT_ARTICLE: ArticleComment,
+    constants.CONTENT_PERSON: PersonComment,
     constants.CONTENT_ANIME: AnimeComment,
     constants.CONTENT_MANGA: MangaComment,
     constants.CONTENT_NOVEL: NovelComment,
@@ -74,10 +80,25 @@ async def get_comment(
     )
 
 
-async def get_comments_count(session: AsyncSession, content: CommentableType):
-    return await session.scalar(
-        select(func.count(Comment.id).filter(Comment.content_id == content.id))
+async def get_comments_count(
+    session: AsyncSession,
+    content_type: ContentTypeEnum,
+    content: CommentableType,
+    first_level_only: bool = False,
+):
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.content_type == content_type,
+            Comment.content_id == content.id,
+        )
     )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    return await session.scalar(query)
 
 
 async def create_comment(
@@ -123,7 +144,14 @@ async def create_comment(
     await session.commit()
 
     # Update comments count here
-    content.comments_count = await get_comments_count(session, content)
+    content.comments_count = await get_comments_count(
+        session, content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, content_type, content, True
+    )
+
     session.add(content)
     await session.commit()
 
@@ -213,7 +241,7 @@ async def count_comments_limit(session: AsyncSession, author: User) -> int:
     return await session.scalar(
         select(func.count(Comment.id)).filter(
             Comment.author == author,
-            Comment.created > round_datetime(utcnow(), hours=1),
+            Comment.created > round_datetime(utcnow(), minutes=60, seconds=60),
             Comment.deleted == False,  # noqa: E712
         )
     )
@@ -271,7 +299,14 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         session, comment.content_type, comment.content_id
     )
 
-    content.comments_count = await get_comments_count(session, content)
+    content.comments_count = await get_comments_count(
+        session, comment.content_type, content
+    )
+
+    content.comments_count_pagination = await get_comments_count(
+        session, comment.content_type, content, True
+    )
+
     session.add(content)
     await session.commit()
 
@@ -295,7 +330,6 @@ async def latest_comments(session: AsyncSession):
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
         )
-        .group_by(Comment.id, Comment.content_id)
         .order_by(desc(Comment.created))
         .limit(3)
     )
@@ -355,6 +389,9 @@ async def generate_preview(
         select(Comment)
         .filter(Comment.id == original_comment.id)
         .options(immediateload(CollectionComment.content))
+        .options(immediateload(CharacterComment.content))
+        .options(immediateload(ArticleComment.content))
+        .options(immediateload(PersonComment.content))
         .options(immediateload(AnimeComment.content))
         .options(immediateload(MangaComment.content))
         .options(immediateload(NovelComment.content))
@@ -374,6 +411,22 @@ async def generate_preview(
             or comment.content.title_ja
         )
 
+    if isinstance(comment, PersonComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_native
+        )
+
+    if isinstance(comment, CharacterComment):
+        image = comment.content.image
+        title = (
+            comment.content.name_ua
+            or comment.content.name_en
+            or comment.content.name_ja
+        )
+
     if isinstance(comment, MangaComment) or isinstance(comment, NovelComment):
         image = comment.content.image
         title = (
@@ -381,6 +434,9 @@ async def generate_preview(
             or comment.content.title_en
             or comment.content.title_original
         )
+
+    if isinstance(comment, ArticleComment):
+        title = comment.content.title
 
     if isinstance(comment, EditComment):
         # This is horrible hack, but we need this to prevent SQLAlchemy bug

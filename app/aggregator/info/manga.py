@@ -1,4 +1,5 @@
 from sqlalchemy.orm import selectinload
+from app.aggregator import service
 from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
@@ -8,7 +9,6 @@ from app.models import (
     MangaCharacter,
     MangaAuthor,
     AuthorRole,
-    Character,
     Magazine,
     Person,
     Image,
@@ -175,6 +175,8 @@ async def process_authors(session, manga, data):
                 }
             )
 
+            person.needs_count_update = True
+
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)
 
@@ -197,13 +199,9 @@ async def process_characters(session, manga, data):
         set([entry["character"]["content_id"] for entry in data["characters"]])
     )
 
-    cache = await session.scalars(
-        select(Character).filter(
-            Character.content_id.in_(character_content_ids)
-        )
+    characters_cache = await service.get_characters_cache(
+        session, character_content_ids
     )
-
-    characters_cache = {entry.content_id: entry for entry in cache}
 
     for entry in data["characters"]:
         if not (
@@ -232,6 +230,8 @@ async def process_characters(session, manga, data):
             )
 
             characters.append(character_role)
+
+            character.needs_count_update = True
 
     return characters
 

@@ -1,45 +1,88 @@
-[tool.poetry]
+[project]
 name = "hikka"
 version = "0.3.0"
 description = "Backend service for hikka.io - Ukrainian anime tracker"
-authors = ["Hikka Team"]
+authors = [{ name = "Hikka Team" }]
 readme = "README.md"
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+  "aioboto3==12.4.0",
+  "aiobotocore==2.12.3",
+  "aiofiles==24.1.0",
+  "aiohappyeyeballs==2.6.1",
+  "aiohttp==3.12.14",
+  "aioitertools==0.12.0",
+  "aiosignal==1.4.0",
+  "alembic==1.14.0",
+  "annotated-types==0.7.0",
+  "anyio==4.8.0",
+  "apscheduler==3.11.0",
+  "async-asgi-testclient==1.4.11",
+  "asyncpg==0.30.0",
+  "attrs==24.3.0",
+  "bcrypt==4.2.1",
+  "boto3==1.34.69",
+  "botocore==1.34.69",
+  "camel-converter==4.0.1",
+  "certifi==2024.7.4",
+  "charset-normalizer==3.4.1",
+  "click==8.1.8",
+  "colorama==0.4.6",
+  "dnspython==2.7.0",
+  "dynaconf==3.2.6",
+  "email-validator==2.0.0.post2",
+  "fastapi (==0.120.4)",
+  "frozenlist==1.5.0",
+  "greenlet==3.1.1",
+  "gunicorn==23.0.0",
+  "h11==0.16.0",
+  "httpcore==1.0.9",
+  "httpx==0.28.1",
+  "idna==3.10",
+  "imagesize==1.4.1",
+  "iniconfig==2.0.0",
+  "jmespath==1.0.1",
+  "mako==1.3.8",
+  "markupsafe==3.0.2",
+  "meilisearch-python-sdk==2.9.0",
+  "mirakuru==2.5.3",
+  "multidict==6.1.0",
+  "packaging==24.2",
+  "pluggy==1.5.0",
+  "port-for==0.7.4",
+  "propcache==0.2.1",
+  "psutil==6.1.1",
+  "psycopg==3.2.4",
+  "puremagic==1.28",
+  "pydantic==2.10.5",
+  "pydantic-core==2.27.2",
+  "pyinstrument==4.7.3",
+  "pyjwt==2.10.1",
+  "pytest==7.4.4",
+  "pytest-asyncio==0.21.2",
+  "pytest-postgresql==6.1.1",
+  "python-dateutil==2.9.0.post0",
+  "python-multipart==0.0.20",
+  "requests==2.32.4",
+  "s3transfer==0.10.4",
+  "setuptools==78.1.1",
+  "six==1.17.0",
+  "sniffio==1.3.1",
+  "sqlalchemy==2.0.37",
+  "sqlalchemy-utils==0.41.2",
+  "starlette (==0.49.1)",
+  "typing-extensions==4.12.2",
+  "tzdata==2024.2",
+  "tzlocal==5.2",
+  "urllib3 (==2.6.0)",
+  "uvicorn==0.30.6",
+  "wrapt==1.17.2",
+  "yarl==1.18.3"
+]
+
+[tool.poetry]
 package-mode = false
-
-[tool.poetry.dependencies]
-python = "^3.13"
-fastapi = "0.115.6"
-uvicorn = "0.30.6"
-sqlalchemy = "^2.0.20"
-dynaconf = "^3.2.1"
-asyncpg = "^0.30.0"
-meilisearch-python-sdk = "2.9.0"
-bcrypt = "^4.0.1"
-email-validator = "2.0.0.post2"
-pytest = "^7.4.0"
-pytest-postgresql = "^6.1.1"
-async-asgi-testclient = "^1.4.11"
-pytest-asyncio = "^0.21.1"
-aiohttp = "3.10.11"
-apscheduler = "^3.11.0"
-alembic = "^1.11.3"
-greenlet = "^3.0.1"
-aioboto3 = "^12.1.0"
-python-multipart = "0.0.20"
-puremagic = "^1.15"
-imagesize = "^1.4.1"
-sqlalchemy-utils = "^0.41.1"
-requests = "^2.32.3"
-urllib3 = "2.2.2"
-gunicorn = "^22.0.0"
-prometheus-fastapi-instrumentator = "^7.0.0"
-pyinstrument = "^4.6.2"
-certifi = "2024.07.04"
-starlette = "0.41.3"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 python_functions = "test_*"
@@ -50,7 +93,7 @@ pythonpath = ["."]
 
 [tool.ruff]
 line-length = 80
-exclude = [".venv", "venv", "alembic"]
+exclude = [".venv", "venv"]
 
 [tool.ruff.lint]
 extend-ignore = [

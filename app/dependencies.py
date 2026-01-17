@@ -41,7 +41,7 @@ async def get_size(
         ge=1,
         le=100,
         default=constants.SEARCH_RESULT_SIZE,
-    )
+    ),
 ):
     return size
 
@@ -87,7 +87,9 @@ async def _auth_token_or_abort(
     if now > token.expiration:
         return Abort("auth", "token-expired")
 
-    token.used = now
+    if not token.used or now - token.used >= timedelta(minutes=5):
+        token.used = now
+
     await session.commit()
 
     return token
@@ -162,10 +164,18 @@ def auth_required(
             raise Abort("user", "deleted")
 
         # After each authenticated request token expiration will be reset
-        token.expiration = now + timedelta(days=7)
-        token.user.last_active = now
+        if (
+            not token.user.last_active
+            or now - token.user.last_active >= timedelta(minutes=5)
+        ):
+            token.user.last_active = now
 
-        session.add(token)
+        # We need to update token expiraion once in a while
+        # 3 days before expiration is arbitrary
+        # we may need to update it later on
+        if now - token.expiration <= timedelta(days=3):
+            token.expiration = now + timedelta(days=30)
+
         await session.commit()
 
         return token.user
@@ -175,7 +185,7 @@ def auth_required(
 
 # Validate captcha
 async def check_captcha(
-    captcha: Annotated[str, Header(alias="captcha")]
+    captcha: Annotated[str, Header(alias="captcha")],
 ) -> bool:
     settings = get_settings()
 

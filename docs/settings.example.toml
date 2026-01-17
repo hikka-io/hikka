@@ -19,6 +19,8 @@
 
     [default.backend]
     plausible = "http://127.0.0.1:8000"
+    plausible_token = "TOKEN"
+
     aggregator = "http://aggregator.local/database"
     sitemap_path = "/Users/user/Work/Hikka/sitemap"
     auth_emails = []

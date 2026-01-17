@@ -1,4 +1,5 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
+from app.common.schemas import UserCustomizationArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
@@ -25,6 +26,7 @@ from .schemas import (
     ReadDeleteContenType,
     ImportWatchListArgs,
     ImportReadListArgs,
+    UserExportResponse,
     DescriptionArgs,
     ImageTypeEnum,
 )
@@ -51,6 +53,21 @@ async def change_description(
     ),
 ):
     return await service.change_description(session, user, args.description)
+
+
+@router.put(
+    "/ui",
+    response_model=SuccessResponse,
+)
+async def change_ui(
+    args: UserCustomizationArgs,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_CUSTOMIZATION])
+    ),
+):
+    await service.set_customization(session, user, args)
+    return {"success": True}
 
 
 @router.put(
@@ -159,6 +176,18 @@ async def import_read(
     )
 
     return {"success": True}
+
+
+@router.post(
+    "/export",
+    response_model=UserExportResponse,
+    summary="Export list",
+)
+async def export_list(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required(scope=[constants.SCOPE_EXPORT_LIST])),
+):
+    return await service.get_export_list(session, user)
 
 
 @router.put(

@@ -1,5 +1,5 @@
-from sqlalchemy import select, desc, asc, case, and_, or_, func
-from app.common.utils import find_document_images
+from sqlalchemy import select, update, desc, asc, case, and_, or_, func
+from app.common.utils import find_document_images, generate_preview
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -12,6 +12,7 @@ from uuid import uuid4
 
 from app.models import (
     UserArticleStats,
+    ArticleComment,
     ArticleTag,
     Article,
     Anime,
@@ -34,22 +35,13 @@ from .schemas import (
 )
 
 
-async def get_or_create_tag(session: AsyncSession, name: str, category: str):
+async def get_or_create_tag(session: AsyncSession, name: str):
     if not (
         tag := await session.scalar(
-            select(ArticleTag).filter(
-                ArticleTag.name == name,
-                ArticleTag.category == category,
-            )
+            select(ArticleTag).filter(ArticleTag.name == name)
         )
     ):
-        tag = ArticleTag(
-            **{
-                "content_count": 0,
-                "category": category,
-                "name": name,
-            }
-        )
+        tag = ArticleTag(**{"content_count": 0, "name": name})
         session.add(tag)
 
     return tag
@@ -134,12 +126,13 @@ async def create_article(
     tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name, args.category)
+        tag = await get_or_create_tag(session, name)
         tag.content_count += 1
         tags.append(tag)
 
     article = Article(
         **{
+            "preview": generate_preview(args.document),
             "category": args.category,
             "document": args.document,
             "trusted": args.trusted,
@@ -209,6 +202,11 @@ async def update_article(
     before = {}
     after = {}
 
+    old_document = article.document
+
+    # If article draft changed to false we shall update creation time
+    update_created = article.draft is True and args.draft is False
+
     for key in ["category", "draft", "title", "document", "trusted"]:
         old_value = getattr(article, key)
         new_value = getattr(args, key)
@@ -217,6 +215,25 @@ async def update_article(
             before[key] = old_value
             setattr(article, key, new_value)
             after[key] = new_value
+
+    # Here we mark old images as delted and new as used
+    old_image_nodes = find_document_images(old_document)
+    old_urls = set([entry["url"] for entry in old_image_nodes])
+
+    new_image_nodes = find_document_images(args.document)
+    new_urls = set([entry["url"] for entry in new_image_nodes])
+
+    old_images = await get_images(session, list(old_urls - new_urls))
+    new_images = await get_images(session, list(new_urls - old_urls))
+
+    for image in old_images:
+        image.attachment_content_type = None
+        image.attachment_content_id = None
+        image.deletion_request = True
+
+    for image in new_images:
+        image.attachment_content_type = constants.CONTENT_ARTICLE
+        image.attachment_content_id = article.id
 
     # Content being removed from the article
     if content is None and article.content_id is not None:
@@ -252,7 +269,7 @@ async def update_article(
     new_tags = []
 
     for name in args.tags:
-        tag = await get_or_create_tag(session, name, article.category)
+        tag = await get_or_create_tag(session, name)
         new_tags.append(tag)
 
     old_tag_names = set([tag.name for tag in old_tags])
@@ -269,8 +286,14 @@ async def update_article(
         for tag in new_tags:
             tag.content_count += 1
 
-    article.updated = utcnow()
-    session.add(article)
+    now = utcnow()
+
+    article.preview = generate_preview(article.document)
+    article.updated = now
+
+    if update_created:
+        article.created = now
+
     await session.commit()
 
     if before != {} and after != {}:
@@ -289,8 +312,29 @@ async def update_article(
 
 
 async def delete_article(session: AsyncSession, article: Article, user: User):
+    # Here we mark old images as delted and new as used
+    image_nodes = find_document_images(article.document)
+    image_urls = set([entry["url"] for entry in image_nodes])
+
+    images = await get_images(session, image_urls)
+
+    for image in images:
+        image.attachment_content_type = None
+        image.attachment_content_id = None
+        image.deletion_request = True
+
+    for tag in article.tags:
+        tag.content_count -= 1
+
     article.deleted = True
     session.add(article)
+
+    # Mark comments for deleted article as private
+    await session.execute(
+        update(ArticleComment)
+        .filter(ArticleComment.content == article)
+        .values(private=True)
+    )
 
     await session.commit()
 
@@ -310,6 +354,9 @@ async def articles_list_filter(
     args: ArticlesListArgs,
     session: AsyncSession,
 ):
+    # We don't want to display system articles in global list
+    query = query.filter(Article.category != constants.ARTICLE_SYSTEM)
+
     if len(args.categories) > 0:
         query = query.filter(Article.category.in_(args.categories))
 
@@ -418,6 +465,8 @@ async def get_articles(
     )
 
 
+# WFT is this?
+# TODO: rework and remove this function
 async def load_articles_content(
     session: AsyncSession,
     article_or_articles: Article | list[Article],
@@ -507,6 +556,5 @@ async def get_article_authors(session: AsyncSession, request_user: User):
                 )
             )
         )
-        .order_by(UserArticleStats.total.desc())
-        .limit(3)
+        .order_by(UserArticleStats.author_score.desc())
     )

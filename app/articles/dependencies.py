@@ -34,15 +34,18 @@ def can_use_category(user: User, category: str):
         constants.ROLE_USER: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
         constants.ROLE_MODERATOR: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
         constants.ROLE_ADMIN: [
             constants.ARTICLE_NEWS,
             constants.ARTICLE_SYSTEM,
             constants.ARTICLE_REVIEWS,
+            constants.ARTICLE_ORIGINAL,
         ],
     }.get(user.role, [])
 
@@ -98,7 +101,7 @@ async def validate_article_create(
         session,
         constants.LOG_ARTICLE_CREATE,
         author,
-        start_time=round_datetime(utcnow(), hours=1),
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
     )
 
     if (
@@ -172,7 +175,7 @@ async def validate_article_update(
         session,
         constants.LOG_ARTICLE_UPDATE,
         user,
-        start_time=round_datetime(utcnow(), hours=1),
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
     )
 
     if (
@@ -185,8 +188,11 @@ async def validate_article_update(
     ):
         raise Abort("system", "rate-limit")
 
-    # We leave it here for now, maybe change in the future
-    if args.category != article.category:
+    if article.draft is False and args.draft is True:
+        raise Abort("articles", "bad-draft")
+
+    # We allow changing category for article drafts
+    if article.draft is False and args.category != article.category:
         raise Abort("articles", "bad-category")
 
     # Yeah, this check is pointless considering previous one
@@ -224,7 +230,7 @@ async def validate_article_update(
             if image.type != constants.UPLOAD_ATTACHMENT:
                 raise Abort("articles", "bad-image-url")
 
-            if image.user_id != author.id:
+            if image.user_id != article.author_id:
                 raise Abort("articles", "bad-image-url")
 
             if image.deletion_request:

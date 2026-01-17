@@ -32,11 +32,12 @@ async def test_articles_create(
             "document": [
                 {"text": "Lorem ipsum dor sit amet."},
                 {
-                    "type": "media",
+                    "type": "image_group",
                     "children": [
                         {
                             "type": "image",
                             "url": new_attachment_url,
+                            "children": [],
                         }
                     ],
                 },
@@ -62,11 +63,12 @@ async def test_articles_create(
     assert r_data["document"] == [
         {"text": "Lorem ipsum dor sit amet."},
         {
-            "type": "media",
+            "type": "image_group",
             "children": [
                 {
                     "type": "image",
                     "url": new_attachment_url,
+                    "children": [],
                 }
             ],
         },
@@ -83,11 +85,12 @@ async def test_articles_create(
     assert log.data["document"] == [
         {"text": "Lorem ipsum dor sit amet."},
         {
-            "type": "media",
+            "type": "image_group",
             "children": [
                 {
                     "type": "image",
                     "url": new_attachment_url,
+                    "children": [],
                 }
             ],
         },
@@ -102,8 +105,12 @@ async def test_articles_create(
     assert log.data["draft"] is False
     assert len(log.data["tags"]) == 2
 
-    path = new_attachment_url.replace(constants.CDN_ENDPOINT, "")
-    image = await test_session.scalar(select(Image).filter(Image.path == path))
+    image = await test_session.scalar(
+        select(Image).filter(
+            Image.path == new_attachment_url.replace(constants.CDN_ENDPOINT, "")
+        )
+    )
+
     article = await test_session.scalar(
         select(Article).filter(Article.slug == r_data["slug"])
     )

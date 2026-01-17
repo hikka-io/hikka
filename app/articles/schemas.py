@@ -17,6 +17,7 @@ from app.schemas import (
 
 # Enums
 class ArticleCategoryEnum(str, Enum):
+    article_original = constants.ARTICLE_ORIGINAL
     article_reviews = constants.ARTICLE_REVIEWS
     article_system = constants.ARTICLE_SYSTEM
     article_news = constants.ARTICLE_NEWS
@@ -72,7 +73,7 @@ class ArticleArgs(CustomModel):
 
 class ArticlesListArgs(CustomModel):
     content_type: ArticleContentEnum | None = None
-    min_vote_score: int | None = Field(0, ge=0)
+    min_vote_score: int | None = Field(None, ge=0)
     categories: list[ArticleCategoryEnum] = []
     tags: list[str] = Field([], max_length=3)  # TODO: tags mixin (?)
     sort: list[str] = ["created:desc"]
@@ -98,39 +99,61 @@ class TagResponse(CustomModel):
     name: str
 
 
-class ArticleContentResponse(CustomModel, DataTypeMixin):
+class ArticleContentResponseBase(CustomModel, DataTypeMixin):
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
-    title_ja: str | None
     title_en: str | None
     title_ua: str | None
     slug: str
 
 
+class ArticleAnimeContentResponse(ArticleContentResponseBase):
+    title_ja: str | None
+
+
+class ArticleMangaNovelContentResponse(ArticleContentResponseBase):
+    title_original: str | None
+
+
+# TODO: Make separate responses for catalog and article info
 class ArticleResponse(CustomModel, DataTypeMixin):
-    content: ArticleContentResponse | None
     author: FollowUserResponse
     tags: list[TagResponse]
     created: datetime_pd
     updated: datetime_pd
-    document: list[dict]
     comments_count: int
     vote_score: int
     my_score: int
     category: str
     trusted: bool
     draft: bool
+    views: int
     title: str
     slug: str
+
+    content: (
+        ArticleAnimeContentResponse | ArticleMangaNovelContentResponse | None
+    )
+
+
+class ArticlePreviewResponse(ArticleResponse):
+    preview: list[dict]
+
+
+class ArticleDocumentResponse(ArticleResponse):
+    document: list[dict]
 
 
 class ArticlesListResponse(CustomModel):
     pagination: PaginationResponse
-    list: list[ArticleResponse]
+    list: list[ArticlePreviewResponse]
 
 
 class UserArticleStatsResponse(CustomModel):
     user: FollowUserResponse
-    total: int
+    total_articles: int
+    total_comments: int
+    author_score: int
+    total_likes: int
 
 
 class ArticlesTopResponse(CustomModel):

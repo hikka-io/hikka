@@ -13,6 +13,7 @@ from .user.history import WatchImportHistory
 from .user.history import WatchDeleteHistory
 from .user.history import ReadImportHistory
 from .user.history import WatchHistory
+from .user.export import UserExport
 from .user.history import History
 from .user.oauth import UserOAuth
 from .user.follow import Follow
@@ -28,6 +29,9 @@ from .edit.edit import Edit
 from .moderation.moderation import Moderation
 
 from .comments.comment import CollectionComment
+from .comments.comment import CharacterComment
+from .comments.comment import ArticleComment
+from .comments.comment import PersonComment
 from .comments.comment import AnimeComment
 from .comments.comment import MangaComment
 from .comments.comment import NovelComment
@@ -75,6 +79,7 @@ from .content.author import AuthorRole
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
 from .system.activity import Activity
+from .system.artifact import Artifact
 from .system.image import Image
 from .system.log import Log
 
@@ -118,6 +123,7 @@ __all__ = [
     "WatchDeleteHistory",
     "ReadImportHistory",
     "WatchHistory",
+    "UserExport",
     "History",
     "Moderation",
     "UserOAuth",
@@ -130,6 +136,9 @@ __all__ = [
     "NovelEdit",
     "Edit",
     "CollectionComment",
+    "CharacterComment",
+    "ArticleComment",
+    "PersonComment",
     "AnimeComment",
     "MangaComment",
     "NovelComment",
@@ -169,6 +178,7 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
+    "Artifact",
     "Image",
     "Log",
     "CollectionVote",

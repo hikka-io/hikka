@@ -136,7 +136,7 @@ async def recalculate_ranking(session: AsyncSession):
 
 
 async def update_ranking():
-    """Recalculare user generateg content ranking from logs"""
+    """Recalculare user generated content ranking from logs"""
 
     async with sessionmanager.session() as session:
         await recalculate_ranking(session)

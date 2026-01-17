@@ -17,7 +17,11 @@ class SignupArgs(UsernameArgs, PasswordArgs, EmailArgs):
     pass
 
 
-class LoginArgs(PasswordArgs, EmailArgs):
+class EmailLoginArgs(PasswordArgs, EmailArgs):
+    pass
+
+
+class UsernameLoginArgs(PasswordArgs, UsernameArgs):
     pass
 
 

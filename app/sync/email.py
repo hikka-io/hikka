@@ -47,13 +47,22 @@ async def send_email(session: AsyncSession, email: EmailMessage):
     template = template.replace("{token}", email.content)
     subject = subjects[email.type]
 
+    user_email = email.user.email
+
+    # If user in process of changing email we send letter to new email
+    if (
+        email.type == constants.EMAIL_ACTIVATION
+        and email.user.new_email is not None
+    ):
+        user_email = email.user.new_email
+
     async with aiohttp.ClientSession() as aiohttp_session:
         async with aiohttp_session.post(
             settings.mailgun.endpoint,
             auth=aiohttp.BasicAuth("api", settings.mailgun.token),
             data={
                 "from": settings.mailgun.email_from,
-                "to": [email.user.email],
+                "to": [user_email],
                 "subject": subject,
                 "html": template,
             },

@@ -11,7 +11,7 @@ async def get_company_by_slug(
     session: AsyncSession, slug: str
 ) -> Company | None:
     return await session.scalar(
-        select(Company).filter(func.lower(Company.slug) == slug.lower())
+        select(Company).filter(Company.slug == slug.lower())
     )
 
 

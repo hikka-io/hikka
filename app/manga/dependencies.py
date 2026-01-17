@@ -40,8 +40,13 @@ async def validate_search_manga(
 
     # Check if provided genres exist
     if len(search.genres) > 0:
-        genres = await genres_count(session, search.genres)
-        if genres != len(search.genres):
+        genre_names_to_validate = {
+            genre[1:] if genre.startswith("-") else genre for genre in search.genres
+        }
+
+        valid_genres_count = await genres_count(session, list(genre_names_to_validate))
+        
+        if valid_genres_count != len(genre_names_to_validate):
             raise Abort("manga", "unknown-genre")
 
     return search

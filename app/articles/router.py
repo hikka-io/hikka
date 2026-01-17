@@ -19,10 +19,10 @@ from app.models import (
 )
 
 from .schemas import (
+    ArticleDocumentResponse,
     ArticlesListResponse,
     ArticlesTopResponse,
     ArticlesListArgs,
-    ArticleResponse,
     ArticleArgs,
 )
 
@@ -45,7 +45,7 @@ from app.dependencies import (
 router = APIRouter(prefix="/articles", tags=["Articles"])
 
 
-@router.post("/create", response_model=ArticleResponse)
+@router.post("/create", response_model=ArticleDocumentResponse)
 async def create_article(
     args: ArticleArgs,
     session: AsyncSession = Depends(get_session),
@@ -55,7 +55,7 @@ async def create_article(
     return await service.create_article(session, args, author, content)
 
 
-@router.put("/{slug}", response_model=ArticleResponse)
+@router.put("/{slug}", response_model=ArticleDocumentResponse)
 async def update_article(
     args: ArticleArgs,
     article: Article = Depends(validate_article_update),
@@ -93,12 +93,12 @@ async def get_article_top(
     ),
 ):
     return {
-        "tags": await service.get_article_tags(session),
         "authors": await service.get_article_authors(session, request_user),
+        "tags": await service.get_article_tags(session),
     }
 
 
-@router.get("/{slug}", response_model=ArticleResponse)
+@router.get("/{slug}", response_model=ArticleDocumentResponse)
 async def get_article(article: Article = Depends(validate_article)):
     return article
 

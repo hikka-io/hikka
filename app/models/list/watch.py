@@ -21,7 +21,7 @@ class AnimeWatch(Base, DeletedMixin):
     updated: Mapped[datetime]
 
     anime_id = mapped_column(ForeignKey("service_content_anime.id"))
-    user_id = mapped_column(ForeignKey("service_users.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"), index=True)
 
     anime: Mapped["Anime"] = relationship(
         back_populates="watch", foreign_keys=[anime_id]

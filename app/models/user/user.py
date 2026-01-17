@@ -8,6 +8,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy import Index
+from sqlalchemy import func
 from ..base import Base
 
 
@@ -24,6 +26,11 @@ class User(Base, NeedsSearchUpdateMixin):
 
     activation_token: Mapped[str] = mapped_column(String(64), nullable=True)
     activation_expire: Mapped[datetime] = mapped_column(nullable=True)
+
+    # Field for email change flow
+    new_email: Mapped[str] = mapped_column(
+        String(255), index=True, nullable=True
+    )
 
     password_reset_token: Mapped[str] = mapped_column(String(64), nullable=True)
     password_reset_expire: Mapped[datetime] = mapped_column(nullable=True)
@@ -136,22 +143,49 @@ class User(Base, NeedsSearchUpdateMixin):
         },
     )
 
+    styles: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "light": None,
+            "dark": None,
+            "radius": None,
+            "typography": None,
+        },
+    )
+
+    preferences: Mapped[dict] = mapped_column(
+        JSONB,
+        default={
+            "title_language": None,
+            "name_language": None,
+            "effects": None,
+        },
+    )
+
+    __table_args__ = (
+        Index("ix_lower_username", func.lower(username), unique=True),
+    )
+
     @hybrid_property
     def avatar(self):
-        if not self.avatar_image:
-            return "https://cdn.hikka.io/avatar.jpg"
-
-        if self.avatar_image.ignore or not self.avatar_image.uploaded:
+        if (
+            not self.avatar_image
+            or self.avatar_image.ignore
+            or not self.avatar_image.uploaded
+            or self.role == "deleted"
+        ):
             return "https://cdn.hikka.io/avatar.jpg"
 
         return self.avatar_image.url
 
     @hybrid_property
     def cover(self):
-        if not self.cover_image:
-            return None
-
-        if self.cover_image.ignore or not self.cover_image.uploaded:
+        if (
+            not self.cover_image
+            or self.cover_image.ignore
+            or not self.cover_image.uploaded
+            or self.role == "deleted"
+        ):
             return None
 
         return self.cover_image.url

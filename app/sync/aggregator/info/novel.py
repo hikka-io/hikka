@@ -35,7 +35,7 @@ async def aggregator_novel_info():
             .order_by(desc("score"), desc("scored_by"))
         )
 
-    semaphore = asyncio.Semaphore(10)
+    semaphore = asyncio.Semaphore(5)
 
     tasks = [
         update_novel_info(semaphore, content_id) for content_id in novel_list

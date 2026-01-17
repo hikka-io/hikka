@@ -1,5 +1,6 @@
 from app.database import sessionmanager
 from app import aggregator
+from app import constants
 from . import requests
 from app import utils
 import asyncio
@@ -27,5 +28,5 @@ async def aggregator_novel():
 
     data = [item for sublist in result for item in sublist]
 
-    for data_chunk in utils.chunkify(data, 5000):
+    for data_chunk in utils.chunkify(data, constants.ALCHEMY_CHUNK_LIMIT_ALT):
         await save_novel_list(data_chunk)

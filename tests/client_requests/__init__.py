@@ -6,6 +6,7 @@ from .auth import request_activation_resend
 from .auth import request_password_confirm
 from .auth import request_auth_token_info
 from .auth import request_password_reset
+from .auth import request_login_username
 from .auth import request_revoke_token
 from .auth import request_activation
 from .auth import request_auth_token
@@ -25,6 +26,7 @@ from .oauth import request_oauth_post
 from .oauth import request_oauth_url
 
 from .user import request_profile
+from .user import request_me_ui
 from .user import request_me
 
 from .follow import request_follow_stats
@@ -39,7 +41,6 @@ from .anime import request_anime_characters
 from .anime import request_anime_franchise
 from .anime import request_anime_episodes
 from .anime import request_anime_search
-from .anime import request_anime_genres
 from .anime import request_anime_staff
 from .anime import request_anime_info
 
@@ -94,6 +95,7 @@ from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
 
+from .settings import request_settings_customization
 from .settings import request_settings_delete_watch
 from .settings import request_settings_delete_image
 from .settings import request_settings_import_watch
@@ -116,12 +118,17 @@ from .articles import request_delete_article
 from .articles import request_article_stats
 from .articles import request_articles
 
+from .artifacts import request_artifact_privacy
+from .artifacts import request_artifact
+
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
 
 from .vote import request_vote_status
 from .vote import request_vote
+
+from .genres import request_genres
 
 from .upload import request_upload
 
@@ -137,6 +144,7 @@ __all__ = [
     "request_password_confirm",
     "request_auth_token_info",
     "request_password_reset",
+    "request_login_username",
     "request_revoke_token",
     "request_activation",
     "request_auth_token",
@@ -156,6 +164,7 @@ __all__ = [
     "request_oauth_url",
     # =========== user ===========
     "request_profile",
+    "request_me_ui",
     "request_me",
     # =========== follow ===========
     "request_follow_stats",
@@ -225,6 +234,7 @@ __all__ = [
     "request_comments_edit",
     "request_comments_hide",
     # =========== settings ===========
+    "request_settings_customization",
     "request_settings_delete_watch",
     "request_settings_delete_image",
     "request_settings_import_watch",
@@ -246,6 +256,9 @@ __all__ = [
     "request_delete_article",
     "request_article_stats",
     "request_articles",
+    # =========== artifacts ===========
+    "request_artifact_privacy",
+    "request_artifact",
     # =========== notifications ===========
     "request_notifications_count",
     "request_notification_seen",
@@ -253,6 +266,8 @@ __all__ = [
     # =========== vote ===========
     "request_vote_status",
     "request_vote",
+    # =========== genres ===========
+    "request_genres",
     # =========== upload ===========
     "request_upload",
     # =========== system ===========

@@ -31,11 +31,12 @@ from .service import (
 )
 
 from .schemas import (
+    UsernameLoginArgs,
     ComfirmResetArgs,
     TokenRequestArgs,
     TokenProceedArgs,
+    EmailLoginArgs,
     SignupArgs,
-    LoginArgs,
     TokenArgs,
     CodeArgs,
 )
@@ -80,10 +81,16 @@ async def validate_signup(
 
 
 async def validate_login(
-    login: LoginArgs, session: AsyncSession = Depends(get_session)
+    login: EmailLoginArgs | UsernameLoginArgs,
+    session: AsyncSession = Depends(get_session),
 ) -> User:
-    # Find user by email
-    if not (user := await get_user_by_email(session, login.email)):
+    # Find user by email or username
+    if isinstance(login, EmailLoginArgs):
+        user = await get_user_by_email(session, login.email)
+    else:
+        user = await get_user_by_username(session, login.username)
+
+    if user is None:
         raise Abort("auth", "user-not-found")
 
     if user.role == constants.ROLE_DELETED:
@@ -101,9 +108,7 @@ async def validate_provider(provider: str) -> str:
     settings = get_settings()
 
     enabled_providers = [
-        provider
-        for provider in settings.oauth
-        if settings.oauth[provider].enabled
+        provider for provider in settings.oauth if settings.oauth[provider].enabled
     ]
 
     if provider not in enabled_providers:
@@ -231,9 +236,7 @@ async def validate_auth_token_request(
 ):
     now = utcnow()
 
-    if not (
-        request := await get_auth_token_request(session, args.request_reference)
-    ):
+    if not (request := await get_auth_token_request(session, args.request_reference)):
         raise Abort("auth", "invalid-token-request")
 
     if now > request.expiration:

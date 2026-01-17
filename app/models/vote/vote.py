@@ -18,7 +18,7 @@ class Vote(Base, CreatedMixin, UpdatedMixin):
     content_type: Mapped[str]
     content_id: Mapped[UUID]
 
-    user_id = mapped_column(ForeignKey("service_users.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"), index=True)
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
 
 

@@ -9,6 +9,7 @@ from ..base import Base
 from uuid import UUID
 
 from ..mixins import (
+    CommentContentMixin,
     MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
@@ -23,19 +24,20 @@ class Article(
     UpdatedMixin,
     DeletedMixin,
     MyScoreMixin,
+    CommentContentMixin,
     SlugMixin,
 ):
     __tablename__ = "service_articles"
-
-    comments_count: Mapped[int] = mapped_column(default=0)
 
     # In community we trust (but it's nice to have some control)
     trusted: Mapped[bool] = mapped_column(default=False)
 
     category: Mapped[str] = mapped_column(String(32), index=True)
     document: Mapped[list] = mapped_column(JSONB, default=[])
+    preview: Mapped[list] = mapped_column(JSONB, default=[])
     draft: Mapped[bool] = mapped_column(default=True)
     title: Mapped[str] = mapped_column(String(255))
+    views: Mapped[int] = mapped_column(default=0)
     vote_score: Mapped[int]
 
     author_id = mapped_column(ForeignKey("service_users.id"))

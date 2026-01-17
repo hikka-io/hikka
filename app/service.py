@@ -1,5 +1,4 @@
 from sqlalchemy import select, asc, desc, and_, or_, func
-from app.utils import new_token, is_int, is_uuid, utcnow
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
@@ -9,6 +8,14 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
+
+from app.utils import (
+    enumerate_seasons,
+    new_token,
+    is_uuid,
+    utcnow,
+    is_int,
+)
 
 from .schemas import (
     AnimeSearchArgsBase,
@@ -163,7 +170,9 @@ async def get_content_by_id(
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # TODO: We would need to get rid of delete eventually
+            # Or handle it in some other manner when anime gets deleted
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.anime == anime,
             AnimeWatch.user == user,
         )
@@ -187,7 +196,7 @@ async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
 async def get_anime_by_slug(session: AsyncSession, slug: str) -> Anime | None:
     return await session.scalar(
         select(Anime).filter(
-            func.lower(Anime.slug) == slug.lower(),
+            Anime.slug == slug.lower(),
             Anime.deleted == False,  # noqa: E712
         )
     )
@@ -288,14 +297,18 @@ async def count_logs(
 def anime_loadonly(statement):
     return statement.load_only(
         Anime.episodes_released,
+        Anime.native_scored_by,
         Anime.episodes_total,
         Anime.translated_ua,
+        Anime.native_score,
         Anime.synopsis_en,
         Anime.synopsis_ua,
         Anime.content_id,
+        Anime.start_date,
         Anime.media_type,
         Anime.scored_by,
         Anime.title_ja,
+        Anime.end_date,
         Anime.title_en,
         Anime.title_ua,
         Anime.season,
@@ -332,11 +345,19 @@ def calculate_watch_duration(watch: AnimeWatch) -> int:
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Anime.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Anime.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Anime.native_score >= search.native_score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Anime.native_score <= search.native_score[1])
 
     if len(search.rating) > 0:
         query = query.filter(Anime.rating.in_(search.rating))
@@ -382,36 +403,68 @@ def anime_search_filter(
             Company.slug.in_(search.studios)
         )
 
-    # All genres must be present in query result
     if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Anime.genres.any(Genre.slug == slug)
-                    for slug in search.genres
-                ]
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        Anime.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
-        )
+
+        if exclude_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        ~Anime.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
 
     airing_seasons_filters = []
     season_filters = []
 
-    # Special filter for multi season titles
-    if (
-        search.include_multiseason
-        and search.years[0] is not None
-        and search.years[1] is not None
-    ):
-        for year in range(search.years[0], search.years[1] + 1):
-            for season in search.season:
-                airing_seasons_filters.append(
-                    Anime.airing_seasons.op("?")(f"{season}_{year}")
-                )
+    if search.years[0] is not None and search.years[1] is not None:
+        # Special filter for multi season titles
+        if (
+            search.include_multiseason
+            and isinstance(search.years[0], int)
+            and isinstance(search.years[1], int)
+        ):
+            for year in range(search.years[0], search.years[1] + 1):
+                for season in search.season:
+                    airing_seasons_filters.append(
+                        Anime.airing_seasons.op("?")(f"{season}_{year}")
+                    )
 
-    if search.years[0]:
+        # If user passed 2 complex year filters we build it here
+        if isinstance(search.years[0], tuple) and isinstance(
+            search.years[1], tuple
+        ):
+            airing_seasons_filters += [
+                Anime.airing_seasons.op("?")(airing_season)
+                for airing_season in enumerate_seasons(
+                    search.years[0], search.years[1]
+                )
+            ]
+
+    # Here we build filters for int years
+    if search.years[0] and isinstance(search.years[0], int):
         season_filters.append(Anime.year >= search.years[0])
 
-    if search.years[1]:
+    if search.years[1] and isinstance(search.years[1], int):
         season_filters.append(Anime.year <= search.years[1])
 
     if len(search.season) > 0:
@@ -436,10 +489,12 @@ def anime_search_filter(
 
 def build_anime_order_by(sort: list[str]):
     order_mapping = {
+        "native_scored_by": Anime.native_scored_by,
         "episodes_total": Anime.episodes_total,
         "watch_episodes": AnimeWatch.episodes,
         "watch_updated": AnimeWatch.updated,
         "watch_created": AnimeWatch.created,
+        "native_score": Anime.native_score,
         "watch_score": AnimeWatch.score,
         "media_type": Anime.media_type,
         "start_date": Anime.start_date,
@@ -539,6 +594,8 @@ async def magazines_count(session: AsyncSession, slugs: list[str]):
 
 def build_manga_order_by(sort: list[str]):
     order_mapping = read_order_mapping | {
+        "native_scored_by": Manga.native_scored_by,
+        "native_score": Manga.native_score,
         "media_type": Manga.media_type,
         "start_date": Manga.start_date,
         "scored_by": Manga.scored_by,
@@ -562,11 +619,19 @@ def manga_search_filter(
     query: Select,
     hide_nsfw=True,
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Manga.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Manga.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Manga.score >= search.score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Manga.native_score <= search.native_score[1])
 
     if len(search.status) > 0:
         query = query.filter(Manga.status.in_(search.status))
@@ -599,22 +664,43 @@ def manga_search_filter(
             )
         )
 
-    # All genres must be present in query result
     if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Manga.genres.any(Genre.slug == slug)
-                    for slug in search.genres
-                ]
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        Manga.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
-        )
+
+        if exclude_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        ~Manga.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
 
     return query
 
 
 def build_novel_order_by(sort: list[str]):
     order_mapping = read_order_mapping | {
+        "native_scored_by": Novel.native_scored_by,
+        "native_score": Novel.native_score,
         "media_type": Novel.media_type,
         "start_date": Novel.start_date,
         "scored_by": Novel.scored_by,
@@ -638,11 +724,19 @@ def novel_search_filter(
     query: Select,
     hide_nsfw=True,
 ):
+    # Score filters
     if search.score[0] and search.score[0] > 0:
         query = query.filter(Novel.score >= search.score[0])
 
     if search.score[1]:
         query = query.filter(Novel.score <= search.score[1])
+
+    # Native score filters
+    if search.native_score[0] and search.native_score[0] > 0:
+        query = query.filter(Novel.native_score >= search.native_score[0])
+
+    if search.native_score[1]:
+        query = query.filter(Novel.native_score <= search.native_score[1])
 
     if len(search.status) > 0:
         query = query.filter(Novel.status.in_(search.status))
@@ -675,15 +769,34 @@ def novel_search_filter(
             )
         )
 
-    # All genres must be present in query result
     if len(search.genres) > 0:
-        query = query.filter(
-            and_(
-                *[
-                    Novel.genres.any(Genre.slug == slug)
-                    for slug in search.genres
-                ]
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        Novel.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
             )
-        )
+
+        if exclude_genres:
+            query = query.filter(
+                and_(
+                    *[
+                        ~Novel.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
 
     return query

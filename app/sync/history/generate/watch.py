@@ -1,7 +1,6 @@
-from datetime import timedelta
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import History, Log
+from datetime import timedelta
 from app import constants
 from .. import service
 import copy

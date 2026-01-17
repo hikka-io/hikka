@@ -90,40 +90,43 @@ async def test_comments_edit_count_limit(
     response = await request_comments_write(
         client, get_test_token, "edit", "17", "Old text"
     )
-    comment_reference = response.json()["reference"]
 
-    edit_count_limit = 5
+    comment = await test_session.scalar(
+        select(Comment).filter(Comment.id == response.json()["reference"])
+    )
 
-    for index, _ in enumerate(range(0, edit_count_limit + 1)):
-        response = await request_comments_edit(
-            client,
-            get_test_token,
-            response.json()["reference"],
-            f"New text {index}",
-        )
+    edit_count_limit = 500
 
-        # Make sure request prior to the count limit is good
-        if index == edit_count_limit - 2:
-            comment = await test_session.scalar(
-                select(Comment).filter(Comment.id == comment_reference)
-            )
-            await test_session.refresh(comment)
+    # Fill up fake history
+    comment.history = list(range(edit_count_limit - 1))
+    test_session.add(comment)
+    await test_session.commit()
 
-            assert comment.is_editable is True
+    await test_session.refresh(comment)
+    assert comment.is_editable is True
 
-            assert response.status_code == status.HTTP_200_OK
-            assert "code" not in response.json()
+    response = await request_comments_edit(
+        client,
+        get_test_token,
+        response.json()["reference"],
+        "New text editable",
+    )
 
-        if index == edit_count_limit:
-            comment = await test_session.scalar(
-                select(Comment).filter(Comment.id == comment_reference)
-            )
-            await test_session.refresh(comment)
+    assert response.status_code == status.HTTP_200_OK
+    assert "code" not in response.json()
 
-            assert comment.is_editable is False
+    await test_session.refresh(comment)
+    assert comment.is_editable is False
 
-            assert response.status_code == status.HTTP_400_BAD_REQUEST
-            assert response.json()["code"] == "comment:not_editable"
+    response = await request_comments_edit(
+        client,
+        get_test_token,
+        response.json()["reference"],
+        "New text uneditable",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "comment:not_editable"
 
 
 async def test_comments_edit_time_limit(
@@ -143,7 +146,7 @@ async def test_comments_edit_time_limit(
     )
 
     # Send comment back in time to test time limit
-    comment.created = comment.created - timedelta(hours=1)
+    comment.created = comment.created - timedelta(hours=24)
     test_session.add(comment)
     await test_session.commit()
 

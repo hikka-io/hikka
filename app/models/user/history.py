@@ -22,7 +22,7 @@ class History(Base, CreatedMixin, UpdatedMixin):
     target_id: Mapped[UUID] = mapped_column(nullable=True)
     data: Mapped[dict] = mapped_column(JSONB, default={})
 
-    user_id = mapped_column(ForeignKey("service_users.id"))
+    user_id = mapped_column(ForeignKey("service_users.id"), index=True)
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
 
     used_logs: Mapped[list[str]] = mapped_column(ARRAY(String))

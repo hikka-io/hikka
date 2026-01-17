@@ -159,6 +159,46 @@ class YearsMixin:
         return years
 
 
+class YearsSeasonsMixin:
+    years: list[tuple[SeasonEnum, PositiveInt]] | list[PositiveInt | None] = (
+        Field(
+            default=[None, None],
+            examples=[
+                [2014, 2024],
+                [["summer", 2014], ["winter", 2024]],
+            ],
+        )
+    )
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if not years or len(years) == 0:
+            return [None, None]
+
+        if len(years) != 2:
+            raise ValueError("Length of years list must be 2.")
+
+        def extract_year(elem):
+            """Return the numeric year from either a SimpleYear or ComplexFilter."""
+
+            if isinstance(elem, tuple):
+                if len(elem) != 2:
+                    raise ValueError("Complex filter must be ['season', year].")
+
+                return elem[1]
+
+            return elem
+
+        first, second = years
+        y1 = extract_year(first)
+        y2 = extract_year(second)
+
+        if isinstance(y1, int) and isinstance(y2, int) and y1 > y2:
+            raise ValueError("The first year must be ≤ the second year.")
+
+        return years
+
+
 class MangaSearchBaseMixin:
     media_type: list[MangaMediaEnum] = []
     status: list[ContentStatusEnum] = []
@@ -167,6 +207,13 @@ class MangaSearchBaseMixin:
     genres: list[str] = []
 
     score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
+    native_score: list[int | None] = Field(
         default=[None, None],
         min_length=2,
         max_length=2,
@@ -188,6 +235,13 @@ class NovelSearchBaseMixin:
         examples=[[0, 10]],
     )
 
+    native_score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
 
 # Args
 class PaginationArgs(CustomModel):
@@ -195,7 +249,7 @@ class PaginationArgs(CustomModel):
 
 
 class QuerySearchArgs(CustomModel):
-    query: str | None = Field(default=None, min_length=3, max_length=255)
+    query: str | None = Field(default=None, min_length=2, max_length=255)
 
 
 class QuerySearchRequiredArgs(CustomModel):
@@ -228,11 +282,18 @@ class PasswordArgs(CustomModel):
     password: str = Field(min_length=8, max_length=256, examples=["password"])
 
 
-class AnimeSearchArgsBase(CustomModel, YearsMixin):
+class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
     include_multiseason: bool = False
     only_translated: bool = False
 
     score: list[int | None] = Field(
+        default=[None, None],
+        min_length=2,
+        max_length=2,
+        examples=[[0, 10]],
+    )
+
+    native_score: list[int | None] = Field(
         default=[None, None],
         min_length=2,
         max_length=2,
@@ -249,25 +310,7 @@ class AnimeSearchArgsBase(CustomModel, YearsMixin):
     studios: list[str] = []
     genres: list[str] = []
 
-    @field_validator("years")
-    def validate_years(cls, years):
-        if not years:
-            return [None, None]
-
-        if len(years) == 0:
-            return [None, None]
-
-        if len(years) != 2:
-            raise ValueError("Lenght of years list must be 2.")
-
-        if all(year is not None for year in years) and years[0] > years[1]:
-            raise ValueError(
-                "The first year must be less than the second year."
-            )
-
-        return years
-
-    @field_validator("score")
+    @field_validator("score", "native_score")
     def validate_score(cls, scores):
         if all(score is not None for score in scores) and scores[0] > scores[1]:
             raise ValueError(
@@ -295,12 +338,29 @@ class MangaSearchArgs(
         return utils.check_sort(
             sort_list,
             [
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
                 "score",
             ],
         )
+
+    @field_validator("score", "native_score")
+    def validate_score(cls, scores):
+        if all(score is not None for score in scores) and scores[0] > scores[1]:
+            raise ValueError(
+                "The first score must be less than the second score."
+            )
+
+        if scores[0] and scores[0] < 0:
+            raise ValueError("Score can't be less than 0.")
+
+        if scores[1] and scores[1] > 10:
+            raise ValueError("Score can't be more than 10.")
+
+        return scores
 
 
 class NovelSearchArgs(
@@ -315,12 +375,29 @@ class NovelSearchArgs(
         return utils.check_sort(
             sort_list,
             [
+                "native_scored_by",
+                "native_score",
                 "media_type",
                 "start_date",
                 "scored_by",
                 "score",
             ],
         )
+
+    @field_validator("score", "native_score")
+    def validate_score(cls, scores):
+        if all(score is not None for score in scores) and scores[0] > scores[1]:
+            raise ValueError(
+                "The first score must be less than the second score."
+            )
+
+        if scores[0] and scores[0] < 0:
+            raise ValueError("Score can't be less than 0.")
+
+        if scores[1] and scores[1] > 10:
+            raise ValueError("Score can't be more than 10.")
+
+        return scores
 
 
 # Responses
@@ -369,9 +446,13 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     episodes_total: int | None = Field(examples=["10"])
     image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
     status: str | None = Field(examples=["finished"])
+    native_scored_by: int = Field(examples=[1210150])
+    native_score: float = Field(examples=[8.11])
     scored_by: int = Field(examples=[1210150])
     score: float = Field(examples=[8.11])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
     translated_ua: bool
     season: str | None
     source: str | None
@@ -380,29 +461,37 @@ class AnimeResponse(CustomModel, DataTypeMixin):
 
 
 class MangaResponse(CustomModel, DataTypeMixin):
-    title_original: str | None = Field(examples=["Monster"])
-    media_type: str | None = Field(examples=["manga"])
-    title_ua: str | None = Field(examples=["Монстр"])
-    title_en: str | None = Field(examples=["Monster"])
-    chapters: int | None = Field(examples=[162])
-    volumes: int | None = Field(examples=[18])
-    translated_ua: bool = Field(True)
-    status: str | None = Field(examples=["finished"])
-    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
-    year: int | None = Field(examples=[1994])
-    scored_by: int = Field(examples=[99368])
-    score: float = Field(examples=[9.16])
-    slug: str = Field(examples=["monster-54bb37"])
-
-
-class NovelResponse(CustomModel, DataTypeMixin):
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
     title_original: str | None
     media_type: str | None
+    native_scored_by: int
     title_ua: str | None
     title_en: str | None
     chapters: int | None
     volumes: int | None
     translated_ua: bool
+    native_score: float
+    status: str | None
+    image: str | None
+    year: int | None
+    scored_by: int
+    score: float
+    slug: str
+
+
+class NovelResponse(CustomModel, DataTypeMixin):
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
+    title_original: str | None
+    media_type: str | None
+    native_scored_by: int
+    title_ua: str | None
+    title_en: str | None
+    chapters: int | None
+    volumes: int | None
+    translated_ua: bool
+    native_score: float
     status: str | None
     image: str | None
     year: int | None

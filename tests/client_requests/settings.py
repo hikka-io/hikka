@@ -6,6 +6,14 @@ def request_settings_description(client, token, description):
     )
 
 
+def request_settings_customization(client, token, data):
+    return client.put(
+        "/settings/ui",
+        headers={"Auth": token},
+        json=data,
+    )
+
+
 def request_settings_username(client, token, username):
     return client.put(
         "/settings/username",

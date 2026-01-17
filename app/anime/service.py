@@ -20,7 +20,6 @@ from app.models import (
     AnimeWatch,
     Company,
     Person,
-    Genre,
     Anime,
     User,
 )
@@ -32,7 +31,7 @@ async def get_anime_info_by_slug(
     return await session.scalar(
         select(Anime)
         .filter(
-            func.lower(Anime.slug) == slug.lower(),  # type: ignore
+            Anime.slug == slug.lower(),  # type: ignore
             Anime.deleted == False,  # noqa: E712
         )
         .options(
@@ -223,10 +222,6 @@ async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
     query = anime_search_filter(search, query)
 
     return await session.scalar(query)
-
-
-async def anime_genres(session: AsyncSession):
-    return await session.scalars(select(Genre).order_by(Genre.slug))
 
 
 # I hate this function so much

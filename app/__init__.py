@@ -1,10 +1,11 @@
-from prometheus_fastapi_instrumentator import Instrumentator
 from app.middlewares import register_profiling_middleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from contextlib import asynccontextmanager
 from app.database import sessionmanager
 from app.utils import TimeoutMiddleware
+from fastapi.routing import APIRoute
 from app.utils import get_settings
 import fastapi.openapi.utils as fu
 from fastapi import FastAPI
@@ -31,9 +32,11 @@ def create_app(init_db: bool = True) -> FastAPI:
 
     app = FastAPI(
         title="Hikka API",
-        version="0.4.2",
+        version="0.4.4",
         openapi_tags=[
             {"name": "Admin"},
+            {"name": "Articles"},
+            {"name": "Artifacts"},
             {"name": "Auth"},
             {"name": "Client"},
             {"name": "User"},
@@ -91,6 +94,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .moderation import router as moderation_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
+    from .artifacts import router as artifacts_router
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
@@ -122,6 +126,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(moderation_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
+    app.include_router(artifacts_router)
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
@@ -146,14 +151,21 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(edit_router)
     app.include_router(vote_router)
 
-    from .testing import router as testing_router
-
-    app.include_router(testing_router)
+    @app.get("/")
+    async def documentation_redirect():
+        return RedirectResponse("/docs")
 
     @app.get("/ping")
     async def ping_pong():
         return "pong"
 
-    Instrumentator().instrument(app).expose(app)
+    # Simple hack to add operation_id to each route based on
+    # https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/
+    def use_route_names_as_operation_ids(app: FastAPI) -> None:
+        for route in app.routes:
+            if isinstance(route, APIRoute):
+                route.operation_id = route.name
+
+    use_route_names_as_operation_ids(app)
 
     return app

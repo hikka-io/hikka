@@ -159,7 +159,7 @@ async def validate_collection_update(
         session,
         constants.LOG_COLLECTION_UPDATE,
         user,
-        start_time=round_datetime(utcnow(), hours=1),
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
     )
 
     if (

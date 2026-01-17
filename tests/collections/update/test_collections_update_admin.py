@@ -6,12 +6,12 @@ from fastapi import status
 from app import constants
 
 
-async def test_collections_update_moderator(
+async def test_collections_update_admin(
     client,
     aggregator_anime,
     aggregator_anime_info,
     create_dummy_user,
-    create_test_user_moderator,
+    create_test_user_admin,
     get_dummy_token,
     get_test_token,
     test_session,
@@ -85,4 +85,4 @@ async def test_collections_update_moderator(
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_COLLECTION_UPDATE
-    assert log.user == create_test_user_moderator
+    assert log.user == create_test_user_admin

@@ -1,3 +1,4 @@
+from app.common.schemas import UserCustomizationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
@@ -60,6 +61,24 @@ async def service_user_activity(
 ):
     activity = await service.get_user_activity(session, user)
     return activity.all()[::-1]
+
+
+@router.get("/me/ui", response_model=UserCustomizationResponse)
+async def profile_ui(
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
+    ),
+):
+    return user
+
+
+@router.get(
+    "/{username}/ui",
+    response_model=UserCustomizationResponse,
+    response_model_exclude_none=True,
+)
+async def user_ui(user: User = Depends(get_user)):
+    return user
 
 
 @router.post("/list", response_model=list[UserResponse])

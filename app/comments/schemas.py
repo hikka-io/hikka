@@ -19,7 +19,9 @@ from app.schemas import (
 
 from app.models import (
     Collection,
+    Character,
     Article,
+    Person,
     Anime,
     Manga,
     Novel,
@@ -28,14 +30,18 @@ from app.models import (
 
 
 # Types
-CommentableType = Collection | Edit | Article | Anime | Manga | Novel
+CommentableType = (
+    Collection | Character | Article | Person | Anime | Manga | Novel | Edit
+)
 
 
 # Enums
 class ContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
+    content_character = constants.CONTENT_CHARACTER
     content_edit = constants.CONTENT_SYSTEM_EDIT
     content_article = constants.CONTENT_ARTICLE
+    content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
     content_manga = constants.CONTENT_MANGA
     content_novel = constants.CONTENT_NOVEL
@@ -47,6 +53,8 @@ class CommentTextArgs(CustomModel):
 
     @field_validator("text")
     def validate_text(cls, text):
+        text = text.strip("\n")
+
         if is_empty_markdown(text):
             raise ValueError("Field text consists of empty markdown")
 

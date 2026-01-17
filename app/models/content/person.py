@@ -1,5 +1,4 @@
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -8,6 +7,7 @@ from ..base import Base
 
 from ..mixins import (
     NeedsSearchUpdateMixin,
+    CommentContentMixin,
     FavoritesMixin,
     SynonymsMixin,
     ContentMixin,
@@ -23,12 +23,16 @@ class Person(
     UpdatedMixin,
     SynonymsMixin,
     FavoritesMixin,
+    CommentContentMixin,
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_people"
 
-    characters_count: Mapped[int] = query_expression()
-    anime_count: Mapped[int] = query_expression()
+    needs_count_update: Mapped[bool] = mapped_column(default=True)
+    characters_count: Mapped[int] = mapped_column(default=0)
+    anime_count: Mapped[int] = mapped_column(default=0)
+    manga_count: Mapped[int] = mapped_column(default=0)
+    novel_count: Mapped[int] = mapped_column(default=0)
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
     name_native: Mapped[str] = mapped_column(nullable=True)

@@ -50,6 +50,8 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
     ):
         return
 
+    user_score = log.data["user_score"]
+
     notification = Notification(
         **{
             "notification_type": notification_type,
@@ -65,12 +67,13 @@ async def generate_comment_vote(session: AsyncSession, log: Log):
                 "comment_depth": comment.depth,
                 "comment_text": comment.text,
                 "base_comment_reference": path_to_uuid(comment.path[0]),
-                "user_score": log.data["user_score"],
+                "user_score": user_score,
                 "old_score": log.data["old_score"],
                 "new_score": log.data["new_score"],
-                "username": user.username,
-                "avatar": user.avatar,
+                "username": user.username if user_score > 0 else None,
+                "avatar": user.avatar if user_score > 0 else None,
             },
+            "initiator_user_id": user.id if user_score > 0 else None,
         }
     )
 

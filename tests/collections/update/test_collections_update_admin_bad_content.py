@@ -4,12 +4,12 @@ from fastapi import status
 from app import constants
 
 
-async def test_collections_update_moderator_bad_content(
+async def test_collections_update_admin_bad_content(
     client,
     aggregator_anime,
     aggregator_anime_info,
     create_dummy_user,
-    create_test_user_moderator,
+    create_test_user_admin,
     get_dummy_token,
     get_test_token,
     test_session,
@@ -82,12 +82,12 @@ async def test_collections_update_moderator_bad_content(
     assert response.json()["code"] == "collections:moderator_content_update"
 
 
-async def test_collections_update_moderator_bad_content_labels_order(
+async def test_collections_update_admin_bad_content_labels_order(
     client,
     aggregator_anime,
     aggregator_anime_info,
     create_dummy_user,
-    create_test_user_moderator,
+    create_test_user_admin,
     get_dummy_token,
     get_test_token,
     test_session,

@@ -31,7 +31,7 @@ from app.service import (
 async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
     return await session.scalar(
         select(func.count(AnimeWatch.id)).filter(
-            AnimeWatch.deleted == False,  # noqa: E712
+            # AnimeWatch.deleted == False,  # noqa: E712
             AnimeWatch.status == status,
             AnimeWatch.user == user,
         )
@@ -188,7 +188,7 @@ async def get_user_watch_list(
     offset: int,
 ) -> ScalarResult[AnimeWatch]:
     query = select(AnimeWatch).filter(
-        AnimeWatch.deleted == False,  # noqa: E712
+        # AnimeWatch.deleted == False,  # noqa: E712
         AnimeWatch.user == user,
     )
 
@@ -208,7 +208,7 @@ async def get_user_watch_list_count(
     session: AsyncSession, search: AnimeWatchSearchArgs, user: User
 ) -> int:
     query = select(func.count(AnimeWatch.id)).filter(
-        AnimeWatch.deleted == False,  # noqa: E712
+        # AnimeWatch.deleted == False,  # noqa: E712
         AnimeWatch.user == user,
     )
 

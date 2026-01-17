@@ -98,6 +98,10 @@ class EditArgs(CustomModel):
 
         return after
 
+    @field_validator("description")
+    def validate_description(cls, description):
+        return description.strip("\n") if description else description
+
 
 class AnimeEditArgs(CustomModel):
     synopsis_en: str | None = Field(None, examples=["..."])
@@ -190,49 +194,8 @@ class EditResponse(EditResponseBase):
     reference: str
 
 
-class EditSimpleAnimeResponse(CustomModel):
-    title_ja: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleMangaResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimpleNovelResponse(CustomModel):
-    title_original: str | None
-    title_en: str | None
-    title_ua: str | None
-    slug: str
-
-
-class EditSimplePersonResponse(CustomModel):
-    name_native: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
-
-
-class EditSimpleCharacterResponse(CustomModel):
-    name_ja: str | None
-    name_en: str | None
-    name_ua: str | None
-    slug: str
-
-
 class EditSimpleResponse(EditResponseBase):
-    content: (
-        EditSimpleAnimeResponse
-        | EditSimpleMangaResponse
-        | EditSimpleNovelResponse
-        | EditSimplePersonResponse
-        | EditSimpleCharacterResponse
-    )
+    content: dict = Field(validation_alias="content_preview")
 
 
 class EditListResponse(CustomModel):

@@ -2,7 +2,7 @@ from tests.client_requests import request_client_create, request_client_verify
 from starlette import status
 
 
-async def test_client_verify(client, test_token, test_user, moderator_token):
+async def test_client_verify(client, test_token, test_user, admin_token):
     name = "test-client"
     description = "test client description"
     endpoint = "hikka://auth/"
@@ -17,13 +17,13 @@ async def test_client_verify(client, test_token, test_user, moderator_token):
 
     created_client = response.json()
 
-    assert created_client["verified"] == False
+    assert created_client["verified"] is False
 
     client_reference = created_client["reference"]
 
     response = await request_client_verify(
-        client, moderator_token, client_reference
+        client, admin_token, client_reference
     )
     assert response.status_code == status.HTTP_200_OK
 
-    assert response.json()["verified"] == True
+    assert response.json()["verified"] is True
