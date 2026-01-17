@@ -8,13 +8,13 @@ from .utils import build_comments
 from . import service
 
 from .dependencies import (
-    validate_comment_get,
     validate_comment_not_hidden,
     validate_comment_edit,
     validate_content_slug,
+    validate_comment_get,
     validate_rate_limit,
-    validate_parent,
     validate_comment,
+    validate_parent,
     validate_hide,
 )
 
