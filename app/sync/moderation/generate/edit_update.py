@@ -24,7 +24,7 @@ async def generate_edit_update(session: AsyncSession, log: Log):
     ):
         return
 
-    await session.refresh(log, attribute_names=["user"])
+    await session.refresh(log)
 
     moderation = Moderation(
         **{

@@ -24,7 +24,7 @@ async def generate_collection_delete(session: AsyncSession, log: Log):
     if collection.author_id == log.user_id:
         return
 
-    await session.refresh(log, attribute_names=["user"])
+    await session.refresh(log)
 
     moderation = Moderation(
         **{
