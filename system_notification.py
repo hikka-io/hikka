@@ -10,16 +10,17 @@ async def send_system_notification():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        update_name = "delayed_devlog"
+        update_name = "customization_and_summary"
+        # update_name = "delayed_devlog"
 
         # await service.delete_hikka_update_notification(session, update_name)
 
         await service.create_hikka_update_notification(
             session,
             update_name,
-            "Ого, давненько ми не розповідали вам про зроблену роботу.",
-            "Запізнілий девлог за минулий рік",
-            "https://hikka.io/articles/zapiznilyy-devloh-za-mynulyy-rik-c7ae14",
+            "У цей святвечір ми принесли вам невеличке різдвяне оновлення.",
+            "Кастомізація та підсумки року",
+            "https://hikka.io/articles/kastomizatsiya-ta-pidsumky-roku-891dcf",
         )
 
     await sessionmanager.close()
