@@ -36,6 +36,7 @@ class CollectionsListArgs(CustomModel):
     content_type: ContentTypeEnum | None = None
     author: str | None = None
     only_public: bool = True
+    tags: list[str] = Field([], max_length=3)
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
