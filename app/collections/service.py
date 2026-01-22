@@ -129,6 +129,16 @@ async def collections_list_filter(
     if args.content_type:
         query = query.filter(Collection.content_type == args.content_type)
 
+    if len(args.tags) > 0:
+        query = query.filter(
+            and_(
+                *[
+                    Collection.tags.any(name)
+                    for name in args.tags
+                ]
+            )
+        )
+
     if args.only_public:
         visibility = [constants.COLLECTION_PUBLIC]
 
