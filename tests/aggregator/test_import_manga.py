@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import select
 from app.models import Manga
 from sqlalchemy import func
@@ -13,6 +14,7 @@ async def test_import_manga(test_session, aggregator_manga):
     )
 
     assert manga is not None
+    assert manga.created == datetime(2023, 6, 20, 23, 45, 33)
     assert manga.title_original == "Fullmetal Alchemist"
     assert manga.needs_search_update is True
     assert manga.mal_id == 25

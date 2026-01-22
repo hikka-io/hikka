@@ -52,6 +52,7 @@ class Novel(
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     translated_ua: Mapped[bool] = mapped_column(default=False)
     needs_update: Mapped[bool] = mapped_column(default=False)
+    created: Mapped[datetime] = mapped_column(nullable=True)
 
     # Metadata
     status: Mapped[str] = mapped_column(String(16), index=True, nullable=True)

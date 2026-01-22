@@ -21,8 +21,9 @@ async def save_novel_list(session, data):
     add_novel = []
 
     for novel_data in data:
-        updated = utils.from_timestamp(novel_data["updated"])
         slug = utils.slugify(novel_data["title_ja"], novel_data["content_id"])
+        created = utils.from_timestamp(novel_data["created"])
+        updated = utils.from_timestamp(novel_data["updated"])
 
         if novel_data["content_id"] in novel_cache:
             novel = novel_cache[novel_data["content_id"]]
@@ -45,6 +46,9 @@ async def save_novel_list(session, data):
 
             #     continue
 
+            if novel.created is None:
+                novel.created = created
+
             if updated == novel.aggregator_updated:
                 continue
 
@@ -52,8 +56,6 @@ async def save_novel_list(session, data):
                 continue
 
             novel.needs_update = True
-
-            add_novel.append(novel)
 
             # print(f"Novel needs update: {novel.title_original}")
 
@@ -98,6 +100,7 @@ async def save_novel_list(session, data):
                     "image_relation": image,
                     "needs_update": True,
                     "end_date": end_date,
+                    "created": created,
                     "updated": updated,
                     "slug": slug,
                     "stats": {

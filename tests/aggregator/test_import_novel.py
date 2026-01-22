@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import select
 from app.models import Novel
 from sqlalchemy import func
@@ -15,6 +16,7 @@ async def test_import_novel(test_session, aggregator_novel):
     )
 
     assert novel is not None
+    assert novel.created == datetime(2024, 5, 11, 15, 40, 19)
     assert novel.title_original == "Kono Subarashii Sekai ni Shukufuku wo!"
     assert novel.needs_search_update is True
     assert novel.mal_id == 60553

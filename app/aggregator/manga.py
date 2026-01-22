@@ -21,8 +21,9 @@ async def save_manga_list(session, data):
     add_manga = []
 
     for manga_data in data:
-        updated = utils.from_timestamp(manga_data["updated"])
         slug = utils.slugify(manga_data["title_ja"], manga_data["content_id"])
+        created = utils.from_timestamp(manga_data["created"])
+        updated = utils.from_timestamp(manga_data["updated"])
 
         if manga_data["content_id"] in manga_cache:
             manga = manga_cache[manga_data["content_id"]]
@@ -45,6 +46,9 @@ async def save_manga_list(session, data):
 
             #     continue
 
+            if manga.created is None:
+                manga.created = created
+
             if updated == manga.aggregator_updated:
                 continue
 
@@ -52,8 +56,6 @@ async def save_manga_list(session, data):
                 continue
 
             manga.needs_update = True
-
-            add_manga.append(manga)
 
             # print(f"Manga needs update: {manga.title_original}")
 
@@ -98,6 +100,7 @@ async def save_manga_list(session, data):
                     "image_relation": image,
                     "needs_update": True,
                     "end_date": end_date,
+                    "created": created,
                     "updated": updated,
                     "slug": slug,
                     "stats": {

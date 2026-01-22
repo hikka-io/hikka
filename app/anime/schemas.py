@@ -160,8 +160,8 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     @field_validator("external")
     def external_ordering(cls, value):
         def watch_sort(item):
-            order = {"Mikai": 0, "Anitube": 1}
-            return order.get(item.text, 2)
+            order = {"Mikai": 0, "AnimeON": 1, "Anitube": 2}
+            return order.get(item.text, 3)
 
         def reorder_watch(input_list):
             return sorted(input_list, key=watch_sort)
