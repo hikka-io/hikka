@@ -30,6 +30,8 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
             "media_type",
             "start_date",
             "scored_by",
+            "created",
+            "updated",
             "score",
         ]
 
@@ -145,6 +147,8 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     score: float = Field(examples=[8.11])
     nsfw: bool = Field(examples=[False])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    created: datetime_pd | None
+    updated: datetime_pd | None
     season: str | None
     year: int | None
 

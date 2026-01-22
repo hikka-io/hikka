@@ -27,6 +27,8 @@ class MangaInfoResponse(CustomModel, DataTypeMixin):
     external: list[ExternalResponse]
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     genres: list[GenreResponse]
     title_original: str | None
     stats: ReadStatsResponse
@@ -37,7 +39,6 @@ class MangaInfoResponse(CustomModel, DataTypeMixin):
     chapters: int | None
     title_en: str | None
     title_ua: str | None
-    updated: datetime_pd
     synonyms: list[str]
     comments_count: int
     has_franchise: bool

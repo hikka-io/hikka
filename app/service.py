@@ -311,10 +311,13 @@ def anime_loadonly(statement):
         Anime.end_date,
         Anime.title_en,
         Anime.title_ua,
+        Anime.created,
+        Anime.updated,
         Anime.season,
         Anime.source,
         Anime.status,
         Anime.rating,
+        Anime.mal_id,
         Anime.score,
         Anime.slug,
         Anime.year,
@@ -499,6 +502,8 @@ def build_anime_order_by(sort: list[str]):
         "media_type": Anime.media_type,
         "start_date": Anime.start_date,
         "scored_by": Anime.scored_by,
+        "created": Anime.created,
+        "updated": Anime.updated,
         "score": Anime.score,
     }
 
@@ -599,6 +604,8 @@ def build_manga_order_by(sort: list[str]):
         "media_type": Manga.media_type,
         "start_date": Manga.start_date,
         "scored_by": Manga.scored_by,
+        "created": Manga.created,
+        "updated": Manga.updated,
         "score": Manga.score,
     }
 
@@ -704,6 +711,8 @@ def build_novel_order_by(sort: list[str]):
         "media_type": Novel.media_type,
         "start_date": Novel.start_date,
         "scored_by": Novel.scored_by,
+        "created": Novel.created,
+        "updated": Novel.updated,
         "score": Novel.score,
     }
 

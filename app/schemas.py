@@ -343,6 +343,8 @@ class MangaSearchArgs(
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
             ],
         )
@@ -380,6 +382,8 @@ class NovelSearchArgs(
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
             ],
         )
@@ -453,16 +457,21 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     translated_ua: bool
     season: str | None
     source: str | None
     rating: str | None
     year: int | None
+    mal_id: int
 
 
 class MangaResponse(CustomModel, DataTypeMixin):
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     title_original: str | None
     media_type: str | None
     native_scored_by: int
@@ -477,12 +486,15 @@ class MangaResponse(CustomModel, DataTypeMixin):
     year: int | None
     scored_by: int
     score: float
+    mal_id: int
     slug: str
 
 
 class NovelResponse(CustomModel, DataTypeMixin):
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     title_original: str | None
     media_type: str | None
     native_scored_by: int
@@ -497,6 +509,7 @@ class NovelResponse(CustomModel, DataTypeMixin):
     year: int | None
     scored_by: int
     score: float
+    mal_id: int
     slug: str
 
 
