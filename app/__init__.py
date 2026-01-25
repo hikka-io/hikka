@@ -53,6 +53,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Read"},
             {"name": "Related"},
             {"name": "Edit"},
+            {"name": "Moderation"},
             {"name": "Settings"},
             {"name": "Schedule"},
             {"name": "Upload"},
@@ -90,6 +91,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .integrations import router as integrations_router
     from .collections import router as collections_router
     from .characters import router as characters_router
+    from .moderation import router as moderation_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
     from .artifacts import router as artifacts_router
@@ -121,6 +123,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(integrations_router)
     app.include_router(collections_router)
     app.include_router(characters_router)
+    app.include_router(moderation_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
     app.include_router(artifacts_router)
