@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import meilisearch
 from app import constants
 from . import service
 
@@ -116,6 +117,14 @@ async def get_articles(
         )
     ),
 ):
+    if args.query:
+        return await meilisearch.search(
+            constants.SEARCH_INDEX_ARTICLES,
+            sort=['title:desc'],
+            query=args.query,
+            page=page,
+            size=size,
+        )
     limit, offset = pagination(page, size)
     total = await service.get_articles_count(session, request_user, args)
 

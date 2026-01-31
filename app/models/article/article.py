@@ -15,6 +15,7 @@ from ..mixins import (
     UpdatedMixin,
     DeletedMixin,
     SlugMixin,
+    NeedsSearchUpdateMixin,
 )
 
 
@@ -26,6 +27,7 @@ class Article(
     MyScoreMixin,
     CommentContentMixin,
     SlugMixin,
+    NeedsSearchUpdateMixin
 ):
     __tablename__ = "service_articles"
 

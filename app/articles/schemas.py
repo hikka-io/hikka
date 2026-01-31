@@ -81,6 +81,7 @@ class ArticlesListArgs(CustomModel):
     show_trusted: bool = True
     author: str | None = None
     draft: bool = False
+    query: str | None = None
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
