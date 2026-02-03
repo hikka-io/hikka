@@ -1,4 +1,5 @@
 from client_requests import request_settings_customization
+from app.common.utils import is_valid_css_background
 from client_requests import request_me_ui
 from sqlalchemy import select, desc
 from app.models import Log
@@ -115,3 +116,85 @@ async def test_settings_customization(
     assert (
         log.data["after"]["styles"]["dark"]["colors"]["background"] == test_hls
     )
+
+
+def test_valid_css_background():
+    for css_value in [
+        # Hex codes
+        "#fff",
+        "#FFF",
+        "#000000",
+        "#ABCDEF",
+        "#ff000080",
+        "#1234",
+        # rgb/rgba functions
+        "rgb(255, 0, 0)",
+        "rgb(100%, 50%, 0%)",
+        "rgba(255, 0, 0, 0.5)",
+        "rgba(255, 255, 255, 1)",
+        "RGB(0, 255, 0)",
+        # hsl/hsla functions
+        "hsl(120, 100%, 50%)",
+        "hsl(0, 0%, 0%)",
+        "hsla(240, 100%, 50%, 0.3)",
+        "hsla(240, 100%, 50%, 1)",
+        # Linear gradients
+        "linear-gradient(red, yellow)",
+        "linear-gradient(to right, red, orange)",
+        "linear-gradient(45deg, blue, red)",
+        "linear-gradient(0deg, blue, green 40%, red)",
+        "repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%)",
+        # Radial gradients
+        "radial-gradient(circle, red, yellow)",
+        "radial-gradient(circle at 100%, #333, #333 50%, #eee 75%, #333 75%)",
+        "repeating-radial-gradient(black, black 5px, white 5px, white 10px)",
+        # Conic gradients
+        "conic-gradient(from 45deg, red, orange)",
+        "conic-gradient(red, orange, yellow, green, blue)",
+        # Whitespace handling
+        "  #ffffff  ",
+        "rgb(  0  ,  255  ,  0  )",
+        "linear-gradient(  to right  , red , blue )",
+        # None
+        None,
+    ]:
+        assert is_valid_css_background(css_value) is True
+
+
+def test_invalid_css_background():
+    for css_value in [
+        # URLs
+        "url('image.jpg')",
+        'url("https://google.com/bad.png")',
+        "url(/static/img.png)",
+        "url(data:image/gif;base64,AAAA)",
+        "src('font.woff')",  # src is sometimes used in other properties, check fallback
+        # Dangerous stuff
+        "javascript:alert(1)",
+        "vbscript:msgbox(1)",
+        "data:text/html,<script>alert(0)</script>",
+        "file:///etc/passwd",
+        "expression(alert(1))",
+        # Invalid hex codes ---
+        "#ZZZ",
+        "#12",
+        "#12345",
+        "#123456789",
+        "123456",
+        "# 123456",
+        # Syntax errors
+        "linear-gradient(red, blue",
+        "rgb(255, 0, 0",
+        "linear-gradient",
+        "gradient(red, blue)",
+        # CSS injection
+        "red; background-image: url('x')",
+        "burl(test.jpg)",
+        # Important breaks stuff (sup DustTail)
+        "#000000!important",
+        # Garbage
+        "",
+        "   ",
+        "some-random-string",
+    ]:
+        assert is_valid_css_background(css_value) is False

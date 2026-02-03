@@ -1,7 +1,7 @@
+from app.common.utils import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
 from typing import List, Literal
-import re
 
 
 class HSLColor(CustomModel):
@@ -41,36 +41,7 @@ class UIThemeStylesBody(CustomModel):
     @field_validator("background_image")
     @classmethod
     def validate_background_image(cls, v):
-        if v is None:
-            return v
-
-        url_patterns = [
-            r"https?://",  # http:// or https://
-            r"www\.",  # www.
-            r"url\(",  # CSS url() function
-            r"//[a-zA-Z0-9]",  # Protocol-relative URLs like //cdn.com
-        ]
-
-        for pattern in url_patterns:
-            if re.search(pattern, v, re.IGNORECASE):
-                raise ValueError(
-                    "URLs and links are not allowed in background_image"
-                )
-
-        allowed_patterns = [
-            r"^linear-gradient\(",
-            r"^radial-gradient\(",
-            r"^repeating-linear-gradient\(",
-            r"^repeating-radial-gradient\(",
-            r"^conic-gradient\(",
-            r"^#[0-9a-fA-F]{3,8}$",
-            r"^rgb\(",
-            r"^rgba\(",
-            r"^hsl\(",
-            r"^hsla\(",
-        ]
-
-        if not any(re.match(pattern, v) for pattern in allowed_patterns):
+        if not is_valid_css_background(v):
             raise ValueError("Only CSS gradients and color values are allowed")
 
         return v
