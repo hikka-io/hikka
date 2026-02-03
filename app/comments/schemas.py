@@ -122,8 +122,10 @@ class CommentNode:
         self.author = comment.author
         self.hidden = comment.hidden
         self.depth = comment.depth
+
         if len(comment.path) > 1:
             self.parent = path_to_uuid(comment.path[-2])
+
         return self
 
     @classmethod
