@@ -1,5 +1,5 @@
+from app.common.utils.customization import is_valid_css_background
 from client_requests import request_settings_customization
-from app.common.utils import is_valid_css_background
 from client_requests import request_me_ui
 from sqlalchemy import select, desc
 from app.models import Log

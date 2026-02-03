@@ -1,4 +1,4 @@
-from app.common.utils import is_valid_css_background
+from app.common.utils.customization import is_valid_css_background
 from app.database import sessionmanager
 from app.utils import get_settings
 from sqlalchemy import select

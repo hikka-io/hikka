@@ -1,4 +1,4 @@
-from app.common.utils import is_valid_css_background
+from app.common.utils.customization import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
 from typing import List, Literal
