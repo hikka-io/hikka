@@ -6,8 +6,8 @@ from zoneinfo import ZoneInfo
 import asyncio
 
 from app.sync import (
+    # artifact_year_summary,
     delete_expired_token_requests,
-    artifact_year_summary,
     update_article_views,
     update_notifications,
     update_article_stats,
