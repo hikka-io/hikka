@@ -51,13 +51,14 @@ def init_scheduler():
         ),
     )
 
-    scheduler.add_job(
-        artifact_year_summary,
-        trigger=CronTrigger(
-            timezone=ZoneInfo("Europe/Kyiv"),
-            hour=1,
-        ),
-    )
+    # NOTE: Reenable next year (maybe)
+    # scheduler.add_job(
+    #     artifact_year_summary,
+    #     trigger=CronTrigger(
+    #         timezone=ZoneInfo("Europe/Kyiv"),
+    #         hour=1,
+    #     ),
+    # )
 
     return scheduler
 
