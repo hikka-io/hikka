@@ -118,6 +118,7 @@ SEARCH_INDEX_ANIME = "content_anime"
 SEARCH_INDEX_MANGA = "content_manga"
 SEARCH_INDEX_NOVEL = "content_novel"
 SEARCH_INDEX_USERS = "content_users"
+SEARCH_INDEX_ARTICLES = "content_articles"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
