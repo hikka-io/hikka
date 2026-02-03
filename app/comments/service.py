@@ -197,7 +197,6 @@ async def get_comments_by_content_id(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
             Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
         )
         .options(
             with_expression(

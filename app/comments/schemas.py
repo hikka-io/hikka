@@ -111,10 +111,10 @@ class CommentNode:
     text: str = None
 
     def from_comment(self, comment: Comment):
+        self.is_editable = comment.is_editable if not comment.hidden else False
         self.my_score = comment.my_score if comment.my_score else 0
         self.text = comment.text if not comment.hidden else None
         self.content_type = comment.content_type
-        self.is_editable = comment.is_editable
         self.vote_score = comment.vote_score
         self.preview = comment.preview
         self.updated = comment.updated
