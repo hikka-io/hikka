@@ -47,7 +47,7 @@ async def fix_collection_comments():
             if fixed_bg:
                 print(f"Fixed background for {user.username}")
 
-        # await session.commit()
+        await session.commit()
 
     await sessionmanager.close()
 
