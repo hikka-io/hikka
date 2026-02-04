@@ -84,7 +84,6 @@ async def has_live_children(
     session: AsyncSession,
     comment_reference: UUID,
 ) -> bool:
-    
     Child = aliased(Comment)
     query =  await session.scalar(
         select(
