@@ -91,8 +91,8 @@ async def has_live_children(
                 select(1)
                 .select_from(Child)
                 .where(
-                    Child.deleted == False, # noqa: E712
-                    Child.hidden == False, # noqa: E712
+                    Child.deleted == False,  # noqa: E712
+                    Child.hidden == False,  # noqa: E712
                     Child.path.descendant_of(
                         select(Comment.path).where(Comment.id == comment_reference).scalar_subquery()
                     ),
@@ -221,9 +221,9 @@ async def get_comments_by_content_id(
         .where(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
-            Comment.deleted == False, # noqa: E712
+            Comment.deleted == False,  # noqa: E712
             or_(
-                Comment.hidden == False, # noqa: E712,
+                Comment.hidden == False,  # noqa: E712,
                 exists(children_exists_query())
             ),
         )
@@ -253,7 +253,7 @@ async def get_sub_comments(
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
             or_(
-                Comment.hidden == False, # noqa: E712,
+                Comment.hidden == False,  # noqa: E712,
                 exists(children_exists_query())
             ),
         )

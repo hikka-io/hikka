@@ -17,8 +17,8 @@ def children_exists_query():
         .select_from(Child)
         .where(
             Child.path.descendant_of(Comment.path),
-            Child.deleted == False, # noqa: E712
-            Child.hidden == False, # noqa: E712
+            Child.deleted == False,  # noqa: E712
+            Child.hidden == False,  # noqa: E712
             Child.id != Comment.id,
         )
         .correlate(Comment)
