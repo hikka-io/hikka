@@ -1,10 +1,28 @@
+from sqlalchemy import select
+from sqlalchemy.orm import aliased
+
 from app.utils import path_to_uuid
 from .schemas import CommentNode
-
+from app.models import Comment
 
 # Convert uuid reference to comment path
 def uuid_to_path(obj_uuid):
     return str(obj_uuid).replace("-", "_")
+
+def children_exists_query():
+    Child = aliased(Comment)
+
+    return (
+        select(1)
+        .select_from(Child)
+        .where(
+            Child.path.descendant_of(Comment.path),
+            Child.deleted == False, # noqa: E712
+            Child.hidden == False, # noqa: E712
+            Child.id != Comment.id,
+        )
+        .correlate(Comment)
+    )
 
 
 def build_comments(base_comment, sub_comments):
