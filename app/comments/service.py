@@ -85,7 +85,7 @@ async def has_live_children(
     comment_reference: UUID,
 ) -> bool:
     Child = aliased(Comment)
-    query =  await session.scalar(
+    query = await session.scalar(
         select(
             exists(
                 select(1)
@@ -93,10 +93,10 @@ async def has_live_children(
                 .where(
                     Child.deleted == False,  # noqa: E712
                     Child.hidden == False,  # noqa: E712
+                    Child.id != comment_reference,
                     Child.path.descendant_of(
                         select(Comment.path).where(Comment.id == comment_reference).scalar_subquery()
                     ),
-                    Child.id != comment_reference,
                 )
             )
         )
