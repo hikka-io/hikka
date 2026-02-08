@@ -8,11 +8,11 @@ class PrivateArgs(CustomModel):
 
 
 # Responses
-class ArtifactPrivacyResponse(CustomModel):
+class DigestPrivacyResponse(CustomModel):
     private: bool
 
 
-class ArtifactResponse(ArtifactPrivacyResponse):
+class DigestResponse(DigestPrivacyResponse):
     created: datetime_pd
     updated: datetime_pd
     data: dict

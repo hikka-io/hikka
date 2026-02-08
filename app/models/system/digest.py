@@ -8,7 +8,7 @@ from sqlalchemy import Index
 from ..base import Base
 
 
-class Artifact(Base, CreatedMixin, UpdatedMixin):
+class Digest(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_artifacts"
 
     data: Mapped[dict] = mapped_column(JSONB, default={})

@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 import asyncio
 
 from app.sync import (
-    # artifact_year_summary,
+    # digest_year_summary,
     delete_expired_token_requests,
     update_article_views,
     update_notifications,
@@ -53,7 +53,7 @@ def init_scheduler():
 
     # NOTE: Reenable next year (maybe)
     # scheduler.add_job(
-    #     artifact_year_summary,
+    #     digest_year_summary,
     #     trigger=CronTrigger(
     #         timezone=ZoneInfo("Europe/Kyiv"),
     #         hour=1,
