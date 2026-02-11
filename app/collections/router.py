@@ -18,6 +18,7 @@ from .dependencies import (
     validate_collection_delete,
     validate_collection_update,
     validate_collection_create,
+    validate_collection_get,
     validate_collection,
 )
 
@@ -109,7 +110,7 @@ async def delete_collection(
 
 @router.get("/{reference}", response_model=CollectionResponse)
 async def get_collection(
-    collection: Collection = Depends(validate_collection),
+    collection: Collection = Depends(validate_collection_get),
     session: AsyncSession = Depends(get_session),
     request_user: User | None = Depends(
         auth_required(
