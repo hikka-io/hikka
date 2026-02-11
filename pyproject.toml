@@ -95,7 +95,13 @@ pythonpath = ["."]
 line-length = 80
 exclude = [".venv", "venv"]
 
+[tool.black]
+line-length = 80
+
 [tool.ruff.lint]
 extend-ignore = [
     "F821",  # Disable checks for annotated SQLAlchemy relations 
 ]
+
+[tool.pyright]
+reportCallInDefaultInitializer = false
