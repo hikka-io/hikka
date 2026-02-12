@@ -127,10 +127,14 @@ async def save_read(
     # Create read record if missing
     if not (read := await get_read(session, content_type, content, user)):
         log_type = constants.LOG_READ_CREATE
+
         read = read_model()
+        read.start_date = now
         read.content = content
         read.created = now
         read.user = user
+
+        session.add(read)
 
     log_before = {}
     log_after = {}
@@ -139,17 +143,24 @@ async def save_read(
     for key, new_value in args.model_dump().items():
         # Here we add changes to log's before/after dicts only if there are changes
         old_value = getattr(read, key)
+
         if old_value != new_value:
             log_before[key] = old_value
             setattr(read, key, new_value)
             log_after[key] = new_value
+
+        if (
+            key == "status"
+            and new_value == constants.READ_COMPLETED
+            and read.end_date is None
+        ):
+            read.end_date = now
 
     # Update updated field
     read.updated = now
 
     # Update user last list update
     user.updated = now
-    session.add_all([read, user])
 
     await session.commit()
 

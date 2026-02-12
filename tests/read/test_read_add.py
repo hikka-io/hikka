@@ -30,6 +30,10 @@ async def test_read_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+    assert response.json()["start_date"] is not None
+    assert response.json()["end_date"] is None
+
     assert response.json()["content"]["slug"] == "berserk-fb9fbd"
     assert response.json()["status"] == "reading"
     assert response.json()["chapters"] == 1
@@ -78,6 +82,10 @@ async def test_read_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+    assert response.json()["start_date"] is not None
+    assert response.json()["end_date"] is not None
+
     assert response.json()["content"]["slug"] == "berserk-fb9fbd"
     assert response.json()["status"] == "completed"
     assert response.json()["chapters"] == 1

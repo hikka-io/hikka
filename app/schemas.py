@@ -435,6 +435,8 @@ class ReadResponseBase(CustomModel):
     volumes: int = Field(examples=[3])
     rereads: int = Field(examples=[2])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
 class AnimeResponse(CustomModel, DataTypeMixin):
