@@ -28,6 +28,10 @@ async def test_watch_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+    assert response.json()["start_date"] is not None
+    assert response.json()["end_date"] is None
+
     assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["status"] == "watching"
     assert response.json()["duration"] == 230  # 10 episodes * 23 minutes
@@ -72,6 +76,10 @@ async def test_watch_add(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+    assert response.json()["start_date"] is not None
+    assert response.json()["end_date"] is not None
+
     assert response.json()["anime"]["slug"] == "bocchi-the-rock-9e172d"
     assert response.json()["status"] == "completed"
     assert response.json()["note"] == "Good anime!"

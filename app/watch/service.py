@@ -103,10 +103,14 @@ async def save_watch(
     # Create watch record if missing
     if not (watch := await get_anime_watch(session, anime, user)):
         log_type = constants.LOG_WATCH_CREATE
+
         watch = AnimeWatch()
+        watch.start_date = now
         watch.created = now
         watch.anime = anime
         watch.user = user
+
+        session.add(watch)
 
     log_before = {}
     log_after = {}
@@ -115,10 +119,18 @@ async def save_watch(
     for key, new_value in args.model_dump().items():
         # Here we add changes to log's before/after dicts only if there are changes
         old_value = getattr(watch, key)
+
         if old_value != new_value:
             log_before[key] = old_value
             setattr(watch, key, new_value)
             log_after[key] = new_value
+
+        if (
+            key == "status"
+            and new_value == constants.WATCH_COMPLETED
+            and watch.end_date is None
+        ):
+            watch.end_date = now
 
     # Calculate duration and update updated field
     watch.duration = calculate_watch_duration(watch)
@@ -126,7 +138,6 @@ async def save_watch(
 
     # Update user last list update
     user.updated = now
-    session.add_all([watch, user])
 
     await session.commit()
 

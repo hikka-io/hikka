@@ -421,6 +421,8 @@ class WatchResponseBase(CustomModel):
     duration: int = Field(examples=[24])
     episodes: int = Field(examples=[3])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
 class ReadResponseBase(CustomModel):
