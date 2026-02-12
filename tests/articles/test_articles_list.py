@@ -158,3 +158,9 @@ async def test_articles_list(
 
     assert tags[2]["name"] == "blah"
     assert tags[2]["content_count"] == 1
+
+    # When Meilisearch is down search should throw query down error
+    response = await request_articles(client, {"query": "test"})
+
+    assert response.json()["code"] == "search:query_down"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
