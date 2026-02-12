@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..mixins import CreatedMixin, UpdatedMixin, DeletedMixin
 from sqlalchemy import String, ForeignKey
+from datetime import datetime
 from ..base import Base
 from uuid import UUID
 
@@ -13,6 +14,8 @@ class Read(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
         "with_polymorphic": "*",
     }
 
+    start_date: Mapped[datetime] = mapped_column(nullable=True)
+    end_date: Mapped[datetime] = mapped_column(nullable=True)
     note: Mapped[str] = mapped_column(nullable=True)
     chapters: Mapped[int] = mapped_column(default=0)
     volumes: Mapped[int] = mapped_column(default=0)
