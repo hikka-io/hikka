@@ -44,9 +44,9 @@ async def test_watch_add(
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+
     assert log.log_type == constants.LOG_WATCH_CREATE
     assert log.user == create_test_user
-
     assert log.data == {
         "after": {
             "episodes": 10,
@@ -105,6 +105,7 @@ async def test_watch_add(
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+
     assert log.log_type == constants.LOG_WATCH_UPDATE
     assert log.user == create_test_user
     assert log.data == {
@@ -127,3 +128,17 @@ async def test_watch_add(
             "end_date": None,
         },
     }
+
+    # Attempt time travel
+    response = await request_watch_add(
+        client,
+        "bocchi-the-rock-9e172d",
+        get_test_token,
+        {
+            "status": "completed",
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"] - 10000,
+        },
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

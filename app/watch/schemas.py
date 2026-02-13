@@ -1,4 +1,5 @@
 from pydantic import field_validator
+from pydantic import model_validator
 from pydantic import Field
 from app import constants
 from enum import Enum
@@ -43,6 +44,14 @@ class WatchArgs(CustomModel):
     start_date: UnixTimestamp | None = None
     end_date: UnixTimestamp | None = None
     status: WatchStatusEnum
+
+    @model_validator(mode="after")
+    def validate_dates(self):
+        if self.start_date is not None and self.end_date is not None:
+            if self.start_date > self.end_date:
+                raise ValueError("Hello there time traveler")
+
+        return self
 
 
 class AnimeWatchSearchArgs(AnimeSearchArgsBase):
