@@ -4,11 +4,16 @@ from datetime import datetime, timedelta
 from pydantic import PlainSerializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
+from pydantic import BeforeValidator
 from pydantic import PositiveInt
 from typing import Annotated
 from . import constants
 from enum import Enum
 from . import utils
+
+
+# Custom field types
+UnixTimestamp = Annotated[datetime, BeforeValidator(utils.from_timestamp)]
 
 
 # Custom Pydantic serializers

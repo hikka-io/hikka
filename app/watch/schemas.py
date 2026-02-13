@@ -7,6 +7,7 @@ from app.schemas import (
     AnimeSearchArgsBase,
     PaginationResponse,
     WatchResponseBase,
+    UnixTimestamp,
     AnimeResponse,
     UserResponse,
     CustomModel,
@@ -39,6 +40,8 @@ class WatchArgs(CustomModel):
     episodes: int = Field(default=0, ge=0, le=10000, examples=[3])
     rewatches: int = Field(default=0, ge=0, le=100, examples=[2])
     score: int = Field(default=0, ge=0, le=10, examples=[8])
+    start_date: UnixTimestamp | None = None
+    end_date: UnixTimestamp | None = None
     status: WatchStatusEnum
 
 

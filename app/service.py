@@ -10,6 +10,7 @@ from app import constants
 from uuid import UUID
 
 from app.utils import (
+    dict_datetime_to_timestamp,
     enumerate_seasons,
     new_token,
     is_uuid,
@@ -252,6 +253,11 @@ async def create_log(
     data: dict = {},
 ):
     now = utcnow()
+
+    # NOTE: here we recursively convert all datetimes to timestamps
+    # We shold never pass user created data because somebody can do
+    # funny thing with recursion
+    data = dict_datetime_to_timestamp(data)
 
     log = Log(
         **{

@@ -40,10 +40,13 @@ async def test_watch_add(
     assert response.json()["note"] == "Test"
     assert response.json()["score"] == 8
 
+    start_timestamp = response.json()["start_date"]
+
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
     assert log.log_type == constants.LOG_WATCH_CREATE
     assert log.user == create_test_user
+
     assert log.data == {
         "after": {
             "episodes": 10,
@@ -51,6 +54,7 @@ async def test_watch_add(
             "rewatches": 0,
             "score": 8,
             "status": "watching",
+            "start_date": response.json()["start_date"],
         },
         "before": {
             "episodes": None,
@@ -58,6 +62,7 @@ async def test_watch_add(
             "rewatches": None,
             "score": None,
             "status": None,
+            "start_date": None,
         },
     }
 
@@ -72,6 +77,8 @@ async def test_watch_add(
             "rewatches": 2,
             "episodes": 12,
             "score": 10,
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"],
         },
     )
 
@@ -107,6 +114,8 @@ async def test_watch_add(
             "rewatches": 2,
             "score": 10,
             "status": "completed",
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"],
         },
         "before": {
             "episodes": 10,
@@ -114,5 +123,7 @@ async def test_watch_add(
             "rewatches": 0,
             "score": 8,
             "status": "watching",
+            "start_date": start_timestamp,
+            "end_date": None,
         },
     }

@@ -105,12 +105,20 @@ async def save_watch(
         log_type = constants.LOG_WATCH_CREATE
 
         watch = AnimeWatch()
-        watch.start_date = now
         watch.created = now
         watch.anime = anime
         watch.user = user
 
         session.add(watch)
+
+        # Generally I think it's bad idea to modify user passed args
+        # but this would allow us to keep existing logic so why not
+        args.start_date = now
+
+    # Same as with start_date we modify user passed args
+    # in special case to simplify our lives
+    if args.status == constants.WATCH_COMPLETED and watch.end_date is None:
+        args.end_date = now
 
     log_before = {}
     log_after = {}
@@ -124,13 +132,6 @@ async def save_watch(
             log_before[key] = old_value
             setattr(watch, key, new_value)
             log_after[key] = new_value
-
-        if (
-            key == "status"
-            and new_value == constants.WATCH_COMPLETED
-            and watch.end_date is None
-        ):
-            watch.end_date = now
 
     # Calculate duration and update updated field
     watch.duration = calculate_watch_duration(watch)
