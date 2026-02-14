@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utils import check_user_permissions
 from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.models import Comment, User
@@ -81,6 +82,18 @@ async def validate_comment(
         )
     ):
         raise Abort("comment", "not-found")
+
+    return comment
+
+
+async def validate_comment_get(
+    comment: Comment = Depends(validate_comment),
+    author: User = Depends(auth_required(optional=True)),
+):
+    if comment.hidden and not check_user_permissions(
+        author, [constants.PERMISSION_COMMENT_READ_HIDDEN]
+    ):
+        raise Abort("comment", "hidden")
 
     return comment
 
