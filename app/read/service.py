@@ -129,12 +129,20 @@ async def save_read(
         log_type = constants.LOG_READ_CREATE
 
         read = read_model()
-        read.start_date = now
         read.content = content
         read.created = now
         read.user = user
 
         session.add(read)
+
+        # Generally I think it's bad idea to modify user passed args
+        # but this would allow us to keep existing logic so why not
+        args.start_date = now
+
+    # Same as with start_date we modify user passed args
+    # in special case to simplify our lives
+    if args.status == constants.READ_COMPLETED and read.end_date is None:
+        args.end_date = now
 
     log_before = {}
     log_after = {}
@@ -148,13 +156,6 @@ async def save_read(
             log_before[key] = old_value
             setattr(read, key, new_value)
             log_after[key] = new_value
-
-        if (
-            key == "status"
-            and new_value == constants.READ_COMPLETED
-            and read.end_date is None
-        ):
-            read.end_date = now
 
     # Update updated field
     read.updated = now

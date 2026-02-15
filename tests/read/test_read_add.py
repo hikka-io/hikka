@@ -41,8 +41,11 @@ async def test_read_add(
     assert response.json()["note"] == "Test"
     assert response.json()["score"] == 8
 
+    start_timestamp = response.json()["start_date"]
+
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+
     assert log.log_type == constants.LOG_READ_CREATE
     assert log.user == create_test_user
 
@@ -54,6 +57,7 @@ async def test_read_add(
             "rereads": 0,
             "volumes": 1,
             "chapters": 1,
+            "start_date": response.json()["start_date"],
         },
         "before": {
             "note": None,
@@ -62,6 +66,7 @@ async def test_read_add(
             "rereads": None,
             "volumes": None,
             "chapters": None,
+            "start_date": None,
         },
         "content_type": "manga",
     }
@@ -78,6 +83,8 @@ async def test_read_add(
             "volumes": 1,
             "chapters": 1,
             "score": 10,
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"],
         },
     )
 
@@ -104,10 +111,36 @@ async def test_read_add(
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))
+
     assert log.log_type == constants.LOG_READ_UPDATE
     assert log.user == create_test_user
     assert log.data == {
-        "after": {"score": 10, "status": "completed"},
-        "before": {"score": 8, "status": "reading"},
+        "after": {
+            "score": 10,
+            "status": "completed",
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"],
+        },
+        "before": {
+            "score": 8,
+            "status": "reading",
+            "start_date": start_timestamp,
+            "end_date": None,
+        },
         "content_type": "manga",
     }
+
+    # Attempt time travel
+    response = await request_read_add(
+        client,
+        "manga",
+        "berserk-fb9fbd",
+        get_test_token,
+        {
+            "status": "completed",
+            "start_date": response.json()["start_date"],
+            "end_date": response.json()["end_date"] - 10000,
+        },
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
