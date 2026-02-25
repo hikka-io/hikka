@@ -571,12 +571,7 @@ async def article_meilisearch_search(
     limit: int,
     offset: int,
 ):
-    slugs = [article["slug"] for article in meilisearch_result]
-    query = select(Article).filter(Article.slug.in_(slugs))
-
-    article_list = await session.scalars(query)
-    article_ids = [article.id for article in article_list.unique().all()]
-
+    article_ids = [article["reference"] for article in meilisearch_result]
     article_list = await get_articles(session, request_user, args, limit, offset, article_ids)
     meilisearch_result["list"] = article_list
 

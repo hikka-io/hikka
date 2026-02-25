@@ -32,6 +32,7 @@ def article_to_document(article: Article):
         "id": article.content_id,
         "title": article.title,
         "slug": article.slug,
+        "reference": article.reference,
     }
 
 
