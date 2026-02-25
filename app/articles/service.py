@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
 from collections import defaultdict
 from app import constants
-from uuid import uuid4
+from uuid import uuid4, UUID
 
 from app.models import (
     UserArticleStats,
@@ -432,6 +432,7 @@ async def get_articles(
     args: ArticlesListArgs,
     limit: int,
     offset: int,
+    ids: list[UUID] | None = None
 ) -> list[Article]:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
@@ -457,6 +458,9 @@ async def get_articles(
         args,
         session,
     )
+
+    if ids is not None and len(ids) > 0:
+        query = query.filter(Article.id.in_(ids))
 
     return await session.scalars(
         query.order_by(*build_articles_order_by(args.sort))
@@ -562,15 +566,18 @@ async def get_article_authors(session: AsyncSession, request_user: User):
 async def article_meilisearch_search(
     session: AsyncSession,
     meilisearch_result: dict,
+    request_user: User,
+    args: ArticlesListArgs,
+    limit: int,
+    offset: int,
 ):
     slugs = [article["slug"] for article in meilisearch_result]
     query = select(Article).filter(Article.slug.in_(slugs))
 
     article_list = await session.scalars(query)
-    meilisearch_result["list"] = article_list.unique().all()
+    article_ids = [article.id for article in article_list.unique().all()]
 
-    meilisearch_result["list"] = sorted(
-        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
-    )
+    article_list = await get_articles(session, request_user, args, limit, offset, article_ids)
+    meilisearch_result["list"] = article_list
 
     return meilisearch_result

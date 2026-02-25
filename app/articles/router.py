@@ -117,8 +117,8 @@ async def get_articles(
         )
     ),
 ):
+    limit, offset = pagination(page, size)
     if not args.query:
-        limit, offset = pagination(page, size)
         total = await service.get_articles_count(session, request_user, args)
 
         articles = await service.get_articles(
@@ -139,5 +139,7 @@ async def get_articles(
             size=size,
         )
 
-    return service.article_meilisearch_search(session, meilisearch_result)
+    return service.article_meilisearch_search(
+        session, meilisearch_result, request_user, args, limit, offset
+    )
 
