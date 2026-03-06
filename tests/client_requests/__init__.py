@@ -25,6 +25,7 @@ from .client import request_client_info
 from .oauth import request_oauth_post
 from .oauth import request_oauth_url
 
+from .user import request_profile_reference
 from .user import request_profile
 from .user import request_me_ui
 from .user import request_me
@@ -163,6 +164,7 @@ __all__ = [
     "request_oauth_post",
     "request_oauth_url",
     # =========== user ===========
+    "request_profile_reference",
     "request_profile",
     "request_me_ui",
     "request_me",

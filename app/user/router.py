@@ -1,6 +1,5 @@
 from app.common.schemas import UserCustomizationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import meilisearch
@@ -24,6 +23,11 @@ from app.dependencies import (
     get_user,
 )
 
+from .dependencies import (
+    get_user_followed_reference,
+    get_user_followed_username,
+)
+
 
 router = APIRouter(prefix="/user", tags=["User"])
 
@@ -42,11 +46,22 @@ async def profile(
 
 
 @router.get(
+    "/reference/{reference}",
+    response_model=UserResponseFollowed,
+    summary="User profile by id",
+)
+async def user_profile_by_id(user: User = Depends(get_user_followed_reference)):
+    return user
+
+
+@router.get(
     "/{username}",
     response_model=UserResponseFollowed,
     summary="User profile",
 )
-async def user_profile(user: User = Depends(get_user_followed)):
+async def user_profile_by_username(
+    user: User = Depends(get_user_followed_username),
+):
     return user
 
 

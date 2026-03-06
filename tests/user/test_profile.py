@@ -1,6 +1,9 @@
 from fastapi import status
 
+from app.models import User
+
 from client_requests import (
+    request_profile_reference,
     request_profile,
     request_me,
 )
@@ -16,6 +19,17 @@ async def test_profile(client, create_test_user):
     response = await request_profile(client, "TestUser")
     assert response.json()["username"] == "testuser"
     assert response.status_code == status.HTTP_200_OK
+
+
+async def test_profile_reference(client, create_test_user: User):
+    # User profile
+    response = await request_profile_reference(
+        client, create_test_user.reference
+    )
+    print(response.json())  # ensure we know the response after test fail
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["username"] == create_test_user.username
+    assert response.json()["reference"] == create_test_user.reference
 
 
 async def test_bad_profile(client):
