@@ -20,6 +20,7 @@ from app.schemas import (
 )
 
 from app.dependencies import (
+    get_user_reference,
     auth_required,
     get_user,
 )
@@ -38,6 +39,14 @@ async def profile(
         auth_required(scope=[constants.SCOPE_READ_USER_DETAILS])
     ),
 ):
+    return user
+
+
+@router.get(
+    "/reference/{reference}",
+    response_model=UserResponse,
+)
+async def user_reference(user: User = Depends(get_user_reference)):
     return user
 
 

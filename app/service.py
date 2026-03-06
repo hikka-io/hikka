@@ -188,6 +188,12 @@ async def get_user_by_username(
     )
 
 
+async def get_user_by_reference(
+    session: AsyncSession, reference: UUID
+) -> User | None:
+    return await session.scalar(select(User).filter(User.id == reference))
+
+
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
     return await session.scalar(
         select(User).filter(func.lower(User.email) == email.lower())

@@ -8,9 +8,11 @@ from typing import Annotated
 from app.errors import Abort
 from app.utils import utcnow
 from app import constants
+from uuid import UUID
 from app import utils
 
 from .service import (
+    get_user_by_reference,
     get_user_by_username,
     get_anime_by_slug,
     get_auth_token,
@@ -22,6 +24,19 @@ async def get_user(
     username: str, session: AsyncSession = Depends(get_session)
 ) -> User:
     if not (user := await get_user_by_username(session, username)):
+        raise Abort("user", "not-found")
+
+    if user.role == constants.ROLE_DELETED:
+        raise Abort("user", "deleted")
+
+    return user
+
+
+# Get user by reference
+async def get_user_reference(
+    reference: UUID, session: AsyncSession = Depends(get_session)
+) -> User:
+    if not (user := await get_user_by_reference(session, reference)):
         raise Abort("user", "not-found")
 
     if user.role == constants.ROLE_DELETED:
