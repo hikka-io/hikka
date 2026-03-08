@@ -231,10 +231,7 @@ async def get_collection(
     collection = await session.scalar(
         select(Collection)
         .options(joinedload(Collection.author))
-        .filter(
-            Collection.deleted == False,  # noqa: E712
-            Collection.id == reference,
-        ),
+        .filter(Collection.id == reference),
     )
 
     if (
