@@ -6,4 +6,8 @@ inputs:
     inputs:
       nixpkgs:
         follows: nixpkgs
+  nixpkgs-meilisearch:
+    url: github:NixOS/nixpkgs/ab7b6889ae9d484eed2876868209e33eb262511d
+  nixpkgs-postgres:
+    url: github:NixOS/nixpkgs/daf7bb95821b789db24fc1ac21f613db0c1bf2cb
 allowUnfree: true
