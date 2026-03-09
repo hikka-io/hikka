@@ -196,7 +196,7 @@ async def meilisearch_populate(session: AsyncSession):
             documents = await anime_documents(session, limit, offset)
 
             if len(documents) > 0:
-                await index.add_documents(documents)
+                await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await anime_document_ids_delete(session)
 
