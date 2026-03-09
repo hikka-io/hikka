@@ -19,6 +19,7 @@ async def update_article_settings(index):
                 "title",
                 "data_type",
                 "slug",
+                "reference"
             ],
             sortable_attributes=["title"],
             distinct_attribute="slug",
@@ -29,7 +30,7 @@ async def update_article_settings(index):
 def article_to_document(article: Article):
     return {
         "data_type": "article",
-        "id": article.content_id,
+        "id": str(article.content_id),
         "title": article.title,
         "slug": article.slug,
         "reference": article.reference,
@@ -44,6 +45,7 @@ async def article_documents(session: AsyncSession, limit: int, offset: int):
         .limit(limit)
         .offset(offset)
     )
+    article_list = article_list.unique().all()
 
     documents = []
 

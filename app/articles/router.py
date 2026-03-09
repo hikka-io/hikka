@@ -118,9 +118,8 @@ async def get_articles(
     ),
 ):
     limit, offset = pagination(page, size)
+    total = await service.get_articles_count(session, request_user, args)
     if not args.query:
-        total = await service.get_articles_count(session, request_user, args)
-
         articles = await service.get_articles(
             session, request_user, args, limit, offset
         )
@@ -132,14 +131,20 @@ async def get_articles(
         return paginated_response(articles, total, page, limit)
 
     meilisearch_result = await meilisearch.search(
-            constants.SEARCH_INDEX_ARTICLES,
-            sort=['title:desc'],
-            query=args.query,
-            page=page,
-            size=size,
-        )
+        constants.SEARCH_INDEX_ARTICLES,
+        sort=['title:desc'],
+        query=args.query,
+        page=page,
+        size=size,
+    )
 
-    return service.article_meilisearch_search(
+    articles = await service.article_meilisearch_search(
         session, meilisearch_result, request_user, args, limit, offset
     )
+
+    articles = await service.load_articles_content(
+        session, articles.unique().all()
+    )
+
+    return paginated_response(articles, total, page, limit)
 

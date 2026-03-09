@@ -571,8 +571,8 @@ async def article_meilisearch_search(
     limit: int,
     offset: int,
 ):
-    article_ids = [article["reference"] for article in meilisearch_result]
+    articles = meilisearch_result.get("list", [])
+    article_ids = [article["reference"] for article in articles]
     article_list = await get_articles(session, request_user, args, limit, offset, article_ids)
-    meilisearch_result["list"] = article_list
 
-    return meilisearch_result
+    return article_list
