@@ -50,12 +50,7 @@ in
         exit 1
       fi
 
-      psql \
-        -h localhost \
-        -p ${toString ports.postgres} \
-        -U ${db.user} \
-        -d ${db.name} \
-        -f $1
+      psql ${credsString} -f $1
 
       alembic-upgrade
     '';
