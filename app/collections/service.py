@@ -55,7 +55,9 @@ content_type_to_collection_content_class = {
 
 def build_collection_order_by(sort: list[str]):
     order_mapping = {
+        "title": Collection.title,
         "system_ranking": Collection.system_ranking,
+        "vote_score": Collection.vote_score,
         "created": Collection.created,
     }
 
@@ -115,6 +117,7 @@ async def collections_list_filter(
     request_user: User | None,
     args: CollectionsListArgs,
     session: AsyncSession,
+    filter_by_ids: list[str] | None,
 ):
     visibility = [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
 
@@ -126,8 +129,18 @@ async def collections_list_filter(
         if author == request_user:
             visibility.append(constants.COLLECTION_PRIVATE)
 
+    # filtering by result of meilisearch
+    if filter_by_ids is not None and len(filter_by_ids) > 0:
+        query = query.filter(Collection.id.in_(filter_by_ids))
+
     if args.content_type:
         query = query.filter(Collection.content_type == args.content_type)
+
+    if args.spoiler is not None:
+        query = query.filter(Collection.spoiler == args.spoiler)
+
+    if args.nsfw is not None:
+        query = query.filter(Collection.nsfw == args.nsfw)
 
     if len(args.tags) > 0:
         query = query.filter(
@@ -171,10 +184,17 @@ async def collections_list_filter(
 
 
 async def get_collections_count(
-    session: AsyncSession, request_user: User | None, args: CollectionsListArgs
+    session: AsyncSession, 
+    request_user: User | None, 
+    args: CollectionsListArgs,
+    filter_by_ids: list[str] | None,
 ) -> int:
     query = await collections_list_filter(
-        select(func.count(Collection.id)), request_user, args, session
+        select(func.count(Collection.id)), 
+        request_user, 
+        args, 
+        session,
+        filter_by_ids,
     )
 
     return await session.scalar(query)
@@ -186,6 +206,7 @@ async def get_collections(
     args: CollectionsListArgs,
     limit: int,
     offset: int,
+    filter_by_ids: list[str] | None,
 ) -> ScalarResult[Collection]:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
@@ -203,6 +224,7 @@ async def get_collections(
         request_user,
         args,
         session,
+        filter_by_ids,
     )
 
     return await session.scalars(
@@ -279,6 +301,7 @@ async def create_collection(
 
     collection = Collection(
         **{
+            "needs_search_update": args.visibility == constants.COLLECTION_PUBLIC,
             "content_type": args.content_type,
             "labels_order": args.labels_order,
             "description": args.description,
@@ -344,6 +367,8 @@ async def update_collection(
     before = {}
     after = {}
 
+    was_public = collection.visibility == constants.COLLECTION_PUBLIC
+
     for key in [
         "labels_order",
         "description",
@@ -361,6 +386,8 @@ async def update_collection(
             setattr(collection, key, new_value)
             after[key] = new_value
 
+    is_public = collection.visibility == constants.COLLECTION_PUBLIC
+    collection.needs_search_update = was_public or is_public
     collection.updated = utcnow()
     session.add(collection)
 
@@ -450,6 +477,7 @@ async def update_collection(
 async def delete_collection(
     session: AsyncSession, collection: Collection, user: User
 ):
+    collection.needs_search_update = collection.visibility == constants.COLLECTION_PUBLIC
     collection.deleted = True
     session.add(collection)
 
