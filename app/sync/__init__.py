@@ -42,6 +42,8 @@ from .content import update_content
 
 from .email import send_emails
 
+from .feed import generate_feed
+
 from .export import update_export
 
 from .views import update_article_views
@@ -81,5 +83,6 @@ __all__ = [
     "update_counts",
     "update_search",
     "update_scores",
+    "generate_feed",
     "send_emails",
 ]

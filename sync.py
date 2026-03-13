@@ -21,6 +21,7 @@ from app.sync import (
     update_search,
     update_scores,
     update_export,
+    generate_feed,
     send_emails,
 )
 
@@ -42,6 +43,9 @@ def init_scheduler():
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
+
+    # TODO: remove me
+    scheduler.add_job(generate_feed, "interval", minutes=1)
 
     scheduler.add_job(
         update_aggregator,
