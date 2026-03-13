@@ -5,6 +5,7 @@ from sqlalchemy.orm import joinedload
 from collections import defaultdict
 from sqlalchemy import select, case
 from app.utils import path_to_uuid
+from .schemas import FeedArgs
 from app import constants
 
 from app.service import (
@@ -98,11 +99,11 @@ async def load_feed_comments(session: AsyncSession, content_ids: list):
 
 
 async def get_user_feed(
-    session: AsyncSession, request_user: User | None
+    session: AsyncSession, request_user: User | None, args: FeedArgs
 ) -> User:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
-    feed = await session.scalars(
+    feed_query = (
         select(Feed)
         .order_by(
             Feed.deleted == False,  # noqa: E712
@@ -110,6 +111,16 @@ async def get_user_feed(
         )
         .limit(20)
     )
+
+    if args.content_type:
+        feed_query = feed_query.filter(Feed.content_type == args.content_type)
+
+    if args.before:
+        feed_query = feed_query.filter(
+            Feed.created < args.before.replace(tzinfo=None)
+        )
+
+    feed = await session.scalars(feed_query)
 
     content_ids = defaultdict(list)
     tmp_feed = []
