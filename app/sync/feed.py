@@ -63,7 +63,7 @@ async def generate_feed():
                 name = entry.reference
 
                 if hasattr(entry, "title"):
-                    name = entry.name
+                    name = entry.title
 
                 print(f"Added {entry.data_type} feed entry for {name}")
 
