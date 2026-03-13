@@ -13,6 +13,7 @@ from app.utils import (
 
 from app.schemas import (
     PaginationResponse,
+    DataTypeMixin,
     UserResponse,
     CustomModel,
 )
@@ -66,7 +67,7 @@ class CommentArgs(CommentTextArgs):
 
 
 # Responses
-class CommentResponse(CustomModel):
+class CommentResponse(CustomModel, DataTypeMixin):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
     updated: datetime_pd
@@ -94,6 +95,7 @@ class CommentListResponse(CustomModel):
 class CommentNode:
     # Reference is default field of data class, do not move it
     reference: str
+    data_type: str = "comment"
 
     replies: list["CommentNode"] = field(default_factory=list)
     is_editable: bool = False

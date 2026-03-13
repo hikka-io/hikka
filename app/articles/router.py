@@ -123,6 +123,7 @@ async def get_articles(
         session, request_user, args, limit, offset
     )
 
+    # TODO: remove this
     articles = await service.load_articles_content(
         session, articles.unique().all()
     )

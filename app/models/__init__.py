@@ -104,6 +104,8 @@ from .schedule.anime import AnimeSchedule
 from .tag.tag import ArticleTag
 from .tag.tag import Tag
 
+from .feed import Feed
+
 from .base import Base
 
 __all__ = [
@@ -195,5 +197,6 @@ __all__ = [
     "AnimeSchedule",
     "ArticleTag",
     "Tag",
+    "Feed",
     "Base",
 ]

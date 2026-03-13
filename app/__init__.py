@@ -63,6 +63,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "History"},
             {"name": "Stats"},
             {"name": "Vote"},
+            {"name": "Feed"},
         ],
         lifespan=lifespan,
         # redoc_url=None,
@@ -116,6 +117,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .auth import router as auth_router
     from .edit import router as edit_router
     from .vote import router as vote_router
+    from .feed import router as feed_router
 
     app.include_router(notifications_router)
     app.include_router(integrations_router)
@@ -147,6 +149,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(edit_router)
     app.include_router(vote_router)
+    app.include_router(feed_router)
 
     @app.get("/")
     async def documentation_redirect():

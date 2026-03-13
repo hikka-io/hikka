@@ -205,6 +205,8 @@ SCOPE_SEEN_NOTIFICATION = "seen:notification"
 SCOPE_READ_VOTE = "read:vote"
 SCOPE_SET_VOTE = "set:vote"
 
+SCOPE_READ_FEED = "read:feed"
+
 SCOPE_UPLOAD = "upload"
 
 ALL_SCOPES = [
@@ -256,6 +258,7 @@ ALL_SCOPES = [
     SCOPE_SEEN_NOTIFICATION,
     SCOPE_SET_VOTE,
     SCOPE_READ_VOTE,
+    SCOPE_READ_FEED,
     SCOPE_UPLOAD,
     SCOPE_CREATE_ARTICLE,
     SCOPE_UPDATE_ARTICLE,
@@ -276,6 +279,7 @@ SCOPE_FAVOURITE = "favourite"
 SCOPE_FOLLOW_FULL = "follow-full"
 SCOPE_NOTIFICATION = "notification"
 SCOPE_VOTE = "vote"
+SCOPE_FEED = "feed"
 SCOPE_ALL = "all"
 
 # This scope groups will be resolved at token scope checking
@@ -345,6 +349,7 @@ SCOPE_GROUPS = {
         SCOPE_READ_VOTE,
         SCOPE_SET_VOTE,
     ],
+    SCOPE_FEED: [SCOPE_READ_FEED],
     SCOPE_ALL: ALL_SCOPES,
 }
 
