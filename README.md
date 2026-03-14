@@ -72,7 +72,7 @@ Install [devenv](https://devenv.sh/getting-started/) before proceeding.
 
 ---
 
-#### Option B — devenv (recommended)
+#### Option B — devenv
 
 [devenv](https://devenv.sh) provides a fully reproducible development environment that automatically manages PostgreSQL, Meilisearch, and all dependencies for you — no manual configuration needed.
 
