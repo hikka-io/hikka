@@ -37,7 +37,7 @@ This guide assumes you already have PostgreSQL installed and database named `hik
 
 Optionally you also need to install Meilisearch [1.4.2](https://github.com/meilisearch/meilisearch/releases/tag/v1.4.2) to work with search. Please note this exact version must be installed because newer versions most likely contain API breaking changes.
 
-[Option B — devenv (recommended)](#option-b--devenv-recommended)
+[Option B — devenv](#option-b--devenv)
 
 **Prerequisites** 
 
