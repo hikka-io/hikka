@@ -112,7 +112,12 @@ async def get_contents_list(
             session, base_comment, request_user
         )
 
-        result.append(build_comments(base_comment, sub_comments))
+        built = build_comments(base_comment, sub_comments)
+
+        if base_comment.hidden and not built.replies:
+            continue
+
+        result.append(built)
 
     return paginated_response(result, total, page, limit)
 

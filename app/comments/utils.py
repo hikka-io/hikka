@@ -8,6 +8,13 @@ def uuid_to_path(obj_uuid):
 
 
 def build_comments(base_comment, sub_comments):
+    def prune_hidden(node):
+        for reply in node.replies:
+            prune_hidden(reply)
+        node.replies = [
+            reply for reply in node.replies if not (reply.hidden and not reply.replies)
+        ]
+
     def calculate_total_replies(node):
         node.total_replies = len(node.replies)
         for reply in node.replies:
@@ -40,11 +47,7 @@ def build_comments(base_comment, sub_comments):
 
         tree_node.from_comment(sub_comment)
 
-    tree.replies = [
-        reply
-        for reply in tree.replies
-        if not (reply.hidden and not reply.replies)
-    ]
+    prune_hidden(tree)
 
     calculate_total_replies(tree)
 
