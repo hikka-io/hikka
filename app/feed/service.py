@@ -1,3 +1,4 @@
+from app.common.service.collections import collections_load_options
 from app.models import Collection, Article, Comment, User, Feed
 from app.common.service.articles import load_articles_content
 from sqlalchemy.orm import with_expression, joinedload
@@ -11,7 +12,6 @@ from app import constants
 from uuid import UUID
 
 from app.service import (
-    collections_load_options,
     get_followed_user_ids,
     get_my_score_subquery,
 )
