@@ -25,7 +25,7 @@ class UsernameLoginArgs(PasswordArgs, UsernameArgs):
     pass
 
 
-class ComfirmResetArgs(PasswordArgs, TokenArgs):
+class ConfirmResetArgs(PasswordArgs, TokenArgs):
     pass
 
 
