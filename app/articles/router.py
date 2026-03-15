@@ -3,12 +3,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import meilisearch
 from app import constants
 from . import service
 
 from app.utils import (
-    pagination_dict,
     pagination,
+    paginated_response,
 )
 
 from app.models import (
@@ -119,15 +120,31 @@ async def get_articles(
 ):
     limit, offset = pagination(page, size)
     total = await service.get_articles_count(session, request_user, args)
+    if not args.query:
+        articles = await service.get_articles(
+            session, request_user, args, limit, offset
+        )
 
-    articles = await service.get_articles(
-        session, request_user, args, limit, offset
+        articles = await service.load_articles_content(
+            session, articles.unique().all()
+        )
+
+        return paginated_response(articles, total, page, limit)
+
+    meilisearch_result = await meilisearch.search(
+        constants.SEARCH_INDEX_ARTICLES,
+        sort=['title:desc'],
+        query=args.query,
+        page=page,
+        size=size,
+    )
+
+    articles = await service.article_meilisearch_search(
+        session, meilisearch_result, request_user, args, limit, offset
     )
 
     # TODO: remove this
     articles = await load_articles_content(session, articles.unique().all())
 
-    return {
-        "pagination": pagination_dict(total, page, limit),
-        "list": articles,
-    }
+    return paginated_response(articles, total, page, limit)
+
