@@ -432,7 +432,7 @@ async def get_articles(
     args: ArticlesListArgs,
     limit: int,
     offset: int,
-    ids: list[UUID] | None = None
+    ids: list[UUID] | None = None,
 ) -> list[Article]:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
@@ -494,16 +494,16 @@ async def get_article_authors(session: AsyncSession, request_user: User):
         .order_by(UserArticleStats.author_score.desc())
     )
 
+
 async def article_meilisearch_search(
     session: AsyncSession,
-    meilisearch_result: dict,
     request_user: User,
-    args: ArticlesListArgs,
-    limit: int,
-    offset: int,
+    meilisearch_result: dict,
 ):
     articles = meilisearch_result.get("list", [])
     article_ids = [article["reference"] for article in articles]
-    article_list = await get_articles(session, request_user, args, limit, offset, article_ids)
+    article_list = await get_articles(
+        session, request_user, args, limit, offset, article_ids
+    )
 
     return article_list

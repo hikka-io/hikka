@@ -15,12 +15,7 @@ async def update_article_settings(index):
         MeilisearchSettings(
             filterable_attributes=["title"],
             searchable_attributes=["title"],
-            displayed_attributes=[
-                "title",
-                "data_type",
-                "slug",
-                "reference"
-            ],
+            displayed_attributes=["title", "slug", "reference"],
             sortable_attributes=["title"],
             distinct_attribute="slug",
         )
@@ -29,24 +24,28 @@ async def update_article_settings(index):
 
 def article_to_document(article: Article):
     return {
-        "data_type": "article",
+        "reference": article.reference,
         "id": str(article.content_id),
         "title": article.title,
         "slug": article.slug,
-        "reference": article.reference,
     }
 
 
 async def article_documents(session: AsyncSession, limit: int, offset: int):
     article_list = await session.scalars(
         select(Article)
-        .filter(Article.needs_search_update == True)  # noqa: E712
+        .filter(
+            Article.category != constants.ARTICLE_SYSTEM,
+            Article.needs_search_update == True,  # noqa: E712
+            Article.deleted == False,  # noqa: E712
+            Article.draft == False,  # noqa: E712
+        )
         .order_by("content_id")
         .limit(limit)
         .offset(offset)
     )
-    article_list = article_list.unique().all()
 
+    article_list = article_list.unique().all()
     documents = []
 
     for article in article_list:
@@ -81,7 +80,7 @@ async def meilisearch_populate(session: AsyncSession):
             limit, offset = pagination(page, size)
             documents = await article_documents(session, limit, offset)
 
-            await index.add_documents(documents)
+            await index.add_documents(documents, primary_key="id")
 
             await session.commit()
 

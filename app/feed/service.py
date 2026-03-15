@@ -56,6 +56,7 @@ async def load_feed_articles(
         .filter(
             Article.id.in_(content_ids),
             Article.category != constants.ARTICLE_SYSTEM,
+            Article.deleted == False,  # noqa: E712
             Article.draft == False,  # noqa: E712
         )
         .options(
