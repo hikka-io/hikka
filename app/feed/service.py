@@ -82,13 +82,33 @@ async def load_feed_articles(
     return await load_articles_content(session, articles.unique().all())
 
 
-async def load_feed_comments(session: AsyncSession, content_ids: list):
+async def load_feed_comments(
+    session: AsyncSession,
+    content_ids: list,
+    followed_user_ids: list,
+    request_user: User | None,
+):
     comments = await session.scalars(
-        select(Comment).filter(
+        select(Comment)
+        .filter(
             Comment.hidden == False,  # noqa: E712
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
             Comment.id.in_(content_ids),
+        )
+        .options(
+            joinedload(Comment.author).with_expression(
+                User.is_followed,
+                case((User.id.in_(followed_user_ids), True), else_=False),
+            )
+        )
+        .options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            )
         )
     )
 
@@ -154,6 +174,11 @@ async def get_user_feed(
         )
 
     if "comment" in content_ids:
-        result += await load_feed_comments(session, content_ids["comment"])
+        result += await load_feed_comments(
+            session,
+            content_ids["comment"],
+            followed_user_ids,
+            request_user,
+        )
 
     return sorted(result, key=lambda x: x.created, reverse=True)

@@ -1,9 +1,9 @@
+from .schemas import CommentResponseFeed, FeedArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.schemas import CollectionResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
-from .schemas import FeedArgs
 from app.models import User
 from app import constants
 from . import service
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/feed", tags=["Feed"])
 @router.post(
     "",
     response_model=list[
-        ArticlePreviewResponse | CommentResponse | CollectionResponse
+        ArticlePreviewResponse | CommentResponseFeed | CollectionResponse
     ],
 )
 async def get_feed(
