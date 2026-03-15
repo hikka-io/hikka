@@ -1,12 +1,12 @@
 from app.models import Collection, Article, Comment, User, Feed
+from sqlalchemy.orm import with_expression, joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import with_expression
-from sqlalchemy.orm import joinedload
+from sqlalchemy import select, case, or_
 from collections import defaultdict
-from sqlalchemy import select, case
 from app.utils import path_to_uuid
 from .schemas import FeedArgs
 from app import constants
+from uuid import UUID
 
 from app.service import (
     collections_load_options,
@@ -21,10 +21,10 @@ from app.comments.schemas import CommentNode
 
 async def load_feed_collections(
     session: AsyncSession,
-    content_ids: list,
-    followed_user_ids: list,
+    content_ids: list[UUID],
+    followed_user_ids: list[UUID],
     request_user: User | None,
-):
+) -> list[Collection]:
     collections = await session.scalars(
         collections_load_options(
             select(Collection)
@@ -44,15 +44,15 @@ async def load_feed_collections(
         )
     )
 
-    return collections.unique()
+    return collections.unique().all()
 
 
 async def load_feed_articles(
     session: AsyncSession,
-    content_ids: list,
-    followed_user_ids: list,
+    content_ids: list[UUID],
+    followed_user_ids: list[UUID],
     request_user: User | None,
-):
+) -> list[Article]:
     articles = await session.scalars(
         select(Article)
         .filter(
@@ -61,11 +61,9 @@ async def load_feed_articles(
             Article.draft == False,  # noqa: E712
         )
         .options(
-            joinedload(Article.author).options(
-                with_expression(
-                    User.is_followed,
-                    case((User.id.in_(followed_user_ids), True), else_=False),
-                )
+            joinedload(Article.author).with_expression(
+                User.is_followed,
+                case((User.id.in_(followed_user_ids), True), else_=False),
             )
         )
         .options(
@@ -84,10 +82,10 @@ async def load_feed_articles(
 
 async def load_feed_comments(
     session: AsyncSession,
-    content_ids: list,
-    followed_user_ids: list,
+    content_ids: list[UUID],
+    followed_user_ids: list[UUID],
     request_user: User | None,
-):
+) -> list[Comment]:
     comments = await session.scalars(
         select(Comment)
         .filter(
@@ -120,15 +118,23 @@ async def load_feed_comments(
 
 async def get_user_feed(
     session: AsyncSession, request_user: User | None, args: FeedArgs
-) -> User:
-    followed_user_ids = await get_followed_user_ids(session, request_user)
+) -> list[Collection | Article | Comment]:
+    user_feed_filter = (
+        or_(
+            Feed.user_id == request_user.id,
+            Feed.user_id == None,  # noqa: E711
+        )
+        if request_user is not None
+        else Feed.user_id == None  # noqa: E711
+    )
 
     feed_query = (
         select(Feed)
-        .order_by(
+        .filter(
             Feed.deleted == False,  # noqa: E712
-            Feed.created.desc(),
+            user_feed_filter,
         )
+        .order_by(Feed.created.desc())
         .limit(20)
     )
 
@@ -143,42 +149,24 @@ async def get_user_feed(
     feed = await session.scalars(feed_query)
 
     content_ids = defaultdict(list)
-    tmp_feed = []
-
     for entry in feed:
         content_ids[entry.content_type].append(entry.content_id)
-        tmp_feed.append(
-            {
-                "content_type": entry.content_type,
-                "content_id": entry.content_id,
-                "created": entry.created,
-            }
-        )
 
+    # List of followed users to load is_followed statuses
+    followed_user_ids = await get_followed_user_ids(session, request_user)
     result = []
 
-    if "article" in content_ids:
-        result += await load_feed_articles(
-            session,
-            content_ids["article"],
-            followed_user_ids,
-            request_user,
-        )
-
-    if "collection" in content_ids:
-        result += await load_feed_collections(
-            session,
-            content_ids["collection"],
-            followed_user_ids,
-            request_user,
-        )
-
-    if "comment" in content_ids:
-        result += await load_feed_comments(
-            session,
-            content_ids["comment"],
-            followed_user_ids,
-            request_user,
-        )
+    for content_type, load_function in [
+        (constants.CONTENT_COLLECTION, load_feed_collections),
+        (constants.CONTENT_ARTICLE, load_feed_articles),
+        (constants.CONTENT_COMMENT, load_feed_comments),
+    ]:
+        if content_type in content_ids:
+            result += await load_function(
+                session,
+                content_ids[content_type],
+                followed_user_ids,
+                request_user,
+            )
 
     return sorted(result, key=lambda x: x.created, reverse=True)

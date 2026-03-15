@@ -10,7 +10,6 @@ from . import service
 
 # TODO: remove me
 from app.articles.schemas import ArticlePreviewResponse
-from app.comments.schemas import CommentResponse
 
 
 router = APIRouter(prefix="/feed", tags=["Feed"])
