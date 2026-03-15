@@ -1,3 +1,4 @@
+from app.common.schemas.articles import ArticlePreviewResponse
 from .schemas import CommentResponseFeed, FeedArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
@@ -7,9 +8,6 @@ from app.database import get_session
 from app.models import User
 from app import constants
 from . import service
-
-# TODO: remove me
-from app.articles.schemas import ArticlePreviewResponse
 
 
 router = APIRouter(prefix="/feed", tags=["Feed"])

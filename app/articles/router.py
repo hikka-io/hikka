@@ -1,3 +1,4 @@
+from app.common.service.articles import load_articles_content
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
@@ -124,9 +125,7 @@ async def get_articles(
     )
 
     # TODO: remove this
-    articles = await service.load_articles_content(
-        session, articles.unique().all()
-    )
+    articles = await load_articles_content(session, articles.unique().all())
 
     return {
         "pagination": pagination_dict(total, page, limit),

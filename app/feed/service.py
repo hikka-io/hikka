@@ -1,5 +1,7 @@
 from app.models import Collection, Article, Comment, User, Feed
+from app.common.service.articles import load_articles_content
 from sqlalchemy.orm import with_expression, joinedload
+from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, case, or_
 from collections import defaultdict
@@ -13,10 +15,6 @@ from app.service import (
     get_followed_user_ids,
     get_my_score_subquery,
 )
-
-# TODO: remove me
-from app.articles.service import load_articles_content
-from app.comments.schemas import CommentNode
 
 
 async def load_feed_collections(
