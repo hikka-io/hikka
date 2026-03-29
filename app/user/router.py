@@ -68,8 +68,7 @@ async def service_user_activity(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_user),
 ):
-    activity = await service.get_user_activity(session, user)
-    return activity.all()[::-1]
+    return await service.get_user_activity(session, user)
 
 
 @router.get("/me/ui", response_model=UserCustomizationResponse)
