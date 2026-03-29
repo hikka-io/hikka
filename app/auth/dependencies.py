@@ -8,6 +8,7 @@ from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import oauth
+import secrets
 import uuid
 
 from app.utils import (
@@ -246,7 +247,7 @@ async def validate_auth_token_request(
     if now > request.expiration:
         raise Abort("auth", "token-request-expired")
 
-    if request.client.secret != args.client_secret:
+    if not secrets.compare_digest(request.client.secret, args.client_secret):
         raise Abort("auth", "invalid-client-credentials")
 
     return request
