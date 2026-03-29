@@ -81,9 +81,11 @@ async def get_followed_user_ids(session: AsyncSession, user: User | None):
     if not user:
         return []
 
-    return await session.scalars(
+    result = await session.scalars(
         select(Follow.followed_user_id).filter(Follow.user_id == user.id)
     )
+
+    return result.all()
 
 
 # We use this code mainly with system based on polymorphic identity
