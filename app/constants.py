@@ -585,9 +585,6 @@ NOTIFICATION_TYPES = [
     NOTIFICATION_THIRDPARTY_LOGIN,
 ]
 
-# Activity intervals
-INTERVAL_DAY = "day"
-
 # Collections
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"

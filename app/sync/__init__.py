@@ -20,8 +20,6 @@ from .digests import digest_activity
 
 from .notifications import update_notifications
 
-from .activity import update_activity
-
 from .ranking import update_article_stats
 from .ranking import update_ranking_all
 from .ranking import update_ranking
