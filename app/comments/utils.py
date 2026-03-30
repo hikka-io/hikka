@@ -1,5 +1,5 @@
+from app.common.schemas.comments import CommentNode
 from app.utils import path_to_uuid
-from .schemas import CommentNode
 
 
 # Convert uuid reference to comment path

@@ -1,3 +1,5 @@
+from app.common.service.collections import collections_load_options
+from .schemas import CollectionsListArgs, CollectionArgs
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
@@ -7,7 +9,6 @@ from app import constants
 from uuid import UUID
 
 from app.service import (
-    collections_load_options,
     get_followed_user_ids,
     get_user_by_username,
     create_log,
@@ -25,7 +26,6 @@ from sqlalchemy import (
     asc,
 )
 
-
 from app.models import (
     CharacterCollectionContent,
     PersonCollectionContent,
@@ -36,11 +36,6 @@ from app.models import (
     CollectionComment,
     Collection,
     User,
-)
-
-from .schemas import (
-    CollectionsListArgs,
-    CollectionArgs,
 )
 
 
@@ -144,12 +139,7 @@ async def collections_list_filter(
 
     if len(args.tags) > 0:
         query = query.filter(
-            and_(
-                *[
-                    Collection.tags.any(name)
-                    for name in args.tags
-                ]
-            )
+            and_(*[Collection.tags.any(name) for name in args.tags])
         )
 
     if args.only_public:
@@ -285,11 +275,7 @@ async def get_collection_display(
         .filter(Collection.id == collection.id)
     )
 
-    return await session.scalar(
-        collections_load_options(query, request_user).order_by(
-            desc(Collection.created)
-        )
-    )
+    return await session.scalar(collections_load_options(query, request_user))
 
 
 async def create_collection(
@@ -456,11 +442,7 @@ async def update_collection(
     # Collection visibility has changed
     # We need to update collection comments private status
     if "visibility" in after:
-        private = (
-            True
-            if collection.visibility == constants.COLLECTION_PRIVATE
-            else False
-        )
+        private = collection.visibility == constants.COLLECTION_PRIVATE
 
         await session.execute(
             update(CollectionComment)

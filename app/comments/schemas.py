@@ -1,18 +1,14 @@
 from pydantic import Field, field_validator
-from dataclasses import dataclass, field
+from app.utils import is_empty_markdown
 from app.schemas import datetime_pd
-from app.models import Comment
 from app import constants
 from uuid import UUID
 from enum import Enum
 
-from app.utils import (
-    is_empty_markdown,
-    path_to_uuid,
-)
 
 from app.schemas import (
     PaginationResponse,
+    DataTypeMixin,
     UserResponse,
     CustomModel,
 )
@@ -66,7 +62,7 @@ class CommentArgs(CommentTextArgs):
 
 
 # Responses
-class CommentResponse(CustomModel):
+class CommentResponse(CustomModel, DataTypeMixin):
     replies: list["CommentResponse"] = []
     total_replies: int = 0
     updated: datetime_pd
@@ -87,53 +83,3 @@ class CommentResponse(CustomModel):
 class CommentListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CommentResponse]
-
-
-# Misc
-@dataclass
-class CommentNode:
-    # Reference is default field of data class, do not move it
-    reference: str
-
-    replies: list["CommentNode"] = field(default_factory=list)
-    is_editable: bool = False
-    parent: str | None = None
-    content_type: str = None
-    total_replies: int = 0
-    vote_score: int = None
-    preview: dict = None
-    hidden: bool = False
-    my_score: int = None
-    created: str = None
-    author: str = None
-    score: int = None
-    depth: int = None
-    text: str = None
-
-    def from_comment(self, comment: Comment):
-        self.is_editable = comment.is_editable if not comment.hidden else False
-        self.my_score = comment.my_score if comment.my_score else 0
-        self.text = comment.text if not comment.hidden else None
-        self.content_type = comment.content_type
-        self.vote_score = comment.vote_score
-        self.preview = comment.preview
-        self.updated = comment.updated
-        self.created = comment.created
-        self.author = comment.author
-        self.hidden = comment.hidden
-        self.depth = comment.depth
-
-        if len(comment.path) > 1:
-            self.parent = path_to_uuid(comment.path[-2])
-
-        return self
-
-    @classmethod
-    def create(cls, reference: str, comment: Comment = None):
-        node_instance = cls(reference)
-        node_instance.reference = reference
-
-        if comment:
-            node_instance = node_instance.from_comment(comment)
-
-        return node_instance

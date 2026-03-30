@@ -87,8 +87,11 @@ async def validate_comment(
 
 async def validate_comment_not_hidden(
     comment: Comment = Depends(validate_comment),
+    session: AsyncSession = Depends(get_session),
 ):
-    if comment.hidden:
+    has_children = await service.has_children(session, comment)
+
+    if comment.hidden and not has_children:
         raise Abort("comment", "hidden")
 
     return comment

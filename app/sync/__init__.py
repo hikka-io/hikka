@@ -16,10 +16,9 @@ from .aggregator.roles import aggregator_roles
 from .aggregator import update_aggregator
 
 from .digests import digest_year_summary
+from .digests import digest_activity
 
 from .notifications import update_notifications
-
-from .activity import update_activity
 
 from .ranking import update_article_stats
 from .ranking import update_ranking_all
@@ -42,6 +41,8 @@ from .content import update_content
 
 from .email import send_emails
 
+from .feed import generate_feed
+
 from .export import update_export
 
 from .views import update_article_views
@@ -50,7 +51,6 @@ from .score import update_scores
 
 __all__ = [
     "delete_expired_token_requests",
-    "digest_year_summary",
     "aggregator_franchises",
     "aggregator_anime_info",
     "aggregator_manga_info",
@@ -62,6 +62,7 @@ __all__ = [
     "update_notifications",
     "update_article_stats",
     "update_article_views",
+    "digest_year_summary",
     "update_ranking_all",
     "aggregator_people",
     "aggregator_genres",
@@ -70,6 +71,7 @@ __all__ = [
     "aggregator_manga",
     "aggregator_novel",
     "aggregator_roles",
+    "digest_activity",
     "update_activity",
     "update_schedule",
     "update_content",
@@ -81,5 +83,6 @@ __all__ = [
     "update_counts",
     "update_search",
     "update_scores",
+    "generate_feed",
     "send_emails",
 ]

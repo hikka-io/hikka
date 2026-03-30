@@ -88,6 +88,10 @@ async def get_by_mal_ids(
 
 
 async def get_anime_by_anitube(session: AsyncSession, anitube_id: int):
+    # Better safe than sorry
+    if not isinstance(anitube_id, int):
+        return None
+
     anitube_url = f"https://anitube.in.ua/{anitube_id}-"
 
     return await session.scalar(

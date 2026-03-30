@@ -2,9 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, exists, desc
 from datetime import timedelta
 from app.utils import utcnow
+from app import constants
 
 from app.models import (
-    Activity,
+    Digest,
     Follow,
     User,
 )
@@ -13,18 +14,16 @@ from app.models import (
 async def get_user_activity(session: AsyncSession, user: User) -> User:
     """Get user activity"""
 
-    end = utcnow()
-    start = end - timedelta(weeks=16)
-
-    return await session.scalars(
-        select(Activity)
-        .filter(
-            Activity.user == user,
-            Activity.timestamp >= start,
-            Activity.timestamp <= end,
+    digest = await session.scalar(
+        select(Digest).filter(
+            Digest.name == constants.DIGEST_ACTIVITY, Digest.user == user
         )
-        .order_by(desc(Activity.timestamp))
     )
+
+    if not digest:
+        return []
+
+    return digest.data
 
 
 async def users_meilisearch(

@@ -81,9 +81,11 @@ async def get_followed_user_ids(session: AsyncSession, user: User | None):
     if not user:
         return []
 
-    return await session.scalars(
+    result = await session.scalars(
         select(Follow.followed_user_id).filter(Follow.user_id == user.id)
     )
+
+    return result.all()
 
 
 # We use this code mainly with system based on polymorphic identity
@@ -529,58 +531,6 @@ def build_anime_order_by(sort: list[str]):
     ] + [desc(Anime.content_id)]
 
     return order_by
-
-
-# Collections stuff
-def collections_load_options(
-    query: Select, request_user: User | None, preview: bool = False
-):
-    # Yeah, I like it but not sure about performance
-    query = query.options(
-        joinedload(Collection.collection.of_type(AnimeCollectionContent))
-        .joinedload(AnimeCollectionContent.content)
-        .joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(Collection.collection.of_type(MangaCollectionContent))
-        .joinedload(MangaCollectionContent.content)
-        .joinedload(Manga.read),
-        with_loader_criteria(
-            MangaRead,
-            MangaRead.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(Collection.collection.of_type(NovelCollectionContent))
-        .joinedload(NovelCollectionContent.content)
-        .joinedload(Novel.read),
-        with_loader_criteria(
-            NovelRead,
-            NovelRead.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(
-            Collection.collection.of_type(CharacterCollectionContent)
-        ).joinedload(CharacterCollectionContent.content),
-    )
-
-    # Here we load user vote score for collection
-    query = query.options(
-        with_expression(
-            Collection.my_score,
-            get_my_score_subquery(
-                Collection, constants.CONTENT_COLLECTION, request_user
-            ),
-        )
-    )
-
-    if preview:
-        query = query.options(
-            with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 6
-            )
-        )
-
-    return query
 
 
 # Vote stuff

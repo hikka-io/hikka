@@ -119,6 +119,7 @@ SEARCH_INDEX_MANGA = "content_manga"
 SEARCH_INDEX_NOVEL = "content_novel"
 SEARCH_INDEX_USERS = "content_users"
 SEARCH_INDEX_COLLECTIONS = "content_collections"
+SEARCH_INDEX_ARTICLES = "content_articles"
 
 COMPANY_ANIME_PRODUCER = "producer"
 COMPANY_ANIME_STUDIO = "studio"
@@ -206,6 +207,8 @@ SCOPE_SEEN_NOTIFICATION = "seen:notification"
 SCOPE_READ_VOTE = "read:vote"
 SCOPE_SET_VOTE = "set:vote"
 
+SCOPE_READ_FEED = "read:feed"
+
 SCOPE_UPLOAD = "upload"
 
 ALL_SCOPES = [
@@ -257,6 +260,7 @@ ALL_SCOPES = [
     SCOPE_SEEN_NOTIFICATION,
     SCOPE_SET_VOTE,
     SCOPE_READ_VOTE,
+    SCOPE_READ_FEED,
     SCOPE_UPLOAD,
     SCOPE_CREATE_ARTICLE,
     SCOPE_UPDATE_ARTICLE,
@@ -277,6 +281,7 @@ SCOPE_FAVOURITE = "favourite"
 SCOPE_FOLLOW_FULL = "follow-full"
 SCOPE_NOTIFICATION = "notification"
 SCOPE_VOTE = "vote"
+SCOPE_FEED = "feed"
 SCOPE_ALL = "all"
 
 # This scope groups will be resolved at token scope checking
@@ -346,6 +351,7 @@ SCOPE_GROUPS = {
         SCOPE_READ_VOTE,
         SCOPE_SET_VOTE,
     ],
+    SCOPE_FEED: [SCOPE_READ_FEED],
     SCOPE_ALL: ALL_SCOPES,
 }
 
@@ -580,9 +586,6 @@ NOTIFICATION_TYPES = [
     NOTIFICATION_THIRDPARTY_LOGIN,
 ]
 
-# Activity intervals
-INTERVAL_DAY = "day"
-
 # Collections
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
@@ -600,3 +603,6 @@ ARTICLE_CATEGORY_TO_PERMISSION = {
     ARTICLE_REVIEWS: PERMISSION_ARTICLE_CATEGORY_REVIEWS,
     ARTICLE_SYSTEM: PERMISSION_ARTICLE_CATEGORY_SYSTEM,
 }
+
+# Digests
+DIGEST_ACTIVITY = "activity"
