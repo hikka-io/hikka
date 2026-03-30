@@ -4,10 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import joinedload
-from sqlalchemy.orm import aliased
 from app.utils import round_datetime
+from sqlalchemy.orm import aliased
 from sqlalchemy_utils import Ltree
-from .utils import children_exists_query, uuid_to_path
+from .utils import uuid_to_path
 from app.utils import utcnow
 from uuid import UUID, uuid4
 from app import constants
@@ -59,6 +59,22 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
+def children_exists_query():
+    CommentChild = aliased(Comment)
+
+    return (
+        select(1)
+        .select_from(CommentChild)
+        .filter(
+            CommentChild.path.descendant_of(Comment.path),
+            CommentChild.deleted == False,  # noqa: E712
+            CommentChild.hidden == False,  # noqa: E712
+            CommentChild.id != Comment.id,
+        )
+        .correlate(Comment)
+    )
+
+
 async def get_comment(
     session: AsyncSession,
     comment_reference: UUID,
@@ -80,29 +96,18 @@ async def get_comment(
         )
     )
 
-async def has_live_children(
+
+async def has_children(
     session: AsyncSession,
-    comment_reference: UUID,
+    comment: Comment,
 ) -> bool:
-    Child = aliased(Comment)
-    query = await session.scalar(
-        select(
-            exists(
-                select(1)
-                .select_from(Child)
-                .where(
-                    Child.deleted == False,  # noqa: E712
-                    Child.hidden == False,  # noqa: E712
-                    Child.id != comment_reference,
-                    Child.path.descendant_of(
-                        select(Comment.path).where(Comment.id == comment_reference).scalar_subquery()
-                    ),
-                )
+    return bool(
+        await session.scalar(
+            select(exists(children_exists_query())).filter(
+                Comment.id == comment.id
             )
         )
     )
-
-    return bool(query)
 
 
 async def get_comments_count(
@@ -218,13 +223,13 @@ async def get_comments_by_content_id(
 
     return await session.scalars(
         select(Comment)
-        .where(
+        .filter(
             func.nlevel(Comment.path) == 1,
             Comment.content_id == content_id,
             Comment.deleted == False,  # noqa: E712
             or_(
                 Comment.hidden == False,  # noqa: E712,
-                exists(children_exists_query())
+                exists(children_exists_query()),
             ),
         )
         .options(
@@ -248,13 +253,13 @@ async def get_sub_comments(
 ):
     return await session.scalars(
         select(Comment)
-        .where(
+        .filter(
             Comment.deleted == False,  # noqa: E712
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
             or_(
                 Comment.hidden == False,  # noqa: E712,
-                exists(children_exists_query())
+                exists(children_exists_query()),
             ),
         )
         .options(
