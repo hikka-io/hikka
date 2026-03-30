@@ -4,11 +4,16 @@ from datetime import datetime, timedelta
 from pydantic import PlainSerializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
+from pydantic import BeforeValidator
 from pydantic import PositiveInt
 from typing import Annotated
 from . import constants
 from enum import Enum
 from . import utils
+
+
+# Custom field types
+UnixTimestamp = Annotated[datetime, BeforeValidator(utils.from_timestamp)]
 
 
 # Custom Pydantic serializers
@@ -421,6 +426,8 @@ class WatchResponseBase(CustomModel):
     duration: int = Field(examples=[24])
     episodes: int = Field(examples=[3])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
 class ReadResponseBase(CustomModel):
@@ -433,6 +440,8 @@ class ReadResponseBase(CustomModel):
     volumes: int = Field(examples=[3])
     rereads: int = Field(examples=[2])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
 class AnimeResponse(CustomModel, DataTypeMixin):

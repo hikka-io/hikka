@@ -54,11 +54,10 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["dengeki", "honey", "zenko", "miu"]:
+    for source in ["dengeki", "zenko", "miu"]:
         website_name = {
             "dengeki": "Dengeki",
             "miu": "Manga.in.ua",
-            "honey": "Honey Manga",
             "zenko": "Zenko",
         }.get(source)
 

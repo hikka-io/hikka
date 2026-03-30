@@ -29,14 +29,19 @@ def register_profiling_middleware(app: FastAPI):
             settings.profiling.trigger == "all"
             or settings.profiling.trigger == "query"
             and request.query_params.get("profiling_flag", False)
-            and request.query_params.get("profiling_secret", None) == settings.profiling.profiling_secret
+            and request.query_params.get("profiling_secret", None)
+            == settings.profiling.profiling_secret
         ):
             with Profiler(interval=0.001, async_mode="enabled") as profiler:
                 response = await call_next(request)
 
-            path = f"{settings.profiling.path}/{request.url.path}"
-            path = path.replace("//", "/")
-            Path(path).mkdir(parents=True, exist_ok=True)
+            base = Path(settings.profiling.path).resolve()
+            path = (base / request.url.path.lstrip("/")).resolve()
+
+            if not path.is_relative_to(base):
+                return await call_next(request)
+
+            path.mkdir(parents=True, exist_ok=True)
 
             timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 

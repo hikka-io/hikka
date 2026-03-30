@@ -127,10 +127,22 @@ async def save_read(
     # Create read record if missing
     if not (read := await get_read(session, content_type, content, user)):
         log_type = constants.LOG_READ_CREATE
+
         read = read_model()
         read.content = content
         read.created = now
         read.user = user
+
+        session.add(read)
+
+        # Generally I think it's bad idea to modify user passed args
+        # but this would allow us to keep existing logic so why not
+        args.start_date = now
+
+    # Same as with start_date we modify user passed args
+    # in special case to simplify our lives
+    if args.status == constants.READ_COMPLETED and read.end_date is None:
+        args.end_date = now
 
     log_before = {}
     log_after = {}
@@ -139,6 +151,7 @@ async def save_read(
     for key, new_value in args.model_dump().items():
         # Here we add changes to log's before/after dicts only if there are changes
         old_value = getattr(read, key)
+
         if old_value != new_value:
             log_before[key] = old_value
             setattr(read, key, new_value)
@@ -149,7 +162,6 @@ async def save_read(
 
     # Update user last list update
     user.updated = now
-    session.add_all([read, user])
 
     await session.commit()
 

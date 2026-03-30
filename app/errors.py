@@ -393,7 +393,7 @@ errors = {
             "Порядок має починатись з 1",
             400,
         ],
-        "unlabled-content": ["Unlabeled content", "Негрупований контент", 400],
+        "unlabeled-content": ["Unlabeled content", "Негрупований контент", 400],
         "bad-labels-order": ["Bad labels order", "Поганий порядок груп", 400],
         "author-not-found": ["Author not found", "Автора не знайдено", 404],
         "not-found": ["Collection not found", "Колекцію не знайдено", 404],
@@ -496,8 +496,8 @@ errors = {
     "content": {
         "not-found": ["Content not found", "Контент не знайдено", 404],
     },
-    "artifacts": {
-        "not-found": ["Artifact not found", "Артефакт не знайдено", 404],
+    "digests": {
+        "not-found": ["Digest not found", "Дайджест не знайдено", 404],
     },
 }
 

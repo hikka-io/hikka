@@ -94,6 +94,10 @@ class Comment(
 
         return True
 
+    @hybrid_property
+    def data_type(self):
+        return "comment"
+
 
 class EditComment(Comment):
     __mapper_args__ = {"polymorphic_identity": "edit"}

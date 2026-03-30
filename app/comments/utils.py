@@ -1,9 +1,8 @@
-from sqlalchemy import select
-from sqlalchemy.orm import aliased
-
+from app.common.schemas.comments import CommentNode
 from app.utils import path_to_uuid
-from .schemas import CommentNode
+from sqlalchemy.orm import aliased
 from app.models import Comment
+from sqlalchemy import select
 
 # Convert uuid reference to comment path
 def uuid_to_path(obj_uuid):

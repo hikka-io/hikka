@@ -76,8 +76,7 @@ from .content.author import AuthorRole
 
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
-from .system.activity import Activity
-from .system.artifact import Artifact
+from .system.digest import Digest
 from .system.image import Image
 from .system.log import Log
 
@@ -103,6 +102,8 @@ from .schedule.anime import AnimeSchedule
 
 from .tag.tag import ArticleTag
 from .tag.tag import Tag
+
+from .feed import Feed
 
 from .base import Base
 
@@ -175,7 +176,7 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
-    "Artifact",
+    "Digest",
     "Image",
     "Log",
     "CollectionVote",
@@ -195,5 +196,6 @@ __all__ = [
     "AnimeSchedule",
     "ArticleTag",
     "Tag",
+    "Feed",
     "Base",
 ]

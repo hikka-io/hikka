@@ -8,8 +8,8 @@ from sqlalchemy import Index
 from ..base import Base
 
 
-class Artifact(Base, CreatedMixin, UpdatedMixin):
-    __tablename__ = "service_artifacts"
+class Digest(Base, CreatedMixin, UpdatedMixin):
+    __tablename__ = "service_digests"
 
     data: Mapped[dict] = mapped_column(JSONB, default={})
     private: Mapped[bool] = mapped_column(default=True)
@@ -19,5 +19,5 @@ class Artifact(Base, CreatedMixin, UpdatedMixin):
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
 
     __table_args__ = (
-        Index("idx_user_artifact_lookup", "user_id", "name", unique=True),
+        Index("idx_user_digest_lookup", "user_id", "name", unique=True),
     )

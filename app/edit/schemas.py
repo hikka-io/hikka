@@ -35,16 +35,6 @@ class EditContentTypeEnum(str, Enum):
     content_novel = constants.CONTENT_NOVEL
 
 
-class AnimeVideoTypeEnum(str, Enum):
-    video_promo = constants.VIDEO_PROMO
-    video_music = constants.VIDEO_MUSIC
-
-
-class AnimeOSTTypeEnum(str, Enum):
-    opening = constants.OST_OPENING
-    ending = constants.OST_ENDING
-
-
 class EditStatusEnum(str, Enum):
     edit_accepted = constants.EDIT_ACCEPTED
     edit_pending = constants.EDIT_PENDING

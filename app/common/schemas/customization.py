@@ -74,10 +74,22 @@ UIEffect = Literal["snowfall"]
 
 
 class UIPreferences(CustomModel):
+    score: Literal["mal", "native"] | None = None
     effects: List[UIEffect] | None = None
     title_language: str | None = None
     name_language: str | None = None
     overlay: bool = True
+
+    home_widgets: list[
+        Literal["tracker", "history", "ongoings", "schedule"]
+    ] = ["tracker", "history", "ongoings", "schedule"]
+
+    @field_validator("home_widgets")
+    def validate_home_widgets(cls, widgets):
+        if len(widgets) != len(set(widgets)):
+            raise ValueError("Repeated widget not allowed")
+
+        return widgets
 
 
 class UserAppearance(CustomModel):

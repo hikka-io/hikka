@@ -50,9 +50,8 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["baka", "honey"]:
+    for source in ["baka", "zenko"]:
         website_name = {
-            "honey": "Honey Manga",
             "zenko": "Zenko",
             "baka": "Бака",
         }.get(source)

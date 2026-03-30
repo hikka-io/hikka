@@ -27,29 +27,11 @@ from app.utils import (
 )
 
 
-def can_use_category(user: User, category: str):
-    # TODO: I don't really like using roles
-    # we should check permissions instead
-    available_categories = {
-        constants.ROLE_USER: [
-            constants.ARTICLE_NEWS,
-            constants.ARTICLE_REVIEWS,
-            constants.ARTICLE_ORIGINAL,
-        ],
-        constants.ROLE_MODERATOR: [
-            constants.ARTICLE_NEWS,
-            constants.ARTICLE_REVIEWS,
-            constants.ARTICLE_ORIGINAL,
-        ],
-        constants.ROLE_ADMIN: [
-            constants.ARTICLE_NEWS,
-            constants.ARTICLE_SYSTEM,
-            constants.ARTICLE_REVIEWS,
-            constants.ARTICLE_ORIGINAL,
-        ],
-    }.get(user.role, [])
-
-    return category in available_categories
+def _can_use_category(user: User, category: str):
+    """Check if user has permission to manage this category of articles"""
+    return check_user_permissions(
+        user, [constants.ARTICLE_CATEGORY_TO_PERMISSION[category]]
+    )
 
 
 async def validate_article(
@@ -57,11 +39,7 @@ async def validate_article(
     request_user: User | None = Depends(auth_required(optional=True)),
     session: AsyncSession = Depends(get_session),
 ):
-    if not (
-        article := await service.get_article_by_slug(
-            session, slug, request_user
-        )
-    ):
+    if not (article := await service.get_article_by_slug(session, slug, request_user)):
         raise Abort("articles", "not-found")
 
     return article
@@ -114,7 +92,7 @@ async def validate_article_create(
     ):
         raise Abort("system", "rate-limit")
 
-    if not can_use_category(author, args.category):
+    if not _can_use_category(author, args.category):
         raise Abort("articles", "bad-category")
 
     if args.trusted and not check_user_permissions(
@@ -197,7 +175,7 @@ async def validate_article_update(
 
     # Yeah, this check is pointless considering previous one
     # But we keep it here just in case
-    if not can_use_category(user, args.category):
+    if not _can_use_category(user, args.category):
         raise Abort("articles", "bad-category")
 
     if args.trusted and not check_user_permissions(

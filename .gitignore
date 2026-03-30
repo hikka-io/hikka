@@ -13,6 +13,7 @@ settings.toml
 
 # misc
 .DS_STORE
+.claude/
 *.db
 
 # PyRight

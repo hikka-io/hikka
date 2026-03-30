@@ -258,14 +258,39 @@ def slugify(
 
 
 # Convest timestamp to UTC datetime
-def from_timestamp(timestamp: int):
-    return utcfromtimestamp(timestamp) if timestamp else None
+def from_timestamp(timestamp: int | float | None):
+    if timestamp and (
+        isinstance(timestamp, int) or isinstance(timestamp, float)
+    ):
+        return utcfromtimestamp(timestamp)
+
+    return None
 
 
 # Convert datetime to timestamp
 def to_timestamp(date: datetime | None) -> int | None:
     date = date.replace(tzinfo=timezone.utc) if date else date
     return int(date.timestamp()) if date else None
+
+
+# Recursively convert all datetimes in dict to unix timestamps
+def dict_datetime_to_timestamp(data):
+    if isinstance(data, datetime):
+        return to_timestamp(data)
+
+    elif isinstance(data, dict):
+        return {
+            key: dict_datetime_to_timestamp(val) for key, val in data.items()
+        }
+
+    elif isinstance(data, list):
+        return [dict_datetime_to_timestamp(item) for item in data]
+
+    elif isinstance(data, tuple):
+        return tuple(dict_datetime_to_timestamp(item) for item in data)
+
+    else:
+        return data
 
 
 # Helper function for pagination

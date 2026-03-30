@@ -118,6 +118,79 @@ async def test_settings_customization(
     )
 
 
+async def test_settings_customization_home_widgets(
+    client, create_test_user, get_test_token, test_session
+):
+    # Update customization
+    response = await request_settings_customization(
+        client,
+        get_test_token,
+        {
+            "styles": {},
+            "preferences": {
+                "home_widgets": ["tracker", "history", "ongoings", "schedule"],
+            },
+        },
+    )
+
+    # Check whether changes has been applied
+    assert response.status_code == status.HTTP_200_OK
+
+    response = await request_me_ui(client, get_test_token)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["preferences"]["home_widgets"] == [
+        "tracker",
+        "history",
+        "ongoings",
+        "schedule",
+    ]
+
+    response = await request_settings_customization(
+        client,
+        get_test_token,
+        {
+            "styles": {},
+            "preferences": {
+                "home_widgets": ["tracker", "ongoings", "schedule"],
+            },
+        },
+    )
+
+    response = await request_me_ui(client, get_test_token)
+    assert response.json()["preferences"]["home_widgets"] == [
+        "tracker",
+        "ongoings",
+        "schedule",
+    ]
+
+    response = await request_settings_customization(
+        client,
+        get_test_token,
+        {
+            "styles": {},
+            "preferences": {"home_widgets": []},
+        },
+    )
+
+    response = await request_me_ui(client, get_test_token)
+    assert response.json()["preferences"]["home_widgets"] == []
+
+    # Update customization
+    response = await request_settings_customization(
+        client,
+        get_test_token,
+        {
+            "styles": {},
+            "preferences": {
+                "home_widgets": ["tracker", "tracker"],
+            },
+        },
+    )
+
+    # Check whether changes has been applied
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
 def test_valid_css_background():
     for css_value in [
         # Hex codes

@@ -1,4 +1,5 @@
 from app.utils import path_to_uuid, paginated_response, pagination
+from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
@@ -30,7 +31,6 @@ from .schemas import (
     CommentResponse,
     ContentTypeEnum,
     CommentTextArgs,
-    CommentNode,
     CommentArgs,
 )
 

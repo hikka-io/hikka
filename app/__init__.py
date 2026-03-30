@@ -36,9 +36,9 @@ def create_app(init_db: bool = True) -> FastAPI:
         openapi_tags=[
             {"name": "Admin"},
             {"name": "Articles"},
-            {"name": "Artifacts"},
             {"name": "Auth"},
             {"name": "Client"},
+            {"name": "Digests"},
             {"name": "User"},
             {"name": "Follow"},
             {"name": "Anime"},
@@ -63,6 +63,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "History"},
             {"name": "Stats"},
             {"name": "Vote"},
+            {"name": "Feed"},
         ],
         lifespan=lifespan,
         # redoc_url=None,
@@ -92,11 +93,11 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .characters import router as characters_router
     from .companies import router as companies_router
     from .favourite import router as favourite_router
-    from .artifacts import router as artifacts_router
     from .settings import router as settings_router
     from .comments import router as comments_router
     from .schedule import router as schedule_router
     from .articles import router as articles_router
+    from .digests import router as digests_router
     from .related import router as related_router
     from .history import router as history_router
     from .genres import router as genres_router
@@ -116,6 +117,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     from .auth import router as auth_router
     from .edit import router as edit_router
     from .vote import router as vote_router
+    from .feed import router as feed_router
 
     app.include_router(notifications_router)
     app.include_router(integrations_router)
@@ -123,7 +125,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(characters_router)
     app.include_router(companies_router)
     app.include_router(favourite_router)
-    app.include_router(artifacts_router)
+    app.include_router(digests_router)
     app.include_router(settings_router)
     app.include_router(comments_router)
     app.include_router(schedule_router)
@@ -147,6 +149,7 @@ def create_app(init_db: bool = True) -> FastAPI:
     app.include_router(auth_router)
     app.include_router(edit_router)
     app.include_router(vote_router)
+    app.include_router(feed_router)
 
     @app.get("/")
     async def documentation_redirect():

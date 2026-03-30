@@ -16,10 +16,10 @@ import copy
 
 from app.models import (
     Collection,
-    Artifact,
     Article,
     Comment,
     History,
+    Digest,
     Genre,
     Edit,
 )
@@ -693,11 +693,11 @@ class YearStatsGenerator:
         )
 
 
-async def artifact_year_summary():
+async def digest_year_summary():
     async with sessionmanager.session() as session:
         start = kyiv_to_utc(datetime(2025, 1, 1))
         end = kyiv_to_utc(datetime(2026, 1, 1))
-        artifact_name = "year-summary-2025"
+        digest_name = "year-summary-2025"
         now = utcnow()
 
         # We should stop generating after 1 day of end period
@@ -711,9 +711,9 @@ async def artifact_year_summary():
             data = json.loads(json.dumps(result[user_id], cls=DateTimeEncoder))
 
             await session.execute(
-                insert(Artifact)
+                insert(Digest)
                 .values(
-                    name=artifact_name,
+                    name=digest_name,
                     user_id=user_id,
                     created=now,
                     updated=now,

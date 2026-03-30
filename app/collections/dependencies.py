@@ -50,8 +50,8 @@ async def validate_collection_args(
     args: CollectionArgs,
     session: AsyncSession = Depends(get_session),
 ):
-    unlabled_content = False
-    labels = []
+    unlabeled_content = False
+    labels = set()
     orders = []
     slugs = []
 
@@ -60,14 +60,13 @@ async def validate_collection_args(
         slugs.append(content.slug)
 
         if not content.label:
-            unlabled_content = True
+            unlabeled_content = True
 
         else:
-            if content.label not in labels:
-                labels.append(content.label)
+            labels.add(content.label)
 
-    if len(labels) > 0 and unlabled_content:
-        raise Abort("collections", "unlabled-content")
+    if len(labels) > 0 and unlabeled_content:
+        raise Abort("collections", "unlabeled-content")
 
     if len(args.labels_order) != len(labels):
         raise Abort("collections", "bad-labels-order")
