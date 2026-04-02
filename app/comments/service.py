@@ -69,22 +69,6 @@ async def count_replies(session: AsyncSession, comment: Comment):
     )
 
 
-def children_exists_query():
-    CommentChild = aliased(Comment)
-
-    return (
-        select(1)
-        .select_from(CommentChild)
-        .filter(
-            CommentChild.path.descendant_of(Comment.path),
-            CommentChild.deleted == False,  # noqa: E712
-            CommentChild.hidden == False,  # noqa: E712
-            CommentChild.id != Comment.id,
-        )
-        .correlate(Comment)
-    )
-
-
 async def get_comment(
     session: AsyncSession,
     comment_reference: UUID,
@@ -102,19 +86,6 @@ async def get_comment(
                 get_my_score_subquery(
                     Comment, constants.CONTENT_COMMENT, request_user
                 ),
-            )
-        )
-    )
-
-
-async def has_children(
-    session: AsyncSession,
-    comment: Comment,
-) -> bool:
-    return bool(
-        await session.scalar(
-            select(exists(children_exists_query())).filter(
-                Comment.id == comment.id
             )
         )
     )
@@ -242,7 +213,7 @@ async def get_comments_by_content_id(
             Comment.deleted == False,  # noqa: E712
             or_(
                 Comment.hidden == False,  # noqa: E712,
-                exists(children_exists_query()),
+                Comment.total_replies > 0,
             ),
         )
         .options(
@@ -272,7 +243,7 @@ async def get_sub_comments(
             Comment.id != base_comment.id,
             or_(
                 Comment.hidden == False,  # noqa: E712,
-                exists(children_exists_query()),
+                Comment.total_replies > 0,
             ),
         )
         .options(
