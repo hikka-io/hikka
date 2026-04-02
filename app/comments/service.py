@@ -1,11 +1,10 @@
-from sqlalchemy import ScalarResult, exists, or_, select, desc, asc, func
+from sqlalchemy import ScalarResult, or_, select, desc, asc, func
 from .schemas import ContentTypeEnum, CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
-from sqlalchemy.orm import aliased
 from sqlalchemy_utils import Ltree
 from .utils import uuid_to_path
 from app.utils import utcnow
