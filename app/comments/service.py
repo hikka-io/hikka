@@ -59,6 +59,16 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
+async def count_replies(session: AsyncSession, comment: Comment):
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            Comment.path.descendant_of(comment.path),
+            Comment.deleted == False,  # noqa: E712
+            Comment.hidden == False,  # noqa: E712
+        )
+    )
+
+
 def children_exists_query():
     CommentChild = aliased(Comment)
 
@@ -173,6 +183,10 @@ async def create_comment(
     session.add(comment)
     await session.commit()
 
+    # Update replies count after new comment is written
+    if parent:
+        parent.total_replies = await count_replies(session, parent)
+
     # Update comments count here
     content.comments_count = await get_comments_count(
         session, content_type, content
@@ -182,7 +196,6 @@ async def create_comment(
         session, content_type, content, True
     )
 
-    session.add(content)
     await session.commit()
 
     await create_log(
@@ -328,7 +341,6 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     comment.hidden_by = user
     comment.hidden = True
 
-    session.add(comment)
     await session.commit()
 
     # Update comments count here
@@ -344,7 +356,12 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         session, comment.content_type, content, True
     )
 
-    session.add(content)
+    if len(comment.path) > 1:
+        if parent := await session.scalar(
+            select(Comment).filter(Comment.path == comment.path[:-1])
+        ):
+            parent.total_replies = await count_replies(session, parent)
+
     await session.commit()
 
     await create_log(

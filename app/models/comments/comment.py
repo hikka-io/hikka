@@ -37,6 +37,7 @@ class Comment(
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
     preview: Mapped[dict] = mapped_column(JSONB, default={})
+    total_replies: Mapped[int] = mapped_column(default=0)
     hidden: Mapped[bool] = mapped_column(default=False)
     score: Mapped[int] = mapped_column(nullable=False)
     path: Mapped[str] = mapped_column(LtreeType)

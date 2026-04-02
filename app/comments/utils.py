@@ -8,11 +8,6 @@ def uuid_to_path(obj_uuid):
 
 
 def build_comments(base_comment, sub_comments):
-    def calculate_total_replies(node):
-        node.total_replies = len(node.replies)
-        for reply in node.replies:
-            calculate_total_replies(reply)
-
     tree = CommentNode.create(path_to_uuid(base_comment.path[-1]), base_comment)
     tree_dict = {tree.reference: tree}
     base_depth = base_comment.depth
@@ -45,7 +40,5 @@ def build_comments(base_comment, sub_comments):
         for reply in tree.replies
         if not (reply.hidden and not reply.replies)
     ]
-
-    calculate_total_replies(tree)
 
     return tree
