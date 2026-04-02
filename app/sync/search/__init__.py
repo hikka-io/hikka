@@ -22,5 +22,5 @@ async def update_search():
         await update_search_novel()
         await update_search_users()
 
-    except MeilisearchCommunicationError:
-        print("Meilisearch is down")
+    except MeilisearchCommunicationError as e:
+        print(f"Meilisearch is down:\n{e}")
