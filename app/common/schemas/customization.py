@@ -1,6 +1,7 @@
 from app.common.utils.customization import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
+from collections import defaultdict
 from typing import List, Literal
 
 
@@ -70,7 +71,41 @@ class UIStyles(CustomModel):
     typography: UIStylesTypography | None = None
 
 
+UIFeedWidgetOptions = Literal["tracker", "history", "ongoings", "schedule"]
 UIEffect = Literal["snowfall"]
+
+
+class UIFeedWidget(CustomModel):
+    side: Literal["left", "center", "right"]
+    slug: UIFeedWidgetOptions
+    order: int
+
+
+class UIFeedSettings(CustomModel):
+    widgets: list[UIFeedWidget]
+
+    @field_validator("widgets")
+    @classmethod
+    def validate_widgets(cls, widgets):
+        # Slugs must be unique
+        slugs = [w.slug for w in widgets]
+        if len(slugs) != len(set(slugs)):
+            raise ValueError("Widget slugs must be unique")
+
+        # Orders must be unique per side and sequential starting from 1
+        sides = defaultdict(list)
+        for w in widgets:
+            sides[w.side].append(w.order)
+
+        for side, orders in sides.items():
+            orders.sort()
+            expected = list(range(1, len(orders) + 1))
+            if orders != expected:
+                raise ValueError(
+                    f"Orders for side '{side}' must be sequential starting from 1"
+                )
+
+        return widgets
 
 
 class UIPreferences(CustomModel):
@@ -80,9 +115,15 @@ class UIPreferences(CustomModel):
     name_language: str | None = None
     overlay: bool = True
 
-    home_widgets: list[
-        Literal["tracker", "history", "ongoings", "schedule"]
-    ] = ["tracker", "history", "ongoings", "schedule"]
+    feed: UIFeedSettings
+
+    # TODO: remove me later
+    home_widgets: list[UIFeedWidgetOptions] = [
+        "tracker",
+        "history",
+        "ongoings",
+        "schedule",
+    ]
 
     @field_validator("home_widgets")
     def validate_home_widgets(cls, widgets):
