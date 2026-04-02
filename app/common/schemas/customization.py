@@ -71,8 +71,10 @@ class UIStyles(CustomModel):
     typography: UIStylesTypography | None = None
 
 
-UIFeedWidgetOptions = Literal["tracker", "history", "ongoings", "schedule"]
 UIEffect = Literal["snowfall"]
+UIFeedWidgetOptions = Literal[
+    "list", "profile", "feed", "tracker", "history", "ongoings", "schedule"
+]
 
 
 class UIFeedWidget(CustomModel):
@@ -82,7 +84,15 @@ class UIFeedWidget(CustomModel):
 
 
 class UIFeedSettings(CustomModel):
-    widgets: list[UIFeedWidget]
+    widgets: list[UIFeedWidget] = [
+        UIFeedWidget(side="left", slug="profile", order=1),
+        UIFeedWidget(side="left", slug="list", order=2),
+        UIFeedWidget(side="center", slug="feed", order=1),
+        UIFeedWidget(side="right", slug="tracker", order=1),
+        UIFeedWidget(side="right", slug="history", order=2),
+        UIFeedWidget(side="right", slug="ongoings", order=3),
+        UIFeedWidget(side="right", slug="schedule", order=4),
+    ]
 
     @field_validator("widgets")
     @classmethod
@@ -115,7 +125,7 @@ class UIPreferences(CustomModel):
     name_language: str | None = None
     overlay: bool = True
 
-    feed: UIFeedSettings
+    feed: UIFeedSettings = Field(default_factory=lambda: UIFeedSettings())
 
     # TODO: remove me later
     home_widgets: list[UIFeedWidgetOptions] = [
