@@ -12,6 +12,7 @@ async def count_replies(session: AsyncSession, comment: Comment):
             Comment.path.descendant_of(comment.path),
             Comment.deleted == False,  # noqa: E712
             Comment.hidden == False,  # noqa: E712
+            Comment.id != comment.id,
         )
     )
 
