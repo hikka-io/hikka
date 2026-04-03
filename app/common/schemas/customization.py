@@ -4,6 +4,14 @@ from app.schemas import CustomModel
 from collections import defaultdict
 from typing import List, Literal
 
+from app.common.schemas.feed import (
+    CollectionContentTypes,
+    CommentContentTypes,
+    ArticleContentTypes,
+    ArticleCategories,
+    FeedContentTypes,
+)
+
 
 class HSLColor(CustomModel):
     h: float = Field(ge=0, le=360)
@@ -84,6 +92,13 @@ class UIFeedWidget(CustomModel):
 
 
 class UIFeedSettings(CustomModel):
+    collection_content_types: list[CollectionContentTypes] | None = None
+    comment_content_types: list[CommentContentTypes] | None = None
+    article_content_types: list[ArticleContentTypes] | None = None
+    article_categories: list[ArticleCategories] | None = None
+    feed_content_types: list[FeedContentTypes] | None = None
+    only_followed: bool = False
+
     widgets: list[UIFeedWidget] = [
         UIFeedWidget(side="left", slug="profile", order=1),
         UIFeedWidget(side="left", slug="list", order=2),
