@@ -41,16 +41,27 @@ async def generate_feed():
             content = await session.scalars(query)
 
             for entry in content.unique():
-                if await session.scalar(
+                name = entry.reference
+
+                if feed := await session.scalar(
                     select(Feed).filter(
                         Feed.content_type == entry.data_type,
                         Feed.content_id == entry.id,
                     )
                 ):
+                    feed.filter_content_type = entry.content_type
+
+                    if entry.data_type == constants.CONTENT_ARTICLE:
+                        feed.filter_category = entry.category
+
+                    if session.is_modified(feed):
+                        print(f"Added {entry.data_type} feed entry for {name}")
+
                     continue
 
                 feed = Feed(
                     **{
+                        "filter_content_type": entry.content_type,
                         "content_type": entry.data_type,
                         "author_id": entry.author_id,
                         "created": entry.created,
@@ -58,9 +69,10 @@ async def generate_feed():
                     }
                 )
 
-                session.add(feed)
+                if entry.data_type == constants.CONTENT_ARTICLE:
+                    feed.filter_category = entry.category
 
-                name = entry.reference
+                session.add(feed)
 
                 if hasattr(entry, "title"):
                     name = entry.title

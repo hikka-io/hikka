@@ -128,6 +128,9 @@ EDIT_ACCEPTED = "accepted"
 EDIT_DENIED = "denied"
 EDIT_CLOSED = "closed"
 
+# Special stub for feed filter since some articles may not have any content
+NO_CONTENT = "no_content"
+
 CONTENT_ANIME = "anime"
 CONTENT_MANGA = "manga"
 CONTENT_NOVEL = "novel"

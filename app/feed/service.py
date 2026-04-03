@@ -118,6 +118,10 @@ async def load_feed_comments(
 async def get_user_feed(
     session: AsyncSession, request_user: User | None, args: FeedArgs
 ) -> list[Collection | Article | Comment]:
+    # List of followed users to load is_followed statuses and filtering
+    followed_user_ids = await get_followed_user_ids(session, request_user)
+
+    # Base feed filters
     user_feed_filter = (
         or_(
             Feed.user_id == request_user.id,
@@ -137,12 +141,58 @@ async def get_user_feed(
         .limit(20)
     )
 
+    # TODO: remove me
     if args.content_type:
         feed_query = feed_query.filter(Feed.content_type == args.content_type)
 
+    # Filter by feed content types
+    if args.feed_content_types:
+        feed_query = feed_query.filter(
+            Feed.content_type.in_(args.feed_content_types)
+        )
+
+    # General filters
+    # Filter by followed users
+    if args.only_followed:
+        feed_query = feed_query.filter(Feed.author_id.in_(followed_user_ids))
+
+    # Return older than
     if args.before:
         feed_query = feed_query.filter(
             Feed.created < args.before.replace(tzinfo=None)
+        )
+
+    # Content specific filters
+    if args.collection_content_types:
+        feed_query = feed_query.filter(
+            or_(
+                Feed.filter_content_type.in_(args.collection_content_types),
+                Feed.content_type != constants.CONTENT_COLLECTION,
+            )
+        )
+
+    if args.article_categories:
+        feed_query = feed_query.filter(
+            or_(
+                Feed.filter_category.in_(args.article_categories),
+                Feed.content_type != constants.CONTENT_ARTICLE,
+            )
+        )
+
+    if args.article_content_types:
+        feed_query = feed_query.filter(
+            or_(
+                Feed.filter_content_type.in_(args.article_content_types),
+                Feed.content_type != constants.CONTENT_ARTICLE,
+            )
+        )
+
+    if args.comment_content_types:
+        feed_query = feed_query.filter(
+            or_(
+                Feed.filter_content_type.in_(args.comment_content_types),
+                Feed.content_type != constants.CONTENT_COMMENT,
+            )
         )
 
     feed = await session.scalars(feed_query)
@@ -151,8 +201,6 @@ async def get_user_feed(
     for entry in feed:
         content_ids[entry.content_type].append(entry.content_id)
 
-    # List of followed users to load is_followed statuses
-    followed_user_ids = await get_followed_user_ids(session, request_user)
     result = []
 
     for content_type, load_function in [

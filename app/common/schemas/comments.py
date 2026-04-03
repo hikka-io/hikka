@@ -4,6 +4,32 @@ from app.models import Comment
 from datetime import datetime
 from app.models import User
 
+from app.schemas import (
+    DataTypeMixin,
+    UserResponse,
+    CustomModel,
+    datetime_pd,
+)
+
+
+# Responses
+class CommentResponse(CustomModel, DataTypeMixin):
+    replies: list["CommentResponse"] = []
+    total_replies: int = 0
+    updated: datetime_pd
+    created: datetime_pd
+    author: UserResponse
+    parent: str | None
+    content_type: str
+    is_editable: bool
+    text: str | None
+    vote_score: int
+    reference: str
+    my_score: int
+    preview: dict
+    hidden: bool
+    depth: int
+
 
 # Misc
 @dataclass

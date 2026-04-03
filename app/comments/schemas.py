@@ -1,17 +1,10 @@
+from app.common.schemas.comments import CommentResponse
+from app.schemas import PaginationResponse, CustomModel
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
-from app.schemas import datetime_pd
 from app import constants
 from uuid import UUID
 from enum import Enum
-
-
-from app.schemas import (
-    PaginationResponse,
-    DataTypeMixin,
-    UserResponse,
-    CustomModel,
-)
 
 from app.models import (
     Collection,
@@ -62,24 +55,6 @@ class CommentArgs(CommentTextArgs):
 
 
 # Responses
-class CommentResponse(CustomModel, DataTypeMixin):
-    replies: list["CommentResponse"] = []
-    total_replies: int = 0
-    updated: datetime_pd
-    created: datetime_pd
-    author: UserResponse
-    parent: str | None
-    content_type: str
-    is_editable: bool
-    text: str | None
-    vote_score: int
-    reference: str
-    my_score: int
-    preview: dict
-    hidden: bool
-    depth: int
-
-
 class CommentListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CommentResponse]

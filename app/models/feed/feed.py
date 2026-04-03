@@ -26,5 +26,8 @@ class Feed(
     author_id = mapped_column(ForeignKey("service_users.id"))
     user_id = mapped_column(ForeignKey("service_users.id"))
 
+    filter_content_type: Mapped[str] = mapped_column(index=True, nullable=True)
+    filter_category: Mapped[str] = mapped_column(index=True, nullable=True)
+
     author: Mapped["User"] = relationship(foreign_keys=[author_id])
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
