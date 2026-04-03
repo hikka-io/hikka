@@ -134,6 +134,8 @@ from .upload import request_upload
 
 from .system import request_backup_images
 
+from .feed import request_feed
+
 __all__ = [
     # =========== admin ===========
     "request_admin_update_user",
@@ -272,4 +274,6 @@ __all__ = [
     "request_upload",
     # =========== system ===========
     "request_backup_images",
+    # =========== feed ===========
+    "request_feed",
 ]

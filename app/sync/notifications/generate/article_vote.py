@@ -42,7 +42,7 @@ async def generate_article_vote(session: AsyncSession, log: Log):
         user.username,
         notification_type,
         timedelta(hours=6),
-        article.reference,
+        article.slug,  # For articles we check via slug instead of reference
     ):
         return
 

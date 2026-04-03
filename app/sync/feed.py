@@ -4,79 +4,83 @@ from sqlalchemy import select, func
 from app import constants
 
 
-async def generate_feed():
-    """Temporary way to generate feed"""
-
-    async with sessionmanager.session() as session:
-        articles_query = (
-            select(Article)
-            .filter(
-                Article.deleted == False,  # noqa: E712
-                Article.draft == False,  # noqa: E712
-            )
-            .order_by(Article.created.asc())
+async def generate_feed_session(session):
+    articles_query = (
+        select(Article)
+        .filter(
+            Article.deleted == False,  # noqa: E712
+            Article.draft == False,  # noqa: E712
         )
+        .order_by(Article.created.asc())
+    )
 
-        collections_query = (
-            select(Collection)
-            .filter(
-                Collection.visibility == constants.COLLECTION_PUBLIC,
-                Collection.deleted == False,  # noqa: E712
-            )
-            .order_by(Collection.created.asc())
+    collections_query = (
+        select(Collection)
+        .filter(
+            Collection.visibility == constants.COLLECTION_PUBLIC,
+            Collection.deleted == False,  # noqa: E712
         )
+        .order_by(Collection.created.asc())
+    )
 
-        comments_query = (
-            select(Comment)
-            .filter(
-                func.nlevel(Comment.path) == 1,
-                Comment.hidden == False,  # noqa: E712
-                Comment.private == False,  # noqa: E712
-                Comment.deleted == False,  # noqa: E712
-            )
-            .order_by(Comment.created.asc())
+    comments_query = (
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
         )
+        .order_by(Comment.created.asc())
+    )
 
-        for query in [articles_query, collections_query, comments_query]:
-            content = await session.scalars(query)
+    for query in [articles_query, collections_query, comments_query]:
+        content = await session.scalars(query)
 
-            for entry in content.unique():
-                name = entry.reference
+        for entry in content.unique():
+            name = entry.reference
 
-                if feed := await session.scalar(
-                    select(Feed).filter(
-                        Feed.content_type == entry.data_type,
-                        Feed.content_id == entry.id,
-                    )
-                ):
-                    feed.filter_content_type = entry.content_type
-
-                    if entry.data_type == constants.CONTENT_ARTICLE:
-                        feed.filter_category = entry.category
-
-                    if session.is_modified(feed):
-                        print(f"Added {entry.data_type} feed entry for {name}")
-
-                    continue
-
-                feed = Feed(
-                    **{
-                        "filter_content_type": entry.content_type,
-                        "content_type": entry.data_type,
-                        "author_id": entry.author_id,
-                        "created": entry.created,
-                        "content_id": entry.id,
-                    }
+            if feed := await session.scalar(
+                select(Feed).filter(
+                    Feed.content_type == entry.data_type,
+                    Feed.content_id == entry.id,
                 )
+            ):
+                feed.filter_content_type = entry.content_type
 
                 if entry.data_type == constants.CONTENT_ARTICLE:
                     feed.filter_category = entry.category
 
-                session.add(feed)
+                if session.is_modified(feed):
+                    print(f"Added {entry.data_type} feed entry for {name}")
 
-                if hasattr(entry, "title"):
-                    name = entry.title
+                continue
 
-                print(f"Added {entry.data_type} feed entry for {name}")
+            feed = Feed(
+                **{
+                    "filter_content_type": entry.content_type,
+                    "content_type": entry.data_type,
+                    "author_id": entry.author_id,
+                    "created": entry.created,
+                    "content_id": entry.id,
+                }
+            )
 
-            await session.commit()
+            if entry.data_type == constants.CONTENT_ARTICLE:
+                feed.filter_category = entry.category
+
+            session.add(feed)
+
+            if hasattr(entry, "title"):
+                name = entry.title
+
+            print(f"Added {entry.data_type} feed entry for {name}")
+
+        await session.commit()
+
+
+async def generate_feed():
+    """Temporary way to generate feed"""
+
+    async with sessionmanager.session() as session:
+        await generate_feed_session(session)
