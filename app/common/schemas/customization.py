@@ -101,12 +101,12 @@ class UIFeedSettings(CustomModel):
 
     widgets: list[UIFeedWidget] = [
         UIFeedWidget(side="left", slug="profile", order=1),
-        UIFeedWidget(side="left", slug="list", order=2),
-        UIFeedWidget(side="center", slug="feed", order=1),
-        UIFeedWidget(side="right", slug="tracker", order=1),
-        UIFeedWidget(side="right", slug="history", order=2),
-        UIFeedWidget(side="right", slug="ongoings", order=3),
-        UIFeedWidget(side="right", slug="schedule", order=4),
+        UIFeedWidget(side="left", slug="tracker", order=2),
+        UIFeedWidget(side="left", slug="history", order=3),
+        UIFeedWidget(side="center", slug="ongoings", order=1),
+        UIFeedWidget(side="center", slug="feed", order=2),
+        UIFeedWidget(side="right", slug="schedule", order=1),
+        UIFeedWidget(side="right", slug="list", order=2),
     ]
 
     @field_validator("widgets")
