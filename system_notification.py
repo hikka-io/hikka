@@ -10,7 +10,7 @@ async def send_system_notification():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        update_name = "feed_and_design"
+        update_name = "feed_customization"
         # update_name = "customization_and_summary"
         # update_name = "delayed_devlog"
 
@@ -19,9 +19,9 @@ async def send_system_notification():
         await service.create_hikka_update_notification(
             session,
             update_name,
-            "Розповідаємо про оновлену головну сторінку та покращений дизайн.",
-            "Стрічка та оновлений дизайн",
-            "https://hikka.io/articles/strichka-ta-onovlenyy-dyzayn-e9997b",
+            "Робимо роботу над помилками після оновлення головної сторінки.",
+            "Макет сторінки та фільтри стрічки",
+            "https://hikka.io/articles/maket-storinky-ta-filtry-strichky-dd38cd",
         )
 
     await sessionmanager.close()

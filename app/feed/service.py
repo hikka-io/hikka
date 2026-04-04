@@ -146,7 +146,7 @@ async def get_user_feed(
         feed_query = feed_query.filter(Feed.content_type == args.content_type)
 
     # Filter by feed content types
-    if args.feed_content_types:
+    if args.feed_content_types is not None:
         feed_query = feed_query.filter(
             Feed.content_type.in_(args.feed_content_types)
         )
@@ -171,7 +171,7 @@ async def get_user_feed(
             )
         )
 
-    if args.article_categories:
+    if args.article_categories is not None:
         feed_query = feed_query.filter(
             or_(
                 Feed.filter_category.in_(args.article_categories),
@@ -179,7 +179,7 @@ async def get_user_feed(
             )
         )
 
-    if args.article_content_types:
+    if args.article_content_types is not None:
         feed_query = feed_query.filter(
             or_(
                 Feed.filter_content_type.in_(args.article_content_types),
@@ -187,7 +187,7 @@ async def get_user_feed(
             )
         )
 
-    if args.comment_content_types:
+    if args.comment_content_types is not None:
         feed_query = feed_query.filter(
             or_(
                 Feed.filter_content_type.in_(args.comment_content_types),
