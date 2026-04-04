@@ -51,6 +51,10 @@ async def generate_feed_session(session):
                 if entry.data_type == constants.CONTENT_ARTICLE:
                     feed.filter_category = entry.category
 
+                    # Special hack for articles with no content
+                    if entry.content_type is None:
+                        feed.filter_content_type = constants.NO_CONTENT
+
                 if session.is_modified(feed):
                     print(f"Added {entry.data_type} feed entry for {name}")
 
