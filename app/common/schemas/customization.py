@@ -2,7 +2,7 @@ from app.common.utils.customization import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
 from collections import defaultdict
-from typing import List, Literal
+from typing import Literal
 
 from app.common.schemas.feed import (
     CollectionContentTypes,
@@ -79,7 +79,7 @@ class UIStyles(CustomModel):
     typography: UIStylesTypography | None = None
 
 
-UIEffect = Literal["snowfall"]
+UIEffect = Literal["snowfall", "sakura"]
 UIFeedWidgetOptions = Literal[
     "list", "profile", "feed", "tracker", "history", "ongoings", "schedule"
 ]
@@ -135,14 +135,15 @@ class UIFeedSettings(CustomModel):
 
 class UIPreferences(CustomModel):
     score: Literal["mal", "native"] | None = None
-    effects: List[UIEffect] | None = None
     title_language: str | None = None
     name_language: str | None = None
+    effect: UIEffect | None = None
     overlay: bool = True
 
     feed: UIFeedSettings = Field(default_factory=lambda: UIFeedSettings())
 
     # TODO: remove me later
+    effects: list[UIEffect] | None = None
     home_widgets: list[UIFeedWidgetOptions] = [
         "tracker",
         "history",
