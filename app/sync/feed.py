@@ -1,13 +1,21 @@
 from app.models import Article, Collection, Comment, Feed
+from datetime import datetime, timedelta
 from app.database import sessionmanager
 from sqlalchemy import select, func
 from app import constants
 
 
 async def generate_feed_session(session):
+    last_feed_entry = await session.scalar(
+        select(func.coalesce(func.max(Feed.created), datetime(2024, 1, 13)))
+    )
+
+    last_feed_entry -= timedelta(days=1)
+
     articles_query = (
         select(Article)
         .filter(
+            Article.created >= last_feed_entry,
             Article.deleted == False,  # noqa: E712
             Article.draft == False,  # noqa: E712
         )
@@ -17,6 +25,7 @@ async def generate_feed_session(session):
     collections_query = (
         select(Collection)
         .filter(
+            Collection.created >= last_feed_entry,
             Collection.visibility == constants.COLLECTION_PUBLIC,
             Collection.deleted == False,  # noqa: E712
         )
@@ -27,6 +36,7 @@ async def generate_feed_session(session):
         select(Comment)
         .filter(
             func.nlevel(Comment.path) == 1,
+            Comment.created >= last_feed_entry,
             Comment.hidden == False,  # noqa: E712
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
