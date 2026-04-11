@@ -202,6 +202,16 @@ async def process_characters(session, manga, data):
         session, character_content_ids
     )
 
+    cache = await session.scalars(
+        select(MangaCharacter).filter(MangaCharacter.manga == manga)
+    )
+
+    existing_manga_characters = {
+        entry.character_id: entry.id for entry in cache
+    }
+
+    actual_character_ids = set()
+
     for entry in data["characters"]:
         if not (
             character := characters_cache.get(entry["character"]["content_id"])
@@ -231,6 +241,19 @@ async def process_characters(session, manga, data):
             characters.append(character_role)
 
             character.needs_count_update = True
+
+        actual_character_ids.add(character.id)
+
+    bad_character_ids = (
+        set(existing_manga_characters.keys()) - actual_character_ids
+    )
+
+    for character_id in bad_character_ids:
+        await session.execute(
+            delete(MangaCharacter).filter(
+                MangaCharacter.id == existing_manga_characters[character_id]
+            )
+        )
 
     return characters
 

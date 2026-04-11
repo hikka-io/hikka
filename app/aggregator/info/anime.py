@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, delete
 from app.aggregator import service
-from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
 from app import utils
@@ -126,6 +126,16 @@ async def process_characters_and_voices(session, anime, data):
                 }
             )
 
+    cache = await session.scalars(
+        select(AnimeCharacter).filter(AnimeCharacter.anime == anime)
+    )
+
+    existing_anime_characters = {
+        entry.character_id: entry.id for entry in cache
+    }
+
+    actual_character_ids = set()
+
     for entry in data["characters"]:
         if not (
             character := characters_cache.get(entry["character"]["content_id"])
@@ -182,6 +192,26 @@ async def process_characters_and_voices(session, anime, data):
 
             character.needs_count_update = True
             person.needs_count_update = True
+
+        actual_character_ids.add(character.id)
+
+    bad_character_ids = (
+        set(existing_anime_characters.keys()) - actual_character_ids
+    )
+
+    for character_id in bad_character_ids:
+        await session.execute(
+            delete(AnimeVoice).filter(
+                AnimeVoice.anime_id == anime.id,
+                AnimeVoice.character_id == character_id,
+            )
+        )
+
+        await session.execute(
+            delete(AnimeCharacter).filter(
+                AnimeCharacter.id == existing_anime_characters[character_id]
+            )
+        )
 
     return characters_and_voices
 
