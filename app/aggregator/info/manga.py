@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, delete
 from app.aggregator import service
-from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
 from app import utils
