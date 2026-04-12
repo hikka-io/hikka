@@ -1,15 +1,12 @@
+from app.common.service.sort import build_anime_order_by
 from sqlalchemy import select, desc, asc, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from app.service import anime_search_filter
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from .schemas import AnimeSearchArgs
 from sqlalchemy import func
-
-from app.service import (
-    build_anime_order_by,
-    anime_search_filter,
-)
 
 from app.models import (
     AnimeRecommendation,

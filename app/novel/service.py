@@ -1,16 +1,14 @@
+from app.common.service.sort import build_novel_order_by
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from app.service import novel_search_filter
 from .utils import build_novel_filters_ms
 from app.schemas import NovelSearchArgs
 from sqlalchemy.orm import joinedload
 from app import meilisearch
 from app import constants
 
-from app.service import (
-    build_novel_order_by,
-    novel_search_filter,
-)
 
 from app.models import (
     NovelCharacter,

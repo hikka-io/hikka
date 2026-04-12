@@ -1,3 +1,5 @@
+from app.common.service.sort import build_manga_order_by
+from app.common.service.sort import build_novel_order_by
 from sqlalchemy import select, desc, func, ScalarResult
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,8 +11,6 @@ from app import constants
 import random
 
 from app.service import (
-    build_manga_order_by,
-    build_novel_order_by,
     manga_search_filter,
     novel_search_filter,
     create_log,

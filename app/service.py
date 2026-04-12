@@ -1,11 +1,8 @@
-from sqlalchemy import select, asc, desc, and_, or_, func
-from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, and_, or_, func
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy.orm import with_expression
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
 
@@ -25,18 +22,11 @@ from .schemas import (
 )
 
 from app.models import (
-    CharacterCollectionContent,
-    AnimeCollectionContent,
-    MangaCollectionContent,
-    NovelCollectionContent,
-    CollectionContent,
     EmailMessage,
     Collection,
     AnimeWatch,
     AuthToken,
     Character,
-    MangaRead,
-    NovelRead,
     Magazine,
     Company,
     Comment,
@@ -51,7 +41,6 @@ from app.models import (
     Edit,
     User,
     Vote,
-    Read,
     Log,
 )
 
@@ -66,14 +55,6 @@ content_type_to_content_class = {
     constants.CONTENT_ANIME: Anime,
     constants.CONTENT_MANGA: Manga,
     constants.CONTENT_NOVEL: Novel,
-}
-
-read_order_mapping = {
-    "read_chapters": Read.chapters,
-    "read_volumes": Read.volumes,
-    "read_updated": Read.updated,
-    "read_created": Read.created,
-    "read_score": Read.score,
 }
 
 
@@ -504,35 +485,6 @@ def anime_search_filter(
     return query
 
 
-def build_anime_order_by(sort: list[str]):
-    order_mapping = {
-        "native_scored_by": Anime.native_scored_by,
-        "episodes_total": Anime.episodes_total,
-        "watch_episodes": AnimeWatch.episodes,
-        "watch_updated": AnimeWatch.updated,
-        "watch_created": AnimeWatch.created,
-        "native_score": Anime.native_score,
-        "watch_score": AnimeWatch.score,
-        "media_type": Anime.media_type,
-        "start_date": Anime.start_date,
-        "scored_by": Anime.scored_by,
-        "created": Anime.created,
-        "updated": Anime.updated,
-        "score": Anime.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Anime.content_id)]
-
-    return order_by
-
-
 # Vote stuff
 def get_my_score_subquery(content_model, content_type, request_user):
     # We use func.sum inside func.coalesce because otherwise it won't work
@@ -557,30 +509,6 @@ async def magazines_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
         select(func.count(Magazine.id)).filter(Magazine.slug.in_(slugs))
     )
-
-
-def build_manga_order_by(sort: list[str]):
-    order_mapping = read_order_mapping | {
-        "native_scored_by": Manga.native_scored_by,
-        "native_score": Manga.native_score,
-        "media_type": Manga.media_type,
-        "start_date": Manga.start_date,
-        "scored_by": Manga.scored_by,
-        "created": Manga.created,
-        "updated": Manga.updated,
-        "score": Manga.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Manga.content_id)]
-
-    return order_by
 
 
 def manga_search_filter(
@@ -664,30 +592,6 @@ def manga_search_filter(
             )
 
     return query
-
-
-def build_novel_order_by(sort: list[str]):
-    order_mapping = read_order_mapping | {
-        "native_scored_by": Novel.native_scored_by,
-        "native_score": Novel.native_score,
-        "media_type": Novel.media_type,
-        "start_date": Novel.start_date,
-        "scored_by": Novel.scored_by,
-        "created": Novel.created,
-        "updated": Novel.updated,
-        "score": Novel.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Novel.content_id)]
-
-    return order_by
 
 
 def novel_search_filter(

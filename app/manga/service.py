@@ -1,16 +1,13 @@
+from app.common.service.sort import build_manga_order_by
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
+from app.service import manga_search_filter
 from .utils import build_manga_filters_ms
 from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
 from app import meilisearch
 from app import constants
-
-from app.service import (
-    build_manga_order_by,
-    manga_search_filter,
-)
 
 from app.models import (
     MangaCharacter,

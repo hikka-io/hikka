@@ -1,3 +1,4 @@
+from app.common.service.sort import build_anime_order_by
 from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import contains_eager
@@ -20,7 +21,6 @@ from .schemas import (
 
 from app.service import (
     calculate_watch_duration,
-    build_anime_order_by,
     anime_search_filter,
     get_anime_watch,
     anime_loadonly,
