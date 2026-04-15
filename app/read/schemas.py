@@ -59,6 +59,8 @@ class ReadSearchArgs(CustomModel, MangaSearchBaseMixin, YearsMixin):
         return check_sort(
             sort_list,
             [
+                "native_score",
+                "native_scored_by",
                 "read_chapters",
                 "read_volumes",
                 "read_updated",
