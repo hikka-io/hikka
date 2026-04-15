@@ -62,6 +62,8 @@ class AnimeWatchSearchArgs(AnimeSearchArgsBase):
     def validate_sort(cls, sort_list):
         valid_orders = ["asc", "desc"]
         valid_fields = [
+            "native_score",
+            "native_scored_by",
             "watch_episodes",
             "watch_updated",
             "watch_created",
