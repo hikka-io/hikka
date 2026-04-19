@@ -166,6 +166,8 @@ async def process_characters_and_voices(session, anime, data):
 
             character.needs_count_update = True
 
+        actual_character_ids.add(character.id)
+
         if character.content_id not in voices:
             continue
 
@@ -192,8 +194,6 @@ async def process_characters_and_voices(session, anime, data):
 
             character.needs_count_update = True
             person.needs_count_update = True
-
-        actual_character_ids.add(character.id)
 
     bad_character_ids = (
         set(existing_anime_characters.keys()) - actual_character_ids
