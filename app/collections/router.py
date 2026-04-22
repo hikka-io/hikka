@@ -3,6 +3,7 @@ from app.schemas import SuccessResponse
 from app.models import Collection, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import meilisearch
 from app import constants
 from . import service
 
@@ -50,12 +51,41 @@ async def get_collections(
     ),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_collections_count(session, request_user, args)
-    collections = await service.get_collections(
-        session, request_user, args, limit, offset
+
+    filter_by_ids: list[str] | None = None
+    if args.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_COLLECTIONS,
+            query=args.query,
+            sort=["title:desc"],
+            page=page,
+            size=size,
+        )
+
+        filter_by_ids = [item["id"] for item in meilisearch_result["list"]]
+
+    total = await service.get_collections_count(
+        session, 
+        request_user,
+        args, 
+        filter_by_ids
     )
 
-    return paginated_response(collections.unique().all(), total, page, limit)
+    collections = await service.get_collections(
+        session, 
+        request_user, 
+        args, 
+        limit, 
+        offset, 
+        filter_by_ids
+    )
+
+    return paginated_response(
+        collections.unique().all(), 
+        total, 
+        page, 
+        limit
+    )
 
 
 @router.post("/create", response_model=CollectionResponse)

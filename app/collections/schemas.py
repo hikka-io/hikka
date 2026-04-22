@@ -7,6 +7,7 @@ from app.schemas import (
     CollectionVisibilityEnum,
     CollectionResponse,
     PaginationResponse,
+    QuerySearchArgs,
     CustomModel,
 )
 
@@ -28,20 +29,24 @@ class CollectionContentArgs(CustomModel):
     slug: str
 
 
-class CollectionsListArgs(CustomModel):
+class CollectionsListArgs(QuerySearchArgs, CustomModel):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
     content: list[str] = Field([], max_length=1)
     content_type: ContentTypeEnum | None = None
     author: str | None = None
     only_public: bool = True
     tags: list[str] = Field([], max_length=3)
+    nsfw: bool | None = None
+    spoiler: bool | None = None
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
         return check_sort(
             sort_list,
             [
+                "title",
                 "system_ranking",
+                "vote_score",
                 "created",
             ],
         )
