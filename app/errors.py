@@ -125,10 +125,26 @@ errors = {
         "scope-empty": ["Scope empty", "Пустий скоуп", 400],
     },
     "settings": {
-        "username-cooldown": ["Username can be changed once per hour", "", 400],
-        "email-cooldown": ["Email can be changed once per day", "", 400],
-        "username-taken": ["Username already taken", "", 400],
-        "invalid-username": ["Invalid username", "", 400],
+        "username-cooldown": [
+            "Username can be changed once per hour",
+            "Юзернейм можна міняти один раз на годину",
+            400,
+        ],
+        "email-cooldown": [
+            "Email can be changed once per day",
+            "Пошта може бути змінена один раз на добу",
+            400,
+        ],
+        "username-taken": [
+            "Username already taken",
+            "Цей юзернейм вже зайнято",
+            400,
+        ],
+        "invalid-username": [
+            "Invalid username",
+            "Такий собі юзернейм",
+            400,
+        ],
     },
     "permission": {
         "denied": [
