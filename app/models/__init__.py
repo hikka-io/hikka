@@ -36,6 +36,11 @@ from .comments.comment import NovelComment
 from .comments.comment import EditComment
 from .comments.comment import Comment
 
+from .review.review import AnimeReview
+from .review.review import MangaReview
+from .review.review import NovelReview
+from .review.review import Review
+
 from .list.favourite import CollectionFavourite
 from .list.favourite import CharacterFavourite
 from .list.favourite import AnimeFavourite
@@ -142,6 +147,10 @@ __all__ = [
     "NovelComment",
     "EditComment",
     "Comment",
+    "AnimeReview",
+    "MangaReview",
+    "NovelReview",
+    "Review",
     "CollectionFavourite",
     "CharacterFavourite",
     "AnimeFavourite",
