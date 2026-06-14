@@ -1,10 +1,11 @@
 def request_comments_write(
-    client, token, content_type, slug, text, parent=None
+    client, token, content_type, slug, text, parent=None, review=None
 ):
     return client.put(
         f"/comments/{content_type}/{slug}",
         headers={"Auth": token},
         json={
+            "review": review,
             "parent": parent,
             "text": text,
         },

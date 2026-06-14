@@ -1,5 +1,6 @@
 from app.common.schemas.comments import CommentResponse
 from app.schemas import PaginationResponse, CustomModel
+from app.common.schemas.reviews import ReviewArgs
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
 from app import constants
@@ -39,6 +40,7 @@ class ContentTypeEnum(str, Enum):
 # Args
 class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
+    review: ReviewArgs | None = None
 
     @field_validator("text")
     def validate_text(cls, text):

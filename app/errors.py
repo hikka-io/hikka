@@ -249,6 +249,23 @@ errors = {
         "not-found": ["Comment not found", "Коментар не знайдено", 404],
         "hidden": ["Comment is hidden", "Коментар приховано", 400],
     },
+    "review": {
+        "non-reviewable-content": [
+            "Non reviewable content",
+            "Не можна написати відгук для цього контенту",
+            400,
+        ],
+        "no-parent": [
+            "Only first level comment can be a review",
+            "Лише коментар першого рівня може бути відгуком",
+            400,
+        ],
+        "has-review": [
+            "You already have the review for that",
+            "Ви вже залишили відгук",
+            400,
+        ],
+    },
     "studio": {
         "not-found": ["Studio not found", "Не вдалось знайти цю студію", 404],
     },

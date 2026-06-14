@@ -167,6 +167,7 @@ def auth_required(
 
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):
+            # TODO: add not activated error
             raise Abort("permission", "denied")
 
         if forbid_thirdparty and token.client:

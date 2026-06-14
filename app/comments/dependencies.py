@@ -1,3 +1,4 @@
+from app.common.service.reviews import has_review
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_content_by_slug
 from app.dependencies import auth_required
@@ -132,3 +133,34 @@ async def validate_hide(
         raise Abort("permission", "denied")
 
     return user
+
+
+async def validate_review_create(
+    args: CommentArgs,
+    content_type: ContentTypeEnum,
+    content: CommentableType = Depends(validate_content),
+    session: AsyncSession = Depends(get_session),
+    author: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_REVIEW_WRITE],
+            scope=[constants.SCOPE_CREATE_REVIEW],
+        )
+    ),
+):
+    if args.review is None:
+        return
+
+    if content_type not in [
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
+        raise Abort("review", "non-reviewable-content")
+
+    if args.parent is not None:
+        raise Abort("review", "no-parent")
+
+    if await has_review(session, author, content, content_type):
+        raise Abort("review", "has-review")
+
+    return True

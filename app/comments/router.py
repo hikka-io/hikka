@@ -11,6 +11,7 @@ from . import service
 
 from .dependencies import (
     validate_comment_not_hidden,
+    validate_review_create,
     validate_comment_edit,
     validate_rate_limit,
     validate_comment,
@@ -26,8 +27,8 @@ from app.dependencies import (
 )
 
 from .schemas import (
-    CommentableType,
     CommentListResponse,
+    CommentableType,
     CommentResponse,
     ContentTypeEnum,
     CommentTextArgs,
@@ -71,17 +72,21 @@ async def comments_list(
     )
 
 
-@router.put("/{content_type}/{slug}", response_model=CommentResponse)
+@router.put(
+    "/{content_type}/{slug}",
+    response_model=CommentResponse,
+    dependencies=[Depends(validate_review_create)],
+)
 async def write_comment(
     args: CommentArgs,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     parent: Comment | None = Depends(validate_parent),
-    author: User = Depends(validate_rate_limit),
     content: CommentableType = Depends(validate_content),
+    author: User = Depends(validate_rate_limit),
 ):
     comment = await service.create_comment(
-        session, content_type, content, author, args.text, parent
+        session, content_type, content, author, args.text, args.review, parent
     )
 
     comment = await service.generate_preview(session, comment)

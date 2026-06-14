@@ -1,5 +1,6 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func
 from .schemas import ContentTypeEnum, CommentableType
+from app.common.schemas.reviews import ReviewArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
@@ -37,6 +38,7 @@ from app.models import (
     NovelEdit,
     Character,
     Comment,
+    Review,
     Person,
     Anime,
     Manga,
@@ -118,6 +120,7 @@ async def create_comment(
     content: CommentableType,
     author: User,
     text: str,
+    comment_review: None | ReviewArgs = None,
     parent: Comment | None = None,
 ):
     cleaned_text = utils.remove_bad_characters(text)
@@ -152,6 +155,21 @@ async def create_comment(
     comment.path = ltree_id if parent is None else parent.path + ltree_id
 
     session.add(comment)
+
+    if comment_review is not None:
+        review = Review(
+            **{
+                "recommended": comment_review.recommended,
+                "content_type": content_type,
+                "content_id": content.id,
+                "created": now,
+                "updated": now,
+                "user": author,
+            }
+        )
+
+        session.add(review)
+
     await session.commit()
 
     # Update replies count after new comment is written
@@ -510,9 +528,9 @@ async def generate_preview(
         title = collection_content.collection.title
 
     original_comment.preview = {
+        "title": title,
         "image": image,
         "slug": slug,
-        "title": title,
     }
 
     session.add(original_comment)
