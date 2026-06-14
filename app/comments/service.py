@@ -192,7 +192,12 @@ async def create_comment(
         constants.LOG_COMMENT_WRITE,
         author,
         comment.id,
-        {"content_type": comment.content_type},
+        {
+            "content_type": comment.content_type,
+            "review": None
+            if not comment_review
+            else {"recommended": comment_review.recommended},
+        },
     )
 
     return comment

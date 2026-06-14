@@ -86,7 +86,13 @@ async def write_comment(
     author: User = Depends(validate_rate_limit),
 ):
     comment = await service.create_comment(
-        session, content_type, content, author, args.text, args.review, parent
+        session,
+        content_type,
+        content,
+        author,
+        args.text,
+        args.review,
+        parent,
     )
 
     comment = await service.generate_preview(session, comment)
@@ -122,7 +128,11 @@ async def get_contents_list(
     return paginated_response(result, total, page, limit)
 
 
-@router.put("/{comment_reference}", response_model=CommentResponse)
+@router.put(
+    "/{comment_reference}",
+    response_model=CommentResponse,
+    dependencies=[Depends(validate_review_create)],
+)
 async def edit_comment(
     args: CommentTextArgs,
     session: AsyncSession = Depends(get_session),
