@@ -148,7 +148,7 @@ async def validate_review_create(
     ),
 ):
     if args.review is None:
-        return
+        return True
 
     if content_type not in [
         constants.CONTENT_ANIME,
@@ -160,7 +160,39 @@ async def validate_review_create(
     if args.parent is not None:
         raise Abort("review", "no-parent")
 
-    if await has_review(session, author, content, content_type):
+    if await has_review(session, author, content.id, content_type):
+        raise Abort("review", "has-review")
+
+    return True
+
+
+async def validate_review_edit(
+    args: CommentArgs,
+    comment: Comment = Depends(validate_comment_edit),
+    session: AsyncSession = Depends(get_session),
+    author: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_REVIEW_EDIT],
+            scope=[constants.SCOPE_UPDATE_REVIEW],
+        )
+    ),
+):
+    if args.review is None:
+        return True
+
+    if comment.content_type not in [
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
+        raise Abort("review", "non-reviewable-content")
+
+    if len(comment.path) > 1:
+        raise Abort("review", "no-parent")
+
+    if await has_review(
+        session, author, comment.content_id, comment.content_type, comment
+    ):
         raise Abort("review", "has-review")
 
     return True

@@ -1,5 +1,7 @@
 from client_requests import request_comments_write
 from client_requests import request_create_edit
+from app.models import Review
+from sqlalchemy import select
 from fastapi import status
 
 
@@ -22,6 +24,10 @@ async def test_comments_write_review(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+    review = await test_session.scalar(select(Review))
+    assert review is not None
+    assert review.recommended == "yes"
 
 
 async def test_comments_write_review_duplicate(

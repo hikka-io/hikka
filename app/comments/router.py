@@ -13,6 +13,7 @@ from .dependencies import (
     validate_comment_not_hidden,
     validate_review_create,
     validate_comment_edit,
+    validate_review_edit,
     validate_rate_limit,
     validate_comment,
     validate_content,
@@ -131,14 +132,20 @@ async def get_contents_list(
 @router.put(
     "/{comment_reference}",
     response_model=CommentResponse,
-    dependencies=[Depends(validate_review_create)],
+    dependencies=[Depends(validate_review_edit)],
 )
 async def edit_comment(
     args: CommentTextArgs,
     session: AsyncSession = Depends(get_session),
     comment: Comment = Depends(validate_comment_edit),
 ):
-    comment = await service.edit_comment(session, comment, args.text)
+    comment = await service.edit_comment(
+        session,
+        comment,
+        args.text,
+        args.review,
+    )
+
     comment = await service.generate_preview(session, comment)
     return CommentNode.create(path_to_uuid(comment.reference), comment)
 

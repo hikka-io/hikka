@@ -162,6 +162,7 @@ async def create_comment(
                 "recommended": comment_review.recommended,
                 "content_type": content_type,
                 "content_id": content.id,
+                "comment": comment,
                 "created": now,
                 "updated": now,
                 "user": author,
@@ -187,17 +188,16 @@ async def create_comment(
 
     await session.commit()
 
+    log_data = {"content_type": comment.content_type}
+    if comment_review is not None:
+        log_data["recommended"] = comment_review.recommended
+
     await create_log(
         session,
         constants.LOG_COMMENT_WRITE,
         author,
         comment.id,
-        {
-            "content_type": comment.content_type,
-            "review": None
-            if not comment_review
-            else {"recommended": comment_review.recommended},
-        },
+        log_data,
     )
 
     return comment
@@ -295,6 +295,7 @@ async def edit_comment(
     session: AsyncSession,
     comment: Comment,
     text: str,
+    comment_review: Review | None = None,
 ) -> Comment:
     now = utcnow()
 
@@ -312,19 +313,56 @@ async def edit_comment(
         }
     )
 
-    session.add(comment)
+    review_before = None
+    review_after = None
+
+    if review := await session.scalar(
+        select(Review).filter(Review.comment == comment)
+    ):
+        review_before = {"recommended": review.recommended}
+
+        if comment_review is None:
+            await session.delete(review)
+
+        else:
+            review.recommended = comment_review.recommended
+            review_after = {"recommended": review.recommended}
+
+    else:
+        if comment_review is not None:
+            review = Review(
+                **{
+                    "user": comment.author,
+                    "recommended": comment_review.recommended,
+                    "content_type": comment.content_type,
+                    "content_id": comment.content_id,
+                    "comment": comment,
+                    "created": now,
+                    "updated": now,
+                }
+            )
+
+            review_after = {"recommended": review.recommended}
+            session.add(review)
+
     await session.commit()
+
+    log_data = {
+        "content_type": comment.content_type,
+        "old_text": old_text,
+        "new_text": new_text,
+    }
+
+    if review_before is not None and review_after is not None:
+        log_data["review_before"] = review_before
+        log_data["review_after"] = review_after
 
     await create_log(
         session,
         constants.LOG_COMMENT_EDIT,
         comment.author,
         comment.id,
-        data={
-            "content_type": comment.content_type,
-            "old_text": old_text,
-            "new_text": new_text,
-        },
+        data=log_data,
     )
 
     return comment

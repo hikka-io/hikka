@@ -12,11 +12,14 @@ def request_comments_write(
     )
 
 
-def request_comments_edit(client, token, comment_reference, text):
+def request_comments_edit(client, token, comment_reference, text, review=None):
     return client.put(
         f"/comments/{comment_reference}",
         headers={"Auth": token},
-        json={"text": text},
+        json={
+            "review": review,
+            "text": text,
+        },
     )
 
 
