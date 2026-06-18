@@ -1,8 +1,9 @@
+from app.common.schemas.reviews import ReviewResponse
 from dataclasses import dataclass, field
+from app.models import Review, User
 from app.utils import path_to_uuid
 from app.models import Comment
 from datetime import datetime
-from app.models import User
 
 from app.schemas import (
     DataTypeMixin,
@@ -15,6 +16,7 @@ from app.schemas import (
 # Responses
 class CommentResponse(CustomModel, DataTypeMixin):
     replies: list["CommentResponse"] = []
+    review: ReviewResponse | None = None
     total_replies: int = 0
     updated: datetime_pd
     created: datetime_pd
@@ -41,6 +43,7 @@ class CommentNode:
     replies: list["CommentNode"] = field(default_factory=list)
     content_type: str | None = None
     created: datetime | None = None
+    review: Review | None = None
     preview: dict | None = None
     author: User | None = None
     is_editable: bool = False
@@ -54,6 +57,9 @@ class CommentNode:
     depth: int = 0
 
     def from_comment(self, comment: Comment):
+        # Bit hackish but should work
+        self.review = comment.review if "review" in comment.__dict__ else None
+
         self.is_editable = comment.is_editable if not comment.hidden else False
         self.my_score = comment.my_score if comment.my_score else 0
         self.text = comment.text if not comment.hidden else None

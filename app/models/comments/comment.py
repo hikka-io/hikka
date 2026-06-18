@@ -56,6 +56,13 @@ class Comment(
         foreign_keys=[author_id], lazy="selectin"
     )
 
+    review: Mapped["Review"] = relationship(
+        "Review",
+        back_populates="comment",
+        foreign_keys="Review.comment_id",
+        uselist=False,
+    )
+
     __table_args__ = (
         Index(
             "ix_comments_path",

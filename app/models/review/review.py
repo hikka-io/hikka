@@ -33,7 +33,9 @@ class Review(
         ForeignKey("service_comments.id", ondelete="CASCADE")
     )
 
-    comment: Mapped["Comment"] = relationship(foreign_keys=[comment_id])
+    comment: Mapped["Comment"] = relationship(
+        foreign_keys=[comment_id], back_populates="review"
+    )
 
     user_id = mapped_column(ForeignKey("service_users.id"), index=True)
 

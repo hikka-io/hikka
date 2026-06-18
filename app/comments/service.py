@@ -4,6 +4,7 @@ from app.common.schemas.reviews import ReviewArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
+from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
@@ -245,7 +246,8 @@ async def get_comments_by_content_id(
                 get_my_score_subquery(
                     Comment, constants.CONTENT_COMMENT, request_user
                 ),
-            )
+            ),
+            selectinload(Comment.review),
         )
         .order_by(desc(Comment.created))
         .limit(limit)
@@ -456,7 +458,8 @@ async def get_comments(
                 get_my_score_subquery(
                     Comment, constants.CONTENT_COMMENT, request_user
                 ),
-            )
+            ),
+            selectinload(Comment.review),
         )
         .order_by(desc(Comment.created))
         .limit(limit)
@@ -474,14 +477,17 @@ async def generate_preview(
     comment = await session.scalar(
         select(Comment)
         .filter(Comment.id == original_comment.id)
-        .options(immediateload(CollectionComment.content))
-        .options(immediateload(CharacterComment.content))
-        .options(immediateload(ArticleComment.content))
-        .options(immediateload(PersonComment.content))
-        .options(immediateload(AnimeComment.content))
-        .options(immediateload(MangaComment.content))
-        .options(immediateload(NovelComment.content))
-        .options(immediateload(EditComment.content))
+        .options(
+            immediateload(CollectionComment.content),
+            immediateload(CharacterComment.content),
+            immediateload(ArticleComment.content),
+            immediateload(PersonComment.content),
+            immediateload(AnimeComment.content),
+            immediateload(MangaComment.content),
+            immediateload(NovelComment.content),
+            immediateload(EditComment.content),
+            selectinload(Comment.review),
+        )
         .order_by(desc(Comment.created))
     )
 
