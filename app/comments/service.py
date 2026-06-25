@@ -1,4 +1,5 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func
+from app.common.schemas.reviews import ReviewRecommended
 from .schemas import ContentTypeEnum, CommentableType
 from app.common.schemas.reviews import ReviewArgs
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -59,6 +60,24 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
     constants.CONTENT_MANGA: MangaComment,
     constants.CONTENT_NOVEL: NovelComment,
 }
+
+
+def filter_reviews(
+    query,
+    reviews_only: bool = False,
+    reviews_recommended: ReviewRecommended | None = None,
+):
+    if reviews_only:
+        review_filter_args = []
+
+        if reviews_recommended is not None:
+            review_filter_args.append(
+                (Review.recommended == reviews_recommended)
+            )
+
+        query = query.filter(Comment.review.has(*review_filter_args))
+
+    return query
 
 
 async def count_replies(session: AsyncSession, comment: Comment):
@@ -441,18 +460,22 @@ async def count_comments(session: AsyncSession) -> int:
 async def get_comments(
     session: AsyncSession,
     request_user: User | None,
+    reviews_only: bool,
+    reviews_recommended: ReviewRecommended | None,
     limit: int,
     offset: int,
 ):
+    query = select(Comment).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.hidden == False,  # noqa: E712
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+    )
+
+    query = filter_reviews(query, reviews_only, reviews_recommended)
+
     return await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .options(
+        query.options(
             with_expression(
                 Comment.my_score,
                 get_my_score_subquery(

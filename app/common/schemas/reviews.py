@@ -1,10 +1,13 @@
 from app.schemas import CustomModel
 from typing import Literal
 
+# Litterals
+ReviewRecommended = Literal["yes", "no", "maybe"]
+
 
 # Args
 class ReviewArgs(CustomModel):
-    recommended: Literal["yes", "no", "maybe"]
+    recommended: ReviewRecommended
 
 
 # Responses

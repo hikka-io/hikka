@@ -1,4 +1,5 @@
 from app.utils import path_to_uuid, paginated_response, pagination
+from app.common.schemas.reviews import ReviewRecommended
 from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
@@ -54,13 +55,21 @@ async def comments_list(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
+    reviews_only: bool = False,
+    reviews_recommended: ReviewRecommended | None = None,
     request_user: User = Depends(
         auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
     ),
 ):
     limit, offset = pagination(page, size)
-    total = await service.count_comments(session)
-    comments = await service.get_comments(session, request_user, limit, offset)
+
+    total = await service.count_comments(
+        session, reviews_only, reviews_recommended
+    )
+
+    comments = await service.get_comments(
+        session, request_user, reviews_only, reviews_recommended, limit, offset
+    )
 
     return paginated_response(
         [
