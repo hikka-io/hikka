@@ -13,10 +13,54 @@ from app.common.schemas.feed import (
 )
 
 
+UIEffect = Literal["snowfall", "sakura"]
+UIFeedWidgetOptions = Literal[
+    "list",
+    "profile",
+    "feed",
+    "tracker",
+    "history",
+    "ongoings",
+    "schedule",
+    "top_anime",
+    "articles",
+    "collections",
+    "top_anime",
+    "articles",
+    "collections",
+]
+
+BackdropStyle = Literal["none", "glow"]
+
+
 class HSLColor(CustomModel):
     h: float = Field(ge=0, le=360)
     s: float = Field(ge=0, le=100)
     l: float = Field(ge=0, le=100)  # noqa: E741
+
+
+class OKLCHColor(CustomModel):
+    l: float = Field(ge=0, le=1)  # noqa: E741
+    c: float = Field(ge=0, le=0.4)
+    h: float = Field(ge=0, le=360)
+
+
+class UISurfaceOverrides(CustomModel):
+    background: OKLCHColor | None = None
+    foreground: OKLCHColor | None = None
+    card: OKLCHColor | None = None
+    card_foreground: OKLCHColor | None = None
+    popover: OKLCHColor | None = None
+    popover_foreground: OKLCHColor | None = None
+    secondary: OKLCHColor | None = None
+    secondary_foreground: OKLCHColor | None = None
+    muted: OKLCHColor | None = None
+    muted_foreground: OKLCHColor | None = None
+    accent: OKLCHColor | None = None
+    accent_foreground: OKLCHColor | None = None
+    border: OKLCHColor | None = None
+    input: OKLCHColor | None = None
+    ring: OKLCHColor | None = None
 
 
 class UIColorTokens(CustomModel):
@@ -70,19 +114,26 @@ class UIStylesTypography(CustomModel):
     p: str | None = None
 
 
+class UIBackdrop(CustomModel):
+    intensity: float = Field(ge=0, le=1)
+    style: BackdropStyle | None = None
+
+
+class UIOverrides(CustomModel):
+    light: UISurfaceOverrides | None = None
+    dark: UISurfaceOverrides | None = None
+
+
 class UIStyles(CustomModel):
-    dark: UIThemeStyles | None = None
+    # TODO: remove me
     light: UIThemeStyles | None = None
-    radius: str | None = Field(
-        None,
-    )
+    dark: UIThemeStyles | None = None
+
     typography: UIStylesTypography | None = None
-
-
-UIEffect = Literal["snowfall", "sakura"]
-UIFeedWidgetOptions = Literal[
-    "list", "profile", "feed", "tracker", "history", "ongoings", "schedule"
-]
+    overrides: UIOverrides | None = None
+    backdrop: UIBackdrop | None = None
+    brand: OKLCHColor | None = None
+    radius: str | None = None
 
 
 class UIFeedWidget(CustomModel):
@@ -134,16 +185,16 @@ class UIFeedSettings(CustomModel):
 
 
 class UIPreferences(CustomModel):
+    # TODO: remove me later
+    effects: list[UIEffect] | None = None
+
+    feed: UIFeedSettings = Field(default_factory=lambda: UIFeedSettings())
     score: Literal["mal", "native"] | None = None
     title_language: str | None = None
     name_language: str | None = None
     effect: UIEffect | None = None
     overlay: bool = True
 
-    feed: UIFeedSettings = Field(default_factory=lambda: UIFeedSettings())
-
-    # TODO: remove me later
-    effects: list[UIEffect] | None = None
     home_widgets: list[UIFeedWidgetOptions] = [
         "tracker",
         "history",
