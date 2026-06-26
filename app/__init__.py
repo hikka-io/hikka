@@ -13,6 +13,9 @@ from app import errors
 
 
 def create_app(init_db: bool = True) -> FastAPI:
+    def custom_generate_unique_id(route: APIRoute) -> str:
+        return route.name
+
     settings = get_settings()
     lifespan = None
 
@@ -66,6 +69,7 @@ def create_app(init_db: bool = True) -> FastAPI:
             {"name": "Feed"},
         ],
         lifespan=lifespan,
+        generate_unique_id_function=custom_generate_unique_id,
         # redoc_url=None,
         # docs_url=None,
     )
@@ -159,13 +163,13 @@ def create_app(init_db: bool = True) -> FastAPI:
     async def ping_pong():
         return "pong"
 
-    # Simple hack to add operation_id to each route based on
-    # https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/
-    def use_route_names_as_operation_ids(app: FastAPI) -> None:
-        for route in app.routes:
-            if isinstance(route, APIRoute):
-                route.operation_id = route.name
+    # # Simple hack to add operation_id to each route based on
+    # # https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/
+    # def use_route_names_as_operation_ids(app: FastAPI) -> None:
+    #     for route in app.routes:
+    #         if isinstance(route, APIRoute):
+    #             route.operation_id = route.name
 
-    use_route_names_as_operation_ids(app)
+    # use_route_names_as_operation_ids(app)
 
     return app
