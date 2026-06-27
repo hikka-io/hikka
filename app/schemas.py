@@ -134,6 +134,14 @@ class CollectionVisibilityEnum(str, Enum):
     visibility_public = constants.COLLECTION_PUBLIC
 
 
+class CollectionContentTypeEnum(str, Enum):
+    content_character = constants.CONTENT_CHARACTER
+    content_person = constants.CONTENT_PERSON
+    content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
+
+
 # Mixins
 class YearsMixin:
     years: list[PositiveInt | None] | None = Field(
@@ -618,7 +626,7 @@ class AnimeVideoResponse(CustomModel):
 class CollectionContentResponse(CustomModel):
     comment: str | None
     label: str | None
-    content_type: str
+    content_type: CollectionContentTypeEnum
     order: int
 
     content: (
@@ -638,7 +646,7 @@ class CollectionResponse(CustomModel):
     created: datetime_pd
     updated: datetime_pd
     comments_count: int
-    content_type: str
+    content_type: CollectionContentTypeEnum
     description: str
     vote_score: int
     tags: list[str]
