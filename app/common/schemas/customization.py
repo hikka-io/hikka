@@ -3,6 +3,7 @@ from pydantic import Field, field_validator
 from app.schemas import CustomModel
 from collections import defaultdict
 from typing import Literal
+from enum import Enum
 
 from app.common.schemas.feed import (
     CollectionContentTypes,
@@ -14,23 +15,20 @@ from app.common.schemas.feed import (
 
 
 UIEffect = Literal["snowfall", "sakura"]
-UIFeedWidgetOptions = Literal[
-    "list",
-    "profile",
-    "feed",
-    "tracker",
-    "history",
-    "ongoings",
-    "schedule",
-    "top_anime",
-    "articles",
-    "collections",
-    "top_anime",
-    "articles",
-    "collections",
-]
-
 BackdropStyle = Literal["none", "glow"]
+
+
+class UIWidgetEnum(str, Enum):
+    list = "list"
+    profile = "profile"
+    feed = "feed"
+    tracker = "tracker"
+    history = "history"
+    ongoings = "ongoings"
+    schedule = "schedule"
+    top_anime = "top_anime"
+    articles = "articles"
+    collections = "collections"
 
 
 class HSLColor(CustomModel):
@@ -138,7 +136,7 @@ class UIStyles(CustomModel):
 
 class UIFeedWidget(CustomModel):
     side: Literal["left", "center", "right"]
-    slug: UIFeedWidgetOptions
+    slug: UIWidgetEnum
     order: int
 
 
@@ -195,7 +193,7 @@ class UIPreferences(CustomModel):
     effect: UIEffect | None = None
     overlay: bool = True
 
-    home_widgets: list[UIFeedWidgetOptions] = [
+    home_widgets: list[UIWidgetEnum] = [
         "tracker",
         "history",
         "ongoings",
