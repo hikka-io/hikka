@@ -1,23 +1,13 @@
 from app.utils import is_empty_markdown, is_valid_tag, check_sort
 from pydantic import Field, field_validator
-from app import constants
-from enum import Enum
 
 from app.schemas import (
+    CollectionContentTypeEnum,
     CollectionVisibilityEnum,
     CollectionResponse,
     PaginationResponse,
     CustomModel,
 )
-
-
-# Enums
-class ContentTypeEnum(str, Enum):
-    content_character = constants.CONTENT_CHARACTER
-    content_person = constants.CONTENT_PERSON
-    content_anime = constants.CONTENT_ANIME
-    content_manga = constants.CONTENT_MANGA
-    content_novel = constants.CONTENT_NOVEL
 
 
 # Args
@@ -31,7 +21,7 @@ class CollectionContentArgs(CustomModel):
 class CollectionsListArgs(CustomModel):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
     content: list[str] = Field([], max_length=1)
-    content_type: ContentTypeEnum | None = None
+    content_type: CollectionContentTypeEnum | None = None
     author: str | None = None
     only_public: bool = True
     tags: list[str] = Field([], max_length=3)
@@ -53,7 +43,7 @@ class CollectionArgs(CustomModel):
     tags: list[str] = Field(max_length=3)
     visibility: CollectionVisibilityEnum
     content: list[CollectionContentArgs]
-    content_type: ContentTypeEnum
+    content_type: CollectionContentTypeEnum
     labels_order: list[str]
     spoiler: bool
     nsfw: bool

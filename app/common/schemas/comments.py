@@ -4,17 +4,32 @@ from app.models import Review, User
 from app.utils import path_to_uuid
 from app.models import Comment
 from datetime import datetime
+from typing import Literal
+from app import constants
+from enum import Enum
 
 from app.schemas import (
-    DataTypeMixin,
     UserResponse,
     CustomModel,
     datetime_pd,
 )
 
 
+# Enums
+class CommentContentTypeEnum(str, Enum):
+    content_collection = constants.CONTENT_COLLECTION
+    content_character = constants.CONTENT_CHARACTER
+    content_edit = constants.CONTENT_SYSTEM_EDIT
+    content_article = constants.CONTENT_ARTICLE
+    content_person = constants.CONTENT_PERSON
+    content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
+
+
 # Responses
-class CommentResponse(CustomModel, DataTypeMixin):
+class CommentResponse(CustomModel):
+    data_type: Literal["comment"]
     replies: list["CommentResponse"] = []
     review: ReviewResponse | None = None
     total_replies: int = 0
@@ -22,7 +37,7 @@ class CommentResponse(CustomModel, DataTypeMixin):
     created: datetime_pd
     author: UserResponse
     parent: str | None
-    content_type: str
+    content_type: CommentContentTypeEnum
     is_editable: bool
     text: str | None
     vote_score: int

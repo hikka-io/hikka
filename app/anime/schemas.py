@@ -1,6 +1,7 @@
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
 from app import constants
+from typing import Literal
 
 from app.schemas import (
     AnimeSearchArgsBase,
@@ -11,7 +12,6 @@ from app.schemas import (
     CompanyTypeEnum,
     CompanyResponse,
     QuerySearchArgs,
-    DataTypeMixin,
     GenreResponse,
     CustomModel,
 )
@@ -112,7 +112,8 @@ class AnimeOSTResponse(CustomModel):
     ost_type: str = Field(examples=["opening"])
 
 
-class AnimeInfoResponse(CustomModel, DataTypeMixin):
+class AnimeInfoResponse(CustomModel):
+    data_type: Literal["anime"]
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
