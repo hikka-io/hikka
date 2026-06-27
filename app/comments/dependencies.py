@@ -1,3 +1,4 @@
+from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.service.reviews import has_review
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_content_by_slug
@@ -13,14 +14,13 @@ from . import service
 
 from .schemas import (
     CommentableType,
-    ContentTypeEnum,
     CommentArgs,
 )
 
 
 async def validate_content(
     slug: str,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ) -> CommentableType:
     if not (content := await get_content_by_slug(session, content_type, slug)):
@@ -32,7 +32,7 @@ async def validate_content(
 
 async def validate_parent(
     args: CommentArgs,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType = Depends(validate_content),
     session: AsyncSession = Depends(get_session),
 ) -> Comment | None:
@@ -137,7 +137,7 @@ async def validate_hide(
 
 async def validate_review_create(
     args: CommentArgs,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType = Depends(validate_content),
     session: AsyncSession = Depends(get_session),
     author: User = Depends(

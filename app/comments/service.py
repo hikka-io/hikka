@@ -1,7 +1,8 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func
+from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.schemas.reviews import ReviewRecommended
-from .schemas import ContentTypeEnum, CommentableType
 from app.common.schemas.reviews import ReviewArgs
+from .schemas import CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
@@ -115,7 +116,7 @@ async def get_comment(
 
 async def get_comments_count(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType,
     first_level_only: bool = False,
 ):
@@ -136,7 +137,7 @@ async def get_comments_count(
 
 async def create_comment(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType,
     author: User,
     text: str,
@@ -225,7 +226,7 @@ async def create_comment(
 
 async def get_comment_by_content(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content_id: str,
     reference: str,
 ) -> Comment | None:

@@ -1,4 +1,5 @@
 from app.utils import path_to_uuid, paginated_response, pagination
+from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.schemas.reviews import ReviewRecommended
 from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -32,7 +33,6 @@ from .schemas import (
     CommentListResponse,
     CommentableType,
     CommentResponse,
-    ContentTypeEnum,
     CommentTextArgs,
     CommentArgs,
 )
@@ -89,7 +89,7 @@ async def comments_list(
 )
 async def write_comment(
     args: CommentArgs,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     session: AsyncSession = Depends(get_session),
     parent: Comment | None = Depends(validate_parent),
     content: CommentableType = Depends(validate_content),
