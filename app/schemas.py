@@ -142,6 +142,17 @@ class CollectionContentTypeEnum(str, Enum):
     content_novel = constants.CONTENT_NOVEL
 
 
+class ExternalTypeEnum(str, Enum):
+    general = constants.EXTERNAL_GENERAL
+    watch = constants.EXTERNAL_WATCH
+    read = constants.EXTERNAL_READ
+
+
+class AnimeVideoTypeEnum(str, Enum):
+    video_promo = constants.VIDEO_PROMO
+    video_music = constants.VIDEO_MUSIC
+
+
 # Mixins
 class YearsMixin:
     years: list[PositiveInt | None] | None = Field(
@@ -612,14 +623,14 @@ class FollowUserResponse(UserResponse):
 class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
-    type: str
+    type: ExternalTypeEnum
 
 
 class AnimeVideoResponse(CustomModel):
     url: str = Field(examples=["https://youtu.be/_4W1OQoDEDg"])
     title: str | None = Field(examples=["ED 2 (Artist ver.)"])
     description: str | None = Field(examples=["..."])
-    video_type: str = Field(examples=["video_music"])
+    video_type: AnimeVideoTypeEnum
 
 
 # Collections

@@ -2,6 +2,7 @@ from pydantic import Field, field_validator
 from app.schemas import datetime_pd
 from app import constants
 from typing import Literal
+from enum import Enum
 
 from app.schemas import (
     AnimeSearchArgsBase,
@@ -15,6 +16,12 @@ from app.schemas import (
     GenreResponse,
     CustomModel,
 )
+
+
+# Enums
+class AnimeOSTTypeEnum(str, Enum):
+    opening = constants.OST_OPENING
+    ending = constants.OST_ENDING
 
 
 # Args
@@ -109,7 +116,7 @@ class AnimeOSTResponse(CustomModel):
     spotify: str | None = Field(
         examples=["https://open.spotify.com/track/3BIhcWQV2hGRoEXdLL3Fzw"]
     )
-    ost_type: str = Field(examples=["opening"])
+    ost_type: AnimeOSTTypeEnum
 
 
 class AnimeInfoResponse(CustomModel):
