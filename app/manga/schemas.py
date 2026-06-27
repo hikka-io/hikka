@@ -1,6 +1,7 @@
 from pydantic import field_validator
 from app.schemas import datetime_pd
 from app import constants
+from typing import Literal
 
 from app.schemas import (
     ContentAuthorResponse,
@@ -9,7 +10,6 @@ from app.schemas import (
     ReadStatsResponse,
     MagazineResponse,
     ExternalResponse,
-    DataTypeMixin,
     GenreResponse,
     CustomModel,
 )
@@ -21,7 +21,8 @@ class MangaPaginationResponse(CustomModel):
     list: list[MangaResponseWithRead]
 
 
-class MangaInfoResponse(CustomModel, DataTypeMixin):
+class MangaInfoResponse(CustomModel):
+    data_type: Literal["manga"]
     authors: list[ContentAuthorResponse]
     magazines: list[MagazineResponse]
     external: list[ExternalResponse]

@@ -4,9 +4,9 @@ from app.models import Review, User
 from app.utils import path_to_uuid
 from app.models import Comment
 from datetime import datetime
+from typing import Literal
 
 from app.schemas import (
-    DataTypeMixin,
     UserResponse,
     CustomModel,
     datetime_pd,
@@ -14,7 +14,8 @@ from app.schemas import (
 
 
 # Responses
-class CommentResponse(CustomModel, DataTypeMixin):
+class CommentResponse(CustomModel):
+    data_type: Literal["comment"]
     replies: list["CommentResponse"] = []
     review: ReviewResponse | None = None
     total_replies: int = 0

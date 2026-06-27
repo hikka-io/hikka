@@ -6,7 +6,7 @@ from pydantic import Field, EmailStr
 from pydantic import field_validator
 from pydantic import BeforeValidator
 from pydantic import PositiveInt
-from typing import Annotated
+from typing import Annotated, Literal
 from . import constants
 from enum import Enum
 from . import utils
@@ -135,10 +135,6 @@ class CollectionVisibilityEnum(str, Enum):
 
 
 # Mixins
-class DataTypeMixin:
-    data_type: str
-
-
 class YearsMixin:
     years: list[PositiveInt | None] | None = Field(
         default=[None, None],
@@ -444,7 +440,8 @@ class ReadResponseBase(CustomModel):
     end_date: datetime_pd | None
 
 
-class AnimeResponse(CustomModel, DataTypeMixin):
+class AnimeResponse(CustomModel):
+    data_type: Literal["anime"]
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
@@ -476,7 +473,8 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     mal_id: int
 
 
-class MangaResponse(CustomModel, DataTypeMixin):
+class MangaResponse(CustomModel):
+    data_type: Literal["manga"]
     start_date: datetime_pd | None
     end_date: datetime_pd | None
     created: datetime_pd | None
@@ -499,7 +497,8 @@ class MangaResponse(CustomModel, DataTypeMixin):
     slug: str
 
 
-class NovelResponse(CustomModel, DataTypeMixin):
+class NovelResponse(CustomModel):
+    data_type: Literal["novel"]
     start_date: datetime_pd | None
     end_date: datetime_pd | None
     created: datetime_pd | None
@@ -539,7 +538,8 @@ class AnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
 
 
-class CharacterResponse(CustomModel, DataTypeMixin):
+class CharacterResponse(CustomModel):
+    data_type: Literal["character"]
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
@@ -548,7 +548,8 @@ class CharacterResponse(CustomModel, DataTypeMixin):
     synonyms: list[str]
 
 
-class PersonResponse(CustomModel, DataTypeMixin):
+class PersonResponse(CustomModel):
+    data_type: Literal["person"]
     name_native: str | None = Field(examples=["高橋 李依"])
     name_ua: str | None = Field(examples=["Ріє Такахаші"])
     name_en: str | None = Field(examples=["Rie Takahashi"])
@@ -629,7 +630,8 @@ class CollectionContentResponse(CustomModel):
     )
 
 
-class CollectionResponse(CustomModel, DataTypeMixin):
+class CollectionResponse(CustomModel):
+    data_type: Literal["collection"]
     visibility: CollectionVisibilityEnum
     author: FollowUserResponse
     labels_order: list[str]
