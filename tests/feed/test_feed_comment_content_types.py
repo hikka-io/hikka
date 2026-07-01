@@ -33,6 +33,16 @@ async def test_feed_comment_content_types(
         "Manga comment",
     )
 
+    # Create anime review
+    await request_comments_write(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        "Anime review",
+        review={"recommended": "yes"},
+    )
+
     # Create article just for good measure
     await request_create_article(
         client,
@@ -81,3 +91,15 @@ async def test_feed_comment_content_types(
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 1  # only article
+
+    # Filter comments to reviews
+    response = await request_feed(
+        client,
+        {"comment_content_types": ["review"]},
+        get_test_token,
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()) == 2  # 1 review + 1 article
+    review = next(x for x in response.json() if x["data_type"] == "comment")
+    assert review["review"] == {"recommended": "yes"}
