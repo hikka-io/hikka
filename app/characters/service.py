@@ -25,12 +25,19 @@ async def get_character_by_slug(
     session: AsyncSession, slug: str
 ) -> Character | None:
     return await session.scalar(
-        select(Character).filter(Character.slug == slug.lower())
+        select(Character).filter(
+            Character.slug == slug.lower(),
+            Character.orphan == False,  # noqa: E712
+        )
     )
 
 
 async def search_total(session: AsyncSession):
-    return await session.scalar(select(func.count(Character.id)))
+    return await session.scalar(
+        select(func.count(Character.id)).filter(
+            Character.orphan == False,  # noqa: E712
+        )
+    )
 
 
 async def characters_search(
@@ -40,6 +47,9 @@ async def characters_search(
 ):
     return await session.scalars(
         select(Character)
+        .filter(
+            Character.orphan == False,  # noqa: E712
+        )
         .order_by(desc("favorites"), desc("content_id"))
         .limit(limit)
         .offset(offset)
