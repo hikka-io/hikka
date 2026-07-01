@@ -107,7 +107,7 @@ async def get_content_by_slug(
 
     elif content_type == constants.CONTENT_CHARACTER:
         query = query.filter(
-            content_model.orphan == True,  # noqa: E712
+            content_model.orphan == False,  # noqa: E712
             content_model.slug == slug,
         )
 
