@@ -1,3 +1,4 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -37,9 +38,13 @@ class Review(
         foreign_keys=[comment_id], back_populates="review"
     )
 
-    user_id = mapped_column(ForeignKey("service_users.id"), index=True)
+    author_id = mapped_column(ForeignKey("service_users.id"), index=True)
 
-    user: Mapped["User"] = relationship(foreign_keys=[user_id])
+    user: Mapped["User"] = relationship(foreign_keys=[author_id])
+
+    @hybrid_property
+    def data_type(self):
+        return "review"
 
 
 class AnimeReview(Review):

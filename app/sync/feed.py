@@ -1,9 +1,15 @@
-from app.models import Article, Collection, Comment, Feed
 from datetime import datetime, timedelta
 from app.database import sessionmanager
-from sqlalchemy.orm import selectinload
 from sqlalchemy import select, func
 from app import constants
+
+from app.models import (
+    Collection,
+    Article,
+    Comment,
+    Review,
+    Feed,
+)
 
 
 async def generate_feed_session(session):
@@ -37,22 +43,27 @@ async def generate_feed_session(session):
         select(Comment)
         .filter(
             func.nlevel(Comment.path) == 1,
-            Comment.created >= last_feed_entry,
-            Comment.hidden == False,  # noqa: E712
+            Comment.updated >= last_feed_entry,
             Comment.private == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
+            Comment.hidden == False,  # noqa: E712
+            ~Comment.review.has(),
         )
-        .options(selectinload(Comment.review))
         .order_by(Comment.created.asc())
     )
 
-    for query in [articles_query, collections_query, comments_query]:
+    reviews_query = select(Review).filter(Review.created >= last_feed_entry)
+
+    for query in [
+        articles_query,
+        collections_query,
+        comments_query,
+        reviews_query,
+    ]:
         content = await session.scalars(query)
 
         for entry in content.unique():
             name = entry.reference
-
-            is_review = getattr(entry, "review", None) is not None
 
             if feed := await session.scalar(
                 select(Feed).filter(
@@ -68,9 +79,6 @@ async def generate_feed_session(session):
                     # Special hack for articles with no content
                     if entry.content_type is None:
                         feed.filter_content_type = constants.NO_CONTENT
-
-                if is_review:
-                    feed.filter_content_type = constants.CONTENT_REVIEW
 
                 if session.is_modified(feed):
                     print(f"Added {entry.data_type} feed entry for {name}")
@@ -89,9 +97,6 @@ async def generate_feed_session(session):
 
             if entry.data_type == constants.CONTENT_ARTICLE:
                 feed.filter_category = entry.category
-
-            if is_review:
-                feed.filter_content_type = constants.CONTENT_REVIEW
 
             session.add(feed)
 

@@ -6,6 +6,7 @@ from app.common.schemas.feed import (
     CollectionContentTypes,
     CommentContentTypes,
     ArticleContentTypes,
+    ReviewContentTypes,
     ArticleCategories,
     FeedContentTypes,
 )
@@ -13,12 +14,10 @@ from app.common.schemas.feed import (
 
 # Args
 class FeedArgs(CustomModel):
-    # TODO: remove me
-    content_type: FeedContentTypes | None = None
-
     collection_content_types: list[CollectionContentTypes] | None = None
     comment_content_types: list[CommentContentTypes] | None = None
     article_content_types: list[ArticleContentTypes] | None = None
+    review_content_types: list[ReviewContentTypes] | None = None
     article_categories: list[ArticleCategories] | None = None
     feed_content_types: list[FeedContentTypes] | None = None
     before: datetime | None = None

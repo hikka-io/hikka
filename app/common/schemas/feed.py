@@ -7,6 +7,7 @@ FeedContentTypes = Literal[
     constants.CONTENT_COLLECTION,
     constants.CONTENT_ARTICLE,
     constants.CONTENT_COMMENT,
+    constants.CONTENT_REVIEW,
 ]
 
 CollectionContentTypes = Literal[
@@ -31,13 +32,18 @@ ArticleContentTypes = Literal[
 ]
 
 CommentContentTypes = Literal[
+    constants.CONTENT_SYSTEM_EDIT,
     constants.CONTENT_COLLECTION,
     constants.CONTENT_CHARACTER,
-    constants.CONTENT_SYSTEM_EDIT,
     constants.CONTENT_ARTICLE,
     constants.CONTENT_PERSON,
     constants.CONTENT_ANIME,
     constants.CONTENT_MANGA,
     constants.CONTENT_NOVEL,
-    constants.CONTENT_REVIEW,
+]
+
+ReviewContentTypes = Literal[
+    constants.CONTENT_ANIME,
+    constants.CONTENT_MANGA,
+    constants.CONTENT_NOVEL,
 ]

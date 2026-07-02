@@ -9,6 +9,7 @@ from app.common.schemas.feed import (
     CollectionContentTypes,
     CommentContentTypes,
     ArticleContentTypes,
+    ReviewContentTypes,
     ArticleCategories,
     FeedContentTypes,
 )
@@ -144,6 +145,7 @@ class UIFeedSettings(CustomModel):
     collection_content_types: list[CollectionContentTypes] | None = None
     comment_content_types: list[CommentContentTypes] | None = None
     article_content_types: list[ArticleContentTypes] | None = None
+    review_content_types: list[ReviewContentTypes] | None = None
     article_categories: list[ArticleCategories] | None = None
     feed_content_types: list[FeedContentTypes] | None = None
     only_followed: bool = False

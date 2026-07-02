@@ -1,7 +1,7 @@
-from app.common.service.collections import collections_load_options
-from app.models import Collection, Article, Comment, User, Feed
-from app.common.service.articles import load_articles_content
+from app.models import Collection, Article, Comment, Review, User, Feed
 from sqlalchemy.orm import with_expression, joinedload, selectinload
+from app.common.service.collections import collections_load_options
+from app.common.service.articles import load_articles_content
 from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, case, or_
@@ -116,6 +116,21 @@ async def load_feed_comments(
     ]
 
 
+async def load_feed_reviews(
+    session: AsyncSession,
+    content_ids: list[UUID],
+    followed_user_ids: list[UUID],
+    request_user: User | None,
+):
+    comment_ids = await session.scalars(
+        select(Review.comment_id).filter(Review.id.in_(content_ids))
+    )
+
+    return await load_feed_comments(
+        session, comment_ids, followed_user_ids, request_user
+    )
+
+
 async def get_user_feed(
     session: AsyncSession, request_user: User | None, args: FeedArgs
 ) -> list[Collection | Article | Comment]:
@@ -141,10 +156,6 @@ async def get_user_feed(
         .order_by(Feed.created.desc())
         .limit(20)
     )
-
-    # TODO: remove me
-    if args.content_type:
-        feed_query = feed_query.filter(Feed.content_type == args.content_type)
 
     # Filter by feed content types
     if args.feed_content_types is not None:
@@ -196,6 +207,14 @@ async def get_user_feed(
             )
         )
 
+    if args.review_content_types is not None:
+        feed_query = feed_query.filter(
+            or_(
+                Feed.filter_content_type.in_(args.review_content_types),
+                Feed.content_type != constants.CONTENT_REVIEW,
+            )
+        )
+
     feed = await session.scalars(feed_query)
 
     content_ids = defaultdict(list)
@@ -208,6 +227,7 @@ async def get_user_feed(
         (constants.CONTENT_COLLECTION, load_feed_collections),
         (constants.CONTENT_ARTICLE, load_feed_articles),
         (constants.CONTENT_COMMENT, load_feed_comments),
+        (constants.CONTENT_REVIEW, load_feed_reviews),
     ]:
         if content_type in content_ids:
             result += await load_function(
