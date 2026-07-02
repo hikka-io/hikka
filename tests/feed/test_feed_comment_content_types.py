@@ -104,6 +104,4 @@ async def test_feed_comment_content_types(
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()) == 1
-
-    # review = next(x for x in response.json() if x["data_type"] == "comment")
-    # assert review["review"] == {"recommended": "yes"}
+    assert response.json()[0]["review"] == {"recommended": "yes"}
