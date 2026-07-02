@@ -116,6 +116,7 @@ class UIStylesTypography(CustomModel):
 class UIBackdrop(CustomModel):
     intensity: float = Field(ge=0, le=1)
     style: BackdropStyle | None = None
+    color: OKLCHColor | None = None
 
 
 class UIOverrides(CustomModel):
