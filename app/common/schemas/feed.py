@@ -39,4 +39,5 @@ CommentContentTypes = Literal[
     constants.CONTENT_ANIME,
     constants.CONTENT_MANGA,
     constants.CONTENT_NOVEL,
+    constants.CONTENT_REVIEW,
 ]

@@ -1,7 +1,7 @@
 from app.common.service.collections import collections_load_options
 from app.models import Collection, Article, Comment, User, Feed
 from app.common.service.articles import load_articles_content
-from sqlalchemy.orm import with_expression, joinedload
+from sqlalchemy.orm import with_expression, joinedload, selectinload
 from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, case, or_
@@ -107,6 +107,7 @@ async def load_feed_comments(
                 ),
             )
         )
+        .options(selectinload(Comment.review))
     )
 
     return [

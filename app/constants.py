@@ -144,6 +144,7 @@ CONTENT_SYSTEM_EDIT = "edit"
 CONTENT_COLLECTION = "collection"
 CONTENT_COMMENT = "comment"
 CONTENT_ARTICLE = "article"
+CONTENT_REVIEW = "review"
 
 # Client access scopes
 SCOPE_READ_USER_DETAILS = "read:user-details"
