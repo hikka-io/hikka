@@ -445,17 +445,23 @@ async def latest_comments(session: AsyncSession):
     return comments
 
 
-async def count_comments(session: AsyncSession) -> int:
+async def count_comments(
+    session: AsyncSession,
+    reviews_only: bool,
+    reviews_recommended: ReviewRecommended | None,
+) -> int:
     """Count comments"""
 
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
+    query = select(func.count(Comment.id)).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.hidden == False,  # noqa: E712
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
     )
+
+    query = filter_reviews(query, reviews_only, reviews_recommended)
+
+    return await session.scalar(query)
 
 
 async def get_comments(
@@ -468,9 +474,9 @@ async def get_comments(
 ):
     query = select(Comment).filter(
         func.nlevel(Comment.path) == 1,
-        Comment.hidden == False,  # noqa: E712
         Comment.private == False,  # noqa: E712
         Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
     )
 
     query = filter_reviews(query, reviews_only, reviews_recommended)
