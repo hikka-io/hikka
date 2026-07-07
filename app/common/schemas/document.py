@@ -107,6 +107,23 @@ class DocumentImageGroup(CustomModel):
     type: Literal["image_group"]
 
 
+class DocumentTableCell(CustomModel):
+    children: list["DocumentElement"]
+    type: Literal["td", "th"]
+    colSpan: int | None = Field(default=None, ge=1)
+    rowSpan: int | None = Field(default=None, ge=1)
+
+
+class DocumentTableRow(CustomModel):
+    children: list[DocumentTableCell]
+    type: Literal["tr"]
+
+
+class DocumentTable(CustomModel):
+    children: list[DocumentTableRow]
+    type: Literal["table"]
+
+
 DocumentElement = (
     DocumentParagraph
     | DocumentBlockquote
@@ -120,6 +137,7 @@ DocumentElement = (
     | DocumentOl
     | DocumentVideo
     | DocumentImageGroup
+    | DocumentTable
 )
 
 
