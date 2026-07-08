@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import History, Log
+from app.models import History, Review, Log
 from datetime import timedelta
+from sqlalchemy import select
 from app import constants
 from .. import service
 import copy
@@ -24,6 +25,7 @@ async def generate_watch(session: AsyncSession, log: Log, delta: timedelta):
 
     if not history:
         new_watch = log.log_type == constants.LOG_WATCH_CREATE
+
         history = History(
             **{
                 "history_type": history_type,
@@ -71,6 +73,20 @@ async def generate_watch(session: AsyncSession, log: Log, delta: timedelta):
     # Skip empty history edits
     if history.data["before"] == {} and history.data["after"] == {}:
         return
+
+    # Update review score if it exists
+    # Kinda hackish but why not
+    # We will clean up sync eventualy (right?)
+    if "score" in log.data["after"] and (
+        review := await session.scalar(
+            select(Review).filter(
+                Review.content_type == constants.CONTENT_ANIME,
+                Review.content_id == log.target_id,
+                Review.author_id == log.user_id,
+            )
+        )
+    ):
+        review.score = log.data["after"]["score"]
 
     session.add(history)
     await session.commit()

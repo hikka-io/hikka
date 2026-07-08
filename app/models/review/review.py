@@ -26,6 +26,7 @@ class Review(
     }
 
     recommended: Mapped[str] = mapped_column(String(16), index=True)
+    score: Mapped[int] = mapped_column(default=0)
 
     content_type: Mapped[str]
     content_id: Mapped[UUID]

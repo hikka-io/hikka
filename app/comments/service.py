@@ -1,14 +1,15 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func
 from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.schemas.reviews import ReviewRecommended
+from app.common.service.score import get_user_list_score
 from app.common.schemas.reviews import ReviewArgs
-from .schemas import CommentableType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
+from .schemas import CommentableType
 from sqlalchemy_utils import Ltree
 from .utils import uuid_to_path
 from app.utils import utcnow
@@ -187,6 +188,9 @@ async def create_comment(
                 "created": now,
                 "updated": now,
                 "user": author,
+                "score": await get_user_list_score(
+                    session, content_type, content.id, author
+                ),
             }
         )
 
