@@ -112,10 +112,13 @@ class DocumentImageGroup(DocumentNode):
 
 
 class DocumentTableCell(DocumentNode):
-    children: list["DocumentElement"]
-    type: Literal["td", "th"]
+    # I hate to have camel case here but it's better than
+    # forking whole js library to have snake case field names
+    # TODO: hope one day we can rename them to snake case
     colSpan: int | None = Field(default=None, ge=1)
     rowSpan: int | None = Field(default=None, ge=1)
+    children: list["DocumentElement"]
+    type: Literal["td", "th"]
 
 
 class DocumentTableRow(DocumentNode):
