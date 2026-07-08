@@ -1,4 +1,5 @@
 from client_requests import request_comments_write
+from client_requests import request_comments_hide
 from client_requests import request_create_edit
 from app.models import Review
 from sqlalchemy import select
@@ -150,3 +151,43 @@ async def test_comments_write_review_not_reviewable(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "review:non_reviewable_content"
+
+
+async def test_comments_write_review_after_deletion(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    # Just a regular review
+    response = await request_comments_write(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        "Ого, класне аніме, прям я!",
+        review={"recommended": "yes"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    # Now delete comment with original review
+    response = await request_comments_hide(
+        client, get_test_token, response.json()["reference"]
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    # And write review for same content again
+    response = await request_comments_write(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        "Ого, класне аніме, прям я!",
+        review={"recommended": "yes"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK

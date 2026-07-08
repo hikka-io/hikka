@@ -410,7 +410,15 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         session, comment.content_type, content, True
     )
 
-    if len(comment.path) > 1:
+    # If comment has review we delete it
+    # Not sure if thats the best approach but it's simple one
+    if len(comment.path) == 1:
+        if review := await session.scalar(
+            select(Review).filter(Review.comment == comment)
+        ):
+            await session.delete(review)
+
+    else:
         if parent := await session.scalar(
             select(Comment).filter(Comment.path == comment.path[:-1])
         ):
