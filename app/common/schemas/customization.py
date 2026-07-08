@@ -20,16 +20,16 @@ BackdropStyle = Literal["none", "glow"]
 
 
 class UIWidgetEnum(str, Enum):
-    list = "list"
-    profile = "profile"
-    feed = "feed"
-    tracker = "tracker"
-    history = "history"
-    ongoings = "ongoings"
-    schedule = "schedule"
+    collections = "collections"
     top_anime = "top_anime"
     articles = "articles"
-    collections = "collections"
+    ongoings = "ongoings"
+    schedule = "schedule"
+    profile = "profile"
+    tracker = "tracker"
+    history = "history"
+    feed = "feed"
+    list = "list"
 
 
 class HSLColor(CustomModel):
@@ -114,6 +114,7 @@ class UIStylesTypography(CustomModel):
 
 
 class UIBackdrop(CustomModel):
+    height: float = Field(ge=0, le=1)
     intensity: float = Field(ge=0, le=1)
     style: BackdropStyle | None = None
     color: OKLCHColor | None = None
