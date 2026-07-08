@@ -90,15 +90,16 @@ class Comment(
     def is_editable(self):
         # TODO: this is bad place for such limits
         # We shold move them somewhere more sensible
-        now = datetime.now(UTC).replace(tzinfo=None)
-        time_limit = timedelta(hours=24)
         max_edits = 500
 
         if len(self.history) >= max_edits:
             return False
 
-        if now > self.created + time_limit:
-            return False
+        # Maybe we will need that back later
+        # now = datetime.now(UTC).replace(tzinfo=None)
+        # time_limit = timedelta(hours=24)
+        # if now > self.created + time_limit:
+        #     return False
 
         return True
 

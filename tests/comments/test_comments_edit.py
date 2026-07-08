@@ -129,35 +129,36 @@ async def test_comments_edit_count_limit(
     assert response.json()["code"] == "comment:not_editable"
 
 
-async def test_comments_edit_time_limit(
-    client,
-    aggregator_anime,
-    aggregator_anime_info,
-    create_test_user,
-    get_test_token,
-    test_session,
-):
-    response = await request_comments_write(
-        client, get_test_token, "edit", "17", "Old text"
-    )
+# Maybe we will need that back later
+# async def test_comments_edit_time_limit(
+#     client,
+#     aggregator_anime,
+#     aggregator_anime_info,
+#     create_test_user,
+#     get_test_token,
+#     test_session,
+# ):
+#     response = await request_comments_write(
+#         client, get_test_token, "edit", "17", "Old text"
+#     )
 
-    comment = await test_session.scalar(
-        select(Comment).filter(Comment.id == response.json()["reference"])
-    )
+#     comment = await test_session.scalar(
+#         select(Comment).filter(Comment.id == response.json()["reference"])
+#     )
 
-    # Send comment back in time to test time limit
-    comment.created = comment.created - timedelta(hours=24)
-    test_session.add(comment)
-    await test_session.commit()
+#     # Send comment back in time to test time limit
+#     comment.created = comment.created - timedelta(hours=24)
+#     test_session.add(comment)
+#     await test_session.commit()
 
-    assert comment.is_editable is False
+#     assert comment.is_editable is False
 
-    response = await request_comments_edit(
-        client, get_test_token, response.json()["reference"], "New text"
-    )
+#     response = await request_comments_edit(
+#         client, get_test_token, response.json()["reference"], "New text"
+#     )
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "comment:not_editable"
+#     assert response.status_code == status.HTTP_400_BAD_REQUEST
+#     assert response.json()["code"] == "comment:not_editable"
 
 
 async def test_comments_edit_bad_author(
