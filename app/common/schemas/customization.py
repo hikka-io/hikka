@@ -114,8 +114,8 @@ class UIStylesTypography(CustomModel):
 
 
 class UIBackdrop(CustomModel):
-    height: float = Field(ge=0, le=1)
-    intensity: float = Field(ge=0, le=1)
+    intensity: float | None = Field(None, ge=0, le=1)
+    height: float | None = Field(None, ge=0, le=1)
     style: BackdropStyle | None = None
     color: OKLCHColor | None = None
 
