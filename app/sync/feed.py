@@ -72,6 +72,7 @@ async def generate_feed_session(session):
                 )
             ):
                 feed.filter_content_type = entry.content_type
+                feed.created = entry.created
 
                 if entry.data_type == constants.CONTENT_ARTICLE:
                     feed.filter_category = entry.category
