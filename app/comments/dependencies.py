@@ -1,7 +1,7 @@
-from app.service import get_content_by_slug, get_user_by_username
 from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.service.reviews import has_review
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.models import Comment, User
 from app.database import get_session
@@ -13,49 +13,9 @@ from app import utils
 from . import service
 
 from .schemas import (
-    CommentsListArgs,
     CommentableType,
     CommentArgs,
 )
-
-
-async def validate_comments_list_args(
-    args: CommentsListArgs,
-    session: AsyncSession = Depends(get_session),
-):
-    # We should not allow slug without content type
-    if args.content_type is None and args.slug is not None:
-        raise Abort("comment", "no-content-type")
-
-    # Make sure comment exists
-    if (
-        args.slug is not None
-        and args.content_type is not None
-        and not await get_content_by_slug(
-            session,
-            args.content_type,
-            args.slug,
-        )
-    ):
-        raise Abort("comment", "content-not-found")
-
-    # Also make sure parent comment exists if specified
-    if args.parent is not None:
-        comment = await service.get_comment(session, args.parent)
-
-        if not comment:
-            raise Abort("comment", "parent-not-found")
-
-        if comment.hidden and comment.total_replies == 0:
-            raise Abort("comment", "hidden")
-
-    # And author (why not)
-    if args.author is not None and not await get_user_by_username(
-        session, args.author
-    ):
-        raise Abort("comment", "author-not-found")
-
-    return args
 
 
 async def validate_content(

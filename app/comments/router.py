@@ -43,38 +43,6 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-@router.post("", response_model=CommentListResponse)
-async def comments_list(
-    args: CommentsListArgs = Depends(validate_comments_list_args),
-    session: AsyncSession = Depends(get_session),
-    request_user: User = Depends(
-        auth_required(
-            scope=[constants.SCOPE_READ_COMMENT_SCORE],
-            optional=True,
-        )
-    ),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    limit, offset = pagination(page, size)
-
-    total = await service.get_comments_list_count(session, args)
-
-    comments = await service.get_comments_list(
-        session, request_user, args, limit, offset
-    )
-
-    return paginated_response(
-        [
-            CommentNode.create(path_to_uuid(comment.reference), comment)
-            for comment in comments
-        ],
-        total,
-        page,
-        limit,
-    )
-
-
 @router.get("/latest", response_model=list[CommentResponse])
 async def latest_comments(session: AsyncSession = Depends(get_session)):
     comments = await service.latest_comments(session)
@@ -84,9 +52,8 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
     ]
 
 
-# TODO: deprecate
 @router.get("/list", response_model=CommentListResponse)
-async def comments_list_legacy(
+async def comments_list(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
