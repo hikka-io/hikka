@@ -12,6 +12,7 @@ from app import constants
 from . import service
 
 from .dependencies import (
+    validate_comments_list_args,
     validate_comment_not_hidden,
     validate_review_create,
     validate_comment_edit,
@@ -31,6 +32,7 @@ from app.dependencies import (
 
 from .schemas import (
     CommentListResponse,
+    CommentsListArgs,
     CommentableType,
     CommentResponse,
     CommentTextArgs,
@@ -39,6 +41,38 @@ from .schemas import (
 
 
 router = APIRouter(prefix="/comments", tags=["Comments"])
+
+
+@router.post("", response_model=CommentListResponse)
+async def comments_list(
+    args: CommentsListArgs = Depends(validate_comments_list_args),
+    session: AsyncSession = Depends(get_session),
+    request_user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
+    ),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    limit, offset = pagination(page, size)
+
+    total = await service.get_comments_list_count(session, args)
+
+    comments = await service.get_comments_list(
+        session, request_user, args, limit, offset
+    )
+
+    return paginated_response(
+        [
+            CommentNode.create(path_to_uuid(comment.reference), comment)
+            for comment in comments
+        ],
+        total,
+        page,
+        limit,
+    )
 
 
 @router.get("/latest", response_model=list[CommentResponse])
@@ -50,15 +84,19 @@ async def latest_comments(session: AsyncSession = Depends(get_session)):
     ]
 
 
+# TODO: deprecate
 @router.get("/list", response_model=CommentListResponse)
-async def comments_list(
+async def comments_list_legacy(
     session: AsyncSession = Depends(get_session),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
     reviews_only: bool = False,
     reviews_recommended: ReviewRecommended | None = None,
     request_user: User = Depends(
-        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
     ),
 ):
     limit, offset = pagination(page, size)

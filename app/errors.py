@@ -214,6 +214,16 @@ errors = {
         "empty-edit": ["Empty edit", "Пуста правка", 400],
     },
     "comment": {
+        "no-content-type": [
+            "Specified slug with no content type",
+            "Вказаний slug без типу контенту",
+            400,
+        ],
+        "author-not-found": [
+            "Comment author not found",
+            "Автора коментаря не знайдено",
+            400,
+        ],
         "rate-limit": [
             "You have reached comment rate limit, try later",
             "Ви досялги ліміту на коментарі, спробуйте пізніше",

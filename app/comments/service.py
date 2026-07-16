@@ -8,6 +8,7 @@ from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
+from .schemas import CommentsListArgs
 from app.utils import round_datetime
 from .schemas import CommentableType
 from sqlalchemy_utils import Ltree
@@ -20,6 +21,8 @@ import copy
 
 from app.service import (
     get_my_score_subquery,
+    get_user_by_username,
+    get_content_by_slug,
     get_content_by_id,
     create_log,
 )
@@ -64,24 +67,6 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
-def filter_reviews(
-    query,
-    reviews_only: bool = False,
-    reviews_recommended: ReviewRecommended | None = None,
-):
-    if reviews_only:
-        review_filter_args = []
-
-        if reviews_recommended is not None:
-            review_filter_args.append(
-                (Review.recommended == reviews_recommended)
-            )
-
-        query = query.filter(Comment.review.has(*review_filter_args))
-
-    return query
-
-
 async def count_replies(session: AsyncSession, comment: Comment):
     return await session.scalar(
         select(func.count(Comment.id)).filter(
@@ -96,7 +81,7 @@ async def count_replies(session: AsyncSession, comment: Comment):
 async def get_comment(
     session: AsyncSession,
     comment_reference: UUID,
-    request_user: User | None,
+    request_user: User | None = None,
 ) -> Comment:
     return await session.scalar(
         select(Comment)
@@ -112,6 +97,90 @@ async def get_comment(
                 ),
             )
         )
+    )
+
+
+def filter_reviews(
+    query,
+    reviews_recommended: ReviewRecommended | None = None,
+):
+    review_filter_args = []
+
+    if reviews_recommended is not None:
+        review_filter_args.append((Review.recommended == reviews_recommended))
+
+    return query.filter(Comment.review.has(*review_filter_args))
+
+
+async def filter_comments_list(session, query, args: CommentsListArgs):
+    if args.content_type is not None:
+        if args.slug is not None:
+            content = await get_content_by_slug(
+                session, args.content_type, args.slug
+            )
+
+            query = query.filter(Comment.content_id == content.id)
+
+        else:
+            query = query.filter(Comment.content_type == args.content_type)
+
+    if args.parent is not None:
+        base_comment = await get_comment(session, args.parent)
+        query = query.filter(Comment.path.descendant_of(base_comment.path))
+
+    if args.author:
+        author = await get_user_by_username(session, args.author)
+        query = query.filter(Comment.author == author)
+
+    if args.reviews_recommended is not None:
+        query = filter_reviews(query, args.reviews_recommended)
+
+    return query
+
+
+async def get_comments_list_count(
+    session: AsyncSession,
+    args: CommentsListArgs,
+):
+    query = select(func.count(Comment.id)).filter(
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
+    )
+
+    query = await filter_comments_list(session, query, args)
+
+    return await session.scalar(query)
+
+
+async def get_comments_list(
+    session: AsyncSession,
+    request_user: User | None,
+    args: CommentsListArgs,
+    limit: int,
+    offset: int,
+):
+    query = select(Comment).filter(
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
+    )
+
+    query = await filter_comments_list(session, query, args)
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
     )
 
 
@@ -471,7 +540,8 @@ async def count_comments(
         Comment.deleted == False,  # noqa: E712
     )
 
-    query = filter_reviews(query, reviews_only, reviews_recommended)
+    if reviews_only:
+        query = filter_reviews(query, reviews_recommended)
 
     return await session.scalar(query)
 
@@ -491,7 +561,8 @@ async def get_comments(
         Comment.hidden == False,  # noqa: E712
     )
 
-    query = filter_reviews(query, reviews_only, reviews_recommended)
+    if reviews_only:
+        query = filter_reviews(query, reviews_recommended)
 
     return await session.scalars(
         query.options(

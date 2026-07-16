@@ -1,3 +1,5 @@
+from app.common.schemas.comments import CommentContentTypeEnum
+from app.common.schemas.reviews import ReviewRecommended
 from app.common.schemas.comments import CommentResponse
 from app.schemas import PaginationResponse, CustomModel
 from app.common.schemas.reviews import ReviewArgs
@@ -24,6 +26,15 @@ CommentableType = (
 
 
 # Args
+class CommentsListArgs(CustomModel):
+    content_type: CommentContentTypeEnum | None = None
+    slug: str | None = None
+
+    reviews_recommended: ReviewRecommended | None = None
+    parent: UUID | None = None
+    author: str | None = None
+
+
 class CommentTextArgs(CustomModel):
     text: str = Field(min_length=1, max_length=2048)
     review: ReviewArgs | None = None
