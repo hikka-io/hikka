@@ -32,7 +32,6 @@ from app.dependencies import (
 
 from .schemas import (
     CommentListResponse,
-    CommentsListArgs,
     CommentableType,
     CommentResponse,
     CommentTextArgs,
@@ -116,7 +115,7 @@ async def write_comment(
 
 
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
-async def get_contents_list(
+async def get_comments_list(
     session: AsyncSession = Depends(get_session),
     content: CommentableType = Depends(validate_content),
     request_user: User = Depends(
