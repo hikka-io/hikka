@@ -5,7 +5,7 @@ from app.schemas import (
     AnimeResponseWithWatch,
     AnimeAgeRatingEnum,
     PaginationResponse,
-    AnimeStatusEnum,
+    ContentStatusEnum,
     CustomModel,
     SeasonEnum,
 )
@@ -15,7 +15,7 @@ from app.schemas import (
 class AnimeScheduleArgs(CustomModel):
     airing_season: list[SeasonEnum | int] | None = None
     rating: list[AnimeAgeRatingEnum] = []
-    status: list[AnimeStatusEnum] = []
+    status: list[ContentStatusEnum] = []
     only_watch: bool = False
 
     @field_validator("airing_season")

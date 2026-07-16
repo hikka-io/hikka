@@ -26,6 +26,37 @@ async def test_anime_list(client, aggregator_anime, aggregator_anime_info):
     )
 
 
+async def test_anime_list_genres_and_studios(
+    client,
+    aggregator_genres,
+    aggregator_companies,
+    aggregator_anime,
+    aggregator_anime_info,
+):
+    # Catalog entries should expose genres and studios
+    response = await request_anime_search(client)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    anime = response.json()["list"][0]
+    assert anime["slug"] == "fullmetal-alchemist-brotherhood-fc524a"
+
+    assert sorted(genre["slug"] for genre in anime["genres"]) == [
+        "action",
+        "adventure",
+        "drama",
+        "fantasy",
+        "shounen",
+    ]
+
+    assert anime["genres"][0]["name_en"] is not None
+    assert anime["genres"][0]["type"] == "genre"
+
+    # Only studios must be here, producers are a separate company type
+    assert [studio["slug"] for studio in anime["studios"]] == ["bones-b0b61b"]
+    assert anime["studios"][0]["name"] == "Bones"
+
+
 async def test_anime_no_meilisearch(client):
     # When Meilisearch is down search should throw query down error
     response = await request_anime_search(client, {"query": "test"})

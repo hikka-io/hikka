@@ -34,6 +34,7 @@ async def update_manga_settings(index):
             ],
             displayed_attributes=[
                 "slug",
+                "id",
             ],
             sortable_attributes=[
                 "native_scored_by",

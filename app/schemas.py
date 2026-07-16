@@ -58,12 +58,6 @@ class CompanyTypeEnum(str, Enum):
     studio = constants.COMPANY_ANIME_STUDIO
 
 
-class AnimeStatusEnum(str, Enum):
-    announced = constants.RELEASE_STATUS_ANNOUNCED
-    finished = constants.RELEASE_STATUS_FINISHED
-    ongoing = constants.RELEASE_STATUS_ONGOING
-
-
 class ContentStatusEnum(str, Enum):
     discontinued = constants.RELEASE_STATUS_DISCONTINUED
     announced = constants.RELEASE_STATUS_ANNOUNCED
@@ -322,7 +316,7 @@ class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
 
     media_type: list[AnimeMediaEnum] = []
     rating: list[AnimeAgeRatingEnum] = []
-    status: list[AnimeStatusEnum] = []
+    status: list[ContentStatusEnum] = []
     source: list[SourceEnum] = []
     season: list[SeasonEnum] = []
 

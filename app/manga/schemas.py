@@ -21,6 +21,16 @@ class MangaPaginationResponse(CustomModel):
     list: list[MangaResponseWithRead]
 
 
+class MangaCatalogResponse(MangaResponseWithRead):
+    genres: list[GenreResponse]
+    magazines: list[MagazineResponse]
+
+
+class MangaCatalogPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[MangaCatalogResponse]
+
+
 class MangaInfoResponse(CustomModel):
     data_type: Literal["manga"]
     authors: list[ContentAuthorResponse]

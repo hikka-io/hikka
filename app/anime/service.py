@@ -187,6 +187,7 @@ async def company_count(session: AsyncSession, slugs: list[str]):
 async def anime_search(
     session: AsyncSession,
     search: AnimeSearchArgs,
+    filter_ids: list[str],
     request_user: User | None,
     limit: int,
     offset: int,
@@ -198,9 +199,15 @@ async def anime_search(
             AnimeWatch,
             AnimeWatch.user_id == request_user.id if request_user else None,
         ),
+        selectinload(Anime.genres), 
+        selectinload(Anime.studios)
     ]
 
     query = select(Anime).filter(Anime.deleted == False)  # noqa: E712
+
+    if filter_ids:
+        query = query.filter(Anime.content_id.in_(filter_ids))
+
     query = anime_search_filter(search, query)
 
     query = query.order_by(*build_anime_order_by(search.sort))
@@ -211,46 +218,16 @@ async def anime_search(
     return await session.scalars(query)
 
 
-async def anime_search_total(session: AsyncSession, search: AnimeSearchArgs):
-    query = select(func.count(Anime.id)).filter(
-        Anime.deleted == False,  # noqa: E712
-    )
+async def anime_search_total(
+    session: AsyncSession,
+    search: AnimeSearchArgs,
+    filter_ids: list[str],
+):
+    query = select(func.count(Anime.id)).filter(Anime.deleted == False) # noqa: E712
+
+    if filter_ids:
+        query = query.filter(Anime.content_id.in_(filter_ids))
 
     query = anime_search_filter(search, query)
 
     return await session.scalar(query)
-
-
-# I hate this function so much
-# But we need it for having watch satatuses in Meilisearch results
-async def anime_meilisearch_watch(
-    session: AsyncSession,
-    search: AnimeSearchArgs,
-    request_user: User | None,
-    meilisearch_result: dict,
-):
-    slugs = [anime["slug"] for anime in meilisearch_result["list"]]
-
-    # Load request user watch statuses here
-    load_options = [
-        joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-    ]
-
-    query = select(Anime).filter(Anime.slug.in_(slugs)).options(*load_options)
-
-    if len(search.sort) > 0:
-        query = query.order_by(*build_anime_order_by(search.sort))
-
-    anime_list = await session.scalars(query)
-    meilisearch_result["list"] = anime_list.unique().all()
-
-    # Results must be sorted here to ensure same order as Meilisearch results
-    meilisearch_result["list"] = sorted(
-        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
-    )
-
-    return meilisearch_result
