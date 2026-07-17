@@ -12,7 +12,6 @@ from app import constants
 from . import service
 
 from .dependencies import (
-    validate_comments_list_args,
     validate_comment_not_hidden,
     validate_review_create,
     validate_comment_edit,
