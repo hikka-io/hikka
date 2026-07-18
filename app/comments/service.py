@@ -309,6 +309,66 @@ async def get_comments_by_content_id(
     )
 
 
+async def get_comments_count_by_user(
+    session: AsyncSession,
+    user: User,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+    first_level_only: bool = False,
+) -> int:
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.author == user,
+        )
+    )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalar(query)
+
+
+async def get_comments_by_user(
+    session: AsyncSession,
+    user: User,
+    request_user: User | None,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+    limit: int,
+    offset: int,
+    first_level_only: bool = False,
+) -> ScalarResult[Comment]:
+    query = select(Comment).filter(
+        Comment.author == user,
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712,
+    )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
 async def get_sub_comments(
     session: AsyncSession,
     base_comment: Comment,
