@@ -34,6 +34,7 @@ from .schemas import (
     CommentableType,
     CommentResponse,
     CommentTextArgs,
+    CommentType,
     CommentArgs,
 )
 
@@ -50,12 +51,31 @@ async def get_comments_list(
     ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
+    # TODO: move to args?
+    recommended: ReviewRecommended | None = None,
+    comment_type: CommentType = "all",
+    flat: bool = False,
 ):
-    total = content.comments_count_pagination
+    # TODO: do we need to implement caching for reviews?
+    # total = content.comments_count_pagination
+
+    total = await service.get_comments_count_by_content_id(
+        session,
+        content.id,
+        comment_type,
+        recommended,
+    )
+
     limit, offset = pagination(page, size)
 
     base_comments = await service.get_comments_by_content_id(
-        session, content.id, request_user, limit, offset
+        session,
+        content.id,
+        request_user,
+        comment_type,
+        recommended,
+        limit,
+        offset,
     )
 
     result = []

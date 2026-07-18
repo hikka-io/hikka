@@ -3,13 +3,13 @@ from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.schemas.reviews import ReviewRecommended
 from app.common.service.score import get_user_list_score
 from app.common.schemas.reviews import ReviewArgs
+from .schemas import CommentableType, CommentType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
-from .schemas import CommentableType
 from sqlalchemy_utils import Ltree
 from .utils import uuid_to_path
 from app.utils import utcnow
@@ -66,12 +66,12 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 
 def filter_reviews(
     query,
-    reviews_recommended: ReviewRecommended | None = None,
+    recommended: ReviewRecommended | None = None,
 ):
     review_filter_args = []
 
-    if reviews_recommended is not None:
-        review_filter_args.append((Review.recommended == reviews_recommended))
+    if recommended is not None:
+        review_filter_args.append((Review.recommended == recommended))
 
     return query.filter(Comment.review.has(*review_filter_args))
 
@@ -238,27 +238,75 @@ async def get_comment_by_content(
     )
 
 
+def filter_comments_review(
+    query,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+):
+    # Here we filter for reviews
+    # or if specific review recommendation filter is set
+    if comment_type == "review" or recommended is not None:
+        review_filter_args = []
+
+        if recommended is not None:
+            review_filter_args.append((Review.recommended == recommended))
+
+        query = query.filter(Comment.review.has(*review_filter_args))
+
+    # Or only show comments
+    elif comment_type == "comment":
+        query = query.filter(~Comment.review.has())
+
+    return query
+
+
+async def get_comments_count_by_content_id(
+    session: AsyncSession,
+    content_id: str,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+) -> int:
+    """Count comments for given content"""
+
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.content_id == content_id,
+            func.nlevel(Comment.path) == 1,
+        )
+    )
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalar(query)
+
+
 async def get_comments_by_content_id(
     session: AsyncSession,
     content_id: str,
     request_user: User | None,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
     limit: int,
     offset: int,
 ) -> ScalarResult[Comment]:
     """Return comments for given content"""
 
+    query = select(Comment).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.content_id == content_id,
+        Comment.deleted == False,  # noqa: E712
+        or_(
+            Comment.hidden == False,  # noqa: E712,
+            Comment.total_replies > 0,
+        ),
+    )
+
+    query = filter_comments_review(query, comment_type, recommended)
+
     return await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.content_id == content_id,
-            Comment.deleted == False,  # noqa: E712
-            or_(
-                Comment.hidden == False,  # noqa: E712,
-                Comment.total_replies > 0,
-            ),
-        )
-        .options(
+        query.options(
             with_expression(
                 Comment.my_score,
                 get_my_score_subquery(

@@ -3,6 +3,7 @@ from app.schemas import PaginationResponse, CustomModel
 from app.common.schemas.reviews import ReviewArgs
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
+from typing import Literal
 from uuid import UUID
 
 from app.models import (
@@ -21,6 +22,8 @@ from app.models import (
 CommentableType = (
     Collection | Character | Article | Person | Anime | Manga | Novel | Edit
 )
+
+CommentType = Literal["all", "comment", "review"]
 
 
 # Args
