@@ -12,6 +12,7 @@ from app.sync import (
     update_article_stats,
     update_ranking_all,
     update_aggregator,
+    digest_user_stats,
     digest_activity,
     update_schedule,
     update_ranking,
@@ -32,6 +33,7 @@ def init_scheduler():
     scheduler.add_job(update_notifications, "interval", seconds=10)
     scheduler.add_job(update_article_views, "interval", minutes=10)
     scheduler.add_job(update_article_stats, "interval", minutes=1)
+    scheduler.add_job(digest_user_stats, "interval", minutes=1)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
     scheduler.add_job(digest_activity, "interval", minutes=1)
     scheduler.add_job(update_schedule, "interval", minutes=5)

@@ -16,6 +16,7 @@ from .aggregator.roles import aggregator_roles
 from .aggregator import update_aggregator
 
 from .digests import digest_year_summary
+from .digests import digest_user_stats
 from .digests import digest_activity
 
 from .notifications import update_notifications
@@ -64,6 +65,7 @@ __all__ = [
     "update_article_views",
     "digest_year_summary",
     "update_ranking_all",
+    "digest_user_stats",
     "aggregator_people",
     "aggregator_genres",
     "update_aggregator",
