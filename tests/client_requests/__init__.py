@@ -94,6 +94,7 @@ from .comments import request_comments_write
 from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
+from .comments import request_comments_user
 
 from .settings import request_settings_customization
 from .settings import request_settings_delete_watch
@@ -235,6 +236,7 @@ __all__ = [
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
+    "request_comments_user",
     # =========== settings ===========
     "request_settings_customization",
     "request_settings_delete_watch",

@@ -38,5 +38,31 @@ def request_comments_list(client, content_type, slug, token=None, page=1):
     )
 
 
+def request_comments_user(
+    client,
+    username,
+    token=None,
+    page=1,
+    comment_type="all",
+    recommended=None,
+    first_level_only=False,
+):
+    headers = {"Auth": token} if token else {}
+    query_string = {
+        "first_level_only": str(first_level_only).lower(),
+        "comment_type": comment_type,
+        "page": page,
+    }
+
+    if recommended:
+        query_string["recommended"] = recommended
+
+    return client.get(
+        f"/comments/user/{username}",
+        headers=headers,
+        query_string=query_string,
+    )
+
+
 def request_comments_latest(client):
     return client.get("/comments/latest")
