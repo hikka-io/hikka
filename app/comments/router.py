@@ -85,7 +85,22 @@ async def get_comments_list(
             session, base_comment, request_user
         )
 
-        result.append(build_comments(base_comment, sub_comments))
+        # TODO: this flag exists for backward compatibility
+        # we should remove buil_comments in the future
+        if not flat:
+            result.append(build_comments(base_comment, sub_comments))
+
+        else:
+            result.append(
+                CommentNode.create(
+                    path_to_uuid(base_comment.reference), base_comment
+                )
+            )
+
+            result += [
+                CommentNode.create(path_to_uuid(comment.reference), comment)
+                for comment in sub_comments
+            ]
 
     return paginated_response(result, total, page, limit)
 

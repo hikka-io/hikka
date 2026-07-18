@@ -64,18 +64,6 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
-def filter_reviews(
-    query,
-    recommended: ReviewRecommended | None = None,
-):
-    review_filter_args = []
-
-    if recommended is not None:
-        review_filter_args.append((Review.recommended == recommended))
-
-    return query.filter(Comment.review.has(*review_filter_args))
-
-
 async def count_replies(session: AsyncSession, comment: Comment):
     return await session.scalar(
         select(func.count(Comment.id)).filter(
