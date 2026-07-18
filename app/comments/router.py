@@ -41,48 +41,48 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-@router.get("/latest", response_model=list[CommentResponse])
-async def latest_comments(session: AsyncSession = Depends(get_session)):
-    comments = await service.latest_comments(session)
-    return [
-        CommentNode.create(path_to_uuid(comment.reference), comment)
-        for comment in comments
-    ]
-
-
-@router.get("/list", response_model=CommentListResponse)
-async def comments_list(
+@router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
+async def get_comments_list(
     session: AsyncSession = Depends(get_session),
+    content: CommentableType = Depends(validate_content),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    reviews_only: bool = False,
-    reviews_recommended: ReviewRecommended | None = None,
-    request_user: User = Depends(
-        auth_required(
-            scope=[constants.SCOPE_READ_COMMENT_SCORE],
-            optional=True,
-        )
-    ),
 ):
+    total = content.comments_count_pagination
     limit, offset = pagination(page, size)
 
-    total = await service.count_comments(
-        session, reviews_only, reviews_recommended
+    base_comments = await service.get_comments_by_content_id(
+        session, content.id, request_user, limit, offset
     )
 
-    comments = await service.get_comments(
-        session, request_user, reviews_only, reviews_recommended, limit, offset
+    result = []
+
+    for base_comment in base_comments:
+        sub_comments = await service.get_sub_comments(
+            session, base_comment, request_user
+        )
+
+        result.append(build_comments(base_comment, sub_comments))
+
+    return paginated_response(result, total, page, limit)
+
+
+@router.get("/thread/{comment_reference}", response_model=CommentResponse)
+async def thread(
+    base_comment: Comment = Depends(validate_comment_not_hidden),
+    request_user: User = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
+    ),
+    session: AsyncSession = Depends(get_session),
+):
+    sub_comments = await service.get_sub_comments(
+        session, base_comment, request_user
     )
 
-    return paginated_response(
-        [
-            CommentNode.create(path_to_uuid(comment.reference), comment)
-            for comment in comments
-        ],
-        total,
-        page,
-        limit,
-    )
+    return build_comments(base_comment, sub_comments)
 
 
 @router.put(
@@ -111,34 +111,6 @@ async def write_comment(
     comment = await service.generate_preview(session, comment)
 
     return CommentNode.create(path_to_uuid(comment.reference), comment)
-
-
-@router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
-async def get_comments_list(
-    session: AsyncSession = Depends(get_session),
-    content: CommentableType = Depends(validate_content),
-    request_user: User = Depends(
-        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
-    ),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    total = content.comments_count_pagination
-    limit, offset = pagination(page, size)
-    base_comments = await service.get_comments_by_content_id(
-        session, content.id, request_user, limit, offset
-    )
-
-    result = []
-
-    for base_comment in base_comments:
-        sub_comments = await service.get_sub_comments(
-            session, base_comment, request_user
-        )
-
-        result.append(build_comments(base_comment, sub_comments))
-
-    return paginated_response(result, total, page, limit)
 
 
 @router.put(
@@ -172,16 +144,41 @@ async def hide_comment(
     return {"success": True}
 
 
-@router.get("/thread/{comment_reference}", response_model=CommentResponse)
-async def thread(
-    base_comment: Comment = Depends(validate_comment_not_hidden),
-    request_user: User = Depends(
-        auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
-    ),
-    session: AsyncSession = Depends(get_session),
-):
-    sub_comments = await service.get_sub_comments(
-        session, base_comment, request_user
-    )
+# DEPRECATED
+@router.get("/latest", response_model=list[CommentResponse])
+async def latest_comments(session: AsyncSession = Depends(get_session)):
+    comments = await service.latest_comments(session)
+    return [
+        CommentNode.create(path_to_uuid(comment.reference), comment)
+        for comment in comments
+    ]
 
-    return build_comments(base_comment, sub_comments)
+
+# DEPRECATED
+@router.get("/list", response_model=CommentListResponse)
+async def comments_list(
+    session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+    request_user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
+    ),
+):
+    limit, offset = pagination(page, size)
+
+    total = await service.count_comments(session)
+
+    comments = await service.get_comments(session, request_user, limit, offset)
+
+    return paginated_response(
+        [
+            CommentNode.create(path_to_uuid(comment.reference), comment)
+            for comment in comments
+        ],
+        total,
+        page,
+        limit,
+    )

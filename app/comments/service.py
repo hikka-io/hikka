@@ -435,79 +435,10 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     return True
 
 
-async def latest_comments(session: AsyncSession):
-    comments = await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .order_by(desc(Comment.created))
-        .limit(3)
-    )
-
-    return comments
-
-
-async def count_comments(
-    session: AsyncSession,
-    reviews_only: bool,
-    reviews_recommended: ReviewRecommended | None,
-) -> int:
-    """Count comments"""
-
-    query = select(func.count(Comment.id)).filter(
-        func.nlevel(Comment.path) == 1,
-        Comment.hidden == False,  # noqa: E712
-        Comment.private == False,  # noqa: E712
-        Comment.deleted == False,  # noqa: E712
-    )
-
-    if reviews_only:
-        query = filter_reviews(query, reviews_recommended)
-
-    return await session.scalar(query)
-
-
-async def get_comments(
-    session: AsyncSession,
-    request_user: User | None,
-    reviews_only: bool,
-    reviews_recommended: ReviewRecommended | None,
-    limit: int,
-    offset: int,
-):
-    query = select(Comment).filter(
-        func.nlevel(Comment.path) == 1,
-        Comment.private == False,  # noqa: E712
-        Comment.deleted == False,  # noqa: E712
-        Comment.hidden == False,  # noqa: E712
-    )
-
-    if reviews_only:
-        query = filter_reviews(query, reviews_recommended)
-
-    return await session.scalars(
-        query.options(
-            with_expression(
-                Comment.my_score,
-                get_my_score_subquery(
-                    Comment, constants.CONTENT_COMMENT, request_user
-                ),
-            ),
-            selectinload(Comment.review),
-        )
-        .order_by(desc(Comment.created))
-        .limit(limit)
-        .offset(offset)
-    )
-
-
 # NOTE: I still hate this function but less than before.
 # NOTE: This code is a liability. It must be updated when
 # new identities added for Comment or Edit
+# TODO: Why the hell this even exists?
 async def generate_preview(
     session: AsyncSession,
     original_comment: Comment,
@@ -624,3 +555,66 @@ async def generate_preview(
     await session.commit()
 
     return original_comment
+
+
+# DEPRECATED
+async def latest_comments(session: AsyncSession):
+    comments = await session.scalars(
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .order_by(desc(Comment.created))
+        .limit(3)
+    )
+
+    return comments
+
+
+# DEPRECATED
+async def count_comments(
+    session: AsyncSession,
+) -> int:
+    """Count comments"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+    )
+
+
+# DEPRECATED
+async def get_comments(
+    session: AsyncSession,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    query = select(Comment).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
+    )
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )
