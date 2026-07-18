@@ -112,12 +112,33 @@ async def thread(
         auth_required(optional=True, scope=[constants.SCOPE_READ_COMMENT_SCORE])
     ),
     session: AsyncSession = Depends(get_session),
+    flat: bool = False,
 ):
+
     sub_comments = await service.get_sub_comments(
         session, base_comment, request_user
     )
 
-    return build_comments(base_comment, sub_comments)
+    result = []
+
+    # TODO: same as above this exists only for backward compatibility
+    # and should be removed in the future
+    if not flat:
+        result.append(build_comments(base_comment, sub_comments))
+
+    else:
+        result.append(
+            CommentNode.create(
+                path_to_uuid(base_comment.reference), base_comment
+            )
+        )
+
+        result += [
+            CommentNode.create(path_to_uuid(comment.reference), comment)
+            for comment in sub_comments
+        ]
+
+    return result
 
 
 @router.put(
