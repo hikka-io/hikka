@@ -11,6 +11,7 @@ from . import service
 from .schemas import (
     UserWithEmailResponse,
     UserResponseFollowed,
+    UserStatsResponse,
     ActivityResponse,
 )
 
@@ -69,6 +70,18 @@ async def service_user_activity(
     user: User = Depends(get_user),
 ):
     return await service.get_user_activity(session, user)
+
+
+@router.get(
+    "/{username}/stats",
+    response_model=UserStatsResponse,
+    summary="User stats",
+)
+async def service_user_stats(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+):
+    return await service.get_user_stats(session, user)
 
 
 @router.get("/me/ui", response_model=UserCustomizationResponse)

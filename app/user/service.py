@@ -24,6 +24,21 @@ async def get_user_activity(session: AsyncSession, user: User) -> User:
     return digest.data
 
 
+async def get_user_stats(session: AsyncSession, user: User) -> User:
+    """Get user stats"""
+
+    digest = await session.scalar(
+        select(Digest).filter(
+            Digest.name == constants.DIGEST_USER_STATS, Digest.user == user
+        )
+    )
+
+    if not digest:
+        return {}
+
+    return digest.data
+
+
 async def users_meilisearch(
     session: AsyncSession,
     meilisearch_result: dict,

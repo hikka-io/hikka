@@ -9,6 +9,11 @@ class ActivityResponse(CustomModel):
     actions: int
 
 
+class UserStatsResponse(CustomModel):
+    comments_count: int = 0
+    edits_count: int = 0
+
+
 class UserResponseFollowed(UserResponse):
     is_followed: bool
 
