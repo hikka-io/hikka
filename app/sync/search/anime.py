@@ -57,6 +57,7 @@ async def update_anime_settings(index):
                 "score",
                 "slug",
                 "year",
+                "id",
             ],
             sortable_attributes=[
                 "native_scored_by",

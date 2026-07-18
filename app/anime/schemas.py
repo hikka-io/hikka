@@ -5,6 +5,7 @@ from typing import Literal
 from enum import Enum
 
 from app.schemas import (
+    AnimeResponseWithWatch,
     AnimeSearchArgsBase,
     AnimeVideoResponse,
     AnimeStaffResponse,
@@ -60,6 +61,16 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 
 
 # Responses
+class AnimeCatalogResponse(AnimeResponseWithWatch):
+    genres: list[GenreResponse]
+    studios: list[CompanyResponse]
+
+
+class AnimeCatalogPaginationResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[AnimeCatalogResponse]
+
+
 class AnimeEpisodeResponse(CustomModel):
     aired: datetime_pd | None = Field(examples=[1686088809])
     title_ua: str | None = Field(

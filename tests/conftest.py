@@ -327,6 +327,13 @@ async def aggregator_companies(test_session):
 
 
 @pytest.fixture
+async def aggregator_magazines(test_session):
+    data = await helpers.load_json("tests/data/magazines.json")
+
+    await aggregator.save_magazines(test_session, data["list"])
+
+
+@pytest.fixture
 async def aggregator_anime(test_session):
     data = await helpers.load_json("tests/data/anime.json")
 
@@ -402,6 +409,7 @@ async def aggregator_manga_info(test_session):
             select(Manga)
             .filter(Manga.content_id == slug)
             .options(selectinload(Manga.genres))
+            .options(selectinload(Manga.magazines))
         ):
             data = await helpers.load_json(
                 f"tests/data/manga_info/{manga_list[slug]}"
@@ -426,6 +434,7 @@ async def aggregator_novel_info(test_session):
             select(Novel)
             .filter(Novel.content_id == slug)
             .options(selectinload(Novel.genres))
+            .options(selectinload(Novel.magazines))
         ):
             data = await helpers.load_json(
                 f"tests/data/novel_info/{novel_list[slug]}"
