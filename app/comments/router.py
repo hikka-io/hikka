@@ -106,7 +106,12 @@ async def get_comments_list(
     return paginated_response(result, total, page, limit)
 
 
-@router.get("/thread/{comment_reference}", response_model=CommentResponse)
+@router.get(
+    "/thread/{comment_reference}",
+    # NOTE: this is not usual practice to have 2 types of response
+    # and we shold remove CommentResponse after non flat comments are deprecated
+    response_model=CommentResponse | list[CommentResponse],
+)
 async def thread(
     base_comment: Comment = Depends(validate_comment_not_hidden),
     request_user: User = Depends(
@@ -128,7 +133,7 @@ async def thread(
     # TODO: same as above this exists only for backward compatibility
     # and should be removed in the future
     if not flat:
-        result.append(build_comments(base_comment, sub_comments))
+        return build_comments(base_comment, sub_comments)
 
     else:
         result.append(
