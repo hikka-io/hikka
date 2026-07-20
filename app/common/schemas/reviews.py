@@ -12,4 +12,5 @@ class ReviewArgs(CustomModel):
 
 # Responses
 class ReviewResponse(CustomModel):
-    recommended: str
+    recommended: ReviewRecommended
+    score: int

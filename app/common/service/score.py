@@ -14,7 +14,7 @@ async def get_user_list_score(
         constants.CONTENT_NOVEL: NovelRead,
     }.get(content_type)
 
-    query = select(model)
+    query = select(model).filter(model.user_id == user.id)
 
     if content_type == constants.CONTENT_ANIME:
         query = query.filter(model.anime_id == content_id)
