@@ -199,8 +199,8 @@ async def anime_search(
             AnimeWatch,
             AnimeWatch.user_id == request_user.id if request_user else None,
         ),
-        selectinload(Anime.genres), 
-        selectinload(Anime.studios)
+        selectinload(Anime.genres),
+        selectinload(Anime.studios),
     ]
 
     query = select(Anime).filter(Anime.deleted == False)  # noqa: E712
@@ -223,7 +223,7 @@ async def anime_search_total(
     search: AnimeSearchArgs,
     filter_ids: list[str],
 ):
-    query = select(func.count(Anime.id)).filter(Anime.deleted == False) # noqa: E712
+    query = select(func.count(Anime.id)).filter(Anime.deleted == False)  # noqa: E712
 
     if filter_ids:
         query = query.filter(Anime.content_id.in_(filter_ids))

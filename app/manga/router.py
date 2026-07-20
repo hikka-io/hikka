@@ -62,7 +62,7 @@ async def search_manga(
         filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
 
         if not filter_ids:
-            return paginated_response([], 0, page, limit) 
+            return paginated_response([], 0, page, limit)
 
     total = await service.manga_search_total(session, search, filter_ids)
 

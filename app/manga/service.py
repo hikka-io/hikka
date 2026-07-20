@@ -81,7 +81,7 @@ async def manga_search_total(
     search: MangaSearchArgs,
     filter_ids: list[str],
 ):
-    query = select(func.count(Manga.id)).filter(Manga.deleted == False) # noqa: E712
+    query = select(func.count(Manga.id)).filter(Manga.deleted == False)  # noqa: E712
 
     if filter_ids:
         query = query.filter(Manga.content_id.in_(filter_ids))

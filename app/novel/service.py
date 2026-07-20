@@ -82,7 +82,7 @@ async def novel_search_total(
     search: NovelSearchArgs,
     filter_ids: list[str],
 ):
-    query = select(func.count(Novel.id)).filter(Novel.deleted == False) # noqa: E712
+    query = select(func.count(Novel.id)).filter(Novel.deleted == False)  # noqa: E712
 
     if filter_ids:
         query = query.filter(Novel.content_id.in_(filter_ids))
