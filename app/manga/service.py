@@ -66,7 +66,11 @@ async def manga_search(
     if filter_ids:
         query = query.filter(Manga.content_id.in_(filter_ids))
 
-    query = manga_search_filter(search, query)
+    # NOTE: we should have dedicated nsfw filter
+    # and don't do stupid things like this
+    hide_nsfw = len(filter_ids) == 0
+
+    query = manga_search_filter(search, query, hide_nsfw)
 
     query = query.order_by(*build_manga_order_by(search.sort))
 

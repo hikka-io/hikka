@@ -208,7 +208,11 @@ async def anime_search(
     if filter_ids:
         query = query.filter(Anime.content_id.in_(filter_ids))
 
-    query = anime_search_filter(search, query)
+    # NOTE: we should have dedicated nsfw filter
+    # and don't do stupid things like this
+    hide_nsfw = len(filter_ids) == 0
+
+    query = anime_search_filter(search, query, hide_nsfw)
 
     query = query.order_by(*build_anime_order_by(search.sort))
 
