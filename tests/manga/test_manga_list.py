@@ -24,14 +24,14 @@ async def test_manga_list(
     assert response.json()["list"][3]["slug"] == "the-horizon-f9ebc0"
 
 
-async def test_manga_list_genres_and_magazines(
+async def test_manga_list_extra_fields(
     client,
     aggregator_genres,
     aggregator_magazines,
     aggregator_manga,
     aggregator_manga_info,
 ):
-    # Catalog entries should expose genres and magazines
+    # Catalog entries should expose genres, magazines and synopsis fields
     response = await request_manga_search(client)
 
     assert response.status_code == status.HTTP_200_OK
@@ -60,3 +60,8 @@ async def test_manga_list_genres_and_magazines(
         "young-animal-4f9e5b"
     ]
     assert manga["magazines"][0]["name_en"] == "Young Animal"
+
+    # Both synopsis fields must be present in the catalog response
+    assert "synopsis_en" in manga
+    assert "synopsis_ua" in manga
+    assert manga["synopsis_en"] is not None

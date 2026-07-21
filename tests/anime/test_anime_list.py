@@ -26,14 +26,14 @@ async def test_anime_list(client, aggregator_anime, aggregator_anime_info):
     )
 
 
-async def test_anime_list_genres_and_studios(
+async def test_anime_list_extra_fields(
     client,
     aggregator_genres,
     aggregator_companies,
     aggregator_anime,
     aggregator_anime_info,
 ):
-    # Catalog entries should expose genres and studios
+    # Catalog entries should expose genres, studios and synopsis fields
     response = await request_anime_search(client)
 
     assert response.status_code == status.HTTP_200_OK
@@ -55,6 +55,11 @@ async def test_anime_list_genres_and_studios(
     # Only studios must be here, producers are a separate company type
     assert [studio["slug"] for studio in anime["studios"]] == ["bones-b0b61b"]
     assert anime["studios"][0]["name"] == "Bones"
+
+    # Both synopsis fields must be present in the catalog response
+    assert "synopsis_en" in anime
+    assert "synopsis_ua" in anime
+    assert anime["synopsis_en"] is not None
 
 
 async def test_anime_no_meilisearch(client):

@@ -24,6 +24,8 @@ class MangaPaginationResponse(CustomModel):
 class MangaCatalogResponse(MangaResponseWithRead):
     genres: list[GenreResponse]
     magazines: list[MagazineResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
 class MangaCatalogPaginationResponse(CustomModel):
