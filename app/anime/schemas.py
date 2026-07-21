@@ -64,6 +64,8 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 class AnimeCatalogResponse(AnimeResponseWithWatch):
     genres: list[GenreResponse]
     studios: list[CompanyResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
 class AnimeCatalogPaginationResponse(CustomModel):

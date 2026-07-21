@@ -27,14 +27,14 @@ async def test_novel_list(
     )
 
 
-async def test_novel_list_genres_and_magazines(
+async def test_novel_list_extra_fields(
     client,
     aggregator_genres,
     aggregator_magazines,
     aggregator_novel,
     aggregator_novel_info,
 ):
-    # Catalog entries should expose genres and magazines
+    # Catalog entries should expose genres, magazines and synopsis fields
     response = await request_novel_search(client)
 
     assert response.status_code == status.HTTP_200_OK
@@ -55,3 +55,8 @@ async def test_novel_list_genres_and_magazines(
     # None of the novels in test data have magazines attached,
     # but the field must still be exposed
     assert novel["magazines"] == []
+
+    # Both synopsis fields must be present in the catalog response
+    assert "synopsis_en" in novel
+    assert "synopsis_ua" in novel
+    assert novel["synopsis_en"] is not None
