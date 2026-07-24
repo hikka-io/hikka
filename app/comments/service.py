@@ -270,6 +270,56 @@ async def get_comments_count_by_content_id(
     return await session.scalar(query)
 
 
+async def get_comments_count_by_thread(
+    session: AsyncSession,
+    base_comment: Comment,
+) -> int:
+    """Count comments in given thread"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            Comment.deleted == False,  # noqa: E712
+            Comment.path.descendant_of(base_comment.path),
+            or_(
+                Comment.hidden == False,  # noqa: E712,
+                Comment.total_replies > 0,
+            ),
+        )
+    )
+
+
+async def get_comments_by_thread(
+    session: AsyncSession,
+    base_comment: Comment,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+) -> ScalarResult[Comment]:
+    query = select(Comment).filter(
+        Comment.deleted == False,  # noqa: E712
+        Comment.path.descendant_of(base_comment.path),
+        or_(
+            Comment.hidden == False,  # noqa: E712,
+            Comment.total_replies > 0,
+        ),
+    )
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(Comment.created.asc())
+        .limit(limit)
+        .offset(offset)
+    )
+
+
 async def get_comments_by_content_id(
     session: AsyncSession,
     content_id: str,
@@ -394,6 +444,7 @@ async def get_sub_comments(
             )
         )
         .order_by(asc(Comment.created))
+        # .limit(10)  # TODO: enable after deprecating non flat comments
     )
 
 

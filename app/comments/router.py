@@ -101,7 +101,7 @@ async def get_comments_list(
             result += [
                 CommentNode.create(path_to_uuid(comment.reference), comment)
                 for comment in sub_comments
-            ]
+            ][:10]  # TODO: Move this to limit after non flat deprecation
 
     return paginated_response(result, total, page, limit)
 
@@ -110,7 +110,7 @@ async def get_comments_list(
     "/thread/{comment_reference}",
     # NOTE: this is not usual practice to have 2 types of response
     # and we shold remove CommentResponse after non flat comments are deprecated
-    response_model=CommentResponse | list[CommentResponse],
+    response_model=CommentResponse | CommentListResponse,
 )
 async def thread(
     base_comment: Comment = Depends(validate_comment_not_hidden),
@@ -121,33 +121,42 @@ async def thread(
         )
     ),
     session: AsyncSession = Depends(get_session),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
     flat: bool = False,
 ):
-
-    sub_comments = await service.get_sub_comments(
-        session, base_comment, request_user
-    )
-
-    result = []
-
     # TODO: same as above this exists only for backward compatibility
     # and should be removed in the future
     if not flat:
+        sub_comments = await service.get_sub_comments(
+            session, base_comment, request_user
+        )
+
         return build_comments(base_comment, sub_comments)
 
     else:
-        result.append(
-            CommentNode.create(
-                path_to_uuid(base_comment.reference), base_comment
-            )
+        result = []
+
+        total = await service.get_comments_count_by_thread(
+            session, base_comment
         )
 
-        result += [
+        limit, offset = pagination(page, size)
+
+        comments = await service.get_comments_by_thread(
+            session,
+            base_comment,
+            request_user,
+            limit,
+            offset,
+        )
+
+        result = [
             CommentNode.create(path_to_uuid(comment.reference), comment)
-            for comment in sub_comments
+            for comment in comments
         ]
 
-    return result
+        return paginated_response(result, total, page, limit)
 
 
 @router.get("/user/{username}", response_model=CommentListResponse)
