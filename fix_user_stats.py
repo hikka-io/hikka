@@ -1,4 +1,4 @@
-from app.sync.digests.user_stats import digest_user_stats
+from app.sync.digests.user_stats import generate_user_stats
 from app.database import sessionmanager
 from app.utils import get_settings
 import asyncio
@@ -9,7 +9,8 @@ async def fix_user_stats():
 
     sessionmanager.init(settings.database.endpoint)
 
-    await digest_user_stats()
+    async with sessionmanager.session() as session:
+        await generate_user_stats(session, True)
 
     await sessionmanager.close()
 

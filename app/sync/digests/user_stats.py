@@ -1,4 +1,3 @@
-from app.models import SystemTimestamp, Edit, Comment, Digest, Log
 from sqlalchemy.dialects.postgresql import insert
 from app.database import sessionmanager
 from app.utils import utcnow, chunkify
@@ -6,8 +5,18 @@ from sqlalchemy import select, func
 from datetime import datetime
 from app import constants
 
+from app.models import (
+    SystemTimestamp,
+    Favourite,
+    Comment,
+    Digest,
+    Review,
+    Edit,
+    Log,
+)
 
-async def generate_user_stats(session):
+
+async def generate_user_stats(session, all=False):
     now = utcnow()
 
     if not (
@@ -22,24 +31,30 @@ async def generate_user_stats(session):
             }
         )
 
-    # Get new logs that were created since last update
-    logs = await session.execute(
+    query = (
         select(Log.user_id, func.max(Log.created).label("latest"))
         .filter(
             Log.log_type.in_(
                 [
+                    constants.LOG_FAVOURITE_REMOVE,
                     constants.LOG_COMMENT_WRITE,
                     constants.LOG_COMMENT_HIDE,
                     constants.LOG_EDIT_CREATE,
+                    constants.LOG_FAVOURITE,
                 ]
             )
         )
         .filter(
-            Log.created > system_timestamp.timestamp,
             Log.user_id != None,  # noqa: E711
         )
         .group_by(Log.user_id)
     )
+
+    if not all:
+        query = query.filter(Log.created > system_timestamp.timestamp)
+
+    # Get new logs that were created since last update
+    logs = await session.execute(query)
 
     max_time = None
     result = {}
@@ -64,8 +79,32 @@ async def generate_user_stats(session):
             )
         )
 
+        reviews_count = await session.scalar(
+            select(
+                func.count(Review.id).filter(
+                    Review.author_id == log.user_id,
+                )
+            )
+        )
+
+        favourites = await session.execute(
+            select(
+                Favourite.content_type,
+                func.count(Favourite.id).label("count"),
+            )
+            .filter(
+                Favourite.user_id == log.user_id,
+                Favourite.deleted == False,  # noqa: E712
+            )
+            .group_by(Favourite.content_type)
+        )
+
+        favourites_count = {row.content_type: row.count for row in favourites}
+
         result[log.user_id] = {
+            "favourites_count": favourites_count,
             "comments_count": comments_count,
+            "reviews_count": reviews_count,
             "edits_count": edits_count,
         }
 
