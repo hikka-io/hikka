@@ -503,9 +503,9 @@ async def edit_comment(
                     "recommended": comment_review.recommended,
                     "content_type": comment.content_type,
                     "content_id": comment.content_id,
+                    "created": comment.created,
+                    "updated": comment.updated,
                     "comment": comment,
-                    "created": now,
-                    "updated": now,
                 }
             )
 

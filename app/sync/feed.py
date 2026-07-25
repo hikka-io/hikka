@@ -12,12 +12,16 @@ from app.models import (
 )
 
 
-async def generate_feed_session(session):
-    last_feed_entry = await session.scalar(
-        select(func.coalesce(func.max(Feed.created), datetime(2024, 1, 13)))
-    )
+async def generate_feed_session(session, all: bool = False):
+    if not all:
+        last_feed_entry = await session.scalar(
+            select(func.coalesce(func.max(Feed.created), datetime(2024, 1, 13)))
+        )
 
-    last_feed_entry -= timedelta(days=1)
+        last_feed_entry -= timedelta(days=1)
+
+    else:
+        last_feed_entry = datetime(2024, 1, 13)
 
     articles_query = (
         select(Article)
