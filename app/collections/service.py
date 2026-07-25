@@ -4,6 +4,7 @@ from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import aliased
 from app.utils import utcnow
 from app import constants
 from uuid import UUID
@@ -136,21 +137,23 @@ async def collections_list_filter(
     if len(args.content) > 0:
         # Get content model and fetch content ids for provided slugs
         content_model = content_type_to_content_class[args.content_type]
-        content_ids = await session.scalars(
-            select(content_model.id).filter(
-                content_model.slug.in_(args.content)
+        content_ids = (
+            await session.scalars(
+                select(content_model.id).filter(
+                    content_model.slug.in_(args.content)
+                )
             )
-        )
+        ).all()
 
-        # Here we use similar logic to anime genres filter
-        query = query.join(CollectionContent).filter(
-            and_(
-                *[
-                    CollectionContent.content_id == content_id
-                    for content_id in content_ids
-                ]
+        for content_id in content_ids:
+            content_alias = aliased(CollectionContent)
+            query = query.join(
+                content_alias,
+                and_(
+                    content_alias.collection_id == Collection.id,
+                    content_alias.content_id == content_id,
+                ),
             )
-        )
 
     query = query.filter(
         Collection.visibility.in_(visibility),
