@@ -1,5 +1,6 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func
 from app.common.schemas.comments import CommentContentTypeEnum
+from app.common.service.sort import build_comments_order_by
 from app.common.schemas.reviews import ReviewRecommended
 from app.common.service.score import get_user_list_score
 from app.common.schemas.reviews import ReviewArgs
@@ -326,6 +327,7 @@ async def get_comments_by_content_id(
     request_user: User | None,
     comment_type: CommentType,
     recommended: ReviewRecommended | None,
+    sort: str,
     limit: int,
     offset: int,
 ) -> ScalarResult[Comment]:
@@ -353,7 +355,7 @@ async def get_comments_by_content_id(
             ),
             selectinload(Comment.review),
         )
-        .order_by(desc(Comment.created))
+        .order_by(*build_comments_order_by(sort))
         .limit(limit)
         .offset(offset)
     )
@@ -388,6 +390,7 @@ async def get_comments_by_user(
     request_user: User | None,
     comment_type: CommentType,
     recommended: ReviewRecommended | None,
+    sort: str,
     limit: int,
     offset: int,
     first_level_only: bool = False,
@@ -413,7 +416,7 @@ async def get_comments_by_user(
             ),
             selectinload(Comment.review),
         )
-        .order_by(desc(Comment.created))
+        .order_by(*build_comments_order_by(sort))
         .limit(limit)
         .offset(offset)
     )
@@ -443,7 +446,7 @@ async def get_sub_comments(
                 ),
             )
         )
-        .order_by(asc(Comment.created))
+        .order_by(Comment.created.asc())
         # .limit(10)  # TODO: enable after deprecating non flat comments
     )
 

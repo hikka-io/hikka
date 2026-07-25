@@ -1,6 +1,5 @@
 from app.utils import path_to_uuid, paginated_response, pagination
 from app.common.schemas.comments import CommentContentTypeEnum
-from app.common.schemas.reviews import ReviewRecommended
 from app.common.schemas.comments import CommentNode
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
@@ -32,10 +31,10 @@ from app.dependencies import (
 
 from .schemas import (
     CommentListResponse,
+    CommentsFilterArgs,
     CommentableType,
     CommentResponse,
     CommentTextArgs,
-    CommentType,
     CommentArgs,
 )
 
@@ -45,6 +44,7 @@ router = APIRouter(prefix="/comments", tags=["Comments"])
 
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
 async def get_comments_list(
+    filters: CommentsFilterArgs = Depends(),
     session: AsyncSession = Depends(get_session),
     content: CommentableType = Depends(validate_content),
     request_user: User = Depends(
@@ -55,16 +55,14 @@ async def get_comments_list(
     ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    # TODO: move to args?
-    recommended: ReviewRecommended | None = None,
-    comment_type: CommentType = "all",
+    # TODO: deprecate flat response as soon as possible
     flat: bool = False,
 ):
     # TODO: do we need to implement caching for reviews?
     # total = content.comments_count_pagination
 
     total = await service.get_comments_count_by_content_id(
-        session, content.id, comment_type, recommended
+        session, content.id, filters.comment_type, filters.recommended
     )
 
     limit, offset = pagination(page, size)
@@ -73,8 +71,9 @@ async def get_comments_list(
         session,
         content.id,
         request_user,
-        comment_type,
-        recommended,
+        filters.comment_type,
+        filters.recommended,
+        filters.sort,
         limit,
         offset,
     )
@@ -102,6 +101,52 @@ async def get_comments_list(
                 CommentNode.create(path_to_uuid(comment.reference), comment)
                 for comment in sub_comments
             ][:10]  # TODO: Move this to limit after non flat deprecation
+
+    return paginated_response(result, total, page, limit)
+
+
+@router.get("/user/{username}", response_model=CommentListResponse)
+async def get_comments_user(
+    filters: CommentsFilterArgs = Depends(),
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(get_user),
+    request_user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
+    ),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+    # TODO: deprecate flat response as soon as possible
+    first_level_only: bool = False,
+):
+    total = await service.get_comments_count_by_user(
+        session,
+        user,
+        filters.comment_type,
+        filters.recommended,
+        first_level_only,
+    )
+
+    limit, offset = pagination(page, size)
+
+    comments = await service.get_comments_by_user(
+        session,
+        user,
+        request_user,
+        filters.comment_type,
+        filters.recommended,
+        filters.sort,
+        limit,
+        offset,
+        first_level_only,
+    )
+
+    result = [
+        CommentNode.create(path_to_uuid(comment.reference), comment)
+        for comment in comments
+    ]
 
     return paginated_response(result, total, page, limit)
 
@@ -157,48 +202,6 @@ async def thread(
         ]
 
         return paginated_response(result, total, page, limit)
-
-
-@router.get("/user/{username}", response_model=CommentListResponse)
-async def get_comments_user(
-    session: AsyncSession = Depends(get_session),
-    user: User = Depends(get_user),
-    request_user: User = Depends(
-        auth_required(
-            scope=[constants.SCOPE_READ_COMMENT_SCORE],
-            optional=True,
-        )
-    ),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-    # TODO: move to args?
-    recommended: ReviewRecommended | None = None,
-    comment_type: CommentType = "all",
-    first_level_only: bool = False,
-):
-    total = await service.get_comments_count_by_user(
-        session, user, comment_type, recommended, first_level_only
-    )
-
-    limit, offset = pagination(page, size)
-
-    comments = await service.get_comments_by_user(
-        session,
-        user,
-        request_user,
-        comment_type,
-        recommended,
-        limit,
-        offset,
-        first_level_only,
-    )
-
-    result = [
-        CommentNode.create(path_to_uuid(comment.reference), comment)
-        for comment in comments
-    ]
-
-    return paginated_response(result, total, page, limit)
 
 
 @router.put(

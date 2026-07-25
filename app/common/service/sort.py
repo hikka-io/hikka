@@ -1,6 +1,15 @@
-from app.models import AnimeWatch, Anime, Manga, Novel, Read
 from sqlalchemy.sql.expression import nulls_last
 from sqlalchemy import desc, asc
+
+from app.models import (
+    AnimeWatch,
+    Comment,
+    Anime,
+    Manga,
+    Novel,
+    Read,
+)
+
 
 read_order_mapping = {
     "read_chapters": Read.chapters,
@@ -95,4 +104,17 @@ def build_novel_order_by(sort: list[str]):
         },
         tiebreaker=desc(Novel.content_id),
         nullable=["start_date"],
+    )
+
+
+def build_comments_order_by(sort: list[str]):
+    return build_order_by(
+        sort,
+        order_mapping={
+            "total_replies": Comment.total_replies,
+            "created": Comment.created,
+            "updated": Comment.updated,
+            "score": Comment.score,
+        },
+        tiebreaker=desc(Comment.id),
     )

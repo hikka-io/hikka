@@ -1,9 +1,11 @@
+from app.common.schemas.reviews import ReviewRecommended
 from app.common.schemas.comments import CommentResponse
 from app.schemas import PaginationResponse, CustomModel
 from app.common.schemas.reviews import ReviewArgs
 from pydantic import Field, field_validator
 from app.utils import is_empty_markdown
 from typing import Literal
+from app import utils
 from uuid import UUID
 
 from app.models import (
@@ -43,6 +45,24 @@ class CommentTextArgs(CustomModel):
 
 class CommentArgs(CommentTextArgs):
     parent: UUID | None = None
+
+
+class CommentsFilterArgs(CustomModel):
+    recommended: ReviewRecommended | None = None
+    comment_type: CommentType = "all"
+    sort: list[str] = ["created:desc"]
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        return utils.check_sort(
+            sort_list,
+            [
+                "total_replies",
+                "created",
+                "updated",
+                "score",
+            ],
+        )
 
 
 # Responses
