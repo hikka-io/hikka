@@ -112,9 +112,9 @@ def build_comments_order_by(sort: list[str]):
         sort,
         order_mapping={
             "total_replies": Comment.total_replies,
+            "vote_score": Comment.vote_score,
             "created": Comment.created,
             "updated": Comment.updated,
-            "score": Comment.score,
         },
         tiebreaker=desc(Comment.id),
     )

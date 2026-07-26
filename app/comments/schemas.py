@@ -58,9 +58,9 @@ class CommentsFilterArgs(CustomModel):
             sort_list,
             [
                 "total_replies",
+                "vote_score",
                 "created",
                 "updated",
-                "score",
             ],
         )
 
