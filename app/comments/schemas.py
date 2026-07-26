@@ -65,6 +65,10 @@ class CommentsFilterArgs(CustomModel):
         )
 
 
+class UserCommentsFilterArgs(CommentsFilterArgs):
+    first_level_only: bool = False
+
+
 # Responses
 class CommentListResponse(CustomModel):
     pagination: PaginationResponse

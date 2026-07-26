@@ -48,19 +48,19 @@ def request_comments_user(
     first_level_only=False,
 ):
     headers = {"Auth": token} if token else {}
-    query_string = {
+
+    data = {
         "first_level_only": str(first_level_only).lower(),
         "comment_type": comment_type,
-        "page": page,
     }
 
     if recommended:
-        query_string["recommended"] = recommended
+        data["recommended"] = recommended
 
-    return client.get(
-        f"/comments/user/{username}",
+    return client.post(
+        f"/comments/user/{username}?page={page}",
         headers=headers,
-        query_string=query_string,
+        json=data,
     )
 
 

@@ -30,6 +30,7 @@ from app.dependencies import (
 )
 
 from .schemas import (
+    UserCommentsFilterArgs,
     CommentListResponse,
     CommentsFilterArgs,
     CommentableType,
@@ -42,8 +43,9 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
+# DEPRECATED
 @router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
-async def get_comments_list(
+async def get_comments_list_legacy(
     filters: CommentsFilterArgs = Depends(),
     session: AsyncSession = Depends(get_session),
     content: CommentableType = Depends(validate_content),
@@ -55,8 +57,6 @@ async def get_comments_list(
     ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    # TODO: deprecate flat response as soon as possible
-    flat: bool = False,
 ):
     # TODO: do we need to implement caching for reviews?
     # total = content.comments_count_pagination
@@ -85,29 +85,66 @@ async def get_comments_list(
             session, base_comment, request_user
         )
 
-        # TODO: this flag exists for backward compatibility
-        # we should remove buil_comments in the future
-        if not flat:
-            result.append(build_comments(base_comment, sub_comments))
-
-        else:
-            result.append(
-                CommentNode.create(
-                    path_to_uuid(base_comment.reference), base_comment
-                )
-            )
-
-            result += [
-                CommentNode.create(path_to_uuid(comment.reference), comment)
-                for comment in sub_comments
-            ][:10]  # TODO: Move this to limit after non flat deprecation
+        result.append(build_comments(base_comment, sub_comments))
 
     return paginated_response(result, total, page, limit)
 
 
-@router.get("/user/{username}", response_model=CommentListResponse)
+@router.post("/{content_type}/{slug}/list", response_model=CommentListResponse)
+async def get_comments_list(
+    filters: CommentsFilterArgs,
+    session: AsyncSession = Depends(get_session),
+    content: CommentableType = Depends(validate_content),
+    request_user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
+    ),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    total = await service.get_comments_count_by_content_id(
+        session, content.id, filters.comment_type, filters.recommended
+    )
+
+    limit, offset = pagination(page, size)
+
+    base_comments = await service.get_comments_by_content_id(
+        session,
+        content.id,
+        request_user,
+        filters.comment_type,
+        filters.recommended,
+        filters.sort,
+        limit,
+        offset,
+    )
+
+    result = []
+
+    for base_comment in base_comments:
+        sub_comments = await service.get_sub_comments(
+            session, base_comment, request_user
+        )
+
+        result.append(
+            CommentNode.create(
+                path_to_uuid(base_comment.reference), base_comment
+            )
+        )
+
+        result += [
+            CommentNode.create(path_to_uuid(comment.reference), comment)
+            for comment in sub_comments
+        ][:10]  # TODO: Move this to limit after non flat deprecation
+
+    return paginated_response(result, total, page, limit)
+
+
+@router.post("/user/{username}", response_model=CommentListResponse)
 async def get_comments_user(
-    filters: CommentsFilterArgs = Depends(),
+    filters: UserCommentsFilterArgs,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_user),
     request_user: User = Depends(
@@ -118,15 +155,13 @@ async def get_comments_user(
     ),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
-    # TODO: deprecate flat response as soon as possible
-    first_level_only: bool = False,
 ):
     total = await service.get_comments_count_by_user(
         session,
         user,
         filters.comment_type,
         filters.recommended,
-        first_level_only,
+        filters.first_level_only,
     )
 
     limit, offset = pagination(page, size)
@@ -140,7 +175,7 @@ async def get_comments_user(
         filters.sort,
         limit,
         offset,
-        first_level_only,
+        filters.first_level_only,
     )
 
     result = [
