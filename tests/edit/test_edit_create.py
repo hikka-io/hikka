@@ -167,7 +167,7 @@ async def test_edit_create_bad_permission(
 
     # Check status
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert response.json()["code"] == "permission:denied"
+    assert response.json()["code"] == "permission:confirm_email"
 
 
 async def test_edit_create_bad_content(

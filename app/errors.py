@@ -147,6 +147,11 @@ errors = {
         ],
     },
     "permission": {
+        "confirm-email": [
+            "Confirm your email to proceed with this request",
+            "Підтвердіть вашу пошту, щоб виконати цей запит",
+            403,
+        ],
         "denied": [
             "You don't have permission for this action",
             "У вас немає дозволу на цю дію",

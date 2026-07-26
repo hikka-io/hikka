@@ -84,7 +84,7 @@ async def test_comments_write_review_restricted(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert response.json()["code"] == "permission:denied"
+    assert response.json()["code"] == "permission:confirm_email"
 
 
 async def test_comments_write_review_no_parrent(

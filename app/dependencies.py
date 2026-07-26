@@ -167,7 +167,11 @@ def auth_required(
 
         # Check requested permissions here
         if not utils.check_user_permissions(token.user, permissions):
-            # TODO: add not activated error
+            # Most likely request has failed because
+            # user did not confirm their email
+            if token.user.role == constants.ROLE_NOT_ACTIVATED:
+                raise Abort("permission", "confirm-email")
+
             raise Abort("permission", "denied")
 
         if forbid_thirdparty and token.client:

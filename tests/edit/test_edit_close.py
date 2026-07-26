@@ -124,4 +124,4 @@ async def test_edit_close_bad_permission(
 
     # And it fails :D
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert response.json()["code"] == "permission:denied"
+    assert response.json()["code"] == "permission:confirm_email"
