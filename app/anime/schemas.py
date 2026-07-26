@@ -5,7 +5,6 @@ from typing import Literal
 from enum import Enum
 
 from app.schemas import (
-    AnimeResponseWithWatch,
     AnimeSearchArgsBase,
     AnimeVideoResponse,
     AnimeStaffResponse,

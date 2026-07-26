@@ -39,13 +39,8 @@ class AnimeScheduleArgs(CustomModel):
 
 
 # Responses
-class AnimeResponseWithSynopsis(AnimeResponseWithWatch):
-    synopsis_en: str | None
-    synopsis_ua: str | None
-
-
 class AnimeScheduleResponse(CustomModel):
-    anime: AnimeResponseWithSynopsis
+    anime: AnimeResponseWithWatch
     time_left: timedelta_pd
     airing_at: datetime_pd
     episode: int

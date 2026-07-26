@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import to_timestamp, utcnow
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, noload
 from app.database import sessionmanager
 from sqlalchemy import select, asc
 from datetime import datetime
@@ -26,7 +26,10 @@ async def get_export_data(session: AsyncSession, user_id: UUID):
         select(AnimeWatch)
         .filter(AnimeWatch.user_id == user_id)
         .options(
-            selectinload(AnimeWatch.anime).load_only(Anime.mal_id, Anime.slug)
+            selectinload(AnimeWatch.anime)
+            .load_only(Anime.mal_id, Anime.slug)
+            # Anime eager loads them by default, but export doesn't need it
+            .options(noload(Anime.genres), noload(Anime.studios))
         )
         .order_by(AnimeWatch.updated.desc(), AnimeWatch.created.desc())
     )

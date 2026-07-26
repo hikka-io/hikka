@@ -102,6 +102,8 @@ class Anime(
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_anime_association_table,
         back_populates="anime",
+        # Solution to not write selectinload for each AnimeResponse
+        lazy="selectin",
     )
 
     companies: Mapped[list["CompanyAnime"]] = relationship(
@@ -160,6 +162,8 @@ class Anime(
             "CompanyAnime.type == 'studio')"
         ),
         viewonly=True,
+        # Same as with genres above
+        lazy="selectin",
     )
 
     # Very dirty hacks, but they do the trick
