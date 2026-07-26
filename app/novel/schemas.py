@@ -19,18 +19,6 @@ class NovelPaginationResponse(CustomModel):
     list: list[NovelResponseWithRead]
 
 
-class NovelCatalogResponse(NovelResponseWithRead):
-    genres: list[GenreResponse]
-    magazines: list[MagazineResponse]
-    synopsis_en: str | None
-    synopsis_ua: str | None
-
-
-class NovelCatalogPaginationResponse(CustomModel):
-    pagination: PaginationResponse
-    list: list[NovelCatalogResponse]
-
-
 class NovelInfoResponse(CustomModel):
     data_type: Literal["novel"]
     authors: list[ContentAuthorResponse]

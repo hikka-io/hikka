@@ -50,7 +50,10 @@ async def get_export_data(session: AsyncSession, user_id: UUID):
         select(NovelRead)
         .filter(NovelRead.user_id == user_id)
         .options(
-            selectinload(NovelRead.content).load_only(Novel.mal_id, Novel.slug)
+            selectinload(NovelRead.content)
+            .load_only(Novel.mal_id, Novel.slug)
+            # Novel eager loads them by default, but export doesn't need it
+            .options(noload(Novel.genres), noload(Novel.magazines))
         )
         .order_by(NovelRead.updated.desc(), NovelRead.created.desc())
     )

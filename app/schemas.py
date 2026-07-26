@@ -565,6 +565,11 @@ class NovelResponse(CustomModel):
     mal_id: int
     slug: str
 
+    magazines: list[MagazineResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
+
 
 class AnimeResponseWithWatch(AnimeResponse):
     watch: list[WatchResponseBase]

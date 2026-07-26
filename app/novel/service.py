@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import novel_search_filter
 from app.schemas import NovelSearchArgs
-from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 
 
@@ -58,8 +57,6 @@ async def novel_search(
             NovelRead,
             NovelRead.user_id == request_user.id if request_user else None,
         ),
-        selectinload(Novel.genres),
-        selectinload(Novel.magazines),
     ]
 
     query = select(Novel).filter(Novel.deleted == False)  # noqa: E712

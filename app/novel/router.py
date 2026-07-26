@@ -14,7 +14,7 @@ from .dependencies import (
 )
 
 from .schemas import (
-    NovelCatalogPaginationResponse,
+    NovelPaginationResponse,
     NovelInfoResponse,
 )
 
@@ -40,7 +40,7 @@ router = APIRouter(prefix="/novel", tags=["Novel"])
 
 @router.post(
     "",
-    response_model=NovelCatalogPaginationResponse,
+    response_model=NovelPaginationResponse,
     summary="Novel catalog",
 )
 async def search_novel(
