@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import manga_search_filter
 from app.schemas import MangaSearchArgs
-from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 
 from app.models import (
@@ -57,8 +56,6 @@ async def manga_search(
             MangaRead,
             MangaRead.user_id == request_user.id if request_user else None,
         ),
-        selectinload(Manga.genres),
-        selectinload(Manga.magazines),
     ]
 
     query = select(Manga).filter(Manga.deleted == False)  # noqa: E712

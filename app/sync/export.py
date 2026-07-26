@@ -38,7 +38,10 @@ async def get_export_data(session: AsyncSession, user_id: UUID):
         select(MangaRead)
         .filter(MangaRead.user_id == user_id)
         .options(
-            selectinload(MangaRead.content).load_only(Manga.mal_id, Manga.slug)
+            selectinload(MangaRead.content)
+            .load_only(Manga.mal_id, Manga.slug)
+            # Manga eager loads them by default, but export doesn't need it
+            .options(noload(Manga.genres), noload(Manga.magazines))
         )
         .order_by(MangaRead.updated.desc(), MangaRead.created.desc())
     )

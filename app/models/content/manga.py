@@ -74,6 +74,8 @@ class Manga(
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_manga_association_table,
         back_populates="manga",
+        # Solution to not write selectinload for each MangaResponse
+        lazy="selectin",
     )
 
     authors: Mapped[list["MangaAuthor"]] = relationship(
@@ -89,6 +91,8 @@ class Manga(
     magazines: Mapped[list["Magazine"]] = relationship(
         secondary=manga_magazines_association_table,
         back_populates="manga",
+        # Same as with genres above
+        lazy="selectin",
     )
 
     image_id = mapped_column(

@@ -470,6 +470,11 @@ class GenreListResponse(CustomModel):
     list: list[GenreResponse]
 
 
+class MagazineResponse(CustomModel):
+    name_en: str
+    slug: str
+
+
 class AnimeResponse(CustomModel):
     data_type: Literal["anime"]
     media_type: str | None = Field(examples=["tv"])
@@ -530,6 +535,11 @@ class MangaResponse(CustomModel):
     score: float
     mal_id: int
     slug: str
+
+    magazines: list[MagazineResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
 class NovelResponse(CustomModel):
@@ -701,11 +711,6 @@ class ReadStatsResponse(CustomModel):
     score_8: int = Field(examples=[398095], default=0)
     score_9: int = Field(examples=[298198], default=0)
     score_10: int = Field(examples=[184038], default=0)
-
-
-class MagazineResponse(CustomModel):
-    name_en: str
-    slug: str
 
 
 class ContentCharacterResponse(CustomModel):

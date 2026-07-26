@@ -15,7 +15,7 @@ from .dependencies import (
 )
 
 from .schemas import (
-    MangaCatalogPaginationResponse,
+    MangaPaginationResponse,
     MangaInfoResponse,
 )
 
@@ -36,7 +36,7 @@ router = APIRouter(prefix="/manga", tags=["Manga"])
 
 @router.post(
     "",
-    response_model=MangaCatalogPaginationResponse,
+    response_model=MangaPaginationResponse,
     summary="Manga catalog",
 )
 async def search_manga(
