@@ -453,6 +453,23 @@ class ReadResponseBase(CustomModel):
     end_date: datetime_pd | None
 
 
+class CompanyResponse(CustomModel):
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    slug: str = Field(examples=["hikka-inc-123456"])
+    name: str = Field(examples=["Hikka Inc."])
+
+
+class GenreResponse(CustomModel):
+    name_ua: str | None = Field(examples=["Комедія"])
+    name_en: str | None = Field(examples=["Comedy"])
+    slug: str = Field(examples=["comedy"])
+    type: str = Field(examples=["genre"])
+
+
+class GenreListResponse(CustomModel):
+    list: list[GenreResponse]
+
+
 class AnimeResponse(CustomModel):
     data_type: Literal["anime"]
     media_type: str | None = Field(examples=["tv"])
@@ -484,6 +501,11 @@ class AnimeResponse(CustomModel):
     rating: str | None
     year: int | None
     mal_id: int
+
+    studios: list[CompanyResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
 class MangaResponse(CustomModel):
@@ -592,12 +614,6 @@ class SuccessResponse(CustomModel):
     success: bool = Field(examples=[True])
 
 
-class CompanyResponse(CustomModel):
-    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
-    slug: str = Field(examples=["hikka-inc-123456"])
-    name: str = Field(examples=["Hikka Inc."])
-
-
 class UserResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     updated: datetime_pd | None = Field(examples=[1686088809])
@@ -667,17 +683,6 @@ class CollectionResponse(CustomModel):
     @field_validator("collection")
     def collection_ordering(cls, collection):
         return sorted(collection, key=lambda c: c.order)
-
-
-class GenreResponse(CustomModel):
-    name_ua: str | None = Field(examples=["Комедія"])
-    name_en: str | None = Field(examples=["Comedy"])
-    slug: str = Field(examples=["comedy"])
-    type: str = Field(examples=["genre"])
-
-
-class GenreListResponse(CustomModel):
-    list: list[GenreResponse]
 
 
 class ReadStatsResponse(CustomModel):

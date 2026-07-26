@@ -112,6 +112,8 @@ async def franchise(
             AnimeWatch,
             AnimeWatch.user_id == request_user.id if request_user else None,
         ),
+        selectinload(Anime.genres),
+        selectinload(Anime.studios),
     ]
 
     return await session.scalars(

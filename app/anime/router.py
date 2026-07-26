@@ -25,7 +25,6 @@ from app.schemas import (
 )
 
 from .schemas import (
-    AnimeCatalogPaginationResponse,
     AnimeStaffPaginationResponse,
     AnimeEpisodesListResponse,
     AnimeInfoResponse,
@@ -43,7 +42,7 @@ router = APIRouter(prefix="/anime", tags=["Anime"])
 
 @router.post(
     "",
-    response_model=AnimeCatalogPaginationResponse,
+    response_model=AnimePaginationResponse,
     summary="Anime catalog",
 )
 async def search_anime(

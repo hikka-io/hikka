@@ -61,18 +61,6 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 
 
 # Responses
-class AnimeCatalogResponse(AnimeResponseWithWatch):
-    genres: list[GenreResponse]
-    studios: list[CompanyResponse]
-    synopsis_en: str | None
-    synopsis_ua: str | None
-
-
-class AnimeCatalogPaginationResponse(CustomModel):
-    pagination: PaginationResponse
-    list: list[AnimeCatalogResponse]
-
-
 class AnimeEpisodeResponse(CustomModel):
     aired: datetime_pd | None = Field(examples=[1686088809])
     title_ua: str | None = Field(
