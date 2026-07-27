@@ -585,6 +585,7 @@ class AnimePaginationResponse(CustomModel):
 
 class CharacterResponse(CustomModel):
     data_type: Literal["character"]
+    mal_id: int | None = Field(examples=[117225])
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
@@ -595,6 +596,7 @@ class CharacterResponse(CustomModel):
 
 class PersonResponse(CustomModel):
     data_type: Literal["person"]
+    mal_id: int | None = Field(examples=[34785d])
     name_native: str | None = Field(examples=["高橋 李依"])
     name_ua: str | None = Field(examples=["Ріє Такахаші"])
     name_en: str | None = Field(examples=["Rie Takahashi"])

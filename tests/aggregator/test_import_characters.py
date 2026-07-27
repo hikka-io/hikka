@@ -18,3 +18,4 @@ async def test_import_characters(test_session, aggregator_characters):
     assert character.name_en == "Edward Elric"
     assert character.needs_search_update is True
     assert character.favorites == 85959
+    assert character.mal_id == 11

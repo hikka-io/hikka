@@ -22,6 +22,7 @@ async def update_characters_settings(index):
             ],
             displayed_attributes=[
                 "data_type",
+                "mal_id",
                 "synonyms",
                 "name_ua",
                 "name_en",
@@ -38,6 +39,7 @@ async def update_characters_settings(index):
 def character_to_document(character: Character):
     return {
         "data_type": "character",
+        "mal_id": character.mal_id,
         "favorites": character.favorites,
         "synonyms": character.synonyms,
         "name_ua": character.name_ua,

@@ -49,6 +49,7 @@ async def save_people(session, data):
                 [
                     person.updated == updated,
                     person.favorites == person_data["favorites"],
+                    person.mal_id == mal_id,
                     new_image is False,
                 ]
             ):
@@ -56,7 +57,9 @@ async def save_people(session, data):
 
             person.favorites = person_data["favorites"]
             person.image_relation = image
+            person.needs_search_update = True
             person.updated = updated
+            person.mal_id = mal_id
 
             add_people.append(person)
 
@@ -69,6 +72,7 @@ async def save_people(session, data):
                     "content_id": person_data["content_id"],
                     "name_native": person_data["name_ja"],
                     "favorites": person_data["favorites"],
+                    "mal_id": person_data["mal_id"],
                     "name_en": person_data["name_en"],
                     "image_relation": image,
                     "updated": updated,
