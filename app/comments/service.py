@@ -3,6 +3,7 @@ from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.service.sort import build_comments_order_by
 from app.common.schemas.reviews import ReviewRecommended
 from app.common.service.score import get_user_list_score
+from app.common.service.reviews import get_review_stats
 from app.common.schemas.reviews import ReviewArgs
 from .schemas import CommentableType, CommentType
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -193,6 +194,12 @@ async def create_comment(
     content.comments_count_pagination = await get_comments_count(
         session, content_type, content, True
     )
+
+    # Update review stats here
+    if comment_review is not None:
+        content.review_stats = await get_review_stats(
+            session, content_type, content.id
+        )
 
     await session.commit()
 
@@ -517,6 +524,18 @@ async def edit_comment(
 
     await session.commit()
 
+    # Update review stats here if review was added, changed or removed
+    if review_before is not None or review_after is not None:
+        content = await get_content_by_id(
+            session, comment.content_type, comment.content_id
+        )
+
+        content.review_stats = await get_review_stats(
+            session, comment.content_type, comment.content_id
+        )
+
+        await session.commit()
+
     log_data = {
         "content_type": comment.content_type,
         "old_text": old_text,
@@ -565,6 +584,10 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
             select(Review).filter(Review.comment == comment)
         ):
             await session.delete(review)
+
+            content.review_stats = await get_review_stats(
+                session, comment.content_type, comment.content_id
+            )
 
     else:
         if parent := await session.scalar(

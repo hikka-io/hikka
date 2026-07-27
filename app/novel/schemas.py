@@ -4,6 +4,7 @@ from typing import Literal
 from app.schemas import (
     ContentAuthorResponse,
     NovelResponseWithRead,
+    ReviewStatsResponse,
     PaginationResponse,
     ReadStatsResponse,
     MagazineResponse,
@@ -21,6 +22,7 @@ class NovelPaginationResponse(CustomModel):
 
 class NovelInfoResponse(CustomModel):
     data_type: Literal["novel"]
+    review_stats: ReviewStatsResponse
     authors: list[ContentAuthorResponse]
     magazines: list[MagazineResponse]
     external: list[ExternalResponse]

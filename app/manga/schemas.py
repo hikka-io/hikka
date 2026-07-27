@@ -6,6 +6,7 @@ from typing import Literal
 from app.schemas import (
     ContentAuthorResponse,
     MangaResponseWithRead,
+    ReviewStatsResponse,
     PaginationResponse,
     ReadStatsResponse,
     MagazineResponse,
@@ -23,6 +24,7 @@ class MangaPaginationResponse(CustomModel):
 
 class MangaInfoResponse(CustomModel):
     data_type: Literal["manga"]
+    review_stats: ReviewStatsResponse
     authors: list[ContentAuthorResponse]
     magazines: list[MagazineResponse]
     external: list[ExternalResponse]

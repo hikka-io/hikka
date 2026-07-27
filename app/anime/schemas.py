@@ -5,6 +5,7 @@ from typing import Literal
 from enum import Enum
 
 from app.schemas import (
+    ReviewStatsResponse,
     AnimeSearchArgsBase,
     AnimeVideoResponse,
     AnimeStaffResponse,
@@ -126,6 +127,7 @@ class AnimeInfoResponse(CustomModel):
 
     start_date: datetime_pd | None = Field(examples=[1686088809])
     end_date: datetime_pd | None = Field(examples=[1686088809])
+    review_stats: ReviewStatsResponse
     updated: datetime_pd
     comments_count: int
 

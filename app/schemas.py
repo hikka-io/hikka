@@ -700,6 +700,12 @@ class CollectionResponse(CustomModel):
         return sorted(collection, key=lambda c: c.order)
 
 
+class ReviewStatsResponse(CustomModel):
+    maybe: int = Field(examples=[1337], default=0)
+    yes: int = Field(examples=[8801], default=0)
+    no: int = Field(examples=[404], default=0)
+
+
 class ReadStatsResponse(CustomModel):
     completed: int = Field(examples=[1502335], default=0)
     reading: int = Field(examples=[83106], default=0)
