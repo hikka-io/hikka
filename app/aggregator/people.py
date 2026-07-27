@@ -22,6 +22,7 @@ async def save_people(session, data):
 
     for person_data in data:
         new_image = False
+        mal_id = person_data.get("mal_id")
 
         if not (image := image_cache.get(person_data["image"])):
             if person_data["image"]:
@@ -72,7 +73,7 @@ async def save_people(session, data):
                     "content_id": person_data["content_id"],
                     "name_native": person_data["name_ja"],
                     "favorites": person_data["favorites"],
-                    "mal_id": person_data["mal_id"],
+                    "mal_id": mal_id,
                     "name_en": person_data["name_en"],
                     "image_relation": image,
                     "updated": updated,

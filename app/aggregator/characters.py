@@ -22,6 +22,7 @@ async def save_characters(session, data):
 
     for character_data in data:
         new_image = False
+        mal_id = character_data.get("mal_id")
 
         if not (image := image_cache.get(character_data["image"])):
             if character_data["image"]:
@@ -61,7 +62,7 @@ async def save_characters(session, data):
             character.image_relation = image
             character.needs_search_update = True
             character.updated = updated
-            character.mal_id = character_data["mal_id"]
+            character.mal_id = mal_id
 
             add_characters.append(character)
 
