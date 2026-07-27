@@ -195,6 +195,7 @@ class UIPreferences(CustomModel):
     title_language: str | None = None
     name_language: str | None = None
     effect: UIEffect | None = None
+    show_nsfw: bool = False
     overlay: bool = True
 
     home_widgets: list[UIWidgetEnum] = [
