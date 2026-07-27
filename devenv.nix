@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 
 let
   db = {
@@ -23,15 +29,20 @@ in
 {
   # https://devenv.sh/basics/
   # https://devenv.sh/packages/
-  packages = with pkgs; [ git pgweb ];
+  packages = with pkgs; [
+    git
+    pgweb
+    python313Packages.alembic
+  ];
 
   # https://devenv.sh/languages/
   languages.python = {
     enable = true;
-    
-    # I'm not sure but eh
-    version = lib.trim (builtins.readFile ./.python-version);
-    
+
+    # I'm still not sure but eh
+    # version = lib.trim (builtins.readFile ./.python-version);
+    package = pkgs.python313;
+
     uv = {
       enable = true;
       sync.enable = true;
@@ -50,7 +61,7 @@ in
         exit 1
       fi
 
-      psql ${credsString} -f $1
+      psql ${credsString} -f "$1"
 
       alembic-upgrade
     '';
@@ -58,41 +69,55 @@ in
 
   # https://devenv.sh/processes/
   processes = {
-    fastapi.exec = ''
-      uv run uvicorn \
-      run:app \
-      --reload \
-      --port=${toString ports.fastapi}
-    '';
-    
-    sync.exec = ''
-      while ! pg_isready ${credsString}; do 
-        sleep 1
-      done
-      
-      TABLE_COUNT=$(psql \
-        ${credsString} \
-        -tAc "SELECT count(*) \
-        FROM information_schema.tables \
-        WHERE table_schema = 'public';")
+    fastapi = {
+      exec = ''
+        uv run uvicorn \
+        run:app \
+        --reload \
+        --port=${toString ports.fastapi}
+      '';
 
-      if [ "$TABLE_COUNT" -eq "0" ]; then
-        echo "ERROR: Database is empty. Run 'db-load-sample <hikka-sample.sql>' and restart." >&2
-        exit 0
-      fi
+      ready.http.get = {
+        port = ports.fastapi;
+        path = "/ping";
+      };
+    };
 
-      uv run sync.py
-    '';
+    sync = {
+      exec = ''
+        TABLE_COUNT=$(psql \
+          ${credsString} \
+          -tAc "SELECT count(*) \
+          FROM information_schema.tables \
+          WHERE table_schema = 'public';")
 
-    pgweb.exec = ''
-      while ! pg_isready ${credsString}; do 
-        sleep 1
-      done
+        if [ "$TABLE_COUNT" -eq "0" ]; then
+          echo "ERROR: Database is empty. Run 'db-load-sample <hikka-sample.sql>' and restart." >&2
+          exit 0
+        fi
 
-      pgweb --bind=127.0.0.1 \
-        --listen=${toString ports.pgweb} \
-        --url="${lib.replaceStrings ["+asyncpg"] [""] db.connectionString}?sslmode=disable";
-    '';
+        echo "Starting sync process..."
+
+        uv run sync.py
+      '';
+
+      after = [ "devenv:processes:postgres" ];
+    };
+
+    pgweb = {
+      exec = ''
+        pgweb --bind=127.0.0.1 \
+          --listen=${toString ports.pgweb} \
+          --url="${lib.replaceStrings [ "+asyncpg" ] [ "" ] db.connectionString}?sslmode=disable"
+      '';
+
+      after = [ "devenv:processes:postgres" ];
+
+      ready.http.get = {
+        port = ports.pgweb;
+        path = "/";
+      };
+    };
   };
 
   # https://devenv.sh/services/
@@ -103,7 +128,13 @@ in
       port = ports.postgres;
 
       listen_addresses = "localhost";
-      initialDatabases = [{ name = db.name; user = db.user; pass = db.pass; }];
+      initialDatabases = [
+        {
+          name = db.name;
+          user = db.user;
+          pass = db.pass;
+        }
+      ];
       initialScript = ''
         CREATE EXTENSION IF NOT EXISTS ltree;
         ALTER USER "${db.user}" WITH SUPERUSER;
@@ -115,17 +146,17 @@ in
       enable = true;
       package = meilisearch-1-9;
       listenPort = ports.meilisearch;
-    }; 
+    };
   };
 
   enterShell = ''
     python --version
     postgres --version
-    uv run alembic --version
+    alembic --version
     meilisearch --version
   '';
 
-  files = { 
+  files = {
     "settings.toml".toml = {
       default = {
         oauth.google = {
@@ -251,16 +282,16 @@ in
       alembic = {
         # Path to migration
         script_location = "alembic";
-        
+
         # Template for migration names
         file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s";
-        
+
         # We need this to include archived migrations
         recursive_version_locations = true;
-        
+
         # SQLAlchemy database endpoint
         "sqlalchemy.url" = db.connectionString;
-        
+
         # Misc configs
         prepend_sys_path = ".";
         version_path_separator = "os";
