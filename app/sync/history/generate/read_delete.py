@@ -58,6 +58,6 @@ async def generate_read_delete(
             Review.author_id == log.user_id,
         )
     ):
-        review.score = log.data["after"]["score"]
+        review.score = 0
 
     await session.commit()

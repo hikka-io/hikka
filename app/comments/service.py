@@ -520,6 +520,12 @@ async def edit_comment(
                     "created": comment.created,
                     "updated": comment.updated,
                     "comment": comment,
+                    "score": await get_user_list_score(
+                        session,
+                        comment.content_type,
+                        comment.content_id,
+                        comment.author,
+                    ),
                 }
             )
 
