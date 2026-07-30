@@ -502,6 +502,10 @@ async def edit_comment(
             await session.delete(review)
 
         else:
+            # Mark review as updated if value has changed
+            if review.recommended != comment_review.recommended:
+                review.updated = now
+
             review.recommended = comment_review.recommended
             review_after = {"recommended": review.recommended}
 

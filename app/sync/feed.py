@@ -1,6 +1,6 @@
+from sqlalchemy import select, exists, delete, func
 from datetime import datetime, timedelta
 from app.database import sessionmanager
-from sqlalchemy import select, func
 from app import constants
 
 from app.models import (
@@ -56,7 +56,7 @@ async def generate_feed_session(session, all: bool = False):
         .order_by(Comment.created.asc())
     )
 
-    reviews_query = select(Review).filter(Review.created >= last_feed_entry)
+    reviews_query = select(Review).filter(Review.updated >= last_feed_entry)
 
     for query in [
         articles_query,
@@ -109,6 +109,26 @@ async def generate_feed_session(session, all: bool = False):
                 name = entry.title
 
             print(f"Added {entry.data_type} feed entry for {name}")
+
+        # Handle comments which has been converted into reviews
+        await session.execute(
+            delete(Feed).where(
+                Feed.content_type == constants.CONTENT_COMMENT,
+                exists(
+                    select(Review.id).where(
+                        Review.comment_id == Feed.content_id
+                    )
+                ),
+            )
+        )
+
+        # Handle deleted reviews
+        await session.execute(
+            delete(Feed).where(
+                Feed.content_type == constants.CONTENT_REVIEW,
+                ~exists(select(Review.id).where(Review.id == Feed.content_id)),
+            )
+        )
 
         await session.commit()
 
