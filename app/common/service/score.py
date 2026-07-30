@@ -19,11 +19,8 @@ async def get_user_list_score(
     if content_type == constants.CONTENT_ANIME:
         query = query.filter(model.anime_id == content_id)
 
-    if content_type == constants.CONTENT_MANGA:
-        query = query.filter(model.manga_id == content_id)
-
-    if content_type == constants.CONTENT_NOVEL:
-        query = query.filter(model.novel_id == content_id)
+    else:
+        query = query.filter(model.content_id == content_id)
 
     if record := await session.scalar(query):
         return record.score
