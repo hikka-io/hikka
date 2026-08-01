@@ -8,6 +8,7 @@ from app.errors import Abort
 from fastapi import Depends
 from app import constants
 from . import oauth
+import secrets
 import uuid
 
 from app.utils import (
@@ -32,7 +33,7 @@ from .service import (
 
 from .schemas import (
     UsernameLoginArgs,
-    ComfirmResetArgs,
+    ConfirmResetArgs,
     TokenRequestArgs,
     TokenProceedArgs,
     EmailLoginArgs,
@@ -108,7 +109,9 @@ async def validate_provider(provider: str) -> str:
     settings = get_settings()
 
     enabled_providers = [
-        provider for provider in settings.oauth if settings.oauth[provider].enabled
+        settings_provider
+        for settings_provider in settings.oauth
+        if settings.oauth[settings_provider].enabled
     ]
 
     if provider not in enabled_providers:
@@ -190,7 +193,7 @@ async def validate_password_reset(
 
 
 async def validate_password_confirm(
-    confirm: ComfirmResetArgs, session: AsyncSession = Depends(get_session)
+    confirm: ConfirmResetArgs, session: AsyncSession = Depends(get_session)
 ):
     # Get user by reset token
     if not (user := await get_user_by_reset(session, confirm.token)):
@@ -236,13 +239,15 @@ async def validate_auth_token_request(
 ):
     now = utcnow()
 
-    if not (request := await get_auth_token_request(session, args.request_reference)):
+    if not (
+        request := await get_auth_token_request(session, args.request_reference)
+    ):
         raise Abort("auth", "invalid-token-request")
 
     if now > request.expiration:
         raise Abort("auth", "token-request-expired")
 
-    if request.client.secret != args.client_secret:
+    if not secrets.compare_digest(request.client.secret, args.client_secret):
         raise Abort("auth", "invalid-client-credentials")
 
     return request

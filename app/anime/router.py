@@ -52,27 +52,35 @@ async def search_anime(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
-    if not search.query:
-        limit, offset = pagination(page, size)
-        total = await service.anime_search_total(session, search)
-        anime = await service.anime_search(
-            session, search, request_user, limit, offset
+    limit, offset = pagination(page, size)
+
+    filter_ids = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_ANIME,
+            filter=build_anime_filters(search),
+            query=search.query,
+            sort=search.sort,
+            page=page,
+            size=size,
         )
 
-        return paginated_response(anime.unique().all(), total, page, limit)
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
 
-    meilisearch_result = await meilisearch.search(
-        constants.SEARCH_INDEX_ANIME,
-        filter=build_anime_filters(search),
-        query=search.query,
-        sort=search.sort,
-        page=page,
-        size=size,
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
+    total = await service.anime_search_total(session, search, filter_ids)
+
+    if total == 0:
+        return paginated_response([], 0, page, limit)
+
+    anime = await service.anime_search(
+        session, search, filter_ids, request_user, limit, offset
     )
 
-    return await service.anime_meilisearch_watch(
-        session, search, request_user, meilisearch_result
-    )
+    return paginated_response(anime.unique().all(), total, page, limit)
 
 
 @router.get(

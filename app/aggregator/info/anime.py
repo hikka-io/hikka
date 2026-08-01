@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, delete
 from app.aggregator import service
-from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
 from app import utils
@@ -126,6 +126,16 @@ async def process_characters_and_voices(session, anime, data):
                 }
             )
 
+    cache = await session.scalars(
+        select(AnimeCharacter).filter(AnimeCharacter.anime == anime)
+    )
+
+    existing_anime_characters = {
+        entry.character_id: entry.id for entry in cache
+    }
+
+    actual_character_ids = set()
+
     for entry in data["characters"]:
         if not (
             character := characters_cache.get(entry["character"]["content_id"])
@@ -156,6 +166,8 @@ async def process_characters_and_voices(session, anime, data):
 
             character.needs_count_update = True
 
+        actual_character_ids.add(character.id)
+
         if character.content_id not in voices:
             continue
 
@@ -182,6 +194,24 @@ async def process_characters_and_voices(session, anime, data):
 
             character.needs_count_update = True
             person.needs_count_update = True
+
+    bad_character_ids = (
+        set(existing_anime_characters.keys()) - actual_character_ids
+    )
+
+    for character_id in bad_character_ids:
+        await session.execute(
+            delete(AnimeVoice).filter(
+                AnimeVoice.anime_id == anime.id,
+                AnimeVoice.character_id == character_id,
+            )
+        )
+
+        await session.execute(
+            delete(AnimeCharacter).filter(
+                AnimeCharacter.id == existing_anime_characters[character_id]
+            )
+        )
 
     return characters_and_voices
 
@@ -383,9 +413,10 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["anitube", "toloka", "mikai"]:
+    for source in ["anitube", "animeon", "toloka", "mikai"]:
         website_name = {
             "anitube": "Anitube",
+            "animeon": "AnimeON",
             "toloka": "Toloka",
             "mikai": "Mikai",
         }.get(source)
@@ -408,9 +439,10 @@ def process_translated_ua(data):
     # Ideally we should make some loop here or something like that
     # Not this
     anitube_len = len(data["anitube"]) if "anitube" in data else 0
+    animeon_len = len(data["animeon"]) if "animeon" in data else 0
     toloka_len = len(data["toloka"]) if "toloka" in data else 0
     mikai_len = len(data["mikai"]) if "mikai" in data else 0
-    return anitube_len > 0 or toloka_len > 0 or mikai_len > 0
+    return anitube_len > 0 or animeon_len > 0 or toloka_len > 0 or mikai_len > 0
 
 
 async def update_anime_info(session, anime, data):

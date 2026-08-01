@@ -13,6 +13,7 @@ from ..mixins import (
     NeedsSearchUpdateMixin,
     CommentContentMixin,
     IgnoredFieldsMixin,
+    ReviewStatsMixin,
     NativeScoreMixin,
     SynonymsMixin,
     ContentMixin,
@@ -30,6 +31,7 @@ class Anime(
     DeletedMixin,
     SynonymsMixin,
     NativeScoreMixin,
+    ReviewStatsMixin,
     IgnoredFieldsMixin,
     CommentContentMixin,
     NeedsSearchUpdateMixin,
@@ -51,6 +53,7 @@ class Anime(
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     translated_ua: Mapped[bool] = mapped_column(default=False)
     needs_update: Mapped[bool] = mapped_column(default=False)
+    created: Mapped[datetime] = mapped_column(nullable=True)
 
     # Metadata
     rating: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
@@ -101,6 +104,8 @@ class Anime(
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_anime_association_table,
         back_populates="anime",
+        # Solution to not write selectinload for each AnimeResponse
+        lazy="selectin",
     )
 
     companies: Mapped[list["CompanyAnime"]] = relationship(
@@ -159,6 +164,8 @@ class Anime(
             "CompanyAnime.type == 'studio')"
         ),
         viewonly=True,
+        # Same as with genres above
+        lazy="selectin",
     )
 
     # Very dirty hacks, but they do the trick

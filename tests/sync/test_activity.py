@@ -1,155 +1,119 @@
-from app.sync.activity import generate_activity
-from sqlalchemy import select, desc, func
-from app.models import Log, Activity
-from datetime import datetime
+from app.sync.digests.activity import generate_activity
+from datetime import datetime, timedelta
+from sqlalchemy import select, func
+from app.models import Digest, Log
+from app.utils import utcnow
 from app import constants
+from uuid import uuid4
 
 
-async def test_activity(test_session, create_test_user, create_dummy_user):
-    dummy_id = create_dummy_user.id
+async def test_activity(test_session, create_test_user):
     user_id = create_test_user.id
 
+    now = utcnow()
+    spam_target_id = uuid4()
+    today = now.date()
+
     user_logs = [
+        # Tracked actions
         {
-            "created": datetime(2024, 2, 1, 1, 0, 0),
-            "log_type": constants.LOG_LOGIN,
+            "created": now - timedelta(days=2, hours=1),
+            "log_type": constants.LOG_COMMENT_WRITE,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": datetime(2024, 2, 1, 2, 0, 0),
-            "log_type": constants.LOG_LOGIN,
+            "created": now - timedelta(days=2, hours=2),
+            "log_type": constants.LOG_EDIT_CREATE,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": datetime(2024, 2, 1, 3, 0, 0),
-            "log_type": constants.LOG_LOGIN,
+            "created": now - timedelta(days=1),
+            "log_type": constants.LOG_WATCH_CREATE,
+            "user_id": user_id,
+            "data": {},
+        },
+        # Spam actions, we count them as one
+        {
+            "created": now - timedelta(days=3, hours=1),
+            "log_type": constants.LOG_FAVOURITE,
+            "target_id": spam_target_id,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": datetime(2024, 2, 2, 1, 0, 0),
-            "log_type": constants.LOG_LOGIN,
+            "created": now - timedelta(days=3, hours=2),
+            "log_type": constants.LOG_FAVOURITE,
+            "target_id": spam_target_id,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": datetime(2024, 2, 4, 1, 0, 0),
-            "log_type": constants.LOG_LOGIN,
-            "user_id": user_id,
-            "data": {},
-        },
-        {
-            "created": datetime(2024, 2, 4, 10, 0, 0),
-            "log_type": constants.LOG_LOGIN,
+            "created": now - timedelta(days=3, hours=3),
+            "log_type": constants.LOG_FAVOURITE,
+            "target_id": spam_target_id,
             "user_id": user_id,
             "data": {},
         },
     ]
 
-    dummy_logs = [
-        {
-            "created": datetime(2024, 2, 2, 3, 0, 0),
-            "log_type": constants.LOG_LOGIN,
-            "user_id": dummy_id,
-            "data": {},
-        },
-        {
-            "created": datetime(2024, 2, 5, 6, 0, 0),
-            "log_type": constants.LOG_LOGIN,
-            "user_id": dummy_id,
-            "data": {},
-        },
-        {
-            "created": datetime(2024, 2, 7, 3, 0, 0),
-            "log_type": constants.LOG_LOGIN,
-            "user_id": dummy_id,
-            "data": {},
-        },
-        {
-            "created": datetime(2024, 2, 8, 3, 0, 0),
-            "log_type": constants.LOG_LOGIN,
-            "user_id": dummy_id,
-            "data": {},
-        },
-    ]
-
-    # Now let's add logs to db
     test_session.add_all([Log(**log) for log in user_logs])
-    test_session.add_all([Log(**log) for log in dummy_logs])
     await test_session.commit()
 
-    # Count user logs
-    logs_count = await test_session.scalar(
-        select(func.count(Log.id)).filter(Log.user == create_test_user)
-    )
-    assert logs_count == 6
-
-    # Count dummy user logs
-    logs_count = await test_session.scalar(
-        select(func.count(Log.id)).filter(Log.user == create_dummy_user)
-    )
-    assert logs_count == 4
-
-    # Now generate activity
     await generate_activity(test_session)
 
-    # Calculate total activity
-    activity_count = await test_session.scalar(select(func.count(Activity.id)))
-    assert activity_count == 7
-
-    # Calculate total activity of user
-    activity_count = await test_session.scalar(
-        select(func.count(Activity.id)).filter(
-            Activity.user == create_test_user
+    digest = await test_session.scalar(
+        select(Digest).filter(
+            Digest.user_id == user_id,
+            Digest.name == constants.DIGEST_ACTIVITY,
         )
     )
-    assert activity_count == 3
 
-    # Calculate total activity of dummy
-    activity_count = await test_session.scalar(
-        select(func.count(Activity.id)).filter(
-            Activity.user == create_dummy_user
+    assert digest is not None
+
+    data = digest.data
+    assert len(data) == 365
+
+    activity = {entry["timestamp"]: entry["actions"] for entry in data}
+
+    day_minus_1 = int(
+        datetime.combine(
+            today - timedelta(days=1), datetime.min.time()
+        ).timestamp()
+    )
+
+    day_minus_2 = int(
+        datetime.combine(
+            today - timedelta(days=2), datetime.min.time()
+        ).timestamp()
+    )
+
+    day_minus_3 = int(
+        datetime.combine(
+            today - timedelta(days=3), datetime.min.time()
+        ).timestamp()
+    )
+
+    assert activity[day_minus_1] == 1  # 1 watch
+    assert activity[day_minus_2] == 2  # 1 comment + 1 edit
+    assert activity[day_minus_3] == 1  # 3 favourites on same target = 1
+
+    # Check days with no activity for zeros
+    day_minus_10 = int(
+        datetime.combine(
+            today - timedelta(days=10), datetime.min.time()
+        ).timestamp()
+    )
+
+    assert activity[day_minus_10] == 0
+
+    # There should be no diplicates
+    await generate_activity(test_session)
+
+    digest_count = await test_session.scalar(
+        select(func.count(Digest.id)).filter(
+            Digest.name == constants.DIGEST_ACTIVITY,
         )
     )
-    assert activity_count == 4
-
-    # Get activity of user
-    activity_user = await test_session.scalars(
-        select(Activity)
-        .filter(Activity.user == create_test_user)
-        .order_by(desc(Activity.timestamp))
-    )
-
-    activity_user = activity_user.all()
-
-    assert activity_user[0].timestamp == datetime(2024, 2, 4)
-    assert activity_user[0].actions == 2
-
-    assert activity_user[1].timestamp == datetime(2024, 2, 2)
-    assert activity_user[1].actions == 1
-
-    assert activity_user[2].timestamp == datetime(2024, 2, 1)
-    assert activity_user[2].actions == 3
-
-    # Get activity of dummy
-    activity_dummy = await test_session.scalars(
-        select(Activity)
-        .filter(Activity.user == create_dummy_user)
-        .order_by(desc(Activity.timestamp))
-    )
-
-    activity_dummy = activity_dummy.all()
-
-    assert activity_dummy[0].timestamp == datetime(2024, 2, 8)
-    assert activity_dummy[0].actions == 1
-
-    assert activity_dummy[1].timestamp == datetime(2024, 2, 7)
-    assert activity_dummy[1].actions == 1
-
-    assert activity_dummy[2].timestamp == datetime(2024, 2, 5)
-    assert activity_dummy[2].actions == 1
-
-    assert activity_dummy[3].timestamp == datetime(2024, 2, 2)
-    assert activity_dummy[3].actions == 1
+    assert digest_count == 1

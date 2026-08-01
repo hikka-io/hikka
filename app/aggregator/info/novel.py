@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, delete
 from app.aggregator import service
-from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
 from app import utils
@@ -50,9 +50,8 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["baka", "honey"]:
+    for source in ["baka", "zenko"]:
         website_name = {
-            "honey": "Honey Manga",
             "zenko": "Zenko",
             "baka": "Бака",
         }.get(source)
@@ -198,6 +197,16 @@ async def process_characters(session, novel, data):
         session, character_content_ids
     )
 
+    cache = await session.scalars(
+        select(NovelCharacter).filter(NovelCharacter.novel == novel)
+    )
+
+    existing_novel_characters = {
+        entry.character_id: entry.id for entry in cache
+    }
+
+    actual_character_ids = set()
+
     for entry in data["characters"]:
         if not (
             character := characters_cache.get(entry["character"]["content_id"])
@@ -227,6 +236,19 @@ async def process_characters(session, novel, data):
             characters.append(character_role)
 
             character.needs_count_update = True
+
+        actual_character_ids.add(character.id)
+
+    bad_character_ids = (
+        set(existing_novel_characters.keys()) - actual_character_ids
+    )
+
+    for character_id in bad_character_ids:
+        await session.execute(
+            delete(NovelCharacter).filter(
+                NovelCharacter.id == existing_novel_characters[character_id]
+            )
+        )
 
     return characters
 

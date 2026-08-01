@@ -1,8 +1,11 @@
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
 from app import constants
+from typing import Literal
+from enum import Enum
 
 from app.schemas import (
+    ReviewStatsResponse,
     AnimeSearchArgsBase,
     AnimeVideoResponse,
     AnimeStaffResponse,
@@ -11,10 +14,15 @@ from app.schemas import (
     CompanyTypeEnum,
     CompanyResponse,
     QuerySearchArgs,
-    DataTypeMixin,
     GenreResponse,
     CustomModel,
 )
+
+
+# Enums
+class AnimeOSTTypeEnum(str, Enum):
+    opening = constants.OST_OPENING
+    ending = constants.OST_ENDING
 
 
 # Args
@@ -30,6 +38,8 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
             "media_type",
             "start_date",
             "scored_by",
+            "created",
+            "updated",
             "score",
         ]
 
@@ -107,15 +117,17 @@ class AnimeOSTResponse(CustomModel):
     spotify: str | None = Field(
         examples=["https://open.spotify.com/track/3BIhcWQV2hGRoEXdLL3Fzw"]
     )
-    ost_type: str = Field(examples=["opening"])
+    ost_type: AnimeOSTTypeEnum
 
 
-class AnimeInfoResponse(CustomModel, DataTypeMixin):
+class AnimeInfoResponse(CustomModel):
+    data_type: Literal["anime"]
     companies: list[AnimeCompanyResponse]
     genres: list[GenreResponse]
 
     start_date: datetime_pd | None = Field(examples=[1686088809])
     end_date: datetime_pd | None = Field(examples=[1686088809])
+    review_stats: ReviewStatsResponse
     updated: datetime_pd
     comments_count: int
 
@@ -145,6 +157,8 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     score: float = Field(examples=[8.11])
     nsfw: bool = Field(examples=[False])
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
+    created: datetime_pd | None
+    updated: datetime_pd | None
     season: str | None
     year: int | None
 
@@ -160,8 +174,8 @@ class AnimeInfoResponse(CustomModel, DataTypeMixin):
     @field_validator("external")
     def external_ordering(cls, value):
         def watch_sort(item):
-            order = {"Mikai": 0, "Anitube": 1}
-            return order.get(item.text, 2)
+            order = {"Mikai": 0, "AnimeON": 1, "Anitube": 2}
+            return order.get(item.text, 3)
 
         def reorder_watch(input_list):
             return sorted(input_list, key=watch_sort)

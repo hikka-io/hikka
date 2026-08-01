@@ -1,13 +1,14 @@
 from app.schemas import datetime_pd
+from typing import Literal
 
 from app.schemas import (
     ContentAuthorResponse,
     NovelResponseWithRead,
+    ReviewStatsResponse,
     PaginationResponse,
     ReadStatsResponse,
     MagazineResponse,
     ExternalResponse,
-    DataTypeMixin,
     GenreResponse,
     CustomModel,
 )
@@ -19,7 +20,9 @@ class NovelPaginationResponse(CustomModel):
     list: list[NovelResponseWithRead]
 
 
-class NovelInfoResponse(CustomModel, DataTypeMixin):
+class NovelInfoResponse(CustomModel):
+    data_type: Literal["novel"]
+    review_stats: ReviewStatsResponse
     authors: list[ContentAuthorResponse]
     magazines: list[MagazineResponse]
     external: list[ExternalResponse]

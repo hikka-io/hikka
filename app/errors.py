@@ -125,12 +125,33 @@ errors = {
         "scope-empty": ["Scope empty", "Пустий скоуп", 400],
     },
     "settings": {
-        "username-cooldown": ["Username can be changed once per hour", "", 400],
-        "email-cooldown": ["Email can be changed once per day", "", 400],
-        "username-taken": ["Username already taken", "", 400],
-        "invalid-username": ["Invalid username", "", 400],
+        "username-cooldown": [
+            "Username can be changed once per hour",
+            "Юзернейм можна міняти один раз на годину",
+            400,
+        ],
+        "email-cooldown": [
+            "Email can be changed once per day",
+            "Пошта може бути змінена один раз на добу",
+            400,
+        ],
+        "username-taken": [
+            "Username already taken",
+            "Цей юзернейм вже зайнято",
+            400,
+        ],
+        "invalid-username": [
+            "Invalid username",
+            "Такий собі юзернейм",
+            400,
+        ],
     },
     "permission": {
+        "confirm-email": [
+            "Confirm your email to proceed with this request",
+            "Підтвердіть вашу пошту, щоб виконати цей запит",
+            403,
+        ],
         "denied": [
             "You don't have permission for this action",
             "У вас немає дозволу на цю дію",
@@ -198,6 +219,16 @@ errors = {
         "empty-edit": ["Empty edit", "Пуста правка", 400],
     },
     "comment": {
+        "no-content-type": [
+            "Specified slug with no content type",
+            "Вказаний slug без типу контенту",
+            400,
+        ],
+        "author-not-found": [
+            "Comment author not found",
+            "Автора коментаря не знайдено",
+            400,
+        ],
         "rate-limit": [
             "You have reached comment rate limit, try later",
             "Ви досялги ліміту на коментарі, спробуйте пізніше",
@@ -232,6 +263,23 @@ errors = {
         "empty-markdown": ["Empty markdown", "Пуста розмітка", 400],
         "not-found": ["Comment not found", "Коментар не знайдено", 404],
         "hidden": ["Comment is hidden", "Коментар приховано", 400],
+    },
+    "review": {
+        "non-reviewable-content": [
+            "Non reviewable content",
+            "Не можна написати відгук для цього контенту",
+            400,
+        ],
+        "no-parent": [
+            "Only first level comment can be a review",
+            "Лише коментар першого рівня може бути відгуком",
+            400,
+        ],
+        "has-review": [
+            "You already have the review for that",
+            "Ви вже залишили відгук",
+            400,
+        ],
     },
     "studio": {
         "not-found": ["Studio not found", "Не вдалось знайти цю студію", 404],
@@ -393,7 +441,7 @@ errors = {
             "Порядок має починатись з 1",
             400,
         ],
-        "unlabled-content": ["Unlabeled content", "Негрупований контент", 400],
+        "unlabeled-content": ["Unlabeled content", "Негрупований контент", 400],
         "bad-labels-order": ["Bad labels order", "Поганий порядок груп", 400],
         "author-not-found": ["Author not found", "Автора не знайдено", 404],
         "not-found": ["Collection not found", "Колекцію не знайдено", 404],
@@ -496,8 +544,8 @@ errors = {
     "content": {
         "not-found": ["Content not found", "Контент не знайдено", 404],
     },
-    "artifacts": {
-        "not-found": ["Artifact not found", "Артефакт не знайдено", 404],
+    "digests": {
+        "not-found": ["Digest not found", "Дайджест не знайдено", 404],
     },
 }
 

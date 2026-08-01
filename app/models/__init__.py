@@ -38,6 +38,11 @@ from .comments.comment import NovelComment
 from .comments.comment import EditComment
 from .comments.comment import Comment
 
+from .review.review import AnimeReview
+from .review.review import MangaReview
+from .review.review import NovelReview
+from .review.review import Review
+
 from .list.favourite import CollectionFavourite
 from .list.favourite import CharacterFavourite
 from .list.favourite import AnimeFavourite
@@ -78,8 +83,7 @@ from .content.author import AuthorRole
 
 from .system.notification import Notification
 from .system.timestamp import SystemTimestamp
-from .system.activity import Activity
-from .system.artifact import Artifact
+from .system.digest import Digest
 from .system.image import Image
 from .system.log import Log
 
@@ -105,6 +109,8 @@ from .schedule.anime import AnimeSchedule
 
 from .tag.tag import ArticleTag
 from .tag.tag import Tag
+
+from .feed import Feed
 
 from .base import Base
 
@@ -144,6 +150,10 @@ __all__ = [
     "NovelComment",
     "EditComment",
     "Comment",
+    "AnimeReview",
+    "MangaReview",
+    "NovelReview",
+    "Review",
     "CollectionFavourite",
     "CharacterFavourite",
     "AnimeFavourite",
@@ -178,7 +188,7 @@ __all__ = [
     "Notification",
     "SystemTimestamp",
     "Activity",
-    "Artifact",
+    "Digest",
     "Image",
     "Log",
     "CollectionVote",
@@ -198,5 +208,6 @@ __all__ = [
     "AnimeSchedule",
     "ArticleTag",
     "Tag",
+    "Feed",
     "Base",
 ]

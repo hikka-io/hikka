@@ -94,6 +94,7 @@ from .comments import request_comments_write
 from .comments import request_comments_list
 from .comments import request_comments_edit
 from .comments import request_comments_hide
+from .comments import request_comments_user
 
 from .settings import request_settings_customization
 from .settings import request_settings_delete_watch
@@ -118,8 +119,8 @@ from .articles import request_delete_article
 from .articles import request_article_stats
 from .articles import request_articles
 
-from .artifacts import request_artifact_privacy
-from .artifacts import request_artifact
+from .digests import request_digest_privacy
+from .digests import request_digest
 
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
@@ -133,6 +134,8 @@ from .genres import request_genres
 from .upload import request_upload
 
 from .system import request_backup_images
+
+from .feed import request_feed
 
 __all__ = [
     # =========== admin ===========
@@ -233,6 +236,7 @@ __all__ = [
     "request_comments_list",
     "request_comments_edit",
     "request_comments_hide",
+    "request_comments_user",
     # =========== settings ===========
     "request_settings_customization",
     "request_settings_delete_watch",
@@ -256,9 +260,9 @@ __all__ = [
     "request_delete_article",
     "request_article_stats",
     "request_articles",
-    # =========== artifacts ===========
-    "request_artifact_privacy",
-    "request_artifact",
+    # =========== digests ===========
+    "request_digest_privacy",
+    "request_digest",
     # =========== notifications ===========
     "request_notifications_count",
     "request_notification_seen",
@@ -272,4 +276,6 @@ __all__ = [
     "request_upload",
     # =========== system ===========
     "request_backup_images",
+    # =========== feed ===========
+    "request_feed",
 ]

@@ -42,7 +42,7 @@ async def generate_article_vote(session: AsyncSession, log: Log):
         user.username,
         notification_type,
         timedelta(hours=6),
-        article.reference,
+        article.slug,  # For articles we check via slug instead of reference
     ):
         return
 
@@ -57,7 +57,7 @@ async def generate_article_vote(session: AsyncSession, log: Log):
             "log_id": log.id,
             "seen": False,
             "data": {
-                "slug": article.reference,
+                "slug": article.slug,
                 "user_score": user_score,
                 "old_score": log.data["old_score"],
                 "new_score": log.data["new_score"],

@@ -1,0 +1,144 @@
+from sqlalchemy.dialects.postgresql import insert
+from app.database import sessionmanager
+from app.utils import utcnow, chunkify
+from sqlalchemy import select, func
+from datetime import datetime
+from app import constants
+
+from app.models import (
+    SystemTimestamp,
+    Favourite,
+    Comment,
+    Digest,
+    Review,
+    Edit,
+    Log,
+)
+
+
+async def generate_user_stats(session, all=False):
+    now = utcnow()
+
+    if not (
+        system_timestamp := await session.scalar(
+            select(SystemTimestamp).filter(SystemTimestamp.name == "user_stats")
+        )
+    ):
+        system_timestamp = SystemTimestamp(
+            **{
+                "timestamp": datetime(2024, 1, 13),
+                "name": "user_stats",
+            }
+        )
+
+    query = (
+        select(Log.user_id, func.max(Log.created).label("latest"))
+        .filter(
+            Log.log_type.in_(
+                [
+                    constants.LOG_FAVOURITE_REMOVE,
+                    constants.LOG_COMMENT_WRITE,
+                    constants.LOG_COMMENT_HIDE,
+                    constants.LOG_EDIT_CREATE,
+                    constants.LOG_FAVOURITE,
+                ]
+            )
+        )
+        .filter(
+            Log.user_id != None,  # noqa: E711
+        )
+        .group_by(Log.user_id)
+    )
+
+    if not all:
+        query = query.filter(Log.created > system_timestamp.timestamp)
+
+    # Get new logs that were created since last update
+    logs = await session.execute(query)
+
+    max_time = None
+    result = {}
+
+    for log in logs:
+        if max_time is None:
+            max_time = log.latest
+
+        max_time = max(max_time, log.latest)
+
+        edits_count = await session.scalar(
+            select(func.count(Edit.id).filter(Edit.author_id == log.user_id))
+        )
+
+        comments_count = await session.scalar(
+            select(
+                func.count(Comment.id).filter(
+                    Comment.author_id == log.user_id,
+                    Comment.deleted == False,  # noqa: E712
+                    Comment.hidden == False,  # noqa: E712
+                )
+            )
+        )
+
+        reviews_count = await session.scalar(
+            select(
+                func.count(Review.id).filter(
+                    Review.author_id == log.user_id,
+                )
+            )
+        )
+
+        favourites = await session.execute(
+            select(
+                Favourite.content_type,
+                func.count(Favourite.id).label("count"),
+            )
+            .filter(
+                Favourite.user_id == log.user_id,
+                Favourite.deleted == False,  # noqa: E712
+            )
+            .group_by(Favourite.content_type)
+        )
+
+        favourites_count = {row.content_type: row.count for row in favourites}
+
+        result[log.user_id] = {
+            "favourites_count": favourites_count,
+            "comments_count": comments_count,
+            "reviews_count": reviews_count,
+            "edits_count": edits_count,
+        }
+
+    values = [
+        {
+            "name": constants.DIGEST_USER_STATS,
+            "user_id": user_id,
+            "created": now,
+            "updated": now,
+            "data": data,
+        }
+        for user_id, data in result.items()
+    ]
+
+    for values_chunk in chunkify(values, 100):
+        await session.execute(
+            insert(Digest)
+            .values(values_chunk)
+            .on_conflict_do_update(
+                index_elements=["user_id", "name"],
+                set_={
+                    "updated": insert(Digest).excluded.updated,
+                    "data": insert(Digest).excluded.data,
+                },
+            )
+        )
+
+    system_timestamp.timestamp = max_time
+
+    print(f"Updated user stats digests for {len(result)} users")
+
+    await session.commit()
+
+
+async def digest_user_stats():
+    async with sessionmanager.session() as session:
+        await generate_user_stats(session)

@@ -9,6 +9,8 @@ class AnimeWatch(Base, DeletedMixin):
     __tablename__ = "service_watch"
 
     # Watch fields
+    start_date: Mapped[datetime] = mapped_column(nullable=True)
+    end_date: Mapped[datetime] = mapped_column(nullable=True)
     rewatches: Mapped[int] = mapped_column(default=0)
     note: Mapped[str] = mapped_column(nullable=True)
     episodes: Mapped[int] = mapped_column(default=0)

@@ -28,6 +28,7 @@ async def update_anime_settings(index):
                 "genres",
                 "status",
                 "source",
+                "mal_id",
                 "score",
                 "year",
             ],
@@ -36,6 +37,7 @@ async def update_anime_settings(index):
                 "title_en",
                 "title_ja",
                 "synonyms",
+                "mal_id",
             ],
             displayed_attributes=[
                 "episodes_released",
@@ -55,6 +57,7 @@ async def update_anime_settings(index):
                 "score",
                 "slug",
                 "year",
+                "id",
             ],
             sortable_attributes=[
                 "native_scored_by",
@@ -62,6 +65,8 @@ async def update_anime_settings(index):
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
                 "year",
             ],
@@ -97,6 +102,8 @@ def anime_to_document(anime: Anime):
         "native_scored_by": anime.native_scored_by,
         "episodes_total": anime.episodes_total,
         "airing_seasons": anime.airing_seasons,
+        "created": to_timestamp(anime.created),
+        "updated": to_timestamp(anime.updated),
         "season": get_season(anime.start_date),
         "translated_ua": anime.translated_ua,
         "native_score": anime.native_score,
@@ -111,6 +118,7 @@ def anime_to_document(anime: Anime):
         "rating": anime.rating,
         "id": anime.content_id,
         "producers": producers,
+        "mal_id": anime.mal_id,
         "score": anime.score,
         "slug": anime.slug,
         "studios": studios,
@@ -189,7 +197,7 @@ async def meilisearch_populate(session: AsyncSession):
             documents = await anime_documents(session, limit, offset)
 
             if len(documents) > 0:
-                await index.add_documents(documents)
+                await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await anime_document_ids_delete(session)
 

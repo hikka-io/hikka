@@ -19,6 +19,7 @@ async def update_manga_settings(index):
                 "native_score",
                 "media_type",
                 "magazines",
+                "mal_id",
                 "genres",
                 "status",
                 "score",
@@ -29,9 +30,11 @@ async def update_manga_settings(index):
                 "title_ua",
                 "title_en",
                 "synonyms",
+                "mal_id",
             ],
             displayed_attributes=[
                 "slug",
+                "id",
             ],
             sortable_attributes=[
                 "native_scored_by",
@@ -39,6 +42,8 @@ async def update_manga_settings(index):
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
                 "year",
             ],
@@ -67,6 +72,8 @@ def manga_to_document(manga: Manga):
         "start_date": to_timestamp(manga.start_date),
         "native_scored_by": manga.native_scored_by,
         "title_original": manga.title_original,
+        "created": to_timestamp(manga.created),
+        "updated": to_timestamp(manga.updated),
         "translated_ua": manga.translated_ua,
         "native_score": manga.native_score,
         "media_type": manga.media_type,
@@ -77,6 +84,7 @@ def manga_to_document(manga: Manga):
         "status": manga.status,
         "id": manga.content_id,
         "magazines": magazines,
+        "mal_id": manga.mal_id,
         "score": manga.score,
         "slug": manga.slug,
     }
@@ -155,7 +163,7 @@ async def meilisearch_populate(session: AsyncSession):
             documents = await manga_documents(session, limit, offset)
 
             if len(documents) > 0:
-                await index.add_documents(documents)
+                await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await manga_document_ids_delete(session)
 

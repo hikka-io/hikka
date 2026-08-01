@@ -7,14 +7,14 @@ import asyncio
 
 from app.sync import (
     delete_expired_token_requests,
-    artifact_year_summary,
     update_article_views,
     update_notifications,
     update_article_stats,
     update_ranking_all,
     update_moderation,
     update_aggregator,
-    update_activity,
+    digest_user_stats,
+    digest_activity,
     update_schedule,
     update_ranking,
     update_history,
@@ -22,6 +22,7 @@ from app.sync import (
     update_search,
     update_scores,
     update_export,
+    generate_feed,
     send_emails,
 )
 
@@ -34,8 +35,9 @@ def init_scheduler():
     scheduler.add_job(update_article_views, "interval", minutes=10)
     scheduler.add_job(update_article_stats, "interval", minutes=1)
     scheduler.add_job(update_moderation, "interval", seconds=10)
+    scheduler.add_job(digest_user_stats, "interval", minutes=1)
     scheduler.add_job(update_ranking_all, "interval", hours=1)
-    scheduler.add_job(update_activity, "interval", seconds=10)
+    scheduler.add_job(digest_activity, "interval", minutes=1)
     scheduler.add_job(update_schedule, "interval", minutes=5)
     scheduler.add_job(update_ranking, "interval", seconds=10)
     scheduler.add_job(update_history, "interval", seconds=10)
@@ -45,6 +47,9 @@ def init_scheduler():
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
 
+    # TODO: remove me
+    scheduler.add_job(generate_feed, "interval", minutes=1)
+
     scheduler.add_job(
         update_aggregator,
         trigger=CronTrigger(
@@ -53,13 +58,14 @@ def init_scheduler():
         ),
     )
 
-    scheduler.add_job(
-        artifact_year_summary,
-        trigger=CronTrigger(
-            timezone=ZoneInfo("Europe/Kyiv"),
-            hour=1,
-        ),
-    )
+    # NOTE: Reenable next year (maybe)
+    # scheduler.add_job(
+    #     digest_year_summary,
+    #     trigger=CronTrigger(
+    #         timezone=ZoneInfo("Europe/Kyiv"),
+    #         hour=1,
+    #     ),
+    # )
 
     return scheduler
 

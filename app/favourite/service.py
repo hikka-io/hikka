@@ -1,3 +1,4 @@
+from app.common.service.collections import collections_load_options
 from sqlalchemy import select, desc, case, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
@@ -9,7 +10,6 @@ from app import constants
 
 from app.service import (
     content_type_to_content_class,
-    collections_load_options,
     get_followed_user_ids,
     create_log,
 )

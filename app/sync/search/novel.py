@@ -19,6 +19,7 @@ async def update_novel_settings(index):
                 "native_score",
                 "media_type",
                 "magazines",
+                "mal_id",
                 "genres",
                 "status",
                 "score",
@@ -29,9 +30,11 @@ async def update_novel_settings(index):
                 "title_ua",
                 "title_en",
                 "synonyms",
+                "mal_id",
             ],
             displayed_attributes=[
                 "slug",
+                "id",
             ],
             sortable_attributes=[
                 "native_scored_by",
@@ -39,6 +42,8 @@ async def update_novel_settings(index):
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
                 "year",
             ],
@@ -66,6 +71,8 @@ def novel_to_document(novel: Novel):
         "genres": [genre.slug for genre in novel.genres],
         "start_date": to_timestamp(novel.start_date),
         "native_scored_by": novel.native_scored_by,
+        "created": to_timestamp(novel.created),
+        "updated": to_timestamp(novel.updated),
         "title_original": novel.title_original,
         "translated_ua": novel.translated_ua,
         "native_score": novel.native_score,
@@ -77,6 +84,7 @@ def novel_to_document(novel: Novel):
         "status": novel.status,
         "id": novel.content_id,
         "magazines": magazines,
+        "mal_id": novel.mal_id,
         "score": novel.score,
         "slug": novel.slug,
     }
@@ -155,7 +163,7 @@ async def meilisearch_populate(session: AsyncSession):
             documents = await novel_documents(session, limit, offset)
 
             if len(documents) > 0:
-                await index.add_documents(documents)
+                await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await novel_document_ids_delete(session)
 

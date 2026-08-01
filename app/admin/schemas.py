@@ -1,6 +1,5 @@
-from pydantic import Field, field_validator
-
 from app.settings.schemas import DescriptionArgs
+from pydantic import Field, field_validator
 from app import constants
 
 

@@ -39,7 +39,7 @@ async def test_collections_list(
         client,
         get_test_token,
         {
-            "tags": [],
+            "tags": ["first", "tag"],
             "title": "Random anime collection",
             "description": "Description",
             "content_type": "anime",
@@ -66,7 +66,7 @@ async def test_collections_list(
         client,
         get_test_token,
         {
-            "tags": [],
+            "tags": ["second", "tag"],
             "title": "Random people collection",
             "description": "Description",
             "content_type": "person",
@@ -121,3 +121,15 @@ async def test_collections_list(
         response.json()["list"][0]["collection"][5]["content"]["slug"]
         == people_slugs[5]
     )
+
+    # Get collections with tags
+    response = await request_collections(client, filters={'tags': ['tag']})
+
+    # There should be 2 returned, as both collections have 'tag' in the tags
+    assert len(response.json()["list"]) == 2
+
+    response = await request_collections(client, filters={'tags': ['second']})
+    assert len(response.json()["list"]) == 1
+
+    response = await request_collections(client, filters={'tags': ['first']})
+    assert len(response.json()["list"]) == 1

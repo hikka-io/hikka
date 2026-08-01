@@ -1,16 +1,10 @@
+from app.common.service.sort import build_manga_order_by
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from .utils import build_manga_filters_ms
+from app.service import manga_search_filter
 from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
-from app import meilisearch
-from app import constants
-
-from app.service import (
-    build_manga_order_by,
-    manga_search_filter,
-)
 
 from app.models import (
     MangaCharacter,
@@ -50,6 +44,7 @@ async def get_manga_by_slug(session: AsyncSession, slug: str) -> Manga | None:
 async def manga_search(
     session: AsyncSession,
     search: MangaSearchArgs,
+    filter_ids: list[str],
     request_user: User | None,
     limit: int,
     offset: int,
@@ -64,7 +59,15 @@ async def manga_search(
     ]
 
     query = select(Manga).filter(Manga.deleted == False)  # noqa: E712
-    query = manga_search_filter(search, query)
+
+    if filter_ids:
+        query = query.filter(Manga.content_id.in_(filter_ids))
+
+    # NOTE: we should have dedicated nsfw filter
+    # and don't do stupid things like this
+    hide_nsfw = len(filter_ids) == 0
+
+    query = manga_search_filter(search, query, hide_nsfw)
 
     query = query.order_by(*build_manga_order_by(search.sort))
 
@@ -74,10 +77,15 @@ async def manga_search(
     return await session.scalars(query)
 
 
-async def manga_search_total(session: AsyncSession, search: MangaSearchArgs):
-    query = select(func.count(Manga.id)).filter(
-        Manga.deleted == False,  # noqa: E712
-    )
+async def manga_search_total(
+    session: AsyncSession,
+    search: MangaSearchArgs,
+    filter_ids: list[str],
+):
+    query = select(func.count(Manga.id)).filter(Manga.deleted == False)  # noqa: E712
+
+    if filter_ids:
+        query = query.filter(Manga.content_id.in_(filter_ids))
 
     query = manga_search_filter(search, query)
 
@@ -102,46 +110,3 @@ async def manga_characters(
         .limit(limit)
         .offset(offset)
     )
-
-
-async def manga_search_query(
-    session: AsyncSession,
-    search: MangaSearchArgs,
-    request_user: User | None,
-    page: int,
-    size: int,
-):
-    meilisearch_result = await meilisearch.search(
-        constants.SEARCH_INDEX_MANGA,
-        filter=build_manga_filters_ms(search),
-        query=search.query,
-        sort=search.sort,
-        page=page,
-        size=size,
-    )
-
-    slugs = [manga["slug"] for manga in meilisearch_result["list"]]
-
-    # Load request user read statuses here
-    load_options = [
-        joinedload(Manga.read),
-        with_loader_criteria(
-            MangaRead,
-            MangaRead.user_id == request_user.id if request_user else None,
-        ),
-    ]
-
-    query = select(Manga).filter(Manga.slug.in_(slugs)).options(*load_options)
-
-    if len(search.sort) > 0:
-        query = query.order_by(*build_manga_order_by(search.sort))
-
-    manga_list = await session.scalars(query)
-    meilisearch_result["list"] = manga_list.unique().all()
-
-    # Results must be sorted here to ensure same order as Meilisearch results
-    meilisearch_result["list"] = sorted(
-        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
-    )
-
-    return meilisearch_result

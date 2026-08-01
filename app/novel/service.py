@@ -1,16 +1,11 @@
+from app.common.service.sort import build_novel_order_by
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
-from .utils import build_novel_filters_ms
+from app.service import novel_search_filter
 from app.schemas import NovelSearchArgs
 from sqlalchemy.orm import joinedload
-from app import meilisearch
-from app import constants
 
-from app.service import (
-    build_novel_order_by,
-    novel_search_filter,
-)
 
 from app.models import (
     NovelCharacter,
@@ -50,6 +45,7 @@ async def get_novel_by_slug(session: AsyncSession, slug: str) -> Novel | None:
 async def novel_search(
     session: AsyncSession,
     search: NovelSearchArgs,
+    filter_ids: list[str],
     request_user: User | None,
     limit: int,
     offset: int,
@@ -64,7 +60,15 @@ async def novel_search(
     ]
 
     query = select(Novel).filter(Novel.deleted == False)  # noqa: E712
-    query = novel_search_filter(search, query)
+
+    if filter_ids:
+        query = query.filter(Novel.content_id.in_(filter_ids))
+
+    # NOTE: we should have dedicated nsfw filter
+    # and don't do stupid things like this
+    hide_nsfw = len(filter_ids) == 0
+
+    query = novel_search_filter(search, query, hide_nsfw)
 
     query = query.order_by(*build_novel_order_by(search.sort))
 
@@ -74,10 +78,15 @@ async def novel_search(
     return await session.scalars(query)
 
 
-async def novel_search_total(session: AsyncSession, search: NovelSearchArgs):
-    query = select(func.count(Novel.id)).filter(
-        Novel.deleted == False,  # noqa: E712
-    )
+async def novel_search_total(
+    session: AsyncSession,
+    search: NovelSearchArgs,
+    filter_ids: list[str],
+):
+    query = select(func.count(Novel.id)).filter(Novel.deleted == False)  # noqa: E712
+
+    if filter_ids:
+        query = query.filter(Novel.content_id.in_(filter_ids))
 
     query = novel_search_filter(search, query)
 
@@ -102,46 +111,3 @@ async def novel_characters(
         .limit(limit)
         .offset(offset)
     )
-
-
-async def novel_search_query(
-    session: AsyncSession,
-    search: NovelSearchArgs,
-    request_user: User | None,
-    page: int,
-    size: int,
-):
-    meilisearch_result = await meilisearch.search(
-        constants.SEARCH_INDEX_NOVEL,
-        filter=build_novel_filters_ms(search),
-        query=search.query,
-        sort=search.sort,
-        page=page,
-        size=size,
-    )
-
-    slugs = [novel["slug"] for novel in meilisearch_result["list"]]
-
-    # Load request user read statuses here
-    load_options = [
-        joinedload(Novel.read),
-        with_loader_criteria(
-            NovelRead,
-            NovelRead.user_id == request_user.id if request_user else None,
-        ),
-    ]
-
-    query = select(Novel).filter(Novel.slug.in_(slugs)).options(*load_options)
-
-    if len(search.sort) > 0:
-        query = query.order_by(*build_novel_order_by(search.sort))
-
-    novel_list = await session.scalars(query)
-    meilisearch_result["list"] = novel_list.unique().all()
-
-    # Results must be sorted here to ensure same order as Meilisearch results
-    meilisearch_result["list"] = sorted(
-        meilisearch_result["list"], key=lambda x: slugs.index(x.slug)
-    )
-
-    return meilisearch_result

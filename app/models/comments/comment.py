@@ -37,6 +37,7 @@ class Comment(
 
     history: Mapped[list] = mapped_column(JSONB, default=[])
     preview: Mapped[dict] = mapped_column(JSONB, default={})
+    total_replies: Mapped[int] = mapped_column(default=0)
     hidden: Mapped[bool] = mapped_column(default=False)
     score: Mapped[int] = mapped_column(nullable=False)
     path: Mapped[str] = mapped_column(LtreeType)
@@ -53,6 +54,13 @@ class Comment(
     author_id = mapped_column(ForeignKey("service_users.id"))
     author: Mapped["User"] = relationship(
         foreign_keys=[author_id], lazy="selectin"
+    )
+
+    review: Mapped["Review"] = relationship(
+        "Review",
+        back_populates="comment",
+        foreign_keys="Review.comment_id",
+        uselist=False,
     )
 
     __table_args__ = (
@@ -82,17 +90,22 @@ class Comment(
     def is_editable(self):
         # TODO: this is bad place for such limits
         # We shold move them somewhere more sensible
-        now = datetime.now(UTC).replace(tzinfo=None)
-        time_limit = timedelta(hours=24)
         max_edits = 500
 
         if len(self.history) >= max_edits:
             return False
 
-        if now > self.created + time_limit:
-            return False
+        # Maybe we will need that back later
+        # now = datetime.now(UTC).replace(tzinfo=None)
+        # time_limit = timedelta(hours=24)
+        # if now > self.created + time_limit:
+        #     return False
 
         return True
+
+    @hybrid_property
+    def data_type(self):
+        return "comment"
 
 
 class EditComment(Comment):

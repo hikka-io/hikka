@@ -15,76 +15,80 @@ class DocumentLinkTargetEnum(str, Enum):
 
 
 # Args
-class DocumentText(CustomModel):
+class DocumentNode(CustomModel):
+    id: str | None = None
+
+
+class DocumentText(DocumentNode):
     italic: bool | None = None
     bold: bool | None = None
     text: str
 
 
-class DocumentLink(CustomModel):
+class DocumentLink(DocumentNode):
     target: DocumentLinkTargetEnum = Field(default=None)
     children: list["DocumentElement"]
     type: Literal["a"]
     url: str
 
 
-class DocumentParagraph(CustomModel):
+class DocumentParagraph(DocumentNode):
     children: list["DocumentElement"]
     type: Literal["p"]
 
 
-class DocumentBlockquote(CustomModel):
+class DocumentBlockquote(DocumentNode):
     children: list["DocumentElement"]
     type: Literal["blockquote"]
 
 
-class DocumentSpoiler(CustomModel):
+class DocumentSpoiler(DocumentNode):
     children: list["DocumentElement"]
     type: Literal["spoiler"]
 
 
-class DocumentLic(CustomModel):
+class DocumentLic(DocumentNode):
     children: list["DocumentElement"]
     type: Literal["lic"]
 
 
-class DocumentLi(CustomModel):
+class DocumentLi(DocumentNode):
     children: list[DocumentLic]
     type: Literal["li"]
 
 
-class DocumentUl(CustomModel):
+class DocumentUl(DocumentNode):
     children: list[DocumentLi]
     type: Literal["ul"]
 
 
-class DocumentOl(CustomModel):
+class DocumentOl(DocumentNode):
     children: list[DocumentLi]
     type: Literal["ol"]
 
 
-class DocumentH3(CustomModel):
+class DocumentH3(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["h3"]
 
 
-class DocumentH4(CustomModel):
+class DocumentH4(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["h4"]
 
 
-class DocumentH5(CustomModel):
+class DocumentH5(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["h5"]
 
 
-class DocumentImage(CustomModel):
+class DocumentImage(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["image"]
     url: AnyUrl
 
 
-class DocumentVideo(CustomModel):
+class DocumentVideo(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["video"]
     url: AnyUrl
@@ -102,9 +106,29 @@ class DocumentVideo(CustomModel):
         return url
 
 
-class DocumentImageGroup(CustomModel):
+class DocumentImageGroup(DocumentNode):
     children: list[DocumentImage] = Field(max_length=4)
     type: Literal["image_group"]
+
+
+class DocumentTableCell(DocumentNode):
+    # I hate to have camel case here but it's better than
+    # forking whole js library to have snake case field names
+    # TODO: hope one day we can rename them to snake case
+    colSpan: int | None = Field(default=None, ge=1)
+    rowSpan: int | None = Field(default=None, ge=1)
+    children: list["DocumentElement"]
+    type: Literal["td", "th"]
+
+
+class DocumentTableRow(DocumentNode):
+    children: list[DocumentTableCell]
+    type: Literal["tr"]
+
+
+class DocumentTable(DocumentNode):
+    children: list[DocumentTableRow]
+    type: Literal["table"]
 
 
 DocumentElement = (
@@ -120,6 +144,7 @@ DocumentElement = (
     | DocumentOl
     | DocumentVideo
     | DocumentImageGroup
+    | DocumentTable
 )
 
 

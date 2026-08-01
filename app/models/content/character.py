@@ -42,6 +42,8 @@ class Character(
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
 
+    orphan: Mapped[bool] = mapped_column(default=False)
+
     image_id = mapped_column(
         ForeignKey("service_images.id", ondelete="SET NULL"), index=True
     )

@@ -1,13 +1,65 @@
+from app.common.utils.customization import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
-from typing import List, Literal
-import re
+from collections import defaultdict
+from typing import Literal
+from enum import Enum
+
+from app.common.schemas.feed import (
+    CollectionContentTypes,
+    CommentContentTypes,
+    ArticleContentTypes,
+    ReviewContentTypes,
+    ArticleCategories,
+    FeedContentTypes,
+)
+
+
+UIEffect = Literal["snowfall", "sakura"]
+BackdropStyle = Literal["none", "glow"]
+
+
+class UIWidgetEnum(str, Enum):
+    collections = "collections"
+    top_anime = "top_anime"
+    articles = "articles"
+    ongoings = "ongoings"
+    schedule = "schedule"
+    profile = "profile"
+    tracker = "tracker"
+    history = "history"
+    feed = "feed"
+    list = "list"
 
 
 class HSLColor(CustomModel):
     h: float = Field(ge=0, le=360)
     s: float = Field(ge=0, le=100)
     l: float = Field(ge=0, le=100)  # noqa: E741
+
+
+class OKLCHColor(CustomModel):
+    l: float = Field(ge=0, le=1)  # noqa: E741
+    c: float = Field(ge=0, le=0.4)
+    h: float = Field(ge=0, le=360)
+
+
+class UISurfaceOverrides(CustomModel):
+    background: OKLCHColor | None = None
+    foreground: OKLCHColor | None = None
+    card: OKLCHColor | None = None
+    card_foreground: OKLCHColor | None = None
+    popover: OKLCHColor | None = None
+    popover_foreground: OKLCHColor | None = None
+    secondary: OKLCHColor | None = None
+    secondary_foreground: OKLCHColor | None = None
+    muted: OKLCHColor | None = None
+    muted_foreground: OKLCHColor | None = None
+    accent: OKLCHColor | None = None
+    accent_foreground: OKLCHColor | None = None
+    border: OKLCHColor | None = None
+    input: OKLCHColor | None = None
+    ring: OKLCHColor | None = None
 
 
 class UIColorTokens(CustomModel):
@@ -41,36 +93,7 @@ class UIThemeStylesBody(CustomModel):
     @field_validator("background_image")
     @classmethod
     def validate_background_image(cls, v):
-        if v is None:
-            return v
-
-        url_patterns = [
-            r"https?://",  # http:// or https://
-            r"www\.",  # www.
-            r"url\(",  # CSS url() function
-            r"//[a-zA-Z0-9]",  # Protocol-relative URLs like //cdn.com
-        ]
-
-        for pattern in url_patterns:
-            if re.search(pattern, v, re.IGNORECASE):
-                raise ValueError(
-                    "URLs and links are not allowed in background_image"
-                )
-
-        allowed_patterns = [
-            r"^linear-gradient\(",
-            r"^radial-gradient\(",
-            r"^repeating-linear-gradient\(",
-            r"^repeating-radial-gradient\(",
-            r"^conic-gradient\(",
-            r"^#[0-9a-fA-F]{3,8}$",
-            r"^rgb\(",
-            r"^rgba\(",
-            r"^hsl\(",
-            r"^hsla\(",
-        ]
-
-        if not any(re.match(pattern, v) for pattern in allowed_patterns):
+        if not is_valid_css_background(v):
             raise ValueError("Only CSS gradients and color values are allowed")
 
         return v
@@ -90,23 +113,104 @@ class UIStylesTypography(CustomModel):
     p: str | None = None
 
 
+class UIBackdrop(CustomModel):
+    intensity: float = Field(0.3, ge=0, le=1)
+    height: float = Field(1, ge=0, le=1)
+    style: BackdropStyle | None = None
+    color: OKLCHColor | None = None
+
+
+class UIOverrides(CustomModel):
+    light: UISurfaceOverrides | None = None
+    dark: UISurfaceOverrides | None = None
+
+
 class UIStyles(CustomModel):
-    dark: UIThemeStyles | None = None
+    # TODO: remove me
     light: UIThemeStyles | None = None
-    radius: str | None = Field(
-        None,
-    )
+    dark: UIThemeStyles | None = None
+
     typography: UIStylesTypography | None = None
+    overrides: UIOverrides | None = None
+    backdrop: UIBackdrop | None = None
+    brand: OKLCHColor | None = None
+    radius: str | None = None
 
 
-UIEffect = Literal["snowfall"]
+class UIFeedWidget(CustomModel):
+    side: Literal["left", "center", "right"]
+    slug: UIWidgetEnum
+    order: int
+
+
+class UIFeedSettings(CustomModel):
+    collection_content_types: list[CollectionContentTypes] | None = None
+    comment_content_types: list[CommentContentTypes] | None = None
+    article_content_types: list[ArticleContentTypes] | None = None
+    review_content_types: list[ReviewContentTypes] | None = None
+    article_categories: list[ArticleCategories] | None = None
+    feed_content_types: list[FeedContentTypes] | None = None
+    only_followed: bool = False
+
+    widgets: list[UIFeedWidget] = [
+        UIFeedWidget(side="left", slug="profile", order=1),
+        UIFeedWidget(side="left", slug="tracker", order=2),
+        UIFeedWidget(side="left", slug="history", order=3),
+        UIFeedWidget(side="center", slug="ongoings", order=1),
+        UIFeedWidget(side="center", slug="feed", order=2),
+        UIFeedWidget(side="right", slug="schedule", order=1),
+        UIFeedWidget(side="right", slug="list", order=2),
+    ]
+
+    @field_validator("widgets")
+    @classmethod
+    def validate_widgets(cls, widgets):
+        # Slugs must be unique
+        slugs = [w.slug for w in widgets]
+        if len(slugs) != len(set(slugs)):
+            raise ValueError("Widget slugs must be unique")
+
+        # Orders must be unique per side and sequential starting from 1
+        sides = defaultdict(list)
+        for w in widgets:
+            sides[w.side].append(w.order)
+
+        for side, orders in sides.items():
+            orders.sort()
+            expected = list(range(1, len(orders) + 1))
+            if orders != expected:
+                raise ValueError(
+                    f"Orders for side '{side}' must be sequential starting from 1"
+                )
+
+        return widgets
 
 
 class UIPreferences(CustomModel):
-    effects: List[UIEffect] | None = None
+    # TODO: remove me later
+    effects: list[UIEffect] | None = None
+
+    feed: UIFeedSettings = Field(default_factory=lambda: UIFeedSettings())
+    score: Literal["mal", "native"] | None = None
     title_language: str | None = None
     name_language: str | None = None
+    effect: UIEffect | None = None
+    show_nsfw: bool = False
     overlay: bool = True
+
+    home_widgets: list[UIWidgetEnum] = [
+        "tracker",
+        "history",
+        "ongoings",
+        "schedule",
+    ]
+
+    @field_validator("home_widgets")
+    def validate_home_widgets(cls, widgets):
+        if len(widgets) != len(set(widgets)):
+            raise ValueError("Repeated widget not allowed")
+
+        return widgets
 
 
 class UserAppearance(CustomModel):

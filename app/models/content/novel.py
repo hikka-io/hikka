@@ -15,6 +15,7 @@ from ..mixins import (
     NeedsSearchUpdateMixin,
     CommentContentMixin,
     IgnoredFieldsMixin,
+    ReviewStatsMixin,
     NativeScoreMixin,
     SynonymsMixin,
     ContentMixin,
@@ -32,6 +33,7 @@ class Novel(
     DeletedMixin,
     SynonymsMixin,
     NativeScoreMixin,
+    ReviewStatsMixin,
     IgnoredFieldsMixin,
     CommentContentMixin,
     NeedsSearchUpdateMixin,
@@ -52,6 +54,7 @@ class Novel(
     mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     translated_ua: Mapped[bool] = mapped_column(default=False)
     needs_update: Mapped[bool] = mapped_column(default=False)
+    created: Mapped[datetime] = mapped_column(nullable=True)
 
     # Metadata
     status: Mapped[str] = mapped_column(String(16), index=True, nullable=True)
@@ -73,6 +76,8 @@ class Novel(
     genres: Mapped[list["Genre"]] = relationship(
         secondary=genres_novel_association_table,
         back_populates="novel",
+        # Solution to not write selectinload for each NovelResponse
+        lazy="selectin",
     )
 
     authors: Mapped[list["NovelAuthor"]] = relationship(
@@ -88,6 +93,8 @@ class Novel(
     magazines: Mapped[list["Magazine"]] = relationship(
         secondary=novel_magazines_association_table,
         back_populates="novel",
+        # Same as with genres above
+        lazy="selectin",
     )
 
     image_id = mapped_column(

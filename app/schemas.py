@@ -4,11 +4,16 @@ from datetime import datetime, timedelta
 from pydantic import PlainSerializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
+from pydantic import BeforeValidator
 from pydantic import PositiveInt
-from typing import Annotated
+from typing import Annotated, Literal
 from . import constants
 from enum import Enum
 from . import utils
+
+
+# Custom field types
+UnixTimestamp = Annotated[datetime, BeforeValidator(utils.from_timestamp)]
 
 
 # Custom Pydantic serializers
@@ -51,12 +56,6 @@ class CustomModelExtraIgnore(CustomModel):
 class CompanyTypeEnum(str, Enum):
     producer = constants.COMPANY_ANIME_PRODUCER
     studio = constants.COMPANY_ANIME_STUDIO
-
-
-class AnimeStatusEnum(str, Enum):
-    announced = constants.RELEASE_STATUS_ANNOUNCED
-    finished = constants.RELEASE_STATUS_FINISHED
-    ongoing = constants.RELEASE_STATUS_ONGOING
 
 
 class ContentStatusEnum(str, Enum):
@@ -129,11 +128,26 @@ class CollectionVisibilityEnum(str, Enum):
     visibility_public = constants.COLLECTION_PUBLIC
 
 
+class CollectionContentTypeEnum(str, Enum):
+    content_character = constants.CONTENT_CHARACTER
+    content_person = constants.CONTENT_PERSON
+    content_anime = constants.CONTENT_ANIME
+    content_manga = constants.CONTENT_MANGA
+    content_novel = constants.CONTENT_NOVEL
+
+
+class ExternalTypeEnum(str, Enum):
+    general = constants.EXTERNAL_GENERAL
+    watch = constants.EXTERNAL_WATCH
+    read = constants.EXTERNAL_READ
+
+
+class AnimeVideoTypeEnum(str, Enum):
+    video_promo = constants.VIDEO_PROMO
+    video_music = constants.VIDEO_MUSIC
+
+
 # Mixins
-class DataTypeMixin:
-    data_type: str
-
-
 class YearsMixin:
     years: list[PositiveInt | None] | None = Field(
         default=[None, None],
@@ -302,7 +316,7 @@ class AnimeSearchArgsBase(CustomModel, YearsSeasonsMixin):
 
     media_type: list[AnimeMediaEnum] = []
     rating: list[AnimeAgeRatingEnum] = []
-    status: list[AnimeStatusEnum] = []
+    status: list[ContentStatusEnum] = []
     source: list[SourceEnum] = []
     season: list[SeasonEnum] = []
 
@@ -343,6 +357,8 @@ class MangaSearchArgs(
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
             ],
         )
@@ -380,6 +396,8 @@ class NovelSearchArgs(
                 "media_type",
                 "start_date",
                 "scored_by",
+                "created",
+                "updated",
                 "score",
             ],
         )
@@ -417,6 +435,8 @@ class WatchResponseBase(CustomModel):
     duration: int = Field(examples=[24])
     episodes: int = Field(examples=[3])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
 class ReadResponseBase(CustomModel):
@@ -429,9 +449,34 @@ class ReadResponseBase(CustomModel):
     volumes: int = Field(examples=[3])
     rereads: int = Field(examples=[2])
     score: int = Field(examples=[8])
+    start_date: datetime_pd | None
+    end_date: datetime_pd | None
 
 
-class AnimeResponse(CustomModel, DataTypeMixin):
+class CompanyResponse(CustomModel):
+    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
+    slug: str = Field(examples=["hikka-inc-123456"])
+    name: str = Field(examples=["Hikka Inc."])
+
+
+class GenreResponse(CustomModel):
+    name_ua: str | None = Field(examples=["Комедія"])
+    name_en: str | None = Field(examples=["Comedy"])
+    slug: str = Field(examples=["comedy"])
+    type: str = Field(examples=["genre"])
+
+
+class GenreListResponse(CustomModel):
+    list: list[GenreResponse]
+
+
+class MagazineResponse(CustomModel):
+    name_en: str
+    slug: str
+
+
+class AnimeResponse(CustomModel):
+    data_type: Literal["anime"]
     media_type: str | None = Field(examples=["tv"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
@@ -453,16 +498,27 @@ class AnimeResponse(CustomModel, DataTypeMixin):
     slug: str = Field(examples=["kono-subarashii-sekai-ni-shukufuku-wo-123456"])
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     translated_ua: bool
     season: str | None
     source: str | None
     rating: str | None
     year: int | None
+    mal_id: int
+
+    studios: list[CompanyResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
-class MangaResponse(CustomModel, DataTypeMixin):
+class MangaResponse(CustomModel):
+    data_type: Literal["manga"]
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     title_original: str | None
     media_type: str | None
     native_scored_by: int
@@ -477,12 +533,21 @@ class MangaResponse(CustomModel, DataTypeMixin):
     year: int | None
     scored_by: int
     score: float
+    mal_id: int
     slug: str
 
+    magazines: list[MagazineResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
-class NovelResponse(CustomModel, DataTypeMixin):
+
+class NovelResponse(CustomModel):
+    data_type: Literal["novel"]
     start_date: datetime_pd | None
     end_date: datetime_pd | None
+    created: datetime_pd | None
+    updated: datetime_pd | None
     title_original: str | None
     media_type: str | None
     native_scored_by: int
@@ -497,7 +562,13 @@ class NovelResponse(CustomModel, DataTypeMixin):
     year: int | None
     scored_by: int
     score: float
+    mal_id: int
     slug: str
+
+    magazines: list[MagazineResponse]
+    genres: list[GenreResponse]
+    synopsis_en: str | None
+    synopsis_ua: str | None
 
 
 class AnimeResponseWithWatch(AnimeResponse):
@@ -517,7 +588,8 @@ class AnimePaginationResponse(CustomModel):
     pagination: PaginationResponse
 
 
-class CharacterResponse(CustomModel, DataTypeMixin):
+class CharacterResponse(CustomModel):
+    data_type: Literal["character"]
     name_ua: str | None = Field(examples=["Меґумін"])
     name_en: str | None = Field(examples=["Megumin"])
     name_ja: str | None = Field(examples=["めぐみん"])
@@ -526,7 +598,8 @@ class CharacterResponse(CustomModel, DataTypeMixin):
     synonyms: list[str]
 
 
-class PersonResponse(CustomModel, DataTypeMixin):
+class PersonResponse(CustomModel):
+    data_type: Literal["person"]
     name_native: str | None = Field(examples=["高橋 李依"])
     name_ua: str | None = Field(examples=["Ріє Такахаші"])
     name_en: str | None = Field(examples=["Rie Takahashi"])
@@ -556,12 +629,6 @@ class SuccessResponse(CustomModel):
     success: bool = Field(examples=[True])
 
 
-class CompanyResponse(CustomModel):
-    image: str | None = Field(examples=["https://cdn.hikka.io/hikka.jpg"])
-    slug: str = Field(examples=["hikka-inc-123456"])
-    name: str = Field(examples=["Hikka Inc."])
-
-
 class UserResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     updated: datetime_pd | None = Field(examples=[1686088809])
@@ -581,21 +648,21 @@ class FollowUserResponse(UserResponse):
 class ExternalResponse(CustomModel):
     url: str = Field(examples=["https://www.konosuba.com/"])
     text: str = Field(examples=["Official Site"])
-    type: str
+    type: ExternalTypeEnum
 
 
 class AnimeVideoResponse(CustomModel):
     url: str = Field(examples=["https://youtu.be/_4W1OQoDEDg"])
     title: str | None = Field(examples=["ED 2 (Artist ver.)"])
     description: str | None = Field(examples=["..."])
-    video_type: str = Field(examples=["video_music"])
+    video_type: AnimeVideoTypeEnum
 
 
 # Collections
 class CollectionContentResponse(CustomModel):
     comment: str | None
     label: str | None
-    content_type: str
+    content_type: CollectionContentTypeEnum
     order: int
 
     content: (
@@ -607,14 +674,15 @@ class CollectionContentResponse(CustomModel):
     )
 
 
-class CollectionResponse(CustomModel, DataTypeMixin):
+class CollectionResponse(CustomModel):
+    data_type: Literal["collection"]
     visibility: CollectionVisibilityEnum
     author: FollowUserResponse
     labels_order: list[str]
     created: datetime_pd
     updated: datetime_pd
     comments_count: int
-    content_type: str
+    content_type: CollectionContentTypeEnum
     description: str
     vote_score: int
     tags: list[str]
@@ -632,15 +700,10 @@ class CollectionResponse(CustomModel, DataTypeMixin):
         return sorted(collection, key=lambda c: c.order)
 
 
-class GenreResponse(CustomModel):
-    name_ua: str | None = Field(examples=["Комедія"])
-    name_en: str | None = Field(examples=["Comedy"])
-    slug: str = Field(examples=["comedy"])
-    type: str = Field(examples=["genre"])
-
-
-class GenreListResponse(CustomModel):
-    list: list[GenreResponse]
+class ReviewStatsResponse(CustomModel):
+    maybe: int = Field(examples=[1337], default=0)
+    yes: int = Field(examples=[8801], default=0)
+    no: int = Field(examples=[404], default=0)
 
 
 class ReadStatsResponse(CustomModel):
@@ -659,11 +722,6 @@ class ReadStatsResponse(CustomModel):
     score_8: int = Field(examples=[398095], default=0)
     score_9: int = Field(examples=[298198], default=0)
     score_10: int = Field(examples=[184038], default=0)
-
-
-class MagazineResponse(CustomModel):
-    name_en: str
-    slug: str
 
 
 class ContentCharacterResponse(CustomModel):

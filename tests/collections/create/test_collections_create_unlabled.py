@@ -3,7 +3,7 @@ from fastapi import status
 from app import constants
 
 
-async def test_collections_create_unlabled(
+async def test_collections_create_unlabeled(
     client,
     aggregator_anime,
     aggregator_anime_info,
@@ -42,4 +42,4 @@ async def test_collections_create_unlabled(
 
     # Make sure we got correct response code
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()["code"] == "collections:unlabled_content"
+    assert response.json()["code"] == "collections:unlabeled_content"

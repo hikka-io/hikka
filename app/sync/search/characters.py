@@ -52,7 +52,10 @@ def character_to_document(character: Character):
 async def characters_documents(session: AsyncSession, limit: int, offset: int):
     characters_list = await session.scalars(
         select(Character)
-        .filter(Character.needs_search_update == True)  # noqa: E712
+        .filter(
+            Character.needs_search_update == True,  # noqa: E712
+            Character.orphan == False,  # noqa: E712
+        )
         .order_by("content_id")
         .limit(limit)
         .offset(offset)
@@ -71,9 +74,27 @@ async def characters_documents(session: AsyncSession, limit: int, offset: int):
 async def characters_documents_total(session: AsyncSession):
     return await session.scalar(
         select(func.count(Character.id)).filter(
-            Character.needs_search_update == True  # noqa: E712
+            Character.needs_search_update == True,  # noqa: E712
+            Character.orphan == False,  # noqa: E712
         )
     )
+
+
+async def characters_document_ids_delete(session: AsyncSession):
+    characters_list = await session.scalars(
+        select(Character)
+        .filter(Character.orphan == True)  # noqa: E712
+        .filter(Character.needs_search_update == True)  # noqa: E712
+    )
+
+    delete_ids = []
+
+    for character in characters_list:
+        delete_ids.append(character.content_id)
+        character.needs_search_update = False
+        session.add(character)
+
+    return delete_ids
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -98,7 +119,15 @@ async def meilisearch_populate(session: AsyncSession):
 
             await index.add_documents(documents)
 
-            await session.commit()
+        delete_document_ids = await characters_document_ids_delete(session)
+
+        if len(delete_document_ids) > 0:
+            await index.delete_documents(delete_document_ids)
+            print(
+                f"Meilisearch: deleted {len(delete_document_ids)} characters from search"
+            )
+
+        await session.commit()
 
 
 async def update_search_characters():

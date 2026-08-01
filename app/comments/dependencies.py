@@ -1,3 +1,5 @@
+from app.common.schemas.comments import CommentContentTypeEnum
+from app.common.service.reviews import has_review
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_content_by_slug
 from app.dependencies import auth_required
@@ -12,14 +14,13 @@ from . import service
 
 from .schemas import (
     CommentableType,
-    ContentTypeEnum,
     CommentArgs,
 )
 
 
 async def validate_content(
     slug: str,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ) -> CommentableType:
     if not (content := await get_content_by_slug(session, content_type, slug)):
@@ -31,7 +32,7 @@ async def validate_content(
 
 async def validate_parent(
     args: CommentArgs,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType = Depends(validate_content),
     session: AsyncSession = Depends(get_session),
 ) -> Comment | None:
@@ -87,8 +88,9 @@ async def validate_comment(
 
 async def validate_comment_not_hidden(
     comment: Comment = Depends(validate_comment),
+    session: AsyncSession = Depends(get_session),
 ):
-    if comment.hidden:
+    if comment.hidden and comment.total_replies == 0:
         raise Abort("comment", "hidden")
 
     return comment
@@ -131,3 +133,66 @@ async def validate_hide(
         raise Abort("permission", "denied")
 
     return user
+
+
+async def validate_review_create(
+    args: CommentArgs,
+    content_type: CommentContentTypeEnum,
+    content: CommentableType = Depends(validate_content),
+    session: AsyncSession = Depends(get_session),
+    author: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_REVIEW_WRITE],
+            scope=[constants.SCOPE_CREATE_REVIEW],
+        )
+    ),
+):
+    if args.review is None:
+        return True
+
+    if content_type not in [
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
+        raise Abort("review", "non-reviewable-content")
+
+    if args.parent is not None:
+        raise Abort("review", "no-parent")
+
+    if await has_review(session, author, content.id, content_type):
+        raise Abort("review", "has-review")
+
+    return True
+
+
+async def validate_review_edit(
+    args: CommentArgs,
+    comment: Comment = Depends(validate_comment_edit),
+    session: AsyncSession = Depends(get_session),
+    author: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_REVIEW_EDIT],
+            scope=[constants.SCOPE_UPDATE_REVIEW],
+        )
+    ),
+):
+    if args.review is None:
+        return True
+
+    if comment.content_type not in [
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
+        raise Abort("review", "non-reviewable-content")
+
+    if len(comment.path) > 1:
+        raise Abort("review", "no-parent")
+
+    if await has_review(
+        session, author, comment.content_id, comment.content_type, comment
+    ):
+        raise Abort("review", "has-review")
+
+    return True

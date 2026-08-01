@@ -1,8 +1,15 @@
-from sqlalchemy import ScalarResult, select, desc, asc, func
-from .schemas import ContentTypeEnum, CommentableType
+from sqlalchemy import ScalarResult, or_, select, desc, asc, func
+from app.common.schemas.comments import CommentContentTypeEnum
+from app.common.service.sort import build_comments_order_by
+from app.common.schemas.reviews import ReviewRecommended
+from app.common.service.score import get_user_list_score
+from app.common.service.reviews import get_review_stats
+from app.common.schemas.reviews import ReviewArgs
+from .schemas import CommentableType, CommentType
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import immediateload
+from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
@@ -37,6 +44,7 @@ from app.models import (
     NovelEdit,
     Character,
     Comment,
+    Review,
     Person,
     Anime,
     Manga,
@@ -58,10 +66,21 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
+async def count_replies(session: AsyncSession, comment: Comment):
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            Comment.path.descendant_of(comment.path),
+            Comment.deleted == False,  # noqa: E712
+            Comment.hidden == False,  # noqa: E712
+            Comment.id != comment.id,
+        )
+    )
+
+
 async def get_comment(
     session: AsyncSession,
     comment_reference: UUID,
-    request_user: User | None,
+    request_user: User | None = None,
 ) -> Comment:
     return await session.scalar(
         select(Comment)
@@ -82,7 +101,7 @@ async def get_comment(
 
 async def get_comments_count(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType,
     first_level_only: bool = False,
 ):
@@ -103,10 +122,11 @@ async def get_comments_count(
 
 async def create_comment(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content: CommentableType,
     author: User,
     text: str,
+    comment_review: None | ReviewArgs = None,
     parent: Comment | None = None,
 ):
     cleaned_text = utils.remove_bad_characters(text)
@@ -141,7 +161,30 @@ async def create_comment(
     comment.path = ltree_id if parent is None else parent.path + ltree_id
 
     session.add(comment)
+
+    if comment_review is not None:
+        review = Review(
+            **{
+                "recommended": comment_review.recommended,
+                "content_type": content_type,
+                "content_id": content.id,
+                "comment": comment,
+                "created": now,
+                "updated": now,
+                "user": author,
+                "score": await get_user_list_score(
+                    session, content_type, content.id, author
+                ),
+            }
+        )
+
+        session.add(review)
+
     await session.commit()
+
+    # Update replies count after new comment is written
+    if parent:
+        parent.total_replies = await count_replies(session, parent)
 
     # Update comments count here
     content.comments_count = await get_comments_count(
@@ -152,15 +195,24 @@ async def create_comment(
         session, content_type, content, True
     )
 
-    session.add(content)
+    # Update review stats here
+    if comment_review is not None:
+        content.review_stats = await get_review_stats(
+            session, content_type, content.id
+        )
+
     await session.commit()
+
+    log_data = {"content_type": comment.content_type}
+    if comment_review is not None:
+        log_data["recommended"] = comment_review.recommended
 
     await create_log(
         session,
         constants.LOG_COMMENT_WRITE,
         author,
         comment.id,
-        {"content_type": comment.content_type},
+        log_data,
     )
 
     return comment
@@ -168,7 +220,7 @@ async def create_comment(
 
 async def get_comment_by_content(
     session: AsyncSession,
-    content_type: ContentTypeEnum,
+    content_type: CommentContentTypeEnum,
     content_id: str,
     reference: str,
 ) -> Comment | None:
@@ -182,32 +234,196 @@ async def get_comment_by_content(
     )
 
 
-async def get_comments_by_content_id(
+def filter_comments_review(
+    query,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+):
+    # Here we filter for reviews
+    # or if specific review recommendation filter is set
+    if comment_type == "review" or recommended is not None:
+        review_filter_args = []
+
+        if recommended is not None:
+            review_filter_args.append((Review.recommended == recommended))
+
+        query = query.filter(Comment.review.has(*review_filter_args))
+
+    # Or only show comments
+    elif comment_type == "comment":
+        query = query.filter(~Comment.review.has())
+
+    return query
+
+
+async def get_comments_count_by_content_id(
     session: AsyncSession,
     content_id: str,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+) -> int:
+    """Count comments for given content"""
+
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.content_id == content_id,
+            func.nlevel(Comment.path) == 1,
+        )
+    )
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalar(query)
+
+
+async def get_comments_count_by_thread(
+    session: AsyncSession,
+    base_comment: Comment,
+) -> int:
+    """Count comments in given thread"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            Comment.deleted == False,  # noqa: E712
+            Comment.path.descendant_of(base_comment.path),
+            or_(
+                Comment.hidden == False,  # noqa: E712,
+                Comment.total_replies > 0,
+            ),
+        )
+    )
+
+
+async def get_comments_by_thread(
+    session: AsyncSession,
+    base_comment: Comment,
     request_user: User | None,
     limit: int,
     offset: int,
 ) -> ScalarResult[Comment]:
-    """Return comments for given content"""
+    query = select(Comment).filter(
+        Comment.deleted == False,  # noqa: E712
+        Comment.path.descendant_of(base_comment.path),
+        or_(
+            Comment.hidden == False,  # noqa: E712,
+            Comment.total_replies > 0,
+        ),
+    )
 
     return await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.content_id == content_id,
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
-        )
-        .options(
+        query.options(
             with_expression(
                 Comment.my_score,
                 get_my_score_subquery(
                     Comment, constants.CONTENT_COMMENT, request_user
                 ),
-            )
+            ),
+            selectinload(Comment.review),
         )
-        .order_by(desc(Comment.created))
+        .order_by(Comment.created.asc())
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def get_comments_by_content_id(
+    session: AsyncSession,
+    content_id: str,
+    request_user: User | None,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+    sort: str,
+    limit: int,
+    offset: int,
+) -> ScalarResult[Comment]:
+    """Return comments for given content"""
+
+    query = select(Comment).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.content_id == content_id,
+        Comment.deleted == False,  # noqa: E712
+        or_(
+            Comment.hidden == False,  # noqa: E712,
+            Comment.total_replies > 0,
+        ),
+    )
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(*build_comments_order_by(sort))
+        .limit(limit)
+        .offset(offset)
+    )
+
+
+async def get_comments_count_by_user(
+    session: AsyncSession,
+    user: User,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+    first_level_only: bool = False,
+) -> int:
+    query = select(
+        func.count(Comment.id).filter(
+            Comment.hidden == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+            Comment.author == user,
+        )
+    )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalar(query)
+
+
+async def get_comments_by_user(
+    session: AsyncSession,
+    user: User,
+    request_user: User | None,
+    comment_type: CommentType,
+    recommended: ReviewRecommended | None,
+    sort: str,
+    limit: int,
+    offset: int,
+    first_level_only: bool = False,
+) -> ScalarResult[Comment]:
+    query = select(Comment).filter(
+        Comment.author == user,
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712,
+    )
+
+    if first_level_only:
+        query = query.filter(func.nlevel(Comment.path) == 1)
+
+    query = filter_comments_review(query, comment_type, recommended)
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(*build_comments_order_by(sort))
         .limit(limit)
         .offset(offset)
     )
@@ -224,6 +440,10 @@ async def get_sub_comments(
             Comment.deleted == False,  # noqa: E712
             Comment.path.descendant_of(base_comment.path),
             Comment.id != base_comment.id,
+            or_(
+                Comment.hidden == False,  # noqa: E712,
+                Comment.total_replies > 0,
+            ),
         )
         .options(
             with_expression(
@@ -233,7 +453,8 @@ async def get_sub_comments(
                 ),
             )
         )
-        .order_by(asc(Comment.created))
+        .order_by(Comment.created.asc())
+        # .limit(10)  # TODO: enable after deprecating non flat comments
     )
 
 
@@ -251,6 +472,7 @@ async def edit_comment(
     session: AsyncSession,
     comment: Comment,
     text: str,
+    comment_review: Review | None = None,
 ) -> Comment:
     now = utcnow()
 
@@ -268,19 +490,78 @@ async def edit_comment(
         }
     )
 
-    session.add(comment)
+    review_before = None
+    review_after = None
+
+    if review := await session.scalar(
+        select(Review).filter(Review.comment == comment)
+    ):
+        review_before = {"recommended": review.recommended}
+
+        if comment_review is None:
+            await session.delete(review)
+
+        else:
+            # Mark review as updated if value has changed
+            if review.recommended != comment_review.recommended:
+                review.updated = now
+
+            review.recommended = comment_review.recommended
+            review_after = {"recommended": review.recommended}
+
+    else:
+        if comment_review is not None:
+            review = Review(
+                **{
+                    "user": comment.author,
+                    "recommended": comment_review.recommended,
+                    "content_type": comment.content_type,
+                    "content_id": comment.content_id,
+                    "created": comment.created,
+                    "updated": comment.updated,
+                    "comment": comment,
+                    "score": await get_user_list_score(
+                        session,
+                        comment.content_type,
+                        comment.content_id,
+                        comment.author,
+                    ),
+                }
+            )
+
+            review_after = {"recommended": review.recommended}
+            session.add(review)
+
     await session.commit()
+
+    # Update review stats here if review was added, changed or removed
+    if review_before is not None or review_after is not None:
+        content = await get_content_by_id(
+            session, comment.content_type, comment.content_id
+        )
+
+        content.review_stats = await get_review_stats(
+            session, comment.content_type, comment.content_id
+        )
+
+        await session.commit()
+
+    log_data = {
+        "content_type": comment.content_type,
+        "old_text": old_text,
+        "new_text": new_text,
+    }
+
+    if review_before is not None and review_after is not None:
+        log_data["review_before"] = review_before
+        log_data["review_after"] = review_after
 
     await create_log(
         session,
         constants.LOG_COMMENT_EDIT,
         comment.author,
         comment.id,
-        data={
-            "content_type": comment.content_type,
-            "old_text": old_text,
-            "new_text": new_text,
-        },
+        data=log_data,
     )
 
     return comment
@@ -291,7 +572,6 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     comment.hidden_by = user
     comment.hidden = True
 
-    session.add(comment)
     await session.commit()
 
     # Update comments count here
@@ -307,7 +587,24 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
         session, comment.content_type, content, True
     )
 
-    session.add(content)
+    # If comment has review we delete it
+    # Not sure if thats the best approach but it's simple one
+    if len(comment.path) == 1:
+        if review := await session.scalar(
+            select(Review).filter(Review.comment == comment)
+        ):
+            await session.delete(review)
+
+            content.review_stats = await get_review_stats(
+                session, comment.content_type, comment.content_id
+            )
+
+    else:
+        if parent := await session.scalar(
+            select(Comment).filter(Comment.path == comment.path[:-1])
+        ):
+            parent.total_replies = await count_replies(session, parent)
+
     await session.commit()
 
     await create_log(
@@ -321,66 +618,10 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
     return True
 
 
-async def latest_comments(session: AsyncSession):
-    comments = await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .order_by(desc(Comment.created))
-        .limit(3)
-    )
-
-    return comments
-
-
-async def count_comments(session: AsyncSession) -> int:
-    """Count comments"""
-
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-    )
-
-
-async def get_comments(
-    session: AsyncSession,
-    request_user: User | None,
-    limit: int,
-    offset: int,
-):
-    return await session.scalars(
-        select(Comment)
-        .filter(
-            func.nlevel(Comment.path) == 1,
-            Comment.hidden == False,  # noqa: E712
-            Comment.private == False,  # noqa: E712
-            Comment.deleted == False,  # noqa: E712
-        )
-        .options(
-            with_expression(
-                Comment.my_score,
-                get_my_score_subquery(
-                    Comment, constants.CONTENT_COMMENT, request_user
-                ),
-            )
-        )
-        .order_by(desc(Comment.created))
-        .limit(limit)
-        .offset(offset)
-    )
-
-
 # NOTE: I still hate this function but less than before.
 # NOTE: This code is a liability. It must be updated when
 # new identities added for Comment or Edit
+# TODO: Why the hell this even exists?
 async def generate_preview(
     session: AsyncSession,
     original_comment: Comment,
@@ -388,14 +629,17 @@ async def generate_preview(
     comment = await session.scalar(
         select(Comment)
         .filter(Comment.id == original_comment.id)
-        .options(immediateload(CollectionComment.content))
-        .options(immediateload(CharacterComment.content))
-        .options(immediateload(ArticleComment.content))
-        .options(immediateload(PersonComment.content))
-        .options(immediateload(AnimeComment.content))
-        .options(immediateload(MangaComment.content))
-        .options(immediateload(NovelComment.content))
-        .options(immediateload(EditComment.content))
+        .options(
+            immediateload(CollectionComment.content),
+            immediateload(CharacterComment.content),
+            immediateload(ArticleComment.content),
+            immediateload(PersonComment.content),
+            immediateload(AnimeComment.content),
+            immediateload(MangaComment.content),
+            immediateload(NovelComment.content),
+            immediateload(EditComment.content),
+            selectinload(Comment.review),
+        )
         .order_by(desc(Comment.created))
     )
 
@@ -485,12 +729,75 @@ async def generate_preview(
         title = collection_content.collection.title
 
     original_comment.preview = {
+        "title": title,
         "image": image,
         "slug": slug,
-        "title": title,
     }
 
     session.add(original_comment)
     await session.commit()
 
     return original_comment
+
+
+# DEPRECATED
+async def latest_comments(session: AsyncSession):
+    comments = await session.scalars(
+        select(Comment)
+        .filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+        .order_by(desc(Comment.created))
+        .limit(3)
+    )
+
+    return comments
+
+
+# DEPRECATED
+async def count_comments(
+    session: AsyncSession,
+) -> int:
+    """Count comments"""
+
+    return await session.scalar(
+        select(func.count(Comment.id)).filter(
+            func.nlevel(Comment.path) == 1,
+            Comment.hidden == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
+            Comment.deleted == False,  # noqa: E712
+        )
+    )
+
+
+# DEPRECATED
+async def get_comments(
+    session: AsyncSession,
+    request_user: User | None,
+    limit: int,
+    offset: int,
+):
+    query = select(Comment).filter(
+        func.nlevel(Comment.path) == 1,
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
+    )
+
+    return await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            ),
+            selectinload(Comment.review),
+        )
+        .order_by(desc(Comment.created))
+        .limit(limit)
+        .offset(offset)
+    )

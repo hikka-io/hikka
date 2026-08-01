@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import History, Log
+from app.models import History, Review, Log
 from datetime import timedelta
+from sqlalchemy import select
 from app import constants
 from .. import service
 
@@ -34,7 +35,6 @@ async def generate_read_delete(
 
     if history:
         await session.delete(history)
-        await session.commit()
 
     else:
         history = History(
@@ -49,4 +49,15 @@ async def generate_read_delete(
         )
 
         session.add(history)
-        await session.commit()
+
+    # Update review score if it exists
+    if review := await session.scalar(
+        select(Review).filter(
+            Review.content_type == log.data["content_type"],
+            Review.content_id == log.target_id,
+            Review.author_id == log.user_id,
+        )
+    ):
+        review.score = 0
+
+    await session.commit()

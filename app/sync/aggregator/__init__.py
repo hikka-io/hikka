@@ -7,6 +7,7 @@ from ..schedule import update_schedule_build
 from .companies import aggregator_companies
 from .magazines import aggregator_magazines
 from app.sync.weights import update_weights
+from app.sync.orphans import update_orphans
 from app.sync.counts import update_counts
 from app.sync.search import update_search
 from .people import aggregator_people
@@ -133,5 +134,13 @@ async def update_aggregator():
 
     await update_telegram_message(message_id, tracker.get_status_message())
     await update_counts()
+
+    print("Orphans")
+    tracker.add_task(
+        ["Шукаю персонажів без контенту", "Знайшла персонажів без контенту"]
+    )
+
+    await update_telegram_message(message_id, tracker.get_status_message())
+    await update_orphans()
 
     await update_telegram_message(message_id, tracker.get_final_message())

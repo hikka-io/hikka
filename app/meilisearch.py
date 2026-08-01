@@ -35,5 +35,6 @@ async def search(
                 result.hits_per_page,
             )
 
-    except MeilisearchError:
+    except MeilisearchError as e:
+        print(e)
         raise Abort("search", "query-down")

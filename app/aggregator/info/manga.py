@@ -1,6 +1,6 @@
 from sqlalchemy.orm import selectinload
+from sqlalchemy import select, delete
 from app.aggregator import service
-from sqlalchemy import select
 from app.utils import utcnow
 from app import constants
 from app import utils
@@ -54,11 +54,10 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["dengeki", "honey", "zenko", "miu"]:
+    for source in ["dengeki", "zenko", "miu"]:
         website_name = {
             "dengeki": "Dengeki",
             "miu": "Manga.in.ua",
-            "honey": "Honey Manga",
             "zenko": "Zenko",
         }.get(source)
 
@@ -203,6 +202,16 @@ async def process_characters(session, manga, data):
         session, character_content_ids
     )
 
+    cache = await session.scalars(
+        select(MangaCharacter).filter(MangaCharacter.manga == manga)
+    )
+
+    existing_manga_characters = {
+        entry.character_id: entry.id for entry in cache
+    }
+
+    actual_character_ids = set()
+
     for entry in data["characters"]:
         if not (
             character := characters_cache.get(entry["character"]["content_id"])
@@ -232,6 +241,19 @@ async def process_characters(session, manga, data):
             characters.append(character_role)
 
             character.needs_count_update = True
+
+        actual_character_ids.add(character.id)
+
+    bad_character_ids = (
+        set(existing_manga_characters.keys()) - actual_character_ids
+    )
+
+    for character_id in bad_character_ids:
+        await session.execute(
+            delete(MangaCharacter).filter(
+                MangaCharacter.id == existing_manga_characters[character_id]
+            )
+        )
 
     return characters
 

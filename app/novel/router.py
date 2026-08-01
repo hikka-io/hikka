@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from .utils import build_novel_filters_ms
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User, Novel
+from app import meilisearch
 from app import constants
 from . import service
 
@@ -50,19 +52,31 @@ async def search_novel(
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
+    limit, offset = pagination(page, size)
+
+    filter_ids = []
     if search.query:
-        return await service.novel_search_query(
-            session,
-            search,
-            request_user,
-            page,
-            size,
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_NOVEL,
+            filter=build_novel_filters_ms(search),
+            query=search.query,
+            sort=search.sort,
+            page=page,
+            size=size,
         )
 
-    limit, offset = pagination(page, size)
-    total = await service.novel_search_total(session, search)
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
+    total = await service.novel_search_total(session, search, filter_ids)
+
+    if total == 0:
+        return paginated_response([], 0, page, limit)
+
     novel = await service.novel_search(
-        session, search, request_user, limit, offset
+        session, search, filter_ids, request_user, limit, offset
     )
 
     return paginated_response(novel.unique().all(), total, page, limit)

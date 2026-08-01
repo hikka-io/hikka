@@ -1,15 +1,13 @@
-from sqlalchemy import select, asc, desc, and_, or_, func
-from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, and_, or_, func
 from sqlalchemy.sql.selectable import Select
-from sqlalchemy.orm import with_expression
 from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
-from sqlalchemy.orm import joinedload
 from app import constants
 from uuid import UUID
 
 from app.utils import (
+    dict_datetime_to_timestamp,
     enumerate_seasons,
     new_token,
     is_uuid,
@@ -24,18 +22,11 @@ from .schemas import (
 )
 
 from app.models import (
-    CharacterCollectionContent,
-    AnimeCollectionContent,
-    MangaCollectionContent,
-    NovelCollectionContent,
-    CollectionContent,
     EmailMessage,
     Collection,
     AnimeWatch,
     AuthToken,
     Character,
-    MangaRead,
-    NovelRead,
     Magazine,
     Company,
     Comment,
@@ -50,7 +41,6 @@ from app.models import (
     Edit,
     User,
     Vote,
-    Read,
     Log,
 )
 
@@ -67,22 +57,16 @@ content_type_to_content_class = {
     constants.CONTENT_NOVEL: Novel,
 }
 
-read_order_mapping = {
-    "read_chapters": Read.chapters,
-    "read_volumes": Read.volumes,
-    "read_updated": Read.updated,
-    "read_created": Read.created,
-    "read_score": Read.score,
-}
-
 
 async def get_followed_user_ids(session: AsyncSession, user: User | None):
     if not user:
         return []
 
-    return await session.scalars(
+    result = await session.scalars(
         select(Follow.followed_user_id).filter(Follow.user_id == user.id)
     )
+
+    return result.all()
 
 
 # We use this code mainly with system based on polymorphic identity
@@ -120,6 +104,12 @@ async def get_content_by_slug(
 
         query = query.filter(content_model.id == UUID(slug))
         query = query.filter(content_model.hidden == False)  # noqa: E712
+
+    elif content_type == constants.CONTENT_CHARACTER:
+        query = query.filter(
+            content_model.orphan == False,  # noqa: E712
+            content_model.slug == slug,
+        )
 
     # Everything else is handled here
     else:
@@ -185,6 +175,12 @@ async def get_user_by_username(
     return await session.scalar(
         select(User).filter(func.lower(User.username) == username.lower())
     )
+
+
+async def get_user_by_reference(
+    session: AsyncSession, reference: UUID
+) -> User | None:
+    return await session.scalar(select(User).filter(User.id == reference))
 
 
 async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
@@ -253,6 +249,11 @@ async def create_log(
 ):
     now = utcnow()
 
+    # NOTE: here we recursively convert all datetimes to timestamps
+    # We shold never pass user created data because somebody can do
+    # funny thing with recursion
+    data = dict_datetime_to_timestamp(data)
+
     log = Log(
         **{
             "created": now,
@@ -311,10 +312,13 @@ def anime_loadonly(statement):
         Anime.end_date,
         Anime.title_en,
         Anime.title_ua,
+        Anime.created,
+        Anime.updated,
         Anime.season,
         Anime.source,
         Anime.status,
         Anime.rating,
+        Anime.mal_id,
         Anime.score,
         Anime.slug,
         Anime.year,
@@ -487,85 +491,6 @@ def anime_search_filter(
     return query
 
 
-def build_anime_order_by(sort: list[str]):
-    order_mapping = {
-        "native_scored_by": Anime.native_scored_by,
-        "episodes_total": Anime.episodes_total,
-        "watch_episodes": AnimeWatch.episodes,
-        "watch_updated": AnimeWatch.updated,
-        "watch_created": AnimeWatch.created,
-        "native_score": Anime.native_score,
-        "watch_score": AnimeWatch.score,
-        "media_type": Anime.media_type,
-        "start_date": Anime.start_date,
-        "scored_by": Anime.scored_by,
-        "score": Anime.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Anime.content_id)]
-
-    return order_by
-
-
-# Collections stuff
-def collections_load_options(
-    query: Select, request_user: User | None, preview: bool = False
-):
-    # Yeah, I like it but not sure about performance
-    query = query.options(
-        joinedload(Collection.collection.of_type(AnimeCollectionContent))
-        .joinedload(AnimeCollectionContent.content)
-        .joinedload(Anime.watch),
-        with_loader_criteria(
-            AnimeWatch,
-            AnimeWatch.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(Collection.collection.of_type(MangaCollectionContent))
-        .joinedload(MangaCollectionContent.content)
-        .joinedload(Manga.read),
-        with_loader_criteria(
-            MangaRead,
-            MangaRead.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(Collection.collection.of_type(NovelCollectionContent))
-        .joinedload(NovelCollectionContent.content)
-        .joinedload(Novel.read),
-        with_loader_criteria(
-            NovelRead,
-            NovelRead.user_id == request_user.id if request_user else None,
-        ),
-        joinedload(
-            Collection.collection.of_type(CharacterCollectionContent)
-        ).joinedload(CharacterCollectionContent.content),
-    )
-
-    # Here we load user vote score for collection
-    query = query.options(
-        with_expression(
-            Collection.my_score,
-            get_my_score_subquery(
-                Collection, constants.CONTENT_COLLECTION, request_user
-            ),
-        )
-    )
-
-    if preview:
-        query = query.options(
-            with_loader_criteria(
-                CollectionContent, CollectionContent.order <= 6
-            )
-        )
-
-    return query
-
-
 # Vote stuff
 def get_my_score_subquery(content_model, content_type, request_user):
     # We use func.sum inside func.coalesce because otherwise it won't work
@@ -590,28 +515,6 @@ async def magazines_count(session: AsyncSession, slugs: list[str]):
     return await session.scalar(
         select(func.count(Magazine.id)).filter(Magazine.slug.in_(slugs))
     )
-
-
-def build_manga_order_by(sort: list[str]):
-    order_mapping = read_order_mapping | {
-        "native_scored_by": Manga.native_scored_by,
-        "native_score": Manga.native_score,
-        "media_type": Manga.media_type,
-        "start_date": Manga.start_date,
-        "scored_by": Manga.scored_by,
-        "score": Manga.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Manga.content_id)]
-
-    return order_by
 
 
 def manga_search_filter(
@@ -695,28 +598,6 @@ def manga_search_filter(
             )
 
     return query
-
-
-def build_novel_order_by(sort: list[str]):
-    order_mapping = read_order_mapping | {
-        "native_scored_by": Novel.native_scored_by,
-        "native_score": Novel.native_score,
-        "media_type": Novel.media_type,
-        "start_date": Novel.start_date,
-        "scored_by": Novel.scored_by,
-        "score": Novel.score,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ] + [desc(Novel.content_id)]
-
-    return order_by
 
 
 def novel_search_filter(

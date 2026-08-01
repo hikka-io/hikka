@@ -21,8 +21,9 @@ async def save_anime_list(session, data):
     add_anime = []
 
     for anime_data in data:
-        updated = utils.from_timestamp(anime_data["updated"])
         slug = utils.slugify(anime_data["title_ja"], anime_data["content_id"])
+        updated = utils.from_timestamp(anime_data["updated"])
+        created = utils.from_timestamp(anime_data["created"])
 
         if anime_data["content_id"] in anime_cache:
             anime = anime_cache[anime_data["content_id"]]
@@ -45,6 +46,9 @@ async def save_anime_list(session, data):
 
             #     continue
 
+            if anime.created is None:
+                anime.created = created
+
             if updated == anime.aggregator_updated:
                 continue
 
@@ -52,8 +56,6 @@ async def save_anime_list(session, data):
                 continue
 
             anime.needs_update = True
-
-            add_anime.append(anime)
 
             # print(f"Anime needs update: {anime.title_ja}")
 
@@ -99,6 +101,7 @@ async def save_anime_list(session, data):
                     "image_relation": image,
                     "needs_update": True,
                     "end_date": end_date,
+                    "created": created,
                     "updated": updated,
                     "slug": slug,
                     "stats": {

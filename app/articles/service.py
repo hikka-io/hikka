@@ -1,14 +1,14 @@
 from sqlalchemy import select, update, desc, asc, case, and_, or_, func
 from app.common.utils import find_document_images, generate_preview
+from app.common.service.articles import load_articles_content
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
 from app.common.service import get_images
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
-from collections import defaultdict
 from app import constants
-from uuid import uuid4
+from uuid import uuid4, UUID
 
 from app.models import (
     UserArticleStats,
@@ -432,6 +432,7 @@ async def get_articles(
     args: ArticlesListArgs,
     limit: int,
     offset: int,
+    ids: list[UUID] | None = None,
 ) -> list[Article]:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
@@ -458,80 +459,14 @@ async def get_articles(
         session,
     )
 
+    if ids is not None and len(ids) > 0:
+        query = query.filter(Article.id.in_(ids))
+
     return await session.scalars(
         query.order_by(*build_articles_order_by(args.sort))
         .limit(limit)
         .offset(offset)
     )
-
-
-# WFT is this?
-# TODO: rework and remove this function
-async def load_articles_content(
-    session: AsyncSession,
-    article_or_articles: Article | list[Article],
-):
-    if isinstance(article_or_articles, Article):
-        articles = [article_or_articles]
-        single_input = True
-    else:
-        articles = article_or_articles
-        single_input = False
-
-    # No articles so why bother
-    if not articles:
-        return article_or_articles
-
-    references = defaultdict(set)
-
-    for article in articles:
-        if article.content_type and article.content_id:
-            references[article.content_type].add(article.content_id)
-
-    anime_dict, manga_dict, novel_dict = {}, {}, {}
-
-    if constants.CONTENT_ANIME in references:
-        anime = await session.scalars(
-            select(Anime).filter(
-                Anime.id.in_(list(references[constants.CONTENT_ANIME]))
-            )
-        )
-
-        anime_dict = {entry.id: entry for entry in anime.all()}
-
-    if constants.CONTENT_MANGA in references:
-        manga = await session.scalars(
-            select(Manga).filter(
-                Manga.id.in_(list(references[constants.CONTENT_MANGA]))
-            )
-        )
-
-        manga_dict = {entry.id: entry for entry in manga.all()}
-
-    if constants.CONTENT_NOVEL in references:
-        novel = await session.scalars(
-            select(Novel).filter(
-                Novel.id.in_(list(references[constants.CONTENT_NOVEL]))
-            )
-        )
-
-        novel_dict = {entry.id: entry for entry in novel.all()}
-
-    for article in articles:
-        match article.content_type:
-            case constants.CONTENT_ANIME:
-                article.content = anime_dict.get(article.content_id)
-
-            case constants.CONTENT_MANGA:
-                article.content = manga_dict.get(article.content_id)
-
-            case constants.CONTENT_NOVEL:
-                article.content = novel_dict.get(article.content_id)
-
-            case _:
-                article.content = None
-
-    return articles[0] if single_input else articles
 
 
 async def get_article_tags(session: AsyncSession):
@@ -558,3 +493,17 @@ async def get_article_authors(session: AsyncSession, request_user: User):
         )
         .order_by(UserArticleStats.author_score.desc())
     )
+
+
+async def article_meilisearch_search(
+    session: AsyncSession,
+    request_user: User,
+    meilisearch_result: dict,
+):
+    articles = meilisearch_result.get("list", [])
+    article_ids = [article["reference"] for article in articles]
+    article_list = await get_articles(
+        session, request_user, args, limit, offset, article_ids
+    )
+
+    return article_list

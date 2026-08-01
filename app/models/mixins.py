@@ -74,6 +74,11 @@ class CommentContentMixin:
     comments_count: Mapped[int] = mapped_column(default=0)
 
 
+# Review counts by recommendation, see ReviewRecommended literal
+class ReviewStatsMixin:
+    review_stats: Mapped[dict] = mapped_column(JSONB, default={})
+
+
 # https://amercader.net/blog/beware-of-json-fields-in-sqlalchemy/
 # no longer using a JSON here but the mutability bit still applies
 class IgnoredFieldsMixin:

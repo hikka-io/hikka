@@ -1,4 +1,4 @@
-from app.common.schemas import DocumentText, DocumentElement
+from app.common.schemas.document import DocumentText, DocumentElement
 import string
 import copy
 
