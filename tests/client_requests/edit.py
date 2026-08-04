@@ -2,6 +2,26 @@ def request_edit(client, edit_id):
     return client.get(f"/edit/{edit_id}")
 
 
+def request_todo_anime_list(client, params={}):
+    return client.get("/edit/todo/anime", query_string=params)
+
+
+def request_todo_manga_list(client, params={}):
+    return client.get("/edit/todo/manga", query_string=params)
+
+
+def request_todo_novel_list(client, params={}):
+    return client.get("/edit/todo/novel", query_string=params)
+
+
+def request_todo_character_list(client, params={}):
+    return client.get("/edit/todo/characters", query_string=params)
+
+
+def request_todo_person_list(client, params={}):
+    return client.get("/edit/todo/people", query_string=params)
+
+
 def request_edit_list(client, filters={}, page=1, size=15, token=None):
     headers = {"Auth": token} if token else {}
     return client.post(

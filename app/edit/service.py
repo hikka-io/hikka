@@ -1,15 +1,31 @@
-from sqlalchemy import select, asc, desc, func, ScalarResult
+from sqlalchemy import (
+    select,
+    asc,
+    desc,
+    func,
+    or_,
+    and_,
+    ScalarResult,
+)
 from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
 from app.utils import round_datetime
 from sqlalchemy.orm import joinedload
-from .utils import calculate_before
 from app.utils import utcnow
 from app.models import Log
 from app import constants
 import copy
+
+from .utils import (
+    calculate_before,
+    todo_anime_filters,
+    todo_manga_filters,
+    todo_novel_filters,
+    todo_character_filters,
+    todo_person_filters
+)
 
 from app.service import (
     get_user_by_username,
@@ -23,6 +39,11 @@ from .schemas import (
     ContentToDoEnum,
     EditSearchArgs,
     EditArgs,
+    AnimeTodoArgs,
+    MangaTodoArgs,
+    NovelTodoArgs,
+    CharacterTodoArgs,
+    PersonTodoArgs,
 )
 
 from app.models import (
@@ -40,6 +61,12 @@ from app.models import (
     Novel,
     Edit,
     User,
+    AnimeCharacter,
+    MangaCharacter,
+    NovelCharacter,
+    AnimeStaff,
+    MangaAuthor,
+    NovelAuthor,
 )
 
 
@@ -527,3 +554,197 @@ async def count_update_edit_limit(session: AsyncSession, user: User) -> int:
         .filter(Log.created > round_datetime(utcnow(), minutes=5))
         .filter(Log.user == user)
     )
+
+
+async def get_todo_anime_list(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+    search: AnimeTodoArgs,
+) -> tuple[int, ScalarResult[Anime]]:
+    and_filters, or_filters = todo_anime_filters(search)
+    filters = [*and_filters]
+
+    if or_filters:
+        filters.append(or_(*or_filters))
+
+    total = await session.scalar(
+        select(func.count(Anime.id)).filter(*filters)
+    )
+
+    if not total:
+        return 0, []
+
+    data = await session.scalars(
+        select(Anime).filter(*filters).limit(limit).offset(offset)
+    )
+
+    return total, data
+
+
+async def get_todo_manga_list(    
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+    search: MangaTodoArgs,
+) -> tuple[int, ScalarResult[Manga]]:
+    and_filters, or_filters = todo_manga_filters(search)
+    filters = [*and_filters]
+
+    if or_filters:
+        filters.append(or_(*or_filters))
+
+    total = await session.scalar(
+        select(func.count(Manga.id)).filter(*filters)
+    )
+
+    if not total:
+        return 0, []
+
+    data = await session.scalars(
+        select(Manga).filter(*filters).limit(limit).offset(offset)
+    )
+
+    return total, data
+
+
+async def get_todo_novel_list(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+    search: NovelTodoArgs,
+) -> tuple[int, ScalarResult[Novel]]:
+    and_filters, or_filters = todo_novel_filters(search)
+    filters = [*and_filters]
+
+    if or_filters:
+        filters.append(or_(*or_filters))
+
+    total = await session.scalar(
+        select(func.count(Novel.id)).filter(*filters)
+    )
+
+    if not total:
+        return 0, []
+
+    data = await session.scalars(
+        select(Novel).filter(*filters).limit(limit).offset(offset)
+    )
+
+    return total, data
+
+
+async def get_todo_character_list(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+    search: CharacterTodoArgs,
+) -> tuple[int, ScalarResult[Character]]:
+    and_filters, or_filters = todo_character_filters(search)
+    filters = [*and_filters]
+
+    if or_filters:
+        filters.append(or_(*or_filters))
+
+    count_query = select(func.count(Character.id))
+    query = select(Character)
+
+    if search.content_type and search.content_slug:
+        content_joins = {
+            EditContentToDoEnum.content_anime: (
+                AnimeCharacter,
+                AnimeCharacter.anime_id,
+                Anime,
+            ),
+            EditContentToDoEnum.content_manga: (
+                MangaCharacter,
+                MangaCharacter.manga_id,
+                Manga,
+            ),
+            EditContentToDoEnum.content_novel: (
+                NovelCharacter,
+                NovelCharacter.novel_id,
+                Novel,
+            ),
+        }
+        model, column, content_model = content_joins[search.content_type]
+        content_id_subquery = (
+            select(content_model.id)
+            .filter(content_model.slug == search.content_slug)
+            .scalar_subquery()
+        )
+        join_condition = and_(
+            model.character_id == Character.id, column == content_id_subquery
+        )
+
+        count_query = count_query.join(model, join_condition)
+        query = query.join(model, join_condition)
+
+    total = await session.scalar(count_query.filter(*filters))
+
+    if not total:
+        return 0, []
+
+    data = await session.scalars(
+        query.filter(*filters).limit(limit).offset(offset)
+    )
+
+    return total, data
+
+
+async def get_todo_person_list(
+    session: AsyncSession,
+    limit: int,
+    offset: int,
+    search: PersonTodoArgs,
+) -> tuple[int, ScalarResult[Person]]:
+    and_filters, or_filters = todo_person_filters(search)
+    filters = [*and_filters]
+
+    if or_filters:
+        filters.append(or_(*or_filters))
+
+    count_query = select(func.count(Person.id))
+    query = select(Person)
+
+    if search.content_type and search.content_slug:
+        content_joins = {
+            EditContentToDoEnum.content_anime: (
+                AnimeStaff,
+                AnimeStaff.anime_id,
+                Anime,
+            ),
+            EditContentToDoEnum.content_manga: (
+                MangaAuthor,
+                MangaAuthor.manga_id,
+                Manga,
+            ),
+            EditContentToDoEnum.content_novel: (
+                NovelAuthor,
+                NovelAuthor.novel_id,
+                Novel,
+            ),
+        }
+        model, column, content_model = content_joins[search.content_type]
+        content_id_subquery = (
+            select(content_model.id)
+            .filter(content_model.slug == search.content_slug)
+            .scalar_subquery()
+        )
+        join_condition = and_(
+            model.person_id == Person.id, column == content_id_subquery
+        )
+
+        count_query = count_query.join(model, join_condition)
+        query = query.join(model, join_condition)
+
+    total = await session.scalar(count_query.filter(*filters))
+
+    if not total:
+        return 0, []
+
+    data = await session.scalars(
+        query.filter(*filters).limit(limit).offset(offset)
+    )
+
+    return total, data
