@@ -1,3 +1,5 @@
+from app.common.service.duration import recalculate_watch_duration
+from app.common.service.duration import recalculate_watch_stats
 from app.common.service.sort import build_anime_order_by
 from sqlalchemy import select, desc, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,7 +22,6 @@ from .schemas import (
 )
 
 from app.service import (
-    calculate_watch_duration,
     anime_search_filter,
     get_anime_watch,
     anime_loadonly,
@@ -38,58 +39,20 @@ async def get_user_watch_stats(session: AsyncSession, user: User, status: str):
     )
 
 
-async def get_user_watch_duration(session: AsyncSession, user: User):
-    duration = await session.scalar(
-        select(func.sum(AnimeWatch.duration)).filter(AnimeWatch.user == user)
-    )
-
-    return duration if duration else 0
-
-
-async def generate_watch_stats(session: AsyncSession, user: User) -> User:
-    completed = await get_user_watch_stats(
+async def generate_watch_stats(
+    session: AsyncSession, user: User, watch: AnimeWatch | None = None
+) -> User:
+    await recalculate_watch_duration(
         session,
-        user,
-        constants.WATCH_COMPLETED,
+        AnimeWatch.id == watch.id if watch else AnimeWatch.user_id == user.id,
     )
 
-    watching = await get_user_watch_stats(
-        session,
-        user,
-        constants.WATCH_WATCHING,
-    )
+    await recalculate_watch_stats(session, User.id == user.id)
 
-    planned = await get_user_watch_stats(
-        session,
-        user,
-        constants.WATCH_PLANNED,
-    )
+    await session.refresh(user, ["anime_stats"])
 
-    on_hold = await get_user_watch_stats(
-        session,
-        user,
-        constants.WATCH_ON_HOLD,
-    )
-
-    dropped = await get_user_watch_stats(
-        session,
-        user,
-        constants.WATCH_DROPPED,
-    )
-
-    duration = await get_user_watch_duration(session, user)
-
-    user.anime_stats = {
-        "duration": duration,
-        "completed": completed,
-        "watching": watching,
-        "planned": planned,
-        "on_hold": on_hold,
-        "dropped": dropped,
-    }
-
-    session.add(user)
-    await session.commit()
+    if watch is not None:
+        await session.refresh(watch, ["duration"])
 
     return user
 
@@ -134,7 +97,6 @@ async def save_watch(
             log_after[key] = new_value
 
     # Calculate duration and update updated field
-    watch.duration = calculate_watch_duration(watch)
     watch.updated = now
 
     # Update user last list update
@@ -154,7 +116,7 @@ async def save_watch(
             },
         )
 
-        await generate_watch_stats(session, user)
+        await generate_watch_stats(session, user, watch)
 
     return watch
 
@@ -164,7 +126,6 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
 
     # Update user last list update
     user.updated = utcnow()
-    session.add(user)
 
     await create_log(
         session,
@@ -173,9 +134,9 @@ async def delete_watch(session: AsyncSession, watch: AnimeWatch, user: User):
         watch.anime.id,
     )
 
-    await generate_watch_stats(session, user)
-
     await session.commit()
+
+    await generate_watch_stats(session, user)
 
 
 async def random_watch(session: AsyncSession, user: User, status: str | None):

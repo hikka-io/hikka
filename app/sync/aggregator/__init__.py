@@ -1,3 +1,4 @@
+from app.sync.duration import update_duration_and_stats
 from .franchises import aggregator_franchises
 from .characters import aggregator_characters
 from .info.anime import aggregator_anime_info
@@ -142,5 +143,13 @@ async def update_aggregator():
 
     await update_telegram_message(message_id, tracker.get_status_message())
     await update_orphans()
+
+    print("Duration")
+    tracker.add_task(
+        ["Перераховую час переглядів", "Перерахувала час переглядів"]
+    )
+
+    await update_telegram_message(message_id, tracker.get_status_message())
+    await update_duration_and_stats()
 
     await update_telegram_message(message_id, tracker.get_final_message())

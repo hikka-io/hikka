@@ -325,26 +325,6 @@ def anime_loadonly(statement):
     )
 
 
-def calculate_watch_duration(watch: AnimeWatch) -> int:
-    # If anime don't have duration set we just return zero
-    if not watch.anime.duration:
-        return 0
-
-    # Rewatches duration is calculated from anime episodes_total field
-    rewatches_duration = (
-        watch.anime.episodes_total * watch.anime.duration * watch.rewatches
-        if watch.anime.episodes_total and watch.rewatches
-        else 0
-    )
-
-    # Current watch duration is just episodes * duration
-    episodes_duration = (
-        watch.episodes * watch.anime.duration if watch.episodes else 0
-    )
-
-    return rewatches_duration + episodes_duration
-
-
 # Search stuff
 def anime_search_filter(
     search: AnimeSearchArgsBase, query: Select, hide_nsfw=True
