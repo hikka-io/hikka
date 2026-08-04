@@ -88,7 +88,11 @@ async def novel_search_total(
     if filter_ids:
         query = query.filter(Novel.content_id.in_(filter_ids))
 
-    query = novel_search_filter(search, query)
+    # NOTE: we should have dedicated nsfw filter
+    # and don't do stupid things like this
+    hide_nsfw = len(filter_ids) == 0
+
+    query = novel_search_filter(search, query, hide_nsfw)
 
     return await session.scalar(query)
 

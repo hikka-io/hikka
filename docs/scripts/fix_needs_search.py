@@ -1,7 +1,7 @@
 from app.database import sessionmanager
+from app.models import Anime, Manga
 from app.utils import get_settings
-from sqlalchemy import select
-from app.models import Anime
+from sqlalchemy import update
 import asyncio
 
 
@@ -11,7 +11,9 @@ async def fix_template():
     sessionmanager.init(settings.database.endpoint)
 
     async with sessionmanager.session() as session:
-        await session.scalar(select(Anime).limit(1))
+        # await session.execute(update(Anime).values(needs_update=True))
+        await session.execute(update(Manga).values(needs_search_update=True))
+        await session.commit()
 
     await sessionmanager.close()
 

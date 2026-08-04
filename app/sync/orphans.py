@@ -1,8 +1,8 @@
 from app.database import sessionmanager
+from sqlalchemy import func, or_
 from app.models import Character
 from sqlalchemy import select
 from sqlalchemy import update
-from sqlalchemy import func, or_
 
 
 async def resolve_orphaned_characters(session):

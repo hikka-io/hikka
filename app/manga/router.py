@@ -49,6 +49,7 @@ async def search_manga(
     limit, offset = pagination(page, size)
 
     filter_ids = []
+
     if search.query:
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_MANGA,
