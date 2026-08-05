@@ -11,13 +11,13 @@ from app import constants
 import copy
 
 from sqlalchemy import (
+    ScalarResult,
     select,
-    asc,
     desc,
     func,
-    or_,
     and_,
-    ScalarResult,
+    asc,
+    or_,
 )
 
 from app.service import (
@@ -29,21 +29,27 @@ from app.service import (
 from .schemas import (
     EditContentToDoEnum,
     EditContentTypeEnum,
+    CharacterTodoArgs,
     ContentToDoEnum,
     EditSearchArgs,
-    EditArgs,
+    PersonTodoArgs,
     AnimeTodoArgs,
     MangaTodoArgs,
     NovelTodoArgs,
-    CharacterTodoArgs,
-    PersonTodoArgs,
+    EditArgs,
 )
 
 from app.models import (
+    AnimeCharacter,
+    MangaCharacter,
+    NovelCharacter,
     UserEditStats,
     CharacterEdit,
+    MangaAuthor,
+    NovelAuthor,
     AnimeWatch,
     PersonEdit,
+    AnimeStaff,
     AnimeEdit,
     MangaEdit,
     NovelEdit,
@@ -54,12 +60,6 @@ from app.models import (
     Novel,
     Edit,
     User,
-    AnimeCharacter,
-    MangaCharacter,
-    NovelCharacter,
-    AnimeStaff,
-    MangaAuthor,
-    NovelAuthor,
 )
 
 

@@ -7,15 +7,15 @@ from app.schemas import (
     PaginationResponse,
     CharacterResponse,
     PersonResponse,
+    AnimeMediaEnum,
+    MangaMediaEnum,
+    NovelMediaEnum,
+    PaginationArgs,
     AnimeResponse,
     MangaResponse,
     NovelResponse,
     UserResponse,
-    CustomModel,
-    AnimeMediaEnum,
-    MangaMediaEnum,
-    NovelMediaEnum,
-    PaginationArgs
+    CustomModel
 )
 
 

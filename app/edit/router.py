@@ -8,46 +8,45 @@ from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import constants
-
 from . import service
 
 from .dependencies import (
-    validate_content, 
-    validate_edit_accept,
-    validate_edit_close, 
-    validate_edit_create,
-    validate_edit_create_rate_limit, 
-    validate_edit_id,
-    validate_edit_id_pending, 
-    validate_edit_search_args,
-    validate_edit_update, 
+    validate_edit_update_rate_limit,
+    validate_edit_create_rate_limit,
     validate_edit_update_args,
-    validate_edit_update_rate_limit
+    validate_edit_search_args,
+    validate_edit_id_pending,
+    validate_edit_update,
+    validate_edit_create,
+    validate_edit_accept,
+    validate_edit_close,
+    validate_edit_id,
+    validate_content
 )
 
 from .schemas import (
-    ContentToDoEnum, 
-    EditArgs, 
-    EditContentToDoEnum,
-    EditContentTypeEnum, 
-    EditListResponse, 
-    EditResponse,
-    EditSearchArgs,
-    AnimeTodoArgs,
-    TodoAnimeResponse,
-    TodoAnimeListResponse,
-    MangaTodoArgs,
-    TodoMangaResponse,
-    TodoMangaListResponse,
-    NovelTodoArgs,
-    TodoNovelResponse,
-    TodoNovelListResponse,
-    CharacterTodoArgs,
-    TodoCharacterResponse,
     TodoCharacterListResponse,
-    PersonTodoArgs,
+    TodoPersonListResponse,
+    TodoCharacterResponse,
+    TodoNovelListResponse,
+    TodoMangaListResponse,
+    TodoAnimeListResponse,
+    EditContentTypeEnum,
+    EditContentToDoEnum,
     TodoPersonResponse,
-    TodoPersonListResponse
+    CharacterTodoArgs,
+    TodoNovelResponse,
+    TodoMangaResponse,
+    TodoAnimeResponse,
+    EditListResponse,
+    ContentToDoEnum,
+    PersonTodoArgs,
+    EditSearchArgs,
+    NovelTodoArgs,
+    MangaTodoArgs,
+    AnimeTodoArgs,
+    EditResponse,
+    EditArgs
 )
 
 router = APIRouter(prefix="/edit", tags=["Edit"])
