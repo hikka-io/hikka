@@ -14,6 +14,7 @@ async def test_todo_character_list_filter_by_content(
         {
             "content_type": "anime",
             "content_slug": "shingeki-no-kyojin-season-3-part-2-91a350",
+            "size": 100,
         },
     )
 

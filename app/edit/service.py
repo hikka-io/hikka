@@ -576,7 +576,11 @@ async def get_todo_anime_list(
         return 0, []
 
     data = await session.scalars(
-        select(Anime).filter(*filters).limit(limit).offset(offset)
+        select(Anime)
+        .filter(*filters)
+        .order_by(Anime.id)
+        .limit(limit)
+        .offset(offset)
     )
 
     return total, data
@@ -602,7 +606,11 @@ async def get_todo_manga_list(
         return 0, []
 
     data = await session.scalars(
-        select(Manga).filter(*filters).limit(limit).offset(offset)
+        select(Manga)
+        .filter(*filters)
+        .order_by(Manga.id)
+        .limit(limit)
+        .offset(offset)
     )
 
     return total, data
@@ -628,7 +636,11 @@ async def get_todo_novel_list(
         return 0, []
 
     data = await session.scalars(
-        select(Novel).filter(*filters).limit(limit).offset(offset)
+        select(Novel)
+        .filter(*filters)
+        .order_by(Novel.id)
+        .limit(limit)
+        .offset(offset)
     )
 
     return total, data
@@ -686,7 +698,10 @@ async def get_todo_character_list(
         return 0, []
 
     data = await session.scalars(
-        query.filter(*filters).limit(limit).offset(offset)
+        query.filter(*filters)
+        .order_by(Character.id)
+        .limit(limit)
+        .offset(offset)
     )
 
     return total, data
@@ -744,7 +759,10 @@ async def get_todo_person_list(
         return 0, []
 
     data = await session.scalars(
-        query.filter(*filters).limit(limit).offset(offset)
+        query.filter(*filters)
+        .order_by(Person.id)
+        .limit(limit)
+        .offset(offset)
     )
 
     return total, data
