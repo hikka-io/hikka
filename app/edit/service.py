@@ -1,12 +1,3 @@
-from sqlalchemy import (
-    select,
-    asc,
-    desc,
-    func,
-    or_,
-    and_,
-    ScalarResult,
-)
 from app.models.list.read import MangaRead, NovelRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
@@ -17,6 +8,16 @@ from app.utils import utcnow
 from app.models import Log
 from app import constants
 import copy
+
+from sqlalchemy import (
+    select,
+    asc,
+    desc,
+    func,
+    or_,
+    and_,
+    ScalarResult,
+)
 
 from .utils import (
     calculate_before,

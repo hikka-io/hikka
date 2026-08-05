@@ -1,13 +1,13 @@
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-from app import constants
-from app.database import get_session
+from app.models import Anime, Character, Edit, Manga, Novel, Person, User
 from app.dependencies import auth_required, get_page, get_size
 from app.manga.schemas import MangaPaginationResponse
-from app.models import Anime, Character, Edit, Manga, Novel, Person, User
 from app.novel.schemas import NovelPaginationResponse
-from app.schemas import AnimePaginationResponse
 from app.utils import paginated_response, pagination
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import AnimePaginationResponse
+from fastapi import APIRouter, Depends
+from app.database import get_session
+from app import constants
 
 from . import service
 

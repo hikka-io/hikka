@@ -1,5 +1,5 @@
-from typing import Generic, TypeVar
 from pydantic import Field, field_validator
+from typing import Generic, TypeVar
 from app.schemas import datetime_pd
 from app import constants
 from enum import Enum
