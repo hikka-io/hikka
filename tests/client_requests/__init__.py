@@ -81,6 +81,11 @@ from .read import request_read_list
 from .read import request_read_add
 from .read import request_read
 
+from .edit import request_todo_character_list
+from .edit import request_todo_person_list
+from .edit import request_todo_anime_list
+from .edit import request_todo_manga_list
+from .edit import request_todo_novel_list
 from .edit import request_accept_edit
 from .edit import request_create_edit
 from .edit import request_update_edit
@@ -88,11 +93,6 @@ from .edit import request_close_edit
 from .edit import request_deny_edit
 from .edit import request_edit_list
 from .edit import request_edit
-from .edit import request_todo_anime_list
-from .edit import request_todo_manga_list
-from .edit import request_todo_novel_list
-from .edit import request_todo_character_list
-from .edit import request_todo_person_list
 
 from .comments import request_comments_latest
 from .comments import request_comments_write
@@ -228,6 +228,11 @@ __all__ = [
     "request_read_add",
     "request_read",
     # =========== edit ===========
+    "request_todo_character_list",
+    "request_todo_person_list",
+    "request_todo_anime_list",
+    "request_todo_manga_list",
+    "request_todo_novel_list",
     "request_accept_edit",
     "request_create_edit",
     "request_update_edit",
@@ -235,11 +240,6 @@ __all__ = [
     "request_deny_edit",
     "request_edit_list",
     "request_edit",
-    "request_todo_anime_list",
-    "request_todo_manga_list",
-    "request_todo_novel_list",
-    "request_todo_character_list",
-    "request_todo_person_list",
     # =========== comments ===========
     "request_comments_latest",
     "request_comments_write",
