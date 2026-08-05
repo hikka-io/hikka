@@ -33,17 +33,21 @@ from .schemas import (
     EditListResponse, 
     EditResponse,
     EditSearchArgs,
-    TodoListResponse,
     AnimeTodoArgs,
     TodoAnimeResponse,
+    TodoAnimeListResponse,
     MangaTodoArgs,
     TodoMangaResponse,
+    TodoMangaListResponse,
     NovelTodoArgs,
     TodoNovelResponse,
+    TodoNovelListResponse,
     CharacterTodoArgs,
     TodoCharacterResponse,
+    TodoCharacterListResponse,
     PersonTodoArgs,
-    TodoPersonResponse
+    TodoPersonResponse,
+    TodoPersonListResponse
 )
 
 router = APIRouter(prefix="/edit", tags=["Edit"])
@@ -167,7 +171,7 @@ async def get_content_edit_todo(
 
 @router.get(
     "/todo/anime",
-    response_model=TodoListResponse[TodoAnimeResponse],
+    response_model=TodoAnimeListResponse,
     summary="Return list of anime with issues",
 )
 async def get_todo_anime_list(
@@ -189,7 +193,7 @@ async def get_todo_anime_list(
 
 @router.get(
     "/todo/manga",
-    response_model=TodoListResponse[TodoMangaResponse],
+    response_model=TodoMangaListResponse,
     summary="Return list of manga with issues",
 )
 async def get_todo_manga_list(
@@ -211,7 +215,7 @@ async def get_todo_manga_list(
 
 @router.get(
     "/todo/novel",
-    response_model=TodoListResponse[TodoNovelResponse],
+    response_model=TodoNovelListResponse,
     summary="Return list of novel with issues",
 )
 async def get_todo_novel_list(
@@ -233,7 +237,7 @@ async def get_todo_novel_list(
 
 @router.get(
     "/todo/characters",
-    response_model=TodoListResponse[TodoCharacterResponse],
+    response_model=TodoCharacterListResponse,
     summary="Return list of characters with issues",
 )
 async def get_todo_character_list(
@@ -255,7 +259,7 @@ async def get_todo_character_list(
 
 @router.get(
     "/todo/people",
-    response_model=TodoListResponse[TodoPersonResponse],
+    response_model=TodoPersonListResponse,
     summary="Return list of people with issues",
 )
 async def get_todo_person_list(

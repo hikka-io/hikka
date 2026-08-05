@@ -1,5 +1,4 @@
 from pydantic import Field, field_validator
-from typing import Generic, TypeVar
 from app.schemas import datetime_pd
 from app import constants
 from enum import Enum
@@ -357,9 +356,26 @@ class TodoPersonResponse(CustomModel):
         )
 
 
-TodoItemType = TypeVar("TodoItemType", bound=CustomModel)
+class TodoAnimeListResponse(CustomModel):
+    list: list[TodoAnimeResponse]
+    pagination: PaginationResponse
 
 
-class TodoListResponse(CustomModel, Generic[TodoItemType]):
-    list: list[TodoItemType]
+class TodoMangaListResponse(CustomModel):
+    list: list[TodoMangaResponse]
+    pagination: PaginationResponse
+
+
+class TodoNovelListResponse(CustomModel):
+    list: list[TodoNovelResponse]
+    pagination: PaginationResponse
+
+
+class TodoCharacterListResponse(CustomModel):
+    list: list[TodoCharacterResponse]
+    pagination: PaginationResponse
+
+
+class TodoPersonListResponse(CustomModel):
+    list: list[TodoPersonResponse]
     pagination: PaginationResponse
