@@ -3,8 +3,8 @@ from app.models import Edit
 from app import constants
 
 from .schemas import (
-    CharacterEditArgs,
     EditContentTypeEnum,
+    CharacterEditArgs,
     PersonEditArgs,
     AnimeEditArgs,
     MangaEditArgs,

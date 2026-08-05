@@ -81,6 +81,11 @@ from .read import request_read_list
 from .read import request_read_add
 from .read import request_read
 
+from .edit import request_todo_character_list
+from .edit import request_todo_person_list
+from .edit import request_todo_anime_list
+from .edit import request_todo_manga_list
+from .edit import request_todo_novel_list
 from .edit import request_accept_edit
 from .edit import request_create_edit
 from .edit import request_update_edit
@@ -223,6 +228,11 @@ __all__ = [
     "request_read_add",
     "request_read",
     # =========== edit ===========
+    "request_todo_character_list",
+    "request_todo_person_list",
+    "request_todo_anime_list",
+    "request_todo_manga_list",
+    "request_todo_novel_list",
     "request_accept_edit",
     "request_create_edit",
     "request_update_edit",

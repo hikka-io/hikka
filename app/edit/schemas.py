@@ -7,11 +7,15 @@ from app.schemas import (
     PaginationResponse,
     CharacterResponse,
     PersonResponse,
+    AnimeMediaEnum,
+    MangaMediaEnum,
+    NovelMediaEnum,
+    PaginationArgs,
     AnimeResponse,
     MangaResponse,
     NovelResponse,
     UserResponse,
-    CustomModel,
+    CustomModel
 )
 
 
@@ -155,6 +159,53 @@ class CharacterEditArgs(CustomModel):
     synonyms: list[str] | None = None
 
 
+class AnimeTodoArgs(PaginationArgs):
+    title_ua: bool | None = None
+    title_en: bool | None = None
+    title_original: bool | None = None
+    synopsis_ua: bool | None = None
+    synopsis_en: bool | None = None
+    media_type: AnimeMediaEnum | None = None
+    mal_id: int | None = None
+
+
+class MangaTodoArgs(PaginationArgs):
+    title_ua: bool | None = None
+    title_en: bool | None = None
+    title_original: bool | None = None
+    synopsis_ua: bool | None = None
+    synopsis_en: bool | None = None
+    media_type: MangaMediaEnum | None = None
+    mal_id: int | None = None
+
+
+class NovelTodoArgs(PaginationArgs):
+    title_ua: bool | None = None
+    title_en: bool | None = None
+    title_original: bool | None = None
+    synopsis_ua: bool | None = None
+    synopsis_en: bool | None = None
+    media_type: NovelMediaEnum | None = None
+    mal_id: int | None = None
+
+
+class CharacterTodoArgs(PaginationArgs):
+    name_ua: bool | None = None
+    name_en: bool | None = None
+    name_original: bool | None = None
+    description_ua: bool | None = None
+    content_type: EditContentToDoEnum | None = None
+    content_slug: str | None = None
+
+
+class PersonTodoArgs(PaginationArgs):
+    name_ua: bool | None = None
+    name_en: bool | None = None
+    name_original: bool | None = None
+    content_type: EditContentToDoEnum | None = None
+    content_slug: str | None = None
+
+
 # Response
 class EditResponseBase(CustomModel):
     content_type: EditContentTypeEnum = Field(examples=["anime"])
@@ -191,3 +242,140 @@ class EditSimpleResponse(EditResponseBase):
 class EditListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[EditSimpleResponse]
+
+
+class TodoContentIssuesInfo(CustomModel):
+    title_ua_absent: bool
+    title_en_absent: bool
+    title_original_absent: bool
+    synopsis_ua_absent: bool
+    synopsis_en_absent: bool
+    # Add more required fields for content: Anime, Manga, Novel
+    # for example: image, link_to_content (orphan)...
+    # Optional fields such as synonyms should not be present in this list
+
+
+class TodoCharacterIssuesInfo(CustomModel):
+    name_ua_absent: bool
+    name_en_absent: bool
+    name_original_absent: bool
+    description_ua_absent: bool
+    # Add more required fields for character
+
+
+class TodoPersonIssuesInfo(CustomModel):
+    name_ua_absent: bool
+    name_en_absent: bool
+    name_original_absent: bool
+    # Add more required fields for peoples
+
+class TodoAnimeResponse(CustomModel):
+    item: AnimeResponse
+    issues: TodoContentIssuesInfo
+
+    @classmethod
+    def from_(cls, anime) -> "TodoAnimeResponse":
+        return cls(
+            item=anime,
+            issues=TodoContentIssuesInfo(
+                title_ua_absent=anime.title_ua is None,
+                title_en_absent=anime.title_en is None,
+                title_original_absent=anime.title_ja is None,
+                synopsis_ua_absent=anime.synopsis_ua is None,
+                synopsis_en_absent=anime.synopsis_en is None,
+            ),
+        )
+
+
+class TodoMangaResponse(CustomModel):
+    item: MangaResponse
+    issues: TodoContentIssuesInfo
+
+    @classmethod
+    def from_(cls, manga) -> "TodoMangaResponse":
+        return cls(
+            item=manga,
+            issues=TodoContentIssuesInfo(
+                title_ua_absent=manga.title_ua is None,
+                title_en_absent=manga.title_en is None,
+                title_original_absent=manga.title_original is None,
+                synopsis_ua_absent=manga.synopsis_ua is None,
+                synopsis_en_absent=manga.synopsis_en is None,
+            ),
+        )
+
+
+class TodoNovelResponse(CustomModel):
+    item: NovelResponse
+    issues: TodoContentIssuesInfo
+
+    @classmethod
+    def from_(cls, novel) -> "TodoNovelResponse":
+        return cls(
+            item=novel,
+            issues=TodoContentIssuesInfo(
+                title_ua_absent=novel.title_ua is None,
+                title_en_absent=novel.title_en is None,
+                title_original_absent=novel.title_original is None,
+                synopsis_ua_absent=novel.synopsis_ua is None,
+                synopsis_en_absent=novel.synopsis_en is None,
+            ),
+        )
+
+
+class TodoCharacterResponse(CustomModel):
+    item: CharacterResponse
+    issues: TodoCharacterIssuesInfo
+
+    @classmethod
+    def from_(cls, character) -> "TodoCharacterResponse":
+        return cls(
+            item=character,
+            issues=TodoCharacterIssuesInfo(
+                name_ua_absent=character.name_ua is None,
+                name_en_absent=character.name_en is None,
+                name_original_absent=character.name_ja is None,
+                description_ua_absent=character.description_ua is None,
+            ),
+        )
+
+
+class TodoPersonResponse(CustomModel):
+    item: PersonResponse
+    issues: TodoPersonIssuesInfo
+
+    @classmethod
+    def from_(cls, person) -> "TodoPersonResponse":
+        return cls(
+            item=person,
+            issues=TodoPersonIssuesInfo(
+                name_ua_absent=person.name_ua is None,
+                name_en_absent=person.name_en is None,
+                name_original_absent=person.name_native is None,
+            ),
+        )
+
+
+class TodoAnimeListResponse(CustomModel):
+    list: list[TodoAnimeResponse]
+    pagination: PaginationResponse
+
+
+class TodoMangaListResponse(CustomModel):
+    list: list[TodoMangaResponse]
+    pagination: PaginationResponse
+
+
+class TodoNovelListResponse(CustomModel):
+    list: list[TodoNovelResponse]
+    pagination: PaginationResponse
+
+
+class TodoCharacterListResponse(CustomModel):
+    list: list[TodoCharacterResponse]
+    pagination: PaginationResponse
+
+
+class TodoPersonListResponse(CustomModel):
+    list: list[TodoPersonResponse]
+    pagination: PaginationResponse
