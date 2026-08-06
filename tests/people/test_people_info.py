@@ -9,6 +9,7 @@ async def test_people_info(client, aggregator_people):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["name_en"] == "Makoto Shinkai"
     assert response.json()["slug"] == "makoto-shinkai-943611"
+    assert response.json()["mal_id"] == 1117
 
 
 async def test_people_info_bad(client):

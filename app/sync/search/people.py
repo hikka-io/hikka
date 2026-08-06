@@ -22,6 +22,7 @@ async def update_people_settings(index):
             ],
             displayed_attributes=[
                 "data_type",
+                "mal_id",
                 "description_ua",
                 "name_native",
                 "synonyms",
@@ -39,6 +40,7 @@ async def update_people_settings(index):
 def person_to_document(person: Person):
     return {
         "data_type": "person",
+        "mal_id": person.mal_id,
         "description_ua": person.description_ua,
         "name_native": person.name_native,
         "favorites": person.favorites,

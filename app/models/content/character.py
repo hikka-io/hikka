@@ -41,6 +41,7 @@ class Character(
     favourite_created: Mapped[datetime] = query_expression()
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
+    mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
 
     orphan: Mapped[bool] = mapped_column(default=False)
 

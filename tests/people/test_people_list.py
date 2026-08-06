@@ -16,6 +16,7 @@ async def test_people_list(client, aggregator_people):
     # Check first and last people slugs
     assert response.json()["list"][0]["slug"] == "hiroshi-kamiya-124b1f"
     assert response.json()["list"][11]["slug"] == "makoto-shinkai-943611"
+    assert response.json()["list"][11]["mal_id"] == 1117
 
 
 async def test_people_pagination(client, aggregator_people):
