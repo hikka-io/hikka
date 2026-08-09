@@ -47,6 +47,11 @@ class DocumentSpoiler(DocumentNode):
     type: Literal["spoiler"]
 
 
+class DocumentSpoilerInline(DocumentNode):
+    children: list["DocumentElement"]
+    type: Literal["spoiler_inline"]
+
+
 class DocumentLic(DocumentNode):
     children: list["DocumentElement"]
     type: Literal["lic"]
@@ -135,6 +140,7 @@ DocumentElement = (
     DocumentParagraph
     | DocumentBlockquote
     | DocumentSpoiler
+    | DocumentSpoilerInline
     | DocumentLink
     | DocumentText
     | DocumentH3
