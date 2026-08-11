@@ -43,53 +43,6 @@ from .schemas import (
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-# DEPRECATED
-@router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
-async def get_comments_list_legacy(
-    filters: CommentsFilterArgs = Depends(),
-    session: AsyncSession = Depends(get_session),
-    content: CommentableType = Depends(validate_content),
-    request_user: User = Depends(
-        auth_required(
-            scope=[constants.SCOPE_READ_COMMENT_SCORE],
-            optional=True,
-        )
-    ),
-    page: int = Depends(get_page),
-    size: int = Depends(get_size),
-):
-    # TODO: do we need to implement caching for reviews?
-    # total = content.comments_count_pagination
-
-    total = await service.get_comments_count_by_content_id(
-        session, content.id, filters.comment_type, filters.recommended
-    )
-
-    limit, offset = pagination(page, size)
-
-    base_comments = await service.get_comments_by_content_id(
-        session,
-        content.id,
-        request_user,
-        filters.comment_type,
-        filters.recommended,
-        filters.sort,
-        limit,
-        offset,
-    )
-
-    result = []
-
-    for base_comment in base_comments:
-        sub_comments = await service.get_sub_comments(
-            session, base_comment, request_user
-        )
-
-        result.append(build_comments(base_comment, sub_comments))
-
-    return paginated_response(result, total, page, limit)
-
-
 @router.post("/{content_type}/{slug}/list", response_model=CommentListResponse)
 async def get_comments_list(
     filters: CommentsFilterArgs,
@@ -296,6 +249,53 @@ async def hide_comment(
 ):
     await service.hide_comment(session, comment, user)
     return {"success": True}
+
+
+# DEPRECATED
+@router.get("/{content_type}/{slug}/list", response_model=CommentListResponse)
+async def get_comments_list_legacy(
+    filters: CommentsFilterArgs = Depends(),
+    session: AsyncSession = Depends(get_session),
+    content: CommentableType = Depends(validate_content),
+    request_user: User = Depends(
+        auth_required(
+            scope=[constants.SCOPE_READ_COMMENT_SCORE],
+            optional=True,
+        )
+    ),
+    page: int = Depends(get_page),
+    size: int = Depends(get_size),
+):
+    # TODO: do we need to implement caching for reviews?
+    # total = content.comments_count_pagination
+
+    total = await service.get_comments_count_by_content_id(
+        session, content.id, filters.comment_type, filters.recommended
+    )
+
+    limit, offset = pagination(page, size)
+
+    base_comments = await service.get_comments_by_content_id(
+        session,
+        content.id,
+        request_user,
+        filters.comment_type,
+        filters.recommended,
+        filters.sort,
+        limit,
+        offset,
+    )
+
+    result = []
+
+    for base_comment in base_comments:
+        sub_comments = await service.get_sub_comments(
+            session, base_comment, request_user
+        )
+
+        result.append(build_comments(base_comment, sub_comments))
+
+    return paginated_response(result, total, page, limit)
 
 
 # DEPRECATED

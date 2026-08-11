@@ -142,8 +142,9 @@ async def validate_review_create(
     session: AsyncSession = Depends(get_session),
     author: User = Depends(
         auth_required(
-            permissions=[constants.PERMISSION_REVIEW_WRITE],
-            scope=[constants.SCOPE_CREATE_REVIEW],
+            # TODO: do we need separate permission/scope for review?
+            # permissions=[constants.PERMISSION_REVIEW_WRITE],
+            # scope=[constants.SCOPE_CREATE_REVIEW],
         )
     ),
 ):
@@ -172,8 +173,9 @@ async def validate_review_edit(
     session: AsyncSession = Depends(get_session),
     author: User = Depends(
         auth_required(
-            permissions=[constants.PERMISSION_REVIEW_EDIT],
-            scope=[constants.SCOPE_UPDATE_REVIEW],
+            # TODO: do we need separate permission/scope for review?
+            # permissions=[constants.PERMISSION_REVIEW_EDIT],
+            # scope=[constants.SCOPE_UPDATE_REVIEW],
         )
     ),
 ):
