@@ -509,8 +509,6 @@ class AnimeResponse(CustomModel):
 
     studios: list[CompanyResponse]
     genres: list[GenreResponse]
-    synopsis_en: str | None
-    synopsis_ua: str | None
 
 
 class MangaResponse(CustomModel):
@@ -538,8 +536,6 @@ class MangaResponse(CustomModel):
 
     magazines: list[MagazineResponse]
     genres: list[GenreResponse]
-    synopsis_en: str | None
-    synopsis_ua: str | None
 
 
 class NovelResponse(CustomModel):
@@ -567,8 +563,6 @@ class NovelResponse(CustomModel):
 
     magazines: list[MagazineResponse]
     genres: list[GenreResponse]
-    synopsis_en: str | None
-    synopsis_ua: str | None
 
 
 class AnimeResponseWithWatch(AnimeResponse):
