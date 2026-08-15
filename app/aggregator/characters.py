@@ -51,6 +51,7 @@ async def save_characters(session, data):
                 [
                     character.updated == updated,
                     character.favorites == character_data["favorites"],
+                    character.mal_id == mal_id,
                     new_image is False,
                 ]
             ):
@@ -58,7 +59,9 @@ async def save_characters(session, data):
 
             character.favorites = character_data["favorites"]
             character.image_relation = image
+            character.needs_search_update = True
             character.updated = updated
+            character.mal_id = character_data["mal_id"]
 
             add_characters.append(character)
 
@@ -72,6 +75,7 @@ async def save_characters(session, data):
                     "needs_search_update": True,
                     "content_id": character_data["content_id"],
                     "favorites": character_data["favorites"],
+                    "mal_id": mal_id,
                     "name_ja": character_data["name_ja"],
                     "name_en": character_data["name_en"],
                     "image_relation": image,

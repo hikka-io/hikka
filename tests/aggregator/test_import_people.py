@@ -16,3 +16,9 @@ async def test_import_people(test_session, aggregator_people):
     assert person.name_en == "Shinichi Omata"
     assert person.needs_search_update is True
     assert person.favorites == 235
+
+    person = await test_session.scalar(
+        select(Person).filter(Person.slug == "makoto-shinkai-943611")
+    )
+
+    assert person.mal_id == 1117

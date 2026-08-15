@@ -9,6 +9,7 @@ async def test_characters_info(client, aggregator_characters):
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["name_en"] == "Levi"
     assert response.json()["slug"] == "levi-565409"
+    assert response.json()["mal_id"] == 45627
 
 
 async def test_characters_info_bad(client):

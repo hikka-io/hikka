@@ -35,6 +35,7 @@ class Person(
     novel_count: Mapped[int] = mapped_column(default=0)
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
+    mal_id: Mapped[int] = mapped_column(index=True, nullable=True)
     name_native: Mapped[str] = mapped_column(nullable=True)
     name_en: Mapped[str] = mapped_column(nullable=True)
     name_ua: Mapped[str] = mapped_column(nullable=True)

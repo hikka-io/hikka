@@ -15,6 +15,7 @@ async def test_characters_list(client, aggregator_characters):
 
     # Check first and last character slugs
     assert response.json()["list"][0]["slug"] == "levi-565409"
+    assert response.json()["list"][0]["mal_id"] == 45627
     assert response.json()["list"][11]["slug"] == "armin-arlert-4fe343"
 
 
