@@ -631,15 +631,19 @@ def todo_anime_filters(search: AnimeTodoArgs) -> tuple[list, list]:
     for entry in search.fields:
         negative = entry.startswith("-")
         column = todo_field_columns[entry[1:] if negative else entry]
-        and_filters.append(column != None if negative else column == None)  # noqa: E711
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
     if not search.fields:
         or_filters = [
-            Anime.title_ua == None,                                 # noqa: E711
-            Anime.title_en == None,                                 # noqa: E711
-            Anime.title_ja == None,                                 # noqa: E711
-            Anime.synopsis_ua == None,                              # noqa: E711
-            Anime.synopsis_en == None,                              # noqa: E711
+            or_(Anime.title_ua == None, Anime.title_ua == ""),          # noqa: E711
+            or_(Anime.title_en == None, Anime.title_en == ""),          # noqa: E711
+            or_(Anime.title_ja == None, Anime.title_ja == ""),          # noqa: E711
+            or_(Anime.synopsis_ua == None, Anime.synopsis_ua == ""),    # noqa: E711
+            or_(Anime.synopsis_en == None, Anime.synopsis_en == ""),    # noqa: E711
         ]
 
     if search.status:
@@ -766,15 +770,19 @@ def todo_manga_filters(search: MangaTodoArgs) -> tuple[list, list]:
     for entry in search.fields:
         negative = entry.startswith("-")
         column = todo_field_columns[entry[1:] if negative else entry]
-        and_filters.append(column != None if negative else column == None)  # noqa: E711
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
     if not search.fields:
         or_filters = [
-            Manga.title_ua == None,                                 # noqa: E711
-            Manga.title_en == None,                                 # noqa: E711
-            Manga.title_original == None,                           # noqa: E711
-            Manga.synopsis_ua == None,                              # noqa: E711
-            Manga.synopsis_en == None,                              # noqa: E711
+            or_(Manga.title_ua == None, Manga.title_ua == ""),                # noqa: E711
+            or_(Manga.title_en == None, Manga.title_en == ""),                # noqa: E711
+            or_(Manga.title_original == None, Manga.title_original == ""),    # noqa: E711
+            or_(Manga.synopsis_ua == None, Manga.synopsis_ua == ""),          # noqa: E711
+            or_(Manga.synopsis_en == None, Manga.synopsis_en == ""),          # noqa: E711
         ]
 
     if search.status:
@@ -897,15 +905,19 @@ def todo_novel_filters(search: NovelTodoArgs) -> tuple[list, list]:
     for entry in search.fields:
         negative = entry.startswith("-")
         column = todo_field_columns[entry[1:] if negative else entry]
-        and_filters.append(column != None if negative else column == None)  # noqa: E711
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
     if not search.fields:
         or_filters = [
-            Novel.title_ua == None,                                 # noqa: E711
-            Novel.title_en == None,                                 # noqa: E711
-            Novel.title_original == None,                           # noqa: E711
-            Novel.synopsis_ua == None,                              # noqa: E711
-            Novel.synopsis_en == None,                              # noqa: E711
+            or_(Novel.title_ua == None, Novel.title_ua == ""),                # noqa: E711
+            or_(Novel.title_en == None, Novel.title_en == ""),                # noqa: E711
+            or_(Novel.title_original == None, Novel.title_original == ""),    # noqa: E711
+            or_(Novel.synopsis_ua == None, Novel.synopsis_ua == ""),          # noqa: E711
+            or_(Novel.synopsis_en == None, Novel.synopsis_en == ""),          # noqa: E711
         ]
 
     if search.status:
@@ -1044,14 +1056,18 @@ def todo_character_filters(search: CharacterTodoArgs) -> tuple[list, list]:
     for entry in search.fields:
         negative = entry.startswith("-")
         column = todo_field_columns[entry[1:] if negative else entry]
-        and_filters.append(column != None if negative else column == None)  # noqa: E711
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
     if not search.fields:
         or_filters = [
-            Character.name_ua == None,                              # noqa: E711
-            Character.name_en == None,                              # noqa: E711
-            Character.name_ja == None,                              # noqa: E711
-            Character.description_ua == None,                       # noqa: E711
+            or_(Character.name_ua == None, Character.name_ua == ""),                  # noqa: E711
+            or_(Character.name_en == None, Character.name_en == ""),                  # noqa: E711
+            or_(Character.name_ja == None, Character.name_ja == ""),                  # noqa: E711
+            or_(Character.description_ua == None, Character.description_ua == ""),    # noqa: E711
         ]
 
     return and_filters, or_filters
@@ -1145,13 +1161,17 @@ def todo_person_filters(search: PersonTodoArgs) -> tuple[list, list]:
     for entry in search.fields:
         negative = entry.startswith("-")
         column = todo_field_columns[entry[1:] if negative else entry]
-        and_filters.append(column != None if negative else column == None)  # noqa: E711
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
     if not search.fields:
         or_filters = [
-            Person.name_ua == None,                                 # noqa: E711
-            Person.name_en == None,                                 # noqa: E711
-            Person.name_native == None,                             # noqa: E711
+            or_(Person.name_ua == None, Person.name_ua == ""),        # noqa: E711
+            or_(Person.name_en == None, Person.name_en == ""),        # noqa: E711
+            or_(Person.name_native == None, Person.name_native == ""),  # noqa: E711
         ]
 
     return and_filters, or_filters
