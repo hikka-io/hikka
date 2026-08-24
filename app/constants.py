@@ -411,6 +411,8 @@ PERMISSION_CLIENT_LIST_ALL = "client:list_all"
 
 PERMISSION_ADMIN_UPDATE_USER = "admin:user:update"
 
+PERMISSION_MODERATION_READ = "moderation:read"
+
 # Permissions for managing a certain categories of articles
 PERMISSION_ARTICLE_CATEGORY_NEWS = "article:category:news"
 PERMISSION_ARTICLE_CATEGORY_SYSTEM = "article:category:system"
@@ -455,6 +457,7 @@ MODERATOR_PERMISSIONS = [
     PERMISSION_EDIT_REJECT,
     PERMISSION_EDIT_AUTO,
     PERMISSION_EDIT_UPDATE_MODERATOR,
+    PERMISSION_MODERATION_READ,
 ]
 
 ADMIN_PERMISSIONS = [
@@ -602,6 +605,14 @@ NOTIFICATION_TYPES = [
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+# Moderation types
+MODERATION_EDIT_ACCEPTED = "edit_accepted"
+MODERATION_EDIT_DENIED = "edit_denied"
+MODERATION_EDIT_UPDATED = "edit_updated"
+MODERATION_COMMENT_HIDDEN = "comment_hidden"
+MODERATION_COLLECTION_DELETED = "collection_deleted"
+MODERATION_COLLECTION_UPDATED = "collection_updated"
 
 # Articles
 ARTICLE_SYSTEM = "system"
