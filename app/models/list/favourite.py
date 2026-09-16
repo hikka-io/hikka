@@ -112,3 +112,22 @@ class CharacterFavourite(Favourite):
         foreign_keys=[content_id],
         lazy="immediate",  # TODO: check if it is good idea
     )
+
+
+class PersonFavourite(Favourite):
+    __mapper_args__ = {
+        "polymorphic_identity": "person",
+        "eager_defaults": True,
+    }
+
+    content_id = mapped_column(
+        ForeignKey("service_content_people.id", ondelete="CASCADE"),
+        use_existing_column=True,
+        index=True,
+    )
+
+    content: Mapped["Person"] = relationship(
+        primaryjoin="Person.id == PersonFavourite.content_id",
+        foreign_keys=[content_id],
+        lazy="immediate",  # TODO: check if it is good idea
+    )

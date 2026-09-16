@@ -12,6 +12,7 @@ class ActivityResponse(CustomModel):
 class FavouriteStatsResponse(CustomModel):
     collection: int = 0
     character: int = 0
+    person: int = 0
     anime: int = 0
     manga: int = 0
     novel: int = 0

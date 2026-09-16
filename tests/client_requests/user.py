@@ -14,3 +14,7 @@ def request_me_ui(client, token):
 
 def request_profile(client, username):
     return client.get(f"/user/{username}")
+
+
+def request_user_stats(client, username):
+    return client.get(f"/user/{username}/stats")
