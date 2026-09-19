@@ -111,8 +111,13 @@ async def collections_list_filter(
     request_user: User | None,
     args: CollectionsListArgs,
     session: AsyncSession,
+    filter_ids: list[UUID],
 ):
     visibility = [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+
+    # Ids we got from Meilisearch, Postgres still applies every filter below
+    if filter_ids:
+        query = query.filter(Collection.id.in_(filter_ids))
 
     if args.author:
         author = await get_user_by_username(session, args.author)
@@ -164,10 +169,17 @@ async def collections_list_filter(
 
 
 async def get_collections_count(
-    session: AsyncSession, request_user: User | None, args: CollectionsListArgs
+    session: AsyncSession,
+    request_user: User | None,
+    args: CollectionsListArgs,
+    filter_ids: list[UUID],
 ) -> int:
     query = await collections_list_filter(
-        select(func.count(Collection.id)), request_user, args, session
+        select(func.count(Collection.id)),
+        request_user,
+        args,
+        session,
+        filter_ids,
     )
 
     return await session.scalar(query)
@@ -177,6 +189,7 @@ async def get_collections(
     session: AsyncSession,
     request_user: User | None,
     args: CollectionsListArgs,
+    filter_ids: list[UUID],
     limit: int,
     offset: int,
 ) -> ScalarResult[Collection]:
@@ -196,6 +209,7 @@ async def get_collections(
         request_user,
         args,
         session,
+        filter_ids,
     )
 
     return await session.scalars(
@@ -350,6 +364,9 @@ async def update_collection(
             setattr(collection, key, new_value)
             after[key] = new_value
 
+    if any(key in after for key in ["visibility", "title", "tags"]):
+        collection.needs_search_update = True
+
     collection.updated = utcnow()
     session.add(collection)
 
@@ -436,6 +453,7 @@ async def delete_collection(
     session: AsyncSession, collection: Collection, user: User
 ):
     collection.deleted = True
+    collection.needs_search_update = True
     session.add(collection)
 
     # Mark comments for deleted collection as private
