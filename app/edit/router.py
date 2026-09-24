@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import meilisearch
 from app import constants
 from . import service
 
@@ -168,21 +169,36 @@ async def get_content_edit_todo(
     return paginated_response(content.unique().all(), total, page, limit)
 
 
-@router.get(
+@router.post(
     "/todo/anime",
     response_model=TodoAnimeListResponse,
     summary="Return list of anime with issues",
 )
 async def get_todo_anime_list(
+    search: AnimeTodoArgs,
     session: AsyncSession = Depends(get_session),
-    search: AnimeTodoArgs = Depends(),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
 
+    filter_ids = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_ANIME,
+            query=search.query,
+            page=page,
+            size=size,
+        )
+
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
     total, data = await service.get_todo_anime_list(
-        session, limit, offset, search
+        session, limit, offset, search, filter_ids
     )
 
     dto = [TodoAnimeResponse.from_(anime) for anime in data]
@@ -190,21 +206,36 @@ async def get_todo_anime_list(
     return paginated_response(dto, total, page, limit)
 
 
-@router.get(
+@router.post(
     "/todo/manga",
     response_model=TodoMangaListResponse,
     summary="Return list of manga with issues",
 )
 async def get_todo_manga_list(
+    search: MangaTodoArgs,
     session: AsyncSession = Depends(get_session),
-    search: MangaTodoArgs = Depends(),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
 
+    filter_ids = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_MANGA,
+            query=search.query,
+            page=page,
+            size=size,
+        )
+
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
     total, data = await service.get_todo_manga_list(
-        session, limit, offset, search
+        session, limit, offset, search, filter_ids
     )
 
     dto = [TodoMangaResponse.from_(manga) for manga in data]
@@ -212,21 +243,36 @@ async def get_todo_manga_list(
     return paginated_response(dto, total, page, limit)
 
 
-@router.get(
+@router.post(
     "/todo/novel",
     response_model=TodoNovelListResponse,
     summary="Return list of novel with issues",
 )
 async def get_todo_novel_list(
+    search: NovelTodoArgs,
     session: AsyncSession = Depends(get_session),
-    search: NovelTodoArgs = Depends(),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
 
+    filter_ids = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_NOVEL,
+            query=search.query,
+            page=page,
+            size=size,
+        )
+
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
     total, data = await service.get_todo_novel_list(
-        session, limit, offset, search
+        session, limit, offset, search, filter_ids
     )
 
     dto = [TodoNovelResponse.from_(novel) for novel in data]
@@ -234,21 +280,36 @@ async def get_todo_novel_list(
     return paginated_response(dto, total, page, limit)
 
 
-@router.get(
+@router.post(
     "/todo/characters",
     response_model=TodoCharacterListResponse,
     summary="Return list of characters with issues",
 )
 async def get_todo_character_list(
+    search: CharacterTodoArgs,
     session: AsyncSession = Depends(get_session),
-    search: CharacterTodoArgs = Depends(),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
 
+    filter_slugs = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_CHARACTERS,
+            query=search.query,
+            page=page,
+            size=size,
+        )
+
+        filter_slugs = [hit["slug"] for hit in meilisearch_result["list"]]
+
+        if not filter_slugs:
+            return paginated_response([], 0, page, limit)
+
     total, data = await service.get_todo_character_list(
-        session, limit, offset, search
+        session, limit, offset, search, filter_slugs
     )
 
     dto = [TodoCharacterResponse.from_(character) for character in data]
@@ -256,21 +317,36 @@ async def get_todo_character_list(
     return paginated_response(dto, total, page, limit)
 
 
-@router.get(
+@router.post(
     "/todo/people",
     response_model=TodoPersonListResponse,
     summary="Return list of people with issues",
 )
 async def get_todo_person_list(
+    search: PersonTodoArgs,
     session: AsyncSession = Depends(get_session),
-    search: PersonTodoArgs = Depends(),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
 
+    filter_slugs = []
+
+    if search.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_PEOPLE,
+            query=search.query,
+            page=page,
+            size=size,
+        )
+
+        filter_slugs = [hit["slug"] for hit in meilisearch_result["list"]]
+
+        if not filter_slugs:
+            return paginated_response([], 0, page, limit)
+
     total, data = await service.get_todo_person_list(
-        session, limit, offset, search
+        session, limit, offset, search, filter_slugs
     )
 
     dto = [TodoPersonResponse.from_(person) for person in data]

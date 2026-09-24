@@ -3,23 +3,58 @@ def request_edit(client, edit_id):
 
 
 def request_todo_anime_list(client, params={}):
-    return client.get("/edit/todo/anime", query_string=params)
+    params = dict(params)
+    query = {}
+
+    for key in ("page", "size"):
+        if key in params:
+            query[key] = params.pop(key)
+
+    return client.post("/edit/todo/anime", query_string=query, json=params)
 
 
 def request_todo_manga_list(client, params={}):
-    return client.get("/edit/todo/manga", query_string=params)
+    params = dict(params)
+    query = {}
+
+    for key in ("page", "size"):
+        if key in params:
+            query[key] = params.pop(key)
+
+    return client.post("/edit/todo/manga", query_string=query, json=params)
 
 
 def request_todo_novel_list(client, params={}):
-    return client.get("/edit/todo/novel", query_string=params)
+    params = dict(params)
+    query = {}
+
+    for key in ("page", "size"):
+        if key in params:
+            query[key] = params.pop(key)
+
+    return client.post("/edit/todo/novel", query_string=query, json=params)
 
 
 def request_todo_character_list(client, params={}):
-    return client.get("/edit/todo/characters", query_string=params)
+    params = dict(params)
+    query = {}
+
+    for key in ("page", "size"):
+        if key in params:
+            query[key] = params.pop(key)
+
+    return client.post("/edit/todo/characters", query_string=query, json=params)
 
 
 def request_todo_person_list(client, params={}):
-    return client.get("/edit/todo/people", query_string=params)
+    params = dict(params)
+    query = {}
+
+    for key in ("page", "size"):
+        if key in params:
+            query[key] = params.pop(key)
+
+    return client.post("/edit/todo/people", query_string=query, json=params)
 
 
 def request_edit_list(client, filters={}, page=1, size=15, token=None):

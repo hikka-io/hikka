@@ -1,4 +1,5 @@
 from app.models.list.read import MangaRead, NovelRead
+from app.common.service.sort import build_order_by
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from sqlalchemy.sql.selectable import Select
@@ -54,7 +55,10 @@ from app.models import (
     MangaEdit,
     NovelEdit,
     Character,
+    Company,
+    Magazine,
     Person,
+    Genre,
     Anime,
     Manga,
     Novel,
@@ -554,9 +558,13 @@ async def get_todo_anime_list(
     limit: int,
     offset: int,
     search: AnimeTodoArgs,
+    filter_ids: list[str],
 ) -> tuple[int, ScalarResult[Anime]]:
     and_filters, or_filters = todo_anime_filters(search)
     filters = [*and_filters]
+
+    if filter_ids:
+        filters.append(Anime.content_id.in_(filter_ids))
 
     if or_filters:
         filters.append(or_(*or_filters))
@@ -571,7 +579,25 @@ async def get_todo_anime_list(
     data = await session.scalars(
         select(Anime)
         .filter(*filters)
-        .order_by(Anime.id)
+        .order_by(
+            *build_order_by(
+                search.sort,
+                order_mapping={
+                    "title_original": Anime.title_ja,
+                    "title_ua": Anime.title_ua,
+                    "title_en": Anime.title_en,
+                    "start_date": Anime.start_date,
+                    "media_type": Anime.media_type,
+                },
+                tiebreaker=asc(Anime.id),
+                nullable=[
+                    "title_ua",
+                    "title_en",
+                    "title_original",
+                    "start_date",
+                ],
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -584,7 +610,7 @@ def todo_anime_filters(search: AnimeTodoArgs) -> tuple[list, list]:
     or_filters = []
 
     if search.media_type:
-        and_filters.append(Anime.media_type == search.media_type)
+        and_filters.append(Anime.media_type.in_(search.media_type))
     else:
         # Exclude music by default for backward compatibility with the
         # previous API endpoint @router.get("/todo/{content_type}/{todo_type}")
@@ -594,57 +620,95 @@ def todo_anime_filters(search: AnimeTodoArgs) -> tuple[list, list]:
     if search.mal_id is not None:
         and_filters.append(Anime.mal_id == search.mal_id)
 
-    if search.title_ua:
-        and_filters.append(Anime.title_ua == None)                  # noqa: E711
+    todo_field_columns = {
+        "title_ua": Anime.title_ua,
+        "title_en": Anime.title_en,
+        "title_original": Anime.title_ja,
+        "synopsis_ua": Anime.synopsis_ua,
+        "synopsis_en": Anime.synopsis_en,
+    }
 
-    if search.title_en:
-        and_filters.append(Anime.title_en == None)                  # noqa: E711
+    for entry in search.fields:
+        negative = entry.startswith("-")
+        column = todo_field_columns[entry[1:] if negative else entry]
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
-    if search.title_original:
-        # TODO: Field `Anime.title_ja` is preventing me from collapsing three 
-        # functions todo_anime_filters, todo_manga_filters, todo_novel_filters 
-        # into one generic function with following signature
-        #  
-        # def todo_content_filters(
-        #       search: AnimeTodoArgs | MangaTodoArgs | NovelTodoArgs, 
-        #       model:  Anime | Manga | Novel
-        # ) -> tuple[list, list]: . . .
-        and_filters.append(Anime.title_ja == None)                  # noqa: E711
-
-    if search.synopsis_ua:
-        and_filters.append(Anime.synopsis_ua == None)               # noqa: E711
-
-    if search.synopsis_en:
-        and_filters.append(Anime.synopsis_en == None)               # noqa: E711
-
-    if not any(
-        [
-            search.title_ua,
-            search.title_en,
-            search.title_original,
-            search.synopsis_ua,
-            search.synopsis_en,
-        ]
-    ):
+    if not search.fields:
         or_filters = [
-            Anime.title_ua == None,                                 # noqa: E711
-            Anime.title_en == None,                                 # noqa: E711
-            Anime.title_ja == None,                                 # noqa: E711
-            Anime.synopsis_ua == None,                              # noqa: E711
-            Anime.synopsis_en == None,                              # noqa: E711
+            or_(Anime.title_ua == None, Anime.title_ua == ""),          # noqa: E711
+            or_(Anime.title_en == None, Anime.title_en == ""),          # noqa: E711
+            or_(Anime.title_ja == None, Anime.title_ja == ""),          # noqa: E711
+            or_(Anime.synopsis_ua == None, Anime.synopsis_ua == ""),    # noqa: E711
+            or_(Anime.synopsis_en == None, Anime.synopsis_en == ""),    # noqa: E711
         ]
+
+    if search.status:
+        and_filters.append(Anime.status.in_(search.status))
+
+    if search.rating:
+        and_filters.append(Anime.rating.in_(search.rating))
+
+    if search.season:
+        and_filters.append(Anime.season.in_(search.season))
+
+    if search.years[0] is not None:
+        and_filters.append(Anime.year >= search.years[0])
+
+    if search.years[1] is not None:
+        and_filters.append(Anime.year <= search.years[1])
+
+    if search.genres:
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        Anime.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
+            )
+
+        if exclude_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        ~Anime.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
+
+    if search.studios:
+        and_filters.append(Anime.studios.any(Company.slug.in_(search.studios)))
 
     return and_filters, or_filters
 
 
-async def get_todo_manga_list(    
+async def get_todo_manga_list(
     session: AsyncSession,
     limit: int,
     offset: int,
     search: MangaTodoArgs,
+    filter_ids: list[str],
 ) -> tuple[int, ScalarResult[Manga]]:
     and_filters, or_filters = todo_manga_filters(search)
     filters = [*and_filters]
+
+    if filter_ids:
+        filters.append(Manga.content_id.in_(filter_ids))
 
     if or_filters:
         filters.append(or_(*or_filters))
@@ -659,7 +723,25 @@ async def get_todo_manga_list(
     data = await session.scalars(
         select(Manga)
         .filter(*filters)
-        .order_by(Manga.id)
+        .order_by(
+            *build_order_by(
+                search.sort,
+                order_mapping={
+                    "title_original": Manga.title_original,
+                    "title_ua": Manga.title_ua,
+                    "title_en": Manga.title_en,
+                    "start_date": Manga.start_date,
+                    "media_type": Manga.media_type,
+                },
+                tiebreaker=asc(Manga.id),
+                nullable=[
+                    "title_ua",
+                    "title_en",
+                    "title_original",
+                    "start_date",
+                ],
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -672,40 +754,80 @@ def todo_manga_filters(search: MangaTodoArgs) -> tuple[list, list]:
     or_filters = []
 
     if search.media_type:
-        and_filters.append(Manga.media_type == search.media_type)
+        and_filters.append(Manga.media_type.in_(search.media_type))
 
     if search.mal_id is not None:
         and_filters.append(Manga.mal_id == search.mal_id)
 
-    if search.title_ua:
-        and_filters.append(Manga.title_ua == None)                  # noqa: E711
+    todo_field_columns = {
+        "title_ua": Manga.title_ua,
+        "title_en": Manga.title_en,
+        "title_original": Manga.title_original,
+        "synopsis_ua": Manga.synopsis_ua,
+        "synopsis_en": Manga.synopsis_en,
+    }
 
-    if search.title_en:
-        and_filters.append(Manga.title_en == None)                  # noqa: E711
+    for entry in search.fields:
+        negative = entry.startswith("-")
+        column = todo_field_columns[entry[1:] if negative else entry]
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
-    if search.title_original:
-        and_filters.append(Manga.title_original == None)            # noqa: E711
-
-    if search.synopsis_ua:
-        and_filters.append(Manga.synopsis_ua == None)               # noqa: E711
-
-    if search.synopsis_en:
-        and_filters.append(Manga.synopsis_en == None)               # noqa: E711
-
-    if not any([
-            search.title_ua,
-            search.title_en,
-            search.title_original,
-            search.synopsis_ua,
-            search.synopsis_en,
-    ]):
+    if not search.fields:
         or_filters = [
-            Manga.title_ua == None,                                 # noqa: E711
-            Manga.title_en == None,                                 # noqa: E711
-            Manga.title_original == None,                           # noqa: E711
-            Manga.synopsis_ua == None,                              # noqa: E711
-            Manga.synopsis_en == None,                              # noqa: E711
+            or_(Manga.title_ua == None, Manga.title_ua == ""),                # noqa: E711
+            or_(Manga.title_en == None, Manga.title_en == ""),                # noqa: E711
+            or_(Manga.title_original == None, Manga.title_original == ""),    # noqa: E711
+            or_(Manga.synopsis_ua == None, Manga.synopsis_ua == ""),          # noqa: E711
+            or_(Manga.synopsis_en == None, Manga.synopsis_en == ""),          # noqa: E711
         ]
+
+    if search.status:
+        and_filters.append(Manga.status.in_(search.status))
+
+    if search.years[0] is not None:
+        and_filters.append(Manga.year >= search.years[0])
+
+    if search.years[1] is not None:
+        and_filters.append(Manga.year <= search.years[1])
+
+    if search.genres:
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        Manga.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
+            )
+
+        if exclude_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        ~Manga.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
+
+    if search.magazines:
+        and_filters.append(
+            Manga.magazines.any(Magazine.slug.in_(search.magazines))
+        )
 
     return and_filters, or_filters
 
@@ -715,9 +837,13 @@ async def get_todo_novel_list(
     limit: int,
     offset: int,
     search: NovelTodoArgs,
+    filter_ids: list[str],
 ) -> tuple[int, ScalarResult[Novel]]:
     and_filters, or_filters = todo_novel_filters(search)
     filters = [*and_filters]
+
+    if filter_ids:
+        filters.append(Novel.content_id.in_(filter_ids))
 
     if or_filters:
         filters.append(or_(*or_filters))
@@ -732,7 +858,25 @@ async def get_todo_novel_list(
     data = await session.scalars(
         select(Novel)
         .filter(*filters)
-        .order_by(Novel.id)
+        .order_by(
+            *build_order_by(
+                search.sort,
+                order_mapping={
+                    "title_original": Novel.title_original,
+                    "title_ua": Novel.title_ua,
+                    "title_en": Novel.title_en,
+                    "start_date": Novel.start_date,
+                    "media_type": Novel.media_type,
+                },
+                tiebreaker=asc(Novel.id),
+                nullable=[
+                    "title_ua",
+                    "title_en",
+                    "title_original",
+                    "start_date",
+                ],
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -745,40 +889,80 @@ def todo_novel_filters(search: NovelTodoArgs) -> tuple[list, list]:
     or_filters = []
 
     if search.media_type:
-        and_filters.append(Novel.media_type == search.media_type)
+        and_filters.append(Novel.media_type.in_(search.media_type))
 
     if search.mal_id is not None:
         and_filters.append(Novel.mal_id == search.mal_id)
 
-    if search.title_ua:
-        and_filters.append(Novel.title_ua == None)                  # noqa: E711
+    todo_field_columns = {
+        "title_ua": Novel.title_ua,
+        "title_en": Novel.title_en,
+        "title_original": Novel.title_original,
+        "synopsis_ua": Novel.synopsis_ua,
+        "synopsis_en": Novel.synopsis_en,
+    }
 
-    if search.title_en:
-        and_filters.append(Novel.title_en == None)                  # noqa: E711
+    for entry in search.fields:
+        negative = entry.startswith("-")
+        column = todo_field_columns[entry[1:] if negative else entry]
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
-    if search.title_original:
-        and_filters.append(Novel.title_original == None)            # noqa: E711
-
-    if search.synopsis_ua:
-        and_filters.append(Novel.synopsis_ua == None)               # noqa: E711
-
-    if search.synopsis_en:
-        and_filters.append(Novel.synopsis_en == None)               # noqa: E711
-
-    if not any([
-        search.title_ua,
-        search.title_en,
-        search.title_original,
-        search.synopsis_ua,
-        search.synopsis_en,
-    ]):
+    if not search.fields:
         or_filters = [
-            Novel.title_ua == None,                                 # noqa: E711
-            Novel.title_en == None,                                 # noqa: E711
-            Novel.title_original == None,                           # noqa: E711
-            Novel.synopsis_ua == None,                              # noqa: E711
-            Novel.synopsis_en == None,                              # noqa: E711
+            or_(Novel.title_ua == None, Novel.title_ua == ""),                # noqa: E711
+            or_(Novel.title_en == None, Novel.title_en == ""),                # noqa: E711
+            or_(Novel.title_original == None, Novel.title_original == ""),    # noqa: E711
+            or_(Novel.synopsis_ua == None, Novel.synopsis_ua == ""),          # noqa: E711
+            or_(Novel.synopsis_en == None, Novel.synopsis_en == ""),          # noqa: E711
         ]
+
+    if search.status:
+        and_filters.append(Novel.status.in_(search.status))
+
+    if search.years[0] is not None:
+        and_filters.append(Novel.year >= search.years[0])
+
+    if search.years[1] is not None:
+        and_filters.append(Novel.year <= search.years[1])
+
+    if search.genres:
+        include_genres = []
+        exclude_genres = []
+
+        for genre_slug in search.genres:
+            if genre_slug.startswith("-"):
+                exclude_genres.append(genre_slug[1:])
+            else:
+                include_genres.append(genre_slug)
+
+        if include_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        Novel.genres.any(Genre.slug == slug)
+                        for slug in include_genres
+                    ]
+                )
+            )
+
+        if exclude_genres:
+            and_filters.append(
+                and_(
+                    *[
+                        ~Novel.genres.any(Genre.slug == slug)
+                        for slug in exclude_genres
+                    ]
+                )
+            )
+
+    if search.magazines:
+        and_filters.append(
+            Novel.magazines.any(Magazine.slug.in_(search.magazines))
+        )
 
     return and_filters, or_filters
 
@@ -788,9 +972,13 @@ async def get_todo_character_list(
     limit: int,
     offset: int,
     search: CharacterTodoArgs,
+    filter_slugs: list[str],
 ) -> tuple[int, ScalarResult[Character]]:
     and_filters, or_filters = todo_character_filters(search)
     filters = [*and_filters]
+
+    if filter_slugs:
+        filters.append(Character.slug.in_(filter_slugs))
 
     if or_filters:
         filters.append(or_(*or_filters))
@@ -836,7 +1024,18 @@ async def get_todo_character_list(
 
     data = await session.scalars(
         query.filter(*filters)
-        .order_by(Character.id)
+        .order_by(
+            *build_order_by(
+                search.sort,
+                order_mapping={
+                    "name_original": Character.name_ja,
+                    "name_ua": Character.name_ua,
+                    "name_en": Character.name_en,
+                },
+                tiebreaker=asc(Character.id),
+                nullable=["name_ua", "name_en", "name_original"],
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -847,29 +1046,28 @@ async def get_todo_character_list(
 def todo_character_filters(search: CharacterTodoArgs) -> tuple[list, list]:
     and_filters, or_filters = [], []
 
-    if search.name_ua:
-        and_filters.append(Character.name_ua == None)               # noqa: E711
+    todo_field_columns = {
+        "name_ua": Character.name_ua,
+        "name_en": Character.name_en,
+        "name_original": Character.name_ja,
+        "description_ua": Character.description_ua,
+    }
 
-    if search.name_en:
-        and_filters.append(Character.name_en == None)               # noqa: E711
+    for entry in search.fields:
+        negative = entry.startswith("-")
+        column = todo_field_columns[entry[1:] if negative else entry]
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
-    if search.name_original:
-        and_filters.append(Character.name_ja == None)               # noqa: E711
-
-    if search.description_ua:
-        and_filters.append(Character.description_ua == None)        # noqa: E711
-
-    if not any([
-        search.name_ua,
-        search.name_en,
-        search.name_original,
-        search.description_ua,
-    ]):
+    if not search.fields:
         or_filters = [
-            Character.name_ua == None,                              # noqa: E711
-            Character.name_en == None,                              # noqa: E711
-            Character.name_ja == None,                              # noqa: E711
-            Character.description_ua == None,                       # noqa: E711
+            or_(Character.name_ua == None, Character.name_ua == ""),                  # noqa: E711
+            or_(Character.name_en == None, Character.name_en == ""),                  # noqa: E711
+            or_(Character.name_ja == None, Character.name_ja == ""),                  # noqa: E711
+            or_(Character.description_ua == None, Character.description_ua == ""),    # noqa: E711
         ]
 
     return and_filters, or_filters
@@ -880,9 +1078,13 @@ async def get_todo_person_list(
     limit: int,
     offset: int,
     search: PersonTodoArgs,
+    filter_slugs: list[str],
 ) -> tuple[int, ScalarResult[Person]]:
     and_filters, or_filters = todo_person_filters(search)
     filters = [*and_filters]
+
+    if filter_slugs:
+        filters.append(Person.slug.in_(filter_slugs))
 
     if or_filters:
         filters.append(or_(*or_filters))
@@ -928,7 +1130,18 @@ async def get_todo_person_list(
 
     data = await session.scalars(
         query.filter(*filters)
-        .order_by(Person.id)
+        .order_by(
+            *build_order_by(
+                search.sort,
+                order_mapping={
+                    "name_original": Person.name_native,
+                    "name_ua": Person.name_ua,
+                    "name_en": Person.name_en,
+                },
+                tiebreaker=asc(Person.id),
+                nullable=["name_ua", "name_en", "name_original"],
+            )
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -939,24 +1152,26 @@ async def get_todo_person_list(
 def todo_person_filters(search: PersonTodoArgs) -> tuple[list, list]:
     and_filters, or_filters = [], []
 
-    if search.name_ua:
-        and_filters.append(Person.name_ua == None)                  # noqa: E711
+    todo_field_columns = {
+        "name_ua": Person.name_ua,
+        "name_en": Person.name_en,
+        "name_original": Person.name_native,
+    }
 
-    if search.name_en:
-        and_filters.append(Person.name_en == None)                  # noqa: E711
+    for entry in search.fields:
+        negative = entry.startswith("-")
+        column = todo_field_columns[entry[1:] if negative else entry]
+        and_filters.append(
+            and_(column != None, column != "")  # noqa: E711
+            if negative
+            else or_(column == None, column == "")  # noqa: E711
+        )
 
-    if search.name_original:
-        and_filters.append(Person.name_native == None)              # noqa: E711
-
-    if not any([
-        search.name_ua,
-        search.name_en,
-        search.name_original,
-    ]):
+    if not search.fields:
         or_filters = [
-            Person.name_ua == None,                                 # noqa: E711
-            Person.name_en == None,                                 # noqa: E711
-            Person.name_native == None,                             # noqa: E711
+            or_(Person.name_ua == None, Person.name_ua == ""),        # noqa: E711
+            or_(Person.name_en == None, Person.name_en == ""),        # noqa: E711
+            or_(Person.name_native == None, Person.name_native == ""),  # noqa: E711
         ]
 
     return and_filters, or_filters

@@ -5,7 +5,10 @@ from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
+    AnimeAgeRatingEnum,
+    ContentStatusEnum,
     CharacterResponse,
+    QuerySearchArgs,
     PersonResponse,
     AnimeMediaEnum,
     MangaMediaEnum,
@@ -15,6 +18,7 @@ from app.schemas import (
     MangaResponse,
     NovelResponse,
     UserResponse,
+    SeasonEnum,
     CustomModel
 )
 
@@ -159,51 +163,308 @@ class CharacterEditArgs(CustomModel):
     synonyms: list[str] | None = None
 
 
-class AnimeTodoArgs(PaginationArgs):
-    title_ua: bool | None = None
-    title_en: bool | None = None
-    title_original: bool | None = None
-    synopsis_ua: bool | None = None
-    synopsis_en: bool | None = None
-    media_type: AnimeMediaEnum | None = None
+class AnimeTodoArgs(QuerySearchArgs, PaginationArgs):
+    media_type: list[AnimeMediaEnum] = []
     mal_id: int | None = None
 
+    fields: list[str] = []
+    sort: list[str] = []
+    season: list[SeasonEnum] = []
+    status: list[ContentStatusEnum] = []
+    rating: list[AnimeAgeRatingEnum] = []
+    years: list[int | None] = Field(
+        default=[None, None], min_length=2, max_length=2
+    )
+    genres: list[str] = []
+    studios: list[str] = []
 
-class MangaTodoArgs(PaginationArgs):
-    title_ua: bool | None = None
-    title_en: bool | None = None
-    title_original: bool | None = None
-    synopsis_ua: bool | None = None
-    synopsis_en: bool | None = None
-    media_type: MangaMediaEnum | None = None
+    @field_validator("fields")
+    def validate_fields(cls, fields):
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "synopsis_ua",
+            "synopsis_en",
+        ]
+
+        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+
+        if len(stripped) != len(set(stripped)):
+            raise ValueError("Invalid fields: duplicates")
+
+        for field in stripped:
+            if field not in valid_fields:
+                raise ValueError(f"Invalid field value: {field}")
+
+        return fields
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "start_date",
+            "media_type",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if years[0] is not None and years[1] is not None and years[0] > years[1]:
+            raise ValueError("The first year must be less than the second year.")
+
+        return years
+
+
+class MangaTodoArgs(QuerySearchArgs, PaginationArgs):
+    media_type: list[MangaMediaEnum] = []
     mal_id: int | None = None
 
+    fields: list[str] = []
+    sort: list[str] = []
+    status: list[ContentStatusEnum] = []
+    years: list[int | None] = Field(
+        default=[None, None], min_length=2, max_length=2
+    )
+    genres: list[str] = []
+    magazines: list[str] = []
 
-class NovelTodoArgs(PaginationArgs):
-    title_ua: bool | None = None
-    title_en: bool | None = None
-    title_original: bool | None = None
-    synopsis_ua: bool | None = None
-    synopsis_en: bool | None = None
-    media_type: NovelMediaEnum | None = None
+    @field_validator("fields")
+    def validate_fields(cls, fields):
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "synopsis_ua",
+            "synopsis_en",
+        ]
+
+        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+
+        if len(stripped) != len(set(stripped)):
+            raise ValueError("Invalid fields: duplicates")
+
+        for field in stripped:
+            if field not in valid_fields:
+                raise ValueError(f"Invalid field value: {field}")
+
+        return fields
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "start_date",
+            "media_type",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if years[0] is not None and years[1] is not None and years[0] > years[1]:
+            raise ValueError("The first year must be less than the second year.")
+
+        return years
+
+
+class NovelTodoArgs(QuerySearchArgs, PaginationArgs):
+    media_type: list[NovelMediaEnum] = []
     mal_id: int | None = None
 
+    fields: list[str] = []
+    sort: list[str] = []
+    status: list[ContentStatusEnum] = []
+    years: list[int | None] = Field(
+        default=[None, None], min_length=2, max_length=2
+    )
+    genres: list[str] = []
+    magazines: list[str] = []
 
-class CharacterTodoArgs(PaginationArgs):
-    name_ua: bool | None = None
-    name_en: bool | None = None
-    name_original: bool | None = None
-    description_ua: bool | None = None
+    @field_validator("fields")
+    def validate_fields(cls, fields):
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "synopsis_ua",
+            "synopsis_en",
+        ]
+
+        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+
+        if len(stripped) != len(set(stripped)):
+            raise ValueError("Invalid fields: duplicates")
+
+        for field in stripped:
+            if field not in valid_fields:
+                raise ValueError(f"Invalid field value: {field}")
+
+        return fields
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = [
+            "title_ua",
+            "title_en",
+            "title_original",
+            "start_date",
+            "media_type",
+        ]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+    @field_validator("years")
+    def validate_years(cls, years):
+        if years[0] is not None and years[1] is not None and years[0] > years[1]:
+            raise ValueError("The first year must be less than the second year.")
+
+        return years
+
+
+class CharacterTodoArgs(QuerySearchArgs, PaginationArgs):
+    fields: list[str] = []
+    sort: list[str] = []
     content_type: EditContentToDoEnum | None = None
     content_slug: str | None = None
 
+    @field_validator("fields")
+    def validate_fields(cls, fields):
+        valid_fields = [
+            "name_ua",
+            "name_en",
+            "name_original",
+            "description_ua",
+        ]
 
-class PersonTodoArgs(PaginationArgs):
-    name_ua: bool | None = None
-    name_en: bool | None = None
-    name_original: bool | None = None
+        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+
+        if len(stripped) != len(set(stripped)):
+            raise ValueError("Invalid fields: duplicates")
+
+        for field in stripped:
+            if field not in valid_fields:
+                raise ValueError(f"Invalid field value: {field}")
+
+        return fields
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = ["name_ua", "name_en", "name_original"]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
+
+
+class PersonTodoArgs(QuerySearchArgs, PaginationArgs):
+    fields: list[str] = []
+    sort: list[str] = []
     content_type: EditContentToDoEnum | None = None
     content_slug: str | None = None
+
+    @field_validator("fields")
+    def validate_fields(cls, fields):
+        valid_fields = [
+            "name_ua",
+            "name_en",
+            "name_original",
+        ]
+
+        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+
+        if len(stripped) != len(set(stripped)):
+            raise ValueError("Invalid fields: duplicates")
+
+        for field in stripped:
+            if field not in valid_fields:
+                raise ValueError(f"Invalid field value: {field}")
+
+        return fields
+
+    @field_validator("sort")
+    def validate_sort(cls, sort_list):
+        valid_orders = ["asc", "desc"]
+        valid_fields = ["name_ua", "name_en", "name_original"]
+
+        if len(sort_list) != len(set(sort_list)):
+            raise ValueError("Invalid sort: duplicates")
+
+        for sort_item in sort_list:
+            parts = sort_item.split(":")
+
+            if len(parts) != 2:
+                raise ValueError(f"Invalid sort format: {sort_item}")
+
+            field, order = parts
+
+            if field not in valid_fields or order not in valid_orders:
+                raise ValueError(f"Invalid sort value: {sort_item}")
+
+        return sort_list
 
 
 # Response
