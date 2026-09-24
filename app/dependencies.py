@@ -193,7 +193,7 @@ def auth_required(
         # We need to update token expiraion once in a while
         # 3 days before expiration is arbitrary
         # we may need to update it later on
-        if now - token.expiration <= timedelta(days=3):
+        if token.expiration - now <= timedelta(days=3):
             token.expiration = now + timedelta(days=30)
 
         await session.commit()
