@@ -10,6 +10,7 @@ from app.schemas import (
     PaginationResponse,
     CollectionResponse,
     CharacterResponse,
+    PersonResponse,
     CustomModel,
 )
 
@@ -18,6 +19,7 @@ from app.schemas import (
 class FavouriteContentTypeEnum(str, Enum):
     content_collection = constants.CONTENT_COLLECTION
     content_character = constants.CONTENT_CHARACTER
+    content_person = constants.CONTENT_PERSON
     content_anime = constants.CONTENT_ANIME
     content_manga = constants.CONTENT_MANGA
     content_novel = constants.CONTENT_NOVEL
@@ -54,6 +56,10 @@ class FavouriteCharacterResponse(CharacterResponse, FavouriteMeta):
     pass
 
 
+class FavouritePersonResponse(PersonResponse, FavouriteMeta):
+    pass
+
+
 class FavouritePaginationResponse(CustomModel):
     list: list[
         FavouriteAnimeResponse
@@ -61,5 +67,6 @@ class FavouritePaginationResponse(CustomModel):
         | FavouriteNovelResponse
         | FavouriteCollectionResponse
         | FavouriteCharacterResponse
+        | FavouritePersonResponse
     ]
     pagination: PaginationResponse

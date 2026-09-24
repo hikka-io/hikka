@@ -43,6 +43,7 @@ from .review.review import Review
 
 from .list.favourite import CollectionFavourite
 from .list.favourite import CharacterFavourite
+from .list.favourite import PersonFavourite
 from .list.favourite import AnimeFavourite
 from .list.favourite import MangaFavourite
 from .list.favourite import NovelFavourite
@@ -153,6 +154,7 @@ __all__ = [
     "Review",
     "CollectionFavourite",
     "CharacterFavourite",
+    "PersonFavourite",
     "AnimeFavourite",
     "MangaFavourite",
     "NovelFavourite",

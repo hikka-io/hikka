@@ -1,8 +1,10 @@
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
+from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
@@ -33,6 +35,8 @@ class Person(
     anime_count: Mapped[int] = mapped_column(default=0)
     manga_count: Mapped[int] = mapped_column(default=0)
     novel_count: Mapped[int] = mapped_column(default=0)
+
+    favourite_created: Mapped[datetime] = query_expression()
 
     description_ua: Mapped[str] = mapped_column(nullable=True)
     name_native: Mapped[str] = mapped_column(nullable=True)

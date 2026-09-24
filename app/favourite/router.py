@@ -9,6 +9,7 @@ from app.models import (
     Collection,
     Favourite,
     Character,
+    Person,
     Anime,
     Manga,
     Novel,
@@ -58,8 +59,8 @@ async def get_favourite(
 async def favourite_add(
     content_type: FavouriteContentTypeEnum,
     session: AsyncSession = Depends(get_session),
-    content: Collection | Character | Anime | Manga | Novel = Depends(
-        validate_add_favourite
+    content: Collection | Character | Person | Anime | Manga | Novel = (
+        Depends(validate_add_favourite)
     ),
     user: User = Depends(
         auth_required(scope=[constants.SCOPE_CREATE_FAVOURITE])
