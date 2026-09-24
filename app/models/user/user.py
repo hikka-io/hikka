@@ -162,6 +162,8 @@ class User(Base, NeedsSearchUpdateMixin):
         },
     )
 
+    links: Mapped[list] = mapped_column(JSONB, default=[])
+
     __table_args__ = (
         Index("ix_lower_username", func.lower(username), unique=True),
     )

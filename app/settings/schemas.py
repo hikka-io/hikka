@@ -1,5 +1,6 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore, datetime_pd
-from pydantic import Field, field_validator, AliasChoices
+from pydantic import Field, field_validator, AliasChoices, HttpUrl
+from typing import Literal
 from app import constants
 from enum import Enum
 
@@ -130,3 +131,40 @@ class UserExportResponse(CustomModel):
     novel: list[UserExportReadResponse]
     created: datetime_pd
     updated: datetime_pd
+
+
+class UserLink(CustomModel):
+    text: str = Field(max_length=64)
+    url: HttpUrl = Field(max_length=255)
+
+    icon: Literal[
+        "telegram",
+        "threads",
+        "instagram",
+        "twitter",
+        "discord",
+        "steam",
+        "github",
+        "bluesky",
+        "fediverse",
+        "custom",
+    ]
+
+    # @model_validator(mode="after")
+    # def validate_url(self):
+    #     if not self.url.host:
+    #         raise ValueError("Invalid link")
+
+    #     hostname = self.url.host.removeprefix("www.")
+
+    #     icon_hostnames = {
+    #         "telegram": ["t.me"],
+    #     }
+
+    #     if not any(
+    #         hostname == allowed or hostname.endswith(f".{allowed}")
+    #         for allowed in icon_hostnames.get(self.icon, [])
+    #     ):
+    #         raise ValueError(f"Invalid {self.icon} link")
+
+    #     return self

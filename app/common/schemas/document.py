@@ -104,7 +104,7 @@ class DocumentVideo(DocumentNode):
         hostname = urlparse(str(url)).hostname
 
         if not hostname or not any(
-            endpoint in hostname for endpoint in ["youtube.com"]
+            endpoint == hostname for endpoint in ["youtube.com"]
         ):
             raise ValueError("Invalid video url")
 

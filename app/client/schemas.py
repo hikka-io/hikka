@@ -1,12 +1,11 @@
-from pydantic import AnyUrl, Field, field_validator
-
 from app.schemas import CustomModel, ClientResponse, PaginationResponse
+from pydantic import AnyUrl, Field, field_validator
 from app import constants, utils
 
 
 class ClientFullResponse(ClientResponse):
-    secret: str
     endpoint: str
+    secret: str
 
 
 class ClientPaginationResponse(CustomModel):

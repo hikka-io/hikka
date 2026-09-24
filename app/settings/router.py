@@ -37,6 +37,8 @@ from .dependencies import (
 )
 
 
+# TODO: there are many identical endpoints here
+# ideally we should have unified settings endpoint
 router = APIRouter(prefix="/settings", tags=["Settings"])
 
 
