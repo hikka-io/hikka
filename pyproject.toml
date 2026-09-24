@@ -16,7 +16,7 @@ dependencies = [
   "aiosignal==1.4.0",
   "alembic==1.14.0",
   "annotated-types==0.7.0",
-  "anyio==4.8.0",
+  "anyio (==4.14.2)",
   "apscheduler==3.11.0",
   "async-asgi-testclient==1.4.11",
   "asyncpg==0.30.0",
