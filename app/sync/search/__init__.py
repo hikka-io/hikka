@@ -1,4 +1,5 @@
 from meilisearch_python_sdk.errors import MeilisearchCommunicationError
+from .collections import update_search_collections
 from .characters import update_search_characters
 from .companies import update_search_companies
 from .article import update_search_article
@@ -21,6 +22,7 @@ async def update_search():
         await update_search_manga()
         await update_search_novel()
         await update_search_users()
+        await update_search_collections()
 
     except MeilisearchCommunicationError as e:
         print(f"Meilisearch is down:\n{e}")

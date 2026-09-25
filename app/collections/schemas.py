@@ -6,6 +6,7 @@ from app.schemas import (
     CollectionVisibilityEnum,
     CollectionResponse,
     PaginationResponse,
+    QuerySearchArgs,
     CustomModel,
 )
 
@@ -18,13 +19,20 @@ class CollectionContentArgs(CustomModel):
     slug: str
 
 
-class CollectionsListArgs(CustomModel):
+class CollectionsListArgs(QuerySearchArgs):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
     content: list[str] = Field([], max_length=1)
     content_type: CollectionContentTypeEnum | None = None
     author: str | None = None
     only_public: bool = True
     tags: list[str] = Field([], max_length=3)
+
+    @field_validator("tags")
+    def validate_tags(cls, tags):
+        if not all(is_valid_tag(tag) for tag in tags):
+            raise ValueError("Invalid tag")
+
+        return tags
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
