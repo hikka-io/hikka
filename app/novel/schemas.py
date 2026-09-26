@@ -30,6 +30,7 @@ class NovelInfoResponse(CustomModel):
     end_date: datetime_pd | None
     genres: list[GenreResponse]
     title_original: str | None
+    title_native: str | None
     stats: ReadStatsResponse
     synopsis_en: str | None
     synopsis_ua: str | None

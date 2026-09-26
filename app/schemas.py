@@ -521,6 +521,7 @@ class MangaResponse(CustomModel):
     created: datetime_pd | None
     updated: datetime_pd | None
     title_original: str | None
+    title_native: str | None
     media_type: str | None
     native_scored_by: int
     title_ua: str | None
@@ -550,6 +551,7 @@ class NovelResponse(CustomModel):
     created: datetime_pd | None
     updated: datetime_pd | None
     title_original: str | None
+    title_native: str | None
     media_type: str | None
     native_scored_by: int
     title_ua: str | None

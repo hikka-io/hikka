@@ -136,6 +136,7 @@ class AnimeInfoResponse(CustomModel):
     synopsis_en: str | None = Field(examples=["..."])
     synopsis_ua: str | None = Field(examples=["..."])
     media_type: str | None = Field(examples=["tv"])
+    title_native: str | None = Field(examples=["この素晴らしい世界に祝福を！"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
     )
