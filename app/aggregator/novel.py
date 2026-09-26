@@ -84,6 +84,9 @@ async def save_novel_list(session, data):
                 **{
                     "needs_search_update": True,
                     "year": start_date.year if start_date else None,
+                    # TODO: we have get here only because I was
+                    # too lazy to update test data
+                    "title_native": novel_data.get("title_native"),
                     "title_original": novel_data["title_ja"],
                     "media_type": novel_data["media_type"],
                     "content_id": novel_data["content_id"],

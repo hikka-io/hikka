@@ -41,6 +41,7 @@ class Anime(
     favourite_created: Mapped[datetime] = query_expression()
 
     # Multilang fields
+    title_native: Mapped[str] = mapped_column(String(255), nullable=True)
     title_ja: Mapped[str] = mapped_column(String(255), nullable=True)
     title_en: Mapped[str] = mapped_column(String(255), nullable=True)
     title_ua: Mapped[str] = mapped_column(String(255), nullable=True)

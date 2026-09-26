@@ -301,6 +301,7 @@ def anime_loadonly(statement):
         Anime.native_scored_by,
         Anime.episodes_total,
         Anime.translated_ua,
+        Anime.title_native,
         Anime.native_score,
         Anime.synopsis_en,
         Anime.synopsis_ua,

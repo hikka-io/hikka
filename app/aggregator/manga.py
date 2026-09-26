@@ -84,6 +84,9 @@ async def save_manga_list(session, data):
                 **{
                     "needs_search_update": True,
                     "year": start_date.year if start_date else None,
+                    # TODO: we have get here only because I was
+                    # too lazy to update test data
+                    "title_native": manga_data.get("title_native"),
                     "title_original": manga_data["title_ja"],
                     "media_type": manga_data["media_type"],
                     "content_id": manga_data["content_id"],

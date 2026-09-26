@@ -89,6 +89,9 @@ async def save_anime_list(session, data):
                     "media_type": anime_data["media_type"],
                     "content_id": anime_data["content_id"],
                     "scored_by": anime_data["scored_by"],
+                    # TODO: we have get here only because I was
+                    # too lazy to update test data
+                    "title_native": anime_data.get("title_native"),
                     "title_en": anime_data["title_en"],
                     "title_ja": anime_data["title_ja"],
                     "title_ua": anime_data["title_ua"],

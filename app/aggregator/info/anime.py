@@ -463,6 +463,7 @@ async def update_anime_info(session, anime, data):
         "media_type",
         "schedule",
         "duration",
+        "title_native",
         "title_en",
         "title_ja",
         "title_ua",

@@ -33,6 +33,7 @@ async def update_anime_settings(index):
                 "year",
             ],
             searchable_attributes=[
+                "title_native",
                 "title_ua",
                 "title_en",
                 "title_ja",
@@ -110,6 +111,7 @@ def anime_to_document(anime: Anime):
         "media_type": anime.media_type,
         "scored_by": anime.scored_by,
         "synonyms": anime.synonyms,
+        "title_native": anime.title_native,
         "title_ua": anime.title_ua,
         "title_en": anime.title_en,
         "title_ja": anime.title_ja,

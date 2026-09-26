@@ -27,6 +27,7 @@ async def update_manga_settings(index):
             ],
             searchable_attributes=[
                 "title_original",
+                "title_native",
                 "title_ua",
                 "title_en",
                 "synonyms",
@@ -79,6 +80,7 @@ def manga_to_document(manga: Manga):
         "media_type": manga.media_type,
         "scored_by": manga.scored_by,
         "synonyms": manga.synonyms,
+        "title_native": manga.title_native,
         "title_ua": manga.title_ua,
         "title_en": manga.title_en,
         "status": manga.status,

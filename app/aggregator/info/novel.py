@@ -275,6 +275,7 @@ async def update_novel_info(session, novel, data):
     after = {}
 
     for field_data, field_model in [
+        ["title_native", "title_native"],
         ["title_ja", "title_original"],
         ["synopsis_ua", "synopsis_ua"],
         ["synopsis_en", "synopsis_en"],

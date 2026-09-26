@@ -43,6 +43,7 @@ class Novel(
     favourite_created: Mapped[datetime] = query_expression()
 
     # Multilang fields
+    title_native: Mapped[str] = mapped_column(String(255), nullable=True)
     title_original: Mapped[str] = mapped_column(nullable=True)
     synopsis_en: Mapped[str] = mapped_column(nullable=True)
     synopsis_ua: Mapped[str] = mapped_column(nullable=True)

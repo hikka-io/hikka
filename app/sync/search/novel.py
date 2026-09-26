@@ -27,6 +27,7 @@ async def update_novel_settings(index):
             ],
             searchable_attributes=[
                 "title_original",
+                "title_native",
                 "title_ua",
                 "title_en",
                 "synonyms",
@@ -79,6 +80,7 @@ def novel_to_document(novel: Novel):
         "media_type": novel.media_type,
         "scored_by": novel.scored_by,
         "synonyms": novel.synonyms,
+        "title_native": novel.title_native,
         "title_ua": novel.title_ua,
         "title_en": novel.title_en,
         "status": novel.status,

@@ -478,6 +478,7 @@ class MagazineResponse(CustomModel):
 class AnimeResponse(CustomModel):
     data_type: Literal["anime"]
     media_type: str | None = Field(examples=["tv"])
+    title_native: str | None = Field(examples=["この素晴らしい世界に祝福を！"])
     title_ua: str | None = Field(
         examples=["Цей прекрасний світ, благословенний Богом!"]
     )
