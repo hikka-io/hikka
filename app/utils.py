@@ -466,6 +466,17 @@ def remove_bad_characters(text):
 
 
 def is_empty_markdown(text):
+    # Unwrap inline directives from the editor, innermost first.
+    while True:
+        unwrapped = re.sub(
+            r"(?<![\\:]):(?:underline|strike|spoiler)\[([^\[\]]*)\]",
+            r"\1",
+            text,
+        )
+        if unwrapped == text:
+            break
+        text = unwrapped
+
     # First we remove markdown tags
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)  # **text**
     text = re.sub(r"\*(.*?)\*", r"\1", text)  # *text*
