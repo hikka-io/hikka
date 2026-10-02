@@ -1,9 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from .utils import build_collection_filters
 from app.schemas import SuccessResponse
 from app.models import Collection, User
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app import meilisearch
 from app import constants
+from uuid import UUID
 from . import service
 
 from .schemas import (
@@ -50,9 +53,42 @@ async def get_collections(
     ),
 ):
     limit, offset = pagination(page, size)
-    total = await service.get_collections_count(session, request_user, args)
+
+    filter_ids = []
+
+    if args.query:
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_COLLECTIONS,
+            filter=build_collection_filters(args),
+            query=args.query,
+            page=page,
+            size=size,
+        )
+
+        filter_ids = [UUID(hit["id"]) for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
+        # Meilisearch has already paginated this page for us, so we
+        # don't apply the offset a second time
+        offset = 0
+
+    # Author and content are not mirrored into the index, so Meilisearch
+    # only knows the real total when neither of them narrows the query
+    if args.query and not args.author and not args.content:
+        total = meilisearch_result["pagination"]["total"]
+
+    else:
+        total = await service.get_collections_count(
+            session, request_user, args, filter_ids
+        )
+
+    if total == 0:
+        return paginated_response([], 0, page, limit)
+
     collections = await service.get_collections(
-        session, request_user, args, limit, offset
+        session, request_user, args, filter_ids, limit, offset
     )
 
     return paginated_response(collections.unique().all(), total, page, limit)

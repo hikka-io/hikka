@@ -9,6 +9,7 @@ from datetime import datetime
 from ..base import Base
 
 from ..mixins import (
+    NeedsSearchUpdateMixin,
     CommentContentMixin,
     MyScoreMixin,
     CreatedMixin,
@@ -18,6 +19,7 @@ from ..mixins import (
 
 
 class Collection(
+    NeedsSearchUpdateMixin,
     MyScoreMixin,
     CreatedMixin,
     UpdatedMixin,
