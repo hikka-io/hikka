@@ -1,8 +1,15 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore, datetime_pd
-from pydantic import Field, field_validator, AliasChoices, HttpUrl
 from typing import Literal
 from app import constants
 from enum import Enum
+
+from pydantic import (
+    model_validator,
+    field_validator,
+    AliasChoices,
+    HttpUrl,
+    Field,
+)
 
 
 # Enums
@@ -33,6 +40,60 @@ class ReadDeleteContenType(str, Enum):
 
 
 # Args
+class UserLink(CustomModel):
+    text: str | None = Field(default=None, max_length=64)
+    url: HttpUrl = Field(max_length=255)
+
+    icon: Literal[
+        "fediverse",
+        "instagram",
+        "telegram",
+        "threads",
+        "twitter",
+        "discord",
+        "bluesky",
+        "github",
+        "custom",
+        "steam",
+    ]
+
+    @model_validator(mode="after")
+    def validate_url(self):
+        hostname = self.url.host.removeprefix("www.")
+
+        icon_hostnames = {
+            "threads": ["threads.com", "threads.net"],
+            "discord": ["discord.com", "discord.gg"],
+            "bluesky": ["bsky.app", "bsky.social"],
+            "telegram": ["t.me", "telegram.me"],
+            "twitter": ["twitter.com", "x.com"],
+            "steam": ["steamcommunity.com"],
+            "instagram": ["instagram.com"],
+            "github": ["github.com"],
+        }
+
+        good_hostnames = icon_hostnames.get(self.icon, None)
+
+        if good_hostnames and hostname not in good_hostnames:
+            raise ValueError(f"Invalid {self.icon} link")
+
+        return self
+
+
+class UserLinkArgs(CustomModel):
+    links: list[UserLink] = Field(max_length=10)
+
+    @field_validator("links")
+    def validate_links(cls, links):
+        urls = [link.url for link in links]
+
+        # Check for dublicates
+        if len(urls) != len(list(set(urls))):
+            raise ValueError("Unknown notification type")
+
+        return links
+
+
 class IgnoredNotificationsArgs(CustomModel):
     ignored_notifications: list[str]
 
@@ -131,40 +192,3 @@ class UserExportResponse(CustomModel):
     novel: list[UserExportReadResponse]
     created: datetime_pd
     updated: datetime_pd
-
-
-class UserLink(CustomModel):
-    text: str = Field(max_length=64)
-    url: HttpUrl = Field(max_length=255)
-
-    icon: Literal[
-        "telegram",
-        "threads",
-        "instagram",
-        "twitter",
-        "discord",
-        "steam",
-        "github",
-        "bluesky",
-        "fediverse",
-        "custom",
-    ]
-
-    # @model_validator(mode="after")
-    # def validate_url(self):
-    #     if not self.url.host:
-    #         raise ValueError("Invalid link")
-
-    #     hostname = self.url.host.removeprefix("www.")
-
-    #     icon_hostnames = {
-    #         "telegram": ["t.me"],
-    #     }
-
-    #     if not any(
-    #         hostname == allowed or hostname.endswith(f".{allowed}")
-    #         for allowed in icon_hostnames.get(self.icon, [])
-    #     ):
-    #         raise ValueError(f"Invalid {self.icon} link")
-
-    #     return self

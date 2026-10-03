@@ -29,6 +29,7 @@ from .schemas import (
     UserExportResponse,
     DescriptionArgs,
     ImageTypeEnum,
+    UserLinkArgs,
 )
 
 from .dependencies import (
@@ -40,6 +41,22 @@ from .dependencies import (
 # TODO: there are many identical endpoints here
 # ideally we should have unified settings endpoint
 router = APIRouter(prefix="/settings", tags=["Settings"])
+
+
+@router.put(
+    "/links",
+    # response_model=UserResponse,
+    summary="Change links",
+)
+async def change_links(
+    args: UserLinkArgs,
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_LINKS])
+    ),
+):
+    # return await service.change_links(session, user, args.description)
+    return args.links
 
 
 @router.put(

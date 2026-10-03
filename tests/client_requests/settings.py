@@ -22,6 +22,14 @@ def request_settings_username(client, token, username):
     )
 
 
+def request_settings_links(client, token, links: list):
+    return client.put(
+        "/settings/links",
+        headers={"Auth": token},
+        json={"links": links},
+    )
+
+
 def request_settings_email(client, token, email):
     return client.put(
         "/settings/email",
