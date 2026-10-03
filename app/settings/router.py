@@ -55,8 +55,7 @@ async def change_links(
         auth_required(scope=[constants.SCOPE_UPDATE_USER_LINKS])
     ),
 ):
-    # return await service.change_links(session, user, args.description)
-    return args.links
+    return await service.change_links(session, user, args.links)
 
 
 @router.put(

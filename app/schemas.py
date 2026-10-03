@@ -639,6 +639,7 @@ class UserResponse(CustomModel):
     description: str | None = Field(examples=["Hikka"])
     username: str | None = Field(examples=["hikka"])
     cover: str | None
+    links: list[dict]
     active: bool
     avatar: str
     role: str

@@ -33,6 +33,27 @@ from app.models import (
 )
 
 
+async def change_links(session: AsyncSession, user: User, links: list) -> User:
+    log_before = user.links
+
+    # I hate this so much but json serializer can't dump it on it's own
+    user.links = [link.model_dump(mode="json") for link in links]
+
+    log_after = user.links
+
+    await session.commit()
+
+    if log_before != log_after:
+        await create_log(
+            session,
+            constants.LOG_SETTINGS_LINKS,
+            user,
+            data={"before": log_before, "after": log_after},
+        )
+
+    return user
+
+
 async def change_description(
     session: AsyncSession, user: User, description: str
 ) -> User:
