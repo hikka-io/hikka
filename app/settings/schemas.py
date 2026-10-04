@@ -1,5 +1,5 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore, datetime_pd
-from app.schemas import UserLinkIconEnum
+from app.common.schemas.user import UserLinkIconEnum
 from app import constants
 from enum import Enum
 
@@ -43,7 +43,6 @@ class ReadDeleteContenType(str, Enum):
 class UserLink(CustomModel):
     text: str | None = Field(default=None, max_length=64)
     url: HttpUrl = Field(max_length=255)
-
     icon: UserLinkIconEnum
 
     @model_validator(mode="after")

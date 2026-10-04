@@ -1,12 +1,13 @@
+from app.common.schemas.user import UserLinkIconEnum
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime, timedelta
+from typing import Annotated, Literal
 from pydantic import PlainSerializer
 from pydantic import Field, EmailStr
 from pydantic import field_validator
 from pydantic import BeforeValidator
 from pydantic import PositiveInt
-from typing import Annotated, Literal
 from . import constants
 from enum import Enum
 from . import utils
@@ -145,19 +146,6 @@ class ExternalTypeEnum(str, Enum):
 class AnimeVideoTypeEnum(str, Enum):
     video_promo = constants.VIDEO_PROMO
     video_music = constants.VIDEO_MUSIC
-
-
-class UserLinkIconEnum(str, Enum):
-    fediverse = "fediverse"
-    instagram = "instagram"
-    telegram = "telegram"
-    threads = "threads"
-    twitter = "twitter"
-    discord = "discord"
-    bluesky = "bluesky"
-    github = "github"
-    custom = "custom"
-    steam = "steam"
 
 
 # Mixins
