@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
@@ -12,6 +13,7 @@ from ..mixins import (
 class Franchise(Base, ContentMixin, UpdatedMixin):
     __tablename__ = "service_content_franchises"
 
+    relations: Mapped[list] = mapped_column(JSONB, default=[])
     scored_by: Mapped[int] = mapped_column(default=0)
     score: Mapped[float] = mapped_column(default=0)
 

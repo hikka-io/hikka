@@ -1,5 +1,5 @@
-from app.schemas import PaginationResponse, CustomModel, UserResponse
-from app.schemas import datetime_pd
+from app.schemas import PaginationResponse, CustomModel, datetime_pd
+from app.common.schemas.user import UserResponse
 from app import constants
 from enum import Enum
 
@@ -25,8 +25,8 @@ class NotificationTypeEnum(str, Enum):
 
 # Responses
 class NotificationResponse(CustomModel):
-    initiator_user: UserResponse | None
     notification_type: NotificationTypeEnum
+    initiator_user: UserResponse | None
     created: datetime_pd
     reference: str
     seen: bool

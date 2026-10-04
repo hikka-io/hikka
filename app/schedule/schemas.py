@@ -1,9 +1,12 @@
 from app.schemas import datetime_pd, timedelta_pd
 from pydantic import field_validator
 
-from app.schemas import (
+from app.common.schemas.anime import (
     AnimeResponseWithWatch,
     AnimeAgeRatingEnum,
+)
+
+from app.schemas import (
     PaginationResponse,
     ContentStatusEnum,
     CustomModel,

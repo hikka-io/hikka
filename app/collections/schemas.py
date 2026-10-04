@@ -1,12 +1,11 @@
 from app.utils import is_empty_markdown, is_valid_tag, check_sort
+from app.schemas import PaginationResponse, CustomModel
 from pydantic import Field, field_validator
 
-from app.schemas import (
+from app.common.schemas.collection import (
     CollectionContentTypeEnum,
     CollectionVisibilityEnum,
     CollectionResponse,
-    PaginationResponse,
-    CustomModel,
 )
 
 

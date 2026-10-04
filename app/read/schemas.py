@@ -1,4 +1,8 @@
-from app.schemas import CustomModel, UserResponse
+from app.common.schemas.manga import MangaResponse, MangaMediaEnum
+from app.common.schemas.novel import NovelResponse, NovelMediaEnum
+from app.common.schemas.search import ReadSearchBaseMixin
+from app.common.schemas.read import ReadResponseBase
+from app.common.schemas.user import UserResponse
 from pydantic import Field, field_validator
 from app.schemas import PaginationResponse
 from pydantic import model_validator
@@ -7,11 +11,8 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
-    MangaSearchBaseMixin,
-    ReadResponseBase,
-    MangaResponse,
-    NovelResponse,
     UnixTimestamp,
+    CustomModel,
     YearsMixin,
 )
 
@@ -50,7 +51,8 @@ class ReadArgs(CustomModel):
         return self
 
 
-class ReadSearchArgs(CustomModel, MangaSearchBaseMixin, YearsMixin):
+class ReadSearchArgs(CustomModel, ReadSearchBaseMixin, YearsMixin):
+    media_type: list[MangaMediaEnum | NovelMediaEnum] = []
     sort: list[str] = ["read_score:desc", "read_created:desc"]
     read_status: ReadStatusEnum | None = None
 

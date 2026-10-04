@@ -1,5 +1,7 @@
 from pydantic import ValidationError, Field, field_validator
+from app.schemas import PaginationResponse, CustomModel
 from app.common.utils import calculate_document_length
+from app.common.schemas.user import FollowUserResponse
 from app.common.schemas import Document
 from app.utils import is_valid_tag
 from app.utils import check_sort
@@ -10,12 +12,6 @@ from app.common.schemas.articles import (
     ArticlePreviewResponse,
     ArticleResponse,
     TagResponse,
-)
-
-from app.schemas import (
-    PaginationResponse,
-    FollowUserResponse,
-    CustomModel,
 )
 
 

@@ -1,6 +1,6 @@
-from app.schemas import CustomModel, UserResponse
+from app.schemas import CustomModel, datetime_pd
+from app.common.schemas.user import UserResponse
 from pydantic import EmailStr, Field
-from app.schemas import datetime_pd
 
 
 # Responses

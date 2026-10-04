@@ -1,4 +1,5 @@
-from app.schemas import PaginationResponse, CustomModel, UserResponse
+from app.schemas import PaginationResponse, CustomModel
+from app.common.schemas.user import UserResponse
 
 
 # Responses

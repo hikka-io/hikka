@@ -1,15 +1,11 @@
+from app.schemas import PaginationResponse, CustomModel
+from app.common.schemas.anime import AnimeResponse
+from app.common.schemas.manga import MangaResponse
+from app.common.schemas.novel import NovelResponse
+from app.common.schemas.user import UserResponse
 from app.schemas import datetime_pd
 from app import constants
 from enum import Enum
-
-from app.schemas import (
-    PaginationResponse,
-    AnimeResponse,
-    MangaResponse,
-    NovelResponse,
-    UserResponse,
-    CustomModel,
-)
 
 
 # Enums

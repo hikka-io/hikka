@@ -1,4 +1,6 @@
 from app.common.schemas.reviews import ReviewResponse
+from app.common.schemas.user import UserResponse
+from app.schemas import CustomModel, datetime_pd
 from dataclasses import dataclass, field
 from app.models import Review, User
 from app.utils import path_to_uuid
@@ -7,12 +9,6 @@ from datetime import datetime
 from typing import Literal
 from app import constants
 from enum import Enum
-
-from app.schemas import (
-    UserResponse,
-    CustomModel,
-    datetime_pd,
-)
 
 
 # Enums

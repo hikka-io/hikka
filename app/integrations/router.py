@@ -1,15 +1,13 @@
 from .schemas import MALContentArgs, MALContentTypeEnum
+from app.common.schemas.manga import MangaResponse
+from app.common.schemas.novel import NovelResponse
+from app.common.schemas.anime import AnimeResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Anime, Manga, Novel
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from . import service
 
-from app.schemas import (
-    AnimeResponse,
-    MangaResponse,
-    NovelResponse,
-)
 
 from .dependencies import (
     validate_anitube_anime,

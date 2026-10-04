@@ -1,8 +1,8 @@
 from app.common.schemas.articles import ArticlePreviewResponse
+from app.common.schemas.collection import CollectionResponse
 from .schemas import CommentResponseFeed, FeedArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from app.schemas import CollectionResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User

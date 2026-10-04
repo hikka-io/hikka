@@ -1,3 +1,7 @@
+from app.common.schemas.anime import AnimeSearchArgsBase
+from app.common.schemas.watch import WatchResponseBase
+from app.common.schemas.anime import AnimeResponse
+from app.common.schemas.user import UserResponse
 from pydantic import field_validator
 from pydantic import model_validator
 from pydantic import Field
@@ -5,12 +9,8 @@ from app import constants
 from enum import Enum
 
 from app.schemas import (
-    AnimeSearchArgsBase,
     PaginationResponse,
-    WatchResponseBase,
     UnixTimestamp,
-    AnimeResponse,
-    UserResponse,
     CustomModel,
 )
 

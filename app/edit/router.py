@@ -1,10 +1,10 @@
 from app.models import Anime, Character, Edit, Manga, Novel, Person, User
 from app.dependencies import auth_required, get_page, get_size
+from app.common.schemas.anime import AnimePaginationResponse
 from app.manga.schemas import MangaPaginationResponse
 from app.novel.schemas import NovelPaginationResponse
 from app.utils import paginated_response, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import AnimePaginationResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app import meilisearch
@@ -22,7 +22,7 @@ from .dependencies import (
     validate_edit_accept,
     validate_edit_close,
     validate_edit_id,
-    validate_content
+    validate_content,
 )
 
 from .schemas import (
@@ -47,7 +47,7 @@ from .schemas import (
     MangaTodoArgs,
     AnimeTodoArgs,
     EditResponse,
-    EditArgs
+    EditArgs,
 )
 
 router = APIRouter(prefix="/edit", tags=["Edit"])

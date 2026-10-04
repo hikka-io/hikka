@@ -1,4 +1,5 @@
-from app.schemas import CustomModel, ClientResponse, PaginationResponse
+from app.schemas import CustomModel, PaginationResponse
+from app.common.schemas.client import ClientResponse
 from pydantic import AnyUrl, Field, field_validator
 from app import constants, utils
 

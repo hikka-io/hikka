@@ -1,3 +1,5 @@
+from app.common.schemas.character import ContentCharacterPaginationResponse
+from app.common.schemas.manga import MangaSearchArgs
 from app.utils import paginated_response, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
 from .utils import build_manga_filters_ms
@@ -23,11 +25,6 @@ from app.dependencies import (
     auth_required,
     get_page,
     get_size,
-)
-
-from app.schemas import (
-    ContentCharacterPaginationResponse,
-    MangaSearchArgs,
 )
 
 

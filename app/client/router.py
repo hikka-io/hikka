@@ -1,9 +1,8 @@
+from app.dependencies import auth_required, get_page, get_size
+from app.common.schemas.client import ClientResponse
+from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
-
-from app.dependencies import auth_required, get_page, get_size
-from app.utils import pagination, paginated_response
-from app.schemas import ClientResponse
 from app.database import get_session
 from app.models import Client, User
 from app.client import service
@@ -15,6 +14,7 @@ from app.client.dependencies import (
     validate_user_client,
     validate_client,
 )
+
 from app.client.schemas import (
     ClientPaginationResponse,
     ClientFullResponse,

@@ -1,12 +1,12 @@
+from app.common.schemas.anime import AnimeResponseWithWatch
+from app.common.schemas.manga import MangaResponseWithRead
+from app.common.schemas.novel import NovelResponseWithRead
+from app.common.schemas.character import CharacterResponse
+from app.common.schemas.person import PersonResponse
 from pydantic import Field
 
 from app.schemas import (
-    AnimeResponseWithWatch,
-    MangaResponseWithRead,
-    NovelResponseWithRead,
     PaginationResponse,
-    CharacterResponse,
-    PersonResponse,
     CustomModel,
 )
 

@@ -1,15 +1,15 @@
+from app.common.schemas.person import ContentAuthorResponse
+from app.common.schemas.novel import NovelResponseWithRead
+from app.common.schemas.review import ReviewStatsResponse
+from app.common.schemas.magazine import MagazineResponse
+from app.common.schemas.read import ReadStatsResponse
+from app.common.schemas.genre import GenreResponse
 from app.schemas import datetime_pd
 from typing import Literal
 
 from app.schemas import (
-    ContentAuthorResponse,
-    NovelResponseWithRead,
-    ReviewStatsResponse,
     PaginationResponse,
-    ReadStatsResponse,
-    MagazineResponse,
     ExternalResponse,
-    GenreResponse,
     CustomModel,
 )
 

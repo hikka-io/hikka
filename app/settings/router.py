@@ -1,5 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
 from app.common.schemas import UserCustomizationArgs
+from app.common.schemas.user import UserResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
 from app.database import get_session
@@ -9,7 +10,6 @@ from . import service
 
 from app.schemas import (
     SuccessResponse,
-    UserResponse,
     PasswordArgs,
     UsernameArgs,
     EmailArgs,

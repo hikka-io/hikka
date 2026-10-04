@@ -1,8 +1,8 @@
 from app.models import User, UserOAuth, AuthToken, Client, AuthTokenRequest
 from app.utils import pagination, utcnow, paginated_response
+from app.common.schemas.user import UserResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
-from app.schemas import UserResponse
 from app.database import get_session
 from app import constants
 from typing import Tuple

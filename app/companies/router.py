@@ -1,3 +1,4 @@
+from app.common.schemas.company import CompanyResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from .dependencies import get_company
@@ -12,9 +13,6 @@ from app.dependencies import (
     get_size,
 )
 
-from app.schemas import (
-    CompanyResponse,
-)
 
 from .schemas import (
     CompaniesSearchPaginationResponse,

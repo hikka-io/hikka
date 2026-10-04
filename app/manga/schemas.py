@@ -1,17 +1,17 @@
+from app.common.schemas.person import ContentAuthorResponse
+from app.common.schemas.manga import MangaResponseWithRead
+from app.common.schemas.review import ReviewStatsResponse
+from app.common.schemas.magazine import MagazineResponse
+from app.common.schemas.read import ReadStatsResponse
+from app.common.schemas.genre import GenreResponse
 from pydantic import field_validator
 from app.schemas import datetime_pd
-from app import constants
 from typing import Literal
+from app import constants
 
 from app.schemas import (
-    ContentAuthorResponse,
-    MangaResponseWithRead,
-    ReviewStatsResponse,
     PaginationResponse,
-    ReadStatsResponse,
-    MagazineResponse,
     ExternalResponse,
-    GenreResponse,
     CustomModel,
 )
 

@@ -1,20 +1,18 @@
+from app.common.schemas.anime import AnimeSearchArgsBase, AnimeVideoResponse
+from app.common.schemas.company import CompanyResponse, CompanyTypeEnum
+from app.common.schemas.review import ReviewStatsResponse
+from app.common.schemas.person import AnimeStaffResponse
+from app.common.schemas.genre import GenreResponse
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
-from app import constants
 from typing import Literal
+from app import constants
 from enum import Enum
 
 from app.schemas import (
-    ReviewStatsResponse,
-    AnimeSearchArgsBase,
-    AnimeVideoResponse,
-    AnimeStaffResponse,
     PaginationResponse,
     ExternalResponse,
-    CompanyTypeEnum,
-    CompanyResponse,
     QuerySearchArgs,
-    GenreResponse,
     CustomModel,
 )
 

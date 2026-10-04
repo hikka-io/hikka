@@ -1,3 +1,5 @@
+from app.common.schemas.character import ContentCharacterPaginationResponse
+from app.common.schemas.anime import AnimePaginationResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from .utils import build_anime_filters
 from fastapi import APIRouter, Depends
@@ -17,11 +19,6 @@ from .dependencies import (
     validate_search_anime,
     validate_franchise,
     get_anime_info,
-)
-
-from app.schemas import (
-    ContentCharacterPaginationResponse,
-    AnimePaginationResponse,
 )
 
 from .schemas import (

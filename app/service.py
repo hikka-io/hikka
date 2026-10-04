@@ -1,3 +1,6 @@
+from app.common.schemas.anime import AnimeSearchArgsBase
+from app.common.schemas.manga import MangaSearchArgs
+from app.common.schemas.novel import NovelSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_, func
 from sqlalchemy.sql.selectable import Select
@@ -13,12 +16,6 @@ from app.utils import (
     is_uuid,
     utcnow,
     is_int,
-)
-
-from .schemas import (
-    AnimeSearchArgsBase,
-    MangaSearchArgs,
-    NovelSearchArgs,
 )
 
 from app.models import (

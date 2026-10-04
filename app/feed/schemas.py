@@ -1,5 +1,6 @@
 from app.common.schemas.comments import CommentResponse
-from app.schemas import FollowUserResponse, CustomModel
+from app.common.schemas.user import FollowUserResponse
+from app.schemas import CustomModel
 from datetime import datetime
 
 from app.common.schemas.feed import (

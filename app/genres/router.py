@@ -1,5 +1,5 @@
+from app.common.schemas.genre import GenreListResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import GenreListResponse
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from . import service

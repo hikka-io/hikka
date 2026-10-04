@@ -1,25 +1,26 @@
+from app.common.schemas.manga import MangaResponse, MangaMediaEnum
+from app.common.schemas.novel import NovelResponse, NovelMediaEnum
+from app.common.schemas.character import CharacterResponse
+from app.common.schemas.person import PersonResponse
+from app.common.schemas.user import UserResponse
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
 from app import constants
 from enum import Enum
 
+from app.common.schemas.anime import (
+    AnimeAgeRatingEnum,
+    AnimeMediaEnum,
+    AnimeResponse,
+)
+
 from app.schemas import (
     PaginationResponse,
-    AnimeAgeRatingEnum,
     ContentStatusEnum,
-    CharacterResponse,
     QuerySearchArgs,
-    PersonResponse,
-    AnimeMediaEnum,
-    MangaMediaEnum,
-    NovelMediaEnum,
     PaginationArgs,
-    AnimeResponse,
-    MangaResponse,
-    NovelResponse,
-    UserResponse,
+    CustomModel,
     SeasonEnum,
-    CustomModel
 )
 
 
@@ -188,7 +189,9 @@ class AnimeTodoArgs(QuerySearchArgs, PaginationArgs):
             "synopsis_en",
         ]
 
-        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+        stripped = [
+            field[1:] if field.startswith("-") else field for field in fields
+        ]
 
         if len(stripped) != len(set(stripped)):
             raise ValueError("Invalid fields: duplicates")
@@ -228,8 +231,14 @@ class AnimeTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("years")
     def validate_years(cls, years):
-        if years[0] is not None and years[1] is not None and years[0] > years[1]:
-            raise ValueError("The first year must be less than the second year.")
+        if (
+            years[0] is not None
+            and years[1] is not None
+            and years[0] > years[1]
+        ):
+            raise ValueError(
+                "The first year must be less than the second year."
+            )
 
         return years
 
@@ -257,7 +266,9 @@ class MangaTodoArgs(QuerySearchArgs, PaginationArgs):
             "synopsis_en",
         ]
 
-        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+        stripped = [
+            field[1:] if field.startswith("-") else field for field in fields
+        ]
 
         if len(stripped) != len(set(stripped)):
             raise ValueError("Invalid fields: duplicates")
@@ -297,8 +308,14 @@ class MangaTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("years")
     def validate_years(cls, years):
-        if years[0] is not None and years[1] is not None and years[0] > years[1]:
-            raise ValueError("The first year must be less than the second year.")
+        if (
+            years[0] is not None
+            and years[1] is not None
+            and years[0] > years[1]
+        ):
+            raise ValueError(
+                "The first year must be less than the second year."
+            )
 
         return years
 
@@ -326,7 +343,9 @@ class NovelTodoArgs(QuerySearchArgs, PaginationArgs):
             "synopsis_en",
         ]
 
-        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+        stripped = [
+            field[1:] if field.startswith("-") else field for field in fields
+        ]
 
         if len(stripped) != len(set(stripped)):
             raise ValueError("Invalid fields: duplicates")
@@ -366,8 +385,14 @@ class NovelTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("years")
     def validate_years(cls, years):
-        if years[0] is not None and years[1] is not None and years[0] > years[1]:
-            raise ValueError("The first year must be less than the second year.")
+        if (
+            years[0] is not None
+            and years[1] is not None
+            and years[0] > years[1]
+        ):
+            raise ValueError(
+                "The first year must be less than the second year."
+            )
 
         return years
 
@@ -387,7 +412,9 @@ class CharacterTodoArgs(QuerySearchArgs, PaginationArgs):
             "description_ua",
         ]
 
-        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+        stripped = [
+            field[1:] if field.startswith("-") else field for field in fields
+        ]
 
         if len(stripped) != len(set(stripped)):
             raise ValueError("Invalid fields: duplicates")
@@ -434,7 +461,9 @@ class PersonTodoArgs(QuerySearchArgs, PaginationArgs):
             "name_original",
         ]
 
-        stripped = [field[1:] if field.startswith("-") else field for field in fields]
+        stripped = [
+            field[1:] if field.startswith("-") else field for field in fields
+        ]
 
         if len(stripped) != len(set(stripped)):
             raise ValueError("Invalid fields: duplicates")
@@ -529,6 +558,7 @@ class TodoPersonIssuesInfo(CustomModel):
     name_en_absent: bool
     name_original_absent: bool
     # Add more required fields for peoples
+
 
 class TodoAnimeResponse(CustomModel):
     item: AnimeResponse

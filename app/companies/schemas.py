@@ -1,12 +1,11 @@
+from app.common.schemas.company import CompanyResponse, CompanyTypeEnum
+from app.common.schemas.anime import AnimeResponse
 from app import constants
 from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
-    CompanyResponse,
-    CompanyTypeEnum,
     QuerySearchArgs,
-    AnimeResponse,
     CustomModel,
 )
 

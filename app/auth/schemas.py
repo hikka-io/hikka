@@ -1,4 +1,5 @@
-from app.schemas import datetime_pd, ClientResponse, PaginationResponse
+from app.schemas import datetime_pd, PaginationResponse
+from app.common.schemas.client import ClientResponse
 from pydantic import Field
 from app import constants
 import uuid

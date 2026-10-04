@@ -1,4 +1,4 @@
-from app.schemas import NovelSearchArgs
+from app.common.schemas.novel import NovelSearchArgs
 
 
 def build_novel_filters_ms(search: NovelSearchArgs):

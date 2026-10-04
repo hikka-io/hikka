@@ -1,3 +1,5 @@
+from app.common.schemas.character import ContentCharacterPaginationResponse
+from app.common.schemas.novel import NovelSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
 from .utils import build_novel_filters_ms
 from fastapi import APIRouter, Depends
@@ -22,11 +24,6 @@ from app.dependencies import (
     auth_required,
     get_page,
     get_size,
-)
-
-from app.schemas import (
-    ContentCharacterPaginationResponse,
-    NovelSearchArgs,
 )
 
 from app.utils import (

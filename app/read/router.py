@@ -1,4 +1,5 @@
-from app.schemas import MangaResponse, NovelResponse
+from app.common.schemas.manga import MangaResponse
+from app.common.schemas.novel import NovelResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, Manga, Novel, Read
 from app.schemas import SuccessResponse

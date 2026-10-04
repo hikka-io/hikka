@@ -1,5 +1,5 @@
+from app.common.schemas.manga import MangaSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas import MangaSearchArgs
 from app.service import magazines_count
 from app.service import genres_count
 from app.database import get_session
@@ -41,11 +41,14 @@ async def validate_search_manga(
     # Check if provided genres exist
     if len(search.genres) > 0:
         genre_names_to_validate = {
-            genre[1:] if genre.startswith("-") else genre for genre in search.genres
+            genre[1:] if genre.startswith("-") else genre
+            for genre in search.genres
         }
 
-        valid_genres_count = await genres_count(session, list(genre_names_to_validate))
-        
+        valid_genres_count = await genres_count(
+            session, list(genre_names_to_validate)
+        )
+
         if valid_genres_count != len(genre_names_to_validate):
             raise Abort("manga", "unknown-genre")
 

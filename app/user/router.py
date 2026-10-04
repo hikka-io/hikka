@@ -1,4 +1,5 @@
 from app.common.schemas import UserCustomizationResponse
+from app.common.schemas.user import UserResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from .dependencies import get_user_followed
 from fastapi import APIRouter, Depends
@@ -17,7 +18,6 @@ from .schemas import (
 
 from app.schemas import (
     QuerySearchRequiredArgs,
-    UserResponse,
 )
 
 from app.dependencies import (

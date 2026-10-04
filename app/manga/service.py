@@ -1,9 +1,9 @@
 from app.common.service.sort import build_manga_order_by
+from app.common.schemas.manga import MangaSearchArgs
 from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import manga_search_filter
-from app.schemas import MangaSearchArgs
 from sqlalchemy.orm import joinedload
 
 from app.models import (

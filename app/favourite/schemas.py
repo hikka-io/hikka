@@ -1,16 +1,16 @@
+from app.common.schemas.collection import CollectionResponse
+from app.common.schemas.anime import AnimeResponseWithWatch
+from app.common.schemas.manga import MangaResponseWithRead
+from app.common.schemas.novel import NovelResponseWithRead
+from app.common.schemas.character import CharacterResponse
+from app.common.schemas.person import PersonResponse
 from app.schemas import datetime_pd
 from pydantic import Field
 from app import constants
 from enum import Enum
 
 from app.schemas import (
-    AnimeResponseWithWatch,
-    MangaResponseWithRead,
-    NovelResponseWithRead,
     PaginationResponse,
-    CollectionResponse,
-    CharacterResponse,
-    PersonResponse,
     CustomModel,
 )
 

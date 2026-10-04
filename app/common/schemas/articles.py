@@ -1,11 +1,7 @@
+from app.common.schemas.user import FollowUserResponse
+from app.schemas import CustomModel, datetime_pd
 from pydantic import Field
 from typing import Literal
-
-from app.schemas import (
-    FollowUserResponse,
-    CustomModel,
-    datetime_pd,
-)
 
 
 # Responses

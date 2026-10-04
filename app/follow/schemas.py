@@ -1,10 +1,6 @@
-from app.schemas import PaginationResponse
+from app.schemas import CustomModel, PaginationResponse
+from app.common.schemas.user import FollowUserResponse
 from pydantic import Field
-
-from app.schemas import (
-    FollowUserResponse,
-    CustomModel,
-)
 
 
 # Responses
