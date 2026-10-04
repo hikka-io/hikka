@@ -1,5 +1,5 @@
 from app.schemas import CustomModel, CustomModelExtraIgnore, datetime_pd
-from typing import Literal
+from app.schemas import UserLinkIconEnum
 from app import constants
 from enum import Enum
 
@@ -44,18 +44,7 @@ class UserLink(CustomModel):
     text: str | None = Field(default=None, max_length=64)
     url: HttpUrl = Field(max_length=255)
 
-    icon: Literal[
-        "fediverse",
-        "instagram",
-        "telegram",
-        "threads",
-        "twitter",
-        "discord",
-        "bluesky",
-        "github",
-        "custom",
-        "steam",
-    ]
+    icon: UserLinkIconEnum
 
     @model_validator(mode="after")
     def validate_url(self):

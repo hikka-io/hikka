@@ -147,6 +147,19 @@ class AnimeVideoTypeEnum(str, Enum):
     video_music = constants.VIDEO_MUSIC
 
 
+class UserLinkIconEnum(str, Enum):
+    fediverse = "fediverse"
+    instagram = "instagram"
+    telegram = "telegram"
+    threads = "threads"
+    twitter = "twitter"
+    discord = "discord"
+    bluesky = "bluesky"
+    github = "github"
+    custom = "custom"
+    steam = "steam"
+
+
 # Mixins
 class YearsMixin:
     years: list[PositiveInt | None] | None = Field(
@@ -632,6 +645,12 @@ class SuccessResponse(CustomModel):
     success: bool = Field(examples=[True])
 
 
+class UserLinkResponse(CustomModel):
+    text: str | None = Field(examples=["GitHub"])
+    url: str = Field(examples=["https://github.com/hikka-io"])
+    icon: UserLinkIconEnum
+
+
 class UserResponse(CustomModel):
     reference: str = Field(examples=["c773d0bf-1c42-4c18-aec8-1bdd8cb0a434"])
     updated: datetime_pd | None = Field(examples=[1686088809])
@@ -639,7 +658,7 @@ class UserResponse(CustomModel):
     description: str | None = Field(examples=["Hikka"])
     username: str | None = Field(examples=["hikka"])
     cover: str | None
-    links: list[dict]
+    links: list[UserLinkResponse]
     active: bool
     avatar: str
     role: str
