@@ -7,6 +7,8 @@ from app import constants
 
 from .generate import (
     generate_thirdparty_login,
+    generate_collection_invite,
+    generate_collection_owner,
     generate_collection_vote,
     generate_anime_schedule,
     generate_comment_write,
@@ -41,6 +43,8 @@ async def generate_notifications(session: AsyncSession):
         .filter(
             Log.log_type.in_(
                 [
+                    constants.LOG_COLLECTION_OWNER_OFFER,
+                    constants.LOG_COLLECTION_MEMBER_INVITE,
                     constants.LOG_LOGIN_THIRDPARTY,
                     constants.LOG_SCHEDULE_ANIME,
                     constants.LOG_COMMENT_WRITE,
@@ -94,6 +98,15 @@ async def generate_notifications(session: AsyncSession):
 
         if log.log_type == constants.LOG_LOGIN_THIRDPARTY:
             await generate_thirdparty_login(session, log)
+
+        # Notify the invited user so they can accept or decline
+        if log.log_type == constants.LOG_COLLECTION_MEMBER_INVITE:
+            await generate_collection_invite(session, log)
+
+        # Notify on the offer, not on the completed transfer: the offer is
+        # the step that needs an answer
+        if log.log_type == constants.LOG_COLLECTION_OWNER_OFFER:
+            await generate_collection_owner(session, log)
 
     session.add(system_timestamp)
     await session.commit()

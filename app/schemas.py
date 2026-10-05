@@ -136,6 +136,16 @@ class CollectionContentTypeEnum(str, Enum):
     content_novel = constants.CONTENT_NOVEL
 
 
+class CollectionMemberRoleEnum(str, Enum):
+    owner = constants.COLLECTION_MEMBER_OWNER
+    editor = constants.COLLECTION_MEMBER_EDITOR
+
+
+class CollectionMemberStatusEnum(str, Enum):
+    pending = constants.COLLECTION_MEMBER_PENDING
+    accepted = constants.COLLECTION_MEMBER_ACCEPTED
+
+
 class ExternalTypeEnum(str, Enum):
     general = constants.EXTERNAL_GENERAL
     watch = constants.EXTERNAL_WATCH
@@ -687,6 +697,7 @@ class CollectionResponse(CustomModel):
     vote_score: int
     tags: list[str]
     reference: str
+    my_role: CollectionMemberRoleEnum | None
     my_score: int
     spoiler: bool
     entries: int

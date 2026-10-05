@@ -452,6 +452,86 @@ errors = {
             "Тільки автор колекції можне змінювати контент всередині",
             400,
         ],
+        "visibility-owner-only": [
+            "Only collection owner can change visibility",
+            "Тільки власник колекції може змінювати видимість",
+            403,
+        ],
+        "outdated": [
+            "Collection has been updated by someone else",
+            "Колекцію вже змінив хтось інший, оновіть сторінку",
+            400,
+        ],
+        "member-not-found": [
+            "Collection member not found",
+            "Учасника колекції не знайдено",
+            404,
+        ],
+        "member-exists": [
+            "User is already a collection member",
+            "Користувач вже є учасником колекції",
+            400,
+        ],
+        "member-self": [
+            "You can't invite yourself",
+            "Ви не можете запросити себе",
+            400,
+        ],
+        "member-banned": [
+            "You can't invite banned user",
+            "Ви не можете запросити заблокованого користувача",
+            400,
+        ],
+        "member-limit": [
+            "Collection members limit reached",
+            "Досягнуто ліміту співавторів у колекції",
+            400,
+        ],
+        "member-invite-limit": [
+            "User has too many pending invites",
+            "У користувача занадто багато нерозглянутих запрошень",
+            400,
+        ],
+        "member-not-pending": [
+            "Invite has already been processed",
+            "Запрошення вже розглянуто",
+            400,
+        ],
+        "member-declined": [
+            "User has recently declined an invite to this collection",
+            "Користувач нещодавно відхилив запрошення до цієї колекції",
+            400,
+        ],
+        "member-not-accepted": [
+            "User has not accepted the invite yet",
+            "Користувач ще не прийняв запрошення",
+            400,
+        ],
+        "owner-only": [
+            "Only collection owner can do this",
+            "Тільки власник колекції може це робити",
+            403,
+        ],
+        "owner-leave": [
+            "Transfer the collection or delete it to leave",
+            "Щоб піти, передайте колекцію комусь або видаліть її",
+            400,
+        ],
+        "owner-offer-exists": [
+            "This collection already has a pending ownership offer",
+            "Ця колекція вже має незакриту заявку на передачу власності",
+            400,
+        ],
+        "owner-offer-not-found": [
+            "Ownership offer not found",
+            "Заявку на передачу власності не знайдено",
+            404,
+        ],
+        "already-owner": [
+            "User is already collection owner",
+            "Користувач вже є власником колекції",
+            400,
+        ],
     },
     "vote": {
         "content-not-found": ["Content not found", "Контент не знайдено", 404],

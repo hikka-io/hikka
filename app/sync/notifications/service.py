@@ -7,6 +7,7 @@ from app import constants
 from uuid import UUID
 
 from app.models import (
+    CollectionMember,
     Notification,
     Collection,
     AnimeWatch,
@@ -99,8 +100,64 @@ async def get_collection(session, content_id):
             Collection.id == content_id,
             Collection.deleted == False,  # noqa: E712
         )
-        .options(joinedload(Collection.author))
     )
+
+
+async def get_collection_members(session, collection) -> list[User]:
+    """
+    Owner and accepted co-authors of a collection
+
+    Returns User rows rather than CollectionMember, callers only care
+    about the person.
+    """
+
+    return (
+        await session.scalars(
+            select(User)
+            .join(
+                CollectionMember,
+                CollectionMember.user_id == User.id,
+            )
+            .filter(
+                CollectionMember.collection_id == collection.id,
+                CollectionMember.status
+                == constants.COLLECTION_MEMBER_ACCEPTED,
+            )
+        )
+    ).all()
+
+
+async def get_collection_recipients(
+    session: AsyncSession,
+    collection: Collection,
+    log_id: UUID,
+    notification_type: str,
+    initiator_id: UUID,
+) -> list[User]:
+    """
+    Collection members who should be notified about this log
+
+    Skips the initiator, members ignoring this notification type and
+    members who already got this notification.
+    """
+
+    recipients = []
+
+    for recipient in await get_collection_members(session, collection):
+        if notification_type in recipient.ignored_notifications:
+            continue
+
+        if recipient.id == initiator_id:
+            continue
+
+        if await get_notification(
+            session, recipient.id, log_id, notification_type
+        ):
+            continue
+
+        recipients.append(recipient)
+
+    return recipients
 
 
 async def get_article(session, content_id):

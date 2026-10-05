@@ -55,6 +55,9 @@ async def test_collections_info(
         client, response.json()["reference"]
     )
 
+    # Anonymous request has no membership, so no role
+    assert response.json()["my_role"] is None
+
     assert len(response.json()["collection"]) == 8
 
     for index, slug in enumerate(slugs):

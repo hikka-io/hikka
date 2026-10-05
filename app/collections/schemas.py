@@ -2,11 +2,15 @@ from app.utils import is_empty_markdown, is_valid_tag, check_sort
 from pydantic import Field, field_validator
 
 from app.schemas import (
+    CollectionMemberStatusEnum,
+    CollectionMemberRoleEnum,
     CollectionContentTypeEnum,
     CollectionVisibilityEnum,
     CollectionResponse,
     PaginationResponse,
+    UserResponse,
     CustomModel,
+    datetime_pd,
 )
 
 
@@ -48,6 +52,12 @@ class CollectionArgs(CustomModel):
     spoiler: bool
     nsfw: bool
 
+    updated: int | None = Field(
+        None,
+        description="Unix timestamp the client started editing from",
+        examples=[1686088809],
+    )
+
     @field_validator("tags")
     def validate_tags(cls, tags):
         if not all(is_valid_tag(tag) for tag in tags):
@@ -76,3 +86,16 @@ class CollectionArgs(CustomModel):
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CollectionResponse]
+
+class CollectionMemberResponse(CustomModel):
+    status: CollectionMemberStatusEnum
+    role: CollectionMemberRoleEnum
+    invited_by: UserResponse | None
+    owner_offered_at: datetime_pd | None
+    created: datetime_pd
+    user: UserResponse
+
+
+class CollectionMembersResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[CollectionMemberResponse]

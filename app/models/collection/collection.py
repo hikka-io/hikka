@@ -37,6 +37,8 @@ class Collection(
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
 
+    my_role: Mapped[str | None] = query_expression(expire_on_flush=False)
+
     system_ranking: Mapped[float] = mapped_column(index=True, default=0)
     visibility: Mapped[str] = mapped_column(String(16), index=True)
     labels_order: Mapped[list[str]] = mapped_column(ARRAY(String))

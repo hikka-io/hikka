@@ -96,6 +96,7 @@ from .collection.content import PersonCollectionContent
 from .collection.content import AnimeCollectionContent
 from .collection.content import MangaCollectionContent
 from .collection.content import NovelCollectionContent
+from .collection.member import CollectionMember
 from .collection.content import CollectionContent
 from .collection.collection import Collection
 
@@ -199,6 +200,7 @@ __all__ = [
     "AnimeCollectionContent",
     "MangaCollectionContent",
     "NovelCollectionContent",
+    "CollectionMember",
     "CollectionContent",
     "Collection",
     "Article",

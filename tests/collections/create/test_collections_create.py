@@ -1,4 +1,5 @@
 from client_requests import request_create_collection
+from app.models import CollectionMember
 from sqlalchemy import select, desc
 from app.models import Log
 from fastapi import status
@@ -46,6 +47,7 @@ async def test_collections_create(
     assert response.status_code == status.HTTP_200_OK
 
     assert response.json()["content_type"] == "anime"
+    assert response.json()["my_role"] == constants.COLLECTION_MEMBER_OWNER
     assert response.json()["entries"] == 2
 
     assert len(response.json()["collection"]) == 2
@@ -61,6 +63,13 @@ async def test_collections_create(
         response.json()["collection"][1]["content"]["slug"]
         == "bocchi-the-rock-9e172d"
     )
+
+    # Author must become the collection owner, that's where permissions live
+    member = await test_session.scalar(select(CollectionMember))
+    assert member.role == constants.COLLECTION_MEMBER_OWNER
+    assert member.status == constants.COLLECTION_MEMBER_ACCEPTED
+    assert member.user_id == create_test_user.id
+    assert member.invited_by_id is None
 
     # Check log
     log = await test_session.scalar(select(Log).order_by(desc(Log.created)))

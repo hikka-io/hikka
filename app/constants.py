@@ -538,6 +538,14 @@ LOG_SETTINGS_IMPORT_READ = "settings_import_read"
 LOG_COLLECTION_CREATE = "collection_create"
 LOG_COLLECTION_UPDATE = "collection_update"
 LOG_COLLECTION_DELETE = "collection_delete"
+LOG_COLLECTION_OWNER_OFFER = "collection_owner_offer"
+LOG_COLLECTION_OWNER_CANCEL = "collection_owner_cancel"
+LOG_COLLECTION_OWNER_TRANSFER = "collection_owner_transfer"
+LOG_COLLECTION_MEMBER_INVITE = "collection_member_invite"
+LOG_COLLECTION_MEMBER_ACCEPT = "collection_member_accept"
+LOG_COLLECTION_MEMBER_REMOVE = "collection_member_remove"
+LOG_COLLECTION_MEMBER_DECLINE = "collection_member_decline"
+LOG_COLLECTION_MEMBER_LEAVE = "collection_member_leave"
 LOG_VOTE_SET = "vote_set"
 LOG_SCHEDULE_ANIME = "schedule_anime"
 LOG_SCHEDULE_ANIME_ROLLBACK = "schedule_anime_rollback"
@@ -579,6 +587,8 @@ NOTIFICATION_HIKKA_UPDATE = "hikka_update"
 NOTIFICATION_SCHEDULE_ANIME = "schedule_anime"
 NOTIFICATION_FOLLOW = "follow"
 NOTIFICATION_THIRDPARTY_LOGIN = "thirdparty_login"
+NOTIFICATION_COLLECTION_INVITE = "collection_invite"
+NOTIFICATION_COLLECTION_OWNER = "collection_owner"
 
 NOTIFICATION_TYPES = [
     NOTIFICATION_COMMENT_REPLY,
@@ -596,12 +606,36 @@ NOTIFICATION_TYPES = [
     NOTIFICATION_SCHEDULE_ANIME,
     NOTIFICATION_FOLLOW,
     NOTIFICATION_THIRDPARTY_LOGIN,
+    NOTIFICATION_COLLECTION_INVITE,
+    NOTIFICATION_COLLECTION_OWNER,
 ]
 
 # Collections
 COLLECTION_PUBLIC = "public"
 COLLECTION_UNLISTED = "unlisted"
 COLLECTION_PRIVATE = "private"
+
+COLLECTION_MEMBER_OWNER = "owner"
+COLLECTION_MEMBER_EDITOR = "editor"
+COLLECTION_MEMBER_PENDING = "pending"
+COLLECTION_MEMBER_ACCEPTED = "accepted"
+
+# Co-authors in one collection, pending invites included
+COLLECTION_MEMBERS_LIMIT = 10
+# Pending invites one user may have waiting across all collections
+COLLECTION_INVITES_LIMIT = 50
+# Invites one user may send per hour
+COLLECTION_INVITES_RATE_LIMIT = 50
+# Collection updates one user may make per hour
+COLLECTION_UPDATES_RATE_LIMIT = 1000
+# Days a pending invite waits before it is dropped. Without this a
+# forgotten invite would hold a member slot forever
+COLLECTION_INVITE_EXPIRE_DAYS = 30
+# Days an owner must wait before inviting someone to the same collection
+# again after that person declined
+COLLECTION_INVITE_COOLDOWN_DAYS = 7
+# Days an unanswered ownership offer stands before it is withdrawn
+COLLECTION_OWNER_OFFER_EXPIRE_DAYS = 30
 
 # Articles
 ARTICLE_SYSTEM = "system"

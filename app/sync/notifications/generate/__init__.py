@@ -1,4 +1,6 @@
 from .thirdparty_login import generate_thirdparty_login
+from .collection_invite import generate_collection_invite
+from .collection_owner import generate_collection_owner
 from .collection_vote import generate_collection_vote
 from .anime_schedule import generate_anime_schedule
 from .comment_write import generate_comment_write
@@ -11,6 +13,8 @@ from .follow import generate_follow
 
 __all__ = [
     "generate_thirdparty_login",
+    "generate_collection_invite",
+    "generate_collection_owner",
     "generate_collection_vote",
     "generate_anime_schedule",
     "generate_comment_write",

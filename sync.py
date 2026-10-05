@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 import asyncio
 
 from app.sync import (
+    delete_expired_collection_invites,
     delete_expired_token_requests,
     update_article_views,
     update_notifications,
@@ -44,6 +45,7 @@ def init_scheduler():
     scheduler.add_job(update_search, "interval", minutes=1)
     scheduler.add_job(send_emails, "interval", seconds=10)
     scheduler.add_job(update_sitemap, "interval", days=1)
+    scheduler.add_job(delete_expired_collection_invites, "interval", hours=1)
 
     # TODO: remove me
     scheduler.add_job(generate_feed, "interval", minutes=1)

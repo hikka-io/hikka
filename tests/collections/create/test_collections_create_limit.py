@@ -1,8 +1,7 @@
 from client_requests import request_create_collection
-from app.models import Collection
-from app.utils import utcnow
 from fastapi import status
 from app import constants
+import helpers
 
 
 async def test_collections_create_limit(
@@ -14,28 +13,26 @@ async def test_collections_create_limit(
     test_session,
 ):
     collections_limit = 1000
-    now = utcnow()
 
     for step in range(0, collections_limit + 1):
-        test_session.add(
-            Collection(
-                **{
-                    "content_type": "anime",
-                    "labels_order": ["Good", "Great"],
-                    "description": "Description",
-                    "visibility": constants.COLLECTION_PUBLIC,
-                    "entries": 0,
-                    "spoiler": False,
-                    "title": f"Test collection {step}",
-                    "nsfw": False,
-                    "tags": ["romance", "comedy"],
-                    "deleted": False,
-                    "vote_score": 0,
-                    "author": create_test_user,
-                    "created": now,
-                    "updated": now,
-                }
-            )
+        collection = helpers.make_collection(
+            create_test_user,
+            title=f"Test collection {step}",
+            labels_order=["Good", "Great"],
+            tags=["romance", "comedy"],
+        )
+
+        # The quota is counted by ownership, not by author_id, so the
+        # membership row is what actually makes these collections count
+        test_session.add_all(
+            [
+                collection,
+                helpers.make_collection_member(
+                    create_test_user,
+                    collection=collection,
+                    role=constants.COLLECTION_MEMBER_OWNER,
+                ),
+            ]
         )
 
     await test_session.commit()

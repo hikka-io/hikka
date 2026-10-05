@@ -189,6 +189,22 @@ async def create_dummy_user(test_session):
 
 
 @pytest.fixture
+async def create_third_user(test_session):
+    return await helpers.create_user(
+        test_session, username="thirduser", email="third@mail.com"
+    )
+
+
+@pytest.fixture
+async def get_third_token(test_session, create_third_user):
+    token = await helpers.create_token(
+        test_session, create_third_user.email, "THIRD_TOKEN"
+    )
+
+    return token.secret
+
+
+@pytest.fixture
 async def create_dummy_user_restricted(test_session):
     return await helpers.create_user(
         test_session,

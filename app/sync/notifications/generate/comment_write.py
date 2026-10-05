@@ -138,51 +138,38 @@ async def generate_comment_write(session: AsyncSession, log: Log):
         ):
             return
 
-        if not collection.author:
-            return
-
-        # Stop if user wishes to ignore this type of notifications
-        if notification_type in collection.author.ignored_notifications:
-            return
-
-        if collection.author == comment.author:
-            return
-
-        # Do not create notification if we already did that
-        if await service.get_notification(
-            session,
-            collection.author_id,
-            log.id,
-            notification_type,
-        ):
-            return
-
         # Fetch content in order to get slug
         await session.refresh(comment, attribute_names=["content"])
 
-        notification = Notification(
-            **{
-                "notification_type": notification_type,
-                "user_id": collection.author_id,
-                "created": log.created,
-                "updated": log.created,
-                "log_id": log.id,
-                "seen": False,
-                "data": {
-                    "slug": comment.content.slug,
-                    "content_type": comment.content_type,
-                    "comment_reference": comment.reference,
-                    "comment_depth": comment.depth,
-                    "comment_text": comment.text,
-                    "base_comment_reference": path_to_uuid(comment.path[0]),
-                    "username": comment.author.username,
-                    "avatar": comment.author.avatar,
-                },
-                "initiator_user_id": comment.author.id,
-            }
-        )
+        # Owner and co-authors all get notified, except the comment author
+        for recipient in await service.get_collection_recipients(
+            session, collection, log.id, notification_type, comment.author_id
+        ):
+            notification = Notification(
+                **{
+                    "notification_type": notification_type,
+                    "user_id": recipient.id,
+                    "created": log.created,
+                    "updated": log.created,
+                    "log_id": log.id,
+                    "seen": False,
+                    "data": {
+                        "slug": comment.content.slug,
+                        "content_type": comment.content_type,
+                        "comment_reference": comment.reference,
+                        "comment_depth": comment.depth,
+                        "comment_text": comment.text,
+                        "base_comment_reference": path_to_uuid(
+                            comment.path[0]
+                        ),
+                        "username": comment.author.username,
+                        "avatar": comment.author.avatar,
+                    },
+                    "initiator_user_id": comment.author.id,
+                }
+            )
 
-        session.add(notification)
+            session.add(notification)
 
     # Create notification for author of the article
     if comment.depth == 1 and comment.content_type == constants.CONTENT_ARTICLE:

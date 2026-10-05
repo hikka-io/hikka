@@ -1,3 +1,4 @@
+from .collection_invites import delete_expired_collection_invites
 from .token_requests import delete_expired_token_requests
 
 from .aggregator.franchises import aggregator_franchises
@@ -51,6 +52,7 @@ from .views import update_article_views
 from .score import update_scores
 
 __all__ = [
+    "delete_expired_collection_invites",
     "delete_expired_token_requests",
     "aggregator_franchises",
     "aggregator_anime_info",

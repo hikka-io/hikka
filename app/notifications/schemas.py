@@ -21,6 +21,8 @@ class NotificationTypeEnum(str, Enum):
     schedule_anime = constants.NOTIFICATION_SCHEDULE_ANIME
     follow = constants.NOTIFICATION_FOLLOW
     thirdparty_login = constants.NOTIFICATION_THIRDPARTY_LOGIN
+    collection_invite = constants.NOTIFICATION_COLLECTION_INVITE
+    collection_owner = constants.NOTIFICATION_COLLECTION_OWNER
 
 
 # Responses
