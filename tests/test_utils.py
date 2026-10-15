@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import constants
 from app import utils
-
+import pytest
 
 async def test_empty_markdown():
     assert utils.is_empty_markdown("**text**") is False
@@ -29,6 +29,53 @@ async def test_empty_markdown():
         utils.is_empty_markdown("** **** ____ [empty]() :::spoiler  :::")
         is True
     )
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        ":underline[]",
+        ":underline[   ]",
+        ":strike[]",
+        ":strike[   ]",
+        ":underline[:strike[** **]]",
+        ":strike[:underline[____]]",
+        ":spoiler[:underline[:strike[ ]]]",
+        ":underline[\u2800]",
+        ":underline[] :strike[]",
+    ],
+)
+def test_empty_markdown_marks(text):
+    assert utils.is_empty_markdown(text) is True
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        ":underline[текст]",
+        ":strike[текст]",
+        ":underline[:strike[**текст**]]",
+        ":spoiler[:underline[:strike[текст]]]",
+        ":underline",
+        ":strike",
+        r"\:underline[]",
+        ":unknown[]",
+    ],
+)
+def test_nonempty_markdown_marks(text):
+    assert utils.is_empty_markdown(text) is False
+
+
+@pytest.mark.parametrize("mark", ["underline", "strike"])
+def test_comment_marks_validation(mark):
+    from app.comments.schemas import CommentTextArgs
+    from pydantic import ValidationError
+
+    text = f":{mark}[текст]"
+    assert CommentTextArgs(text=text).text == text
+
+    with pytest.raises(ValidationError, match="empty markdown"):
+        CommentTextArgs(text=f":{mark}[ ]")
 
 
 def test_token():
