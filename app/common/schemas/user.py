@@ -5,7 +5,6 @@ from enum import Enum
 
 # Enums
 class UserLinkIconEnum(str, Enum):
-    fediverse = "fediverse"
     instagram = "instagram"
     telegram = "telegram"
     threads = "threads"

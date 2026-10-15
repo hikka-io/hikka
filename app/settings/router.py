@@ -45,7 +45,7 @@ router = APIRouter(prefix="/settings", tags=["Settings"])
 
 @router.put(
     "/links",
-    # response_model=UserResponse,
+    response_model=UserResponse,
     summary="Change links",
 )
 async def change_links(

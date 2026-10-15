@@ -4,8 +4,8 @@ from app import constants
 from enum import Enum
 
 from pydantic import (
-    model_validator,
     field_validator,
+    computed_field,
     AliasChoices,
     HttpUrl,
     Field,
@@ -43,29 +43,28 @@ class ReadDeleteContenType(str, Enum):
 class UserLink(CustomModel):
     text: str | None = Field(default=None, max_length=64)
     url: HttpUrl = Field(max_length=255)
-    icon: UserLinkIconEnum
 
-    @model_validator(mode="after")
-    def validate_url(self):
+    @computed_field
+    @property
+    def icon(self) -> UserLinkIconEnum:
         hostname = self.url.host.removeprefix("www.")
 
         icon_hostnames = {
-            "threads": ["threads.com", "threads.net"],
-            "discord": ["discord.com", "discord.gg"],
-            "bluesky": ["bsky.app", "bsky.social"],
-            "telegram": ["t.me", "telegram.me"],
-            "twitter": ["twitter.com", "x.com"],
-            "steam": ["steamcommunity.com"],
-            "instagram": ["instagram.com"],
-            "github": ["github.com"],
+            UserLinkIconEnum.threads: ["threads.com", "threads.net"],
+            UserLinkIconEnum.discord: ["discord.com", "discord.gg"],
+            UserLinkIconEnum.bluesky: ["bsky.app", "bsky.social"],
+            UserLinkIconEnum.telegram: ["t.me", "telegram.me"],
+            UserLinkIconEnum.twitter: ["twitter.com", "x.com"],
+            UserLinkIconEnum.steam: ["steamcommunity.com"],
+            UserLinkIconEnum.instagram: ["instagram.com"],
+            UserLinkIconEnum.github: ["github.com"],
         }
 
-        good_hostnames = icon_hostnames.get(self.icon, None)
+        for icon, hostnames in icon_hostnames.items():
+            if hostname in hostnames:
+                return icon
 
-        if good_hostnames and hostname not in good_hostnames:
-            raise ValueError(f"Invalid {self.icon} link")
-
-        return self
+        return UserLinkIconEnum.custom
 
 
 class UserLinkArgs(CustomModel):
