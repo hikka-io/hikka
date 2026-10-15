@@ -6,14 +6,23 @@ from enum import Enum
 # Enums
 class UserLinkIconEnum(str, Enum):
     instagram = "instagram"
+    mangainua = "mangainua"
+    mangalist = "mangalist"
     telegram = "telegram"
     threads = "threads"
     twitter = "twitter"
     discord = "discord"
     bluesky = "bluesky"
+    anitube = "anitube"
+    dgmanga = "dgmanga"
+    youtube = "youtube"
     github = "github"
     custom = "custom"
+    reddit = "reddit"
     steam = "steam"
+    mikai = "mikai"
+    zenko = "zenko"
+    chess = "chess"
 
 
 # Responses

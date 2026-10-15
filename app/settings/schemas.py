@@ -53,11 +53,20 @@ class UserLink(CustomModel):
             UserLinkIconEnum.threads: ["threads.com", "threads.net"],
             UserLinkIconEnum.discord: ["discord.com", "discord.gg"],
             UserLinkIconEnum.bluesky: ["bsky.app", "bsky.social"],
+            UserLinkIconEnum.youtube: ["youtube.com", "youtu.be"],
             UserLinkIconEnum.telegram: ["t.me", "telegram.me"],
             UserLinkIconEnum.twitter: ["twitter.com", "x.com"],
+            UserLinkIconEnum.mangalist: ["mangalist.in.ua"],
             UserLinkIconEnum.steam: ["steamcommunity.com"],
             UserLinkIconEnum.instagram: ["instagram.com"],
+            UserLinkIconEnum.anitube: ["anitube.in.ua"],
+            UserLinkIconEnum.mangainua: ["manga.in.ua"],
+            UserLinkIconEnum.dgmanga: ["dgmanga.app"],
+            UserLinkIconEnum.zenko: ["zenko.online"],
             UserLinkIconEnum.github: ["github.com"],
+            UserLinkIconEnum.reddit: ["reddit.com"],
+            UserLinkIconEnum.chess: ["chess.com"],
+            UserLinkIconEnum.mikai: ["mikai.me"],
         }
 
         for icon, hostnames in icon_hostnames.items():
