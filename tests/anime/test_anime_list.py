@@ -99,3 +99,31 @@ async def test_anime_pagination_size(
     assert response.json()["pagination"]["total"] == 16
     assert response.json()["pagination"]["pages"] == 8
     assert response.json()["pagination"]["page"] == 1
+
+
+async def test_anime_search_query_pagination(
+    client, mock_meilisearch, aggregator_anime, aggregator_anime_info
+):
+    # Meilisearch returns second page out of 40 results
+    mock_meilisearch.hits = [
+        "0cf69ac6-9238-4e2f-9add-39294c1a0f11",
+        "b22bb359-4545-45ce-92d3-df8646554128",
+    ]
+    mock_meilisearch.total = 40
+
+    response = await request_anime_search(
+        client, {"query": "kyojin"}, page=2, size=2
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert mock_meilisearch.calls[0]["page"] == 2
+
+    # Total comes from Meilisearch and page is not offset second time
+    assert response.json()["pagination"]["total"] == 40
+    assert response.json()["pagination"]["pages"] == 20
+    assert response.json()["pagination"]["page"] == 2
+
+    assert {anime["slug"] for anime in response.json()["list"]} == {
+        "shingeki-no-kyojin-0cf69a",
+        "shingeki-no-kyojin-season-3-b22bb3",
+    }

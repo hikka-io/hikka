@@ -67,7 +67,11 @@ async def search_novel(
         if not filter_ids:
             return paginated_response([], 0, page, limit)
 
-    total = await service.novel_search_total(session, search, filter_ids)
+        total = meilisearch_result["pagination"]["total"]
+        offset = 0
+
+    else:
+        total = await service.novel_search_total(session, search, filter_ids)
 
     if total == 0:
         return paginated_response([], 0, page, limit)

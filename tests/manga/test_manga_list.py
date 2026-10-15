@@ -65,3 +65,27 @@ async def test_manga_list_extra_fields(
     assert "synopsis_en" in manga
     assert "synopsis_ua" in manga
     assert manga["synopsis_en"] is not None
+
+
+async def test_manga_search_query_pagination(
+    client, mock_meilisearch, aggregator_manga, aggregator_manga_info
+):
+    # Meilisearch returns second page out of 40 results
+    mock_meilisearch.hits = [
+        "fb9fbd44-76f6-4b22-9438-05d7e3a43c37",
+        "7ef8d2cf-0565-4ddd-9498-7fae392a7421",
+    ]
+    mock_meilisearch.total = 40
+
+    response = await request_manga_search(
+        client, {"query": "manga"}, page=2, size=2
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert mock_meilisearch.calls[0]["page"] == 2
+
+    # Total comes from Meilisearch and page is not offset second time
+    assert response.json()["pagination"]["total"] == 40
+    assert response.json()["pagination"]["pages"] == 20
+    assert response.json()["pagination"]["page"] == 2
+    assert len(response.json()["list"]) == 2

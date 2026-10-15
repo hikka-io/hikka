@@ -281,6 +281,38 @@ def mock_utcnow(monkeypatch):
     monkeypatch.setattr("app.comments.service.utcnow", lambda: fixed_time)
 
 
+# Meilisearch is not running in tests, so search returns content ids
+# we set as hits and records how it was called
+@pytest.fixture(autouse=False)
+def mock_meilisearch(monkeypatch):
+    class MockMeilisearch:
+        def __init__(self):
+            self.calls = []
+            self.hits = []
+            self.total = 0
+
+        async def search(
+            self,
+            content_index,
+            query=None,
+            sort=None,
+            page=1,
+            filter=None,
+            size=constants.SEARCH_RESULT_SIZE,
+        ):
+            self.calls.append({"filter": filter, "page": page, "size": size})
+
+            return {
+                "list": [{"id": content_id} for content_id in self.hits],
+                "pagination": {"total": self.total, "page": page},
+            }
+
+    meilisearch = MockMeilisearch()
+    monkeypatch.setattr("app.meilisearch.search", meilisearch.search)
+
+    return meilisearch
+
+
 # Aggregator fixtures
 @pytest.fixture
 async def aggregator_genres(test_session):
