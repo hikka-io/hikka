@@ -26,6 +26,21 @@
                 {"content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e", "content_type": "anime"},
                 {"content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0", "content_type": "anime"}
             ],
+            "entries": [
+                {"content": 16498, "content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11", "content_type": "anime", "related_content": 25777, "related_content_id": "b88bf4b4-564e-43d4-8f1a-01741d244366", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 16498, "content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11", "content_type": "anime", "related_content": 23390, "related_content_id": "c5a7e2d4-3f1b-4e8a-9b6d-2a1f0e9c8b7d", "related_content_type": "manga", "relation_type": "adaptation"},
+                {"content": 25777, "content_id": "b88bf4b4-564e-43d4-8f1a-01741d244366", "content_type": "anime", "related_content": 16498, "related_content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11", "related_content_type": "anime", "relation_type": "prequel"},
+                {"content": 25777, "content_id": "b88bf4b4-564e-43d4-8f1a-01741d244366", "content_type": "anime", "related_content": 35760, "related_content_id": "b22bb359-4545-45ce-92d3-df8646554128", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 35760, "content_id": "b22bb359-4545-45ce-92d3-df8646554128", "content_type": "anime", "related_content": 38524, "related_content_id": "91a35018-3439-47b1-8eb8-ba2092fd0191", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 38524, "content_id": "91a35018-3439-47b1-8eb8-ba2092fd0191", "content_type": "anime", "related_content": 35760, "related_content_id": "b22bb359-4545-45ce-92d3-df8646554128", "related_content_type": "anime", "relation_type": "parent_story"},
+                {"content": 38524, "content_id": "91a35018-3439-47b1-8eb8-ba2092fd0191", "content_type": "anime", "related_content": 40028, "related_content_id": "4877caaf-d76d-46f2-9a73-cbdb2fef202b", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 40028, "content_id": "4877caaf-d76d-46f2-9a73-cbdb2fef202b", "content_type": "anime", "related_content": 38524, "related_content_id": "91a35018-3439-47b1-8eb8-ba2092fd0191", "related_content_type": "anime", "relation_type": "prequel"},
+                {"content": 40028, "content_id": "4877caaf-d76d-46f2-9a73-cbdb2fef202b", "content_type": "anime", "related_content": 48583, "related_content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 48583, "content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e", "content_type": "anime", "related_content": 40028, "related_content_id": "4877caaf-d76d-46f2-9a73-cbdb2fef202b", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 48583, "content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e", "content_type": "anime", "related_content": 51535, "related_content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0", "related_content_type": "anime", "relation_type": "sequel"},
+                {"content": 51535, "content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0", "content_type": "anime", "related_content": 48583, "related_content_id": "8d3fc3a7-1fa5-4ce4-909f-3d60ca2d072e", "related_content_type": "anime", "relation_type": "prequel"},
+                {"content": 51535, "content_id": "833be1cc-b3ef-4ebc-8017-07f49203a8a0", "content_type": "anime", "related_content": 16498, "related_content_id": "0cf69ac6-9238-4e2f-9add-39294c1a0f11", "related_content_type": "anime", "relation_type": "other"}
+            ],
             "updated": 1689529791,
             "content_id": "e2283d58-ba06-420e-92de-8fe597d69a02",
             "scored_by": 10568296,

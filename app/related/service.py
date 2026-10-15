@@ -15,12 +15,44 @@ from app.models import (
 )
 
 
+def get_franchise_relations(franchise: Franchise):
+    slugs = {
+        (content.data_type, content.content_id): content.slug
+        for content in franchise.anime + franchise.manga + franchise.novel
+    }
+
+    relations = []
+
+    for relation in franchise.relations:
+        source = (relation["content_type"], relation["content_id"])
+        target = (
+            relation["related_content_type"],
+            relation["related_content_id"],
+        )
+
+        # Skip relations to deleted content or content we don't have
+        if source not in slugs or target not in slugs:
+            continue
+
+        relations.append(
+            {
+                "related_content_type": relation["related_content_type"],
+                "relation_type": relation["relation_type"],
+                "content_type": relation["content_type"],
+                "related_slug": slugs[target],
+                "slug": slugs[source],
+            }
+        )
+
+    return relations
+
+
 async def get_franchise(
     session: AsyncSession,
     content: Anime | Manga | Novel,
     request_user: User | None,
 ):
-    return await session.scalar(
+    franchise = await session.scalar(
         select(Franchise)
         .filter(Franchise.id == content.franchise_id)
         .options(
@@ -45,3 +77,10 @@ async def get_franchise(
             ),
         )
     )
+
+    return {
+        "relations": get_franchise_relations(franchise),
+        "anime": franchise.anime,
+        "manga": franchise.manga,
+        "novel": franchise.novel,
+    }

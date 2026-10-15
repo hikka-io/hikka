@@ -144,6 +144,8 @@ from .system import request_backup_images
 
 from .feed import request_feed
 
+from .related import request_related_franchise
+
 __all__ = [
     # =========== admin ===========
     "request_admin_update_user",
@@ -292,4 +294,6 @@ __all__ = [
     "request_backup_images",
     # =========== feed ===========
     "request_feed",
+    # =========== related ===========
+    "request_related_franchise",
 ]

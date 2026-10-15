@@ -13,8 +13,27 @@ class RelatedContentTypeEnum(str, Enum):
     content_novel = constants.CONTENT_NOVEL
 
 
+class FranchiseRelationTypeEnum(str, Enum):
+    alternative_setting = constants.RELATION_ALTERNATIVE_SETTING
+    alternative_version = constants.RELATION_ALTERNATIVE_VERSION
+    side_story = constants.RELATION_SIDE_STORY
+    adaptation = constants.RELATION_ADAPTATION
+    spin_off = constants.RELATION_SPIN_OFF
+    summary = constants.RELATION_SUMMARY
+    sequel = constants.RELATION_SEQUEL
+
+
 # Responses
+class FranchiseRelationResponse(CustomModel):
+    related_content_type: RelatedContentTypeEnum
+    relation_type: FranchiseRelationTypeEnum
+    content_type: RelatedContentTypeEnum
+    related_slug: str
+    slug: str
+
+
 class FranchiseResponse(CustomModel):
+    relations: list[FranchiseRelationResponse]
     anime: list[AnimeResponseWithWatch]
     manga: list[MangaResponseWithRead]
     novel: list[NovelResponseWithRead]

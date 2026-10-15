@@ -102,6 +102,18 @@ EXTERNAL_GENERAL = "general"
 EXTERNAL_WATCH = "watch"
 EXTERNAL_READ = "read"
 
+# Franchise relations
+RELATION_ALTERNATIVE_SETTING = "alternative_setting"
+RELATION_ALTERNATIVE_VERSION = "alternative_version"
+RELATION_PARENT_STORY = "parent_story"
+RELATION_FULL_STORY = "full_story"
+RELATION_SIDE_STORY = "side_story"
+RELATION_ADAPTATION = "adaptation"
+RELATION_SPIN_OFF = "spin_off"
+RELATION_SUMMARY = "summary"
+RELATION_PREQUEL = "prequel"
+RELATION_SEQUEL = "sequel"
+
 SEARCH_RESULT_SIZE = 15
 
 MAX_USER_CLIENTS = 10
