@@ -3,11 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
 from app.utils import get_settings
-from sqlalchemy import select, func
 from app.models import Character
-from app.utils import pagination
+from sqlalchemy import select
 from app import constants
-import math
 
 
 async def update_characters_settings(index):
@@ -49,35 +47,34 @@ def character_to_document(character: Character):
     }
 
 
-async def characters_documents(session: AsyncSession, limit: int, offset: int):
-    characters_list = await session.scalars(
+async def characters_documents(
+    session: AsyncSession, limit: int, last_id: str | None
+):
+    query = (
         select(Character)
         .filter(
             Character.needs_search_update == True,  # noqa: E712
             Character.orphan == False,  # noqa: E712
         )
-        .order_by("content_id")
+        .order_by(Character.content_id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(Character.content_id > last_id)
+
+    characters_list = await session.scalars(query)
 
     documents = []
 
     for character in characters_list:
         documents.append(character_to_document(character))
+        last_id = character.content_id
         character.needs_search_update = False
         session.add(character)
 
-    return documents
-
-
-async def characters_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(Character.id)).filter(
-            Character.needs_search_update == True,  # noqa: E712
-            Character.orphan == False,  # noqa: E712
-        )
-    )
+    return documents, last_id
 
 
 async def characters_document_ids_delete(session: AsyncSession):
@@ -108,14 +105,15 @@ async def meilisearch_populate(session: AsyncSession):
         await update_characters_settings(index)
 
         size = 1000
-        total = await characters_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing characters page {page} of {pages}")
+        while True:
+            documents, last_id = await characters_documents(
+                session, size, last_id
+            )
 
-            limit, offset = pagination(page, size)
-            documents = await characters_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
             await index.add_documents(documents)
 

@@ -4,11 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func
-from app.utils import pagination
+from sqlalchemy import select
 from app.models import Novel
 from app import constants
-import math
 
 
 async def update_novel_settings(index):
@@ -93,8 +91,10 @@ def novel_to_document(novel: Novel):
     }
 
 
-async def novel_documents(session: AsyncSession, limit: int, offset: int):
-    novel_list = await session.scalars(
+async def novel_documents(
+    session: AsyncSession, limit: int, last_id: str | None
+):
+    query = (
         select(Novel)
         .filter(Novel.media_type != None)  # noqa: E711
         .filter(Novel.deleted == False)  # noqa: E712
@@ -103,21 +103,27 @@ async def novel_documents(session: AsyncSession, limit: int, offset: int):
             joinedload(Novel.magazines),
             joinedload(Novel.genres),
         )
-        .order_by("content_id")
+        .order_by(Novel.content_id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(Novel.content_id > last_id)
+
+    novel_list = await session.scalars(query)
 
     documents = []
 
     for novel in novel_list.unique().all():
         documents.append(novel_to_document(novel))
+        last_id = novel.content_id
 
         # I'm not sure if this would behave correctly if Meilisearch is down
         novel.needs_search_update = False
         session.add(novel)
 
-    return documents
+    return documents, last_id
 
 
 async def novel_document_ids_delete(session: AsyncSession):
@@ -137,14 +143,6 @@ async def novel_document_ids_delete(session: AsyncSession):
     return delete_ids
 
 
-async def novel_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(Novel.id)).filter(
-            Novel.needs_search_update == True  # noqa: E712
-        )
-    )
-
-
 async def meilisearch_populate(session: AsyncSession):
     # print("Meilisearch: Populating novel")
 
@@ -156,17 +154,15 @@ async def meilisearch_populate(session: AsyncSession):
         await update_novel_settings(index)
 
         size = 1000
-        total = await novel_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing novel page {page} of {pages}")
+        while True:
+            documents, last_id = await novel_documents(session, size, last_id)
 
-            limit, offset = pagination(page, size)
-            documents = await novel_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
-            if len(documents) > 0:
-                await index.add_documents(documents, primary_key="id")
+            await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await novel_document_ids_delete(session)
 

@@ -2,13 +2,12 @@ from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from app.utils import get_settings, to_timestamp
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
-from app.utils import get_season, pagination
 from app.models import Anime, CompanyAnime
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
-from sqlalchemy import select, func
+from app.utils import get_season
+from sqlalchemy import select
 from app import constants
-import math
 
 
 async def update_anime_settings(index):
@@ -128,8 +127,10 @@ def anime_to_document(anime: Anime):
     }
 
 
-async def anime_documents(session: AsyncSession, limit: int, offset: int):
-    anime_list = await session.scalars(
+async def anime_documents(
+    session: AsyncSession, limit: int, last_id: str | None
+):
+    query = (
         select(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
@@ -137,21 +138,27 @@ async def anime_documents(session: AsyncSession, limit: int, offset: int):
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
-        .order_by("content_id")
+        .order_by(Anime.content_id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(Anime.content_id > last_id)
+
+    anime_list = await session.scalars(query)
 
     documents = []
 
     for anime in anime_list:
         documents.append(anime_to_document(anime))
+        last_id = anime.content_id
 
         # I'm not sure if this would behave correctly if Meilisearch is down
         anime.needs_search_update = False
         session.add(anime)
 
-    return documents
+    return documents, last_id
 
 
 async def anime_document_ids_delete(session: AsyncSession):
@@ -171,14 +178,6 @@ async def anime_document_ids_delete(session: AsyncSession):
     return delete_ids
 
 
-async def anime_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(Anime.id)).filter(
-            Anime.needs_search_update == True  # noqa: E712
-        )
-    )
-
-
 async def meilisearch_populate(session: AsyncSession):
     # print("Meilisearch: Populating anime")
 
@@ -190,17 +189,15 @@ async def meilisearch_populate(session: AsyncSession):
         await update_anime_settings(index)
 
         size = 1000
-        total = await anime_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing anime page {page} of {pages}")
+        while True:
+            documents, last_id = await anime_documents(session, size, last_id)
 
-            limit, offset = pagination(page, size)
-            documents = await anime_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
-            if len(documents) > 0:
-                await index.add_documents(documents, primary_key="id")
+            await index.add_documents(documents, primary_key="id")
 
         delete_document_ids = await anime_document_ids_delete(session)
 

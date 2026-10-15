@@ -2,13 +2,11 @@ from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from sqlalchemy.orm import with_expression
-from sqlalchemy import select, case, func
 from app.database import sessionmanager
+from sqlalchemy import select, case
 from app.utils import get_settings
-from app.utils import pagination
 from app.models import Company
 from app import constants
-import math
 
 
 async def update_companies_settings(index):
@@ -39,8 +37,10 @@ def company_to_document(company: Company):
     }
 
 
-async def companies_documents(session: AsyncSession, limit: int, offset: int):
-    companies_list = await session.scalars(
+async def companies_documents(
+    session: AsyncSession, limit: int, last_id: str | None
+):
+    query = (
         select(Company)
         .filter(Company.needs_search_update == True)  # noqa: E712
         .options(
@@ -55,27 +55,25 @@ async def companies_documents(session: AsyncSession, limit: int, offset: int):
                 case((Company.produced_anime.any(), True), else_=False),
             )
         )
-        .order_by("content_id")
+        .order_by(Company.content_id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(Company.content_id > last_id)
+
+    companies_list = await session.scalars(query)
 
     documents = []
 
     for company in companies_list:
         documents.append(company_to_document(company))
+        last_id = company.content_id
         company.needs_search_update = False
         session.add(company)
 
-    return documents
-
-
-async def companies_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(Company.id)).filter(
-            Company.needs_search_update == True  # noqa: E712
-        )
-    )
+    return documents, last_id
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -89,14 +87,15 @@ async def meilisearch_populate(session: AsyncSession):
         await update_companies_settings(index)
 
         size = 1000
-        total = await companies_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing companies page {page} of {pages}")
+        while True:
+            documents, last_id = await companies_documents(
+                session, size, last_id
+            )
 
-            limit, offset = pagination(page, size)
-            documents = await companies_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
             await index.add_documents(documents)
 

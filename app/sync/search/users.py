@@ -2,12 +2,11 @@ from meilisearch_python_sdk.models.settings import MeilisearchSettings
 from app.utils import get_settings, to_timestamp
 from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
-from sqlalchemy import select, asc, func
 from app.database import sessionmanager
-from app.utils import pagination
+from sqlalchemy import select
 from app.models import User
 from app import constants
-import math
+from uuid import UUID
 
 
 async def update_user_settings(index):
@@ -30,33 +29,33 @@ def user_to_document(user: User):
     }
 
 
-async def user_documents(session: AsyncSession, limit: int, offset: int):
-    users_list = await session.scalars(
+async def user_documents(
+    session: AsyncSession, limit: int, last_id: UUID | None
+):
+    query = (
         select(User)
         .filter(User.needs_search_update == True)  # noqa: E712
-        .order_by(asc(User.created))
+        .order_by(User.id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(User.id > last_id)
+
+    users_list = await session.scalars(query)
 
     documents = []
 
     for user in users_list:
         documents.append(user_to_document(user))
+        last_id = user.id
 
         # I'm not sure if this would behave correctly if Meilisearch is down
         user.needs_search_update = False
         session.add(user)
 
-    return documents
-
-
-async def user_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(User.id)).filter(
-            User.needs_search_update == True,  # noqa: E712
-        )
-    )
+    return documents, last_id
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -70,14 +69,13 @@ async def meilisearch_populate(session: AsyncSession):
         await update_user_settings(index)
 
         size = 1000
-        total = await user_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing users page {page} of {pages}")
+        while True:
+            documents, last_id = await user_documents(session, size, last_id)
 
-            limit, offset = pagination(page, size)
-            documents = await user_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
             await index.add_documents(documents)
 

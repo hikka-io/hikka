@@ -3,11 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
 from app.utils import get_settings
-from sqlalchemy import select, func
-from app.utils import pagination
+from sqlalchemy import select
 from app.models import Person
 from app import constants
-import math
 
 
 async def update_people_settings(index):
@@ -51,31 +49,31 @@ def person_to_document(person: Person):
     }
 
 
-async def people_documents(session: AsyncSession, limit: int, offset: int):
-    people_list = await session.scalars(
+async def people_documents(
+    session: AsyncSession, limit: int, last_id: str | None
+):
+    query = (
         select(Person)
         .filter(Person.needs_search_update == True)  # noqa: E712
-        .order_by("content_id")
+        .order_by(Person.content_id)
         .limit(limit)
-        .offset(offset)
     )
+
+    # Rows drop out of the filter once indexed so we page by key
+    if last_id:
+        query = query.filter(Person.content_id > last_id)
+
+    people_list = await session.scalars(query)
 
     documents = []
 
     for person in people_list:
         documents.append(person_to_document(person))
+        last_id = person.content_id
         person.needs_search_update = False
         session.add(person)
 
-    return documents
-
-
-async def people_documents_total(session: AsyncSession):
-    return await session.scalar(
-        select(func.count(Person.id)).filter(
-            Person.needs_search_update == True  # noqa: E712
-        )
-    )
+    return documents, last_id
 
 
 async def meilisearch_populate(session: AsyncSession):
@@ -89,14 +87,13 @@ async def meilisearch_populate(session: AsyncSession):
         await update_people_settings(index)
 
         size = 1000
-        total = await people_documents_total(session)
-        pages = math.ceil(total / size)
+        last_id = None
 
-        for page in range(1, pages + 1):
-            # print(f"Meilisearch: Processing people page {page} of {pages}")
+        while True:
+            documents, last_id = await people_documents(session, size, last_id)
 
-            limit, offset = pagination(page, size)
-            documents = await people_documents(session, limit, offset)
+            if len(documents) == 0:
+                break
 
             await index.add_documents(documents)
 
