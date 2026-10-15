@@ -107,7 +107,7 @@ async def test_relations_priority():
 
 
 async def test_relations_direction_by_mal_id():
-    # Both sides say other one is spin-off, so lower MAL id is source
+    # Both sides say other one is spin-off so lower MAL id is source
     for edges in [
         [
             edge(ANIME_A, ANIME_B, "spin_off"),

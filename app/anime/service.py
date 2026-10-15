@@ -1,5 +1,5 @@
+from sqlalchemy import select, desc, asc, exists, ScalarResult, Select
 from app.common.service.sort import build_anime_order_by
-from sqlalchemy import select, desc, asc, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import anime_search_filter
@@ -184,6 +184,41 @@ async def company_count(session: AsyncSession, slugs: list[str]):
     )
 
 
+def anime_exclude_watch_filter(
+    search: AnimeSearchArgs, query: Select, request_user: User | None
+):
+    if not request_user or not search.exclude_watch_status:
+        return query
+
+    return query.filter(
+        ~exists().where(
+            AnimeWatch.deleted == False,  # noqa: E712
+            AnimeWatch.status.in_(search.exclude_watch_status),
+            AnimeWatch.user_id == request_user.id,
+            AnimeWatch.anime_id == Anime.id,
+        )
+    )
+
+
+async def anime_exclude_content_ids(
+    session: AsyncSession, search: AnimeSearchArgs, request_user: User | None
+) -> list[str]:
+    if not request_user or not search.exclude_watch_status:
+        return []
+
+    content_ids = await session.scalars(
+        select(Anime.content_id)
+        .join(AnimeWatch, AnimeWatch.anime_id == Anime.id)
+        .filter(
+            AnimeWatch.user_id == request_user.id,
+            AnimeWatch.status.in_(search.exclude_watch_status),
+            AnimeWatch.deleted == False,  # noqa: E712
+        )
+    )
+
+    return content_ids.all()
+
+
 async def anime_search(
     session: AsyncSession,
     search: AnimeSearchArgs,
@@ -211,6 +246,7 @@ async def anime_search(
     hide_nsfw = len(filter_ids) == 0
 
     query = anime_search_filter(search, query, hide_nsfw)
+    query = anime_exclude_watch_filter(search, query, request_user)
 
     query = query.order_by(*build_anime_order_by(search.sort))
 
@@ -224,6 +260,7 @@ async def anime_search_total(
     session: AsyncSession,
     search: AnimeSearchArgs,
     filter_ids: list[str],
+    request_user: User | None,
 ):
     query = select(func.count(Anime.id)).filter(Anime.deleted == False)  # noqa: E712
 
@@ -235,5 +272,6 @@ async def anime_search_total(
     hide_nsfw = len(filter_ids) == 0
 
     query = anime_search_filter(search, query, hide_nsfw)
+    query = anime_exclude_watch_filter(search, query, request_user)
 
     return await session.scalar(query)

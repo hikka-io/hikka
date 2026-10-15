@@ -2,6 +2,7 @@ from app.common.schemas.anime import AnimeSearchArgsBase, AnimeVideoResponse
 from app.common.schemas.company import CompanyResponse, CompanyTypeEnum
 from app.common.schemas.review import ReviewStatsResponse
 from app.common.schemas.person import AnimeStaffResponse
+from app.common.schemas.watch import WatchStatusEnum
 from app.common.schemas.genre import GenreResponse
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
@@ -26,6 +27,7 @@ class AnimeOSTTypeEnum(str, Enum):
 # Args
 class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
     sort: list[str] = ["score:desc", "scored_by:desc"]
+    exclude_watch_status: list[WatchStatusEnum] = []
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):

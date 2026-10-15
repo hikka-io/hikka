@@ -2,6 +2,7 @@ from app.common.schemas.manga import MangaResponse, MangaMediaEnum
 from app.common.schemas.novel import NovelResponse, NovelMediaEnum
 from app.common.schemas.search import ReadSearchBaseMixin
 from app.common.schemas.read import ReadResponseBase
+from app.common.schemas.read import ReadStatusEnum
 from app.common.schemas.user import UserResponse
 from pydantic import Field, field_validator
 from app.schemas import PaginationResponse
@@ -18,14 +19,6 @@ from app.schemas import (
 
 
 # Enums
-class ReadStatusEnum(str, Enum):
-    completed = constants.READ_COMPLETED
-    reading = constants.READ_READING
-    on_hold = constants.READ_ON_HOLD
-    dropped = constants.READ_DROPPED
-    planned = constants.READ_PLANNED
-
-
 class ReadContentTypeEnum(str, Enum):
     content_manga = constants.CONTENT_MANGA
     content_novel = constants.CONTENT_NOVEL

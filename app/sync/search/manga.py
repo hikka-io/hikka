@@ -24,6 +24,7 @@ async def update_manga_settings(index):
                 "status",
                 "score",
                 "year",
+                "id",
             ],
             searchable_attributes=[
                 "title_original",

@@ -1,7 +1,10 @@
 from app.common.schemas.manga import MangaSearchArgs
+from app.utils import exclude_content_ids_filter
 
 
-def build_manga_filters_ms(search: MangaSearchArgs):
+def build_manga_filters_ms(
+    search: MangaSearchArgs, exclude_content_ids: list[str] | None = None
+):
     status = [f"status = {status}" for status in search.status]
 
     media_type = [
@@ -55,6 +58,7 @@ def build_manga_filters_ms(search: MangaSearchArgs):
         *exclude_genres,
         *score,
         *year,
+        *exclude_content_ids_filter(exclude_content_ids),
     ]
 
     return [entry for entry in search_filters if entry]

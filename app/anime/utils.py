@@ -1,8 +1,11 @@
+from app.utils import exclude_content_ids_filter
 from app.utils import enumerate_seasons
 from .schemas import AnimeSearchArgs
 
 
-def build_anime_filters(search: AnimeSearchArgs):
+def build_anime_filters(
+    search: AnimeSearchArgs, exclude_content_ids: list[str] | None = None
+):
     rating = [f"rating = {rating}" for rating in search.rating]
     status = [f"status = {status}" for status in search.status]
     source = [f"source = {source}" for source in search.source]
@@ -98,6 +101,7 @@ def build_anime_filters(search: AnimeSearchArgs):
         *include_genres,
         *exclude_genres,
         *score,
+        *exclude_content_ids_filter(exclude_content_ids),
     ]
 
     return [entry for entry in search_filters if entry]

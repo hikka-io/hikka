@@ -54,9 +54,13 @@ async def search_anime(
     filter_ids = []
 
     if search.query:
+        exclude_content_ids = await service.anime_exclude_content_ids(
+            session, search, request_user
+        )
+
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_ANIME,
-            filter=build_anime_filters(search),
+            filter=build_anime_filters(search, exclude_content_ids),
             query=search.query,
             sort=search.sort,
             page=page,
@@ -72,7 +76,9 @@ async def search_anime(
         offset = 0
 
     else:
-        total = await service.anime_search_total(session, search, filter_ids)
+        total = await service.anime_search_total(
+            session, search, filter_ids, request_user
+        )
 
     if total == 0:
         return paginated_response([], 0, page, limit)

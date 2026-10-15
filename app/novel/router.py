@@ -53,9 +53,13 @@ async def search_novel(
 
     filter_ids = []
     if search.query:
+        exclude_content_ids = await service.novel_exclude_content_ids(
+            session, search, request_user
+        )
+
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_NOVEL,
-            filter=build_novel_filters_ms(search),
+            filter=build_novel_filters_ms(search, exclude_content_ids),
             query=search.query,
             sort=search.sort,
             page=page,
@@ -71,7 +75,9 @@ async def search_novel(
         offset = 0
 
     else:
-        total = await service.novel_search_total(session, search, filter_ids)
+        total = await service.novel_search_total(
+            session, search, filter_ids, request_user
+        )
 
     if total == 0:
         return paginated_response([], 0, page, limit)

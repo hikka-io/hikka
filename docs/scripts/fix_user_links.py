@@ -15,7 +15,7 @@ async def fix_user_links():
         users = await session.scalars(select(User).filter(User.links != []))
 
         for user in users:
-            # Icons are derived from link host now, so we rebuild links
+            # Icons are derived from link host now so we rebuild links
             # through schema to replace icons picked by users before
             user.links = [
                 UserLink(text=link.get("text"), url=link["url"]).model_dump(

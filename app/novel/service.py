@@ -1,6 +1,6 @@
+from sqlalchemy import select, func, exists, ScalarResult, Select
 from app.common.service.sort import build_novel_order_by
 from app.common.schemas.novel import NovelSearchArgs
-from sqlalchemy import select, func, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from app.service import novel_search_filter
@@ -41,6 +41,41 @@ async def get_novel_by_slug(session: AsyncSession, slug: str) -> Novel | None:
     )
 
 
+def novel_exclude_read_filter(
+    search: NovelSearchArgs, query: Select, request_user: User | None
+):
+    if not request_user or not search.exclude_read_status:
+        return query
+
+    return query.filter(
+        ~exists().where(
+            NovelRead.deleted == False,  # noqa: E712
+            NovelRead.status.in_(search.exclude_read_status),
+            NovelRead.user_id == request_user.id,
+            NovelRead.content_id == Novel.id,
+        )
+    )
+
+
+async def novel_exclude_content_ids(
+    session: AsyncSession, search: NovelSearchArgs, request_user: User | None
+) -> list[str]:
+    if not request_user or not search.exclude_read_status:
+        return []
+
+    content_ids = await session.scalars(
+        select(Novel.content_id)
+        .join(NovelRead, NovelRead.content_id == Novel.id)
+        .filter(
+            NovelRead.user_id == request_user.id,
+            NovelRead.status.in_(search.exclude_read_status),
+            NovelRead.deleted == False,  # noqa: E712
+        )
+    )
+
+    return content_ids.all()
+
+
 async def novel_search(
     session: AsyncSession,
     search: NovelSearchArgs,
@@ -68,6 +103,7 @@ async def novel_search(
     hide_nsfw = len(filter_ids) == 0
 
     query = novel_search_filter(search, query, hide_nsfw)
+    query = novel_exclude_read_filter(search, query, request_user)
 
     query = query.order_by(*build_novel_order_by(search.sort))
 
@@ -81,6 +117,7 @@ async def novel_search_total(
     session: AsyncSession,
     search: NovelSearchArgs,
     filter_ids: list[str],
+    request_user: User | None,
 ):
     query = select(func.count(Novel.id)).filter(Novel.deleted == False)  # noqa: E712
 
@@ -92,6 +129,7 @@ async def novel_search_total(
     hide_nsfw = len(filter_ids) == 0
 
     query = novel_search_filter(search, query, hide_nsfw)
+    query = novel_exclude_read_filter(search, query, request_user)
 
     return await session.scalar(query)
 

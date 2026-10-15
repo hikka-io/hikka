@@ -1,5 +1,6 @@
 from app.common.schemas.anime import AnimeSearchArgsBase
 from app.common.schemas.watch import WatchResponseBase
+from app.common.schemas.watch import WatchStatusEnum
 from app.common.schemas.anime import AnimeResponse
 from app.common.schemas.user import UserResponse
 from pydantic import field_validator
@@ -16,14 +17,6 @@ from app.schemas import (
 
 
 # Enums
-class WatchStatusEnum(str, Enum):
-    completed = constants.WATCH_COMPLETED
-    watching = constants.WATCH_WATCHING
-    planned = constants.WATCH_PLANNED
-    on_hold = constants.WATCH_ON_HOLD
-    dropped = constants.WATCH_DROPPED
-
-
 class WatchOrderEnum(str, Enum):
     media_type = constants.WATCH_ORDER_MEDIA_TYPE
     episodes = constants.WATCH_ORDER_EPISODES

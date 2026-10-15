@@ -1,5 +1,16 @@
 from app.schemas import CustomModel, datetime_pd
 from pydantic import Field
+from app import constants
+from enum import Enum
+
+
+# Enums
+class ReadStatusEnum(str, Enum):
+    completed = constants.READ_COMPLETED
+    reading = constants.READ_READING
+    on_hold = constants.READ_ON_HOLD
+    dropped = constants.READ_DROPPED
+    planned = constants.READ_PLANNED
 
 
 # Responses

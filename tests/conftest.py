@@ -281,7 +281,7 @@ def mock_utcnow(monkeypatch):
     monkeypatch.setattr("app.comments.service.utcnow", lambda: fixed_time)
 
 
-# Meilisearch is not running in tests, so search returns content ids
+# Meilisearch is not running in tests so search returns content ids
 # we set as hits and records how it was called
 @pytest.fixture(autouse=False)
 def mock_meilisearch(monkeypatch):

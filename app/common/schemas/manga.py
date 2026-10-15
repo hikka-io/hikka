@@ -1,6 +1,7 @@
 from app.common.schemas.search import ReadSearchBaseMixin
 from app.common.schemas.magazine import MagazineResponse
 from app.common.schemas.read import ReadResponseBase
+from app.common.schemas.read import ReadStatusEnum
 from app.common.schemas.genre import GenreResponse
 from pydantic import field_validator
 from typing import Literal
@@ -37,6 +38,7 @@ class MangaSearchArgs(
     YearsMixin,
 ):
     sort: list[str] = ["score:desc", "scored_by:desc"]
+    exclude_read_status: list[ReadStatusEnum] = []
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):

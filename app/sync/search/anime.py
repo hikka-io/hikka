@@ -31,6 +31,7 @@ async def update_anime_settings(index):
                 "mal_id",
                 "score",
                 "year",
+                "id",
             ],
             searchable_attributes=[
                 "title_native",

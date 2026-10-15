@@ -549,6 +549,17 @@ def check_sort(sort_list, valid_fields):
     return sort_list
 
 
+def exclude_content_ids_filter(content_ids: list[str] | None) -> list[str]:
+    # Meilisearch knows nothing about user lists so content
+    # from request user list is excluded by id instead
+    if not content_ids:
+        return []
+
+    ids = ", ".join(f'"{content_id}"' for content_id in content_ids)
+
+    return [f"id NOT IN [{ids}]"]
+
+
 def enumerate_seasons(start, end):
     SEASONS_ORDER = [
         constants.SEASON_WINTER,
