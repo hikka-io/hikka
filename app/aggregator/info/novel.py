@@ -34,10 +34,11 @@ async def process_genres(session, novel, data):
 
 
 def process_translated_ua(data):
+    dgmanga_count = len(data["dgmanga"]) if "dgmanga" in data else 0
     honey_count = len(data["honey"]) if "honey" in data else 0
     baka_count = len(data["baka"]) if "baka" in data else 0
 
-    return baka_count > 0 or honey_count > 0
+    return baka_count > 0 or honey_count > 0 or dgmanga_count > 0
 
 
 def process_external(data):
@@ -50,8 +51,9 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["baka", "zenko"]:
+    for source in ["baka", "zenko", "dgmanga"]:
         website_name = {
+            "dgmanga": "DGManga",
             "zenko": "Zenko",
             "baka": "Бака",
         }.get(source)

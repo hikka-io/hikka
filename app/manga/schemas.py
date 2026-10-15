@@ -61,7 +61,7 @@ class MangaInfoResponse(CustomModel):
     @field_validator("external")
     def external_ordering(cls, value):
         def read_sort(item):
-            order = {"Dengeki": 0}
+            order = {"DGManga": 0}
             return order.get(item.text, 2)
 
         def reorder_read(input_list):

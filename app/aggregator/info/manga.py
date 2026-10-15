@@ -34,13 +34,13 @@ async def process_genres(session, manga, data):
 
 
 def process_translated_ua(data):
-    dengeki_count = len(data["dengeki"]) if "dengeki" in data else 0
+    dgmanga_count = len(data["dgmanga"]) if "dgmanga" in data else 0
     honey_count = len(data["honey"]) if "honey" in data else 0
     zenko_count = len(data["zenko"]) if "zenko" in data else 0
     miu_count = len(data["miu"]) if "miu" in data else 0
 
     return (
-        dengeki_count > 0 or honey_count > 0 or zenko_count > 0 or miu_count > 0
+        dgmanga_count > 0 or honey_count > 0 or zenko_count > 0 or miu_count > 0
     )
 
 
@@ -54,9 +54,9 @@ def process_external(data):
         for entry in data["external"]
     ]
 
-    for source in ["dengeki", "zenko", "miu"]:
+    for source in ["zenko", "miu", "dgmanga"]:
         website_name = {
-            "dengeki": "Dengeki",
+            "dgmanga": "DGManga",
             "miu": "Manga.in.ua",
             "zenko": "Zenko",
         }.get(source)
