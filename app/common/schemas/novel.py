@@ -4,6 +4,7 @@ from app.common.schemas.read import ReadResponseBase
 from app.common.schemas.read import ReadStatusEnum
 from app.common.schemas.genre import GenreResponse
 from pydantic import field_validator
+from app.utils import check_sort
 from typing import Literal
 from app import constants
 from enum import Enum
@@ -38,7 +39,7 @@ class NovelSearchArgs(
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        return utils.check_sort(
+        return check_sort(
             sort_list,
             [
                 "native_scored_by",
