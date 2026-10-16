@@ -33,8 +33,13 @@ async def get_user_read_stats(
     content_type: str,
     status: str,
 ):
+    content_model = content_type_to_content_class[content_type]
+
     return await session.scalar(
-        select(func.count(Read.id)).filter(
+        select(func.count(Read.id))
+        .join(content_model, Read.content_id == content_model.id)
+        .filter(
+            content_model.deleted == False,  # noqa: E712
             Read.content_type == content_type,
             Read.deleted == False,  # noqa: E712
             Read.status == status,
@@ -256,7 +261,10 @@ async def random_read(
     content_model = content_type_to_content_class[content_type]
 
     content_ids = await session.scalars(
-        select(Read.content_id).filter(
+        select(Read.content_id)
+        .join(content_model, Read.content_id == content_model.id)
+        .filter(
+            content_model.deleted == False,  # noqa: E712
             Read.content_type == content_type,
             Read.status == status,
             Read.user == user,
@@ -276,7 +284,10 @@ async def get_user_read_list_count(
     content_type: str,
     user: User,
 ) -> int:
+    content_model = content_type_to_content_class[content_type]
+
     query = select(func.count(Read.id)).filter(
+        content_model.deleted == False,  # noqa: E712
         Read.content_type == content_type,
         Read.deleted == False,  # noqa: E712
         Read.user == user,
@@ -306,7 +317,10 @@ async def get_user_read_list(
     limit: int,
     offset: int,
 ) -> ScalarResult[Read]:
+    content_model = content_type_to_content_class[content_type]
+
     query = select(Read).filter(
+        content_model.deleted == False,  # noqa: E712
         Read.content_type == content_type,
         Read.deleted == False,  # noqa: E712
         Read.user == user,

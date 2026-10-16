@@ -1,7 +1,7 @@
+from sqlalchemy import select, update, func, and_
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import AnimeWatch, Anime, User
-from sqlalchemy import select, update, func
 from itertools import chain
 from app import constants
 
@@ -44,7 +44,13 @@ async def recalculate_watch_stats(session: AsyncSession, *filters):
             watch_stats_object(AnimeWatch).label("anime_stats"),
         )
         .select_from(User)
-        .outerjoin(AnimeWatch, AnimeWatch.user_id == User.id)
+        .outerjoin(
+            AnimeWatch,
+            and_(
+                AnimeWatch.anime.has(Anime.deleted == False),  # noqa: E712
+                AnimeWatch.user_id == User.id,
+            ),
+        )
         .filter(*filters)
         .group_by(User.id)
         .subquery()
