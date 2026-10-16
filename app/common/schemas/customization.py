@@ -1,4 +1,3 @@
-from app.common.utils.customization import is_valid_css_background
 from pydantic import Field, field_validator
 from app.schemas import CustomModel
 from collections import defaultdict
@@ -32,12 +31,6 @@ class UIWidgetEnum(str, Enum):
     list = "list"
 
 
-class HSLColor(CustomModel):
-    h: float = Field(ge=0, le=360)
-    s: float = Field(ge=0, le=100)
-    l: float = Field(ge=0, le=100)  # noqa: E741
-
-
 class OKLCHColor(CustomModel):
     l: float = Field(ge=0, le=1)  # noqa: E741
     c: float = Field(ge=0, le=0.4)
@@ -62,57 +55,6 @@ class UISurfaceOverrides(CustomModel):
     ring: OKLCHColor | None = None
 
 
-class UIColorTokens(CustomModel):
-    background: HSLColor | None = None
-    foreground: HSLColor | None = None
-    primary: HSLColor | None = None
-    primary_foreground: HSLColor | None = None
-    primary_border: HSLColor | None = None
-    secondary: HSLColor | None = None
-    secondary_foreground: HSLColor | None = None
-    muted: HSLColor | None = None
-    muted_foreground: HSLColor | None = None
-    accent_foreground: HSLColor | None = None
-    border: HSLColor | None = None
-    ring: HSLColor | None = None
-    popover: HSLColor | None = None
-    popover_foreground: HSLColor | None = None
-    sidebar_background: HSLColor | None = None
-    sidebar_foreground: HSLColor | None = None
-    sidebar_primary: HSLColor | None = None
-    sidebar_primary_foreground: HSLColor | None = None
-    sidebar_accent: HSLColor | None = None
-    sidebar_accent_foreground: HSLColor | None = None
-    sidebar_border: HSLColor | None = None
-    sidebar_ring: HSLColor | None = None
-
-
-class UIThemeStylesBody(CustomModel):
-    background_image: str | None = None
-
-    @field_validator("background_image")
-    @classmethod
-    def validate_background_image(cls, v):
-        if not is_valid_css_background(v):
-            raise ValueError("Only CSS gradients and color values are allowed")
-
-        return v
-
-
-class UIThemeStyles(CustomModel):
-    colors: UIColorTokens | None = None
-    body: UIThemeStylesBody | None = None
-
-
-class UIStylesTypography(CustomModel):
-    h1: str | None = None
-    h2: str | None = None
-    h3: str | None = None
-    h4: str | None = None
-    h5: str | None = None
-    p: str | None = None
-
-
 class UIBackdrop(CustomModel):
     intensity: float = Field(0.3, ge=0, le=1)
     height: float = Field(1, ge=0, le=1)
@@ -126,15 +68,14 @@ class UIOverrides(CustomModel):
 
 
 class UIStyles(CustomModel):
-    # TODO: remove me
-    light: UIThemeStyles | None = None
-    dark: UIThemeStyles | None = None
-
-    typography: UIStylesTypography | None = None
     overrides: UIOverrides | None = None
     backdrop: UIBackdrop | None = None
     brand: OKLCHColor | None = None
-    radius: str | None = None
+
+    radius: str | None = Field(
+        default=None,
+        pattern=r"(?i)^-?\d+(\.\d+)?(px|rem|em|%|vh|vw|ch|ex|vmin|vmax)$",
+    )
 
 
 class UIFeedWidget(CustomModel):

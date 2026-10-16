@@ -146,10 +146,7 @@ class User(Base, NeedsSearchUpdateMixin):
     styles: Mapped[dict] = mapped_column(
         JSONB,
         default={
-            "light": None,
-            "dark": None,
             "radius": None,
-            "typography": None,
         },
     )
 
