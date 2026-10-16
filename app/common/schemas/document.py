@@ -1,8 +1,9 @@
+from pydantic import AnyUrl, UrlConstraints
+from typing import Annotated, Literal
 from pydantic import field_validator
 from app.schemas import CustomModel
 from pydantic import Field, HttpUrl
 from urllib.parse import urlparse
-from typing import Literal
 from enum import Enum
 
 
@@ -12,6 +13,15 @@ class DocumentLinkTargetEnum(str, Enum):
     _blank = "_blank"
     _self = "_self"
     _top = "_top"
+
+
+DocumentLinkUrl = Annotated[
+    AnyUrl,
+    UrlConstraints(
+        allowed_schemes=["http", "https", "mailto"],
+        max_length=2083,
+    ),
+]
 
 
 # Args
@@ -28,8 +38,8 @@ class DocumentText(DocumentNode):
 class DocumentLink(DocumentNode):
     target: DocumentLinkTargetEnum = Field(default=None)
     children: list["DocumentElement"]
+    url: DocumentLinkUrl
     type: Literal["a"]
-    url: HttpUrl
 
 
 class DocumentParagraph(DocumentNode):
