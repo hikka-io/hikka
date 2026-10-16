@@ -44,6 +44,7 @@ def format_timedelta_uk(tdelta):
 class SyncTracker:
     def __init__(self):
         self.completed_tasks = []
+        self.current_task_failed = False
         self.current_task_start = None
         self.current_task = None
         self.start_time = time.time()
@@ -51,10 +52,16 @@ class SyncTracker:
     def add_task(self, task_name: str):
         if self.current_task is not None:
             duration = round(time.time() - self.current_task_start)
-            self.completed_tasks.append((self.current_task, duration))
+            self.completed_tasks.append(
+                (self.current_task, duration, self.current_task_failed)
+            )
 
         self.current_task = task_name
         self.current_task_start = time.time()
+        self.current_task_failed = False
+
+    def mark_failed(self):
+        self.current_task_failed = True
 
     def get_status_message(self) -> str:
         lines = ["Починаю синхронізацію з агрегатором..."]
@@ -62,9 +69,14 @@ class SyncTracker:
         if bool(self.completed_tasks or self.current_task):
             lines.append("")
 
-        for completed_task, duration in self.completed_tasks:
+        for completed_task, duration, failed in self.completed_tasks:
             time_spent = format_timedelta_uk(timedelta(seconds=duration))
-            lines.append(f"{completed_task[1]} за {time_spent}")
+            line = f"{completed_task[1]} за {time_spent}"
+
+            if failed:
+                line += " (помилка)"
+
+            lines.append(line)
 
         if self.current_task:
             if len(self.completed_tasks) > 0:
@@ -77,7 +89,9 @@ class SyncTracker:
     def get_final_message(self) -> str:
         if self.current_task is not None:
             duration = round(time.time() - self.current_task_start)
-            self.completed_tasks.append((self.current_task, duration))
+            self.completed_tasks.append(
+                (self.current_task, duration, self.current_task_failed)
+            )
             self.current_task = None
             self.current_task_start = None
 
@@ -110,16 +124,22 @@ async def send_telegram_notification(text):
         "text": text,
     }
 
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, data=payload) as response:
-            response_data = await response.json()
+    # Telegram is only for status updates so its errors shouldn't stop sync
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, data=payload) as response:
+                response_data = await response.json()
 
-            if response.status != 200:
-                print("Failed to send message:", response_data)
-                return None
+                if response.status != 200:
+                    print("Failed to send message:", response_data)
+                    return None
 
-            else:
-                return response_data["result"]["message_id"]
+                else:
+                    return response_data["result"]["message_id"]
+
+    except Exception as e:
+        print("Failed to send message:", e)
+        return None
 
 
 async def update_telegram_message(message_id, new_text):
@@ -142,8 +162,13 @@ async def update_telegram_message(message_id, new_text):
         "text": new_text,
     }
 
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, data=payload) as response:
-            if response.status != 200:
-                response_data = await response.json()
-                print("Failed to update message:", response_data)
+    # Same as with sending, failed update shouldn't stop sync
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, data=payload) as response:
+                if response.status != 200:
+                    response_data = await response.json()
+                    print("Failed to update message:", response_data)
+
+    except Exception as e:
+        print("Failed to update message:", e)
