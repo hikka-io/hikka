@@ -393,6 +393,7 @@ async def get_comments_count_by_user(
         func.count(Comment.id).filter(
             Comment.hidden == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
+            Comment.private == False,  # noqa: E712
             Comment.author == user,
         )
     )
@@ -420,6 +421,7 @@ async def get_comments_by_user(
         Comment.author == user,
         Comment.deleted == False,  # noqa: E712
         Comment.hidden == False,  # noqa: E712,
+        Comment.private == False,  # noqa: E712
     )
 
     if first_level_only:
