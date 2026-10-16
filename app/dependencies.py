@@ -178,6 +178,10 @@ def auth_required(
             raise Abort("permission", "denied")
 
         if not utils.check_token_scope(token, scope):
+            # Optional endpoints treat token without proper scope as anonymous
+            if optional:
+                return None
+
             raise Abort("permission", "denied")
 
         if token.user.role == constants.ROLE_DELETED:

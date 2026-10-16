@@ -19,7 +19,12 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
     response_model=UserResponse,
     operation_id="admin_update_user",
     dependencies=[
-        Depends(auth_required([constants.PERMISSION_ADMIN_UPDATE_USER]))
+        Depends(
+            auth_required(
+                [constants.PERMISSION_ADMIN_UPDATE_USER],
+                forbid_thirdparty=True,
+            )
+        )
     ],
 )
 async def update_user(
