@@ -11,3 +11,5 @@ async def delete_expired_token_requests():
         await session.execute(
             delete(AuthTokenRequest).filter(AuthTokenRequest.expiration < now)
         )
+
+        await session.commit()
