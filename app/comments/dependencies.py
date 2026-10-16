@@ -51,6 +51,10 @@ async def validate_parent(
     ):
         raise Abort("comment", "parent-not-found")
 
+    # Hidden comments can't receive new replies
+    if parent_comment.hidden:
+        raise Abort("comment", "hidden")
+
     max_reply_depth = 5
     if len(parent_comment.path) >= max_reply_depth:
         raise Abort("comment", "max-depth")
@@ -102,7 +106,7 @@ async def validate_comment_not_hidden(
 
 
 async def validate_comment_edit(
-    comment: Comment = Depends(validate_comment_not_hidden),
+    comment: Comment = Depends(validate_comment),
     author: User = Depends(
         auth_required(
             permissions=[constants.PERMISSION_COMMENT_EDIT],
@@ -110,6 +114,10 @@ async def validate_comment_edit(
         )
     ),
 ):
+    # Hidden comments can't be edited even if they have replies
+    if comment.hidden:
+        raise Abort("comment", "hidden")
+
     if comment.author != author:
         raise Abort("comment", "not-owner")
 
