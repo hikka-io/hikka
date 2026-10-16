@@ -1,4 +1,4 @@
-from sqlalchemy import ScalarResult, or_, select, desc, asc, func
+from sqlalchemy import ScalarResult, or_, select, desc, asc, func, update
 from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.service.sort import build_comments_order_by
 from app.common.schemas.reviews import ReviewRecommended
@@ -13,6 +13,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
+from sqlalchemy.orm import aliased
 from .utils import uuid_to_path
 from app.utils import utcnow
 from uuid import UUID, uuid4
@@ -66,13 +67,26 @@ content_type_to_comment_class: dict[str, type[Comment]] = {
 }
 
 
-async def count_replies(session: AsyncSession, comment: Comment):
-    return await session.scalar(
-        select(func.count(Comment.id)).filter(
-            Comment.path.descendant_of(comment.path),
-            Comment.deleted == False,  # noqa: E712
-            Comment.hidden == False,  # noqa: E712
+async def update_thread_replies_count(session: AsyncSession, comment: Comment):
+    # Replies count includes whole thread below comment so after reply
+    # is written or hidden we recount it for every comment above it
+    descendant = aliased(Comment)
+
+    await session.execute(
+        update(Comment)
+        .filter(
+            Comment.path.ancestor_of(comment.path),
             Comment.id != comment.id,
+        )
+        .values(
+            total_replies=select(func.count(descendant.id))
+            .filter(
+                descendant.path.descendant_of(Comment.path),
+                descendant.deleted == False,  # noqa: E712
+                descendant.hidden == False,  # noqa: E712
+                descendant.id != Comment.id,
+            )
+            .scalar_subquery()
         )
     )
 
@@ -182,9 +196,9 @@ async def create_comment(
 
     await session.commit()
 
-    # Update replies count after new comment is written
+    # Update replies count for whole thread after new comment is written
     if parent:
-        parent.total_replies = await count_replies(session, parent)
+        await update_thread_replies_count(session, comment)
 
     # Update comments count here
     content.comments_count = await get_comments_count(
@@ -600,10 +614,7 @@ async def hide_comment(session: AsyncSession, comment: Comment, user: User):
             )
 
     else:
-        if parent := await session.scalar(
-            select(Comment).filter(Comment.path == comment.path[:-1])
-        ):
-            parent.total_replies = await count_replies(session, parent)
+        await update_thread_replies_count(session, comment)
 
     await session.commit()
 
