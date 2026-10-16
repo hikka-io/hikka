@@ -173,10 +173,7 @@ async def is_content_visible(
         return content.visibility != constants.COLLECTION_PRIVATE or is_author
 
     if content_type == constants.CONTENT_ARTICLE:
-        if content.deleted:
-            return False
-
-        return not content.draft or is_author
+        return not content.deleted
 
     if content_type == constants.CONTENT_COMMENT:
         if content.deleted:
