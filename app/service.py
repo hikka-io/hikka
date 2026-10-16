@@ -572,7 +572,7 @@ def manga_search_filter(
 
     # Native score filters
     if search.native_score[0] and search.native_score[0] > 0:
-        query = query.filter(Manga.score >= search.score[0])
+        query = query.filter(Manga.native_score >= search.native_score[0])
 
     if search.native_score[1]:
         query = query.filter(Manga.native_score <= search.native_score[1])
