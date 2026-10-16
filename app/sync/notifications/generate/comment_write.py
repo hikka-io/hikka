@@ -28,7 +28,7 @@ async def generate_comment_write(session: AsyncSession, log: Log):
 
         # Continue if user wishes to ignore this type of notifications
         if notification_type in user.ignored_notifications:
-            return
+            continue
 
         # Do not create notification if we already did that
         if await service.get_notification(
