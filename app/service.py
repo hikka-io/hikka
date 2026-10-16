@@ -112,6 +112,9 @@ async def get_content_by_slug(
     else:
         query = query.filter(content_model.slug == slug)
 
+    if hasattr(content_model, "deleted"):
+        query = query.filter(content_model.deleted == False)  # noqa: E712
+
     return await session.scalar(query)
 
 

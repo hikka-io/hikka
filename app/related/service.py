@@ -76,6 +76,11 @@ async def get_franchise(
                 NovelRead.user_id == request_user.id if request_user else None,
             ),
         )
+        .options(
+            with_loader_criteria(Anime, Anime.deleted == False),  # noqa: E712
+            with_loader_criteria(Manga, Manga.deleted == False),  # noqa: E712
+            with_loader_criteria(Novel, Novel.deleted == False),  # noqa: E712
+        )
     )
 
     return {
