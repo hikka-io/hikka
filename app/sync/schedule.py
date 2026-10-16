@@ -175,11 +175,11 @@ async def rollback_episodes_released(
 
     now = utcnow()
 
-    # Stop if anime episodes_released haven't been updated yet
-    # Or episode haven't aired yet
+    # Stop if episode wasn't counted as released yet
+    # or it has already aired (nothing to roll back)
     if (
-        anime.episodes_released is not None
-        and anime.episodes_released < episode.episode
+        anime.episodes_released is None
+        or anime.episodes_released < episode.episode
         or episode.airing_at < now
     ):
         return
