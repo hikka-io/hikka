@@ -142,11 +142,20 @@ async def save_read(
 
         # Generally I think it's bad idea to modify user passed args
         # but this would allow us to keep existing logic so why not
-        args.start_date = now
+        # We only default start date if user didn't pass one
+        # and it won't end up after the end date user passed
+        if args.start_date is None and (
+            args.end_date is None or args.end_date >= now
+        ):
+            args.start_date = now
 
     # Same as with start_date we modify user passed args
     # in special case to simplify our lives
-    if args.status == constants.READ_COMPLETED and read.end_date is None:
+    if (
+        args.status == constants.READ_COMPLETED
+        and args.end_date is None
+        and read.end_date is None
+    ):
         args.end_date = now
 
     log_before = {}
