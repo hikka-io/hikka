@@ -439,13 +439,13 @@ def anime_search_filter(
         query = query.filter(Anime.translated_ua == True)  # noqa: E712
 
     if len(search.producers) > 0:
-        query = query.join(Anime.producers).filter(
-            Company.slug.in_(search.producers)
+        query = query.filter(
+            Anime.producers.any(Company.slug.in_(search.producers))
         )
 
     if len(search.studios) > 0:
-        query = query.join(Anime.studios).filter(
-            Company.slug.in_(search.studios)
+        query = query.filter(
+            Anime.studios.any(Company.slug.in_(search.studios))
         )
 
     if len(search.genres) > 0:
@@ -593,8 +593,8 @@ def manga_search_filter(
         query = query.filter(Manga.year <= search.years[1])
 
     if len(search.magazines) > 0:
-        query = query.join(Manga.magazines).filter(
-            Magazine.slug.in_(search.magazines)
+        query = query.filter(
+            Manga.magazines.any(Magazine.slug.in_(search.magazines))
         )
 
     # In some cases, like on front page, we would want to hide NSFW content
@@ -676,8 +676,8 @@ def novel_search_filter(
         query = query.filter(Novel.year <= search.years[1])
 
     if len(search.magazines) > 0:
-        query = query.join(Novel.magazines).filter(
-            Magazine.slug.in_(search.magazines)
+        query = query.filter(
+            Novel.magazines.any(Magazine.slug.in_(search.magazines))
         )
 
     # In some cases, like on front page, we would want to hide NSFW content
