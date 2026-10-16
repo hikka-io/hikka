@@ -185,11 +185,13 @@ async def get_todo_anime_list(
     filter_ids = []
 
     if search.query:
+        # Meilisearch only knows about the text query so we take all
+        # matching results and let database filter and paginate them
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_ANIME,
             query=search.query,
-            page=page,
-            size=size,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
         )
 
         filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
@@ -222,11 +224,13 @@ async def get_todo_manga_list(
     filter_ids = []
 
     if search.query:
+        # Meilisearch only knows about the text query so we take all
+        # matching results and let database filter and paginate them
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_MANGA,
             query=search.query,
-            page=page,
-            size=size,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
         )
 
         filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
@@ -259,11 +263,13 @@ async def get_todo_novel_list(
     filter_ids = []
 
     if search.query:
+        # Meilisearch only knows about the text query so we take all
+        # matching results and let database filter and paginate them
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_NOVEL,
             query=search.query,
-            page=page,
-            size=size,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
         )
 
         filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
@@ -296,11 +302,13 @@ async def get_todo_character_list(
     filter_slugs = []
 
     if search.query:
+        # Meilisearch only knows about the text query so we take all
+        # matching results and let database filter and paginate them
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_CHARACTERS,
             query=search.query,
-            page=page,
-            size=size,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
         )
 
         filter_slugs = [hit["slug"] for hit in meilisearch_result["list"]]
@@ -333,11 +341,13 @@ async def get_todo_person_list(
     filter_slugs = []
 
     if search.query:
+        # Meilisearch only knows about the text query so we take all
+        # matching results and let database filter and paginate them
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_PEOPLE,
             query=search.query,
-            page=page,
-            size=size,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
         )
 
         filter_slugs = [hit["slug"] for hit in meilisearch_result["list"]]

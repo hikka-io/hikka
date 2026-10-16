@@ -116,6 +116,9 @@ RELATION_SEQUEL = "sequel"
 
 SEARCH_RESULT_SIZE = 15
 
+# Meilisearch default maxTotalHits, it won't return more hits than that
+SEARCH_MAX_HITS = 1000
+
 MAX_USER_CLIENTS = 10
 
 MAX_CLIENT_NAME_LENGTH = 128
