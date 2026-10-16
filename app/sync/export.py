@@ -132,6 +132,11 @@ async def generate_export(session: AsyncSession):
                     constants.LOG_READ_CREATE,
                     constants.LOG_READ_UPDATE,
                     constants.LOG_READ_DELETE,
+                    # Bulk list changes from settings
+                    constants.LOG_SETTINGS_IMPORT_WATCH,
+                    constants.LOG_SETTINGS_IMPORT_READ,
+                    constants.LOG_SETTINGS_WATCH_DELETE,
+                    constants.LOG_SETTINGS_READ_DELETE,
                 ]
             )
         )
