@@ -4,6 +4,7 @@ from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
 from app.models import EmailMessage
 from functools import lru_cache
+from datetime import timedelta
 from sqlalchemy import select
 from app import constants
 import aiohttp
@@ -73,21 +74,37 @@ async def send_email(session: AsyncSession, email: EmailMessage):
 
                 session.add(email)
 
+                # Commit right away so email accepted by Mailgun
+                # won't be sent again if something fails later on
+                await session.commit()
+
                 print(f"Sent email: {email.type}")
 
 
 async def send_emails():
     """Send pending emails via Mailgun api"""
 
+    # Tokens in our emails expire after 3 hours so there is
+    # no point in retrying emails older than that
+    email_lifetime = timedelta(hours=3)
+    min_created = utcnow() - email_lifetime
+
     async with sessionmanager.session() as session:
         emails = await session.scalars(
             select(EmailMessage)
-            .filter(EmailMessage.sent == False)  # noqa: E712
+            .filter(
+                EmailMessage.sent == False,  # noqa: E712
+                EmailMessage.created > min_created,
+            )
             .options(selectinload(EmailMessage.user))
+            .order_by(EmailMessage.created.asc())
             .limit(100)
         )
 
-        for email in emails:
-            await send_email(session, email)
+        for email in emails.all():
+            # One failed email shouldn't stop the rest of the batch
+            try:
+                await send_email(session, email)
 
-        await session.commit()
+            except Exception as e:
+                print(f"Failed to send email: {email.type} ({e})")
