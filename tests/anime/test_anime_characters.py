@@ -46,12 +46,12 @@ async def test_anime_characters_pagination(
     assert response.json()["list"][0]["main"] is False
     assert (
         response.json()["list"][0]["character"]["slug"]
-        == "eliza-shimizu-9b6a1e"
+        == "hitoris-fan-1-78a57e"
     )
 
     # Check last character on second page
     assert response.json()["list"][1]["main"] is False
     assert (
         response.json()["list"][1]["character"]["slug"]
-        == "ginjirou-yoshida-2f08d8"
+        == "music-store-clerk-4eb9b6"
     )

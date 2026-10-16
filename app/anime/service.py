@@ -15,6 +15,7 @@ from app.models import (
     AnimeEpisode,
     AnimeStaff,
     AnimeWatch,
+    Character,
     Company,
     Person,
     Anime,
@@ -43,8 +44,14 @@ async def anime_characters(
 ) -> ScalarResult[AnimeCharacter]:
     return await session.scalars(
         select(AnimeCharacter)
+        .join(Character, AnimeCharacter.character)
         .filter(AnimeCharacter.anime == anime)
         .options(joinedload(AnimeCharacter.character))
+        .order_by(
+            desc(AnimeCharacter.main),
+            desc(Character.favorites),
+            desc(Character.content_id),
+        )
         .limit(limit)
         .offset(offset)
     )
@@ -153,7 +160,10 @@ async def anime_recommendations(
             AnimeRecommendation.anime == anime,
             Anime.deleted == False,  # noqa: E712
         )
-        .order_by(desc(AnimeRecommendation.weight))
+        .order_by(
+            desc(AnimeRecommendation.weight),
+            desc(Anime.content_id),
+        )
         .options(*load_options)
         .limit(limit)
         .offset(offset)

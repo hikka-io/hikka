@@ -1,4 +1,4 @@
-from sqlalchemy import select, func, exists, ScalarResult, Select
+from sqlalchemy import select, desc, func, exists, ScalarResult, Select
 from app.common.service.sort import build_manga_order_by
 from app.common.schemas.manga import MangaSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +9,7 @@ from sqlalchemy.orm import joinedload
 from app.models import (
     MangaCharacter,
     MangaAuthor,
+    Character,
     MangaRead,
     Manga,
     User,
@@ -147,8 +148,14 @@ async def manga_characters(
 ) -> ScalarResult[MangaCharacter]:
     return await session.scalars(
         select(MangaCharacter)
+        .join(Character, MangaCharacter.character)
         .filter(MangaCharacter.manga == manga)
         .options(joinedload(MangaCharacter.character))
+        .order_by(
+            desc(MangaCharacter.main),
+            desc(Character.favorites),
+            desc(Character.content_id),
+        )
         .limit(limit)
         .offset(offset)
     )

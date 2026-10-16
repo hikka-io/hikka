@@ -162,6 +162,7 @@ async def person_voices(
             desc(Anime.score),
             desc(Anime.scored_by),
             desc(Anime.content_id),
+            desc(AnimeVoice.id),
         )
         .limit(limit)
         .offset(offset)

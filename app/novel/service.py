@@ -1,4 +1,4 @@
-from sqlalchemy import select, func, exists, ScalarResult, Select
+from sqlalchemy import select, desc, func, exists, ScalarResult, Select
 from app.common.service.sort import build_novel_order_by
 from app.common.schemas.novel import NovelSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +9,7 @@ from sqlalchemy.orm import joinedload
 from app.models import (
     NovelCharacter,
     NovelAuthor,
+    Character,
     NovelRead,
     Novel,
     User,
@@ -147,8 +148,14 @@ async def novel_characters(
 ) -> ScalarResult[NovelCharacter]:
     return await session.scalars(
         select(NovelCharacter)
+        .join(Character, NovelCharacter.character)
         .filter(NovelCharacter.novel == novel)
         .options(joinedload(NovelCharacter.character))
+        .order_by(
+            desc(NovelCharacter.main),
+            desc(Character.favorites),
+            desc(Character.content_id),
+        )
         .limit(limit)
         .offset(offset)
     )
