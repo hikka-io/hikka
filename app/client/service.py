@@ -1,12 +1,12 @@
 import secrets
 import uuid
 
-from sqlalchemy import select, func, ScalarResult, Select
+from sqlalchemy import select, update, func, ScalarResult, Select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.client.schemas import ClientCreate, ClientUpdate, ListAllClientsArgs
-from app.models import User, Client
+from app.models import AuthTokenRequest, AuthToken, User, Client
 from app.utils import utcnow
 
 
@@ -19,7 +19,10 @@ async def get_client(
 ) -> Client:
     return await session.scalar(
         select(Client)
-        .filter(Client.id == reference)
+        .filter(
+            Client.id == reference,
+            Client.deleted == False,  # noqa: E712
+        )
         .options(joinedload(Client.user))
     )
 
@@ -29,7 +32,9 @@ async def get_user_client(
 ) -> Client:
     return await session.scalar(
         select(Client).filter(
-            Client.user_id == user.id, func.lower(Client.name) == name.lower()
+            Client.user_id == user.id,
+            func.lower(Client.name) == name.lower(),
+            Client.deleted == False,  # noqa: E712
         )
     )
 
@@ -44,6 +49,7 @@ async def list_user_clients(
         select(Client)
         .filter(
             Client.user_id == user.id,
+            Client.deleted == False,  # noqa: E712
         )
         .offset(offset)
         .limit(limit)
@@ -59,7 +65,10 @@ async def count_user_clients(
 ) -> int:
     return await session.scalar(
         select(func.count(Client.id))
-        .filter(Client.user_id == user.id)
+        .filter(
+            Client.user_id == user.id,
+            Client.deleted == False,  # noqa: E712
+        )
         .offset(offset)
         .limit(limit)
     )
@@ -113,7 +122,27 @@ async def update_client(
 
 
 async def delete_client(session: AsyncSession, client: Client) -> Client:
-    await session.delete(client)
+    now = utcnow()
+
+    client.deleted = True
+    client.updated = now
+
+    # Once client is deleted we should expire related tokens and requests
+    await session.execute(
+        update(AuthToken)
+        .filter(AuthToken.client_id == client.id, AuthToken.expiration > now)
+        .values(expiration=now)
+    )
+
+    await session.execute(
+        update(AuthTokenRequest)
+        .filter(
+            AuthTokenRequest.client_id == client.id,
+            AuthTokenRequest.expiration > now,
+        )
+        .values(expiration=now)
+    )
+
     await session.commit()
     return client
 
@@ -127,6 +156,8 @@ async def verify_client(session: AsyncSession, client: Client) -> Client:
 def apply_all_clients_filters(
     query: Select, args: ListAllClientsArgs
 ) -> Select:
+    query = query.filter(Client.deleted == False)  # noqa: E712
+
     if args.query is not None:
         query = query.filter(Client.name.ilike(f"%{args.query}%"))
 

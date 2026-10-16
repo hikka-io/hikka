@@ -8,7 +8,9 @@ from app import constants
 async def generate_thirdparty_login(session: AsyncSession, log: Log):
     notification_type = constants.NOTIFICATION_THIRDPARTY_LOGIN
 
-    client = await get_client(session, log.target_id)
+    # Do nothing if client was deleted
+    if not (client := await get_client(session, log.target_id)):
+        return
 
     notification = Notification(
         **{
