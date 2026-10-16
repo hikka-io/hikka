@@ -164,8 +164,14 @@ async def anime_recommendations_count(
     session: AsyncSession, anime: Anime
 ) -> int:
     return await session.scalar(
-        select(func.count(AnimeRecommendation.id)).filter(
-            AnimeRecommendation.anime == anime
+        select(func.count(AnimeRecommendation.id))
+        .join(
+            Anime,
+            AnimeRecommendation.recommendation_id == Anime.id,
+        )
+        .filter(
+            AnimeRecommendation.anime == anime,
+            Anime.deleted == False,  # noqa: E712
         )
     )
 

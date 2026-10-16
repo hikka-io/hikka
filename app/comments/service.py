@@ -280,10 +280,13 @@ async def get_comments_count_by_content_id(
 
     query = select(
         func.count(Comment.id).filter(
-            Comment.hidden == False,  # noqa: E712
             Comment.deleted == False,  # noqa: E712
             Comment.content_id == content_id,
             func.nlevel(Comment.path) == 1,
+            or_(
+                Comment.hidden == False,  # noqa: E712
+                Comment.total_replies > 0,
+            ),
         )
     )
 

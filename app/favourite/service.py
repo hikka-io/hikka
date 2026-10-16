@@ -240,7 +240,12 @@ async def get_user_favourite_list_count(
         .filter(favourite_model.user == user)
     )
 
-    if content_type == constants.CONTENT_ANIME:
+    if content_type in [
+        constants.CONTENT_COLLECTION,
+        constants.CONTENT_ANIME,
+        constants.CONTENT_MANGA,
+        constants.CONTENT_NOVEL,
+    ]:
         query = query.filter(
             content_model.deleted == False,  # noqa: E712
         )
