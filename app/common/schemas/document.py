@@ -1,6 +1,6 @@
 from pydantic import field_validator
 from app.schemas import CustomModel
-from pydantic import Field, AnyUrl
+from pydantic import Field, HttpUrl
 from urllib.parse import urlparse
 from typing import Literal
 from enum import Enum
@@ -29,7 +29,7 @@ class DocumentLink(DocumentNode):
     target: DocumentLinkTargetEnum = Field(default=None)
     children: list["DocumentElement"]
     type: Literal["a"]
-    url: str
+    url: HttpUrl
 
 
 class DocumentParagraph(DocumentNode):
@@ -90,17 +90,17 @@ class DocumentH5(DocumentNode):
 class DocumentImage(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["image"]
-    url: AnyUrl
+    url: HttpUrl
 
 
 class DocumentVideo(DocumentNode):
     children: list[DocumentText] = Field(max_length=1)
     type: Literal["video"]
-    url: AnyUrl
+    url: HttpUrl
 
     @field_validator("url")
     @classmethod
-    def check_url(cls, url: AnyUrl) -> AnyUrl:
+    def check_url(cls, url: HttpUrl) -> HttpUrl:
         hostname = urlparse(str(url)).hostname
 
         if not hostname or not any(
