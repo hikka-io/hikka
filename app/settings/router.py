@@ -285,14 +285,14 @@ async def delete_user_watch(
 @router.delete(
     "/read/{content_type}",
     response_model=SuccessResponse,
-    summary="Delete user watch list",
+    summary="Delete user read list",
 )
 async def delete_user_read(
     content_type: ReadDeleteContenType,
     background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_WATCHLIST])
+        auth_required(scope=[constants.SCOPE_UPDATE_READLIST])
     ),
 ):
     # Run watch list import in background
