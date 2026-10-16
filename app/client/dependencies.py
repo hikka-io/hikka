@@ -20,10 +20,9 @@ async def validate_client_create(
         raise Abort("client", "already-exists")
 
     if (
-        await service.count_user_clients(
-            session, user, 0, constants.MAX_USER_CLIENTS
-        )
-    ) >= constants.MAX_USER_CLIENTS:
+        await service.count_user_clients(session, user)
+        >= constants.MAX_USER_CLIENTS
+    ):
         raise Abort("client", "max-clients")
 
     return create

@@ -60,17 +60,12 @@ async def list_user_clients(
 async def count_user_clients(
     session: AsyncSession,
     user: User,
-    offset: int,
-    limit: int,
 ) -> int:
     return await session.scalar(
-        select(func.count(Client.id))
-        .filter(
+        select(func.count(Client.id)).filter(
             Client.user_id == user.id,
             Client.deleted == False,  # noqa: E712
         )
-        .offset(offset)
-        .limit(limit)
     )
 
 

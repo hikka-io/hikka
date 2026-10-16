@@ -39,7 +39,7 @@ async def list_user_clients(
 ):
     limit, offset = pagination(page, size)
 
-    total = await service.count_user_clients(session, user, offset, limit)
+    total = await service.count_user_clients(session, user)
     clients = await service.list_user_clients(session, user, offset, limit)
 
     return paginated_response(clients.all(), total, page, limit)
