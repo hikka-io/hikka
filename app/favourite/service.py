@@ -1,5 +1,5 @@
 from app.common.service.collections import collections_load_options
-from sqlalchemy import select, desc, case, func, ScalarResult
+from sqlalchemy import select, desc, case, func, or_, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_loader_criteria
 from .schemas import FavouriteContentTypeEnum
@@ -101,6 +101,18 @@ async def delete_favourite(session: AsyncSession, favourite: Favourite):
     )
 
 
+def visible_collections_filter(request_user: User | None):
+    # Private collections are visible only to their author
+    visible = Collection.visibility.in_(
+        [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
+    )
+
+    if not request_user:
+        return visible
+
+    return or_(visible, Collection.author_id == request_user.id)
+
+
 async def get_user_favourite_list(
     session: AsyncSession,
     content_type: FavouriteContentTypeEnum,
@@ -193,12 +205,7 @@ async def get_user_favourite_list(
             )
         )
 
-        if request_user != user:
-            query = query.filter(
-                Collection.visibility.in_(
-                    [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
-                )
-            )
+        query = query.filter(visible_collections_filter(request_user))
 
         query = collections_load_options(query, request_user, True)
 
@@ -238,11 +245,7 @@ async def get_user_favourite_list_count(
             content_model.deleted == False,  # noqa: E712
         )
 
-    if content_type == constants.CONTENT_COLLECTION and request_user != user:
-        query = query.filter(
-            Collection.visibility.in_(
-                [constants.COLLECTION_PUBLIC, constants.COLLECTION_UNLISTED]
-            )
-        )
+    if content_type == constants.CONTENT_COLLECTION:
+        query = query.filter(visible_collections_filter(request_user))
 
     return await session.scalar(query)
