@@ -1,4 +1,4 @@
-from sqlalchemy import select, update, func
+from sqlalchemy import select, update, func, case, or_
 from app.database import sessionmanager
 from app import constants
 
@@ -71,25 +71,40 @@ async def update_scores():
             v = subquery.c.scored_by
             s = subquery.c.raw_score
 
-            # Final weighted score
-            weighted_score = func.round(
-                (v / (v + m)) * s + (m / (v + m)) * c, 2
+            # Final weighted score, zero for titles with less than m votes
+            weighted_score = case(
+                (v < m, 0),
+                else_=func.round((v / (v + m)) * s + (m / (v + m)) * c, 2),
             )
 
+            # Native score is searchable so we flag changed titles for search
+            # update and skip unchanged ones in order not to reindex them all
             await session.execute(
                 update(content_model)
                 .values(
                     native_score=weighted_score,
-                    native_scored_by=subquery.c.scored_by,
+                    native_scored_by=v,
+                    needs_search_update=True,
                 )
-                .filter(content_model.id == subquery.c.content_id)
+                .filter(
+                    content_model.id == subquery.c.content_id,
+                    or_(
+                        content_model.native_score.is_distinct_from(
+                            weighted_score
+                        ),
+                        content_model.native_scored_by.is_distinct_from(v),
+                    ),
+                )
             )
 
             # Set native score to zero for titles with less than m votes
             await session.execute(
                 update(content_model)
-                .values(native_score=0)
-                .filter(content_model.native_scored_by < m)
+                .values(native_score=0, needs_search_update=True)
+                .filter(
+                    content_model.native_scored_by < m,
+                    content_model.native_score != 0,
+                )
             )
 
             await session.commit()

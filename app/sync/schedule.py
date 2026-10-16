@@ -112,6 +112,10 @@ async def update_schedule_aired(session: AsyncSession):
 
         # Only create new edit and log records when needed
         if before != {} and after != {}:
+            # Status and episodes released are searchable
+            # so search index has to be updated
+            anime.needs_search_update = True
+
             edit = Edit(
                 **{
                     "content_type": constants.CONTENT_ANIME,
@@ -158,6 +162,7 @@ async def update_schedule_aired(session: AsyncSession):
 
     for anime in anime_list:
         anime.status = constants.RELEASE_STATUS_FINISHED
+        anime.needs_search_update = True
 
     await session.commit()
 
@@ -185,6 +190,9 @@ async def rollback_episodes_released(
     before["episodes_released"] = anime.episodes_released
     anime.episodes_released = episode.episode - 1
     after["episodes_released"] = anime.episodes_released
+
+    # Episodes released is searchable so search index has to be updated
+    anime.needs_search_update = True
 
     # Only create new edit and log records when needed
     if before != {} and after != {}:
