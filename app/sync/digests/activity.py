@@ -50,7 +50,7 @@ async def generate_activity(session):
                 ]
             ),
             Log.created >= min_date,
-            Log.created <= max_date,
+            Log.created < max_date + timedelta(days=1),
         )
         .group_by(Log.user_id, func.date(Log.created))
         .order_by(func.date(Log.created))
