@@ -1,7 +1,7 @@
 from app.common.schemas.comments import CommentContentTypeEnum
+from app.service import get_visible_content_by_slug
 from app.common.service.reviews import has_review
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.models import Comment, User
 from app.database import get_session
@@ -22,8 +22,13 @@ async def validate_content(
     slug: str,
     content_type: CommentContentTypeEnum,
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
 ) -> CommentableType:
-    if not (content := await get_content_by_slug(session, content_type, slug)):
+    if not (
+        content := await get_visible_content_by_slug(
+            session, content_type, slug, request_user
+        )
+    ):
         # TODO: use single error message for content not found
         raise Abort("comment", "content-not-found")
 

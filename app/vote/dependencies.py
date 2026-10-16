@@ -1,6 +1,6 @@
+from app.service import get_visible_content_by_slug
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Anime, User, Favourite
-from app.service import get_content_by_slug
 from app.dependencies import auth_required
 from app.database import get_session
 from .schemas import ContentTypeEnum
@@ -13,8 +13,13 @@ async def validate_content(
     slug: str,
     content_type: ContentTypeEnum,
     session: AsyncSession = Depends(get_session),
+    request_user: User | None = Depends(auth_required(optional=True)),
 ) -> Anime:
-    if not (content := await get_content_by_slug(session, content_type, slug)):
+    if not (
+        content := await get_visible_content_by_slug(
+            session, content_type, slug, request_user
+        )
+    ):
         raise Abort("vote", "content-not-found")
 
     return content

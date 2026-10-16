@@ -154,6 +154,72 @@ async def get_content_by_id(
     return await session.scalar(query)
 
 
+async def is_content_visible(
+    session: AsyncSession,
+    content_type: str,
+    content,
+    request_user: User | None,
+) -> bool:
+    """Check whether request user can see and interact with content"""
+
+    is_author = request_user is not None and (
+        getattr(content, "author_id", None) == request_user.id
+    )
+
+    if content_type == constants.CONTENT_COLLECTION:
+        if content.deleted:
+            return False
+
+        return content.visibility != constants.COLLECTION_PRIVATE or is_author
+
+    if content_type == constants.CONTENT_ARTICLE:
+        if content.deleted:
+            return False
+
+        return not content.draft or is_author
+
+    if content_type == constants.CONTENT_COMMENT:
+        if content.deleted:
+            return False
+
+        # Private comments belong to private or deleted content
+        # so they are visible only if that content is
+        if content.private:
+            parent = await get_content_by_id(
+                session, content.content_type, content.content_id
+            )
+
+            if parent is None:
+                return False
+
+            return await is_content_visible(
+                session, content.content_type, parent, request_user
+            )
+
+    return True
+
+
+async def get_visible_content_by_slug(
+    session: AsyncSession,
+    content_type: str,
+    slug: str,
+    request_user: User | None,
+):
+    """Same as get_content_by_slug but hides content request user can't see"""
+
+    content = await get_content_by_slug(session, content_type, slug)
+
+    if content is None:
+        return None
+
+    if not await is_content_visible(
+        session, content_type, content, request_user
+    ):
+        return None
+
+    return content
+
+
 async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
     return await session.scalar(
         select(AnimeWatch).filter(
