@@ -1,4 +1,4 @@
-from sqlalchemy import select, exists, delete, func
+from sqlalchemy import select, exists, delete, update, func
 from datetime import datetime, timedelta
 from app.database import sessionmanager
 from app import constants
@@ -10,6 +10,55 @@ from app.models import (
     Review,
     Feed,
 )
+
+
+def visible_comment_filters():
+    return [
+        Comment.private == False,  # noqa: E712
+        Comment.deleted == False,  # noqa: E712
+        Comment.hidden == False,  # noqa: E712
+    ]
+
+
+async def update_feed_deleted(session):
+    # Content can be hidden, deleted or made private after its feed entry
+    # was created so we keep feed deleted flag in sync with content state
+    visible = {
+        constants.CONTENT_COLLECTION: exists().where(
+            Collection.id == Feed.content_id,
+            Collection.visibility == constants.COLLECTION_PUBLIC,
+            Collection.deleted == False,  # noqa: E712
+        ),
+        constants.CONTENT_ARTICLE: exists().where(
+            Article.id == Feed.content_id,
+            Article.category != constants.ARTICLE_SYSTEM,
+            Article.deleted == False,  # noqa: E712
+            Article.draft == False,  # noqa: E712
+        ),
+        constants.CONTENT_COMMENT: exists().where(
+            Comment.id == Feed.content_id,
+            *visible_comment_filters(),
+        ),
+        constants.CONTENT_REVIEW: exists().where(
+            Review.id == Feed.content_id,
+            Review.comment_id == Comment.id,
+            *visible_comment_filters(),
+        ),
+    }
+
+    for content_type, is_visible in visible.items():
+        # Only touch entries which state has actually changed
+        await session.execute(
+            update(Feed)
+            .where(
+                Feed.content_type == content_type,
+                Feed.deleted.is_distinct_from(~is_visible),
+            )
+            .values(deleted=~is_visible)
+            .execution_options(synchronize_session=False)
+        )
+
+    await session.commit()
 
 
 async def generate_feed_session(session, all: bool = False):
@@ -26,6 +75,7 @@ async def generate_feed_session(session, all: bool = False):
     articles_query = (
         select(Article)
         .filter(
+            Article.category != constants.ARTICLE_SYSTEM,
             Article.created >= last_feed_entry,
             Article.deleted == False,  # noqa: E712
             Article.draft == False,  # noqa: E712
@@ -131,6 +181,8 @@ async def generate_feed_session(session, all: bool = False):
         )
 
         await session.commit()
+
+    await update_feed_deleted(session)
 
 
 async def generate_feed():
