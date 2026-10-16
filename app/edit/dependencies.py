@@ -62,6 +62,10 @@ async def validate_edit_id(
     if not (edit := await service.get_edit(session, edit_id)):
         raise Abort("edit", "not-found")
 
+    # Edits of deleted content are hidden
+    if edit.hidden or getattr(edit.content, "deleted", False):
+        raise Abort("edit", "not-found")
+
     return edit
 
 
@@ -130,7 +134,10 @@ async def validate_content(
     content_type: EditContentTypeEnum,
     session: AsyncSession = Depends(get_session),
 ):
-    if not (content := await get_content_by_slug(session, content_type, slug)):
+    content = await get_content_by_slug(session, content_type, slug)
+
+    # Deleted titles can't be edited
+    if not content or getattr(content, "deleted", False):
         raise Abort("edit", "content-not-found")
 
     return content
