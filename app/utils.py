@@ -510,9 +510,9 @@ def path_to_uuid(obj_uuid):
 
 # Collection ranking algorithm
 def calculate_collection_ranking(score, favourite, comments, created):
-    def boost_factor(day, boost_factor=10.0, boost_duration_days=30):
-        decay_rate = -math.log(1 / boost_factor) / boost_duration_days
-        return max(boost_factor * math.exp(-decay_rate * day), 1)
+    def boost_factor(day, factor=10.0, boost_duration_days=30):
+        decay_rate = -math.log(1 / factor) / boost_duration_days
+        return max(factor * math.exp(-decay_rate * day), 1)
 
     boost_duration_days = 30
     now = utcnow()
@@ -527,7 +527,9 @@ def calculate_collection_ranking(score, favourite, comments, created):
     ranking += weight_comment * comments
 
     days_since_creation = (now - created).days
-    ranking *= boost_factor(days_since_creation, boost_duration_days)
+    ranking *= boost_factor(
+        days_since_creation, boost_duration_days=boost_duration_days
+    )
 
     return round(ranking, 8)
 
