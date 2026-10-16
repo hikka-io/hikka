@@ -100,6 +100,10 @@ def build_relations(entries):
     pairs = {}
 
     for entry in entries:
+        # Let's not crash if aggregator has messed up
+        if not entry.get("content_id") or not entry.get("related_content_id"):
+            continue
+
         if (
             entry["relation_type"] not in INVERSE_RELATIONS
             and entry["relation_type"] not in RELATIONS_PRIORITY
@@ -164,10 +168,6 @@ async def save_franchises_list(session, data):
 
         franchise.scored_by = franchise_data["scored_by"]
         franchise.score = franchise_data["score"]
-        franchise.updated = updated
-
-        session.add(franchise)
-        await session.commit()
 
         anime_cache = await session.scalars(
             select(Anime).filter(
@@ -220,9 +220,10 @@ async def save_franchises_list(session, data):
             update_content.append(novel)
 
         franchise.relations = build_relations(franchise_data.get("entries", []))
+        franchise.updated = updated
 
+        session.add(franchise)
         session.add_all(update_content)
+        await session.commit()
 
         # print(f"Processed franchise {franchise.content_id}")
-
-    await session.commit()
