@@ -31,6 +31,8 @@ async def generate_user_stats(session, all=False):
             }
         )
 
+        session.add(system_timestamp)
+
     query = (
         select(Log.user_id, func.max(Log.created).label("latest"))
         .filter(
@@ -132,7 +134,8 @@ async def generate_user_stats(session, all=False):
             )
         )
 
-    system_timestamp.timestamp = max_time
+    if max_time is not None:
+        system_timestamp.timestamp = max_time
 
     print(f"Updated user stats digests for {len(result)} users")
 
