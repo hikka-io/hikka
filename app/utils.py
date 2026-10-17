@@ -94,17 +94,14 @@ def check_user_permissions(user: User, permissions: list):
 
 
 def check_token_scope(token: AuthToken, scope: list[str]) -> bool:
-    # First party tokens have full access
+    token_scope = set(resolve_scope_groups(token.scope))
+
+    scope = set(scope)
+
     if not token.scope and not token.client:
         return True
 
-    # Third party tokens can only reach endpoints which declare scope
-    if not scope:
-        return False
-
-    token_scope = set(resolve_scope_groups(token.scope))
-
-    return token_scope.issuperset(set(scope))
+    return token_scope.issuperset(scope)
 
 
 def resolve_scope_groups(scopes: list[str]) -> list[str]:
