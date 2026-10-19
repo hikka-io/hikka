@@ -208,12 +208,21 @@ async def validate_user_collections_args(
 async def validate_collection_content_update(
     collection: Collection = Depends(validate_collection),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(auth_required()),
+    user: User = Depends(
+        auth_required(
+            permissions=[constants.PERMISSION_COLLECTION_UPDATE],
+            scope=[constants.SCOPE_UPDATE_COLLECTION],
+        )
+    ),
 ):
     if user != collection.author:
         raise Abort("permission", "denied")
 
     await check_collection_updates_limit(session, user)
+
+    # Held until the service commits, so routes using this
+    # must not add dependencies that commit (like auth_required)
+    await service.lock_collection(session, collection)
 
     return collection
 

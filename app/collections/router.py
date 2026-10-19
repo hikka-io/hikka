@@ -174,15 +174,9 @@ async def add_collection_content(
     ),
     collection: Collection = Depends(validate_collection_content_update),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(
-            permissions=[constants.PERMISSION_COLLECTION_UPDATE],
-            scope=[constants.SCOPE_UPDATE_COLLECTION],
-        )
-    ),
 ):
     collection = await service.add_collection_content(
-        session, collection, content, args, user
+        session, collection, content, args, collection.author
     )
 
     return await service.get_user_collection_display(session, collection, slug)
@@ -196,15 +190,9 @@ async def delete_collection_content(
     entry: CollectionContent = Depends(validate_collection_content_delete),
     collection: Collection = Depends(validate_collection_content_update),
     session: AsyncSession = Depends(get_session),
-    user: User = Depends(
-        auth_required(
-            permissions=[constants.PERMISSION_COLLECTION_UPDATE],
-            scope=[constants.SCOPE_UPDATE_COLLECTION],
-        )
-    ),
 ):
     collection = await service.delete_collection_content(
-        session, collection, entry, user
+        session, collection, entry, collection.author
     )
 
     return await service.get_user_collection_display(session, collection, slug)

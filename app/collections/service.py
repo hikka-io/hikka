@@ -516,6 +516,15 @@ async def get_collection_content(
     )
 
 
+async def lock_collection(session: AsyncSession, collection: Collection):
+    await session.scalar(
+        select(Collection)
+        .filter(Collection.id == collection.id)
+        .with_for_update(of=Collection)
+        .execution_options(populate_existing=True)
+    )
+
+
 def collection_content_log(entry: CollectionContent):
     return {
         "content_id": str(entry.content_id),
@@ -649,7 +658,9 @@ def user_collections_load_options(
         *entry_filter
     )
 
-    content_label = select(CollectionContent.label).filter(*entry_filter)
+    content_label = (
+        select(CollectionContent.label).filter(*entry_filter).limit(1)
+    )
 
     # Collection cover is the image of its first entry
     image = (
@@ -665,6 +676,7 @@ def user_collections_load_options(
             Image.ignore == False,  # noqa: E712
             Image.uploaded == True,  # noqa: E712
         )
+        .limit(1)
         .scalar_subquery()
     )
 
