@@ -119,6 +119,9 @@ from .collections import request_update_collection
 from .collections import request_delete_collection
 from .collections import request_collection_info
 from .collections import request_collections
+from .collections import request_user_collections
+from .collections import request_add_collection_content
+from .collections import request_delete_collection_content
 
 from .articles import request_create_article
 from .articles import request_update_article
@@ -270,6 +273,9 @@ __all__ = [
     "request_delete_collection",
     "request_collection_info",
     "request_collections",
+    "request_user_collections",
+    "request_add_collection_content",
+    "request_delete_collection_content",
     # =========== articles ===========
     "request_create_article",
     "request_update_article",

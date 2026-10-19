@@ -36,6 +36,9 @@ class Collection(
 
     # TODO: moderated
     favourite_created: Mapped[datetime] = query_expression()
+    content_label: Mapped[str] = query_expression()
+    has_content: Mapped[bool] = query_expression()
+    image: Mapped[str] = query_expression()
 
     system_ranking: Mapped[float] = mapped_column(index=True, default=0)
     visibility: Mapped[str] = mapped_column(String(16), index=True)

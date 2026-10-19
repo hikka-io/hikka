@@ -447,6 +447,16 @@ errors = {
         "not-found": ["Collection not found", "Колекцію не знайдено", 404],
         "bad-label": ["Unknown label", "Невідома група", 400],
         "bad-content": ["Bad content", "Поганий контент", 400],
+        "content-exists": [
+            "Content is already in collection",
+            "Контент вже є в колекції",
+            400,
+        ],
+        "content-not-found": [
+            "Content is not in collection",
+            "Контенту немає в колекції",
+            404,
+        ],
         "moderator-content-update": [
             "Moderator can't update content in collection",
             "Тільки автор колекції можне змінювати контент всередині",

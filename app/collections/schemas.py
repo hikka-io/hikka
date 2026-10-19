@@ -17,6 +17,17 @@ class CollectionContentArgs(CustomModel):
     slug: str
 
 
+class CollectionContentAddArgs(CustomModel):
+    comment: str | None = Field(default=None, min_length=3)
+    label: str | None = Field(default=None, min_length=1)
+
+
+class UserCollectionsArgs(CustomModel):
+    content_type: CollectionContentTypeEnum
+    content: str | None = None
+    query: str | None = Field(default=None, min_length=2, max_length=255)
+
+
 class CollectionsListArgs(CustomModel):
     sort: list[str] = ["system_ranking:desc", "created:desc"]
     content: list[str] = Field([], max_length=1)
@@ -75,3 +86,22 @@ class CollectionArgs(CustomModel):
 class CollectionsListResponse(CustomModel):
     pagination: PaginationResponse
     list: list[CollectionResponse]
+
+
+class UserCollectionResponse(CustomModel):
+    content_type: CollectionContentTypeEnum
+    visibility: CollectionVisibilityEnum
+    content_label: str | None
+    labels_order: list[str]
+    has_content: bool
+    image: str | None
+    reference: str
+    spoiler: bool
+    entries: int
+    title: str
+    nsfw: bool
+
+
+class UserCollectionsListResponse(CustomModel):
+    pagination: PaginationResponse
+    list: list[UserCollectionResponse]
