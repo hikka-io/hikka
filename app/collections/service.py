@@ -1,8 +1,8 @@
 from app.common.service.collections import collections_load_options
-from .schemas import CollectionsListArgs, CollectionArgs
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.orm import with_expression
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import aliased
 from app.utils import utcnow
@@ -13,6 +13,13 @@ from app.service import (
     get_followed_user_ids,
     get_user_by_username,
     create_log,
+)
+
+from .schemas import (
+    CollectionContentAddArgs,
+    CollectionsListArgs,
+    UserCollectionsArgs,
+    CollectionArgs,
 )
 
 from sqlalchemy import (
@@ -36,6 +43,12 @@ from app.models import (
     CollectionContent,
     CollectionComment,
     Collection,
+    Character,
+    Person,
+    Anime,
+    Manga,
+    Novel,
+    Image,
     User,
 )
 
@@ -487,3 +500,231 @@ async def content_compare(
     ]
 
     return collection_compare == args_compare
+
+
+async def get_collection_content(
+    session: AsyncSession, collection: Collection, slug: str
+) -> CollectionContent | None:
+    content_model = content_type_to_content_class[collection.content_type]
+    return await session.scalar(
+        select(CollectionContent)
+        .join(content_model, content_model.id == CollectionContent.content_id)
+        .filter(
+            CollectionContent.collection == collection,
+            content_model.slug == slug,
+        )
+    )
+
+
+def collection_content_log(entry: CollectionContent):
+    return {
+        "content_id": str(entry.content_id),
+        "content_type": entry.content_type,
+        "comment": entry.comment,
+        "label": entry.label,
+        "order": entry.order,
+    }
+
+
+async def add_collection_content(
+    session: AsyncSession,
+    collection: Collection,
+    content: Anime | Manga | Novel | Character | Person,
+    args: CollectionContentAddArgs,
+    user: User,
+):
+    log_data = {}
+
+    if args.label and args.label not in collection.labels_order:
+        log_data["old_labels_order"] = collection.labels_order
+        collection.labels_order = [*collection.labels_order, args.label]
+        log_data["labels_order"] = collection.labels_order
+
+    # New entry goes after the last one with the same label
+    group_end = await session.scalar(
+        select(func.max(CollectionContent.order)).filter(
+            CollectionContent.collection == collection,
+            CollectionContent.label == args.label,
+        )
+    )
+
+    order = (group_end or collection.entries) + 1
+
+    await session.execute(
+        update(CollectionContent)
+        .filter(
+            CollectionContent.collection == collection,
+            CollectionContent.order >= order,
+        )
+        .values(order=CollectionContent.order + 1)
+    )
+
+    entry = content_type_to_collection_content_class[collection.content_type](
+        content_id=content.id,
+        content_type=collection.content_type,
+        collection=collection,
+        comment=args.comment,
+        label=args.label,
+        order=order,
+    )
+
+    collection.entries += 1
+    collection.updated = utcnow()
+    session.add_all([collection, entry])
+
+    log_data["added_content"] = collection_content_log(entry)
+
+    await create_log(
+        session,
+        constants.LOG_COLLECTION_UPDATE,
+        user,
+        collection.id,
+        log_data,
+    )
+
+    return collection
+
+
+async def delete_collection_content(
+    session: AsyncSession,
+    collection: Collection,
+    entry: CollectionContent,
+    user: User,
+):
+    log_data = {"deleted_content": collection_content_log(entry)}
+
+    await session.delete(entry)
+
+    await session.execute(
+        update(CollectionContent)
+        .filter(
+            CollectionContent.collection == collection,
+            CollectionContent.order > entry.order,
+        )
+        .values(order=CollectionContent.order - 1)
+    )
+
+    if entry.label and not await session.scalar(
+        select(func.count(CollectionContent.id)).filter(
+            CollectionContent.collection == collection,
+            CollectionContent.label == entry.label,
+        )
+    ):
+        log_data["old_labels_order"] = collection.labels_order
+        collection.labels_order = [
+            label for label in collection.labels_order if label != entry.label
+        ]
+        log_data["labels_order"] = collection.labels_order
+
+    collection.entries -= 1
+    collection.updated = utcnow()
+    session.add(collection)
+
+    await create_log(
+        session,
+        constants.LOG_COLLECTION_UPDATE,
+        user,
+        collection.id,
+        log_data,
+    )
+
+    return collection
+
+
+def user_collections_load_options(
+    query: Select, content_type: str, slug: str | None
+):
+    content_model = content_type_to_content_class[content_type]
+
+    entry_filter = [
+        CollectionContent.collection_id == Collection.id,
+        CollectionContent.content_id
+        == select(content_model.id)
+        .filter(content_model.slug == slug)
+        .scalar_subquery(),
+    ]
+
+    # Count instead of exists, so Postgres stays on the collection_id index
+    has_content = select(func.count(CollectionContent.id) > 0).filter(
+        *entry_filter
+    )
+
+    content_label = select(CollectionContent.label).filter(*entry_filter)
+
+    # Collection cover is the image of its first entry
+    image = (
+        select(Image.url)
+        .join(content_model, content_model.image_id == Image.id)
+        .join(
+            CollectionContent,
+            CollectionContent.content_id == content_model.id,
+        )
+        .filter(
+            CollectionContent.collection_id == Collection.id,
+            CollectionContent.order == 1,
+            Image.ignore == False,  # noqa: E712
+            Image.uploaded == True,  # noqa: E712
+        )
+        .scalar_subquery()
+    )
+
+    return query.options(
+        with_expression(Collection.has_content, has_content.scalar_subquery()),
+        with_expression(
+            Collection.content_label, content_label.scalar_subquery()
+        ),
+        with_expression(Collection.image, image),
+    )
+
+
+def user_collections_filter(
+    query: Select, user: User, args: UserCollectionsArgs
+):
+    query = query.filter(
+        Collection.content_type == args.content_type,
+        Collection.deleted == False,  # noqa: E712
+        Collection.author == user,
+    )
+
+    if args.query:
+        query = query.filter(Collection.title.ilike(f"%{args.query}%"))
+
+    return query
+
+
+async def get_user_collections_count(
+    session: AsyncSession, user: User, args: UserCollectionsArgs
+) -> int:
+    return await session.scalar(
+        user_collections_filter(select(func.count(Collection.id)), user, args)
+    )
+
+
+async def get_user_collections(
+    session: AsyncSession,
+    user: User,
+    args: UserCollectionsArgs,
+    limit: int,
+    offset: int,
+) -> ScalarResult[Collection]:
+    query = user_collections_load_options(
+        user_collections_filter(select(Collection), user, args),
+        args.content_type,
+        args.content,
+    )
+
+    return await session.scalars(
+        query.order_by(desc(Collection.created)).limit(limit).offset(offset)
+    )
+
+
+async def get_user_collection_display(
+    session: AsyncSession, collection: Collection, slug: str
+) -> Collection:
+    query = user_collections_load_options(
+        select(Collection).filter(Collection.id == collection.id),
+        collection.content_type,
+        slug,
+    )
+
+    return await session.scalar(query.execution_options(populate_existing=True))

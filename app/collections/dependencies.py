@@ -1,6 +1,6 @@
+from app.models import Collection, CollectionContent, User
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import auth_required
-from app.models import Collection, User
 from app.database import get_session
 from .utils import check_consecutive
 from app.errors import Abort
@@ -17,11 +17,14 @@ from app.utils import (
 
 from app.service import (
     get_user_by_username,
+    get_content_by_slug,
     count_logs,
 )
 
 from .schemas import (
+    CollectionContentAddArgs,
     CollectionsListArgs,
+    UserCollectionsArgs,
     CollectionArgs,
 )
 
@@ -131,6 +134,27 @@ async def validate_collection(
     return collection
 
 
+async def check_collection_updates_limit(session: AsyncSession, user: User):
+    # 1000 collection updates per hour should be sensible limit
+    updates_limit = 1000
+    logs_count = await count_logs(
+        session,
+        constants.LOG_COLLECTION_UPDATE,
+        user,
+        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
+    )
+
+    if (
+        user.role
+        not in [
+            constants.ROLE_ADMIN,
+            constants.ROLE_MODERATOR,
+        ]
+        and logs_count > updates_limit
+    ):
+        raise Abort("system", "rate-limit")
+
+
 async def validate_collection_update(
     args: CollectionArgs = Depends(validate_collection_args),
     collection: Collection = Depends(validate_collection),
@@ -152,24 +176,7 @@ async def validate_collection_update(
         if not await service.content_compare(session, collection, args):
             raise Abort("collections", "moderator-content-update")
 
-    # 1000 collection updates per hour should be sensible limit
-    updates_limit = 1000
-    logs_count = await count_logs(
-        session,
-        constants.LOG_COLLECTION_UPDATE,
-        user,
-        start_time=round_datetime(utcnow(), minutes=60, seconds=60),
-    )
-
-    if (
-        user.role
-        not in [
-            constants.ROLE_ADMIN,
-            constants.ROLE_MODERATOR,
-        ]
-        and logs_count > updates_limit
-    ):
-        raise Abort("system", "rate-limit")
+    await check_collection_updates_limit(session, user)
 
     return args
 
@@ -184,3 +191,72 @@ async def validate_collection_delete(
         raise Abort("permission", "denied")
 
     return collection
+
+
+async def validate_user_collections_args(
+    args: UserCollectionsArgs = Depends(),
+    session: AsyncSession = Depends(get_session),
+):
+    if args.content and not await get_content_by_slug(
+        session, args.content_type, args.content
+    ):
+        raise Abort("collections", "bad-content")
+
+    return args
+
+
+async def validate_collection_content_update(
+    collection: Collection = Depends(validate_collection),
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(auth_required()),
+):
+    if user != collection.author:
+        raise Abort("permission", "denied")
+
+    await check_collection_updates_limit(session, user)
+
+    return collection
+
+
+async def validate_collection_content_add(
+    slug: str,
+    args: CollectionContentAddArgs,
+    collection: Collection = Depends(validate_collection_content_update),
+    session: AsyncSession = Depends(get_session),
+):
+    if collection.entries >= 500:
+        raise Abort("collections", "content-limit")
+
+    if not (
+        content := await get_content_by_slug(
+            session, collection.content_type, slug
+        )
+    ):
+        raise Abort("collections", "bad-content")
+
+    if await service.get_collection_content(session, collection, slug):
+        raise Abort("collections", "content-exists")
+
+    if len(collection.labels_order) > 0 and not args.label:
+        raise Abort("collections", "unlabeled-content")
+
+    if len(collection.labels_order) == 0 and args.label:
+        raise Abort("collections", "bad-label")
+
+    return content
+
+
+async def validate_collection_content_delete(
+    slug: str,
+    collection: Collection = Depends(validate_collection_content_update),
+    session: AsyncSession = Depends(get_session),
+) -> CollectionContent:
+    if not (
+        entry := await service.get_collection_content(session, collection, slug)
+    ):
+        raise Abort("collections", "content-not-found")
+
+    if collection.entries <= 1:
+        raise Abort("collections", "content-limit")
+
+    return entry
