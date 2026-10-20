@@ -352,11 +352,13 @@ async def update_novel_info(session, novel, data):
     characters = await process_characters(session, novel, data)
 
     session.add_all(update_authors)
-    session.add_all(magazines_add)
     session.add_all(characters)
 
     for genre in genres_add:
         novel.genres.append(genre)
+
+    for magazine in magazines_add:
+        novel.magazines.append(magazine)
 
     # Only create new edit if we need to
     if before != {} and after != {}:
