@@ -97,7 +97,11 @@ async def change_password(
     args: PasswordArgs,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_PASSWORD])
+        auth_required(
+            # TODO: bring scope back once we check current password
+            # scope=[constants.SCOPE_UPDATE_USER_PASSWORD],
+            forbid_thirdparty=True,
+        )
     ),
 ):
     return await service.set_password(session, user, args.password)
@@ -125,10 +129,14 @@ async def change_username(
 )
 async def change_email(
     session: AsyncSession = Depends(get_session),
-    args: EmailArgs = Depends(validate_set_email),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_EMAIL])
+        auth_required(
+            # TODO: bring scope back once we check current password
+            # scope=[constants.SCOPE_UPDATE_USER_EMAIL],
+            forbid_thirdparty=True,
+        )
     ),
+    args: EmailArgs = Depends(validate_set_email),
 ):
     user = await service.set_email(session, user, args.email)
     user = await create_activation_token(session, user)
