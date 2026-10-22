@@ -54,6 +54,9 @@ class ClientCreate(CustomModel):
                 f"Endpoint length should be less than {constants.MAX_CLIENT_ENDPOINT_LENGTH}"
             )
 
+        if v.scheme in constants.FORBIDDEN_CLIENT_ENDPOINT_SCHEMES:
+            raise ValueError(f"Endpoint scheme {v.scheme} is not allowed")
+
         return v
 
 
@@ -92,6 +95,11 @@ class ClientUpdate(CustomModel):
             raise ValueError(
                 f"Endpoint length should be less than {constants.MAX_CLIENT_ENDPOINT_LENGTH}"
             )
+
+        if v is not None and (
+            v.scheme in constants.FORBIDDEN_CLIENT_ENDPOINT_SCHEMES
+        ):
+            raise ValueError(f"Endpoint scheme {v.scheme} is not allowed")
 
         return v
 

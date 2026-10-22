@@ -125,6 +125,16 @@ MAX_CLIENT_NAME_LENGTH = 128
 MAX_CLIENT_DESCRIPTION_LENGTH = 512
 MAX_CLIENT_ENDPOINT_LENGTH = 128
 
+# Frontend redirects user to client endpoint after authorization
+# so schemes which browser would execute or open locally are forbidden
+FORBIDDEN_CLIENT_ENDPOINT_SCHEMES = [
+    "javascript",
+    "vbscript",
+    "data",
+    "file",
+    "blob",
+]
+
 # Meilisearch index names
 SEARCH_INDEX_CHARACTERS = "content_characters"
 SEARCH_INDEX_COMPANIES = "content_companies"

@@ -37,6 +37,17 @@ async def test_client_create_invalid_endpoint(client, test_token):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
+    # Frontend redirects to endpoint so executable schemes are not allowed
+    for endpoint in [
+        "javascript:alert(document.cookie)//",
+        "data:text/html,<script>alert(1)</script>",
+    ]:
+        response = await request_client_create(
+            client, test_token, name, description, endpoint
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
 
 async def test_client_create_double(client, test_token):
     name = "test-client"
