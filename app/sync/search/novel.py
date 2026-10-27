@@ -94,6 +94,8 @@ def novel_to_document(novel: Novel):
 async def novel_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Novel)
         .filter(Novel.media_type != None)  # noqa: E711
@@ -105,6 +107,7 @@ async def novel_documents(
         )
         .order_by(Novel.content_id)
         .limit(limit)
+        .with_for_update(of=Novel, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key
@@ -131,6 +134,7 @@ async def novel_document_ids_delete(session: AsyncSession):
         select(Novel)
         .filter(Novel.deleted == True)  # noqa: E712
         .filter(Novel.needs_search_update == True)  # noqa: E712
+        .with_for_update(of=Novel, skip_locked=True)
     )
 
     delete_ids = []
@@ -163,6 +167,9 @@ async def meilisearch_populate(session: AsyncSession):
                 break
 
             await index.add_documents(documents, primary_key="id")
+
+            # Commit each batch so row locks are released right away
+            await session.commit()
 
         delete_document_ids = await novel_document_ids_delete(session)
 

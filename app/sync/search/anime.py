@@ -130,6 +130,8 @@ def anime_to_document(anime: Anime):
 async def anime_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
@@ -140,6 +142,7 @@ async def anime_documents(
         )
         .order_by(Anime.content_id)
         .limit(limit)
+        .with_for_update(of=Anime, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key
@@ -166,6 +169,7 @@ async def anime_document_ids_delete(session: AsyncSession):
         select(Anime)
         .filter(Anime.deleted == True)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
+        .with_for_update(of=Anime, skip_locked=True)
     )
 
     delete_ids = []
@@ -198,6 +202,9 @@ async def meilisearch_populate(session: AsyncSession):
                 break
 
             await index.add_documents(documents, primary_key="id")
+
+            # Commit each batch so row locks are released right away
+            await session.commit()
 
         delete_document_ids = await anime_document_ids_delete(session)
 

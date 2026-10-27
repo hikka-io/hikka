@@ -33,6 +33,8 @@ def article_to_document(article: Article):
 async def article_documents(
     session: AsyncSession, limit: int, last_id: UUID | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Article)
         .filter(
@@ -43,6 +45,7 @@ async def article_documents(
         )
         .order_by(Article.id)
         .limit(limit)
+        .with_for_update(of=Article, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key

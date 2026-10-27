@@ -40,6 +40,8 @@ def company_to_document(company: Company):
 async def companies_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Company)
         .filter(Company.needs_search_update == True)  # noqa: E712
@@ -57,6 +59,7 @@ async def companies_documents(
         )
         .order_by(Company.content_id)
         .limit(limit)
+        .with_for_update(of=Company, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key

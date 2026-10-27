@@ -650,3 +650,6 @@ ARTICLE_CATEGORY_TO_PERMISSION = {
 # Digests
 DIGEST_ACTIVITY = "activity"
 DIGEST_USER_STATS = "user_stats"
+
+# Postgres advisory lock keys
+ADVISORY_LOCK_SEARCH_SYNC = 1

@@ -52,11 +52,14 @@ def person_to_document(person: Person):
 async def people_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Person)
         .filter(Person.needs_search_update == True)  # noqa: E712
         .order_by(Person.content_id)
         .limit(limit)
+        .with_for_update(of=Person, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key

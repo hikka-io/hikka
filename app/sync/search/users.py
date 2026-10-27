@@ -32,11 +32,14 @@ def user_to_document(user: User):
 async def user_documents(
     session: AsyncSession, limit: int, last_id: UUID | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(User)
         .filter(User.needs_search_update == True)  # noqa: E712
         .order_by(User.id)
         .limit(limit)
+        .with_for_update(of=User, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key

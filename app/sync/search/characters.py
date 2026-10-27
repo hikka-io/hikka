@@ -50,6 +50,8 @@ def character_to_document(character: Character):
 async def characters_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
+    # Rows stay locked until the batch is committed so edits made
+    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Character)
         .filter(
@@ -58,6 +60,7 @@ async def characters_documents(
         )
         .order_by(Character.content_id)
         .limit(limit)
+        .with_for_update(of=Character, skip_locked=True)
     )
 
     # Rows drop out of the filter once indexed so we page by key
@@ -82,6 +85,7 @@ async def characters_document_ids_delete(session: AsyncSession):
         select(Character)
         .filter(Character.orphan == True)  # noqa: E712
         .filter(Character.needs_search_update == True)  # noqa: E712
+        .with_for_update(of=Character, skip_locked=True)
     )
 
     delete_ids = []
@@ -116,6 +120,9 @@ async def meilisearch_populate(session: AsyncSession):
                 break
 
             await index.add_documents(documents)
+
+            # Commit each batch so row locks are released right away
+            await session.commit()
 
         delete_document_ids = await characters_document_ids_delete(session)
 
