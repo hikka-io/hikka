@@ -15,7 +15,7 @@ def _client_secret():
     return secrets.token_urlsafe(96)
 
 
-def _preserve_reference_placeholder(endpoint: str) -> str:
+def preserve_reference_placeholder(endpoint: str) -> str:
     return re.sub(r"%7[bB]reference%7[dD]", "{reference}", endpoint)
 
 
@@ -84,7 +84,7 @@ async def create_user_client(
             "secret": _client_secret(),
             "name": create.name,
             "description": create.description,
-            "endpoint": _preserve_reference_placeholder(str(create.endpoint)),
+            "endpoint": preserve_reference_placeholder(str(create.endpoint)),
             "user_id": user.id,
             "created": now,
             "updated": utcnow(),
@@ -109,7 +109,7 @@ async def update_client(
         client.description = update.description
 
     if update.endpoint is not None:
-        client.endpoint = _preserve_reference_placeholder(str(update.endpoint))
+        client.endpoint = preserve_reference_placeholder(str(update.endpoint))
 
     if update.revoke_secret:
         client.secret = _client_secret()
