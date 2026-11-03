@@ -49,6 +49,19 @@ async def test_client_create_invalid_endpoint(client, test_token):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
+async def test_client_create_reference_placeholder(client, test_token):
+    endpoint = "hikka://auth/?reference=%7breference%7d&state=%7Bother%7D"
+
+    response = await request_client_create(
+        client, test_token, "test-client", "test client description", endpoint
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["endpoint"] == (
+        "hikka://auth/?reference={reference}&state=%7Bother%7D"
+    )
+
+
 async def test_client_create_double(client, test_token):
     name = "test-client"
     description = "test client description"

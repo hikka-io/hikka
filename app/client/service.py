@@ -1,5 +1,6 @@
 import secrets
 import uuid
+import re
 
 from sqlalchemy import select, update, func, ScalarResult, Select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +13,10 @@ from app.utils import utcnow
 
 def _client_secret():
     return secrets.token_urlsafe(96)
+
+
+def _preserve_reference_placeholder(endpoint: str) -> str:
+    return re.sub(r"%7[bB]reference%7[dD]", "{reference}", endpoint)
 
 
 async def get_client(
@@ -79,7 +84,7 @@ async def create_user_client(
             "secret": _client_secret(),
             "name": create.name,
             "description": create.description,
-            "endpoint": str(create.endpoint),
+            "endpoint": _preserve_reference_placeholder(str(create.endpoint)),
             "user_id": user.id,
             "created": now,
             "updated": utcnow(),
@@ -104,7 +109,7 @@ async def update_client(
         client.description = update.description
 
     if update.endpoint is not None:
-        client.endpoint = str(update.endpoint)
+        client.endpoint = _preserve_reference_placeholder(str(update.endpoint))
 
     if update.revoke_secret:
         client.secret = _client_secret()

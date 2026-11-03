@@ -43,6 +43,9 @@ async def test_auth_thirdparty(client, test_token, aggregator_anime):
     assert response.status_code == status.HTTP_200_OK
 
     request_reference = response.json()["reference"]
+    assert response.json()["redirect_url"] == (
+        f"hikka://auth/?reference={request_reference}"
+    )
 
     response = await request_auth_token(
         client, request_reference, client_secret

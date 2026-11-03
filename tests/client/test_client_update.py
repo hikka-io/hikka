@@ -55,6 +55,28 @@ async def test_client_update_nonexistent(client, test_token):
     assert response.json()["code"] == "client:not_found"
 
 
+async def test_client_update_reference_placeholder(client, test_token):
+    response = await request_client_create(
+        client,
+        test_token,
+        "test-client",
+        "test client description",
+        "hikka://auth/",
+    )
+    assert response.status_code == status.HTTP_200_OK
+
+    endpoint = "hikka://auth/{reference}?state=%7Bother%7D"
+    response = await request_client_update(
+        client,
+        test_token,
+        response.json()["reference"],
+        endpoint=endpoint,
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["endpoint"] == endpoint
+
+
 async def test_too_long_fields(client, test_token):
     error_message_format = "Invalid field {field} in request body"
     error_code = "system:validation_error"

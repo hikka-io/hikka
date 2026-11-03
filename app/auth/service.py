@@ -8,6 +8,7 @@ from datetime import timedelta, datetime
 from starlette.datastructures import URL
 from sqlalchemy.orm import selectinload
 from .schemas import SignupArgs
+from urllib.parse import quote
 from app import constants
 import secrets
 import uuid
@@ -216,6 +217,13 @@ async def change_password(session: AsyncSession, user: User, new_password: str):
     return user
 
 
+def build_redirect_url(endpoint: str, reference: str) -> str:
+    if "{reference}" in endpoint:
+        return endpoint.replace("{reference}", quote(reference, safe=""))
+
+    return str(URL(endpoint).replace_query_params(reference=reference))
+
+
 async def create_auth_token_request(
     session: AsyncSession, user: User, client: Client, scope: list[str]
 ) -> dict:
@@ -239,11 +247,7 @@ async def create_auth_token_request(
     return {
         "reference": request.reference,
         "expiration": request.expiration,
-        "redirect_url": str(
-            URL(client.endpoint).replace_query_params(
-                reference=request.reference
-            )
-        ),
+        "redirect_url": build_redirect_url(client.endpoint, request.reference),
     }
 
 
