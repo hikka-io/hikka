@@ -312,6 +312,21 @@ async def build_schedule(session: AsyncSession):
 
             session.add(episode)
 
+        scheduled = {
+            episode_data["episode"]
+            for episode_data in anime.schedule
+            if anime.episodes_total is None
+            or episode_data["episode"] <= anime.episodes_total
+        }
+
+        for episode in cache.values():
+            if episode.episode in scheduled or episode.airing_at <= now:
+                continue
+
+            await session.delete(episode)
+
+            print(f"Removed episode #{episode.episode} for {anime.title_ja}")
+
         await session.commit()
 
 
