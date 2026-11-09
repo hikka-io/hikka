@@ -1,6 +1,7 @@
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, delete
 from app.aggregator import service
+from datetime import timedelta
 from app.utils import utcnow
 from app import constants
 from app import utils
@@ -445,6 +446,26 @@ def process_translated_ua(data):
     return anitube_len > 0 or animeon_len > 0 or toloka_len > 0 or mikai_len > 0
 
 
+def trim_schedule(schedule, episodes_total):
+    if episodes_total is None:
+        return schedule
+
+    return [
+        entry for entry in schedule or [] if entry["episode"] <= episodes_total
+    ]
+
+
+def schedule_pending(schedule, current, episodes_released, now):
+    # Recently aired episodes may not be processed by schedule task yet
+    since = now - timedelta(days=1)
+
+    return any(
+        (current or 0) < entry["episode"] <= episodes_released
+        and utils.from_timestamp(entry["airing_at"]) > since
+        for entry in schedule or []
+    )
+
+
 async def update_anime_info(session, anime, data):
     # NOTE: this code has a lot of moving parts, hardcoded values and generaly
     # things I don't like. Let's just hope tests do cover all edge cases
@@ -481,35 +502,51 @@ async def update_anime_info(session, anime, data):
         if field in anime.ignored_fields:
             continue
 
-        if data[field] == getattr(anime, field):
+        value = data[field]
+
+        # Schedule is stored trimmed by episodes total
+        if field == "schedule":
+            value = trim_schedule(value, anime.episodes_total)
+
+        if value == getattr(anime, field):
             continue
 
         # Special checks to prevent overwriting
         # changes made by our anime schedule task
         if field == "episodes_released":
-            if (
-                data[field] is not None
-                and getattr(anime, field)
-                and getattr(anime, field) > data[field]
-            ):
+            current = getattr(anime, field)
+
+            if current is not None and (value is None or current > value):
+                continue
+
+            # Leave scheduled episodes to schedule task so users get notified
+            if schedule_pending(data.get("schedule"), current, value, now):
                 continue
 
         if field == "status":
-            if getattr(anime, field) == constants.RELEASE_STATUS_FINISHED:
+            current = getattr(anime, field)
+
+            if current == constants.RELEASE_STATUS_FINISHED:
+                continue
+
+            # MAL may lag behind schedule task here
+            if (
+                current == constants.RELEASE_STATUS_ONGOING
+                and value == constants.RELEASE_STATUS_ANNOUNCED
+            ):
                 continue
 
         # If field going to be changed first we need add it to before dict
         before[field] = getattr(anime, field)
 
         # Update value here
-        setattr(anime, field, data[field])
+        setattr(anime, field, value)
 
         # And add it to after dict
         after[field] = getattr(anime, field)
 
     # Special case (awful hack) for situations when
     # schedule logic don't update episodes_released field properly
-    # while holding it hostage in ignored fields
     if (
         anime.status == constants.RELEASE_STATUS_FINISHED
         and anime.episodes_total is not None
@@ -531,12 +568,7 @@ async def update_anime_info(session, anime, data):
             anime.episodes_released = anime.episodes_total
 
     # At this point I just hate schedule subsystem with my whole heart
-    if anime.episodes_total is not None:
-        anime.schedule = [
-            entry
-            for entry in anime.schedule
-            if entry["episode"] <= anime.episodes_total
-        ]
+    anime.schedule = trim_schedule(anime.schedule, anime.episodes_total)
 
     # Extract and convert date fields
     date_fields = ["start_date", "end_date"]

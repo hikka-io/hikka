@@ -1,9 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, asc
 from app.database import sessionmanager
+from sqlalchemy import select, asc
 from datetime import datetime
 from app import constants
-import copy
 
 from app.utils import (
     utcfromtimestamp,
@@ -60,9 +59,6 @@ async def update_schedule_aired(session: AsyncSession):
         if not anime:
             continue
 
-        # Fix for SQLAlchemy shenanigans
-        anime.ignored_fields = copy.deepcopy(anime.ignored_fields)
-
         before = {}
         after = {}
 
@@ -82,9 +78,6 @@ async def update_schedule_aired(session: AsyncSession):
             anime.episodes_released = schedule.episode
             after["episodes_released"] = anime.episodes_released
 
-            if "episodes_released" not in anime.ignored_fields:
-                anime.ignored_fields.append("episodes_released")
-
         # Change anime status when final episode has aired
         if (
             anime.episodes_total
@@ -95,9 +88,6 @@ async def update_schedule_aired(session: AsyncSession):
             anime.status = constants.RELEASE_STATUS_FINISHED
             after["status"] = anime.status
 
-            if "status" not in anime.ignored_fields:
-                anime.ignored_fields.append("status")
-
         # Set status to ongoing if anime just started airing
         if (
             anime.status == constants.RELEASE_STATUS_ANNOUNCED
@@ -106,9 +96,6 @@ async def update_schedule_aired(session: AsyncSession):
             before["status"] = anime.status
             anime.status = constants.RELEASE_STATUS_ONGOING
             after["status"] = anime.status
-
-            if "status" not in anime.ignored_fields:
-                anime.ignored_fields.append("status")
 
         # Only create new edit and log records when needed
         if before != {} and after != {}:
@@ -229,50 +216,33 @@ async def rollback_episodes_released(
 async def build_schedule(session: AsyncSession):
     now = utcnow()
 
-    anime_list = await session.scalars(
-        select(Anime).filter(
-            Anime.status.in_(
-                [
-                    constants.RELEASE_STATUS_ANNOUNCED,
-                    constants.RELEASE_STATUS_ONGOING,
-                ]
-            )
-        )
-    )
+    statuses = [
+        constants.RELEASE_STATUS_ANNOUNCED,
+        constants.RELEASE_STATUS_ONGOING,
+    ]
+
+    anime_list = (
+        await session.scalars(select(Anime).filter(Anime.status.in_(statuses)))
+    ).all()
+
+    cache = {}
+
+    for entry in await session.scalars(
+        select(AnimeSchedule)
+        .join(AnimeSchedule.anime)
+        .filter(Anime.status.in_(statuses))
+    ):
+        cache.setdefault(entry.anime_id, {})[entry.episode] = entry
 
     for anime in anime_list:
-        schedule = await session.scalars(
-            select(AnimeSchedule).filter(AnimeSchedule.anime == anime)
-        )
+        episodes = cache.get(anime.id, {})
 
-        cache = {entry.episode: entry for entry in schedule}
+        if not anime.schedule and not episodes:
+            continue
 
-        # One more awful hack to handle bad schedules from Anilist
-        if anime.episodes_total is not None:
-            purge_after = False
+        scheduled = {}
 
-            for episode_data in anime.schedule:
-                if (
-                    episode_data["episode"] > anime.episodes_total
-                    and episode_data["episode"] in cache
-                ):
-                    purge_after = True
-                    break
-
-            if purge_after:
-                await session.execute(
-                    delete(AnimeSchedule).filter(
-                        AnimeSchedule.anime == anime,
-                        AnimeSchedule.episode > anime.episodes_total,
-                    )
-                )
-
-                await session.commit()
-                continue
-
-        for episode_data in anime.schedule:
-            airing_at = utcfromtimestamp(episode_data["airing_at"])
-
+        for episode_data in anime.schedule or []:
             # Sometimes Anilist returns more episodes than it should
             if (
                 anime.episodes_total is not None
@@ -280,54 +250,52 @@ async def build_schedule(session: AsyncSession):
             ):
                 continue
 
-            if not (episode := cache.get(episode_data["episode"])):
-                episode = AnimeSchedule(
-                    **{
-                        "episode": episode_data["episode"],
-                        "airing_at": airing_at,
-                        "created": now,
-                        "updated": now,
-                        "anime": anime,
-                    }
+            scheduled[episode_data["episode"]] = utcfromtimestamp(
+                episode_data["airing_at"]
+            )
+
+        for number, airing_at in scheduled.items():
+            if not (episode := episodes.get(number)):
+                session.add(
+                    AnimeSchedule(
+                        **{
+                            "episode": number,
+                            "airing_at": airing_at,
+                            "created": now,
+                            "updated": now,
+                            "anime": anime,
+                        }
+                    )
                 )
 
-                print(f"Added episode #{episode.episode} for {anime.title_ja}")
+                print(f"Added episode #{number} for {anime.title_ja}")
 
-            if episode.airing_at != airing_at:
-                episode.airing_at = airing_at
-                episode.updated = now
-                session.add(episode)
-
-                # Sometimes our schedule may be not up to date and system can
-                # incorrectly set episodes_released for some entries
-                # In this case we should roll it back
-                if anime := await session.scalar(
-                    select(Anime).filter(Anime.id == episode.anime_id)
-                ):
-                    await rollback_episodes_released(session, episode, anime)
-
-                print(
-                    f"Updated episode #{episode.episode} for {anime.title_ja}"
-                )
-
-            session.add(episode)
-
-        scheduled = {
-            episode_data["episode"]
-            for episode_data in anime.schedule
-            if anime.episodes_total is None
-            or episode_data["episode"] <= anime.episodes_total
-        }
-
-        for episode in cache.values():
-            if episode.episode in scheduled or episode.airing_at <= now:
                 continue
 
-            await session.delete(episode)
+            if episode.airing_at == airing_at:
+                continue
 
-            print(f"Removed episode #{episode.episode} for {anime.title_ja}")
+            episode.airing_at = airing_at
+            episode.updated = now
 
-        await session.commit()
+            # Sometimes our schedule may be not up to date and system can
+            # incorrectly set episodes_released for some entries
+            # In this case we should roll it back
+            await rollback_episodes_released(session, episode, anime)
+
+            print(f"Updated episode #{number} for {anime.title_ja}")
+
+        for number, episode in episodes.items():
+            # Remove episodes above total and stale upcoming ones
+            if (
+                anime.episodes_total is not None
+                and number > anime.episodes_total
+            ) or (number not in scheduled and episode.airing_at > now):
+                await session.delete(episode)
+
+                print(f"Removed episode #{number} for {anime.title_ja}")
+
+    await session.commit()
 
 
 async def update_schedule_build():

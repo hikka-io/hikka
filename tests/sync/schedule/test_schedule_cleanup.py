@@ -54,6 +54,29 @@ async def test_schedule_cleanup_upcoming(
     assert await get_scheduled_episodes(test_session, test_anime) == [1, 2]
 
 
+async def test_schedule_cleanup_above_total(
+    test_session, aggregator_anime, aggregator_anime_info
+):
+    test_anime = await get_test_anime(test_session)
+
+    test_anime.episodes_total = None
+    test_anime.schedule = [
+        {"episode": 12, "airing_at": 1681354800},
+        {"episode": 13, "airing_at": 1681959600},
+    ]
+
+    await build_schedule(test_session)
+
+    assert await get_scheduled_episodes(test_session, test_anime) == [12, 13]
+
+    # Turns out anime has only 12 episodes
+    test_anime.episodes_total = 12
+
+    await build_schedule(test_session)
+
+    assert await get_scheduled_episodes(test_session, test_anime) == [12]
+
+
 async def test_schedule_cleanup_keep_aired(
     test_session, aggregator_anime, aggregator_anime_info
 ):
