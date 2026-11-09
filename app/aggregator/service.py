@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import Character
+from app.models import Character, Person
+from sqlalchemy import select, update
 from app.utils import chunkify
-from sqlalchemy import select
 
 
 async def get_characters_cache(
@@ -19,3 +19,17 @@ async def get_characters_cache(
         characters_cache |= {entry.content_id: entry for entry in cache}
 
     return characters_cache
+
+
+async def mark_count_update(
+    session: AsyncSession, model: type[Character] | type[Person], ids: set
+):
+    # Counts are only recalculated for flagged rows
+    if not ids:
+        return
+
+    await session.execute(
+        update(model)
+        .filter(model.id.in_(list(ids)))
+        .values(needs_count_update=True)
+    )

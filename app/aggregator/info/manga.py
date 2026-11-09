@@ -9,6 +9,7 @@ from app.models import (
     MangaCharacter,
     MangaAuthor,
     AuthorRole,
+    Character,
     Magazine,
     Person,
     Image,
@@ -254,6 +255,9 @@ async def process_characters(session, manga, data):
                 MangaCharacter.id == existing_manga_characters[character_id]
             )
         )
+
+    # Removed characters have to be recounted
+    await service.mark_count_update(session, Character, bad_character_ids)
 
     return characters
 

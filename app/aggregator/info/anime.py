@@ -14,6 +14,7 @@ from app.models import (
     CompanyAnime,
     AnimeStaff,
     AnimeVoice,
+    Character,
     Company,
     Person,
     Genre,
@@ -206,19 +207,29 @@ async def process_characters_and_voices(session, anime, data):
         set(existing_anime_characters.keys()) - actual_character_ids
     )
 
+    bad_person_ids = set()
+
     for character_id in bad_character_ids:
-        await session.execute(
-            delete(AnimeVoice).filter(
+        person_ids = await session.scalars(
+            delete(AnimeVoice)
+            .filter(
                 AnimeVoice.anime_id == anime.id,
                 AnimeVoice.character_id == character_id,
             )
+            .returning(AnimeVoice.person_id)
         )
+
+        bad_person_ids.update(person_ids)
 
         await session.execute(
             delete(AnimeCharacter).filter(
                 AnimeCharacter.id == existing_anime_characters[character_id]
             )
         )
+
+    # Removed characters and their voice actors have to be recounted
+    await service.mark_count_update(session, Character, bad_character_ids)
+    await service.mark_count_update(session, Person, bad_person_ids)
 
     return characters_and_voices
 
@@ -368,6 +379,8 @@ async def process_staff(session, anime, data):
                     "anime": anime,
                 }
             )
+
+            person.needs_count_update = True
 
         for role_name in entry["roles"]:
             role_slug = utils.slugify(role_name)
