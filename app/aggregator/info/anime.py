@@ -119,13 +119,14 @@ async def process_characters_and_voices(session, anime, data):
         if character_content_id not in voices:
             voices[character_content_id] = []
 
-        if person_content_id not in voices[character_content_id]:
-            voices[character_content_id].append(
-                {
-                    "person_content_id": person_content_id,
-                    "language": entry["language"],
-                }
-            )
+        voice = {
+            "person_content_id": person_content_id,
+            "language": entry["language"],
+        }
+
+        # Same voice may be listed more than once so we skip duplicates
+        if voice not in voices[character_content_id]:
+            voices[character_content_id].append(voice)
 
     cache = await session.scalars(
         select(AnimeCharacter).filter(AnimeCharacter.anime == anime)
@@ -179,7 +180,9 @@ async def process_characters_and_voices(session, anime, data):
             if not (person := people_cache.get(person_content_id)):
                 continue
 
-            if anime_voice_cache.get(f"{character.id}-{person.id}-{language}"):
+            voice_key = f"{character.id}-{person.id}-{language}"
+
+            if anime_voice_cache.get(voice_key):
                 continue
 
             voice = AnimeVoice(
@@ -190,6 +193,9 @@ async def process_characters_and_voices(session, anime, data):
                     "anime": anime,
                 }
             )
+
+            # Remember new voice so it won't be created twice in this sync
+            anime_voice_cache[voice_key] = voice
 
             characters_and_voices.append(voice)
 
