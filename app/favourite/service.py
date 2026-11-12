@@ -11,6 +11,7 @@ from app import constants
 from app.service import (
     content_type_to_content_class,
     get_followed_user_ids,
+    insert_or_skip,
     create_log,
 )
 
@@ -63,18 +64,26 @@ async def create_favourite(
     content_type: FavouriteContentTypeEnum,
     content: Anime,
     user: User,
-) -> Favourite:
+) -> Favourite | None:
     favourite_model = content_type_to_favourite_class[content_type]
 
-    favourite = favourite_model(
-        **{
-            "content_id": content.id,
-            "created": utcnow(),
-            "user": user,
-        }
-    )
+    # Parallel requests may get here at the same time
+    # so unique index decides which one adds the favourite
+    if not (
+        favourite := await insert_or_skip(
+            session,
+            favourite_model,
+            ["content_type", "content_id", "user_id"],
+            {
+                "content_type": content_type,
+                "content_id": content.id,
+                "user_id": user.id,
+                "created": utcnow(),
+            },
+        )
+    ):
+        return None
 
-    session.add(favourite)
     await session.commit()
 
     await create_log(

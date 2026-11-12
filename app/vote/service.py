@@ -1,7 +1,7 @@
+from app.service import insert_or_skip, create_log
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ContentTypeEnum
 from sqlalchemy import select, func
-from app.service import create_log
 from app.utils import utcnow
 from app import constants
 
@@ -48,15 +48,22 @@ async def set_vote(
     vote_model = content_type_to_vote_class[content_type]
     now = utcnow()
 
-    # Create vote record if missing
+    # Create vote record if missing, parallel requests may get here
+    # at the same time so unique index decides which one creates it
     if not (vote := await get_vote(session, content_type, content, user)):
-        vote = vote_model(
-            **{
-                "content": content,
+        vote = await insert_or_skip(
+            session,
+            vote_model,
+            ["content_type", "content_id", "user_id"],
+            {
+                "content_type": content_type,
+                "content_id": content.id,
+                "score": user_score,
+                "user_id": user.id,
                 "created": now,
-                "user": user,
-            }
-        )
+                "updated": now,
+            },
+        ) or await get_vote(session, content_type, content, user)
 
     vote.updated = now
     vote.score = user_score

@@ -7,6 +7,7 @@ from app.utils import paginated_response, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app.errors import Abort
 from app import meilisearch
 from app import constants
 from . import service
@@ -94,6 +95,10 @@ async def update_edit(
     edit: Edit = Depends(validate_edit_update),
     user: User = Depends(validate_edit_update_rate_limit),
 ):
+    # Status check from dependencies may be outdated by now
+    if not await service.lock_pending_edit(session, edit):
+        raise Abort("edit", "not-pending")
+
     return await service.update_pending_edit(session, edit, user, args)
 
 
@@ -102,6 +107,10 @@ async def close_edit(
     session: AsyncSession = Depends(get_session),
     edit: Edit = Depends(validate_edit_close),
 ):
+    # Status check from dependencies may be outdated by now
+    if not await service.lock_pending_edit(session, edit):
+        raise Abort("edit", "not-pending")
+
     return await service.close_pending_edit(session, edit)
 
 
@@ -116,6 +125,10 @@ async def accept_edit(
         )
     ),
 ):
+    # Status check from dependencies may be outdated by now
+    if not await service.lock_pending_edit(session, edit):
+        raise Abort("edit", "not-pending")
+
     return await service.accept_pending_edit(session, edit, moderator)
 
 
@@ -130,6 +143,10 @@ async def deny_edit(
         )
     ),
 ):
+    # Status check from dependencies may be outdated by now
+    if not await service.lock_pending_edit(session, edit):
+        raise Abort("edit", "not-pending")
+
     return await service.deny_pending_edit(session, edit, moderator)
 
 

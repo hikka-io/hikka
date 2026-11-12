@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import Comment, User
 from .utils import build_comments
+from app.errors import Abort
 from app import constants
 from . import service
 
@@ -215,6 +216,10 @@ async def write_comment(
         parent,
     )
 
+    # Parallel request has written review for this content first
+    if comment is None:
+        raise Abort("review", "has-review")
+
     comment = await service.generate_preview(session, comment)
 
     return CommentNode.create(path_to_uuid(comment.reference), comment)
@@ -236,6 +241,10 @@ async def edit_comment(
         args.text,
         args.review,
     )
+
+    # Parallel request has written review for this content first
+    if comment is None:
+        raise Abort("review", "has-review")
 
     comment = await service.generate_preview(session, comment)
     return CommentNode.create(path_to_uuid(comment.reference), comment)

@@ -1,6 +1,7 @@
 from app.common.schemas import UserCustomizationArgs
 from app.watch.service import generate_watch_stats
 from app.read.service import generate_read_stats
+from app.read.service import get_or_create_read
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func
 from app import constants
@@ -18,7 +19,7 @@ from app.utils import (
 )
 
 from app.service import (
-    get_anime_watch,
+    get_or_create_anime_watch,
     create_log,
 )
 
@@ -314,17 +315,14 @@ async def import_watch_list(
             if anime.episodes_total and import_episodes > anime.episodes_total:
                 import_episodes = anime.episodes_total
 
-            if watch := await get_anime_watch(session, anime, user):
-                # If anime already in list and user don't want to overwrite it
-                # Just skipt it
-                if not args.overwrite:
-                    continue
+            watch, created = await get_or_create_anime_watch(
+                session, anime, user, import_status, now
+            )
 
-            else:
-                watch = AnimeWatch()
-                watch.created = now
-                watch.anime = anime
-                watch.user = user
+            # If anime already in list and user don't want to overwrite it
+            # Just skipt it
+            if not created and not args.overwrite:
+                continue
 
             watch.rewatches = import_rewatches
             watch.episodes = import_episodes
@@ -349,17 +347,6 @@ async def import_watch_list(
         )
 
         await generate_watch_stats(session, user)
-
-
-async def get_read(session: AsyncSession, content: Manga | Novel, user: User):
-    return await session.scalar(
-        select(Read).filter(
-            Read.content_type == content.data_type,
-            Read.content_id == content.id,
-            Read.deleted == False,  # noqa: E712
-            Read.user == user,
-        )
-    )
 
 
 async def import_read_list(
@@ -431,18 +418,14 @@ async def import_read_list(
             if import_rereads > 100:
                 import_rereads = 100
 
-            if read := await get_read(session, content, user):
-                # If content already in list and user don't want to overwrite it
-                # Just skipt it
-                if not args.overwrite:
-                    continue
+            read, created = await get_or_create_read(
+                session, content.data_type, content, user, import_status, now
+            )
 
-            else:
-                read = Read()
-                read.created = now
-                read.content_type = content.data_type
-                read.content_id = content.id
-                read.user = user
+            # If content already in list and user don't want to overwrite it
+            # Just skipt it
+            if not created and not args.overwrite:
+                continue
 
             read.chapters = import_chapters
             read.volumes = import_volumes

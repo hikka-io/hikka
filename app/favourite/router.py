@@ -2,6 +2,7 @@ from app.utils import pagination, paginated_response
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
 from app.database import get_session
+from app.errors import Abort
 from app import constants
 from . import service
 
@@ -66,7 +67,15 @@ async def favourite_add(
         auth_required(scope=[constants.SCOPE_CREATE_FAVOURITE])
     ),
 ):
-    return await service.create_favourite(session, content_type, content, user)
+    if not (
+        favourite := await service.create_favourite(
+            session, content_type, content, user
+        )
+    ):
+        # Parallel request has added same favourite first
+        raise Abort("favourite", "exists")
+
+    return favourite
 
 
 @router.delete(

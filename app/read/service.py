@@ -1,3 +1,4 @@
+from sqlalchemy.orm.attributes import set_committed_value
 from app.common.service.sort import build_manga_order_by
 from app.common.service.sort import build_novel_order_by
 from sqlalchemy import select, desc, func, ScalarResult
@@ -6,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import ReadArgs, ReadSearchArgs
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
+from datetime import datetime
 from app.utils import utcnow
 from app import constants
 import random
@@ -13,6 +15,7 @@ import random
 from app.service import (
     manga_search_filter,
     novel_search_filter,
+    insert_or_skip,
     create_log,
 )
 
@@ -112,6 +115,49 @@ async def get_read(
     )
 
 
+async def get_or_create_read(
+    session: AsyncSession,
+    content_type: str,
+    content: Manga | Novel,
+    user: User,
+    status: str,
+    now: datetime,
+) -> tuple[Read, bool]:
+    """Return user's read record for content and whether it was created"""
+
+    if read := await get_read(session, content_type, content, user):
+        return read, False
+
+    # We need to do this in order to return object with content inside
+    # when read record is created for the first time
+    read_model = {
+        constants.CONTENT_MANGA: MangaRead,
+        constants.CONTENT_NOVEL: NovelRead,
+    }.get(content_type)
+
+    # Parallel requests may get here at the same time
+    # so unique index decides which one creates the record
+    if read := await insert_or_skip(
+        session,
+        read_model,
+        ["content_type", "content_id", "user_id"],
+        {
+            "content_type": content_type,
+            "content_id": content.id,
+            "user_id": user.id,
+            "status": status,
+            "created": now,
+            "updated": now,
+        },
+        index_where=Read.deleted == False,  # noqa: E712
+    ):
+        set_committed_value(read, "content", content)
+        set_committed_value(read, "user", user)
+        return read, True
+
+    return await get_read(session, content_type, content, user), False
+
+
 async def save_read(
     session: AsyncSession,
     content_type: str,
@@ -122,23 +168,13 @@ async def save_read(
     now = utcnow()
     log_type = constants.LOG_READ_UPDATE
 
-    # We need to do this in order to return object with content inside
-    # when read record is created for the first time
-    read_model = {
-        constants.CONTENT_MANGA: MangaRead,
-        constants.CONTENT_NOVEL: NovelRead,
-    }.get(content_type)
-
     # Create read record if missing
-    if not (read := await get_read(session, content_type, content, user)):
+    read, created = await get_or_create_read(
+        session, content_type, content, user, args.status, now
+    )
+
+    if created:
         log_type = constants.LOG_READ_CREATE
-
-        read = read_model()
-        read.content = content
-        read.created = now
-        read.user = user
-
-        session.add(read)
 
         # Generally I think it's bad idea to modify user passed args
         # but this would allow us to keep existing logic so why not
@@ -164,7 +200,8 @@ async def save_read(
     # Set attributes from args to read record
     for key, new_value in args.model_dump().items():
         # Here we add changes to log's before/after dicts only if there are changes
-        old_value = getattr(read, key)
+        # New record had nothing before so its log lists every passed value
+        old_value = None if created else getattr(read, key)
 
         if old_value != new_value:
             log_before[key] = old_value

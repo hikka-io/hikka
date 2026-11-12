@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..mixins import CreatedMixin, UpdatedMixin, DeletedMixin
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, Index, text
 from datetime import datetime
 from ..base import Base
 from uuid import UUID
@@ -13,6 +13,18 @@ class Read(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
         "polymorphic_on": "content_type",
         "with_polymorphic": "*",
     }
+
+    # One read record per user and content (soft deleted ones aside)
+    __table_args__ = (
+        Index(
+            "uq_read_content_user",
+            "content_type",
+            "content_id",
+            "user_id",
+            unique=True,
+            postgresql_where=text("deleted = false"),
+        ),
+    )
 
     start_date: Mapped[datetime] = mapped_column(nullable=True)
     end_date: Mapped[datetime] = mapped_column(nullable=True)

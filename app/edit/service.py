@@ -13,6 +13,7 @@ import copy
 
 from sqlalchemy import (
     ScalarResult,
+    inspect,
     select,
     desc,
     func,
@@ -157,6 +158,20 @@ async def get_edit(session: AsyncSession, edit_id: int) -> Edit | None:
     )
 
 
+async def lock_pending_edit(session: AsyncSession, edit: Edit) -> bool:
+    """Lock edit until transaction ends and check it's still pending"""
+
+    # Parallel requests for same edit wait here until the first one commits
+    # and we reload edit since that request may have changed it
+    await session.refresh(
+        edit,
+        [column.key for column in inspect(edit).mapper.column_attrs],
+        with_for_update=True,
+    )
+
+    return edit.status == constants.EDIT_PENDING
+
+
 def build_edit_order_by(sort: list[str]):
     order_mapping = {
         "edit_id": Edit.edit_id,
@@ -272,7 +287,8 @@ async def update_pending_edit(
     )
 
     # If user marked edit as auto accept we should do that
-    if args.auto:
+    # unless someone else changed its status after update was saved
+    if args.auto and await lock_pending_edit(session, edit):
         await accept_pending_edit(
             session, edit, user, constants.LOG_EDIT_UPDATE_ACCEPT_AUTO
         )

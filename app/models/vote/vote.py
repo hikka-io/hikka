@@ -2,7 +2,7 @@ from ..mixins import CreatedMixin, UpdatedMixin
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Index
 from ..base import Base
 from uuid import UUID
 
@@ -13,6 +13,17 @@ class Vote(Base, CreatedMixin, UpdatedMixin):
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
     }
+
+    # One vote record per user and content
+    __table_args__ = (
+        Index(
+            "uq_vote_content_user",
+            "content_type",
+            "content_id",
+            "user_id",
+            unique=True,
+        ),
+    )
 
     score: Mapped[int]  # Shoule be -1 / 0 / 1
     content_type: Mapped[str]

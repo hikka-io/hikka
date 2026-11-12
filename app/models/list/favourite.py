@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..mixins import CreatedMixin, DeletedMixin
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Index
 from ..base import Base
 from uuid import UUID
 
@@ -11,6 +11,17 @@ class Favourite(Base, CreatedMixin, DeletedMixin):
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
     }
+
+    # One favourite record per user and content
+    __table_args__ = (
+        Index(
+            "uq_favourite_content_user",
+            "content_type",
+            "content_id",
+            "user_id",
+            unique=True,
+        ),
+    )
 
     content_type: Mapped[str]
     content_id: Mapped[UUID]

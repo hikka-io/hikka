@@ -1,6 +1,7 @@
 from sqlalchemy import ScalarResult, or_, select, desc, asc, func, update
 from app.common.schemas.comments import CommentContentTypeEnum
 from app.common.service.sort import build_comments_order_by
+from sqlalchemy.orm.attributes import set_committed_value
 from app.common.schemas.reviews import ReviewRecommended
 from app.common.service.score import get_user_list_score
 from app.common.service.reviews import get_review_stats
@@ -15,6 +16,7 @@ from app.utils import round_datetime
 from sqlalchemy_utils import Ltree
 from sqlalchemy.orm import aliased
 from .utils import uuid_to_path
+from datetime import datetime
 from app.utils import utcnow
 from uuid import UUID, uuid4
 from app import constants
@@ -24,6 +26,7 @@ import copy
 from app.service import (
     get_my_score_subquery,
     get_content_by_id,
+    insert_or_skip,
     create_log,
 )
 
@@ -134,6 +137,46 @@ async def get_comments_count(
     return await session.scalar(query)
 
 
+async def insert_review(
+    session: AsyncSession,
+    comment: Comment,
+    recommended: str,
+    created: datetime,
+    updated: datetime,
+) -> Review | None:
+    """Write review for comment unless its author already has one"""
+
+    # Review references comment so comment has to be written first
+    await session.flush()
+
+    score = await get_user_list_score(
+        session, comment.content_type, comment.content_id, comment.author
+    )
+
+    # Parallel requests may get here at the same time
+    # so unique index decides which one writes the review
+    review = await insert_or_skip(
+        session,
+        Review,
+        ["content_type", "content_id", "author_id"],
+        {
+            "content_type": comment.content_type,
+            "content_id": comment.content_id,
+            "author_id": comment.author_id,
+            "comment_id": comment.id,
+            "recommended": recommended,
+            "created": created,
+            "updated": updated,
+            "score": score,
+        },
+    )
+
+    if review:
+        set_committed_value(comment, "review", review)
+
+    return review
+
+
 async def create_comment(
     session: AsyncSession,
     content_type: CommentContentTypeEnum,
@@ -176,23 +219,12 @@ async def create_comment(
 
     session.add(comment)
 
-    if comment_review is not None:
-        review = Review(
-            **{
-                "recommended": comment_review.recommended,
-                "content_type": content_type,
-                "content_id": content.id,
-                "comment": comment,
-                "created": now,
-                "updated": now,
-                "user": author,
-                "score": await get_user_list_score(
-                    session, content_type, content.id, author
-                ),
-            }
-        )
-
-        session.add(review)
+    if comment_review is not None and not await insert_review(
+        session, comment, comment_review.recommended, now, now
+    ):
+        # Parallel request has written review for this content first
+        await session.rollback()
+        return None
 
     await session.commit()
 
@@ -492,7 +524,7 @@ async def edit_comment(
     comment: Comment,
     text: str,
     comment_review: Review | None = None,
-) -> Comment:
+) -> Comment | None:
     now = utcnow()
 
     old_text = comment.text
@@ -530,26 +562,20 @@ async def edit_comment(
 
     else:
         if comment_review is not None:
-            review = Review(
-                **{
-                    "user": comment.author,
-                    "recommended": comment_review.recommended,
-                    "content_type": comment.content_type,
-                    "content_id": comment.content_id,
-                    "created": comment.created,
-                    "updated": comment.updated,
-                    "comment": comment,
-                    "score": await get_user_list_score(
-                        session,
-                        comment.content_type,
-                        comment.content_id,
-                        comment.author,
-                    ),
-                }
-            )
+            if not (
+                review := await insert_review(
+                    session,
+                    comment,
+                    comment_review.recommended,
+                    comment.created,
+                    comment.updated,
+                )
+            ):
+                # Parallel request has written review for this content first
+                await session.rollback()
+                return None
 
             review_after = {"recommended": review.recommended}
-            session.add(review)
 
     await session.commit()
 

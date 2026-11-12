@@ -22,8 +22,8 @@ from .schemas import (
 )
 
 from app.service import (
+    get_or_create_anime_watch,
     anime_search_filter,
-    get_anime_watch,
     anime_loadonly,
     create_log,
 )
@@ -66,15 +66,12 @@ async def save_watch(
     log_type = constants.LOG_WATCH_UPDATE
 
     # Create watch record if missing
-    if not (watch := await get_anime_watch(session, anime, user)):
+    watch, created = await get_or_create_anime_watch(
+        session, anime, user, args.status, now
+    )
+
+    if created:
         log_type = constants.LOG_WATCH_CREATE
-
-        watch = AnimeWatch()
-        watch.created = now
-        watch.anime = anime
-        watch.user = user
-
-        session.add(watch)
 
         # Generally I think it's bad idea to modify user passed args
         # but this would allow us to keep existing logic so why not
@@ -100,7 +97,8 @@ async def save_watch(
     # Set attributes from args to watch record
     for key, new_value in args.model_dump().items():
         # Here we add changes to log's before/after dicts only if there are changes
-        old_value = getattr(watch, key)
+        # New record had nothing before so its log lists every passed value
+        old_value = None if created else getattr(watch, key)
 
         if old_value != new_value:
             log_before[key] = old_value

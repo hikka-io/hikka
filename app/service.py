@@ -1,6 +1,8 @@
+from sqlalchemy.orm.attributes import set_committed_value
 from app.common.schemas.anime import AnimeSearchArgsBase
 from app.common.schemas.manga import MangaSearchArgs
 from app.common.schemas.novel import NovelSearchArgs
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_, func
 from sqlalchemy.sql.selectable import Select
@@ -230,6 +232,59 @@ async def get_anime_watch(session: AsyncSession, anime: Anime, user: User):
             AnimeWatch.user == user,
         )
     )
+
+
+async def insert_or_skip(
+    session: AsyncSession,
+    model,
+    index_elements: list[str],
+    values: dict,
+    index_where=None,
+):
+    """Insert row and return it or None if unique index already has one"""
+
+    return await session.scalar(
+        insert(model)
+        .values(**values)
+        .on_conflict_do_nothing(
+            index_elements=index_elements,
+            index_where=index_where,
+        )
+        .returning(model)
+    )
+
+
+async def get_or_create_anime_watch(
+    session: AsyncSession,
+    anime: Anime,
+    user: User,
+    status: str,
+    now: datetime,
+) -> tuple[AnimeWatch, bool]:
+    """Return user's watch record for anime and whether it was created"""
+
+    if watch := await get_anime_watch(session, anime, user):
+        return watch, False
+
+    # Parallel requests may get here at the same time
+    # so unique index decides which one creates the record
+    if watch := await insert_or_skip(
+        session,
+        AnimeWatch,
+        ["anime_id", "user_id"],
+        {
+            "anime_id": anime.id,
+            "user_id": user.id,
+            "status": status,
+            "created": now,
+            "updated": now,
+        },
+    ):
+        set_committed_value(watch, "anime", anime)
+        set_committed_value(watch, "user", user)
+        return watch, True
+
+    return await get_anime_watch(session, anime, user), False
 
 
 async def get_user_by_username(

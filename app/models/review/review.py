@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
+from sqlalchemy import Index
 from ..base import Base
 from uuid import UUID
 
@@ -24,6 +25,17 @@ class Review(
         "polymorphic_on": "content_type",
         "with_polymorphic": "*",
     }
+
+    # One review per user and content
+    __table_args__ = (
+        Index(
+            "uq_review_content_author",
+            "content_type",
+            "content_id",
+            "author_id",
+            unique=True,
+        ),
+    )
 
     recommended: Mapped[str] = mapped_column(String(16), index=True)
     score: Mapped[int] = mapped_column(default=0)
