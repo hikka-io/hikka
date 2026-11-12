@@ -50,18 +50,15 @@ def check_invalid_fields(edit: Edit):
 
 
 def check_after(after, content):
-    """Check if Edit has differences from content"""
+    """Return only fields which differ from content"""
 
-    pop_list = []
-
-    for key, value in after.items():
-        if getattr(content, key) == value:
-            pop_list.append(key)
-
-    for pop_key in pop_list:
-        after.pop(pop_key)
-
-    return after
+    # We return new dict since changing edit's after in place
+    # wouldn't be saved to database and would only confuse things
+    return {
+        key: value
+        for key, value in after.items()
+        if getattr(content, key) != value
+    }
 
 
 def calculate_before(content, after):

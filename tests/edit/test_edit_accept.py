@@ -237,3 +237,58 @@ async def test_edit_accept_parallel(
     )
 
     assert status_logs_count == 1
+
+
+async def test_edit_accept_content_changed(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user_moderator,
+    get_test_token,
+    test_session,
+):
+    # Create edit for anime
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {
+            "description": "Brief description",
+            "after": {
+                "title_en": "Bocchi The Rock!",
+                "title_ua": "Самотня рокерка!",
+            },
+        },
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    edit_id = response.json()["edit_id"]
+
+    # Sync sets same English title before edit is accepted
+    anime = await test_session.scalar(
+        select(Anime).filter(Anime.slug == "bocchi-the-rock-9e172d")
+    )
+
+    anime.title_en = "Bocchi The Rock!"
+    await test_session.commit()
+
+    # Accept edit
+    response = await request_accept_edit(client, get_test_token, edit_id)
+
+    # Only field which still differed should be accepted
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["after"] == {"title_ua": "Самотня рокерка!"}
+    assert response.json()["before"].keys() == {"title_ua"}
+
+    # Stored edit should be same as response
+    edit = await test_session.scalar(
+        select(Edit).filter(Edit.edit_id == edit_id)
+    )
+
+    assert edit.after == response.json()["after"]
+    assert edit.before == response.json()["before"]
+
+    # English title shouldn't be locked since edit didn't change it
+    await test_session.refresh(anime)
+    assert anime.ignored_fields == ["title_ua"]

@@ -6,6 +6,7 @@ from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
 from .utils import calculate_before
+from .utils import check_after
 from app.utils import utcnow
 from app.models import Log
 from app import constants
@@ -329,6 +330,10 @@ async def accept_pending_edit(
     """Accept pending edit"""
 
     content = edit.content
+
+    # Content may have caught up with edit since it was created
+    # so we only apply and store fields which still differ
+    edit.after = check_after(edit.after, content)
 
     # Fix for SQLAlchemy shenanigans
     if hasattr(content, "ignored_fields"):

@@ -1,5 +1,5 @@
-from app.models import Anime, Edit
 from app.database import sessionmanager
+from app.models import Anime, Edit
 from app.utils import get_settings
 from sqlalchemy import select, or_
 from app import constants
