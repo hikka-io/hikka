@@ -1,9 +1,10 @@
 from client_requests import request_watch_add
+from sqlalchemy import select, desc, func
 from client_requests import request_watch
-from sqlalchemy import select, desc
-from app.models import Log
+from app.models import AnimeWatch, Log
 from fastapi import status
 from app import constants
+import asyncio
 
 
 async def test_watch_add(
@@ -142,3 +143,46 @@ async def test_watch_add(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_watch_add_parallel(
+    client,
+    create_test_user,
+    aggregator_anime,
+    aggregator_anime_info,
+    get_test_token,
+    test_session,
+):
+    # Same anime added from several requests at once
+    responses = await asyncio.gather(
+        *[
+            request_watch_add(
+                client,
+                "bocchi-the-rock-9e172d",
+                get_test_token,
+                {"status": "watching"},
+            )
+            for _ in range(5)
+        ]
+    )
+
+    for response in responses:
+        assert response.status_code == status.HTTP_200_OK
+
+    # User should still have only one watch record for it
+    watch_count = await test_session.scalar(
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.user == create_test_user
+        )
+    )
+
+    assert watch_count == 1
+
+    # And only one request should log it as created
+    create_logs_count = await test_session.scalar(
+        select(func.count(Log.id)).filter(
+            Log.log_type == constants.LOG_WATCH_CREATE
+        )
+    )
+
+    assert create_logs_count == 1

@@ -4,6 +4,7 @@ from client_requests import request_watch_add
 from sqlalchemy import select, desc, func
 from fastapi import status
 from app import constants
+import asyncio
 
 
 async def test_settings_import_watch(
@@ -98,3 +99,53 @@ async def test_settings_import_watch(
     assert log.user == create_test_user
     assert log.data["imported"] == 1
     assert log.data["overwrite"] is False
+
+
+async def test_settings_import_watch_parallel(
+    client,
+    create_test_user,
+    aggregator_anime,
+    aggregator_anime_info,
+    get_test_token,
+    test_session,
+):
+    anime = [
+        {
+            "my_status": "Watching",
+            "series_animedb_id": 47917,
+            "my_watched_episodes": 9,
+            "my_comments": {},
+            "my_score": 10,
+        },
+        {
+            "my_status": "Completed",
+            "series_animedb_id": 16498,
+            "my_watched_episodes": 25,
+            "my_comments": {},
+            "my_score": 7,
+        },
+    ]
+
+    # Same list imported from several requests at once
+    responses = await asyncio.gather(
+        *[
+            request_settings_import_watch(
+                client,
+                get_test_token,
+                {"overwrite": False, "anime": anime},
+            )
+            for _ in range(3)
+        ]
+    )
+
+    for response in responses:
+        assert response.status_code == status.HTTP_200_OK
+
+    # Each anime should be imported only once
+    watch_count = await test_session.scalar(
+        select(func.count(AnimeWatch.id)).filter(
+            AnimeWatch.user == create_test_user
+        )
+    )
+
+    assert watch_count == 2

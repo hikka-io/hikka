@@ -3,6 +3,7 @@ from client_requests import request_read_add
 from sqlalchemy import select, desc, func
 from fastapi import status
 from app import constants
+import asyncio
 
 from app.models import (
     MangaRead,
@@ -139,3 +140,59 @@ async def test_settings_import_read(
     assert log.data["imported_manga"] == 1
     assert log.data["overwrite"] is False
     assert log.user == create_test_user
+
+
+async def test_settings_import_read_parallel(
+    client,
+    create_test_user,
+    aggregator_manga,
+    aggregator_novel,
+    aggregator_manga_info,
+    aggregator_novel_info,
+    get_test_token,
+    test_session,
+):
+    content = [
+        {
+            "my_times_read": 0,
+            "manga_mangadb_id": 130826,  # Tian (novel)
+            "my_read_chapters": 2,
+            "my_read_volumes": 3,
+            "my_score": 7,
+            "my_status": "Reading",
+            "my_comments": {},
+        },
+        {
+            "my_times_read": 1,
+            "manga_mangadb_id": 60553,  # Konosuba (novel)
+            "my_read_chapters": 1,
+            "my_read_volumes": 1,
+            "my_score": 10,
+            "my_status": "Reading",
+            "my_comments": {},
+        },
+    ]
+
+    # Same list imported from several requests at once
+    responses = await asyncio.gather(
+        *[
+            request_settings_import_read(
+                client,
+                get_test_token,
+                {"overwrite": False, "content": content},
+            )
+            for _ in range(3)
+        ]
+    )
+
+    for response in responses:
+        assert response.status_code == status.HTTP_200_OK
+
+    # Each novel should be imported only once
+    read_count = await test_session.scalar(
+        select(func.count(NovelRead.id)).filter(
+            NovelRead.user == create_test_user
+        )
+    )
+
+    assert read_count == 2

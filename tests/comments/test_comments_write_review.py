@@ -1,9 +1,10 @@
 from client_requests import request_comments_write
 from client_requests import request_comments_hide
 from client_requests import request_create_edit
-from app.models import Review
-from sqlalchemy import select
+from app.models import Comment, Review
+from sqlalchemy import select, func
 from fastapi import status
+import asyncio
 
 
 async def test_comments_write_review(
@@ -191,3 +192,45 @@ async def test_comments_write_review_after_deletion(
     )
 
     assert response.status_code == status.HTTP_200_OK
+
+
+async def test_comments_write_review_parallel(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    comments_before = await test_session.scalar(select(func.count(Comment.id)))
+
+    # Same user writes several reviews for same anime at once
+    responses = await asyncio.gather(
+        *[
+            request_comments_write(
+                client,
+                get_test_token,
+                "anime",
+                "bocchi-the-rock-9e172d",
+                f"Огляд номер {index}",
+                review={"recommended": "yes"},
+            )
+            for index in range(3)
+        ]
+    )
+
+    # Only one of them should be saved
+    status_codes = [response.status_code for response in responses]
+    assert status_codes.count(status.HTTP_200_OK) == 1
+
+    for response in responses:
+        if response.status_code != status.HTTP_200_OK:
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+            assert response.json()["code"] == "review:has_review"
+
+    review_count = await test_session.scalar(select(func.count(Review.id)))
+    assert review_count == 1
+
+    # Rejected reviews shouldn't leave their comments behind
+    comments_after = await test_session.scalar(select(func.count(Comment.id)))
+    assert comments_after - comments_before == 1

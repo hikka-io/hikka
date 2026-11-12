@@ -1,10 +1,11 @@
 from client_requests import request_comments_write
 from client_requests import request_vote_status
 from sqlalchemy import select, desc, func
+from app.models import Comment, Vote, Log
 from client_requests import request_vote
-from app.models import Comment, Log
 from fastapi import status
 from app import constants
+import asyncio
 
 
 async def test_vote_comment(
@@ -86,3 +87,49 @@ async def test_vote_comment(
     # Check status and score
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["score"] == -1
+
+
+async def test_vote_comment_parallel(
+    client,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    response = await request_comments_write(
+        client, get_test_token, "edit", "17", "Text"
+    )
+
+    comment_reference = response.json()["reference"]
+
+    # Same vote sent from several requests at once
+    responses = await asyncio.gather(
+        *[
+            request_vote(
+                client,
+                get_test_token,
+                constants.CONTENT_COMMENT,
+                comment_reference,
+                1,
+            )
+            for _ in range(5)
+        ]
+    )
+
+    for response in responses:
+        assert response.status_code == status.HTTP_200_OK
+
+    # User should have only one vote for comment
+    vote_count = await test_session.scalar(
+        select(func.count(Vote.id)).filter(Vote.user == create_test_user)
+    )
+
+    assert vote_count == 1
+
+    # And it should be counted only once
+    comment = await test_session.scalar(
+        select(Comment).filter(Comment.id == comment_reference)
+    )
+
+    assert comment.vote_score == 1

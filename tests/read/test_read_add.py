@@ -1,9 +1,10 @@
 from client_requests import request_read_add
+from sqlalchemy import select, desc, func
 from client_requests import request_read
-from sqlalchemy import select, desc
-from app.models import Log
+from app.models import MangaRead, Log
 from fastapi import status
 from app import constants
+import asyncio
 
 
 async def test_read_add(
@@ -144,3 +145,47 @@ async def test_read_add(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_read_add_parallel(
+    client,
+    create_test_user,
+    aggregator_manga,
+    aggregator_manga_info,
+    get_test_token,
+    test_session,
+):
+    # Same manga added from several requests at once
+    responses = await asyncio.gather(
+        *[
+            request_read_add(
+                client,
+                "manga",
+                "berserk-fb9fbd",
+                get_test_token,
+                {"status": "reading"},
+            )
+            for _ in range(5)
+        ]
+    )
+
+    for response in responses:
+        assert response.status_code == status.HTTP_200_OK
+
+    # User should still have only one read record for it
+    read_count = await test_session.scalar(
+        select(func.count(MangaRead.id)).filter(
+            MangaRead.user == create_test_user
+        )
+    )
+
+    assert read_count == 1
+
+    # And only one request should log it as created
+    create_logs_count = await test_session.scalar(
+        select(func.count(Log.id)).filter(
+            Log.log_type == constants.LOG_READ_CREATE
+        )
+    )
+
+    assert create_logs_count == 1
