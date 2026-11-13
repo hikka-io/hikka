@@ -65,8 +65,8 @@ async def validate_upload_file(
     upload_type: UploadTypeEnum, file: UploadFile = File()
 ) -> UploadMetadata:
     # TODO: we probably need to reduce file size here
-    if not (
-        file.size  # Empty file is not smething we want to have
+    if (
+        not file.size  # Empty file is not something we want to have
         or file.size > 2 * 1024 * 1024  # 2mb
     ):
         raise Abort("upload", "bad-size")
