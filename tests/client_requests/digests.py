@@ -9,3 +9,7 @@ def request_digest_privacy(client, name, private, token):
         json={"private": private},
         headers={"Auth": token},
     )
+
+
+def request_digest_privacy_info(client, name, token):
+    return client.get(f"/digests/{name}/privacy", headers={"Auth": token})

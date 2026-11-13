@@ -22,7 +22,13 @@ from .dependencies import (
 router = APIRouter(prefix="/digests", tags=["Digests"])
 
 
-@router.get("/{name}/privacy", response_model=DigestPrivacyResponse)
+@router.get(
+    "/{name}/privacy",
+    response_model=DigestPrivacyResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_READ_USER_DETAILS]))
+    ],
+)
 async def get_digest_privacy(
     digest: Digest = Depends(validate_digest_owner),
 ):
@@ -36,7 +42,13 @@ async def get_user_digest_privacy(
     return digest
 
 
-@router.post("/{name}/privacy", response_model=DigestPrivacyResponse)
+@router.post(
+    "/{name}/privacy",
+    response_model=DigestPrivacyResponse,
+    dependencies=[
+        Depends(auth_required(scope=[constants.SCOPE_UPDATE_USER_DIGESTS]))
+    ],
+)
 async def update_digest_privacy(
     args: PrivateArgs,
     digest: Digest = Depends(validate_digest_owner),

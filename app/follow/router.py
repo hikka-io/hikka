@@ -34,9 +34,7 @@ router = APIRouter(prefix="/follow", tags=["Follow"])
     "/{username}",
     response_model=FollowResponse,
     summary="Check follow",
-    dependencies=[
-        Depends(auth_required(scope=[constants.SCOPE_READ_FAVOURITE]))
-    ],
+    dependencies=[Depends(auth_required(scope=[constants.SCOPE_READ_FOLLOW]))],
 )
 async def check(
     session: AsyncSession = Depends(get_session),

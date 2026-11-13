@@ -4,7 +4,6 @@ from app.database import get_session
 from app.models import Digest, User
 from app.errors import Abort
 from fastapi import Depends
-from app import constants
 from . import service
 
 
@@ -31,7 +30,7 @@ async def validate_digest_info(
 
 async def validate_digest_owner(
     name: str,
-    request_user: User = Depends(auth_required(scope=[constants.SCOPE_UPLOAD])),
+    request_user: User = Depends(auth_required()),
     session: AsyncSession = Depends(get_session),
 ):
     if not (digest := await service.get_digest(session, name, request_user)):

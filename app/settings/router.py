@@ -225,7 +225,7 @@ async def change_ignored_notifications(
     args: IgnoredNotificationsArgs,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(
-        auth_required(scope=[constants.SCOPE_UPDATE_USER_DETAILS])
+        auth_required(scope=[constants.SCOPE_UPDATE_USER_NOTIFICATIONS])
     ),
 ):
     return await service.set_ignored_notifications(

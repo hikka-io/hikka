@@ -102,6 +102,7 @@ from .comments import request_comments_edit
 from .comments import request_comments_hide
 from .comments import request_comments_user
 
+from .settings import request_settings_ignored_notifications
 from .settings import request_settings_customization
 from .settings import request_settings_delete_watch
 from .settings import request_settings_delete_image
@@ -129,6 +130,7 @@ from .articles import request_delete_article
 from .articles import request_article_stats
 from .articles import request_articles
 
+from .digests import request_digest_privacy_info
 from .digests import request_digest_privacy
 from .digests import request_digest
 
@@ -256,6 +258,7 @@ __all__ = [
     "request_comments_hide",
     "request_comments_user",
     # =========== settings ===========
+    "request_settings_ignored_notifications",
     "request_settings_customization",
     "request_settings_delete_watch",
     "request_settings_delete_image",
@@ -283,6 +286,7 @@ __all__ = [
     "request_article_stats",
     "request_articles",
     # =========== digests ===========
+    "request_digest_privacy_info",
     "request_digest_privacy",
     "request_digest",
     # =========== notifications ===========

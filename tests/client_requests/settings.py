@@ -14,6 +14,14 @@ def request_settings_customization(client, token, data):
     )
 
 
+def request_settings_ignored_notifications(client, token, ignored):
+    return client.put(
+        "/settings/notifications",
+        headers={"Auth": token},
+        json={"ignored_notifications": ignored},
+    )
+
+
 def request_settings_username(client, token, username):
     return client.put(
         "/settings/username",
