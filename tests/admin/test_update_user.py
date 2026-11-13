@@ -1,3 +1,5 @@
+from app.models import Image
+from app.utils import utcnow
 from app import constants
 from tests.client_requests import (
     request_admin_update_user,
@@ -84,3 +86,55 @@ async def test_ban(client, test_user, token_admin, test_session):
     await test_session.refresh(test_user)
 
     assert test_user.banned is True
+
+
+async def test_forbid_action_merge_nothing_new(
+    client, test_user, token_admin, test_session
+):
+    test_user.forbidden_actions = [
+        constants.PERMISSION_CLIENT_UPDATE,
+        constants.PERMISSION_CLIENT_CREATE,
+    ]
+
+    await test_session.commit()
+
+    # Merging empty list or actions user already has changes nothing
+    for forbid_actions in [[], [constants.PERMISSION_CLIENT_CREATE]]:
+        response = await request_admin_update_user(
+            client,
+            token_admin,
+            test_user.username,
+            forbid_actions,
+            forbid_actions_merge=True,
+        )
+
+        assert response.status_code == 400
+        assert response.json()["code"] == "admin:nothing_to_update"
+
+
+async def test_ban_remove_images(client, test_user, token_admin, test_session):
+    # User has avatar but no cover
+    avatar = Image(path="test/avatar.jpg", created=utcnow(), uploaded=True)
+    test_user.avatar_image = avatar
+    await test_session.commit()
+
+    assert test_user.cover_image_id is None
+
+    # Missing cover shouldn't break rest of the request
+    response = await request_admin_update_user(
+        client,
+        token_admin,
+        test_user.username,
+        remove_avatar=True,
+        remove_cover=True,
+        banned=True,
+    )
+
+    assert response.status_code == 200
+
+    await test_session.refresh(test_user)
+    await test_session.refresh(avatar)
+
+    assert test_user.banned is True
+    assert test_user.avatar_image_id is None
+    assert avatar.deletion_request is True

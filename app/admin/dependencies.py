@@ -16,17 +16,20 @@ async def validate_update_user(
     - Too many return-statements?
     """
 
-    user_forbidden_actions = set(user.forbidden_actions)
-    body_forbidden_actions = (
-        set(body.forbid_actions) if body.forbid_actions else None
-    )
+    if body.forbid_actions is not None:
+        user_forbidden_actions = set(user.forbidden_actions)
+        body_forbidden_actions = set(body.forbid_actions)
 
-    if body.forbid_actions is not None and (
-        body.forbid_actions_merge
-        and not user_forbidden_actions.issuperset(body_forbidden_actions)
-        or user_forbidden_actions != body_forbidden_actions
-    ):
-        return body
+        # Merge changes nothing if user already has all passed actions
+        if body.forbid_actions_merge:
+            changed = not user_forbidden_actions.issuperset(
+                body_forbidden_actions
+            )
+        else:
+            changed = user_forbidden_actions != body_forbidden_actions
+
+        if changed:
+            return body
 
     if body.remove_avatar and user.avatar_image_id is not None:
         return body
