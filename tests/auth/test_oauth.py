@@ -1,3 +1,4 @@
+from app.utils import is_valid_username
 from sqlalchemy import select, desc
 from app.models import Log, User
 from fastapi import status
@@ -95,3 +96,35 @@ async def test_valid_oauth_username_extra(
     response = await request_me(client, response.json()["secret"])
     assert response.json()["username"].startswith("testuser") is True
     assert len(response.json()["username"]) == 15
+
+
+async def test_oauth_username_rules(client, mock_oauth_data):
+    # Username made from email follows same rules as regular signup
+    cases = [
+        ("john.doe-99@mail.com", "john_doe_99"),
+        ("1st.place@mail.com", "1st_place"),
+        ("380991234567@mail.com", None),  # No letters
+        ("admin@mail.com", None),  # Reserved
+        ("abc@mail.com", None),  # Too short
+    ]
+
+    for index, (email, expected) in enumerate(cases):
+        mock_oauth_data.return_value = {
+            "email": email,
+            "id": f"TEST_OAUTH_ID_{index}",
+        }
+
+        response = await request_oauth_post(client, "google", "code")
+        assert response.status_code == status.HTTP_200_OK
+
+        response = await request_me(client, response.json()["secret"])
+        username = response.json()["username"]
+
+        assert is_valid_username(username)
+
+        # Random username is used when email can't give valid one
+        if expected is None:
+            assert username.startswith("user_")
+            continue
+
+        assert username == expected

@@ -28,9 +28,18 @@ async def test_long_username(client):
 
 
 async def test_start_number_username(client):
-    # Username starting with number
+    # Username can start with number
     response = await request_signup(
-        client, "test@mail.com", "1user", "password"
+        client, "user@mail.com", "1user", "password"
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+async def test_number_only_username(client):
+    # But it has to have at least one letter
+    response = await request_signup(
+        client, "test@mail.com", "12345", "password"
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST

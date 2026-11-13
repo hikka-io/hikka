@@ -453,6 +453,16 @@ def is_protected_username(username: str):
     return username in usernames
 
 
+def is_valid_username(username: str) -> bool:
+    """Check username against same rules as signup and username change"""
+
+    return (
+        re.fullmatch(constants.USERNAME_PATTERN, username) is not None
+        and any(char.isalpha() for char in username)
+        and not is_protected_username(username)
+    )
+
+
 def remove_bad_characters(text):
     bad_characters = [
         "\u2800",  # Braille Pattern Blank

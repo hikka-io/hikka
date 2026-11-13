@@ -7,11 +7,13 @@ from app.service import get_user_by_email
 from datetime import timedelta, datetime
 from starlette.datastructures import URL
 from sqlalchemy.orm import selectinload
+from app.utils import is_valid_username
 from .schemas import SignupArgs
 from urllib.parse import quote
 from app import constants
 import secrets
 import uuid
+import re
 
 
 async def get_user_by_activation(
@@ -41,41 +43,50 @@ async def get_user_by_reset(session: AsyncSession, token: str) -> User | None:
     )
 
 
+def username_from_email(email: str | None) -> str | None:
+    """Make username from email or return None if it can't be valid"""
+
+    if not email:
+        return None
+
+    # Characters usernames can't have become underscores
+    # and leading ones are dropped since username can't start with one
+    username = re.sub(r"[^A-Za-z0-9_]", "_", email.split("@")[0])
+    username = username.lstrip("_")[:32]
+
+    # All digit names like phone numbers fail since letter is required
+    return username if is_valid_username(username) else None
+
+
+async def generate_oauth_username(
+    session: AsyncSession, email: str | None
+) -> str:
+    """Pick free username for new oauth account"""
+
+    # Name from email goes first and then same name with random suffix
+    if username := username_from_email(email):
+        candidates = [username] + [
+            f"{username}_{secrets.token_hex(3)}" for _ in range(5)
+        ]
+
+        for candidate in candidates:
+            if not await get_user_by_username(session, candidate):
+                return candidate
+
+    # Random username always matches username rules
+    while True:
+        username = f"user_{secrets.token_hex(6)}"
+
+        if not await get_user_by_username(session, username):
+            return username
+
+
 async def create_oauth_user(
     session: AsyncSession, provider: str, user_data: dict[str, str]
 ) -> UserOAuth:
     email = user_data.get("email")
+    username = await generate_oauth_username(session, email)
     now = utcnow()
-
-    # I really hate this part of code
-    # but we need it for better user experience
-    # when new account is created via oauth
-    username = secrets.token_urlsafe(16)
-
-    # If email is present we split it and get first 32 characters
-    if email:
-        tmp_username = email.split("@")[0][:32]
-
-        # Thanks @t for finding this ;)
-        if len(tmp_username) > 4:
-            username = tmp_username
-
-    # Just in case
-    max_attempts = 5
-    attempts = 0
-
-    while True:
-        # If for some reason we exceed attempts or 64 character limit
-        # Just generate random username
-        if attempts > max_attempts or len(username) > 64:
-            username = secrets.token_urlsafe(16)
-            break
-
-        if not (await get_user_by_username(session, username)):
-            break
-
-        username += "-" + secrets.token_urlsafe(4)
-        attempts += 1
 
     user = User(
         **{

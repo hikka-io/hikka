@@ -9,6 +9,10 @@ EMAIL_PASSWORD_RESET = "password_reset"
 # CDN endpoing
 CDN_ENDPOINT = "https://cdn.hikka.io"
 
+# Username lenght is 5-64 characters, it can contain digits as well as
+# underscores (but can't start with them)
+USERNAME_PATTERN = "^[A-Za-z0-9][A-Za-z0-9_]{4,63}$"
+
 # Sort options
 SORT_DESC = "desc"
 SORT_ASC = "asc"

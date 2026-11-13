@@ -155,8 +155,18 @@ class QuerySearchRequiredArgs(CustomModel):
 
 class UsernameArgs(CustomModel):
     username: str = Field(
-        pattern="^[A-Za-z][A-Za-z0-9_]{4,63}$", examples=["hikka"]
+        pattern=constants.USERNAME_PATTERN, examples=["hikka"]
     )
+
+    @field_validator("username")
+    @classmethod
+    def check_username(cls, value: str) -> str:
+        # Ensure there is at least one charater
+        # to prevent number only usernames
+        if not any(char.isalpha() for char in value):
+            raise ValueError("Username must contain at least one letter")
+
+        return value
 
 
 class EmailArgs(CustomModel):
