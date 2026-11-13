@@ -1,4 +1,6 @@
 from client_requests import request_todo_anime_list
+from sqlalchemy import select
+from app.models import Anime
 from fastapi import status
 
 
@@ -246,3 +248,27 @@ async def test_todo_anime_list_sort_invalid(client, aggregator_anime):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "system:validation_error"
+
+
+async def test_todo_anime_list_empty_field(
+    client, aggregator_anime, test_session
+):
+    # Field saved as empty string is as absent as missing one
+    anime = await test_session.scalar(
+        select(Anime).filter(Anime.slug == "bocchi-the-rock-9e172d")
+    )
+
+    anime.title_ua = ""
+    await test_session.commit()
+
+    response = await request_todo_anime_list(
+        client, {"mal_id": 47917, "fields": ["title_ua"]}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 1
+
+    # Issues should say why anime is in the list
+    issues = response.json()["list"][0]["issues"]
+    assert issues["title_ua_absent"] is True
+    assert issues["title_en_absent"] is False

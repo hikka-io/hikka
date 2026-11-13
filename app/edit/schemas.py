@@ -569,11 +569,11 @@ class TodoAnimeResponse(CustomModel):
         return cls(
             item=anime,
             issues=TodoContentIssuesInfo(
-                title_ua_absent=anime.title_ua is None,
-                title_en_absent=anime.title_en is None,
-                title_original_absent=anime.title_ja is None,
-                synopsis_ua_absent=anime.synopsis_ua is None,
-                synopsis_en_absent=anime.synopsis_en is None,
+                title_ua_absent=not anime.title_ua,
+                title_en_absent=not anime.title_en,
+                title_original_absent=not anime.title_ja,
+                synopsis_ua_absent=not anime.synopsis_ua,
+                synopsis_en_absent=not anime.synopsis_en,
             ),
         )
 
@@ -587,11 +587,11 @@ class TodoMangaResponse(CustomModel):
         return cls(
             item=manga,
             issues=TodoContentIssuesInfo(
-                title_ua_absent=manga.title_ua is None,
-                title_en_absent=manga.title_en is None,
-                title_original_absent=manga.title_original is None,
-                synopsis_ua_absent=manga.synopsis_ua is None,
-                synopsis_en_absent=manga.synopsis_en is None,
+                title_ua_absent=not manga.title_ua,
+                title_en_absent=not manga.title_en,
+                title_original_absent=not manga.title_original,
+                synopsis_ua_absent=not manga.synopsis_ua,
+                synopsis_en_absent=not manga.synopsis_en,
             ),
         )
 
@@ -605,11 +605,11 @@ class TodoNovelResponse(CustomModel):
         return cls(
             item=novel,
             issues=TodoContentIssuesInfo(
-                title_ua_absent=novel.title_ua is None,
-                title_en_absent=novel.title_en is None,
-                title_original_absent=novel.title_original is None,
-                synopsis_ua_absent=novel.synopsis_ua is None,
-                synopsis_en_absent=novel.synopsis_en is None,
+                title_ua_absent=not novel.title_ua,
+                title_en_absent=not novel.title_en,
+                title_original_absent=not novel.title_original,
+                synopsis_ua_absent=not novel.synopsis_ua,
+                synopsis_en_absent=not novel.synopsis_en,
             ),
         )
 
@@ -623,10 +623,10 @@ class TodoCharacterResponse(CustomModel):
         return cls(
             item=character,
             issues=TodoCharacterIssuesInfo(
-                name_ua_absent=character.name_ua is None,
-                name_en_absent=character.name_en is None,
-                name_original_absent=character.name_ja is None,
-                description_ua_absent=character.description_ua is None,
+                name_ua_absent=not character.name_ua,
+                name_en_absent=not character.name_en,
+                name_original_absent=not character.name_ja,
+                description_ua_absent=not character.description_ua,
             ),
         )
 
@@ -640,9 +640,9 @@ class TodoPersonResponse(CustomModel):
         return cls(
             item=person,
             issues=TodoPersonIssuesInfo(
-                name_ua_absent=person.name_ua is None,
-                name_en_absent=person.name_en is None,
-                name_original_absent=person.name_native is None,
+                name_ua_absent=not person.name_ua,
+                name_en_absent=not person.name_en,
+                name_original_absent=not person.name_native,
             ),
         )
 

@@ -1,4 +1,6 @@
 from client_requests import request_todo_character_list
+from app.models import Character
+from sqlalchemy import select
 from fastapi import status
 
 
@@ -157,3 +159,35 @@ async def test_todo_character_list_sort_by_name(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["list"][0]["item"]["name_en"] == "Abel"
     assert response.json()["list"][-1]["item"]["name_en"] == "Zeke"
+
+
+async def test_todo_character_list_orphan(
+    client, aggregator_characters, test_session
+):
+    response = await request_todo_character_list(
+        client, {"sort": ["name_en:asc"]}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    total = response.json()["pagination"]["total"]
+    slug = response.json()["list"][0]["item"]["slug"]
+
+    # Nightly sync marks characters without any titles as orphans
+    character = await test_session.scalar(
+        select(Character).filter(Character.slug == slug)
+    )
+
+    character.orphan = True
+    await test_session.commit()
+
+    # Orphans can't be opened or edited so todo list shouldn't show them
+    response = await request_todo_character_list(
+        client, {"sort": ["name_en:asc"]}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == total - 1
+
+    slugs = [entry["item"]["slug"] for entry in response.json()["list"]]
+    assert slug not in slugs

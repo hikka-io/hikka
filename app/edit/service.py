@@ -590,9 +590,7 @@ async def get_todo_anime_list(
     if or_filters:
         filters.append(or_(*or_filters))
 
-    total = await session.scalar(
-        select(func.count(Anime.id)).filter(*filters)
-    )
+    total = await session.scalar(select(func.count(Anime.id)).filter(*filters))
 
     if not total:
         return 0, []
@@ -660,11 +658,11 @@ def todo_anime_filters(search: AnimeTodoArgs) -> tuple[list, list]:
 
     if not search.fields:
         or_filters = [
-            or_(Anime.title_ua == None, Anime.title_ua == ""),          # noqa: E711
-            or_(Anime.title_en == None, Anime.title_en == ""),          # noqa: E711
-            or_(Anime.title_ja == None, Anime.title_ja == ""),          # noqa: E711
-            or_(Anime.synopsis_ua == None, Anime.synopsis_ua == ""),    # noqa: E711
-            or_(Anime.synopsis_en == None, Anime.synopsis_en == ""),    # noqa: E711
+            or_(Anime.title_ua == None, Anime.title_ua == ""),  # noqa: E711
+            or_(Anime.title_en == None, Anime.title_en == ""),  # noqa: E711
+            or_(Anime.title_ja == None, Anime.title_ja == ""),  # noqa: E711
+            or_(Anime.synopsis_ua == None, Anime.synopsis_ua == ""),  # noqa: E711
+            or_(Anime.synopsis_en == None, Anime.synopsis_en == ""),  # noqa: E711
         ]
 
     if search.status:
@@ -734,9 +732,7 @@ async def get_todo_manga_list(
     if or_filters:
         filters.append(or_(*or_filters))
 
-    total = await session.scalar(
-        select(func.count(Manga.id)).filter(*filters)
-    )
+    total = await session.scalar(select(func.count(Manga.id)).filter(*filters))
 
     if not total:
         return 0, []
@@ -799,11 +795,11 @@ def todo_manga_filters(search: MangaTodoArgs) -> tuple[list, list]:
 
     if not search.fields:
         or_filters = [
-            or_(Manga.title_ua == None, Manga.title_ua == ""),                # noqa: E711
-            or_(Manga.title_en == None, Manga.title_en == ""),                # noqa: E711
-            or_(Manga.title_original == None, Manga.title_original == ""),    # noqa: E711
-            or_(Manga.synopsis_ua == None, Manga.synopsis_ua == ""),          # noqa: E711
-            or_(Manga.synopsis_en == None, Manga.synopsis_en == ""),          # noqa: E711
+            or_(Manga.title_ua == None, Manga.title_ua == ""),  # noqa: E711
+            or_(Manga.title_en == None, Manga.title_en == ""),  # noqa: E711
+            or_(Manga.title_original == None, Manga.title_original == ""),  # noqa: E711
+            or_(Manga.synopsis_ua == None, Manga.synopsis_ua == ""),  # noqa: E711
+            or_(Manga.synopsis_en == None, Manga.synopsis_en == ""),  # noqa: E711
         ]
 
     if search.status:
@@ -869,9 +865,7 @@ async def get_todo_novel_list(
     if or_filters:
         filters.append(or_(*or_filters))
 
-    total = await session.scalar(
-        select(func.count(Novel.id)).filter(*filters)
-    )
+    total = await session.scalar(select(func.count(Novel.id)).filter(*filters))
 
     if not total:
         return 0, []
@@ -934,11 +928,11 @@ def todo_novel_filters(search: NovelTodoArgs) -> tuple[list, list]:
 
     if not search.fields:
         or_filters = [
-            or_(Novel.title_ua == None, Novel.title_ua == ""),                # noqa: E711
-            or_(Novel.title_en == None, Novel.title_en == ""),                # noqa: E711
-            or_(Novel.title_original == None, Novel.title_original == ""),    # noqa: E711
-            or_(Novel.synopsis_ua == None, Novel.synopsis_ua == ""),          # noqa: E711
-            or_(Novel.synopsis_en == None, Novel.synopsis_en == ""),          # noqa: E711
+            or_(Novel.title_ua == None, Novel.title_ua == ""),  # noqa: E711
+            or_(Novel.title_en == None, Novel.title_en == ""),  # noqa: E711
+            or_(Novel.title_original == None, Novel.title_original == ""),  # noqa: E711
+            or_(Novel.synopsis_ua == None, Novel.synopsis_ua == ""),  # noqa: E711
+            or_(Novel.synopsis_en == None, Novel.synopsis_en == ""),  # noqa: E711
         ]
 
     if search.status:
@@ -1065,7 +1059,8 @@ async def get_todo_character_list(
 
 
 def todo_character_filters(search: CharacterTodoArgs) -> tuple[list, list]:
-    and_filters, or_filters = [], []
+    and_filters = [Character.orphan == False]  # noqa: E712
+    or_filters = []
 
     todo_field_columns = {
         "name_ua": Character.name_ua,
@@ -1085,10 +1080,12 @@ def todo_character_filters(search: CharacterTodoArgs) -> tuple[list, list]:
 
     if not search.fields:
         or_filters = [
-            or_(Character.name_ua == None, Character.name_ua == ""),                  # noqa: E711
-            or_(Character.name_en == None, Character.name_en == ""),                  # noqa: E711
-            or_(Character.name_ja == None, Character.name_ja == ""),                  # noqa: E711
-            or_(Character.description_ua == None, Character.description_ua == ""),    # noqa: E711
+            or_(Character.name_ua == None, Character.name_ua == ""),  # noqa: E711
+            or_(Character.name_en == None, Character.name_en == ""),  # noqa: E711
+            or_(Character.name_ja == None, Character.name_ja == ""),  # noqa: E711
+            or_(
+                Character.description_ua == None, Character.description_ua == ""
+            ),  # noqa: E711
         ]
 
     return and_filters, or_filters
@@ -1190,8 +1187,8 @@ def todo_person_filters(search: PersonTodoArgs) -> tuple[list, list]:
 
     if not search.fields:
         or_filters = [
-            or_(Person.name_ua == None, Person.name_ua == ""),        # noqa: E711
-            or_(Person.name_en == None, Person.name_en == ""),        # noqa: E711
+            or_(Person.name_ua == None, Person.name_ua == ""),  # noqa: E711
+            or_(Person.name_en == None, Person.name_en == ""),  # noqa: E711
             or_(Person.name_native == None, Person.name_native == ""),  # noqa: E711
         ]
 
