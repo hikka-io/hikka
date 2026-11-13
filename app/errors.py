@@ -391,6 +391,11 @@ errors = {
         "bad-resolution": ["Bad resolution", "Погана роздільна якість", 400],
         "bad-mime": ["Don't be bad mime", "Не будьте поганим мімом", 400],
         "bad-size": ["Bad file size", "Поганий розмір файлу", 400],
+        "failed": [
+            "Failed to save file, try again later",
+            "Не вдалося завантажити файл, спробуйте пізніше",
+            400,
+        ],
         "missconfigured-permission": [
             "If you see this, check upload permissions in rate limit",
             "Якщо ви бачите це, треба перевірити дозволи на завантаження в рейт лімітах",

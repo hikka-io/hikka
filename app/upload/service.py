@@ -57,10 +57,15 @@ async def process_upload_file(
     upload_type: UploadTypeEnum,
     upload_metadata: UploadMetadata,
     user: User,
-) -> Image:
+) -> Image | None:
     extension = utils.get_mime_extension(upload_metadata.mime_type)
 
     file_path = f"/uploads/{user.username}/{upload_type.name}/{str(uuid4())}.{extension}"
+
+    # Image without file in storage would link to nothing
+    # and still count towards user's daily upload limit
+    if not await s3_upload_file(upload_metadata, file_path):
+        return None
 
     now = utcnow()
 
@@ -73,34 +78,29 @@ async def process_upload_file(
             "type": upload_type,
             "user_id": user.id,
             "path": file_path,
-            "uploaded": False,
+            "uploaded": True,
             "ignore": False,
             "system": False,
             "created": now,
         }
     )
 
-    image.uploaded = await s3_upload_file(upload_metadata, file_path)
+    if upload_type == constants.UPLOAD_AVATAR:
+        # Mark old image to be deleted
+        if user.avatar_image:
+            user.avatar_image.deletion_request = True
 
-    if image.uploaded:
-        if upload_type == constants.UPLOAD_AVATAR:
-            # Mark old image to be deleted
-            if user.avatar_image:
-                user.avatar_image.deletion_request = True
+        user.avatar_image = image
 
-            # Only update image relation if file has been uploaded
-            user.avatar_image = image
+    if upload_type == constants.UPLOAD_COVER:
+        # Mark old image to be deleted
+        if user.cover_image:
+            user.cover_image.deletion_request = True
 
-        if upload_type == constants.UPLOAD_COVER:
-            # Mark old image to be deleted
-            if user.cover_image:
-                user.cover_image.deletion_request = True
+        user.cover_image = image
 
-            # Only update image relation if file has been uploaded
-            user.cover_image = image
-
-        if upload_type == constants.UPLOAD_ATTACHMENT:
-            image.used = False
+    if upload_type == constants.UPLOAD_ATTACHMENT:
+        image.used = False
 
     session.add_all([image])
     await session.commit()

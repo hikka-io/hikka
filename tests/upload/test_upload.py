@@ -1,5 +1,6 @@
 from client_requests import request_upload
 from fastapi import status
+from io import BytesIO
 
 
 async def test_upload_bad_mime(
@@ -34,3 +35,35 @@ async def test_upload_bad_size(
         response = await request_upload(client, "avatar", get_test_token, file)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["code"] == "upload:bad_size"
+
+
+async def test_upload_empty_file(
+    client,
+    create_test_user,
+    get_test_token,
+    mock_s3_upload_file,
+):
+    response = await request_upload(
+        client, "avatar", get_test_token, BytesIO(b"")
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "upload:bad_size"
+
+
+async def test_upload_broken_file(
+    client,
+    create_test_user,
+    get_test_token,
+    mock_s3_upload_file,
+):
+    # Beginning of valid JPEG without the rest of the image
+    with open("tests/data/upload/test.jpg", mode="rb") as file:
+        broken_image = BytesIO(file.read(64))
+
+    response = await request_upload(
+        client, "avatar", get_test_token, broken_image
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "upload:bad_mime"

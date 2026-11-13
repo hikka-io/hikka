@@ -57,7 +57,8 @@ async def test_upload_cover_rate_limit(
                 client, "cover", get_test_token, file
             )
 
-            if index != 11:
+            # Daily limit is 10 uploads so we check 11th one
+            if index != 10:
                 continue
 
             assert response.json()["code"] == "upload:rate_limit"
@@ -75,7 +76,8 @@ async def test_upload_cover_rate_limit_admin(
                 client, "cover", get_test_token, file
             )
 
-            if index != 11:
+            # Daily limit is 10 uploads so we check 11th one
+            if index != 10:
                 continue
 
             assert "code" not in response.json()

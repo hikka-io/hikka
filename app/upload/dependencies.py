@@ -65,7 +65,10 @@ async def validate_upload_file(
     upload_type: UploadTypeEnum, file: UploadFile = File()
 ) -> UploadMetadata:
     # TODO: we probably need to reduce file size here
-    if file.size > 2 * 1024 * 1024:  # 2mb
+    if not (
+        file.size  # Empty file is not smething we want to have
+        or file.size > 2 * 1024 * 1024  # 2mb
+    ):
         raise Abort("upload", "bad-size")
 
     mime_type = get_mime_type(file)
@@ -80,7 +83,12 @@ async def validate_upload_file(
     if mime_type not in supported_mimes:
         raise Abort("upload", "bad-mime")
 
-    width, height = imagesize.get(BytesIO(file.file.read()))
+    try:
+        width, height = imagesize.get(BytesIO(file.file.read()))
+
+    # File starts like supported image but its content is broken
+    except ValueError:
+        raise Abort("upload", "bad-mime")
 
     if upload_type == constants.UPLOAD_AVATAR:
         if width != height:

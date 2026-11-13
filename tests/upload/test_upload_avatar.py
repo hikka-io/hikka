@@ -1,6 +1,6 @@
 from client_requests import request_upload, request_me
-from sqlalchemy import select, desc
-from app.models import Log
+from sqlalchemy import select, desc, func
+from app.models import Image, Log
 from fastapi import status
 from app import constants
 
@@ -74,7 +74,8 @@ async def test_upload_avatar_rate_limit(
                 client, "avatar", get_test_token, file
             )
 
-            if index != 11:
+            # Daily limit is 10 uploads so we check 11th one
+            if index != 10:
                 continue
 
             assert response.json()["code"] == "upload:rate_limit"
@@ -92,7 +93,38 @@ async def test_upload_avatar_rate_limit_admin(
                 client, "avatar", get_test_token, file
             )
 
-            if index != 11:
+            # Daily limit is 10 uploads so we check 11th one
+            if index != 10:
                 continue
 
             assert "code" not in response.json()
+
+
+async def test_upload_avatar_failed(
+    client,
+    create_test_user,
+    get_test_token,
+    mock_s3_upload_file,
+    test_session,
+):
+    # Storage didn't accept the file
+    mock_s3_upload_file.return_value = False
+
+    with open("tests/data/upload/test.jpg", mode="rb") as file:
+        response = await request_upload(client, "avatar", get_test_token, file)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "upload:failed"
+
+    # Nothing should be saved so it won't count towards upload limit
+    images_count = await test_session.scalar(select(func.count(Image.id)))
+    assert images_count == 0
+
+    upload_logs_count = await test_session.scalar(
+        select(func.count(Log.id)).filter(Log.log_type == constants.LOG_UPLOAD)
+    )
+
+    assert upload_logs_count == 0
+
+    await test_session.refresh(create_test_user)
+    assert create_test_user.avatar_image_id is None
