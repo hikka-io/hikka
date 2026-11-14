@@ -9,6 +9,8 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from datetime import datetime
+from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 
 from ..mixins import (
@@ -39,6 +41,14 @@ class Novel(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_novel"
+
+    __table_args__ = (
+        Index(
+            "ix_novel_search_update",
+            "content_id",
+            postgresql_where=text("needs_search_update"),
+        ),
+    )
 
     favourite_created: Mapped[datetime] = query_expression()
 

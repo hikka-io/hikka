@@ -4,6 +4,8 @@ from sqlalchemy.orm import query_expression
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 
 from ..mixins import (
@@ -26,6 +28,14 @@ class Company(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_companies"
+
+    __table_args__ = (
+        Index(
+            "ix_companies_search_update",
+            "content_id",
+            postgresql_where=text("needs_search_update"),
+        ),
+    )
 
     name: Mapped[str] = mapped_column(nullable=True)
 
@@ -80,7 +90,7 @@ class CompanyAnime(Base):
 
     type: Mapped[str] = mapped_column(String(32), index=True)
     company_id = mapped_column(ForeignKey("service_content_companies.id"))
-    anime_id = mapped_column(ForeignKey("service_content_anime.id"))
+    anime_id = mapped_column(ForeignKey("service_content_anime.id"), index=True)
 
     company: Mapped["Company"] = relationship(
         back_populates="anime", foreign_keys=[company_id]

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy import Index
+from sqlalchemy import text
 from sqlalchemy import func
 from ..base import Base
 
@@ -16,7 +17,7 @@ from ..base import Base
 class User(Base, NeedsSearchUpdateMixin):
     __tablename__ = "service_users"
 
-    email: Mapped[str] = mapped_column(String(255), index=True, nullable=True)
+    email: Mapped[str] = mapped_column(String(255), nullable=True)
     role: Mapped[str] = mapped_column(String(64), index=True, nullable=True)
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
     description: Mapped[str] = mapped_column(String(140), nullable=True)
@@ -163,6 +164,12 @@ class User(Base, NeedsSearchUpdateMixin):
 
     __table_args__ = (
         Index("ix_lower_username", func.lower(username), unique=True),
+        Index("ix_lower_email", func.lower(email), unique=True),
+        Index(
+            "ix_users_search_update",
+            "id",
+            postgresql_where=text("needs_search_update"),
+        ),
     )
 
     @hybrid_property

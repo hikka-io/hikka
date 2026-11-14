@@ -5,6 +5,8 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 from uuid import UUID
 
@@ -30,6 +32,14 @@ class Article(
     NeedsSearchUpdateMixin
 ):
     __tablename__ = "service_articles"
+
+    __table_args__ = (
+        Index(
+            "ix_articles_search_update",
+            "id",
+            postgresql_where=text("needs_search_update"),
+        ),
+    )
 
     # In community we trust (but it's nice to have some control)
     trusted: Mapped[bool] = mapped_column(default=False)

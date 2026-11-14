@@ -46,7 +46,7 @@ class Edit(
     after: Mapped[dict] = mapped_column(JSONB)
 
     moderator_id = mapped_column(ForeignKey("service_users.id"))
-    author_id = mapped_column(ForeignKey("service_users.id"))
+    author_id = mapped_column(ForeignKey("service_users.id"), index=True)
 
     moderator: Mapped["User"] = relationship(
         back_populates="decisions",

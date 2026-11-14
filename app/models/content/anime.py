@@ -7,6 +7,8 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from datetime import datetime
+from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 
 from ..mixins import (
@@ -37,6 +39,14 @@ class Anime(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_anime"
+
+    __table_args__ = (
+        Index(
+            "ix_anime_search_update",
+            "content_id",
+            postgresql_where=text("needs_search_update"),
+        ),
+    )
 
     favourite_created: Mapped[datetime] = query_expression()
 

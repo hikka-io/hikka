@@ -51,7 +51,7 @@ class Comment(
         foreign_keys=[hidden_by_id],
     )
 
-    author_id = mapped_column(ForeignKey("service_users.id"))
+    author_id = mapped_column(ForeignKey("service_users.id"), index=True)
     author: Mapped["User"] = relationship(
         foreign_keys=[author_id], lazy="selectin"
     )

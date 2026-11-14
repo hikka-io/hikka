@@ -5,6 +5,8 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from datetime import datetime
+from sqlalchemy import Index
+from sqlalchemy import text
 from ..base import Base
 
 from ..mixins import (
@@ -31,6 +33,14 @@ class Character(
     NeedsSearchUpdateMixin,
 ):
     __tablename__ = "service_content_characters"
+
+    __table_args__ = (
+        Index(
+            "ix_characters_search_update",
+            "content_id",
+            postgresql_where=text("needs_search_update"),
+        ),
+    )
 
     needs_count_update: Mapped[bool] = mapped_column(default=True)
     voices_count: Mapped[int] = mapped_column(default=0)
