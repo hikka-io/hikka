@@ -64,6 +64,7 @@ class Comment(
     )
 
     __table_args__ = (
+        Index("ix_comments_content", "content_type", "content_id"),
         Index(
             "ix_comments_path",
             path,

@@ -2,6 +2,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
+from sqlalchemy import Index
 from ..base import Base
 from uuid import UUID
 
@@ -12,6 +13,10 @@ class CollectionContent(Base):
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
     }
+
+    __table_args__ = (
+        Index("ix_collection_content_content", "content_type", "content_id"),
+    )
 
     comment: Mapped[str] = mapped_column(nullable=True)
     label: Mapped[str] = mapped_column(nullable=True)

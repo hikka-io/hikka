@@ -4,6 +4,7 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy import ForeignKey
+from sqlalchemy import Index
 from ..base import Base
 from uuid import UUID
 
@@ -26,6 +27,8 @@ class Edit(
         "polymorphic_on": "content_type",
         "with_polymorphic": "*",
     }
+
+    __table_args__ = (Index("ix_edits_content", "content_type", "content_id"),)
 
     content_preview: Mapped[dict] = mapped_column(JSONB, default={})
 
