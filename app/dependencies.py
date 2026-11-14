@@ -102,10 +102,11 @@ async def _auth_token_or_abort(
     if now > token.expiration:
         return Abort("auth", "token-expired")
 
+    # Commit only when there is something to save since commit in the
+    # middle of request ends its transaction and releases row locks
     if not token.used or now - token.used >= timedelta(minutes=5):
         token.used = now
-
-    await session.commit()
+        await session.commit()
 
     return token
 
@@ -187,20 +188,25 @@ def auth_required(
         if token.user.role == constants.ROLE_DELETED:
             raise Abort("user", "deleted")
 
+        changed = False
+
         # After each authenticated request token expiration will be reset
         if (
             not token.user.last_active
             or now - token.user.last_active >= timedelta(minutes=5)
         ):
             token.user.last_active = now
+            changed = True
 
         # We need to update token expiraion once in a while
         # 3 days before expiration is arbitrary
         # we may need to update it later on
         if token.expiration - now <= timedelta(days=3):
             token.expiration = now + timedelta(days=30)
+            changed = True
 
-        await session.commit()
+        if changed:
+            await session.commit()
 
         return token.user
 

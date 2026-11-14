@@ -220,8 +220,8 @@ async def validate_collection_content_update(
 
     await check_collection_updates_limit(session, user)
 
-    # Held until the service commits, so routes using this
-    # must not add dependencies that commit (like auth_required)
+    # Held until the service commits and nothing may commit before that
+    # Auth only commits in first auth dependency of request which ran above
     await service.lock_collection(session, collection)
 
     return collection
