@@ -1,6 +1,7 @@
+from app.common.service.read_content import read_content_search_filter
+from app.common.service.sort import build_read_content_order_by
+from app.common.service.read_content import read_content_models
 from sqlalchemy.orm.attributes import set_committed_value
-from app.common.service.sort import build_manga_order_by
-from app.common.service.sort import build_novel_order_by
 from sqlalchemy import select, desc, func, ScalarResult
 from app.service import content_type_to_content_class
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,8 +14,6 @@ from app import constants
 import random
 
 from app.service import (
-    manga_search_filter,
-    novel_search_filter,
     insert_or_skip,
     create_log,
 )
@@ -342,15 +341,11 @@ async def get_user_read_list_count(
     if search.read_status:
         query = query.filter(Read.status == search.read_status)
 
-    if content_type == constants.CONTENT_MANGA:
-        query = manga_search_filter(
-            search, query.join(MangaRead.content), False
-        )
+    models = read_content_models[content_type]
 
-    if content_type == constants.CONTENT_NOVEL:
-        query = novel_search_filter(
-            search, query.join(NovelRead.content), False
-        )
+    query = read_content_search_filter(
+        models, search, query.join(models.read.content), False
+    )
 
     return await session.scalar(query)
 
@@ -375,26 +370,14 @@ async def get_user_read_list(
     if search.read_status:
         query = query.filter(Read.status == search.read_status)
 
-    if content_type == constants.CONTENT_MANGA:
-        query = (
-            manga_search_filter(
-                search,
-                query.join(MangaRead.content),
-                False,
-            )
-            .order_by(*build_manga_order_by(search.sort))
-            .options(joinedload(MangaRead.content))
-        )
+    models = read_content_models[content_type]
 
-    if content_type == constants.CONTENT_NOVEL:
-        query = (
-            novel_search_filter(
-                search,
-                query.join(NovelRead.content),
-                False,
-            )
-            .order_by(*build_novel_order_by(search.sort))
-            .options(joinedload(NovelRead.content))
+    query = (
+        read_content_search_filter(
+            models, search, query.join(models.read.content), False
         )
+        .order_by(*build_read_content_order_by(models.content, search.sort))
+        .options(joinedload(models.read.content))
+    )
 
     return await session.scalars(query.limit(limit).offset(offset))

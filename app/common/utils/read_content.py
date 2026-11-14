@@ -1,10 +1,14 @@
+from app.common.schemas.manga import MangaSearchArgs
 from app.common.schemas.novel import NovelSearchArgs
 from app.utils import exclude_content_ids_filter
 
 
-def build_novel_filters_ms(
-    search: NovelSearchArgs, exclude_content_ids: list[str] | None = None
+def build_read_content_filters_ms(
+    search: MangaSearchArgs | NovelSearchArgs,
+    exclude_content_ids: list[str] | None = None,
 ):
+    """Build Meilisearch filters for manga and novel catalogs"""
+
     status = [f"status = {status}" for status in search.status]
 
     media_type = [

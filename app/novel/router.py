@@ -1,13 +1,22 @@
 from app.common.schemas.character import ContentCharacterPaginationResponse
+from app.common.utils.read_content import build_read_content_filters_ms
+from app.utils import paginated_response, sort_by_ids, pagination
 from app.common.schemas.novel import NovelSearchArgs
 from sqlalchemy.ext.asyncio import AsyncSession
-from .utils import build_novel_filters_ms
 from fastapi import APIRouter, Depends
 from app.database import get_session
 from app.models import User, Novel
 from app import meilisearch
 from app import constants
-from . import service
+
+from app.common.service.read_content import (
+    read_content_characters_count,
+    read_content_search_total,
+    exclude_read_content_ids,
+    read_content_characters,
+    read_content_search,
+    novel_models,
+)
 
 from .dependencies import (
     validate_search_novel,
@@ -24,12 +33,6 @@ from app.dependencies import (
     auth_required,
     get_page,
     get_size,
-)
-
-from app.utils import (
-    paginated_response,
-    sort_by_ids,
-    pagination,
 )
 
 
@@ -53,14 +56,15 @@ async def search_novel(
     limit, offset = pagination(page, size)
 
     filter_ids = []
+
     if search.query:
-        exclude_content_ids = await service.novel_exclude_content_ids(
-            session, search, request_user
+        exclude_content_ids = await exclude_read_content_ids(
+            session, novel_models, search, request_user
         )
 
         meilisearch_result = await meilisearch.search(
             constants.SEARCH_INDEX_NOVEL,
-            filter=build_novel_filters_ms(search, exclude_content_ids),
+            filter=build_read_content_filters_ms(search, exclude_content_ids),
             query=search.query,
             sort=search.sort,
             page=page,
@@ -76,15 +80,15 @@ async def search_novel(
         offset = 0
 
     else:
-        total = await service.novel_search_total(
-            session, search, filter_ids, request_user
+        total = await read_content_search_total(
+            session, novel_models, search, filter_ids, request_user
         )
 
     if total == 0:
         return paginated_response([], 0, page, limit)
 
-    novel = await service.novel_search(
-        session, search, filter_ids, request_user, limit, offset
+    novel = await read_content_search(
+        session, novel_models, search, filter_ids, request_user, limit, offset
     )
 
     novel = novel.unique().all()
@@ -118,7 +122,10 @@ async def novel_characters(
     size: int = Depends(get_size),
 ):
     limit, offset = pagination(page, size)
-    total = await service.novel_characters_count(session, novel)
-    characters = await service.novel_characters(session, novel, limit, offset)
+    total = await read_content_characters_count(session, novel_models, novel)
+
+    characters = await read_content_characters(
+        session, novel_models, novel, limit, offset
+    )
 
     return paginated_response(characters.all(), total, page, limit)

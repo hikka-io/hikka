@@ -69,40 +69,21 @@ def build_anime_order_by(sort: list[str]):
     )
 
 
-def build_manga_order_by(sort: list[str]):
+def build_read_content_order_by(model: type[Manga | Novel], sort: list[str]):
     return build_order_by(
         sort,
         order_mapping=read_order_mapping
         | {
-            "native_scored_by": Manga.native_scored_by,
-            "native_score": Manga.native_score,
-            "media_type": Manga.media_type,
-            "start_date": Manga.start_date,
-            "scored_by": Manga.scored_by,
-            "created": Manga.created,
-            "updated": Manga.updated,
-            "score": Manga.score,
+            "native_scored_by": model.native_scored_by,
+            "native_score": model.native_score,
+            "media_type": model.media_type,
+            "start_date": model.start_date,
+            "scored_by": model.scored_by,
+            "created": model.created,
+            "updated": model.updated,
+            "score": model.score,
         },
-        tiebreaker=desc(Manga.content_id),
-        nullable=["start_date"],
-    )
-
-
-def build_novel_order_by(sort: list[str]):
-    return build_order_by(
-        sort,
-        order_mapping=read_order_mapping
-        | {
-            "native_scored_by": Novel.native_scored_by,
-            "native_score": Novel.native_score,
-            "media_type": Novel.media_type,
-            "start_date": Novel.start_date,
-            "scored_by": Novel.scored_by,
-            "created": Novel.created,
-            "updated": Novel.updated,
-            "score": Novel.score,
-        },
-        tiebreaker=desc(Novel.content_id),
+        tiebreaker=desc(model.content_id),
         nullable=["start_date"],
     )
 
