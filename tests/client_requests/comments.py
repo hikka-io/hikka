@@ -38,6 +38,17 @@ def request_comments_list(client, content_type, slug, token=None, page=1):
     )
 
 
+def request_comments_list_flat(
+    client, content_type, slug, filters={}, token=None, page=1
+):
+    headers = {"Auth": token} if token else {}
+    return client.post(
+        f"/comments/{content_type}/{slug}/list?page={page}",
+        headers=headers,
+        json=filters,
+    )
+
+
 def request_comments_user(
     client,
     username,

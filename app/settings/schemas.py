@@ -143,12 +143,16 @@ class ImportReadArgs(CustomModelExtraIgnore):
 
 
 class ImportWatchListArgs(CustomModelExtraIgnore):
-    anime: list[ImportWatchArgs]
+    anime: list[ImportWatchArgs] = Field(
+        max_length=constants.IMPORT_MAX_ENTRIES
+    )
     overwrite: bool
 
 
 class ImportReadListArgs(CustomModelExtraIgnore):
-    content: list[ImportReadArgs]
+    content: list[ImportReadArgs] = Field(
+        max_length=constants.IMPORT_MAX_ENTRIES
+    )
     overwrite: bool
 
 

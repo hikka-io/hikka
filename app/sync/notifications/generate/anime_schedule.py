@@ -13,13 +13,13 @@ async def generate_anime_schedule(session: AsyncSession, log: Log):
 
     anime_watch = await service.get_anime_watch(session, anime)
 
-    # TODO: batch check for existing notifications here
+    notified_user_ids = await service.get_notified_user_ids(
+        session, log.id, notification_type
+    )
 
     for watch in anime_watch:
         # Do not create notification if we already did that
-        if await service.get_notification(
-            session, watch.user_id, log.id, notification_type
-        ):
+        if watch.user_id in notified_user_ids:
             continue
 
         # Stop if user wishes to ignore this type of notifications

@@ -13,8 +13,8 @@ class Notification(Base, CreatedMixin, UpdatedMixin):
     __tablename__ = "service_notifications"
 
     notification_type: Mapped[str] = mapped_column(String(64), index=True)
+    log_id: Mapped[UUID] = mapped_column(nullable=True, index=True)
     data: Mapped[dict] = mapped_column(JSONB, default={})
-    log_id: Mapped[UUID] = mapped_column(nullable=True)
     seen: Mapped[bool] = mapped_column(default=False)
 
     user_id = mapped_column(ForeignKey("service_users.id"), index=True)

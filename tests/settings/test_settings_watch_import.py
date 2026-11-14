@@ -1,10 +1,13 @@
 from client_requests import request_settings_import_watch
+from app.settings.schemas import ImportWatchListArgs
 from app.models import AnimeWatch, User, Anime, Log
 from client_requests import request_watch_add
 from sqlalchemy import select, desc, func
+from pydantic import ValidationError
 from fastapi import status
 from app import constants
 import asyncio
+import pytest
 
 
 async def test_settings_import_watch(
@@ -149,3 +152,64 @@ async def test_settings_import_watch_parallel(
     )
 
     assert watch_count == 2
+
+
+async def test_settings_import_watch_repeated(
+    client,
+    create_test_user,
+    aggregator_anime,
+    aggregator_anime_info,
+    get_test_token,
+    test_session,
+):
+    entry = {
+        "series_animedb_id": 47917,
+        "my_watched_episodes": 3,
+        "my_status": "Watching",
+        "my_comments": {},
+        "my_score": 7,
+    }
+
+    # Same anime twice in one list counts as existing the second time
+    response = await request_settings_import_watch(
+        client,
+        get_test_token,
+        {
+            "overwrite": False,
+            "anime": [entry, {**entry, "my_status": "Dropped", "my_score": 2}],
+        },
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    watch = (await test_session.scalars(select(AnimeWatch))).all()
+
+    assert len(watch) == 1
+    assert watch[0].status == constants.WATCH_WATCHING
+    assert watch[0].score == 7
+
+    log = await test_session.scalar(
+        select(Log).filter(Log.log_type == constants.LOG_SETTINGS_IMPORT_WATCH)
+    )
+
+    assert log.data["imported"] == 1
+
+
+def test_settings_import_watch_size_limit():
+    entry = {
+        "series_animedb_id": 47917,
+        "my_watched_episodes": 3,
+        "my_status": "Watching",
+        "my_comments": {},
+        "my_score": 7,
+    }
+
+    ImportWatchListArgs(
+        anime=[entry] * constants.IMPORT_MAX_ENTRIES, overwrite=False
+    )
+
+    with pytest.raises(ValidationError):
+        ImportWatchListArgs(
+            anime=[entry] * (constants.IMPORT_MAX_ENTRIES + 1),
+            overwrite=False,
+        )

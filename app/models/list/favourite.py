@@ -10,6 +10,7 @@ class Favourite(Base, CreatedMixin, DeletedMixin):
     __mapper_args__ = {
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
+        "with_polymorphic": "*",
     }
 
     # One favourite record per user and content
@@ -39,7 +40,7 @@ class AnimeFavourite(Favourite):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
         foreign_keys="AnimeFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -52,7 +53,7 @@ class MangaFavourite(Favourite):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaFavourite.content_id",
         foreign_keys="MangaFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -65,7 +66,7 @@ class NovelFavourite(Favourite):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelFavourite.content_id",
         foreign_keys="NovelFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -78,7 +79,7 @@ class CollectionFavourite(Favourite):
     content: Mapped["Collection"] = relationship(
         primaryjoin="Collection.id == CollectionFavourite.content_id",
         foreign_keys="CollectionFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -91,7 +92,7 @@ class CharacterFavourite(Favourite):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterFavourite.content_id",
         foreign_keys="CharacterFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -104,5 +105,5 @@ class PersonFavourite(Favourite):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonFavourite.content_id",
         foreign_keys="PersonFavourite.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )

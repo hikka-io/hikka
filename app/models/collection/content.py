@@ -12,6 +12,7 @@ class CollectionContent(Base):
     __mapper_args__ = {
         "polymorphic_identity": "default",
         "polymorphic_on": "content_type",
+        "with_polymorphic": "*",
     }
 
     __table_args__ = (
@@ -41,7 +42,7 @@ class AnimeCollectionContent(CollectionContent):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeCollectionContent.content_id",
         foreign_keys="AnimeCollectionContent.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -54,7 +55,7 @@ class CharacterCollectionContent(CollectionContent):
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterCollectionContent.content_id",
         foreign_keys="CharacterCollectionContent.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -67,7 +68,7 @@ class PersonCollectionContent(CollectionContent):
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonCollectionContent.content_id",
         foreign_keys="PersonCollectionContent.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -80,7 +81,7 @@ class MangaCollectionContent(CollectionContent):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaCollectionContent.content_id",
         foreign_keys="MangaCollectionContent.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -93,5 +94,5 @@ class NovelCollectionContent(CollectionContent):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelCollectionContent.content_id",
         foreign_keys="NovelCollectionContent.content_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )

@@ -16,6 +16,7 @@ class History(Base, CreatedMixin, UpdatedMixin):
     __mapper_args__ = {
         "polymorphic_identity": "default",
         "polymorphic_on": "history_type",
+        "with_polymorphic": "*",
     }
 
     history_type: Mapped[str] = mapped_column(String(64), index=True)
@@ -37,7 +38,7 @@ class FavouriteAnimeHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteAnimeHistory.target_id",
         foreign_keys="FavouriteAnimeHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -50,7 +51,7 @@ class FavouriteAnimeRemoveHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteAnimeRemoveHistory.target_id",
         foreign_keys="FavouriteAnimeRemoveHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -63,7 +64,7 @@ class FavouriteMangaHistory(History):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == FavouriteMangaHistory.target_id",
         foreign_keys="FavouriteMangaHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -76,7 +77,7 @@ class FavouriteMangaRemoveHistory(History):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == FavouriteMangaRemoveHistory.target_id",
         foreign_keys="FavouriteMangaRemoveHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -89,7 +90,7 @@ class FavouriteNovelHistory(History):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == FavouriteNovelHistory.target_id",
         foreign_keys="FavouriteNovelHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -102,7 +103,7 @@ class FavouriteNovelRemoveHistory(History):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == FavouriteNovelRemoveHistory.target_id",
         foreign_keys="FavouriteNovelRemoveHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -115,7 +116,7 @@ class WatchHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchHistory.target_id",
         foreign_keys="WatchHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -128,7 +129,7 @@ class WatchDeleteHistory(History):
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchDeleteHistory.target_id",
         foreign_keys="WatchDeleteHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -155,7 +156,7 @@ class ReadMangaHistory(History):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == ReadMangaHistory.target_id",
         foreign_keys="ReadMangaHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -168,7 +169,7 @@ class ReadMangaDeleteHistory(History):
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == ReadMangaDeleteHistory.target_id",
         foreign_keys="ReadMangaDeleteHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -181,7 +182,7 @@ class ReadNovelHistory(History):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == ReadNovelHistory.target_id",
         foreign_keys="ReadNovelHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )
 
 
@@ -194,5 +195,5 @@ class ReadNovelDeleteHistory(History):
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == ReadNovelDeleteHistory.target_id",
         foreign_keys="ReadNovelDeleteHistory.target_id",
-        lazy="immediate",  # TODO: check if it is good idea
+        lazy="selectin",
     )

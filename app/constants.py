@@ -2,6 +2,9 @@
 ALCHEMY_CHUNK_LIMIT = 5000
 ALCHEMY_CHUNK_LIMIT_ALT = 1000
 
+# Bigger than any real list but keeps import requests bounded
+IMPORT_MAX_ENTRIES = 30000
+
 # Email types
 EMAIL_ACTIVATION = "activation"
 EMAIL_PASSWORD_RESET = "password_reset"

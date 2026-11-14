@@ -13,6 +13,7 @@ from sqlalchemy.orm import immediateload
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import joinedload
 from app.utils import round_datetime
+from collections import defaultdict
 from sqlalchemy_utils import Ltree
 from sqlalchemy.orm import aliased
 from .utils import uuid_to_path
@@ -507,6 +508,70 @@ async def get_sub_comments(
         .order_by(Comment.created.asc())
         # .limit(10)  # TODO: enable after deprecating non flat comments
     )
+
+
+async def get_sub_comments_by_threads(
+    session: AsyncSession,
+    base_comments: list[Comment],
+    request_user: User | None,
+    limit: int | None = None,
+) -> dict[str, list[Comment]]:
+    """Return replies of top level comments grouped by thread"""
+
+    if not base_comments:
+        return {}
+
+    filters = [
+        Comment.deleted == False,  # noqa: E712
+        or_(*[Comment.path.descendant_of(base.path) for base in base_comments]),
+        Comment.id.not_in([base.id for base in base_comments]),
+        or_(
+            Comment.hidden == False,  # noqa: E712,
+            Comment.total_replies > 0,
+        ),
+    ]
+
+    query = select(Comment).filter(*filters)
+
+    # Number replies inside each thread to take first ones in single query
+    if limit is not None:
+        ranked = (
+            select(
+                Comment.id,
+                func.row_number()
+                .over(
+                    partition_by=func.subpath(Comment.path, 0, 1),
+                    order_by=Comment.created.asc(),
+                )
+                .label("position"),
+            )
+            .filter(*filters)
+            .subquery()
+        )
+
+        query = (
+            select(Comment)
+            .join(ranked, ranked.c.id == Comment.id)
+            .filter(ranked.c.position <= limit)
+        )
+
+    comments = await session.scalars(
+        query.options(
+            with_expression(
+                Comment.my_score,
+                get_my_score_subquery(
+                    Comment, constants.CONTENT_COMMENT, request_user
+                ),
+            )
+        ).order_by(Comment.created.asc())
+    )
+
+    threads = defaultdict(list)
+
+    for comment in comments:
+        threads[str(comment.path).split(".")[0]].append(comment)
+
+    return threads
 
 
 async def count_comments_limit(session: AsyncSession, author: User) -> int:

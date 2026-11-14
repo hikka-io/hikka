@@ -1,10 +1,14 @@
+from sqlalchemy.orm.attributes import set_committed_value
 from app.common.schemas import UserCustomizationArgs
 from app.watch.service import generate_watch_stats
+from sqlalchemy.dialects.postgresql import insert
 from app.read.service import generate_read_stats
-from app.read.service import get_or_create_read
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, func
+from app.service import create_log
+from datetime import datetime
 from app import constants
+from uuid import UUID
 from . import utils
 
 from .schemas import (
@@ -18,14 +22,11 @@ from app.utils import (
     utcnow,
 )
 
-from app.service import (
-    get_or_create_anime_watch,
-    create_log,
-)
-
 from app.models import (
     UserExport,
     AnimeWatch,
+    MangaRead,
+    NovelRead,
     Anime,
     Manga,
     Novel,
@@ -261,6 +262,136 @@ async def delete_user_read(
     await generate_read_stats(session, user, content_type)
 
 
+async def get_or_create_watch_entries(
+    session: AsyncSession,
+    user: User,
+    entries: dict[UUID, tuple[Anime, str]],
+    now: datetime,
+) -> tuple[dict[UUID, AnimeWatch], set[UUID]]:
+    """Return user's watch entries for anime and ids of created ones"""
+
+    def select_entries(anime_ids):
+        return select(AnimeWatch).filter(
+            AnimeWatch.anime_id.in_(anime_ids),
+            AnimeWatch.user == user,
+        )
+
+    existing = await session.scalars(select_entries(list(entries)))
+    watch_cache = {watch.anime_id: watch for watch in existing}
+
+    missing = [anime_id for anime_id in entries if anime_id not in watch_cache]
+    created_ids = set()
+
+    if not missing:
+        return watch_cache, created_ids
+
+    # Parallel requests may insert same entries
+    # so unique index decides which one creates them
+    created = await session.scalars(
+        insert(AnimeWatch)
+        .on_conflict_do_nothing(index_elements=["anime_id", "user_id"])
+        .returning(AnimeWatch),
+        [
+            {
+                "status": entries[anime_id][1],
+                "anime_id": anime_id,
+                "user_id": user.id,
+                "created": now,
+                "updated": now,
+            }
+            for anime_id in missing
+        ],
+    )
+
+    # Here we use set_committed_value to set fields for
+    # batch objects from query above
+    for watch in created.all():
+        set_committed_value(watch, "anime", entries[watch.anime_id][0])
+        set_committed_value(watch, "user", user)
+        watch_cache[watch.anime_id] = watch
+        created_ids.add(watch.anime_id)
+
+    # Entries parallel request created in the meantime
+    if skipped := [i for i in missing if i not in created_ids]:
+        existing = await session.scalars(select_entries(skipped))
+        watch_cache.update({watch.anime_id: watch for watch in existing})
+
+    return watch_cache, created_ids
+
+
+async def get_or_create_read_entries(
+    session: AsyncSession,
+    user: User,
+    entries: dict[UUID, tuple[Manga | Novel, str]],
+    now: datetime,
+) -> tuple[dict[UUID, Read], set[UUID]]:
+    """Return user's read entries for content and ids of created ones"""
+
+    def select_entries(content_ids):
+        return select(Read).filter(
+            Read.deleted == False,  # noqa: E712
+            Read.content_id.in_(content_ids),
+            Read.user == user,
+        )
+
+    existing = await session.scalars(select_entries(list(entries)))
+    read_cache = {read.content_id: read for read in existing}
+
+    missing = [
+        content_id for content_id in entries if content_id not in read_cache
+    ]
+
+    created_ids = set()
+
+    # Read entries are inserted with their own model to get it back
+    for read_model, content_type in [
+        (MangaRead, constants.CONTENT_MANGA),
+        (NovelRead, constants.CONTENT_NOVEL),
+    ]:
+        values = [
+            {
+                "status": entries[content_id][1],
+                "content_type": content_type,
+                "content_id": content_id,
+                "user_id": user.id,
+                "created": now,
+                "updated": now,
+            }
+            for content_id in missing
+            if entries[content_id][0].data_type == content_type
+        ]
+
+        if not values:
+            continue
+
+        # Parallel requests may insert same entries
+        # so unique index decides which one creates them
+        created = await session.scalars(
+            insert(read_model)
+            .on_conflict_do_nothing(
+                index_elements=["content_type", "content_id", "user_id"],
+                index_where=Read.deleted == False,  # noqa: E712
+            )
+            .returning(read_model),
+            values,
+        )
+
+        # Here we use set_committed_value to set fields for
+        # batch objects from query above
+        for read in created.all():
+            set_committed_value(read, "content", entries[read.content_id][0])
+            set_committed_value(read, "user", user)
+            read_cache[read.content_id] = read
+            created_ids.add(read.content_id)
+
+    # Entries parallel request created in the meantime
+    if skipped := [i for i in missing if i not in created_ids]:
+        existing = await session.scalars(select_entries(skipped))
+        read_cache.update({read.content_id: read for read in existing})
+
+    return read_cache, created_ids
+
+
 async def import_watch_list(
     session: AsyncSession,
     args: ImportWatchListArgs,
@@ -286,6 +417,22 @@ async def import_watch_list(
 
         # And build key/value dict
         anime_cache = {entry.mal_id: entry for entry in cache}
+
+        # New entries get status from first time anime appears in list
+        entries = {}
+
+        for data in anime_chunk:
+            anime = anime_cache.get(data.series_animedb_id)
+
+            if anime and anime.id not in entries:
+                entries[anime.id] = (
+                    anime,
+                    utils.get_anime_import_status(data.my_status),
+                )
+
+        watch_cache, created_ids = await get_or_create_watch_entries(
+            session, user, entries, now
+        )
 
         for data in anime_chunk:
             # If user passed mal_id we don't know about just skip it
@@ -315,9 +462,12 @@ async def import_watch_list(
             if anime.episodes_total and import_episodes > anime.episodes_total:
                 import_episodes = anime.episodes_total
 
-            watch, created = await get_or_create_anime_watch(
-                session, anime, user, import_status, now
-            )
+            if not (watch := watch_cache.get(anime.id)):
+                continue
+
+            # Repeated anime in the same list counts as existing entry
+            created = anime.id in created_ids
+            created_ids.discard(anime.id)
 
             # If anime already in list and user don't want to overwrite it
             # Just skipt it
@@ -389,6 +539,22 @@ async def import_read_list(
 
         content_cache = manga_cache | novel_cache
 
+        # New entries get status from first time content appears in list
+        entries = {}
+
+        for data in read_chunk:
+            content = content_cache.get(data.manga_mangadb_id)
+
+            if content and content.id not in entries:
+                entries[content.id] = (
+                    content,
+                    utils.get_read_import_status(data.my_status),
+                )
+
+        read_cache, created_ids = await get_or_create_read_entries(
+            session, user, entries, now
+        )
+
         for data in read_chunk:
             # If user passed mal_id we don't know about just skip it
             if data.manga_mangadb_id not in content_cache:
@@ -418,9 +584,12 @@ async def import_read_list(
             if import_rereads > 100:
                 import_rereads = 100
 
-            read, created = await get_or_create_read(
-                session, content.data_type, content, user, import_status, now
-            )
+            if not (read := read_cache.get(content.id)):
+                continue
+
+            # Repeated content in the same list counts as existing entry
+            created = content.id in created_ids
+            created_ids.discard(content.id)
 
             # If content already in list and user don't want to overwrite it
             # Just skipt it

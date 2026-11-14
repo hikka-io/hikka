@@ -41,6 +41,23 @@ async def get_notification(
     return await session.scalar(query.order_by(desc(Notification.created)))
 
 
+async def get_notified_user_ids(
+    session: AsyncSession,
+    log_id: UUID,
+    notification_type: str,
+) -> set[UUID]:
+    """Return users who already got notification for this log"""
+
+    return set(
+        await session.scalars(
+            select(Notification.user_id).filter(
+                Notification.notification_type == notification_type,
+                Notification.log_id == log_id,
+            )
+        )
+    )
+
+
 async def count_notifications_spam(
     session: AsyncSession,
     user_id: User,

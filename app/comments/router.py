@@ -75,13 +75,15 @@ async def get_comments_list(
         offset,
     )
 
+    base_comments = base_comments.all()
+
+    threads = await service.get_sub_comments_by_threads(
+        session, base_comments, request_user, limit=10
+    )
+
     result = []
 
     for base_comment in base_comments:
-        sub_comments = await service.get_sub_comments(
-            session, base_comment, request_user
-        )
-
         result.append(
             CommentNode.create(
                 path_to_uuid(base_comment.reference), base_comment
@@ -90,8 +92,8 @@ async def get_comments_list(
 
         result += [
             CommentNode.create(path_to_uuid(comment.reference), comment)
-            for comment in sub_comments
-        ][:10]  # TODO: Move this to limit after non flat deprecation
+            for comment in threads.get(str(base_comment.path), [])
+        ]
 
     return paginated_response(result, total, page, limit)
 
@@ -295,14 +297,20 @@ async def get_comments_list_legacy(
         offset,
     )
 
+    base_comments = base_comments.all()
+
+    threads = await service.get_sub_comments_by_threads(
+        session, base_comments, request_user
+    )
+
     result = []
 
     for base_comment in base_comments:
-        sub_comments = await service.get_sub_comments(
-            session, base_comment, request_user
+        result.append(
+            build_comments(
+                base_comment, threads.get(str(base_comment.path), [])
+            )
         )
-
-        result.append(build_comments(base_comment, sub_comments))
 
     return paginated_response(result, total, page, limit)
 
