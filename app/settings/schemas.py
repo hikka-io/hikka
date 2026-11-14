@@ -85,7 +85,7 @@ class UserLinkArgs(CustomModel):
 
         # Check for dublicates
         if len(urls) != len(list(set(urls))):
-            raise ValueError("Unknown notification type")
+            raise ValueError("Duplicated link url")
 
         return links
 

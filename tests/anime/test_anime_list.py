@@ -127,3 +127,27 @@ async def test_anime_search_query_pagination(
         "shingeki-no-kyojin-0cf69a",
         "shingeki-no-kyojin-season-3-b22bb3",
     }
+
+
+async def test_anime_search_query_order(
+    client, mock_meilisearch, aggregator_anime, aggregator_anime_info
+):
+    # Page keeps relevance order from Meilisearch instead of catalog sort
+    hits = [
+        "0cf69ac6-9238-4e2f-9add-39294c1a0f11",
+        "b22bb359-4545-45ce-92d3-df8646554128",
+    ]
+
+    slugs = []
+
+    for order in [hits, hits[::-1]]:
+        mock_meilisearch.hits = order
+        mock_meilisearch.total = 2
+
+        response = await request_anime_search(client, {"query": "kyojin"})
+        assert response.status_code == status.HTTP_200_OK
+
+        slugs.append([entry["slug"] for entry in response.json()["list"]])
+
+    assert len(slugs[0]) == 2
+    assert slugs[1] == slugs[0][::-1]

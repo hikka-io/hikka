@@ -572,6 +572,13 @@ def exclude_content_ids_filter(content_ids: list[str] | None) -> list[str]:
     return [f"id NOT IN [{ids}]"]
 
 
+def sort_by_ids(items: list, ids: list[str]) -> list:
+    """Return content in the same order as search result ids"""
+
+    position = {content_id: index for index, content_id in enumerate(ids)}
+    return sorted(items, key=lambda item: position[item.content_id])
+
+
 def enumerate_seasons(start, end):
     SEASONS_ORDER = [
         constants.SEASON_WINTER,

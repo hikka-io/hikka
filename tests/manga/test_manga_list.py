@@ -89,3 +89,27 @@ async def test_manga_search_query_pagination(
     assert response.json()["pagination"]["pages"] == 20
     assert response.json()["pagination"]["page"] == 2
     assert len(response.json()["list"]) == 2
+
+
+async def test_manga_search_query_order(
+    client, mock_meilisearch, aggregator_manga, aggregator_manga_info
+):
+    # Page keeps relevance order from Meilisearch instead of catalog sort
+    hits = [
+        "fb9fbd44-76f6-4b22-9438-05d7e3a43c37",
+        "7ef8d2cf-0565-4ddd-9498-7fae392a7421",
+    ]
+
+    slugs = []
+
+    for order in [hits, hits[::-1]]:
+        mock_meilisearch.hits = order
+        mock_meilisearch.total = 2
+
+        response = await request_manga_search(client, {"query": "manga"})
+        assert response.status_code == status.HTTP_200_OK
+
+        slugs.append([entry["slug"] for entry in response.json()["list"]])
+
+    assert len(slugs[0]) == 2
+    assert slugs[1] == slugs[0][::-1]

@@ -12,10 +12,13 @@ from tests.client_requests import (
     request_digest_privacy,
     request_favourite_add,
     request_client_create,
+    request_manga_search,
+    request_anime_search,
     request_follow_check,
     request_watch_delete,
     request_auth_token,
     request_watch_add,
+    request_read_add,
     request_watch,
 )
 
@@ -256,3 +259,64 @@ async def test_thirdparty_ignored_notifications(client, test_token):
 
     response = await request_settings_ignored_notifications(client, token, [])
     assert response.status_code == status.HTTP_200_OK
+
+
+def catalog_entry(response, slug):
+    return next(
+        entry for entry in response.json()["list"] if entry["slug"] == slug
+    )
+
+
+async def test_thirdparty_catalog_list_status(
+    client,
+    test_token,
+    aggregator_anime,
+    aggregator_manga,
+    aggregator_manga_info,
+):
+    response = await request_watch_add(
+        client, "bocchi-the-rock-9e172d", test_token, {"status": "watching"}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    response = await request_read_add(
+        client, "manga", "berserk-fb9fbd", test_token, {"status": "reading"}
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+
+    client_info = await create_thirdparty_client(client, test_token)
+
+    # Without list scopes catalogs treat token as anonymous
+    token = await get_thirdparty_token(
+        client, test_token, client_info, [constants.SCOPE_READ_USER_DETAILS]
+    )
+
+    response = await request_anime_search(client, size=100, token=token)
+    assert response.status_code == status.HTTP_200_OK
+    assert catalog_entry(response, "bocchi-the-rock-9e172d")["watch"] == []
+
+    response = await request_manga_search(client, size=100, token=token)
+    assert response.status_code == status.HTTP_200_OK
+    assert catalog_entry(response, "berserk-fb9fbd")["read"] == []
+
+    # With list scopes user's own statuses are shown
+    token = await get_thirdparty_token(
+        client,
+        test_token,
+        client_info,
+        [constants.SCOPE_READ_WATCHLIST, constants.SCOPE_READ_READLIST],
+    )
+
+    response = await request_anime_search(client, size=100, token=token)
+    assert response.status_code == status.HTTP_200_OK
+
+    watch = catalog_entry(response, "bocchi-the-rock-9e172d")["watch"]
+    assert watch[0]["status"] == "watching"
+
+    response = await request_manga_search(client, size=100, token=token)
+    assert response.status_code == status.HTTP_200_OK
+
+    read = catalog_entry(response, "berserk-fb9fbd")["read"]
+    assert read[0]["status"] == "reading"

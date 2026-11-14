@@ -28,6 +28,7 @@ from app.dependencies import (
 
 from app.utils import (
     paginated_response,
+    sort_by_ids,
     pagination,
 )
 
@@ -86,7 +87,14 @@ async def search_novel(
         session, search, filter_ids, request_user, limit, offset
     )
 
-    return paginated_response(novel.unique().all(), total, page, limit)
+    novel = novel.unique().all()
+
+    # Database sorts page by catalog sort and we need relevance
+    # order Meilisearch returned search results in
+    if filter_ids:
+        novel = sort_by_ids(novel, filter_ids)
+
+    return paginated_response(novel, total, page, limit)
 
 
 @router.get(

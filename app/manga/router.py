@@ -1,6 +1,6 @@
 from app.common.schemas.character import ContentCharacterPaginationResponse
+from app.utils import paginated_response, sort_by_ids, pagination
 from app.common.schemas.manga import MangaSearchArgs
-from app.utils import paginated_response, pagination
 from sqlalchemy.ext.asyncio import AsyncSession
 from .utils import build_manga_filters_ms
 from fastapi import APIRouter, Depends
@@ -38,7 +38,9 @@ router = APIRouter(prefix="/manga", tags=["Manga"])
 )
 async def search_manga(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_READLIST])
+    ),
     search: MangaSearchArgs = Depends(validate_search_manga),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -81,7 +83,14 @@ async def search_manga(
         session, search, filter_ids, request_user, limit, offset
     )
 
-    return paginated_response(manga.unique().all(), total, page, limit)
+    manga = manga.unique().all()
+
+    # Database sorts page by catalog sort and we need relevance
+    # order Meilisearch returned search results in
+    if filter_ids:
+        manga = sort_by_ids(manga, filter_ids)
+
+    return paginated_response(manga, total, page, limit)
 
 
 @router.get(

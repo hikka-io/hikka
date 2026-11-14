@@ -30,6 +30,7 @@ from .schemas import (
 
 from app.utils import (
     paginated_response,
+    sort_by_ids,
     pagination,
 )
 
@@ -44,7 +45,9 @@ router = APIRouter(prefix="/anime", tags=["Anime"])
 )
 async def search_anime(
     session: AsyncSession = Depends(get_session),
-    request_user: User | None = Depends(auth_required(optional=True)),
+    request_user: User | None = Depends(
+        auth_required(optional=True, scope=[constants.SCOPE_READ_WATCHLIST])
+    ),
     search: AnimeSearchArgs = Depends(validate_search_anime),
     page: int = Depends(get_page),
     size: int = Depends(get_size),
@@ -87,7 +90,14 @@ async def search_anime(
         session, search, filter_ids, request_user, limit, offset
     )
 
-    return paginated_response(anime.unique().all(), total, page, limit)
+    anime = anime.unique().all()
+
+    # Database sorts page by catalog sort and we need relevance
+    # order Meilisearch returned search results in
+    if filter_ids:
+        anime = sort_by_ids(anime, filter_ids)
+
+    return paginated_response(anime, total, page, limit)
 
 
 @router.get(

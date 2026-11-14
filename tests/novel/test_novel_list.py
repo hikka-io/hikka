@@ -84,3 +84,27 @@ async def test_novel_search_query_pagination(
     assert response.json()["pagination"]["pages"] == 20
     assert response.json()["pagination"]["page"] == 2
     assert len(response.json()["list"]) == 2
+
+
+async def test_novel_search_query_order(
+    client, mock_meilisearch, aggregator_novel, aggregator_novel_info
+):
+    # Page keeps relevance order from Meilisearch instead of catalog sort
+    hits = [
+        "7bb1594b-9a84-4632-948d-594903e85676",
+        "cc552518-5e42-43fa-a729-0f9a81db5767",
+    ]
+
+    slugs = []
+
+    for order in [hits, hits[::-1]]:
+        mock_meilisearch.hits = order
+        mock_meilisearch.total = 2
+
+        response = await request_novel_search(client, {"query": "novel"})
+        assert response.status_code == status.HTTP_200_OK
+
+        slugs.append([entry["slug"] for entry in response.json()["list"]])
+
+    assert len(slugs[0]) == 2
+    assert slugs[1] == slugs[0][::-1]
