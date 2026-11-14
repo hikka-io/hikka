@@ -38,15 +38,9 @@ class AnimeCollectionContent(CollectionContent):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeCollectionContent.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="AnimeCollectionContent.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -57,15 +51,9 @@ class CharacterCollectionContent(CollectionContent):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_characters.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterCollectionContent.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CharacterCollectionContent.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -76,15 +64,9 @@ class PersonCollectionContent(CollectionContent):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_people.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonCollectionContent.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="PersonCollectionContent.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -95,15 +77,9 @@ class MangaCollectionContent(CollectionContent):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaCollectionContent.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaCollectionContent.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -114,14 +90,8 @@ class NovelCollectionContent(CollectionContent):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelCollectionContent.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelCollectionContent.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )

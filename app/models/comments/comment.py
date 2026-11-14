@@ -112,30 +112,18 @@ class Comment(
 class EditComment(Comment):
     __mapper_args__ = {"polymorphic_identity": "edit"}
 
-    content_id = mapped_column(
-        ForeignKey("service_edits.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Edit"] = relationship(
         primaryjoin="Edit.id == EditComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="EditComment.content_id",
     )
 
 
 class CollectionComment(Comment):
     __mapper_args__ = {"polymorphic_identity": "collection"}
 
-    content_id = mapped_column(
-        ForeignKey("service_collections.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Collection"] = relationship(
         primaryjoin="Collection.id == CollectionComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CollectionComment.content_id",
     )
 
 
@@ -144,15 +132,9 @@ class AnimeComment(Comment):
         "polymorphic_identity": "anime",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="AnimeComment.content_id",
     )
 
 
@@ -161,15 +143,9 @@ class MangaComment(Comment):
         "polymorphic_identity": "manga",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaComment.content_id",
     )
 
 
@@ -178,15 +154,9 @@ class NovelComment(Comment):
         "polymorphic_identity": "novel",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelComment.content_id",
     )
 
 
@@ -195,15 +165,9 @@ class PersonComment(Comment):
         "polymorphic_identity": "person",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_people.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="PersonComment.content_id",
     )
 
 
@@ -212,15 +176,9 @@ class CharacterComment(Comment):
         "polymorphic_identity": "character",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_people.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CharacterComment.content_id",
     )
 
 
@@ -229,13 +187,7 @@ class ArticleComment(Comment):
         "polymorphic_identity": "article",
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_articles.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Article"] = relationship(
         primaryjoin="Article.id == ArticleComment.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="ArticleComment.content_id",
     )

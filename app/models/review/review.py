@@ -63,43 +63,25 @@ class Review(
 class AnimeReview(Review):
     __mapper_args__ = {"polymorphic_identity": "anime"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeReview.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="AnimeReview.content_id",
     )
 
 
 class MangaReview(Review):
     __mapper_args__ = {"polymorphic_identity": "manga"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaReview.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaReview.content_id",
     )
 
 
 class NovelReview(Review):
     __mapper_args__ = {"polymorphic_identity": "novel"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelReview.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelReview.content_id",
     )

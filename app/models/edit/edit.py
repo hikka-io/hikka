@@ -70,73 +70,43 @@ class Edit(
 class AnimeEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "anime"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeEdit.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="AnimeEdit.content_id",
     )
 
 
 class MangaEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "manga"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaEdit.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaEdit.content_id",
     )
 
 
 class NovelEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "novel"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelEdit.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelEdit.content_id",
     )
 
 
 class PersonEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "person"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_people.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonEdit.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="PersonEdit.content_id",
     )
 
 
 class CharacterEdit(Edit):
     __mapper_args__ = {"polymorphic_identity": "character"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_characters.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterEdit.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CharacterEdit.content_id",
     )

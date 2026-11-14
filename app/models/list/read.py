@@ -46,28 +46,16 @@ class Read(Base, CreatedMixin, UpdatedMixin, DeletedMixin):
 class MangaRead(Read):
     __mapper_args__ = {"polymorphic_identity": "manga"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaRead.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaRead.content_id",
     )
 
 
 class NovelRead(Read):
     __mapper_args__ = {"polymorphic_identity": "novel"}
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelRead.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelRead.content_id",
     )

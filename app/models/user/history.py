@@ -34,15 +34,9 @@ class FavouriteAnimeHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteAnimeHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteAnimeHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -53,15 +47,9 @@ class FavouriteAnimeRemoveHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == FavouriteAnimeRemoveHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteAnimeRemoveHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -72,15 +60,9 @@ class FavouriteMangaHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == FavouriteMangaHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteMangaHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -91,15 +73,9 @@ class FavouriteMangaRemoveHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == FavouriteMangaRemoveHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteMangaRemoveHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -110,15 +86,9 @@ class FavouriteNovelHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == FavouriteNovelHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteNovelHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -129,15 +99,9 @@ class FavouriteNovelRemoveHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == FavouriteNovelRemoveHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="FavouriteNovelRemoveHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -148,15 +112,9 @@ class WatchHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="WatchHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -167,15 +125,9 @@ class WatchDeleteHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == WatchDeleteHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="WatchDeleteHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -200,15 +152,9 @@ class ReadMangaHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == ReadMangaHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="ReadMangaHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -219,15 +165,9 @@ class ReadMangaDeleteHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == ReadMangaDeleteHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="ReadMangaDeleteHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -238,15 +178,9 @@ class ReadNovelHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == ReadNovelHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="ReadNovelHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -257,14 +191,8 @@ class ReadNovelDeleteHistory(History):
         "eager_defaults": True,
     }
 
-    target_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == ReadNovelDeleteHistory.target_id",
-        foreign_keys=[target_id],
+        foreign_keys="ReadNovelDeleteHistory.target_id",
         lazy="immediate",  # TODO: check if it is good idea
     )

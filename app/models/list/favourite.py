@@ -36,15 +36,9 @@ class AnimeFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_anime.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Anime"] = relationship(
         primaryjoin="Anime.id == AnimeFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="AnimeFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -55,15 +49,9 @@ class MangaFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_manga.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Manga"] = relationship(
         primaryjoin="Manga.id == MangaFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="MangaFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -74,15 +62,9 @@ class NovelFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_novel.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Novel"] = relationship(
         primaryjoin="Novel.id == NovelFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="NovelFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -93,15 +75,9 @@ class CollectionFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_collections.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Collection"] = relationship(
         primaryjoin="Collection.id == CollectionFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CollectionFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -112,15 +88,9 @@ class CharacterFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_characters.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Character"] = relationship(
         primaryjoin="Character.id == CharacterFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="CharacterFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
 
@@ -131,14 +101,8 @@ class PersonFavourite(Favourite):
         "eager_defaults": True,
     }
 
-    content_id = mapped_column(
-        ForeignKey("service_content_people.id", ondelete="CASCADE"),
-        use_existing_column=True,
-        index=True,
-    )
-
     content: Mapped["Person"] = relationship(
         primaryjoin="Person.id == PersonFavourite.content_id",
-        foreign_keys=[content_id],
+        foreign_keys="PersonFavourite.content_id",
         lazy="immediate",  # TODO: check if it is good idea
     )
