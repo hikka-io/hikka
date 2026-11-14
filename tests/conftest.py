@@ -1,11 +1,11 @@
 # Based on https://praciano.com.br/fastapi-and-async-sqlalchemy-20-with-pytest-done-right.html
 # https://github.com/gpkc/fastapi-sqlalchemy-pytest
 
+from sqlalchemy.schema import sort_tables_and_constraints
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
 from app.models import Anime, Manga, Novel, Base
 from async_asgi_testclient import TestClient
-from pytest_postgresql import factories
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, text
 from app.utils import get_settings
@@ -18,14 +18,60 @@ from app import constants
 from unittest import mock
 import asyncio
 import helpers
+import psycopg
 import pytest
 
 
-# This is needed to obtain PostgreSQL version
-test_db = factories.postgresql_proc()
+# Statements which clean test data between tests
+reset_script = None
 
 
-@pytest.fixture(autouse=True)
+def build_reset_script(sequences: list[str]) -> str:
+    tables = []
+    cycle_columns = {}
+
+    # Foreign keys in table cycles (users and images) can't be ordered
+    # so their columns are cleared before rows get deleted
+    for table, constraints in sort_tables_and_constraints(
+        Base.metadata.tables.values()
+    ):
+        if table is not None:
+            tables.append(table.name)
+            continue
+
+        for constraint in constraints:
+            cycle_columns.setdefault(constraint.table.name, []).extend(
+                column.name for column in constraint.columns
+            )
+
+    statements = [
+        f'UPDATE "{table}" SET '
+        + ", ".join(f'"{column}" = NULL' for column in columns)
+        for table, columns in cycle_columns.items()
+    ]
+
+    # DELETE is way faster than TRUNCATE on almost empty tables
+    statements += [f'DELETE FROM "{table}"' for table in reversed(tables)]
+
+    # Sequences are restarted since some tests check edit ids
+    statements += [f'ALTER SEQUENCE "{name}" RESTART' for name in sequences]
+
+    return ";".join(statements)
+
+
+def get_server_version(db_url) -> str:
+    with psycopg.connect(
+        host=db_url.host,
+        port=db_url.port,
+        user=db_url.username,
+        password=db_url.password,
+        dbname="postgres",
+    ) as connection:
+        version = connection.info.server_version
+        return f"{version // 10000}.{version % 10000}"
+
+
+@pytest.fixture(scope="session", autouse=True)
 def app():
     with ExitStack():
         yield create_app(init_db=False)
@@ -45,22 +91,28 @@ def event_loop(request):
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def connection_test(test_db, event_loop):
+async def connection_test(event_loop, worker_id):
+    global reset_script
+
     # Switch to testing config using env variable
     settings = get_settings()
     settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
 
     db_url = make_url(settings.database.endpoint)
 
+    # Each xdist worker gets its own database
+    if worker_id != "master":
+        db_url = db_url.set(database=f"{db_url.database}-{worker_id}")
+
     with DatabaseJanitor(
         user=db_url.username,
         host=db_url.host,
         port=db_url.port,
-        version=test_db.version,
+        version=get_server_version(db_url),
         dbname=db_url.database,
         password=db_url.password,
     ):
-        sessionmanager.init(settings.database.endpoint)
+        sessionmanager.init(db_url.render_as_string(hide_password=False))
 
         async with sessionmanager.connect() as connection:
             await connection.execute(
@@ -70,6 +122,15 @@ async def connection_test(test_db, event_loop):
             await connection.run_sync(Base.metadata.drop_all)
             await connection.run_sync(Base.metadata.create_all)
 
+            sequences = await connection.scalars(
+                text(
+                    "SELECT sequence_name FROM information_schema.sequences "
+                    "WHERE sequence_schema = 'public'"
+                )
+            )
+
+            reset_script = build_reset_script(sequences.all())
+
         yield
 
         await sessionmanager.close()
@@ -78,13 +139,9 @@ async def connection_test(test_db, event_loop):
 @pytest.fixture(scope="function", autouse=True)
 async def create_tables(connection_test):
     async with sessionmanager.connect() as connection:
-        tables = ",".join(
-            table.name for table in reversed(Base.metadata.sorted_tables)
-        )
-
-        await connection.execute(
-            text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE;")
-        )
+        # Raw driver connection runs whole script in one round trip
+        raw_connection = await connection.get_raw_connection()
+        await raw_connection.driver_connection.execute(reset_script)
 
 
 @pytest.fixture(scope="function", autouse=True)

@@ -65,6 +65,7 @@ Install [devenv](https://devenv.sh/getting-started/) before proceeding.
    ```sh
    pytest
    ```
+   Add `-n auto` to run them in parallel, each worker creates its own test database.
 6. If tests from previous step completed without any issues - congrats, now you can launch Hikka backend locally:
    ```sh
    uvicorn run:app --reload --port=8888

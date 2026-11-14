@@ -62,6 +62,7 @@ dependencies = [
   "pytest==7.4.4",
   "pytest-asyncio==0.21.2",
   "pytest-postgresql==6.1.1",
+  "pytest-xdist==3.6.1",
   "python-dateutil==2.9.0.post0",
   "python-multipart==0.0.31",
   "requests (==2.33.0)",
