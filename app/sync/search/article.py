@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from meilisearch_python_sdk import AsyncClient
 from app.database import sessionmanager
 from app.utils import get_settings
+from sqlalchemy import select, or_
 from app.models import Article
-from sqlalchemy import select
 from app import constants
 from uuid import UUID
 
@@ -12,19 +12,15 @@ from uuid import UUID
 async def update_article_settings(index):
     await index.update_settings(
         MeilisearchSettings(
-            filterable_attributes=["title"],
             searchable_attributes=["title"],
-            displayed_attributes=["title", "slug", "reference"],
-            sortable_attributes=["title"],
-            distinct_attribute="slug",
+            displayed_attributes=["id", "title", "slug"],
         )
     )
 
 
 def article_to_document(article: Article):
     return {
-        "reference": article.reference,
-        "id": str(article.content_id),
+        "id": article.reference,
         "title": article.title,
         "slug": article.slug,
     }
@@ -35,13 +31,14 @@ async def article_documents(
 ):
     # Rows stay locked until the batch is committed so edits made
     # meanwhile wait and flag the row again instead of being overwritten
+    # Drafts are indexed too so authors can search them, articles list
+    # decides who can see what
     query = (
         select(Article)
         .filter(
             Article.category != constants.ARTICLE_SYSTEM,
             Article.needs_search_update == True,  # noqa: E712
             Article.deleted == False,  # noqa: E712
-            Article.draft == False,  # noqa: E712
         )
         .order_by(Article.id)
         .limit(limit)
@@ -66,6 +63,29 @@ async def article_documents(
     return documents, last_id
 
 
+async def article_document_ids_delete(session: AsyncSession):
+    article_list = await session.scalars(
+        select(Article)
+        .filter(
+            or_(
+                Article.category == constants.ARTICLE_SYSTEM,
+                Article.deleted == True,  # noqa: E712
+            ),
+            Article.needs_search_update == True,  # noqa: E712
+        )
+        .with_for_update(of=Article, skip_locked=True)
+    )
+
+    delete_ids = []
+
+    for article in article_list.unique():
+        delete_ids.append(article.reference)
+        article.needs_search_update = False
+        session.add(article)
+
+    return delete_ids
+
+
 async def meilisearch_populate(session: AsyncSession):
     settings = get_settings()
 
@@ -86,6 +106,16 @@ async def meilisearch_populate(session: AsyncSession):
             await index.add_documents(documents, primary_key="id")
 
             await session.commit()
+
+        delete_document_ids = await article_document_ids_delete(session)
+
+        if len(delete_document_ids) > 0:
+            await index.delete_documents(delete_document_ids)
+            print(
+                f"Meilisearch: deleted {len(delete_document_ids)} articles from search"
+            )
+
+        await session.commit()
 
 
 async def update_search_article():

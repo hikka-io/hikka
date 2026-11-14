@@ -4,6 +4,8 @@ from client_requests import request_articles
 from app.models import Article
 from sqlalchemy import select
 from fastapi import status
+from app import constants
+from uuid import uuid4
 
 
 async def test_articles_list(
@@ -164,3 +166,91 @@ async def test_articles_list(
 
     assert response.json()["code"] == "search:query_down"
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+async def test_articles_list_search(
+    client,
+    mock_meilisearch,
+    create_test_user,
+    get_test_token,
+    test_session,
+):
+    article_ids = {}
+
+    for title, draft in [
+        ("Search first", False),
+        ("Search second", False),
+        ("Search draft", True),
+    ]:
+        response = await request_create_article(
+            client,
+            get_test_token,
+            {
+                "document": [{"text": "Lorem ipsum dor sit amet."}],
+                "title": title,
+                "tags": ["search"],
+                "category": "news",
+                "content": None,
+                "draft": draft,
+                "trusted": False,
+            },
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+
+        article = await test_session.scalar(
+            select(Article).filter(Article.slug == response.json()["slug"])
+        )
+
+        article_ids[title] = article.reference
+
+    # Hits include draft which is hidden from general list and
+    # stale document of article which doesn't exist
+    mock_meilisearch.hits = [
+        article_ids["Search first"],
+        article_ids["Search draft"],
+        str(uuid4()),
+    ]
+
+    response = await request_articles(client, {"query": "search"})
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 1
+    assert response.json()["list"][0]["title"] == "Search first"
+
+    # Database filters and paginates results so we ask for all hits
+    assert mock_meilisearch.calls[0]["page"] == 1
+    assert mock_meilisearch.calls[0]["size"] == constants.SEARCH_MAX_HITS
+
+    # Author can search own drafts
+    response = await request_articles(
+        client, {"query": "search", "draft": True}, token=get_test_token
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 1
+    assert response.json()["list"][0]["title"] == "Search draft"
+
+    # Total and pages come from database
+    mock_meilisearch.hits = [
+        article_ids["Search first"],
+        article_ids["Search second"],
+    ]
+
+    response = await request_articles(
+        client, {"query": "search"}, page=2, size=1
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 2
+    assert response.json()["pagination"]["pages"] == 2
+    assert len(response.json()["list"]) == 1
+
+    # No hits should return empty list instead of all articles
+    mock_meilisearch.hits = []
+
+    response = await request_articles(client, {"query": "nothing"})
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["pagination"]["total"] == 0
+    assert response.json()["list"] == []

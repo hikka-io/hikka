@@ -1,4 +1,3 @@
-from app.common.service.articles import load_articles_content
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import SuccessResponse
 from fastapi import APIRouter, Depends
@@ -42,9 +41,6 @@ from app.dependencies import (
     get_page,
     get_size,
 )
-
-# TODO: remove me
-from app.errors import Abort
 
 router = APIRouter(prefix="/articles", tags=["Articles"])
 
@@ -120,15 +116,31 @@ async def get_articles(
         )
     ),
 ):
-    # TODO: remove me
-    if args.query:
-        raise Abort("search", "query-down")
-
     limit, offset = pagination(page, size)
-    total = await service.get_articles_count(session, request_user, args)
+
+    filter_ids = None
+
+    if args.query:
+        # Meilisearch only knows about the title so we take all
+        # matching results and let database filter and paginate them
+        meilisearch_result = await meilisearch.search(
+            constants.SEARCH_INDEX_ARTICLES,
+            query=args.query,
+            size=constants.SEARCH_MAX_HITS,
+            page=1,
+        )
+
+        filter_ids = [hit["id"] for hit in meilisearch_result["list"]]
+
+        if not filter_ids:
+            return paginated_response([], 0, page, limit)
+
+    total = await service.get_articles_count(
+        session, request_user, args, filter_ids
+    )
 
     articles = await service.get_articles(
-        session, request_user, args, limit, offset
+        session, request_user, args, limit, offset, filter_ids
     )
 
     articles = await service.load_articles_content(
@@ -136,38 +148,3 @@ async def get_articles(
     )
 
     return paginated_response(articles, total, page, limit)
-
-    # TODO: finish articles search cleanup
-    # if not args.query:
-    #     limit, offset = pagination(page, size)
-    #     total = await service.get_articles_count(session, request_user, args)
-
-    #     articles = await service.get_articles(
-    #         session, request_user, args, limit, offset
-    #     )
-
-    #     articles = await service.load_articles_content(
-    #         session, articles.unique().all()
-    #     )
-
-    #     return paginated_response(articles, total, page, limit)
-
-    # meilisearch_result = await meilisearch.search(
-    #     constants.SEARCH_INDEX_ARTICLES,
-    #     query=args.query,
-    #     page=page,
-    #     size=size,
-    # )
-
-    # return await service.article_meilisearch_search(
-    #     session, request_userm, meilisearch_result
-    # )
-
-    # articles = await service.article_meilisearch_search(
-    #     session, meilisearch_result, request_user, args, limit, offset
-    # )
-
-    # # TODO: remove this
-    # articles = await load_articles_content(session, articles.unique().all())
-
-    # return paginated_response(articles, total, page, limit)

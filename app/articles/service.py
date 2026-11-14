@@ -8,7 +8,7 @@ from app.common.service import get_images
 from sqlalchemy.orm import joinedload
 from app.utils import utcnow, slugify
 from app import constants
-from uuid import uuid4, UUID
+from uuid import uuid4
 
 from app.models import (
     UserArticleStats,
@@ -286,6 +286,10 @@ async def update_article(
         for tag in new_tags:
             tag.content_count += 1
 
+    # Update search index if searchable fields has been changed
+    if "title" in after or "category" in after:
+        article.needs_search_update = True
+
     now = utcnow()
 
     article.preview = generate_preview(article.document)
@@ -326,6 +330,8 @@ async def delete_article(session: AsyncSession, article: Article, user: User):
     for tag in article.tags:
         tag.content_count -= 1
 
+    # Search sync will remove article from index
+    article.needs_search_update = True
     article.deleted = True
     session.add(article)
 
@@ -353,9 +359,14 @@ async def articles_list_filter(
     request_user: User | None,
     args: ArticlesListArgs,
     session: AsyncSession,
+    ids: list[str] | None = None,
 ):
     # We don't want to display system articles in global list
     query = query.filter(Article.category != constants.ARTICLE_SYSTEM)
+
+    # Limit list to articles found by search
+    if ids is not None:
+        query = query.filter(Article.id.in_(ids))
 
     if len(args.categories) > 0:
         query = query.filter(Article.category.in_(args.categories))
@@ -415,12 +426,14 @@ async def get_articles_count(
     session: AsyncSession,
     request_user: User | None,
     args: ArticlesListArgs,
+    ids: list[str] | None = None,
 ) -> int:
     query = await articles_list_filter(
         select(func.count(Article.id)),
         request_user,
         args,
         session,
+        ids,
     )
 
     return await session.scalar(query)
@@ -432,7 +445,7 @@ async def get_articles(
     args: ArticlesListArgs,
     limit: int,
     offset: int,
-    ids: list[UUID] | None = None,
+    ids: list[str] | None = None,
 ) -> list[Article]:
     followed_user_ids = await get_followed_user_ids(session, request_user)
 
@@ -457,10 +470,8 @@ async def get_articles(
         request_user,
         args,
         session,
+        ids,
     )
-
-    if ids is not None and len(ids) > 0:
-        query = query.filter(Article.id.in_(ids))
 
     return await session.scalars(
         query.order_by(*build_articles_order_by(args.sort))
@@ -493,17 +504,3 @@ async def get_article_authors(session: AsyncSession, request_user: User):
         )
         .order_by(UserArticleStats.author_score.desc())
     )
-
-
-async def article_meilisearch_search(
-    session: AsyncSession,
-    request_user: User,
-    meilisearch_result: dict,
-):
-    articles = meilisearch_result.get("list", [])
-    article_ids = [article["reference"] for article in articles]
-    article_list = await get_articles(
-        session, request_user, args, limit, offset, article_ids
-    )
-
-    return article_list

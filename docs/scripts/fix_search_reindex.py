@@ -58,8 +58,8 @@ async def fix_search_reindex():
         async with sessionmanager.session() as session:
             left = await count_pending(session)
 
-        # Drafts, system articles and manga without media type are never
-        # pushed so we stop once a pass makes no progress
+        # Manga and novels without media type are never pushed so we stop
+        # once a pass makes no progress
         if left >= pending:
             break
 
