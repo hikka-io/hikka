@@ -1,4 +1,5 @@
 from fastapi import status
+import helpers
 
 from client_requests import (
     request_profile,
@@ -16,6 +17,22 @@ async def test_profile(client, create_test_user):
     response = await request_profile(client, "TestUser")
     assert response.json()["username"] == "testuser"
     assert response.status_code == status.HTTP_200_OK
+
+
+async def test_profile_old_username(client, test_session):
+    # User renamed from username with forbidden characters
+    await helpers.create_user(
+        test_session, username="john_doe", email="john@mail.com"
+    )
+
+    for old_username in ["john.doe", "John-Doe", "-john.doe"]:
+        response = await request_profile(client, old_username)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json()["username"] == "john_doe"
+
+    # Old style username nobody was renamed to
+    response = await request_profile(client, "jane.doe")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 async def test_bad_profile(client):

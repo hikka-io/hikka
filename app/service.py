@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import selectinload
 from app import constants
 from uuid import UUID
+import re
 
 from app.utils import (
     dict_datetime_to_timestamp,
@@ -288,9 +289,20 @@ async def get_or_create_anime_watch(
 async def get_user_by_username(
     session: AsyncSession, username: str
 ) -> User | None:
-    return await session.scalar(
-        select(User).filter(func.lower(User.username) == username.lower())
-    )
+    def select_user(name):
+        return select(User).filter(func.lower(User.username) == name.lower())
+
+    if user := await session.scalar(select_user(username)):
+        return user
+
+    # Usernames with forbidden characters were renamed by replacing them
+    # with underscores and old links should still lead to the same user
+    fixed = re.sub(r"[^A-Za-z0-9_]", "_", username).lstrip("_")
+
+    if fixed and fixed != username:
+        return await session.scalar(select_user(fixed))
+
+    return None
 
 
 async def get_user_by_reference(

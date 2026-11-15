@@ -1,5 +1,5 @@
 from app.sync.digests.activity import generate_activity
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from sqlalchemy import select, func
 from app.models import Digest, Log
 from app.utils import utcnow
@@ -14,43 +14,47 @@ async def test_activity(test_session, create_test_user):
     spam_target_id = uuid4()
     today = now.date()
 
+    # Logs are placed relative to today's noon so hour offsets
+    # never cross into another day when test runs near midnight
+    noon = datetime.combine(today, time(hour=12))
+
     user_logs = [
         # Tracked actions
         {
-            "created": now - timedelta(days=2, hours=1),
+            "created": noon - timedelta(days=2, hours=1),
             "log_type": constants.LOG_COMMENT_WRITE,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": now - timedelta(days=2, hours=2),
+            "created": noon - timedelta(days=2, hours=2),
             "log_type": constants.LOG_EDIT_CREATE,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": now - timedelta(days=1),
+            "created": noon - timedelta(days=1),
             "log_type": constants.LOG_WATCH_CREATE,
             "user_id": user_id,
             "data": {},
         },
         # Spam actions, we count them as one
         {
-            "created": now - timedelta(days=3, hours=1),
+            "created": noon - timedelta(days=3, hours=1),
             "log_type": constants.LOG_FAVOURITE,
             "target_id": spam_target_id,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": now - timedelta(days=3, hours=2),
+            "created": noon - timedelta(days=3, hours=2),
             "log_type": constants.LOG_FAVOURITE,
             "target_id": spam_target_id,
             "user_id": user_id,
             "data": {},
         },
         {
-            "created": now - timedelta(days=3, hours=3),
+            "created": noon - timedelta(days=3, hours=3),
             "log_type": constants.LOG_FAVOURITE,
             "target_id": spam_target_id,
             "user_id": user_id,
