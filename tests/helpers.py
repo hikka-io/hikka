@@ -1,4 +1,5 @@
 from app.models import User, UserOAuth, AuthToken, Client
+from app.common.auth.service import normalize_email
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.inspection import inspect
@@ -40,6 +41,7 @@ async def create_user(
                 "username": username,
                 "last_active": now,
                 "created": now,
+                "email_normalized": normalize_email(email),
                 "email": email,
                 "role": role,
                 "login": now,

@@ -9,6 +9,25 @@ IMPORT_MAX_ENTRIES = 30000
 EMAIL_ACTIVATION = "activation"
 EMAIL_PASSWORD_RESET = "password_reset"
 
+# Providers which deliver "name+label@domain" to "name@domain"
+EMAIL_PLUS_DOMAINS = [
+    "gmail.com",
+    "googlemail.com",
+    "yahoo.com",
+    "ymail.com",
+    "rocketmail.com",
+    "protonmail.com",
+    "protonmail.ch",
+    "proton.me",
+    "pm.me",
+    "icloud.com",
+    "me.com",
+    "mac.com",
+]
+
+# Gmail ignores dots and googlemail.com is the same mailbox
+EMAIL_GMAIL_DOMAINS = ["gmail.com", "googlemail.com"]
+
 # CDN endpoing
 CDN_ENDPOINT = "https://cdn.hikka.io"
 

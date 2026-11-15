@@ -1,9 +1,9 @@
 from app.models import User, AuthToken, UserOAuth, AuthTokenRequest, Client
+from app.common.auth.service import normalize_email, is_email_taken
 from sqlalchemy import select, func, ScalarResult
 from app.utils import hashpwd, new_token, utcnow
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.service import get_user_by_username
-from app.service import get_user_by_email
 from datetime import timedelta, datetime
 from starlette.datastructures import URL
 from sqlalchemy.orm import selectinload
@@ -91,6 +91,7 @@ async def create_oauth_user(
     user = User(
         **{
             "needs_search_update": True,
+            "email_normalized": normalize_email(email) if email else None,
             "email_confirmed": email is not None,
             "role": constants.ROLE_USER,
             "password_hash": None,
@@ -136,6 +137,7 @@ async def create_user(session: AsyncSession, signup: SignupArgs) -> User:
         **{
             "needs_search_update": True,
             "role": constants.ROLE_NOT_ACTIVATED,
+            "email_normalized": normalize_email(signup.email),
             "activation_expire": now + timedelta(hours=3),
             "activation_token": activation_token,
             "password_hash": password_hash,
@@ -193,7 +195,8 @@ async def activate_user(session: AsyncSession, user: User) -> User:
 
     # Special case for email change
     if user.new_email is not None:
-        if not await get_user_by_email(session, user.new_email):
+        if not await is_email_taken(session, user.new_email):
+            user.email_normalized = normalize_email(user.new_email)
             user.email = user.new_email
             user.new_email = None
 

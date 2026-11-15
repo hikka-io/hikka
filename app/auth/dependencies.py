@@ -1,3 +1,4 @@
+from app.common.auth.service import is_email_taken
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, UserOAuth, Client
 from app.dependencies import auth_required
@@ -70,8 +71,8 @@ async def validate_signup(
     if await get_user_by_username(session, signup.username):
         raise Abort("auth", "username-taken")
 
-    # Check if email has been used
-    if await get_user_by_email(session, signup.email):
+    # Check if email or another alias of its mailbox has been used
+    if await is_email_taken(session, signup.email):
         raise Abort("auth", "email-exists")
 
     if len(settings.backend.auth_emails) > 0:
@@ -138,7 +139,7 @@ async def get_user_oauth(
     if not (oauth := await get_oauth_by_id(session, data["id"], provider)):
         email = data.get("email")
 
-        if email and (await get_user_by_email(session, email)):
+        if email and (await is_email_taken(session, email)):
             raise Abort("auth", "email-exists")
 
     return oauth

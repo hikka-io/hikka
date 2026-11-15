@@ -3,6 +3,7 @@ from sqlalchemy import select, desc
 from app.models import User, Log
 from fastapi import status
 from app import constants
+import helpers
 
 
 async def test_settings_email(
@@ -53,3 +54,19 @@ async def test_settings_email(
     # It should hit rate limit
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["code"] == "settings:email_cooldown"
+
+
+async def test_settings_email_mailbox_taken(
+    client, test_session, create_test_user, get_test_token
+):
+    await helpers.create_user(
+        test_session, username="johndoe", email="john.doe@gmail.com"
+    )
+
+    # Another account already uses this Gmail mailbox
+    response = await request_settings_email(
+        client, get_test_token, "johndoe@gmail.com"
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "auth:email_exists"

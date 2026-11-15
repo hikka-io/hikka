@@ -3,6 +3,7 @@ from sqlalchemy import select, desc
 from app.models import Log, User
 from fastapi import status
 from app import constants
+import helpers
 
 from client_requests import (
     request_oauth_post,
@@ -73,6 +74,25 @@ async def test_valid_oauth_login(client, mock_oauth_data, test_session):
 async def test_oauth_login_email_exists(
     client, create_test_user_oauth, mock_oauth_data
 ):
+    response = await request_oauth_post(client, "google", "code")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()["code"] == "auth:email_exists"
+
+
+async def test_oauth_signup_mailbox_exists(
+    client, test_session, mock_oauth_data
+):
+    await helpers.create_user(
+        test_session, username="johndoe", email="johndoe@gmail.com"
+    )
+
+    # Google returns dotted address of the same mailbox
+    mock_oauth_data.return_value = {
+        "email": "john.doe@gmail.com",
+        "id": "TEST_OAUTH_ID",
+    }
+
     response = await request_oauth_post(client, "google", "code")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST

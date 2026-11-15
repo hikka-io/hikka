@@ -18,6 +18,12 @@ class User(Base, NeedsSearchUpdateMixin):
     __tablename__ = "service_users"
 
     email: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    # Same mailbox can have many addresses (dots, plus labels)
+    email_normalized: Mapped[str] = mapped_column(
+        String(255), nullable=True, index=True
+    )
+
     role: Mapped[str] = mapped_column(String(64), index=True, nullable=True)
     password_hash: Mapped[str] = mapped_column(String(60), nullable=True)
     description: Mapped[str] = mapped_column(String(140), nullable=True)

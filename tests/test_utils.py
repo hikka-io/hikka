@@ -1,3 +1,4 @@
+from app.common.auth.service import normalize_email
 from datetime import datetime
 from app import constants
 from app import utils
@@ -129,3 +130,18 @@ def test_pagination():
         page,
         limit,
     )
+
+
+def test_normalize_email():
+    cases = {
+        " Jo.Hn+tag@GMail.com ": "john@gmail.com",
+        "john@googlemail.com": "john@gmail.com",
+        "name+label@icloud.com": "name@icloud.com",
+        "na.me+label@yahoo.com": "na.me@yahoo.com",
+        "name+label@example.com": "name+label@example.com",
+        "First.Last@Example.com": "first.last@example.com",
+        "not-an-email": "not-an-email",
+    }
+
+    for email, expected in cases.items():
+        assert normalize_email(email) == expected
