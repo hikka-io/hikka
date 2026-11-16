@@ -94,7 +94,7 @@ class IgnoredNotificationsArgs(CustomModel):
     ignored_notifications: list[str]
 
     @field_validator("ignored_notifications")
-    def validate_sort(cls, ignored_notifications):
+    def validate_ignored_notifications(cls, ignored_notifications):
         if len(set(ignored_notifications)) != len(ignored_notifications):
             raise ValueError("Duplicated notification type")
 
