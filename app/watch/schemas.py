@@ -5,6 +5,7 @@ from app.common.schemas.anime import AnimeResponse
 from app.common.schemas.user import UserResponse
 from pydantic import field_validator
 from pydantic import model_validator
+from app.utils import check_sort
 from pydantic import Field
 from app import constants
 from enum import Enum
@@ -53,35 +54,21 @@ class AnimeWatchSearchArgs(AnimeSearchArgsBase):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "native_score",
-            "native_scored_by",
-            "watch_episodes",
-            "watch_updated",
-            "watch_created",
-            "watch_score",
-            "media_type",
-            "start_date",
-            "scored_by",
-            "score",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "native_score",
+                "native_scored_by",
+                "watch_episodes",
+                "watch_updated",
+                "watch_created",
+                "watch_score",
+                "media_type",
+                "start_date",
+                "scored_by",
+                "score",
+            ],
+        )
 
 
 # Responses

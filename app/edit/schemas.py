@@ -5,6 +5,7 @@ from app.common.schemas.person import PersonResponse
 from app.common.schemas.user import UserResponse
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
+from app.utils import check_sort
 from app import constants
 from enum import Enum
 
@@ -62,27 +63,13 @@ class EditSearchArgs(CustomModel):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "edit_id",
-            "created",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "edit_id",
+                "created",
+            ],
+        )
 
 
 class EditArgs(CustomModel):
@@ -204,30 +191,16 @@ class AnimeTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "title_ua",
-            "title_en",
-            "title_original",
-            "start_date",
-            "media_type",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "title_ua",
+                "title_en",
+                "title_original",
+                "start_date",
+                "media_type",
+            ],
+        )
 
     @field_validator("years")
     def validate_years(cls, years):
@@ -281,30 +254,16 @@ class MangaTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "title_ua",
-            "title_en",
-            "title_original",
-            "start_date",
-            "media_type",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "title_ua",
+                "title_en",
+                "title_original",
+                "start_date",
+                "media_type",
+            ],
+        )
 
     @field_validator("years")
     def validate_years(cls, years):
@@ -358,30 +317,16 @@ class NovelTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "title_ua",
-            "title_en",
-            "title_original",
-            "start_date",
-            "media_type",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "title_ua",
+                "title_en",
+                "title_original",
+                "start_date",
+                "media_type",
+            ],
+        )
 
     @field_validator("years")
     def validate_years(cls, years):
@@ -427,24 +372,14 @@ class CharacterTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = ["name_ua", "name_en", "name_original"]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "name_ua",
+                "name_en",
+                "name_original",
+            ],
+        )
 
 
 class PersonTodoArgs(QuerySearchArgs, PaginationArgs):
@@ -476,24 +411,14 @@ class PersonTodoArgs(QuerySearchArgs, PaginationArgs):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = ["name_ua", "name_en", "name_original"]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "name_ua",
+                "name_en",
+                "name_original",
+            ],
+        )
 
 
 # Response

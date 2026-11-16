@@ -6,6 +6,7 @@ from app.common.schemas.watch import WatchStatusEnum
 from app.common.schemas.genre import GenreResponse
 from pydantic import Field, field_validator
 from app.schemas import datetime_pd
+from app.utils import check_sort
 from typing import Literal
 from app import constants
 from enum import Enum
@@ -31,33 +32,19 @@ class AnimeSearchArgs(QuerySearchArgs, AnimeSearchArgsBase):
 
     @field_validator("sort")
     def validate_sort(cls, sort_list):
-        valid_orders = ["asc", "desc"]
-        valid_fields = [
-            "native_scored_by",
-            "native_score",
-            "media_type",
-            "start_date",
-            "scored_by",
-            "created",
-            "updated",
-            "score",
-        ]
-
-        if len(sort_list) != len(set(sort_list)):
-            raise ValueError("Invalid sort: duplicates")
-
-        for sort_item in sort_list:
-            parts = sort_item.split(":")
-
-            if len(parts) != 2:
-                raise ValueError(f"Invalid sort format: {sort_item}")
-
-            field, order = parts
-
-            if field not in valid_fields or order not in valid_orders:
-                raise ValueError(f"Invalid sort value: {sort_item}")
-
-        return sort_list
+        return check_sort(
+            sort_list,
+            [
+                "native_scored_by",
+                "native_score",
+                "media_type",
+                "start_date",
+                "scored_by",
+                "created",
+                "updated",
+                "score",
+            ],
+        )
 
 
 # Responses
