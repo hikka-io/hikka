@@ -103,6 +103,7 @@ errors = {
         "invalid-password": ["Invalid password", "Поганий пароль", 400],
         "client-not-found": ["Client not found", "Клієнт не знайдено", 404],
         "token-expired": ["Token has expired", "Токен вже не дійсний", 400],
+        "banned": ["User is banned", "Користувача заблоковано", 400],
         "invalid-code": ["Invalid OAuth code", "Поганий код OAuth", 400],
         "user-not-found": ["User not found", "Користувача не знайдено", 404],
         "invalid-scope": [
@@ -481,6 +482,11 @@ errors = {
         ],
     },
     "client": {
+        "already-exists": [
+            "Client with that name already exists",
+            "Клієнт з такою назвою вже існує",
+            400,
+        ],
         "already-verified": [
             "Client is already verified",
             "Клієнт вже верифіковано",

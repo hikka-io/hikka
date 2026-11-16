@@ -4,6 +4,7 @@ from app import constants
 from tests.client_requests import (
     request_admin_update_user,
     request_client_create,
+    request_me,
 )
 
 
@@ -73,7 +74,7 @@ async def test_remove_description(client, test_user, token_admin, test_session):
     assert test_user.description is None
 
 
-async def test_ban(client, test_user, token_admin, test_session):
+async def test_ban(client, test_user, test_token, token_admin, test_session):
     # Ensure user have not been banned
     test_user.banned = False
     await test_session.commit()
@@ -86,6 +87,12 @@ async def test_ban(client, test_user, token_admin, test_session):
     await test_session.refresh(test_user)
 
     assert test_user.banned is True
+
+    # Banned user can't use their token
+    response = await request_me(client, test_token)
+
+    assert response.status_code == 400
+    assert response.json()["code"] == "auth:banned"
 
 
 async def test_forbid_action_merge_nothing_new(

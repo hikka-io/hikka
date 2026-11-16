@@ -46,4 +46,4 @@ async def validate_update_user(
     if body.banned is not None and user.banned != body.banned:
         return body
 
-    raise Abort("admin", "nothing_to_update")
+    raise Abort("admin", "nothing-to-update")
