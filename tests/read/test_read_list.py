@@ -72,6 +72,15 @@ async def test_read_list(
         == "fullmetal-alchemist-7ef8d2"
     )
 
+    # Score filter should be in order and in range of 0 to 10
+    for score in [[8, 3], [-1, 5], [5, 11]]:
+        response = await request_read_list(
+            client, "manga", "testuser", {"score": score}
+        )
+
+        assert response.json()["code"] == "system:validation_error"
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
     # And now delete Berserk from user's read list
     await request_read_delete(client, "manga", "berserk-fb9fbd", get_test_token)
 

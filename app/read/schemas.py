@@ -2,12 +2,12 @@ from app.common.schemas.manga import MangaResponse, MangaMediaEnum
 from app.common.schemas.novel import NovelResponse, NovelMediaEnum
 from app.common.schemas.search import ReadSearchBaseMixin
 from app.common.schemas.read import ReadResponseBase
+from app.utils import check_score_range, check_sort
 from app.common.schemas.read import ReadStatusEnum
 from app.common.schemas.user import UserResponse
 from pydantic import Field, field_validator
 from app.schemas import PaginationResponse
 from pydantic import model_validator
-from app.utils import check_sort
 from app import constants
 from enum import Enum
 
@@ -67,6 +67,10 @@ class ReadSearchArgs(CustomModel, ReadSearchBaseMixin, YearsMixin):
                 "score",
             ],
         )
+
+    @field_validator("score", "native_score")
+    def validate_score(cls, scores):
+        return check_score_range(scores)
 
 
 # Responses

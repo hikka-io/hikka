@@ -561,6 +561,19 @@ def check_sort(sort_list, valid_fields):
     return sort_list
 
 
+def check_score_range(scores):
+    if all(score is not None for score in scores) and scores[0] > scores[1]:
+        raise ValueError("The first score must be less than the second score.")
+
+    if scores[0] and scores[0] < 0:
+        raise ValueError("Score can't be less than 0.")
+
+    if scores[1] and scores[1] > 10:
+        raise ValueError("Score can't be more than 10.")
+
+    return scores
+
+
 def exclude_content_ids_filter(content_ids: list[str] | None) -> list[str]:
     # Meilisearch knows nothing about user lists so content
     # from request user list is excluded by id instead

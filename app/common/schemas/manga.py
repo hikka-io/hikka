@@ -1,10 +1,10 @@
 from app.common.schemas.search import ReadSearchBaseMixin
 from app.common.schemas.magazine import MagazineResponse
 from app.common.schemas.read import ReadResponseBase
+from app.utils import check_score_range, check_sort
 from app.common.schemas.read import ReadStatusEnum
 from app.common.schemas.genre import GenreResponse
 from pydantic import field_validator
-from app.utils import check_sort
 from typing import Literal
 from app import constants
 from enum import Enum
@@ -59,18 +59,7 @@ class MangaSearchArgs(
 
     @field_validator("score", "native_score")
     def validate_score(cls, scores):
-        if all(score is not None for score in scores) and scores[0] > scores[1]:
-            raise ValueError(
-                "The first score must be less than the second score."
-            )
-
-        if scores[0] and scores[0] < 0:
-            raise ValueError("Score can't be less than 0.")
-
-        if scores[1] and scores[1] > 10:
-            raise ValueError("Score can't be more than 10.")
-
-        return scores
+        return check_score_range(scores)
 
 
 # Responses
