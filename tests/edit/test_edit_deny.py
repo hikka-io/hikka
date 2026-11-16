@@ -31,6 +31,24 @@ async def test_edit_deny(
     # Check create status
     assert response.status_code == status.HTTP_200_OK
 
+    # Deny has its own permission
+    create_test_user_moderator.forbidden_actions = [
+        constants.PERMISSION_EDIT_REJECT
+    ]
+    test_session.add(create_test_user_moderator)
+    await test_session.commit()
+
+    response = await request_deny_edit(client, get_test_token, 18)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["code"] == "permission:denied"
+
+    # And doesn't depend on accept permission
+    create_test_user_moderator.forbidden_actions = [
+        constants.PERMISSION_EDIT_ACCEPT
+    ]
+    test_session.add(create_test_user_moderator)
+    await test_session.commit()
+
     # Deny edit
     response = await request_deny_edit(client, get_test_token, 18)
 

@@ -138,7 +138,7 @@ async def deny_edit(
     edit: Edit = Depends(validate_edit_id_pending),
     moderator: User = Depends(
         auth_required(
-            permissions=[constants.PERMISSION_EDIT_ACCEPT],
+            permissions=[constants.PERMISSION_EDIT_REJECT],
             scope=[constants.SCOPE_DENY_EDIT],
         )
     ),
