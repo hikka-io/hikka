@@ -174,21 +174,14 @@ async def lock_pending_edit(session: AsyncSession, edit: Edit) -> bool:
 
 
 def build_edit_order_by(sort: list[str]):
-    order_mapping = {
-        "edit_id": Edit.edit_id,
-        "created": Edit.created,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ]
-
-    return order_by
+    return build_order_by(
+        sort,
+        order_mapping={
+            "edit_id": Edit.edit_id,
+            "created": Edit.created,
+        },
+        tiebreaker=desc(Edit.edit_id),
+    )
 
 
 async def edits_search_filter(

@@ -1,5 +1,7 @@
 from client_requests import request_create_collection
 from client_requests import request_collections
+from app.models import Collection
+from sqlalchemy import update
 from fastapi import status
 from app import constants
 
@@ -133,3 +135,16 @@ async def test_collections_list(
 
     response = await request_collections(client, filters={'tags': ['first']})
     assert len(response.json()["list"]) == 1
+
+    # Collections with the same ranking are ordered by id
+    await test_session.execute(update(Collection).values(system_ranking=0))
+    await test_session.commit()
+
+    response = await request_collections(
+        client, filters={"sort": ["system_ranking:desc"]}
+    )
+
+    references = [entry["reference"] for entry in response.json()["list"]]
+
+    assert response.status_code == status.HTTP_200_OK
+    assert references == sorted(references, reverse=True)

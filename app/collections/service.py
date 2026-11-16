@@ -1,5 +1,6 @@
 from app.common.service.collections import collections_load_options
 from app.service import content_type_to_content_class
+from app.common.service.sort import build_order_by
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -31,7 +32,6 @@ from sqlalchemy import (
     case,
     desc,
     and_,
-    asc,
 )
 
 from app.models import (
@@ -63,21 +63,14 @@ content_type_to_collection_content_class = {
 
 
 def build_collection_order_by(sort: list[str]):
-    order_mapping = {
-        "system_ranking": Collection.system_ranking,
-        "created": Collection.created,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ]
-
-    return order_by
+    return build_order_by(
+        sort,
+        order_mapping={
+            "system_ranking": Collection.system_ranking,
+            "created": Collection.created,
+        },
+        tiebreaker=desc(Collection.id),
+    )
 
 
 async def build_collection_content(

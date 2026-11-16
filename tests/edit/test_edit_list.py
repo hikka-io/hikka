@@ -1,5 +1,8 @@
 from client_requests import request_create_edit
 from client_requests import request_edit_list
+from sqlalchemy import update
+from app.utils import utcnow
+from app.models import Edit
 from fastapi import status
 
 
@@ -90,3 +93,14 @@ async def test_edit_create(
         response.json()["list"][2]["content"]["slug"]
         == "bocchi-the-rock-9e172d"
     )
+
+    # Edits with the same creation date are ordered by edit id
+    await test_session.execute(update(Edit).values(created=utcnow()))
+    await test_session.commit()
+
+    response = await request_edit_list(client, {"sort": ["created:asc"]})
+
+    edit_ids = [entry["edit_id"] for entry in response.json()["list"]]
+
+    assert response.status_code == status.HTTP_200_OK
+    assert edit_ids == sorted(edit_ids, reverse=True)

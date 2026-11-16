@@ -146,6 +146,26 @@ async def test_articles_list(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["pagination"]["total"] == 1
 
+    # Articles with the same vote score are ordered by id
+    response = await request_articles(
+        client, {"sort": ["vote_score:desc"], "categories": ["news"]}
+    )
+
+    tied_slugs = await test_session.scalars(
+        select(Article.slug)
+        .filter(
+            Article.vote_score == 0,
+            Article.draft == False,  # noqa: E712
+        )
+        .order_by(Article.id.desc())
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert [entry["slug"] for entry in response.json()["list"]] == [
+        article.slug,
+        *tied_slugs,
+    ]
+
     # Check tags top
     response = await request_article_stats(client)
     assert response.status_code == status.HTTP_200_OK

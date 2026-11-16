@@ -1,6 +1,7 @@
-from sqlalchemy import select, update, desc, asc, case, and_, or_, func
 from app.common.utils import find_document_images, generate_preview
+from sqlalchemy import select, update, desc, case, and_, or_, func
 from app.common.service.articles import load_articles_content
+from app.common.service.sort import build_order_by
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.selectable import Select
 from sqlalchemy.orm import with_expression
@@ -48,22 +49,14 @@ async def get_or_create_tag(session: AsyncSession, name: str):
 
 
 def build_articles_order_by(sort: list[str]):
-    # TODO: Unified function for this stuff
-    order_mapping = {
-        "vote_score": Article.vote_score,
-        "created": Article.created,
-    }
-
-    order_by = [
-        (
-            desc(order_mapping[field])
-            if order == "desc"
-            else asc(order_mapping[field])
-        )
-        for field, order in (entry.split(":") for entry in sort)
-    ]
-
-    return order_by
+    return build_order_by(
+        sort,
+        order_mapping={
+            "vote_score": Article.vote_score,
+            "created": Article.created,
+        },
+        tiebreaker=desc(Article.id),
+    )
 
 
 async def get_article_by_slug(
