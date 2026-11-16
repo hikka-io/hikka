@@ -1,4 +1,7 @@
 from client_requests import request_companies_anime
+from sqlalchemy.orm import selectinload
+from app.models import Company
+from sqlalchemy import select
 from fastapi import status
 
 
@@ -32,6 +35,7 @@ async def test_companies_anime_filter(
     aggregator_companies,
     aggregator_anime,
     aggregator_anime_info,
+    test_session,
 ):
     # Get anime produced by Bones (studio)
     response = await request_companies_anime(client, "bones-b0b61b", "studio")
@@ -60,3 +64,21 @@ async def test_companies_anime_filter(
         response.json()["list"][0]["anime"]["slug"]
         == "pia-carrot-e-youkoso-sayaka-no-koi-monogatari-227414"
     )
+
+    # Company relationships should load the same anime
+    company = await test_session.scalar(
+        select(Company)
+        .filter(Company.slug == "bones-b0b61b")
+        .options(
+            selectinload(Company.studio_anime),
+            selectinload(Company.produced_anime),
+        )
+    )
+
+    assert [anime.slug for anime in company.studio_anime] == [
+        "fullmetal-alchemist-brotherhood-fc524a"
+    ]
+
+    assert [anime.slug for anime in company.produced_anime] == [
+        "pia-carrot-e-youkoso-sayaka-no-koi-monogatari-227414"
+    ]
