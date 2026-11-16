@@ -1,23 +1,22 @@
 from app.models import AnimeStaffRole
-from app.models import AuthorRole
 from sqlalchemy import select
 from app import utils
 import aiofiles
 import json
 
 
-async def update_anime_roles(session, data):
+async def update_roles(session, role_model, data):
     create_roles = []
 
     for role_name in data:
         slug = utils.slugify(role_name)
 
         if await session.scalar(
-            select(AnimeStaffRole).filter(AnimeStaffRole.slug == slug)
+            select(role_model).filter(role_model.slug == slug)
         ):
             continue
 
-        role = AnimeStaffRole(
+        role = role_model(
             **{
                 "name_en": role_name,
                 "slug": slug,
@@ -27,34 +26,7 @@ async def update_anime_roles(session, data):
 
         create_roles.append(role)
 
-        # print(f"Added anime staff role: {role.name_en}")
-
-    session.add_all(create_roles)
-    await session.commit()
-
-
-async def update_manga_roles(session, data):
-    create_roles = []
-
-    for role_name in data:
-        slug = utils.slugify(role_name)
-
-        if await session.scalar(
-            select(AuthorRole).filter(AuthorRole.slug == slug)
-        ):
-            continue
-
-        role = AuthorRole(
-            **{
-                "name_en": role_name,
-                "slug": slug,
-                "weight": 0,
-            }
-        )
-
-        create_roles.append(role)
-
-        # print(f"Added manga staff role: {role.name_en}")
+        # print(f"Added staff role: {role.name_en}")
 
     session.add_all(create_roles)
     await session.commit()

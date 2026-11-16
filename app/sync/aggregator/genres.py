@@ -8,4 +8,4 @@ async def aggregator_genres():
         data = await requests.get_anime_genres()
         await aggregator.save_genres(session, data)
         data = await requests.get_manga_genres()
-        await aggregator.save_manga_genres(session, data)
+        await aggregator.save_genres(session, data)

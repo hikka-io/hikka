@@ -110,34 +110,3 @@ async def save_genres(session, data):
 
     session.add_all(create_genres)
     await session.commit()
-
-
-async def save_manga_genres(session, data):
-    create_genres = []
-
-    for genre_data in data:
-        slug = utils.slugify(genre_data["name"])
-        name_ua = TRANSLATIONS.get(slug)
-
-        # if name_ua is None:
-        #     print(slug)
-
-        if await session.scalar(select(Genre).filter(Genre.slug == slug)):
-            continue
-
-        genre = Genre(
-            **{
-                "content_id": genre_data["content_id"],
-                "name_en": genre_data["name"],
-                "type": genre_data["type"],
-                "name_ua": name_ua,
-                "slug": slug,
-            }
-        )
-
-        create_genres.append(genre)
-
-        # print(f"Added genre: {genre.name_en}")
-
-    session.add_all(create_genres)
-    await session.commit()

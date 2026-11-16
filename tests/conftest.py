@@ -1,10 +1,10 @@
 # Based on https://praciano.com.br/fastapi-and-async-sqlalchemy-20-with-pytest-done-right.html
 # https://github.com/gpkc/fastapi-sqlalchemy-pytest
 
+from app.models import AnimeStaffRole, AuthorRole, Anime, Manga, Novel, Base
 from sqlalchemy.schema import sort_tables_and_constraints
 from pytest_postgresql.janitor import DatabaseJanitor
 from app.database import sessionmanager, get_session
-from app.models import Anime, Manga, Novel, Base
 from async_asgi_testclient import TestClient
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, text
@@ -382,7 +382,7 @@ async def aggregator_genres(test_session):
 async def aggregator_anime_roles(test_session):
     data = await helpers.load_json("tests/data/anime_roles.json")
 
-    await aggregator.update_anime_roles(test_session, data)
+    await aggregator.update_roles(test_session, AnimeStaffRole, data)
 
     await aggregator.update_anime_role_weights(test_session)
 
@@ -391,7 +391,7 @@ async def aggregator_anime_roles(test_session):
 async def aggregator_manga_roles(test_session):
     data = await helpers.load_json("tests/data/manga_roles.json")
 
-    await aggregator.update_manga_roles(test_session, data)
+    await aggregator.update_roles(test_session, AuthorRole, data)
 
 
 @pytest.fixture
