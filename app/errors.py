@@ -69,11 +69,6 @@ errors = {
             "Користувач не власний токена",
             400,
         ],
-        "oauth-code-required": [
-            "OAuth code required",
-            "Потрібен код OAuth",
-            400,
-        ],
         "invalid-provider": [
             "Invalid OAuth provider",
             "Поганий провайдер OAuth",
@@ -109,7 +104,6 @@ errors = {
         "client-not-found": ["Client not found", "Клієнт не знайдено", 404],
         "token-expired": ["Token has expired", "Токен вже не дійсний", 400],
         "invalid-code": ["Invalid OAuth code", "Поганий код OAuth", 400],
-        "oauth-error": ["Error during OAuth", "Помилка під час OAuth", 400],
         "user-not-found": ["User not found", "Користувача не знайдено", 404],
         "invalid-scope": [
             "Invalid scope",
@@ -166,7 +160,6 @@ errors = {
         ],
         "unknown-producer": ["Unknown producer", "Невідомий виробник", 400],
         "unknown-studio": ["Unknown studio", "Невідома студія", 400],
-        "bad-year": ["Invalid years passed", "Задано погані роки", 400],
         "unknown-genre": ["Unknown genre", "Невідомий жанр", 400],
         "not-found": ["Anime not found", "Аніме не знайдено", 404],
     },
@@ -206,11 +199,6 @@ errors = {
             "Тільки автор може редагувати цю цю правку",
             400,
         ],
-        "invalid-content-id": [
-            "Invalid content id",
-            "Поганий ідентифікатор контенту",
-            400,
-        ],
         "content-not-found": ["Content not found", "Контент не знайдено", 404],
         "author-not-found": ["Author not found", "Автора не знайдено", 404],
         "bad-edit": ["This edit is invalid", "Ця правка погана", 400],
@@ -219,11 +207,6 @@ errors = {
         "empty-edit": ["Empty edit", "Пуста правка", 400],
     },
     "comment": {
-        "no-content-type": [
-            "Specified slug with no content type",
-            "Вказаний slug без типу контенту",
-            400,
-        ],
         "author-not-found": [
             "Comment author not found",
             "Автора коментаря не знайдено",
@@ -260,7 +243,6 @@ errors = {
             "Досягнуто (дна) максимальної глибини відповід",
             400,
         ],
-        "empty-markdown": ["Empty markdown", "Пуста розмітка", 400],
         "not-found": ["Comment not found", "Коментар не знайдено", 404],
         "hidden": ["Comment is hidden", "Коментар приховано", 400],
     },
@@ -354,7 +336,6 @@ errors = {
             "Ви (поки) не стежите за цим користувачем",
             400,
         ],
-        "invalid-action": ["Invalid action", "Погана дія", 401],
         "self": [
             "Can't follow self",
             "Ех, на самого себе не підпишешся, а дуже хотілось...",
@@ -473,11 +454,6 @@ errors = {
         "not-found": ["Vote record not found", "Вашу оцінку не знайдено", 404],
     },
     "schedule": {
-        "incompatible-filters": [
-            "You've specified incompatible filters",
-            "Ви вказали несумісні фільтри",
-            400,
-        ],
         "watch-no-user": [
             "You can't use only_watch without user",
             "Не можна використовувати only_watch без користувача",
@@ -541,11 +517,6 @@ errors = {
         "duplicate-image-url": [
             "Duplicate image url",
             "Дублікат посилання на зображення",
-            400,
-        ],
-        "used-image": [
-            "This image already been used",
-            "Це зображення вже було використано деінде",
             400,
         ],
         "author-not-found": ["Author not found", "Автора не знайдено", 404],
