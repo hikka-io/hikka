@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_system_timestamp
 from app.database import sessionmanager
 from sqlalchemy import update, delete
 from sqlalchemy import select, asc
@@ -6,7 +7,6 @@ from datetime import datetime
 from app import constants
 
 from app.models import (
-    SystemTimestamp,
     AnimeFavourite,
     AnimeSchedule,
     AnimeComment,
@@ -19,19 +19,9 @@ from app.models import (
 
 async def process_content_deleted(session: AsyncSession):
     # Get system timestamp for latest content_deleted update
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(
-                SystemTimestamp.name == "content_deleted"
-            )
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2024, 1, 13),
-                "name": "content_deleted",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "content_deleted", datetime(2024, 1, 13)
+    )
 
     # Get new logs that were created since last update
     logs = await session.scalars(
@@ -92,7 +82,6 @@ async def process_content_deleted(session: AsyncSession):
 
             print(f"Deleted anime {anime.title_ja}")
 
-    session.add(system_timestamp)
     await session.commit()
 
 

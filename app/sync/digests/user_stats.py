@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import insert
+from app.service import get_system_timestamp
 from app.database import sessionmanager
 from app.utils import utcnow, chunkify
 from sqlalchemy import select, func
@@ -6,7 +7,6 @@ from datetime import datetime
 from app import constants
 
 from app.models import (
-    SystemTimestamp,
     Favourite,
     Comment,
     Digest,
@@ -19,19 +19,9 @@ from app.models import (
 async def generate_user_stats(session, all=False):
     now = utcnow()
 
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(SystemTimestamp.name == "user_stats")
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2024, 1, 13),
-                "name": "user_stats",
-            }
-        )
-
-        session.add(system_timestamp)
+    system_timestamp = await get_system_timestamp(
+        session, "user_stats", datetime(2024, 1, 13)
+    )
 
     query = (
         select(Log.user_id, func.max(Log.created).label("latest"))

@@ -1,8 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import SystemTimestamp, Log
+from app.service import get_system_timestamp
 from datetime import datetime, timedelta
 from app.database import sessionmanager
 from sqlalchemy import select, asc
+from app.models import Log
 from app import constants
 
 from .generate import (
@@ -23,17 +24,9 @@ async def generate_history(session: AsyncSession):
     read_delta = timedelta(hours=3)
 
     # Get system timestamp for latest history update
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(SystemTimestamp.name == "history")
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2024, 1, 13),
-                "name": "history",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "history", datetime(2024, 1, 13)
+    )
 
     # Get new logs that were created since last update
     logs = await session.scalars(
@@ -92,7 +85,6 @@ async def generate_history(session: AsyncSession):
         if log.log_type == constants.LOG_SETTINGS_IMPORT_READ:
             await generate_import_read(session, log)
 
-    session.add(system_timestamp)
     await session.commit()
 
 

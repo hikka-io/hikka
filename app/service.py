@@ -20,6 +20,7 @@ from app.utils import (
 )
 
 from app.models import (
+    SystemTimestamp,
     EmailMessage,
     Collection,
     AnimeWatch,
@@ -284,6 +285,20 @@ async def get_or_create_anime_watch(
         return watch, True
 
     return await get_anime_watch(session, anime, user), False
+
+
+async def get_system_timestamp(
+    session: AsyncSession, name: str, start: datetime
+) -> SystemTimestamp:
+    if not (
+        system_timestamp := await session.scalar(
+            select(SystemTimestamp).filter(SystemTimestamp.name == name)
+        )
+    ):
+        system_timestamp = SystemTimestamp(name=name, timestamp=start)
+        session.add(system_timestamp)
+
+    return system_timestamp
 
 
 async def get_user_by_username(

@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_system_timestamp
 from app.database import sessionmanager
 from sqlalchemy import select, asc
 from datetime import datetime
@@ -10,7 +11,6 @@ from app.utils import (
 )
 
 from app.models import (
-    SystemTimestamp,
     AnimeSchedule,
     Anime,
     Edit,
@@ -22,19 +22,9 @@ async def update_schedule_aired(session: AsyncSession):
     now = utcnow()
 
     # Get system timestamp for latest known aired episode
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(
-                SystemTimestamp.name == "schedule_anime"
-            )
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2010, 1, 1),
-                "name": "schedule_anime",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "schedule_anime", datetime(2010, 1, 1)
+    )
 
     aired = await session.scalars(
         select(AnimeSchedule)
@@ -132,7 +122,6 @@ async def update_schedule_aired(session: AsyncSession):
             session.add_all([anime, edit, log])
             await session.commit()
 
-    session.add(system_timestamp)
     await session.commit()
 
     # Fix for unupdated ongoing status

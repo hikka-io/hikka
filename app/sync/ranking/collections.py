@@ -1,5 +1,6 @@
 from app.utils import calculate_collection_ranking
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_system_timestamp
 from sqlalchemy import select, asc, func
 from sqlalchemy.orm import selectinload
 from app.database import sessionmanager
@@ -9,7 +10,6 @@ from app import constants
 from app.models import (
     CollectionFavourite,
     CollectionComment,
-    SystemTimestamp,
     Collection,
     Log,
 )
@@ -53,17 +53,9 @@ async def recalculate_ranking_all(session: AsyncSession):
 
 async def recalculate_ranking(session: AsyncSession):
     # Get system timestamp for latest ranking update
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(SystemTimestamp.name == "ranking")
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2024, 1, 13),
-                "name": "ranking",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "ranking", datetime(2024, 1, 13)
+    )
 
     # Get new logs that were created since last update
     logs = await session.scalars(
@@ -131,7 +123,6 @@ async def recalculate_ranking(session: AsyncSession):
 
             session.add(collection)
 
-    session.add(system_timestamp)
     await session.commit()
 
 

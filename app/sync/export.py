@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.service import get_system_timestamp
 from app.utils import to_timestamp, utcnow
 from sqlalchemy.orm import selectinload, noload
 from app.database import sessionmanager
@@ -8,7 +9,6 @@ from app import constants
 from uuid import UUID
 
 from app.models import (
-    SystemTimestamp,
     UserExport,
     AnimeWatch,
     MangaRead,
@@ -108,17 +108,9 @@ async def get_export_data(session: AsyncSession, user_id: UUID):
 
 async def generate_export(session: AsyncSession):
     # Get system timestamp for latest export update
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(SystemTimestamp.name == "export")
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2025, 2, 25),
-                "name": "export",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "export", datetime(2025, 2, 25)
+    )
 
     # Get new logs that were created since last update
     logs = await session.scalars(
@@ -187,7 +179,6 @@ async def generate_export(session: AsyncSession):
 
         print(f"Generated export for {user.username}")
 
-    session.add(system_timestamp)
     await session.commit()
 
 

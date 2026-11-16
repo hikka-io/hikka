@@ -1,8 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models import SystemTimestamp, Log
+from app.service import get_system_timestamp
 from app.database import sessionmanager
 from sqlalchemy import select, asc
 from datetime import datetime
+from app.models import Log
 from app import constants
 
 from .generate import (
@@ -21,19 +22,9 @@ from .generate import (
 
 async def generate_notifications(session: AsyncSession):
     # Get system timestamp for latest history update
-    if not (
-        system_timestamp := await session.scalar(
-            select(SystemTimestamp).filter(
-                SystemTimestamp.name == "notifications"
-            )
-        )
-    ):
-        system_timestamp = SystemTimestamp(
-            **{
-                "timestamp": datetime(2024, 1, 13),
-                "name": "notifications",
-            }
-        )
+    system_timestamp = await get_system_timestamp(
+        session, "notifications", datetime(2024, 1, 13)
+    )
 
     # Get new logs that were created since last update
     logs = await session.scalars(
@@ -95,7 +86,6 @@ async def generate_notifications(session: AsyncSession):
         if log.log_type == constants.LOG_LOGIN_THIRDPARTY:
             await generate_thirdparty_login(session, log)
 
-    session.add(system_timestamp)
     await session.commit()
 
 
