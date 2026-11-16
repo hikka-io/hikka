@@ -7,26 +7,12 @@ from pydantic import field_validator
 from pydantic import model_validator
 from app.utils import check_sort
 from pydantic import Field
-from app import constants
-from enum import Enum
 
 from app.schemas import (
     PaginationResponse,
     UnixTimestamp,
     CustomModel,
 )
-
-
-# Enums
-class WatchOrderEnum(str, Enum):
-    media_type = constants.WATCH_ORDER_MEDIA_TYPE
-    episodes = constants.WATCH_ORDER_EPISODES
-    score = constants.WATCH_ORDER_SCORE
-
-
-class WatchSortEnum(str, Enum):
-    desc = constants.SORT_DESC
-    asc = constants.SORT_ASC
 
 
 # Args

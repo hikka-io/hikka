@@ -35,10 +35,6 @@ CDN_ENDPOINT = "https://cdn.hikka.io"
 # underscores (but can't start with them)
 USERNAME_PATTERN = "^[A-Za-z0-9][A-Za-z0-9_]{4,63}$"
 
-# Sort options
-SORT_DESC = "desc"
-SORT_ASC = "asc"
-
 # TODO: Consider merging watch and read statuses
 # Read stuff
 READ_COMPLETED = "completed"
@@ -61,11 +57,6 @@ WATCH = [
     WATCH_ON_HOLD,
     WATCH_DROPPED,
 ]
-
-# Watch list orders
-WATCH_ORDER_MEDIA_TYPE = "media_type"
-WATCH_ORDER_EPISODES = "episodes"
-WATCH_ORDER_SCORE = "score"
 
 # Seasons
 SEASON_WINTER = "winter"
