@@ -186,7 +186,6 @@ __all__ = [
     "NovelAuthor",
     "Notification",
     "SystemTimestamp",
-    "Activity",
     "Digest",
     "Image",
     "Log",

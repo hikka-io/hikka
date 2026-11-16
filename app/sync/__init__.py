@@ -74,7 +74,6 @@ __all__ = [
     "aggregator_novel",
     "aggregator_roles",
     "digest_activity",
-    "update_activity",
     "update_schedule",
     "update_content",
     "update_ranking",
