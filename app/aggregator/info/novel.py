@@ -12,7 +12,6 @@ from app.models import (
     Character,
     Magazine,
     Person,
-    Image,
     Genre,
     Edit,
 )
@@ -71,32 +70,6 @@ def process_external(data):
         )
 
     return result
-
-
-async def process_image(session, novel, data):
-    if not data.get("poster"):
-        return
-
-    if "image" in novel.ignored_fields:
-        return
-
-    if not (
-        image := await session.scalar(
-            select(Image).filter(Image.path == data["poster"])
-        )
-    ):
-        image = Image(
-            **{
-                "path": data["poster"],
-                "created": utcnow(),
-                "uploaded": True,
-                "ignore": False,
-                "system": True,
-            }
-        )
-
-    session.add(image)
-    novel.image_relation = image
 
 
 async def process_magazines(session, novel, data):
@@ -348,7 +321,7 @@ async def update_novel_info(session, novel, data):
     novel.needs_update = False
     novel.updated = now
 
-    await process_image(session, novel, data)
+    await service.process_image(session, novel, data)
 
     genres_add = await process_genres(session, novel, data)
     magazines_add = await process_magazines(session, novel, data)

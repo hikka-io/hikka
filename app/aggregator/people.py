@@ -1,6 +1,6 @@
-from app.models import Person, Image
+from app.aggregator import service
+from app.models import Person
 from sqlalchemy import select
-from app.utils import utcnow
 from app import utils
 
 
@@ -14,9 +14,7 @@ async def save_people(session, data):
 
     people_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
-
-    image_cache = {entry.path: entry for entry in cache}
+    image_cache = await service.get_image_cache(session, images)
 
     add_people = []
 
@@ -25,15 +23,7 @@ async def save_people(session, data):
 
         if not (image := image_cache.get(person_data["image"])):
             if person_data["image"]:
-                image = Image(
-                    **{
-                        "path": person_data["image"],
-                        "created": utcnow(),
-                        "uploaded": True,
-                        "ignore": False,
-                        "system": True,
-                    }
-                )
+                image = service.new_system_image(person_data["image"])
 
                 image_cache[person_data["image"]] = image
                 new_image = True

@@ -28,6 +28,11 @@ async def test_import_anime_info(
     assert anime.needs_search_update is True
     assert anime.needs_update is False
     assert anime.image is not None
+    assert anime.image_relation.system is True
+    assert (
+        anime.image_relation.path
+        == "/content/anime/fullmetal-alchemist-brotherhood-fc524a/1dRVedKKpa2i_iiHmEcDhA.jpg"
+    )
 
     assert len(anime.genres) == 5
     assert len(anime.episodes_list) == 64

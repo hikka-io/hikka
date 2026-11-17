@@ -19,7 +19,6 @@ from app.models import (
     Person,
     Genre,
     Anime,
-    Image,
     Edit,
 )
 
@@ -397,32 +396,6 @@ async def process_staff(session, anime, data):
     return update_staff
 
 
-async def process_image(session, anime, data):
-    if not data.get("poster"):
-        return
-
-    if "poster" in anime.ignored_fields:
-        return
-
-    if not (
-        image := await session.scalar(
-            select(Image).filter(Image.path == data["poster"])
-        )
-    ):
-        image = Image(
-            **{
-                "path": data["poster"],
-                "created": utcnow(),
-                "uploaded": True,
-                "ignore": False,
-                "system": True,
-            }
-        )
-
-    session.add(image)
-    anime.image_relation = image
-
-
 def process_external(data):
     result = [
         {
@@ -644,7 +617,7 @@ async def update_anime_info(session, anime, data):
     anime.needs_update = False
     anime.updated = now
 
-    await process_image(session, anime, data)
+    await service.process_image(session, anime, data)
 
     genres_add = await process_genres(session, anime, data)
     companies_anime = await process_companies_anime(session, anime, data)

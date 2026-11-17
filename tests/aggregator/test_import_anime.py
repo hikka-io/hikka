@@ -25,6 +25,17 @@ async def test_import_anime(test_session, aggregator_anime):
     assert anime.mal_id == 5114
     assert anime.image is None
 
+    # Poster from the list is saved as system image
+    anime = await test_session.scalar(
+        select(Anime).filter(Anime.slug == "steinsgate-f29797")
+    )
+
+    assert anime.image_relation.system is True
+    assert (
+        anime.image_relation.path
+        == "/content/anime/steinsgate-f29797/M-8Gxbqmsq0ScxFZWQAt-Q.jpg"
+    )
+
 
 async def test_import_anime_pages(test_session):
     data = await helpers.load_json("tests/data/anime.json")

@@ -1,6 +1,6 @@
-from app.models import Manga, Image
+from app.aggregator import service
 from sqlalchemy import select
-from app.utils import utcnow
+from app.models import Manga
 from app import utils
 
 
@@ -14,9 +14,7 @@ async def save_manga_list(session, data):
 
     manga_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
-
-    image_cache = {entry.path: entry for entry in cache}
+    image_cache = await service.get_image_cache(session, images)
 
     add_manga = []
 
@@ -65,15 +63,7 @@ async def save_manga_list(session, data):
 
             if not (image := image_cache.get(manga_data["poster"])):
                 if manga_data["poster"]:
-                    image = Image(
-                        **{
-                            "path": manga_data["poster"],
-                            "created": utcnow(),
-                            "uploaded": True,
-                            "ignore": False,
-                            "system": True,
-                        }
-                    )
+                    image = service.new_system_image(manga_data["poster"])
 
                     image_cache[manga_data["poster"]] = image
 

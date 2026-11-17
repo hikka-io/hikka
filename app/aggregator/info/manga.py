@@ -12,7 +12,6 @@ from app.models import (
     Character,
     Magazine,
     Person,
-    Image,
     Genre,
     Edit,
 )
@@ -74,32 +73,6 @@ def process_external(data):
         )
 
     return result
-
-
-async def process_image(session, manga, data):
-    if not data.get("poster"):
-        return
-
-    if "image" in manga.ignored_fields:
-        return
-
-    if not (
-        image := await session.scalar(
-            select(Image).filter(Image.path == data["poster"])
-        )
-    ):
-        image = Image(
-            **{
-                "path": data["poster"],
-                "created": utcnow(),
-                "uploaded": True,
-                "ignore": False,
-                "system": True,
-            }
-        )
-
-    session.add(image)
-    manga.image_relation = image
 
 
 async def process_magazines(session, manga, data):
@@ -351,7 +324,7 @@ async def update_manga_info(session, manga, data):
     manga.needs_update = False
     manga.updated = now
 
-    await process_image(session, manga, data)
+    await service.process_image(session, manga, data)
 
     genres_add = await process_genres(session, manga, data)
     magazines_add = await process_magazines(session, manga, data)

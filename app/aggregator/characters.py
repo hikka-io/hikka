@@ -1,6 +1,6 @@
-from app.models import Character, Image
+from app.aggregator import service
+from app.models import Character
 from sqlalchemy import select
-from app.utils import utcnow
 from app import utils
 
 
@@ -14,9 +14,7 @@ async def save_characters(session, data):
 
     characters_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
-
-    image_cache = {entry.path: entry for entry in cache}
+    image_cache = await service.get_image_cache(session, images)
 
     add_characters = []
 
@@ -25,15 +23,7 @@ async def save_characters(session, data):
 
         if not (image := image_cache.get(character_data["image"])):
             if character_data["image"]:
-                image = Image(
-                    **{
-                        "path": character_data["image"],
-                        "created": utcnow(),
-                        "uploaded": True,
-                        "ignore": False,
-                        "system": True,
-                    }
-                )
+                image = service.new_system_image(character_data["image"])
 
                 image_cache[character_data["image"]] = image
                 new_image = True

@@ -1,6 +1,6 @@
-from app.models import Company, Image
+from app.aggregator import service
+from app.models import Company
 from sqlalchemy import select
-from app.utils import utcnow
 from app import utils
 
 
@@ -14,9 +14,7 @@ async def save_companies(session, data):
 
     companies_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
-
-    image_cache = {entry.path: entry for entry in cache}
+    image_cache = await service.get_image_cache(session, images)
 
     add_companies = []
 
@@ -45,15 +43,7 @@ async def save_companies(session, data):
         else:
             if not (image := image_cache.get(company_data["image"])):
                 if company_data["image"]:
-                    image = Image(
-                        **{
-                            "path": company_data["image"],
-                            "created": utcnow(),
-                            "uploaded": True,
-                            "ignore": False,
-                            "system": True,
-                        }
-                    )
+                    image = service.new_system_image(company_data["image"])
 
                     image_cache[company_data["image"]] = image
 

@@ -1,6 +1,6 @@
-from app.models import Anime, Image
+from app.aggregator import service
 from sqlalchemy import select
-from app.utils import utcnow
+from app.models import Anime
 from app import utils
 
 
@@ -14,9 +14,7 @@ async def save_anime_list(session, data):
 
     anime_cache = {entry.content_id: entry for entry in cache}
 
-    cache = await session.scalars(select(Image).filter(Image.path.in_(images)))
-
-    image_cache = {entry.path: entry for entry in cache}
+    image_cache = await service.get_image_cache(session, images)
 
     add_anime = []
 
@@ -65,15 +63,7 @@ async def save_anime_list(session, data):
 
             if not (image := image_cache.get(anime_data["poster"])):
                 if anime_data["poster"]:
-                    image = Image(
-                        **{
-                            "path": anime_data["poster"],
-                            "created": utcnow(),
-                            "uploaded": True,
-                            "ignore": False,
-                            "system": True,
-                        }
-                    )
+                    image = service.new_system_image(anime_data["poster"])
 
                     image_cache[anime_data["poster"]] = image
 
