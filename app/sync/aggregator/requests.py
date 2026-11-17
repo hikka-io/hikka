@@ -1,156 +1,87 @@
 from app.utils import get_settings
 import aiohttp
+import asyncio
+
+
+async def request_aggregator(path):
+    settings = get_settings()
+
+    endpoint = f"{settings.backend.aggregator}{path}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(endpoint) as r:
+            return await r.json()
+
+
+async def get_all_pages(request):
+    data = await request(1)
+    pages = data["pagination"]["pages"]
+
+    semaphore = asyncio.Semaphore(5)
+
+    async def make_request(page):
+        async with semaphore:
+            page_data = await request(page)
+            return page_data["list"]
+
+    # Page 1 is already fetched for the page count
+    tasks = [make_request(page) for page in range(2, pages + 1)]
+    result = await asyncio.gather(*tasks)
+
+    return data["list"] + [item for sublist in result for item in sublist]
 
 
 async def get_anime_genres():
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/genres/anime"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator("/genres/anime")
 
 
 async def get_manga_genres():
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/genres/manga"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator("/genres/manga")
 
 
 async def get_roles(content_type):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/roles/{content_type}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/roles/{content_type}")
 
 
 async def get_companies(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/companies?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/companies?page={page}")
 
 
 async def get_magazines(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/magazines?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/magazines?page={page}")
 
 
 async def get_characters(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/characters?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/characters?page={page}")
 
 
 async def get_people(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/people?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/people?page={page}")
 
 
 async def get_anime(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/anime?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/anime?page={page}")
 
 
 async def get_manga(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/manga?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/manga?page={page}")
 
 
 async def get_novel(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/novel?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/novel?page={page}")
 
 
 async def get_franchises(page):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/franchises?page={page}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/franchises?page={page}")
 
 
 async def get_anime_info(content_id):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/anime/{content_id}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/anime/{content_id}")
 
 
 async def get_manga_info(content_id):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/manga/{content_id}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/manga/{content_id}")
 
 
 async def get_novel_info(content_id):
-    settings = get_settings()
-
-    endpoint = f"{settings.backend.aggregator}/novel/{content_id}"
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(endpoint) as r:
-            data = await r.json()
-            return data
+    return await request_aggregator(f"/novel/{content_id}")
