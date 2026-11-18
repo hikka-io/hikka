@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select
 from app.models import Novel
 from app import constants
+from . import service
 
 
 async def update_novel_settings(index):
@@ -94,8 +95,6 @@ def novel_to_document(novel: Novel):
 async def novel_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
-    # Rows stay locked until the batch is committed so edits made
-    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Novel)
         .filter(Novel.media_type != None)  # noqa: E711
@@ -105,84 +104,36 @@ async def novel_documents(
             joinedload(Novel.magazines),
             joinedload(Novel.genres),
         )
-        .order_by(Novel.content_id)
-        .limit(limit)
-        .with_for_update(of=Novel, skip_locked=True)
     )
 
-    # Rows drop out of the filter once indexed so we page by key
-    if last_id:
-        query = query.filter(Novel.content_id > last_id)
-
-    novel_list = await session.scalars(query)
-
-    documents = []
-
-    for novel in novel_list.unique().all():
-        documents.append(novel_to_document(novel))
-        last_id = novel.content_id
-
-        # I'm not sure if this would behave correctly if Meilisearch is down
-        novel.needs_search_update = False
-        session.add(novel)
-
-    return documents, last_id
+    return await service.get_documents(
+        session, query, Novel.content_id, novel_to_document, limit, last_id
+    )
 
 
 async def novel_document_ids_delete(session: AsyncSession):
-    novel_list = await session.scalars(
+    query = (
         select(Novel)
         .filter(Novel.deleted == True)  # noqa: E712
         .filter(Novel.needs_search_update == True)  # noqa: E712
-        .with_for_update(of=Novel, skip_locked=True)
     )
 
-    delete_ids = []
-
-    for novel in novel_list.unique().all():
-        delete_ids.append(novel.content_id)
-        novel.needs_search_update = False
-        session.add(novel)
-
-    return delete_ids
-
-
-async def meilisearch_populate(session: AsyncSession):
-    # print("Meilisearch: Populating novel")
-
-    settings = get_settings()
-
-    async with AsyncClient(**settings.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_NOVEL)
-
-        await update_novel_settings(index)
-
-        size = 1000
-        last_id = None
-
-        while True:
-            documents, last_id = await novel_documents(session, size, last_id)
-
-            if len(documents) == 0:
-                break
-
-            await index.add_documents(documents, primary_key="id")
-
-            # Commit each batch so row locks are released right away
-            await session.commit()
-
-        delete_document_ids = await novel_document_ids_delete(session)
-
-        if len(delete_document_ids) > 0:
-            await index.delete_documents(delete_document_ids)
-            # print(
-            #     f"Meilisearch: deleted {len(delete_document_ids)} novel from search"
-            # )
-
-        # Let's just hope if Meilisearch is down this fails ;)
-        await session.commit()
+    return await service.get_delete_ids(session, query, Novel.content_id)
 
 
 async def update_search_novel():
+    settings = get_settings()
+
     async with sessionmanager.session() as session:
-        await meilisearch_populate(session)
+        async with AsyncClient(**settings.meilisearch) as client:
+            index = client.index(constants.SEARCH_INDEX_NOVEL)
+
+            await update_novel_settings(index)
+
+            await service.index_documents(
+                session, index, novel_documents, primary_key="id"
+            )
+
+            await service.delete_documents(
+                session, index, novel_document_ids_delete
+            )

@@ -8,6 +8,7 @@ from app.database import sessionmanager
 from app.utils import get_season
 from sqlalchemy import select
 from app import constants
+from . import service
 
 
 async def update_anime_settings(index):
@@ -130,8 +131,6 @@ def anime_to_document(anime: Anime):
 async def anime_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
-    # Rows stay locked until the batch is committed so edits made
-    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Anime)
         .filter(Anime.deleted == False)  # noqa: E712
@@ -140,84 +139,36 @@ async def anime_documents(
             selectinload(Anime.companies).selectinload(CompanyAnime.company),
             selectinload(Anime.genres),
         )
-        .order_by(Anime.content_id)
-        .limit(limit)
-        .with_for_update(of=Anime, skip_locked=True)
     )
 
-    # Rows drop out of the filter once indexed so we page by key
-    if last_id:
-        query = query.filter(Anime.content_id > last_id)
-
-    anime_list = await session.scalars(query)
-
-    documents = []
-
-    for anime in anime_list:
-        documents.append(anime_to_document(anime))
-        last_id = anime.content_id
-
-        # I'm not sure if this would behave correctly if Meilisearch is down
-        anime.needs_search_update = False
-        session.add(anime)
-
-    return documents, last_id
+    return await service.get_documents(
+        session, query, Anime.content_id, anime_to_document, limit, last_id
+    )
 
 
 async def anime_document_ids_delete(session: AsyncSession):
-    anime_list = await session.scalars(
+    query = (
         select(Anime)
         .filter(Anime.deleted == True)  # noqa: E712
         .filter(Anime.needs_search_update == True)  # noqa: E712
-        .with_for_update(of=Anime, skip_locked=True)
     )
 
-    delete_ids = []
-
-    for anime in anime_list:
-        delete_ids.append(anime.content_id)
-        anime.needs_search_update = False
-        session.add(anime)
-
-    return delete_ids
-
-
-async def meilisearch_populate(session: AsyncSession):
-    # print("Meilisearch: Populating anime")
-
-    settings = get_settings()
-
-    async with AsyncClient(**settings.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_ANIME)
-
-        await update_anime_settings(index)
-
-        size = 1000
-        last_id = None
-
-        while True:
-            documents, last_id = await anime_documents(session, size, last_id)
-
-            if len(documents) == 0:
-                break
-
-            await index.add_documents(documents, primary_key="id")
-
-            # Commit each batch so row locks are released right away
-            await session.commit()
-
-        delete_document_ids = await anime_document_ids_delete(session)
-
-        if len(delete_document_ids) > 0:
-            await index.delete_documents(delete_document_ids)
-            print(
-                f"Meilisearch: deleted {len(delete_document_ids)} animes from search"
-            )
-
-        # Let's just hope if Meilisearch is down this fails ;)
-        await session.commit()
+    return await service.get_delete_ids(session, query, Anime.content_id)
 
 
 async def update_search_anime():
+    settings = get_settings()
+
     async with sessionmanager.session() as session:
-        await meilisearch_populate(session)
+        async with AsyncClient(**settings.meilisearch) as client:
+            index = client.index(constants.SEARCH_INDEX_ANIME)
+
+            await update_anime_settings(index)
+
+            await service.index_documents(
+                session, index, anime_documents, primary_key="id"
+            )
+
+            await service.delete_documents(
+                session, index, anime_document_ids_delete
+            )

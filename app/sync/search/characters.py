@@ -6,6 +6,7 @@ from app.utils import get_settings
 from app.models import Character
 from sqlalchemy import select
 from app import constants
+from . import service
 
 
 async def update_characters_settings(index):
@@ -50,91 +51,42 @@ def character_to_document(character: Character):
 async def characters_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
-    # Rows stay locked until the batch is committed so edits made
-    # meanwhile wait and flag the row again instead of being overwritten
-    query = (
-        select(Character)
-        .filter(
-            Character.needs_search_update == True,  # noqa: E712
-            Character.orphan == False,  # noqa: E712
-        )
-        .order_by(Character.content_id)
-        .limit(limit)
-        .with_for_update(of=Character, skip_locked=True)
+    query = select(Character).filter(
+        Character.needs_search_update == True,  # noqa: E712
+        Character.orphan == False,  # noqa: E712
     )
 
-    # Rows drop out of the filter once indexed so we page by key
-    if last_id:
-        query = query.filter(Character.content_id > last_id)
-
-    characters_list = await session.scalars(query)
-
-    documents = []
-
-    for character in characters_list:
-        documents.append(character_to_document(character))
-        last_id = character.content_id
-        character.needs_search_update = False
-        session.add(character)
-
-    return documents, last_id
+    return await service.get_documents(
+        session,
+        query,
+        Character.content_id,
+        character_to_document,
+        limit,
+        last_id,
+    )
 
 
 async def characters_document_ids_delete(session: AsyncSession):
-    characters_list = await session.scalars(
+    query = (
         select(Character)
         .filter(Character.orphan == True)  # noqa: E712
         .filter(Character.needs_search_update == True)  # noqa: E712
-        .with_for_update(of=Character, skip_locked=True)
     )
 
-    delete_ids = []
-
-    for character in characters_list:
-        delete_ids.append(character.content_id)
-        character.needs_search_update = False
-        session.add(character)
-
-    return delete_ids
-
-
-async def meilisearch_populate(session: AsyncSession):
-    # print("Meilisearch: Populating characters")
-
-    settings = get_settings()
-
-    async with AsyncClient(**settings.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_CHARACTERS)
-
-        await update_characters_settings(index)
-
-        size = 1000
-        last_id = None
-
-        while True:
-            documents, last_id = await characters_documents(
-                session, size, last_id
-            )
-
-            if len(documents) == 0:
-                break
-
-            await index.add_documents(documents)
-
-            # Commit each batch so row locks are released right away
-            await session.commit()
-
-        delete_document_ids = await characters_document_ids_delete(session)
-
-        if len(delete_document_ids) > 0:
-            await index.delete_documents(delete_document_ids)
-            print(
-                f"Meilisearch: deleted {len(delete_document_ids)} characters from search"
-            )
-
-        await session.commit()
+    return await service.get_delete_ids(session, query, Character.content_id)
 
 
 async def update_search_characters():
+    settings = get_settings()
+
     async with sessionmanager.session() as session:
-        await meilisearch_populate(session)
+        async with AsyncClient(**settings.meilisearch) as client:
+            index = client.index(constants.SEARCH_INDEX_CHARACTERS)
+
+            await update_characters_settings(index)
+
+            await service.index_documents(session, index, characters_documents)
+
+            await service.delete_documents(
+                session, index, characters_document_ids_delete
+            )

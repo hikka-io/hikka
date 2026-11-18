@@ -7,6 +7,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select
 from app.models import Manga
 from app import constants
+from . import service
 
 
 async def update_manga_settings(index):
@@ -94,8 +95,6 @@ def manga_to_document(manga: Manga):
 async def manga_documents(
     session: AsyncSession, limit: int, last_id: str | None
 ):
-    # Rows stay locked until the batch is committed so edits made
-    # meanwhile wait and flag the row again instead of being overwritten
     query = (
         select(Manga)
         .filter(Manga.media_type != None)  # noqa: E711
@@ -105,86 +104,36 @@ async def manga_documents(
             joinedload(Manga.magazines),
             joinedload(Manga.genres),
         )
-        .order_by(Manga.content_id)
-        .limit(limit)
-        .with_for_update(of=Manga, skip_locked=True)
     )
 
-    # Rows drop out of the filter once indexed so we page by key
-    if last_id:
-        query = query.filter(Manga.content_id > last_id)
-
-    manga_list = await session.scalars(query)
-
-    documents = []
-
-    for manga in manga_list.unique().all():
-        documents.append(manga_to_document(manga))
-        last_id = manga.content_id
-
-        # I'm not sure if this would behave correctly if Meilisearch is down
-        manga.needs_search_update = False
-        session.add(manga)
-
-    return documents, last_id
+    return await service.get_documents(
+        session, query, Manga.content_id, manga_to_document, limit, last_id
+    )
 
 
 async def manga_document_ids_delete(session: AsyncSession):
-    manga_list = await session.scalars(
+    query = (
         select(Manga)
         .filter(Manga.deleted == True)  # noqa: E712
         .filter(Manga.needs_search_update == True)  # noqa: E712
-        .with_for_update(of=Manga, skip_locked=True)
     )
 
-    delete_ids = []
-
-    for manga in manga_list.unique().all():
-        delete_ids.append(manga.content_id)
-        manga.needs_search_update = False
-        session.add(manga)
-
-    return delete_ids
-
-
-async def meilisearch_populate(session: AsyncSession):
-    # print("Meilisearch: Populating manga")
-
-    settings = get_settings()
-
-    async with AsyncClient(**settings.meilisearch) as client:
-        index = client.index(constants.SEARCH_INDEX_MANGA)
-
-        await update_manga_settings(index)
-
-        size = 1000
-        last_id = None
-
-        while True:
-            documents, last_id = await manga_documents(session, size, last_id)
-
-            if len(documents) == 0:
-                break
-
-            print(f"Meilisearch: Processing {len(documents)} manga")
-
-            await index.add_documents(documents, primary_key="id")
-
-            # Commit each batch so row locks are released right away
-            await session.commit()
-
-        delete_document_ids = await manga_document_ids_delete(session)
-
-        if len(delete_document_ids) > 0:
-            await index.delete_documents(delete_document_ids)
-            # print(
-            #     f"Meilisearch: deleted {len(delete_document_ids)} manga from search"
-            # )
-
-        # Let's just hope if Meilisearch is down this fails ;)
-        await session.commit()
+    return await service.get_delete_ids(session, query, Manga.content_id)
 
 
 async def update_search_manga():
+    settings = get_settings()
+
     async with sessionmanager.session() as session:
-        await meilisearch_populate(session)
+        async with AsyncClient(**settings.meilisearch) as client:
+            index = client.index(constants.SEARCH_INDEX_MANGA)
+
+            await update_manga_settings(index)
+
+            await service.index_documents(
+                session, index, manga_documents, primary_key="id"
+            )
+
+            await service.delete_documents(
+                session, index, manga_document_ids_delete
+            )
