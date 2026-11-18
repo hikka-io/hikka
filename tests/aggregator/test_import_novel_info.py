@@ -1,7 +1,9 @@
+from sqlalchemy.orm import joinedload, selectinload
 from app.models import Novel, NovelEdit
-from sqlalchemy.orm import joinedload
 from sqlalchemy import select
+from app import aggregator
 from app import constants
+import helpers
 
 
 async def test_import_novel_info(
@@ -90,4 +92,25 @@ async def test_import_novel_info(
         "duo's problems are just starting to take shape—and the arrival of "
         "eccentric allies may only make things "
         "worse.\n\n[Written by MAL Rewrite]",
+    }
+
+    # Novel counts its own Ukrainian sources and read links
+    data = await helpers.load_json("tests/data/novel_info/konosuba.json")
+    data["baka"] = [{"url": "https://baka.in.ua/fiction/konosuba"}]
+
+    novel = await test_session.scalar(
+        select(Novel)
+        .filter(Novel.slug == "kono-subarashii-sekai-ni-shukufuku-wo-cc5525")
+        .options(selectinload(Novel.genres))
+        .options(selectinload(Novel.magazines))
+    )
+
+    await aggregator.update_novel_info(test_session, novel, data)
+    await test_session.refresh(novel)
+
+    assert novel.translated_ua is True
+    assert novel.external[-1] == {
+        "url": "https://baka.in.ua/fiction/konosuba",
+        "type": constants.EXTERNAL_READ,
+        "text": "Бака",
     }
