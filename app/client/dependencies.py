@@ -2,6 +2,7 @@ import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
+from app.utils import check_user_permissions
 from app.dependencies import auth_required
 from app.database import get_session
 from app.models import User, Client
@@ -43,6 +44,19 @@ async def validate_user_client(
     user: User = Depends(auth_required()),
 ) -> Client:
     if client.user_id != user.id:
+        raise Abort("client", "not-owner")
+
+    return client
+
+
+async def validate_client_delete(
+    client: Client = Depends(validate_client),
+    user: User = Depends(auth_required()),
+) -> Client:
+    # Admins can delete clients of other users
+    if client.user_id != user.id and not check_user_permissions(
+        user, [constants.PERMISSION_CLIENT_DELETE_ADMIN]
+    ):
         raise Abort("client", "not-owner")
 
     return client

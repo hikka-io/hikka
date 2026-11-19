@@ -11,6 +11,7 @@ from app import constants
 from app.client.dependencies import (
     validate_unverified_client,
     validate_client_create,
+    validate_client_delete,
     validate_user_client,
     validate_client,
 )
@@ -143,7 +144,7 @@ async def update_user_client(
 )
 async def delete_user_client(
     session: AsyncSession = Depends(get_session),
-    client: Client = Depends(validate_user_client),
+    client: Client = Depends(validate_client_delete),
 ):
     return await service.delete_client(session, client)
 
