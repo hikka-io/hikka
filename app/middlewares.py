@@ -38,8 +38,9 @@ def register_profiling_middleware(app: FastAPI):
             base = Path(settings.profiling.path).resolve()
             path = (base / request.url.path.lstrip("/")).resolve()
 
+            # Request has already run so we just skip saving the profile
             if not path.is_relative_to(base):
-                return await call_next(request)
+                return response
 
             path.mkdir(parents=True, exist_ok=True)
 
