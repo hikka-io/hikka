@@ -193,6 +193,27 @@ async def edits_search_filter(
         author = await get_user_by_username(session, args.author)
         query = query.filter(Edit.author == author)
 
+    if len(args.authors) > 0:
+        include_authors = []
+        exclude_authors = []
+
+        for username in args.authors:
+            if username.startswith("-"):
+                exclude_authors.append(username[1:].lower())
+            else:
+                include_authors.append(username.lower())
+
+        # Edit has single author so any of included ones is enough
+        if include_authors:
+            query = query.filter(
+                Edit.author.has(func.lower(User.username).in_(include_authors))
+            )
+
+        if exclude_authors:
+            query = query.filter(
+                ~Edit.author.has(func.lower(User.username).in_(exclude_authors))
+            )
+
     if args.moderator:
         moderator = await get_user_by_username(session, args.moderator)
         query = query.filter(Edit.moderator == moderator)
@@ -216,6 +237,14 @@ async def edits_search_filter(
     )
 
     return query
+
+
+async def count_users(session: AsyncSession, usernames: list[str]) -> int:
+    return await session.scalar(
+        select(func.count(User.id)).filter(
+            func.lower(User.username).in_(usernames)
+        )
+    )
 
 
 async def count_edits(session: AsyncSession, args: EditSearchArgs) -> int:

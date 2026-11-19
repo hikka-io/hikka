@@ -58,7 +58,11 @@ class EditSearchArgs(CustomModel):
     content_type: EditContentTypeEnum | None = None
     status: EditStatusEnum | None = None
     moderator: str | None = None
-    author: str | None = None
+
+    # TODO: remove once frontend moves to authors
+    author: str | None = Field(None, json_schema_extra={"deprecated": True})
+
+    authors: list[str] = Field([], max_length=10)
     slug: str | None = None
 
     @field_validator("sort")

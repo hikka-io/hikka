@@ -104,3 +104,64 @@ async def test_edit_create(
 
     assert response.status_code == status.HTTP_200_OK
     assert edit_ids == sorted(edit_ids, reverse=True)
+
+
+async def test_edit_list_authors(
+    client,
+    aggregator_people,
+    aggregator_anime,
+    aggregator_anime_info,
+    create_test_user,
+    create_dummy_user,
+    get_test_token,
+    get_dummy_token,
+    test_session,
+):
+    # Create edits by two different users
+    response = await request_create_edit(
+        client,
+        get_test_token,
+        "anime",
+        "bocchi-the-rock-9e172d",
+        {"after": {"title_en": "Bocchi The Rock!"}},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    test_edit_id = response.json()["edit_id"]
+
+    response = await request_create_edit(
+        client,
+        get_dummy_token,
+        "person",
+        "justin-cook-77f1b3",
+        {"after": {"name_ua": "Джастін Кук"}},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    dummy_edit_id = response.json()["edit_id"]
+
+    for filters, edit_ids in [
+        # Any of listed authors
+        ({"authors": ["testuser"]}, [test_edit_id]),
+        ({"authors": ["testuser", "dummy"]}, [dummy_edit_id, test_edit_id]),
+        # Prefixed authors are excluded and case doesn't matter
+        ({"authors": ["-testuser"]}, [dummy_edit_id]),
+        ({"authors": ["Dummy", "-testuser"]}, [dummy_edit_id]),
+        ({"authors": ["-testuser", "-dummy"]}, []),
+        # Old field still works on its own and together with new one
+        ({"author": "testuser"}, [test_edit_id]),
+        ({"author": "testuser", "authors": ["-dummy"]}, [test_edit_id]),
+    ]:
+        response = await request_edit_list(client, filters)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [
+            entry["edit_id"] for entry in response.json()["list"]
+        ] == edit_ids
+
+    # Unknown author is rejected even when excluded
+    for authors in [["nobody"], ["-nobody"]]:
+        response = await request_edit_list(client, {"authors": authors})
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response.json()["code"] == "edit:author_not_found"

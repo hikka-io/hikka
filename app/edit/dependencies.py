@@ -35,6 +35,19 @@ async def validate_edit_search_args(
         if not await get_user_by_username(session, args.author):
             raise Abort("edit", "author-not-found")
 
+    if len(args.authors) > 0:
+        usernames = {
+            username.removeprefix("-").lower() for username in args.authors
+        }
+
+        # Excluded authors still have to exist
+        valid_authors_count = await service.count_users(
+            session, list(usernames)
+        )
+
+        if valid_authors_count != len(usernames):
+            raise Abort("edit", "author-not-found")
+
     if args.moderator:
         if not await get_user_by_username(session, args.moderator):
             raise Abort("edit", "moderator-not-found")
