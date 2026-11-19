@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from app import constants
 from app import utils
 
@@ -145,6 +145,17 @@ def build_relations(entries):
     ]
 
 
+async def get_franchise_content(session, model, franchise, content_ids):
+    condition = model.content_id.in_(content_ids)
+
+    # Titles still pointing to franchise are loaded too so we can detach them
+    # New franchise has no id yet and nothing can point to it
+    if franchise.id:
+        condition = or_(condition, model.franchise_id == franchise.id)
+
+    return await session.scalars(select(model).filter(condition))
+
+
 # TODO: optimize it
 async def save_franchises_list(session, data):
     content_ids = [entry["content_id"] for entry in data]
@@ -166,61 +177,35 @@ async def save_franchises_list(session, data):
         if updated == franchise.updated:
             continue
 
+        # Set before loading titles since those queries can flush new franchise
+        franchise.relations = build_relations(franchise_data.get("entries", []))
         franchise.scored_by = franchise_data["scored_by"]
         franchise.score = franchise_data["score"]
-
-        anime_cache = await session.scalars(
-            select(Anime).filter(
-                Anime.content_id.in_(
-                    [
-                        entry["content_id"]
-                        for entry in franchise_data["franchise_entries"]
-                        if entry["content_type"] == constants.CONTENT_ANIME
-                    ]
-                )
-            )
-        )
-
-        manga_cache = await session.scalars(
-            select(Manga).filter(
-                Manga.content_id.in_(
-                    [
-                        entry["content_id"]
-                        for entry in franchise_data["franchise_entries"]
-                        if entry["content_type"] == constants.CONTENT_MANGA
-                    ]
-                )
-            )
-        )
-
-        novel_cache = await session.scalars(
-            select(Novel).filter(
-                Novel.content_id.in_(
-                    [
-                        entry["content_id"]
-                        for entry in franchise_data["franchise_entries"]
-                        if entry["content_type"] == constants.CONTENT_NOVEL
-                    ]
-                )
-            )
-        )
+        franchise.updated = updated
 
         update_content = []
 
-        for anime in anime_cache:
-            anime.franchise_relation = franchise
-            update_content.append(anime)
+        for model, content_type in [
+            (Anime, constants.CONTENT_ANIME),
+            (Manga, constants.CONTENT_MANGA),
+            (Novel, constants.CONTENT_NOVEL),
+        ]:
+            listed_ids = [
+                entry["content_id"]
+                for entry in franchise_data["franchise_entries"]
+                if entry["content_type"] == content_type
+            ]
 
-        for manga in manga_cache:
-            manga.franchise_relation = franchise
-            update_content.append(manga)
+            for content in await get_franchise_content(
+                session, model, franchise, listed_ids
+            ):
+                # Titles aggregator no longer lists leave franchise
+                if content.content_id in listed_ids:
+                    content.franchise_relation = franchise
+                else:
+                    content.franchise_relation = None
 
-        for novel in novel_cache:
-            novel.franchise_relation = franchise
-            update_content.append(novel)
-
-        franchise.relations = build_relations(franchise_data.get("entries", []))
-        franchise.updated = updated
+                update_content.append(content)
 
         session.add(franchise)
         session.add_all(update_content)

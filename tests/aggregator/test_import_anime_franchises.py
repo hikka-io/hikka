@@ -1,7 +1,17 @@
 from sqlalchemy.orm import selectinload
-from app.models import Franchise
+from app.models import Franchise, Anime
 from sqlalchemy import select
 from sqlalchemy import func
+from app import aggregator
+import helpers
+
+
+async def count_franchise_anime(session, content_id):
+    return await session.scalar(
+        select(func.count(Anime.id))
+        .join(Franchise, Anime.franchise_id == Franchise.id)
+        .filter(Franchise.content_id == content_id)
+    )
 
 
 async def test_import_anime_franchises(
@@ -86,3 +96,61 @@ async def test_import_anime_franchises(
             "adaptation",
         ),
     }
+
+    # Aggregator moves titles out of franchises
+    data = await helpers.load_json("tests/data/anime_franchises.json")
+    franchises = {entry["content_id"]: entry for entry in data["list"]}
+
+    first = franchises["4f17027c-2b0f-4ad5-b51e-3c4f729b16e1"]
+    snk = franchises["e2283d58-ba06-420e-92de-8fe597d69a02"]
+
+    lost_id = first["franchise_entries"][2]["content_id"]
+    moved_id = snk["franchise_entries"][0]["content_id"]
+
+    # One title is no longer listed
+    first["franchise_entries"] = first["franchise_entries"][:2]
+    first["updated"] += 60
+
+    # One title is split off into new franchise
+    split = {
+        **snk,
+        "content_id": "split-off-franchise",
+        "franchise_entries": snk["franchise_entries"][:1],
+        "entries": [],
+        "updated": snk["updated"] + 60,
+    }
+
+    # Rest of franchise is emptied
+    snk["franchise_entries"] = []
+    snk["entries"] = []
+    snk["updated"] += 60
+
+    # Split franchise goes first and emptied one must not detach moved title
+    await aggregator.save_franchises_list(test_session, [first, split, snk])
+
+    # Queried directly since session keeps objects loaded before sync
+    assert await count_franchise_anime(test_session, first["content_id"]) == 2
+    assert await count_franchise_anime(test_session, split["content_id"]) == 1
+    assert await count_franchise_anime(test_session, snk["content_id"]) == 0
+
+    lost_franchise_id = await test_session.scalar(
+        select(Anime.franchise_id).filter(Anime.content_id == lost_id)
+    )
+
+    assert lost_franchise_id is None
+
+    moved_franchise = await test_session.scalar(
+        select(Franchise.content_id)
+        .join(Anime, Anime.franchise_id == Franchise.id)
+        .filter(Anime.content_id == moved_id)
+    )
+
+    assert moved_franchise == split["content_id"]
+
+    snk_relations = await test_session.scalar(
+        select(Franchise.relations).filter(
+            Franchise.content_id == snk["content_id"]
+        )
+    )
+
+    assert snk_relations == []
