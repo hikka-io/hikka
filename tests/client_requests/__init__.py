@@ -132,6 +132,8 @@ from .articles import request_articles
 from .digests import request_digest_privacy
 from .digests import request_digest
 
+from .notifications import request_notification_group_seen
+from .notifications import request_notification_groups
 from .notifications import request_notifications_count
 from .notifications import request_notification_seen
 from .notifications import request_notifications
@@ -286,6 +288,8 @@ __all__ = [
     "request_digest_privacy",
     "request_digest",
     # =========== notifications ===========
+    "request_notification_group_seen",
+    "request_notification_groups",
     "request_notifications_count",
     "request_notification_seen",
     "request_notifications",
